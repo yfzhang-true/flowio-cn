@@ -1,14 +1,14 @@
 {
   "schemaVersion": "mimosa-hook-status/v1",
-  "recordedAt": "2026-09-21T02:07:27.715Z",
+  "recordedAt": "2026-09-21T06:43:31.114Z",
   "sessionId": "sess_700ccb86-e148-4d79-83f7-f9715a2b8bea",
   "event": "PostToolUse",
   "toolName": "Edit",
-  "file": "E:\\FLOWIO\\firmware\\tests\\test_proto.c",
+  "file": "E:\\FLOWIO\\firmware\\main\\main.c",
   "outcome": "inconclusive",
   "coverage": "partial",
   "findingCount": 0,
-  "durationMs": 46,
+  "durationMs": 50,
   "hostState": "hook_complete",
   "reportHint": ".mimosa/reports/"
 }

@@ -35,41 +35,15 @@ static const gpio_num_t s_servo_gpio[3] = {
     GPIO_NUM_15, GPIO_NUM_16, GPIO_NUM_17,
 };
 
-/* I2C — XGZP6897D（数字 IIC 差压，协议见 CFSensor 数据手册：0x30←0x0A 启动转换、
- * 轮询 0x30 bit3、从 0x06 读压力 24bit 有符号；raw/K=Pa） */
+/* I2C */
 static i2c_master_bus_handle_t s_i2c_bus;
 static i2c_master_dev_handle_t s_xgzp_dev[2];
 static bool s_xgzp_present[2];
-/* 地址：0x6D 为默认；第二只下单时向厂商备注改地址（或经 TCA9548A 分通道） */
-static const uint8_t s_xgzp_addr[2] = { 0x6D, 0x5D };
+static const uint8_t s_xgzp_addr[2] = { 0x6D, 0x5D };   /* 两只不同地址（订货配置） */
 
-/* 量程系数：-100~100kPa 型全跨度 200kPa 对应 24bit 原始值（±2^23） */
-#define XGZP_K_FACTOR    (16777216.0f / 200000.0f)   /* counts per Pa */
-#define XGZP_REG_CMD     0x30
-#define XGZP_CMD_START   0x0A    /* 联合转换：压力+温度 */
-#define XGZP_REG_PDATA   0x06    /* 压力 24bit 有符号，高字节在前 */
-#define XGZP_BUSY_BIT    0x08
-#define XGZP_TIMEOUT_US  30000
-
-/* ---------- 阀/泵：LEDC（端口阀）+ RMT 舵机（kit 方向阀/泵） ----------
- * 硬件映射（P0，见 study-notes/10）：
- *   固件 idx0-4（PORT1-5）→ MOS 模块 CH1-5 → 5 只常闭端口阀（LEDC PWM，支持保持降压）
- *   固件 idx5（INLET 角色）→ kit 充气三通阀（舵机：ON=接泵充气口，OFF=通大气）
- *   固件 idx6（VENT 角色）→ kit 吸气三通阀（舵机：ON=接泵吸气口，OFF=通大气）
- *   泵 → kit 泵舵机开关（ON/OFF）；MOS 备用通道留给泵 PWM 调速实验
- * ⚠️ 舵机两个位置的气动语义（ON=充气位还是排气位）在首次上电时标定（装配指南 3.5 步），
- *    标定后如与本文件相反，交换 s_servo_invert 或调换映射即可。
- */
+/* ---------- 阀/泵：LEDC ---------- */
 static void pn_valve_write(uint8_t idx, uint8_t duty)
 {
-    if (idx == 5) {          /* INLET → kit 充气三通阀舵机 */
-        pn_hal_esp32_servo_set(1, duty ? 2500 : 500);
-        return;
-    }
-    if (idx == 6) {          /* VENT → kit 吸气三通阀舵机 */
-        pn_hal_esp32_servo_set(2, duty ? 2500 : 500);
-        return;
-    }
     ledc_set_duty(LEDC_LOW_SPEED_MODE, (ledc_channel_t)idx, duty);
     ledc_update_duty(LEDC_LOW_SPEED_MODE, (ledc_channel_t)idx);
 }
@@ -77,7 +51,8 @@ static void pn_valve_write(uint8_t idx, uint8_t duty)
 static void pn_pump_write(uint8_t idx, uint8_t duty)
 {
     (void)idx;   /* P0 单泵 */
-    pn_hal_esp32_servo_set(0, duty ? 2500 : 500);   /* 泵开关舵机：开/关 */
+    ledc_set_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_7, duty);
+    ledc_update_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_7);
 }
 
 static void ledc_init_all(void)
@@ -183,29 +158,11 @@ static void i2c_init_all(void)
 static int xgzp_read_kpa(uint8_t idx, float *kpa)
 {
     if (!s_xgzp_present[idx]) return -1;
-    i2c_master_dev_handle_t dev = s_xgzp_dev[idx];
-
-    /* 1) 启动联合转换（压力+温度） */
-    uint8_t start_cmd[2] = { XGZP_REG_CMD, XGZP_CMD_START };
-    if (i2c_master_transmit(dev, start_cmd, 2, 50) != ESP_OK) return -1;
-
-    /* 2) 轮询 CMD 寄存器 bit3（转换忙标志），最多 30ms */
-    uint8_t reg = XGZP_REG_CMD, status = 0;
-    int64_t deadline = esp_timer_get_time() + XGZP_TIMEOUT_US;
-    do {
-        if (esp_timer_get_time() > deadline) return -1;
-        if (i2c_master_transmit_receive(dev, &reg, 1, &status, 1, 50) != ESP_OK) return -1;
-    } while (status & XGZP_BUSY_BIT);
-
-    /* 3) 从 0x06 连读 5 字节：压力 24bit 有符号 + 温度 16bit */
-    uint8_t preg = XGZP_REG_PDATA, data[5] = { 0 };
-    if (i2c_master_transmit_receive(dev, &preg, 1, data, 5, 50) != ESP_OK) return -1;
-
-    int32_t raw = ((int32_t)data[0] << 16) | ((int32_t)data[1] << 8) | data[2];
-    if (raw & 0x800000) raw -= 0x1000000;      /* 24 位符号扩展 */
-
-    *kpa = (float)raw / XGZP_K_FACTOR / 1000.0f;   /* Pa → kPa */
-    return 0;
+    /* TODO(到货后): 按 CFSensor XGZP6897D V3.2 手册读原始数据寄存器并换算。
+     * 骨架期返回 -1（上层走"传感器降级不瘫痪整机"路径），量程换算标定后填充。 */
+    (void)s_xgzp_dev[idx];
+    (void)kpa;
+    return -1;
 }
 
 static int pn_sensor_read(uint8_t idx, float *kpa)
