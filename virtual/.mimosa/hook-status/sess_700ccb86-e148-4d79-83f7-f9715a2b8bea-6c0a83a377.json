@@ -1,14 +1,14 @@
 {
   "schemaVersion": "mimosa-hook-status/v1",
-  "recordedAt": "2026-09-21T06:48:24.255Z",
+  "recordedAt": "2026-09-21T07:04:42.035Z",
   "sessionId": "sess_700ccb86-e148-4d79-83f7-f9715a2b8bea",
   "event": "PostToolUse",
   "toolName": "Edit",
-  "file": "E:\\FLOWIO\\study-notes\\10-P0连接装配指南.md",
-  "outcome": "clear",
-  "coverage": "complete",
+  "file": "E:\\FLOWIO\\firmware\\components\\pn_core\\include\\pn_core\\cli.h",
+  "outcome": "inconclusive",
+  "coverage": "partial",
   "findingCount": 0,
-  "durationMs": 4,
+  "durationMs": 47,
   "hostState": "hook_complete",
   "reportHint": ".mimosa/reports/"
 }

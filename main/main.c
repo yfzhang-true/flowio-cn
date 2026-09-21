@@ -1,24 +1,12 @@
 /**
- * main.c — P0 上电入口 + 串口 CLI（装配指南第 4-7 步的驱动台）
+ * main.c — P0 上电入口（目标机）
  *
- * 架构：control_task 以 10ms 周期跑（闭环 tick + 节能 + 超压保护）；
- *       主线程阻塞在串口 CLI（阻塞不影响控制节拍）。
- *
- * CLI 命令（ASCII 行，\n 结尾）：
- *   I <ports> <pwm>   充气       例: I 1 255
- *   V <ports> <pwm>   抽气
- *   R <ports>         释放
- *   S <ports>         停止/保压
- *   O <ports> / C <ports>   开/关端口阀
- *   G <ports> <kPa> <sensor>  压力闭环充气  例: G 1 40 0
- *   X                 闭环复位
- *   F                 硬件自检（传感器/阀/保压 ΔP）
- *   P                 读传感器
- *   T                 打印状态字
- *   L                 阀保持节能
+ * 架构：control_task 以 10ms 周期跑（闭环 tick + 节能 + 超压保护 + 泵护栏）；
+ *       主线程阻塞在串口 CLI（命令分发在 pn_core/cli.c，与虚拟设备共用）。
  */
 #include "pn_core/actions.h"
 #include "pn_core/closedloop.h"
+#include "pn_core/cli.h"
 #include "pn_hal_esp32/hal_esp32.h"
 
 #include "freertos/FreeRTOS.h"
@@ -27,8 +15,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#define PN_OVERPRESSURE_LIMIT_KPA 120.f
-#define PN_PUMP_MAX_RUNTIME_MS    120000u   /* 泵连续运行上限（安全护栏） */
+static void cli_delay_wrapper(uint32_t ms) { vTaskDelay(pdMS_TO_TICKS(ms)); }
 
 static void control_task(void *arg)
 {
@@ -47,10 +34,11 @@ static void control_task(void *arg)
             printf("[CL] sensor error, aborted\n");
         }
 
-        /* 泵连续运行护栏：超时强制停止（防止干转/过热） */
+        /* 泵连续运行护栏：超时强制停止（防干转/过热） */
         if (pn_get_state_of(7)) {
-            if (pump_on_since == 0) pump_on_since = (uint32_t)(esp_timer_get_time() / 1000);
-            else if ((uint32_t)(esp_timer_get_time() / 1000) - pump_on_since > PN_PUMP_MAX_RUNTIME_MS) {
+            uint32_t now_ms = (uint32_t)(esp_timer_get_time() / 1000);
+            if (pump_on_since == 0) pump_on_since = now_ms;
+            else if (now_ms - pump_on_since > 120000u) {
                 pn_pump_stop();
                 printf("[SAFETY] pump max runtime, stopped\n");
                 pump_on_since = 0;
@@ -58,107 +46,14 @@ static void control_task(void *arg)
         } else pump_on_since = 0;
 
         pn_optimize_power(PN_HOLD_DEFAULT_DUTY, PN_HOLD_DEFAULT_DELAY_MS);
-        pn_check_overpressure(PN_OVERPRESSURE_LIMIT_KPA);
+        pn_check_overpressure(120.f);
         vTaskDelay(pdMS_TO_TICKS(10));
-    }
-}
-
-static void selftest(void)
-{
-    /* 对标 FlowIO Hardware_Test.ino 的测试序列（实现原创） */
-    printf("[ST] 1. sensor detect: ");
-    for (uint8_t i = 0; i < PN_SENSOR_COUNT; ++i) {
-        float p;
-        printf("S%u=%s ", i, pn_read_pressure(i, &p) == PN_OK ? "OK" : "ABSENT");
-    }
-    printf("\n[ST] 2. valve click test (listen: 3 port clicks + inlet + vent):\n");
-    for (uint8_t v = 0; v < 3; ++v) {                    /* 端口阀 A/B/C */
-        printf("  port valve %u ON/OFF\n", v + 1);
-        pn_ports_open((uint8_t)(1u << v));
-        vTaskDelay(pdMS_TO_TICKS(250));
-        pn_ports_close((uint8_t)(1u << v));
-        vTaskDelay(pdMS_TO_TICKS(250));
-    }
-    printf("  inlet servo ON/OFF\n");
-    pn_inlet_open();  vTaskDelay(pdMS_TO_TICKS(400)); pn_inlet_close();
-    vTaskDelay(pdMS_TO_TICKS(250));
-    printf("  vent servo ON/OFF\n");
-    pn_vent_open();   vTaskDelay(pdMS_TO_TICKS(400)); pn_vent_close();
-    vTaskDelay(pdMS_TO_TICKS(250));
-
-    printf("[ST] 3. manifold delta-P test (pump 1.5s, ports closed):\n");
-    float p0, p1;
-    pn_read_pressure(0, &p0);
-    pn_inlet_open();                                     /* 直接驱动级：进气阀开+泵转 */
-    pn_pump_start(255);
-    vTaskDelay(pdMS_TO_TICKS(1500));
-    pn_pump_stop();
-    pn_inlet_close();
-    pn_read_pressure(0, &p1);
-    printf("  dP=%.2f kPa (%.2f -> %.2f) %s\n", (double)(p1 - p0), (double)p0, (double)p1,
-           (p1 - p0 > 2.f) ? "PASS" : "FAIL/LEAK");
-    printf("[ST] done\n");
-}
-
-static void cli_task_line(char *line)
-{
-    float kpa;
-    uint8_t ports, pwm, sensor;
-    switch (line[0]) {
-    case 'I':
-        if (sscanf(line + 1, "%hhu %hhu", &ports, &pwm) == 2)
-            printf("inflate=%d\n", pn_start_inflation(ports, pwm));
-        break;
-    case 'V':
-        if (sscanf(line + 1, "%hhu %hhu", &ports, &pwm) == 2)
-            printf("vacuum=%d\n", pn_start_vacuum(ports, pwm));
-        break;
-    case 'R':
-        if (sscanf(line + 1, "%hhu", &ports) == 1)
-            printf("release=%d\n", pn_start_release(ports));
-        break;
-    case 'S':
-        if (sscanf(line + 1, "%hhu", &ports) == 1)
-            printf("stop=%d\n", pn_stop_action(ports));
-        break;
-    case 'O':
-        if (sscanf(line + 1, "%hhu", &ports) == 1) pn_ports_open(ports);
-        break;
-    case 'C':
-        if (sscanf(line + 1, "%hhu", &ports) == 1) pn_ports_close(ports);
-        break;
-    case 'G': {   /* 闭环充气: G <ports> <target_kPa> <sensor_idx> */
-        if (sscanf(line + 1, "%hhu %f %hhu", &ports, &kpa, &sensor) == 3)
-            printf("inflate_to=%d\n", pn_inflate_to_start(ports, kpa, sensor, 255, 30000));
-        break;
-    }
-    case 'X':
-        pn_cl_reset();
-        printf("closed-loop reset\n");
-        break;
-    case 'F':
-        printf("[ST] selftest starting (5s)\n");
-        selftest();
-        break;
-    case 'P':
-        for (uint8_t i = 0; i < PN_SENSOR_COUNT; ++i)
-            if (pn_read_pressure(i, &kpa) == PN_OK) printf("sensor%u=%.2f kPa\n", i, (double)kpa);
-            else printf("sensor%u=ERR\n", i);
-        break;
-    case 'T':
-        printf("state=0x%04X err=%d\n", (unsigned)pn_get_state(), pn_last_error());
-        break;
-    case 'L':
-        pn_optimize_power(PN_HOLD_DEFAULT_DUTY, PN_HOLD_DEFAULT_DELAY_MS);
-        printf("optimized\n");
-        break;
-    default:
-        printf("?\n");
     }
 }
 
 void app_main(void)
 {
+    pn_cli_set_delay_fn(cli_delay_wrapper);
     pn_init(pn_hal_esp32_init(), PN_CFG_GENERAL);
     printf("FlowIO-compatible P0 ready. state=0x%04X\n", (unsigned)pn_get_state());
 
@@ -169,7 +64,7 @@ void app_main(void)
         if (fgets(line, sizeof(line), stdin)) {
             size_t n = strlen(line);
             if (n && (line[n - 1] == '\n' || line[n - 1] == '\r')) line[n - 1] = 0;
-            if (line[0]) cli_task_line(line);
+            if (line[0]) pn_cli_process_line(line);
         }
     }
 }

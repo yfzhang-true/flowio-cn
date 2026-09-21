@@ -61,3 +61,21 @@ bit0-4=端口1-5 开、bit5=进气阀、bit6=排气阀、bit7=泵、bit9=传感�
 - 上电默认全关（常闭阀 + duty=0）；
 - 超压保护为**硬规则**（pn_check_overpressure），任何上层不可关闭；
 - TinyML/智能层永远是并行观察者，不进控制路径（study-notes/11）。
+
+## 虚拟设备（无硬件调试）
+
+逻辑层 + mock HAL 跑在电脑上，命令与真机完全一致：
+
+```bash
+cd virtual
+cmake -B build -G Ninja && cmake --build build
+./build/pn_virtual.exe
+```
+
+虚拟专属命令：`M <传感器号> <kPa>`（模拟压力读数）、`W <ms>`（推进时钟）、`K`（手动闭环 tick）、`Q` 退出。
+示例：`I 1 255` → `M 0 30` → `G 1 40 0` → `K`（RUNNING）→ `M 0 45` → `K`（DONE reached=45kPa）→ `S 1`。
+
+## 型号说明书
+
+E:\FLOWIO\资源\datasheets\：ESP32-S3-WROOM-1 中文数据手册、XGZP6897D V2.5、TCA9548A。
+DevKitC-1 用户指南（在线）：https://docs.espressif.com/projects/esp-idf/zh_CN/latest/esp32s3/hw-reference/esp32s3/user-guide-devkitc-1.html
