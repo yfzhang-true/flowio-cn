@@ -1,0 +1,11 @@
+# 统一行尾：仓库内与检出均为 LF（gcc/IDF/node/python/bash 均要求）
+* text=auto eol=lf
+# 二进制不碰
+*.png binary
+*.jpg binary
+*.pdf binary
+*.3MF binary
+*.mp4 binary
+*.zip binary
+*.dll binary
+*.exe binary
