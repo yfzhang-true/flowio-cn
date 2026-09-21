@@ -1,0 +1,19 @@
+# ninja log v6
+6	123	8116594360000000	CMakeFiles/pn_core.dir/E_/FLOWIO/firmware/components/pn_core/src/closedloop.c.obj	76b8703e9a000c4d
+9	129	8116594360000000	CMakeFiles/pn_core.dir/E_/FLOWIO/firmware/components/pn_core/src/proto.c.obj	381a8fe79966cae4
+11	133	8116594360000000	CMakeFiles/pn_tests.dir/test_main.c.obj	6550a5b281dcd944
+24	158	8116594360000000	CMakeFiles/pn_tests.dir/mock_hal.c.obj	73c345764bb5e6a8
+20	165	8116594360000000	CMakeFiles/pn_tests.dir/test_proto.c.obj	bd7b77da0ea150ba
+17	168	8116594360000000	CMakeFiles/pn_tests.dir/test_closedloop.c.obj	70b92f62fdde6a3d
+14	177	8116594360000000	CMakeFiles/pn_tests.dir/test_actions.c.obj	9d118582a8a01dde
+3	179	8116594358800000	CMakeFiles/pn_core.dir/E_/FLOWIO/firmware/components/pn_core/src/actions.c.obj	c3e1cc2517ab9110
+180	424	8116594380000000	libpn_core.a	84e4f7862829860a
+424	553	8116594380000000	pn_tests.exe	690e0d347bb59f26
+19	98	8116596780000000	CMakeFiles/pn_core.dir/E_/FLOWIO/firmware/components/pn_core/src/proto.c.obj	381a8fe79966cae4
+21	114	8116596780000000	CMakeFiles/pn_tests.dir/test_proto.c.obj	bd7b77da0ea150ba
+16	140	8116596768100000	CMakeFiles/pn_core.dir/E_/FLOWIO/firmware/components/pn_core/src/actions.c.obj	c3e1cc2517ab9110
+140	228	8116596780000000	libpn_core.a	84e4f7862829860a
+228	321	8116596780000000	pn_tests.exe	690e0d347bb59f26
+5	79	8116598957200000	CMakeFiles/pn_core.dir/E_/FLOWIO/firmware/components/pn_core/src/proto.c.obj	381a8fe79966cae4
+80	176	8116598960000000	libpn_core.a	84e4f7862829860a
+177	270	8116598960000000	pn_tests.exe	690e0d347bb59f26
