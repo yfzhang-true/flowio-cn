@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<title>FlowIO-CN P0 · 控制台</title>
+<style>
+:root{--bg:#f4f5f7;--card:#fff;--line:#d9dce1;--fg:#1f2329;--dim:#6b7280;
+--blue:#1a73e8;--green:#21a366;--red:#d13438;--log:#0a7a3d;--accent:#00d4ff}
+*{box-sizing:border-box;margin:0}
+body{background:#f4f5f7;color:var(--fg);font-family:"Segoe UI","Microsoft YaHei",system-ui,sans-serif;font-size:13px}
+.topbar{background:#fff;border-bottom:1px solid var(--line);padding:10px 18px;display:flex;
+align-items:center;gap:14px;font-size:13px}
+.topbar .brand{font-weight:700}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block;background:var(--green);
+box-shadow:0 0 6px var(--green)}
+.dot.off{background:var(--red);box-shadow:none}
+.main{display:grid;grid-template-columns:1.5fr 1fr 0.8fr;gap:14px;padding:14px;max-width:1460px;margin:0 auto}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px}
+.card h3{font-size:15px;margin-bottom:10px}
+h4.sub{font-size:12px;color:var(--dim);margin:12px 0 6px;text-transform:uppercase;letter-spacing:1px}
+button{background:#eef0f3;color:var(--fg);border:1px solid var(--line);border-radius:6px;
+padding:6px 12px;cursor:pointer;font-size:12px}
+button:hover{background:#e2e5e9}
+button.play{background:var(--green);color:#fff;border:none;border-radius:16px;padding:7px 22px;font-size:14px}
+button.stopb{background:var(--red);color:#fff;border:none;border-radius:16px;padding:7px 18px}
+.pwmrow{display:flex;align-items:center;gap:10px;margin:8px 0;font-size:13px}
+.pwmrow label{width:110px}
+.pwmrow input[type=range]{flex:1;accent-color:var(--blue)}
+.pwmrow .v{width:44px;text-align:right;font-family:Consolas,monospace}
+.schem{background:#fbfcfd;border:1px solid var(--line);border-radius:8px;padding:6px}
+table.sched{width:100%;border-collapse:collapse;font-size:12px}
+table.sched th{background:#f0f1f3;padding:5px;font-size:11px;border:1px solid var(--line)}
+table.sched td{border:1px solid var(--line);padding:4px 6px;text-align:center}
+table.sched input,table.sched select{width:100%;padding:2px;font-size:12px;
+border:1px solid var(--line);border-radius:4px}
+.logbox{background:#fff;border:1px solid var(--line);border-radius:8px;height:100%;
+min-height:380px;overflow-y:auto;padding:8px;font-family:Consolas,monospace;
+font-size:12px;color:var(--log);white-space:pre-wrap}
+.logbox div{margin:1px 0}
+.logbtns{display:flex;gap:8px;margin-top:8px}
+.ctl{display:flex;align-items:center;gap:8px;margin:8px 0;font-size:13px;flex-wrap:wrap}
+.ctl input,.ctl select{padding:4px 6px;border:1px solid var(--line);border-radius:4px}
+.ctl input{width:70px}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <span class="brand">FlowIO-CN P0</span>
+  <span class="dot"></span>
+  <span class="badge" id="tbcl">IDLE</span>
+  <span class="badge" id="tberr">无错误</span>
+  <span style="color:var(--dim)">P0 虚拟孪生 · 逻辑层与目标机固件同构</span>
+  <span style="margin-left:auto;color:var(--dim)">时钟 <b id="clk">0.0</b> s</span>
+</div>
+
+<div class="main">
+  <!-- ═══ Config/Control（动画气路示意） ═══ -->
+  <div class="card">
+    <h3>Config / Control</h3>
+    <div class="pwmrow"><label>充气 PWM:</label>
+      <input type="range" id="pwmI" min="80" max="255" value="255"
+        oninput="$('pwmIv').textContent=this.value">
+      <span class="v" id="pwmIv">255</span></div>
+    <div class="pwmrow"><label>抽气 PWM:</label>
+      <input type="range" id="pwmV" min="80" max="255" value="255"
+        oninput="$('pwmVv').textContent=this.value">
+      <span class="v" id="pwmVv">255</span></div>
+
+    <h4 class="sub">气路状态示意（实时动画）</h4>
+    <div class="schem">
+      <svg viewBox="0 0 560 400" width="100%">
+        <defs>
+          <marker id="arw" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+            <path d="M0,0 L8,4 L0,8 Z" fill="#c0392b"/></marker>
+        </defs>
+
+        <!-- 大气 → 进气阀 → 泵吸气口 -->
+        <text x="20" y="254" font-size="11" fill="#6b7280">大气</text>
+        <line x1="52" y1="254" x2="78" y2="254" stroke="#909090" stroke-width="4"/>
+        <rect x="78" y="242" width="26" height="24" rx="3" fill="#d7dee5" stroke="#8b98a5" stroke-width="1.5"/>
+        <text x="91" y="259" text-anchor="middle" font-size="10" fill="#37474f">进气阀</text>
+        <line x1="104" y1="254" x2="146" y2="254" stroke="#909090" stroke-width="4"/>
+        <text x="150" y="246" font-size="10" fill="#6b7280">吸气口</text>
+        <line x1="146" y1="254" x2="168" y2="254" stroke="#909090" stroke-width="4"/>
+
+        <!-- 泵 -->
+        <rect x="150" y="230" width="260" height="80" rx="8" fill="#eef3f7" stroke="#9aa7b3" stroke-width="2"/>
+        <g id="imp" style="transform-origin:230px 270px;transform-box:view-box">
+          <circle cx="230" cy="270" r="27" fill="#dfe7ee" stroke="#5b6b7a" stroke-width="2"/>
+          <path d="M 230 270 L 230 246 A 24 24 0 0 1 251 258 Z" fill="#9fb3c4"/>
+          <path d="M 230 270 L 251 282 A 24 24 0 0 1 209 282 Z" fill="#b8c7d4"/>
+          <path d="M 230 270 L 209 282 A 24 24 0 0 1 230 246 Z" fill="#cfdbe5"/>
+        </g>
+        <text x="230" y="308" text-anchor="middle" font-size="11" fill="#6b7280">泵 · 充吸两用</text>
+
+        <!-- 泵排气口 → 排气三通阀 → 汇流管 -->
+        <line x1="290" y1="254" x2="330" y2="254" stroke="#909090" stroke-width="4"/>
+        <text x="292" y="246" font-size="10" fill="#6b7280">排气口</text>
+        <rect x="330" y="242" width="26" height="24" rx="3" fill="#d7dee5" stroke="#8b98a5" stroke-width="1.5"/>
+        <text x="343" y="259" text-anchor="middle" font-size="10" fill="#37474f">排气</text>
+        <line x1="356" y1="254" x2="392" y2="254" stroke="#909090" stroke-width="4"/>
+        <line x1="392" y1="254" x2="392" y2="176" stroke="#909090" stroke-width="4"/>
+
+        <!-- 汇流管 -->
+        <rect x="180" y="90" width="360" height="34" rx="6" fill="#dde9f3" stroke="#7a9bb5" stroke-width="1.5"/>
+        <text x="360" y="82" text-anchor="middle" font-size="12" fill="#33475b">汇流管（5 端口）</text>
+        <g id="ports_svg"></g>
+
+        <!-- 传感器 -->
+        <rect x="392" y="176" width="10" height="10" fill="#c0392b"/>
+        <text x="408" y="186" font-size="10" fill="#8b949e">S0</text>
+
+        <!-- 压力读出 -->
+        <rect x="440" y="330" width="90" height="30" rx="4" fill="#f6f8fa" stroke="#c3cbd3"/>
+        <text id="ptxt" x="485" y="350" text-anchor="middle" font-family="Consolas" font-size="14" fill="#33475b">--.-</text>
+        <text x="485" y="368" text-anchor="middle" font-size="10" fill="#8b949e">kPa · S0</text>
+      </svg>
+
+      <div class="ctl">
+        手动：
+        <button onclick="send('I 7 ' + $('pwmI').value)">充气</button>
+        <button onclick="send('V 7 ' + $('pwmV').value)">抽气</button>
+        <button onclick="send('R 7')">释放</button>
+        <button onclick="send('S 127')">保压</button>
+        <span class="press" id="pnow">P = --.-</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ Scheduler ═══ -->
+  <div class="card">
+    <h3>Scheduler</h3>
+    <div class="btnrow">
+      <button onclick="schedAddRow()">＋Add Row</button>
+      <button onclick="schedDelRow()">Delete</button>
+      <button onclick="schedReset()">Reset</button>
+      <button class="play" onclick="schedPlay()">▶ Play</button>
+      <button class="stopb" onclick="schedStopSeq()">■ Stop</button>
+    </div>
+    <table class="sched">
+      <thead><tr><th>t₀ (ms)</th><th>Action</th><th>PWM</th><th>Ports</th></tr></thead>
+      <tbody id="schedbody"></tbody>
+    </table>
+    <div class="ctl" style="margin-top:8px">
+      新行:
+      <select id="nact"><option>Inflate</option><option>Stop</option><option>Release</option><option>Vacuum</option></select>
+      t₀ <input id="nt0" type="number" value="0" style="width:56px"> ms
+      PWM <input id="npwm" type="number" value="255" style="width:56px">
+      掩码 <input id="nmask" type="number" value="7" style="width:52px">
+      <button onclick="schedAddRowFrom()">＋</button>
+    </div>
+  </div>
+
+  <!-- ═══ Log ═══ -->
+  <div class="card">
+    <h3>Log</h3>
+    <div class="logbox" id="devlog"></div>
+    <div class="logbtns">
+      <button onclick="$('devlog').textContent=''">Clear Log</button>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+let clk = 0, prevCL = null;
+
+/* ═══ 状态轮询（400ms）：驱动示意图动画 ═══ */
+setInterval(async () => {
+  let s;
+  try { s = await (await fetch('/api/state')).json(); } catch(e){ return; }
+  clk += 0.4;
+  $('clk').textContent = clk.toFixed(1);
+
+  const bits = i => (s.state >> i) & 1;
+  const pumpOn = !!bits(7), inletOn = !!bits(5), ventOn = !!bits(6);
+
+  $('imp').style.transform = 'rotate(' + (clk*720 % 360) + 'deg)';
+  $('imp').style.opacity = pumpOn ? 1 : 0.55;
+
+  const pist = (id, on) => { const e = $(id); if (e) e.setAttribute('fill', on ? '#21a366' : '#37474f'); };
+  pist('v_in_p',  inletOn);
+  pist('v_out_p', ventOn);
+
+  const mani = document.querySelector('#toports');
+  mani.setAttribute('stroke', (bits(0)||bits(1)||bits(2)) ? '#5b9bd5' : '#909090');
+
+  $('ptxt').textContent = s.sensors[0].toFixed(1);
+  if (Math.round(clk*2) % 4 === 0)
+    dlog('P = ' + s.sensors[0].toFixed(3));
+  if (prevCL !== s.cl) { dlog('闭环: ' + prevCL + ' → ' + s.cl); prevCL = s.cl; }
+}, 400);
+
+async function send(line){
+  await fetch('/api/cmd', {method:'POST', body:line});
+  dlog('▶ ' + line);
+}
+function dlog(s){ const b = $('devlog'); const d = document.createElement('div'); d.textContent = s; b.prepend(d); }
+
+let manT = null;
+function manual(line){
+  send(line);
+  clearTimeout(manT);
+  manT = setTimeout(() => send('S 127'), 5000);
+}
+
+let rows = [{t0:0, action:'Inflate', pwm:255, ports:7}];
+let playing = false, timers = [];
+
+function renderSched(){
+  const tb = $('schedbody'); tb.innerHTML = '';
+  for (const r of rows) {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td><input type="number" value="${r.t0}" style="width:52px"
+      onchange="rowUpd(${r.id},'t0',this.value)"></td>
+      <td><input value="${r.action}" style="width:64px"
+      onchange="rowUpd(${r.id},'action',this.value)"></td>
+      <td><input type="number" value="${r.pwm}" style="width:48px"
+      onchange="rowUpd(${r.id},'pwm',this.value)"></td>
+      <td><input type="number" value="${r.ports}" style="width:48px"
+      onchange="rowUpd(${r.id},'ports',this.value)"></td>`;
+    tb.appendChild(tr);
+  }
+}
+function rowUpd(id, k, v){ const r = rows.find(x=>x.id===id); if (r) r[k] = k==='action'? v : +v; }
+function schedAddRow(){ rows.push({t0:0, action:'Inflate', pwm:255, ports:7}); renderSched(); }
+function schedDelRow(){ rows.pop(); renderSched(); }
+
+function schedPlay(){
+  if (!rows.length) return;
+  playing = true;
+  dlog('▶ Scheduler 开始（' + rows.length + ' 行）');
+  for (const r of [...rows].sort((a,b)=>a.t0-b.t0)) {
+    timers.push(setTimeout(() => {
+      const line = (r.action === 'Stop' ? 'S ' : r.action === 'Release' ? 'R ' :
+        r.action === 'Vacuum' ? 'V ' : 'I ') + (r.ports || 7) + ' ' + r.pwm;
+      send(line);
+    }, r.t0));
+  }
+}
+function schedStopSeq(){ playing = false; timers.forEach(clearTimeout); dlog('■ Scheduler 停止'); }
+
+renderSched();
+</script>
+</body>
+</html>

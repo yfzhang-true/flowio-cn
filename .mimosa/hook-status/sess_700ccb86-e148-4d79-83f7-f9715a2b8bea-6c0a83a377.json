@@ -1,14 +1,14 @@
 {
   "schemaVersion": "mimosa-hook-status/v1",
-  "recordedAt": "2026-09-21T07:14:42.744Z",
+  "recordedAt": "2026-09-21T09:50:00.658Z",
   "sessionId": "sess_700ccb86-e148-4d79-83f7-f9715a2b8bea",
   "event": "PostToolUse",
-  "toolName": "Edit",
-  "file": "twin/twin_api.c",
+  "toolName": "Write",
+  "file": "twin/gui.html",
   "outcome": "clear",
   "coverage": "complete",
   "findingCount": 0,
-  "durationMs": 107,
+  "durationMs": 5,
   "hostState": "hook_complete",
   "reportHint": ".mimosa/reports/"
 }
