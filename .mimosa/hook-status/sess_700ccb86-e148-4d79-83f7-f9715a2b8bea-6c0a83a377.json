@@ -1,14 +1,14 @@
 {
   "schemaVersion": "mimosa-hook-status/v1",
-  "recordedAt": "2026-09-21T06:48:24.255Z",
+  "recordedAt": "2026-09-21T07:14:42.744Z",
   "sessionId": "sess_700ccb86-e148-4d79-83f7-f9715a2b8bea",
   "event": "PostToolUse",
   "toolName": "Edit",
-  "file": "E:\\FLOWIO\\study-notes\\10-P0连接装配指南.md",
+  "file": "twin/twin_api.c",
   "outcome": "clear",
   "coverage": "complete",
   "findingCount": 0,
-  "durationMs": 4,
+  "durationMs": 107,
   "hostState": "hook_complete",
   "reportHint": ".mimosa/reports/"
 }
