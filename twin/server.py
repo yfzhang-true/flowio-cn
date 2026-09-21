@@ -51,6 +51,8 @@ class Handler(BaseHTTPRequestHandler):
             self._send(200, (ROOT / "index.html").read_bytes(), "text/html; charset=utf-8")
         elif path in ("/babylon", "/babylon.html"):
             self._send(200, (ROOT / "babylon.html").read_bytes(), "text/html; charset=utf-8")
+        elif path in ("/gui", "/gui.html"):
+            self._send(200, (ROOT / "gui.html").read_bytes(), "text/html; charset=utf-8")
         elif path in ("/proto3d", "/proto3d.html"):
             self._send(200, (ROOT / "proto3d.html").read_bytes(), "text/html; charset=utf-8")
         elif path == "/lib/babylon.min.js":
