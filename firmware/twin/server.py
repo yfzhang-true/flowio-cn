@@ -47,17 +47,8 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         path = self.path.split("?")[0]
-        if path in ("/", "/index.html"):
-            self._send(200, (ROOT / "index.html").read_bytes(), "text/html; charset=utf-8")
-        elif path in ("/babylon", "/babylon.html"):
-            self._send(200, (ROOT / "babylon.html").read_bytes(), "text/html; charset=utf-8")
-        elif path in ("/gui", "/gui.html"):
+        if path in ("/", "/index.html", "/gui", "/gui.html"):
             self._send(200, (ROOT / "gui.html").read_bytes(), "text/html; charset=utf-8")
-        elif path in ("/proto3d", "/proto3d.html"):
-            self._send(200, (ROOT / "proto3d.html").read_bytes(), "text/html; charset=utf-8")
-        elif path == "/lib/babylon.min.js":
-            self._send(200, (ROOT / "lib" / "babylon.min.js").read_bytes(),
-                       "application/javascript; charset=utf-8")
         elif path == "/lib/echarts.min.js":
             self._send(200, (ROOT / "lib" / "echarts.min.js").read_bytes(),
                        "application/javascript; charset=utf-8")
