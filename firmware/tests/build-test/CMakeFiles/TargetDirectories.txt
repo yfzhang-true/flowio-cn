@@ -1,0 +1,5 @@
+E:/FLOWIO/firmware/tests/build-test/CMakeFiles/pn_core.dir
+E:/FLOWIO/firmware/tests/build-test/CMakeFiles/pn_tests.dir
+E:/FLOWIO/firmware/tests/build-test/CMakeFiles/test.dir
+E:/FLOWIO/firmware/tests/build-test/CMakeFiles/edit_cache.dir
+E:/FLOWIO/firmware/tests/build-test/CMakeFiles/rebuild_cache.dir

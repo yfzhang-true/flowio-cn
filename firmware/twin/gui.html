@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FlowIO-CN P0 · 数字孪生控制台</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='%23161b22' stroke='%2358a6ff'/%3E%3Cpath d='M8 8 L8 3 A5 5 0 0 1 12 5 Z' fill='%237ee0ff'/%3E%3C/svg%3E">
+<script src="/lib/echarts.min.js"></script>
+<style>
+:root{
+  --bg:#0d1117; --card:#161b22; --line:#30363d; --fg:#e6edf3; --dim:#8b949e;
+  --ok:#3fb950; --err:#f85149; --accent:#58a6ff; --cyan:#00d4ff; --purple:#8b5cf6;
+}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--fg);font:13px "Segoe UI","Microsoft YaHei",system-ui,sans-serif}
+button{background:#1c2430;color:var(--fg);border:1px solid var(--line);border-radius:6px;
+  padding:6px 10px;cursor:pointer;font-size:12px;transition:.15s}
+button:hover{border-color:var(--accent)}
+button:active{transform:scale(.97)}
+button:disabled{opacity:.45;cursor:not-allowed}
+input,select{background:#0a0e14;border:1px solid var(--line);border-radius:5px;color:var(--fg);
+  padding:4px 6px;font-size:12px}
+input[type=range]{padding:0;accent-color:var(--accent)}
+
+/* ═══ 顶栏 ═══ */
+.topbar{position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:10px;
+  padding:10px 16px;background:#161b22;border-bottom:1px solid var(--line)}
+.topbar .brand{font-weight:700;font-size:15px}
+.topbar .brand small{color:var(--dim);font-weight:400;margin-left:6px}
+.badge{padding:3px 10px;border-radius:12px;background:#21262d;border:1px solid var(--line);
+  font-size:12px;white-space:nowrap}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block;background:var(--ok);
+  margin-right:5px;vertical-align:-1px}
+.dot.err{background:var(--err);box-shadow:0 0 6px var(--err)}
+
+/* ═══ 三栏布局：左=示意图+控制 中=Scheduler 右=曲线+日志 ═══ */
+.layout{display:grid;grid-template-columns:minmax(420px,1.3fr) minmax(300px,.9fr) minmax(280px,.85fr);
+  gap:12px;padding:12px;align-items:start}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:12px}
+.card h3{font-size:13px;color:var(--accent);margin-bottom:8px}
+.row{display:flex;align-items:center;gap:8px;margin:6px 0;flex-wrap:wrap}
+
+/* ═══ SVG 气路动画 ═══ */
+#schem{width:100%;height:auto;display:block;background:#0a0e14;border-radius:8px}
+.piston,.pistonb{transition:transform .2s ease}
+.piston .blk,.pistonb .blk{fill:#37474f;transition:fill .2s}
+.piston.on{transform:translateY(10px)}
+.pistonb.on{transform:translateY(6px)}
+.piston.on .blk,.pistonb.on .blk{fill:#21a366}
+.pumpc{transition:stroke .3s,filter .3s}
+.pumpc.on{stroke:#7ee0ff;filter:drop-shadow(0 0 7px #7ee0ff)}
+#imp{transform-box:fill-box;transform-origin:center}
+#imp path{fill:#9fb3c4;transition:fill .3s}
+#imp.on{animation:spin .55s linear infinite}
+#imp.on path{fill:#7ee0ff}
+@keyframes spin{to{transform:rotate(360deg)}}
+.flow{opacity:0;transition:opacity .25s}
+.flow.show{opacity:1}
+.flow path{fill:none;stroke-width:3;stroke-dasharray:7 7;animation:dash .5s linear infinite}
+@keyframes dash{to{stroke-dashoffset:-14}}
+#flowIn path{stroke:var(--cyan)}
+#flowVac path{stroke:var(--purple)}
+#flowRel path{stroke:var(--ok)}
+#needle{transition:transform .3s}
+
+/* ═══ 动作按钮 ═══ */
+.acts{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:8px 0}
+.acts button{padding:9px 0}
+.acts2{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+
+/* ═══ 端口卡片 ═══ */
+.pcard{border:1px solid var(--line);border-radius:8px;padding:8px;margin-bottom:8px;transition:.15s}
+.pcard.sel{border-color:var(--accent);box-shadow:0 0 8px rgba(88,166,255,.25)}
+.pcard.un{opacity:.55}
+.pcard .hd{display:flex;justify-content:space-between;align-items:center;cursor:pointer;
+  padding:2px 4px;border-radius:5px}
+.pcard .hd:hover{background:#1c2430}
+.pcard .nm{font-size:13px;font-weight:600}
+.pcard .tag{font-size:10px;padding:1px 7px;border-radius:9px;background:#21262d;color:var(--dim)}
+.pcard .tag.open{background:#0d2818;color:var(--ok);border:1px solid #1c5c33}
+.pcard .prow{display:flex;justify-content:space-between;align-items:baseline;margin:5px 4px 3px}
+.pcard .pval{font-family:Consolas,monospace;font-size:19px;font-weight:600;color:var(--accent)}
+.pcard .pval small{font-size:10px;color:var(--dim);font-weight:400}
+.pcard .psrc{font-size:10px;color:var(--dim)}
+.pbtns{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.pbtns button{padding:4px 0;font-size:11px}
+.clrow{display:flex;align-items:center;gap:6px;margin-top:6px;font-size:11px;color:var(--dim)}
+.clrow input[type=range]{flex:1;height:14px}
+.clrow .tv{color:var(--accent);font-family:Consolas,monospace;min-width:52px;text-align:right}
+.clrow button{padding:2px 8px;font-size:11px}
+
+/* ═══ Scheduler ═══ */
+.schedbtns{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:8px}
+#schedtbl{width:100%;border-collapse:collapse;font-size:12px}
+#schedtbl th{color:var(--dim);font-weight:400;text-align:left;padding:3px 4px;border-bottom:1px solid var(--line)}
+#schedtbl td{padding:3px 4px;border-bottom:1px solid #21262d}
+#schedtbl input{width:100%;font-family:Consolas,monospace;font-size:11px;padding:3px 5px}
+#schedtbl input.tcell{width:72px}
+#schedtbl tr.run td{background:#0d2818}
+#schedtbl tr.pend td{background:#1a1f05}
+.hint{font-size:11px;color:var(--dim);margin-top:8px;line-height:1.6}
+
+/* ═══ 曲线 + 传感器 ═══ */
+#chart{width:100%;height:225px}
+.snsrow{display:flex;justify-content:space-between;padding:4px 2px;font-size:12px}
+.snsrow b{color:var(--accent);font-family:Consolas,monospace}
+
+/* ═══ 日志 ═══ */
+#devlog{height:340px;overflow-y:auto;background:#0a0e14;border:1px solid var(--line);border-radius:8px;
+  padding:8px;font-family:Consolas,monospace;font-size:11px;color:#7ee787;line-height:1.55}
+#devlog .warn{color:var(--err)}
+#devlog .cmd{color:#79c0ff}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <span class="brand">FlowIO-CN P0<small>数字孪生控制台</small></span>
+  <span class="badge">state=<b id="tbstate" style="font-family:Consolas">0x0000</b></span>
+  <span class="badge">闭环 <b id="tbcl">IDLE</b></span>
+  <span class="badge"><span class="dot" id="errdot"></span><span id="tberr">无错误</span></span>
+  <span class="badge" id="tbclk" style="margin-left:auto;font-family:Consolas">--:--:--</span>
+</header>
+
+<div class="layout">
+
+  <!-- ═══════════ 左栏：气路示意 + 全局控制 + 端口卡片 ═══════════ -->
+  <section>
+    <div class="card">
+      <h3>气路示意（实时 SVG）</h3>
+      <svg id="schem" viewBox="0 0 560 400" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arwC" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+            <path d="M0,0 L8,4 L0,8 Z" fill="#00d4ff"/></marker>
+          <marker id="arwP" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+            <path d="M0,0 L8,4 L0,8 Z" fill="#8b5cf6"/></marker>
+          <marker id="arwG" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+            <path d="M0,0 L8,4 L0,8 Z" fill="#3fb950"/></marker>
+        </defs>
+
+        <!-- 汇流管腔体 -->
+        <rect x="60" y="64" width="440" height="272" rx="16" fill="#dde9f3" stroke="#7a9bb5" stroke-width="2"/>
+        <text x="68" y="322" font-size="11" fill="#33475b">汇流管腔（5 端口）</text>
+
+        <!-- 端口短管 ×5（腔体顶部伸出） -->
+        <g fill="#90a4ae">
+          <rect x="122" y="34" width="16" height="32"/><rect x="117" y="30" width="26" height="7" rx="2" fill="#607d8b"/>
+          <rect x="192" y="34" width="16" height="32"/><rect x="187" y="30" width="26" height="7" rx="2" fill="#607d8b"/>
+          <rect x="262" y="34" width="16" height="32"/><rect x="257" y="30" width="26" height="7" rx="2" fill="#607d8b"/>
+          <rect x="332" y="34" width="16" height="32"/><rect x="327" y="30" width="26" height="7" rx="2" fill="#607d8b"/>
+          <rect x="402" y="34" width="16" height="32"/><rect x="397" y="30" width="26" height="7" rx="2" fill="#607d8b"/>
+        </g>
+        <g font-size="11" fill="#8b949e" text-anchor="middle">
+          <text x="130" y="24">端口1</text><text x="200" y="24">端口2</text><text x="270" y="24">端口3</text>
+          <text x="340" y="24">端口4</text><text x="410" y="24">端口5</text>
+        </g>
+
+        <!-- 端口阀活塞 ×5（上排，阀座 y=76） -->
+        <g stroke="#546e7a" stroke-width="3">
+          <line x1="117" y1="76" x2="143" y2="76"/><line x1="187" y1="76" x2="213" y2="76"/>
+          <line x1="257" y1="76" x2="283" y2="76"/><line x1="327" y1="76" x2="353" y2="76"/>
+          <line x1="397" y1="76" x2="423" y2="76"/>
+        </g>
+        <g fill="#eceff1" stroke="#90a4ae" stroke-width="1.5">
+          <rect x="114" y="80" width="32" height="54" rx="5"/><rect x="184" y="80" width="32" height="54" rx="5"/>
+          <rect x="254" y="80" width="32" height="54" rx="5"/><rect x="324" y="80" width="32" height="54" rx="5"/>
+          <rect x="394" y="80" width="32" height="54" rx="5"/>
+        </g>
+        <!-- 弹簧（静态，被活塞压缩） -->
+        <g fill="none" stroke="#78909c" stroke-width="2">
+          <path d="M130,104 l7,4 l-14,5 l14,5 l-14,5 l14,5 l-7,4"/>
+          <path d="M200,104 l7,4 l-14,5 l14,5 l-14,5 l14,5 l-7,4"/>
+          <path d="M270,104 l7,4 l-14,5 l14,5 l-14,5 l14,5 l-7,4"/>
+          <path d="M340,104 l7,4 l-14,5 l14,5 l-14,5 l14,5 l-7,4"/>
+          <path d="M410,104 l7,4 l-14,5 l14,5 l-14,5 l14,5 l-7,4"/>
+        </g>
+        <!-- 活塞本体（JS 切换 .on：绿色+下压） -->
+        <g class="piston" id="pn1"><rect class="stem" x="126.5" y="70" width="7" height="18" rx="2" fill="#78909c"/><rect class="blk" x="119" y="86" width="22" height="18" rx="4"/></g>
+        <g class="piston" id="pn2"><rect class="stem" x="196.5" y="70" width="7" height="18" rx="2" fill="#78909c"/><rect class="blk" x="189" y="86" width="22" height="18" rx="4"/></g>
+        <g class="piston" id="pn3"><rect class="stem" x="266.5" y="70" width="7" height="18" rx="2" fill="#78909c"/><rect class="blk" x="259" y="86" width="22" height="18" rx="4"/></g>
+        <g class="piston" id="pn4"><rect class="stem" x="336.5" y="70" width="7" height="18" rx="2" fill="#78909c"/><rect class="blk" x="329" y="86" width="22" height="18" rx="4"/></g>
+        <g class="piston" id="pn5"><rect class="stem" x="406.5" y="70" width="7" height="18" rx="2" fill="#78909c"/><rect class="blk" x="399" y="86" width="22" height="18" rx="4"/></g>
+        <g font-size="9" fill="#546e7a" text-anchor="middle">
+          <text x="130" y="146">V1</text><text x="200" y="146">V2</text><text x="270" y="146">V3</text>
+          <text x="340" y="146">V4</text><text x="410" y="146">V5</text>
+        </g>
+
+        <!-- 底部管路：大气→[进气阀]→泵→腔体；腔体→[排气阀]→大气 -->
+        <text x="20" y="294" font-size="11" fill="#8b949e">大气</text>
+        <text x="511" y="294" font-size="11" fill="#8b949e">大气</text>
+        <g stroke="#90a4ae" stroke-width="5" fill="none">
+          <path d="M46,290 H250"/>          <!-- 进气管 → 泵入口 -->
+          <path d="M280,260 V244"/>          <!-- 泵出口 → 汇流管 -->
+          <path d="M410,232 V214"/>          <!-- 汇流管 → 排气阀 -->
+          <path d="M410,290 H505"/>          <!-- 排气阀 → 大气 -->
+        </g>
+
+        <!-- 进气阀活塞（下排左，cx=150，阀座 y=290） -->
+        <text x="150" y="226" font-size="10" fill="#546e7a" text-anchor="middle">进气阀</text>
+        <line x1="137" y1="290" x2="163" y2="290" stroke="#546e7a" stroke-width="3"/>
+        <rect x="134" y="232" width="32" height="56" rx="5" fill="#eceff1" stroke="#90a4ae" stroke-width="1.5"/>
+        <path d="M150,240 l5,4 l-10,4 l10,4 l-10,4 l5,2" fill="none" stroke="#78909c" stroke-width="2"/>
+        <g class="pistonb" id="pn6"><rect class="stem" x="146.5" y="252" width="7" height="18" rx="2" fill="#78909c"/><rect class="blk" x="139" y="266" width="22" height="18" rx="4"/></g>
+
+        <!-- 排气阀活塞（下排右，cx=410，阀座 y=290） -->
+        <text x="410" y="226" font-size="10" fill="#546e7a" text-anchor="middle">排气阀</text>
+        <line x1="397" y1="290" x2="423" y2="290" stroke="#546e7a" stroke-width="3"/>
+        <rect x="394" y="232" width="32" height="56" rx="5" fill="#eceff1" stroke="#90a4ae" stroke-width="1.5"/>
+        <path d="M410,240 l5,4 l-10,4 l10,4 l-10,4 l5,2" fill="none" stroke="#78909c" stroke-width="2"/>
+        <g class="pistonb" id="pn7"><rect class="stem" x="406.5" y="252" width="7" height="18" rx="2" fill="#78909c"/><rect class="blk" x="399" y="266" width="22" height="18" rx="4"/></g>
+
+        <!-- 泵（370 充吸两用） -->
+        <circle class="pumpc" id="pumpc" cx="280" cy="290" r="30" fill="#cfd8dc" stroke="#546e7a" stroke-width="2"/>
+        <g id="imp">
+          <path d="M280,290 L280,268 A22,22 0 0 1 299,279 Z"/>
+          <path d="M280,290 L280,268 A22,22 0 0 1 299,279 Z" transform="rotate(120 280 290)"/>
+          <path d="M280,290 L280,268 A22,22 0 0 1 299,279 Z" transform="rotate(240 280 290)"/>
+          <circle cx="280" cy="290" r="5" fill="#37474f"/>
+        </g>
+        <text x="280" y="354" font-size="10" fill="#8b949e" text-anchor="middle">370 泵 · 充吸两用</text>
+
+        <!-- 流向箭头：充气(青) / 抽气(紫) / 释放(绿)，JS 切换 opacity -->
+        <g class="flow" id="flowIn">
+          <path d="M52,290 H240" marker-end="url(#arwC)"/>
+          <path d="M280,258 V246" marker-end="url(#arwC)"/>
+        </g>
+        <g class="flow" id="flowVac">
+          <path d="M280,246 V258" marker-end="url(#arwP)"/>
+          <path d="M414,290 H496" marker-end="url(#arwP)"/>
+        </g>
+        <g class="flow" id="flowRel">
+          <path d="M410,218 V230" marker-end="url(#arwG)"/>
+          <path d="M414,290 H496" marker-end="url(#arwG)"/>
+        </g>
+
+        <!-- 压力表（汇流管右侧，S0） -->
+        <text x="532" y="120" font-size="9" fill="#8b949e" text-anchor="middle">S0 汇流</text>
+        <circle cx="532" cy="150" r="22" fill="#10161d" stroke="#546e7a" stroke-width="2"/>
+        <g stroke="#8b949e" stroke-width="1.5">
+          <line x1="519.9" y1="157" x2="516.4" y2="159"/><line x1="519.9" y1="143" x2="516.4" y2="141"/>
+          <line x1="532" y1="136" x2="532" y2="132"/>
+          <line x1="544.1" y1="143" x2="547.6" y2="141"/><line x1="544.1" y1="157" x2="547.6" y2="159"/>
+        </g>
+        <g transform="translate(532,150)">
+          <g id="needle"><line x1="0" y1="4" x2="0" y2="-15" stroke="#f85149" stroke-width="2"/></g>
+          <circle r="3" fill="#e6edf3"/>
+        </g>
+        <text id="gval" x="532" y="188" font-size="13" font-weight="bold" fill="#58a6ff"
+              text-anchor="middle" font-family="Consolas">0.0</text>
+        <text x="532" y="200" font-size="9" fill="#8b949e" text-anchor="middle">kPa</text>
+      </svg>
+
+      <!-- 泵 PWM + 全局动作（作用于选中端口掩码） -->
+      <div class="row">
+        <span style="color:var(--dim)">泵 PWM</span>
+        <input type="range" id="pwmI" min="80" max="255" value="255" style="flex:1"
+               oninput="pwShow(this.value)">
+        <b id="pwmv" style="color:var(--accent);font-family:Consolas;min-width:28px">255</b>
+        <span style="color:var(--dim)">掩码</span>
+        <b id="maskv" style="color:var(--accent);font-family:Consolas">7</b>
+      </div>
+      <div class="acts">
+        <button onclick="cmdI()">▶ 充气</button>
+        <button onclick="cmdV()">▼ 抽气</button>
+        <button onclick="cmdR()">↗ 释放</button>
+        <button onclick="cmdS()">■ 保压</button>
+        <button onclick="cmdX()">◎ 复位</button>
+      </div>
+      <div class="acts2">
+        <button onclick="send('F')">🔧 自检</button>
+        <button onclick="send('T')">📊 状态字</button>
+        <button onclick="send('L')">⚡ 阀节能</button>
+        <button onclick="send('X')">↺ 闭环复位</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>端口控制（点击卡片头部选择端口）</h3>
+      <div id="pcards"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════ 中栏：Scheduler 任务序列 ═══════════ -->
+  <section>
+    <div class="card">
+      <h3>任务序列 Scheduler</h3>
+      <div class="schedbtns">
+        <button onclick="schedAddRow()">＋ 行</button>
+        <button onclick="schedDelRow()">－ 行</button>
+        <button onclick="schedReset()">↺ 复位</button>
+        <button id="schedPlayBtn" onclick="schedPlay()" style="background:#1a5c2e;border-color:#2ea043">▶ 运行</button>
+        <button onclick="schedStopSeq()" style="background:#5c1a1a;border-color:#a03030">■ 停止</button>
+      </div>
+      <table id="schedtbl">
+        <thead><tr><th>#</th><th>偏移 ms</th><th>命令</th><th>状态</th></tr></thead>
+        <tbody id="schedbody"></tbody>
+      </table>
+      <div class="hint">
+        每行 = 相对 ▶ 运行时刻的偏移(ms) + 一条 CLI 命令。<br>
+        例：<b>I 7 255</b> 充气(端口1-3) · <b>S 7</b> 保压 · <b>R 7</b> 释放 · <b>G 7 40 0</b> 闭环充至 40kPa · <b>X</b> 闭环复位
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ 右栏：压力曲线 + 传感器 + 注入 + 日志 ═══════════ -->
+  <section>
+    <div class="card">
+      <h3>压力曲线（60 点滚动）</h3>
+      <div id="chart"></div>
+      <div class="snsrow"><span>S0 汇流压力</span><b id="sns0">--</b></div>
+      <div class="snsrow"><span>S1 端口压力</span><b id="sns1">--</b></div>
+      <div class="snsrow"><span>泵 PWM</span><b id="pumpv2">0</b></div>
+    </div>
+
+    <div class="card">
+      <h3>物理注入（仿真）</h3>
+      <div class="row">
+        <span style="color:var(--dim)">传感器</span>
+        <select id="simIdx"><option value="0">S0</option><option value="1">S1</option></select>
+        <input id="simVal" type="number" value="50" style="width:70px"> kPa
+        <button onclick="simInject()">注入</button>
+      </div>
+      <div class="hint">S0 会被物理模型持续演化（充升/排降/微漏），注入即设定起点。</div>
+    </div>
+
+    <div class="card">
+      <h3>运行日志</h3>
+      <div id="devlog"></div>
+    </div>
+  </section>
+</div>
+
+<script>
+'use strict';
+/* ═══════════════════════════════════════════════════════════
+   FlowIO-CN P0 数字孪生控制台
+   轮询 GET /api/state @200ms · 命令 POST /api/cmd · 注入 POST /api/sim
+   逻辑层全部在 pn_core（DLL），前端只做展示与控制。
+   ═══════════════════════════════════════════════════════════ */
+const $ = id => document.getElementById(id);
+
+/* ── 全局状态 ── */
+let S = { state: 0, valves: [0, 0, 0, 0, 0, 0, 0], pump: 0, sensors: [0, 0], cl: 'IDLE', err: 0 };
+let mask = 7;                       /* 选中端口掩码，默认端口 1-3 */
+let prevCl = 'IDLE', prevErr = 0, connWarned = false;
+
+/* ═══ 日志（最新在上） ═══ */
+function dlog(msg, cls) {
+  const box = $('devlog');
+  const d = document.createElement('div');
+  if (cls) d.className = cls;
+  d.textContent = '[' + new Date().toLocaleTimeString('zh-CN', { hour12: false }) + '] ' + msg;
+  box.insertBefore(d, box.firstChild);
+  while (box.childElementCount > 200) box.removeChild(box.lastChild);
+}
+
+/* ═══ 命令发送 ═══ */
+async function send(line) {
+  try {
+    const r = await fetch('/api/cmd', { method: 'POST', body: line });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    dlog('▶ ' + line, 'cmd');
+  } catch (e) {
+    dlog('✗ 发送失败 [' + line + '] ' + e.message, 'warn');
+  }
+}
+function pw() { return $('pwmI').value; }
+function pwShow(v) { $('pwmv').textContent = v; }
+function tShow(i, v) { $('pvtv' + i).textContent = v + ' kPa'; }
+function cmdI() { send('I ' + mask + ' ' + pw()); }
+function cmdV() { send('V ' + mask + ' ' + pw()); }
+function cmdR() { send('R ' + mask); }
+function cmdS() { send('S ' + mask); }
+function cmdX() { send('X'); }
+
+/* ═══ 端口控制卡片 ×5（Step 5） ═══ */
+const PORT_NAMES = ['端口 1', '端口 2', '端口 3', '端口 4', '端口 5'];
+
+function buildCards() {
+  $('pcards').innerHTML = PORT_NAMES.map((nm, i) => {
+    const bit = 1 << i, spare = i >= 3;
+    return `
+    <div class="pcard${spare ? ' un' : ''}${(mask & bit) ? ' sel' : ''}" id="pvcard${i}">
+      <div class="hd" onclick="togglePort(${i})">
+        <span class="nm">${nm}${spare ? ' <span class="tag">备用</span>' : ''}</span>
+        <span class="tag" id="pvs${i}">阀关·密封</span>
+      </div>
+      <div class="prow">
+        <span class="pval" id="pvp${i}">0.0<small> kPa</small></span>
+        <span class="psrc">S1 端口侧</span>
+      </div>
+      <div class="pbtns">
+        <button onclick="send('I ${bit} '+pw())">充</button>
+        <button onclick="send('S ${bit}')">保</button>
+        <button onclick="send('R ${bit}')">释</button>
+        <button onclick="send('V ${bit} '+pw())">抽</button>
+      </div>
+      <div class="clrow">
+        <span>目标</span>
+        <input type="range" min="0" max="100" value="40" id="pvt${i}"
+               oninput="tShow(${i},this.value)">
+        <span class="tv" id="pvtv${i}">40 kPa</span>
+        <button onclick="clGo(${i})">◎ 闭环</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+function togglePort(i) {
+  mask ^= 1 << i;
+  if (!mask) mask = 1 << i;                       /* 至少保留一个端口 */
+  $('pvcard' + i).classList.toggle('sel', !!(mask & (1 << i)));
+  $('maskv').textContent = mask;
+  dlog('端口掩码 → ' + mask);
+}
+function clGo(i) {
+  const t = parseFloat($('pvt' + i).value) || 0;
+  send('G ' + (1 << i) + ' ' + t + ' 0');
+}
+
+/* ═══ ECharts 压力曲线（60 点窗口） ═══ */
+let chart = null;
+const hist = { s0: [], s1: [] };
+if (window.echarts) {
+  chart = echarts.init($('chart'));
+  chart.setOption({
+    animation: false,
+    grid: { left: 40, right: 8, top: 26, bottom: 18 },
+    legend: { data: ['S0 汇流', 'S1 端口'], textStyle: { color: '#8b949e', fontSize: 10 }, top: 2, itemWidth: 14 },
+    xAxis: { type: 'category', show: false, data: [] },
+    yAxis: {
+      type: 'value', name: 'kPa', nameTextStyle: { color: '#8b949e', fontSize: 10 },
+      axisLabel: { color: '#8b949e', fontSize: 10 }, splitLine: { lineStyle: { color: '#21262d' } }
+    },
+    series: [
+      { name: 'S0 汇流', type: 'line', showSymbol: false, data: [], lineStyle: { color: '#58a6ff', width: 1.5 } },
+      { name: 'S1 端口', type: 'line', showSymbol: false, data: [], lineStyle: { color: '#3fb950', width: 1.5 } }
+    ]
+  });
+  window.addEventListener('resize', () => chart.resize());
+} else {
+  dlog('⚠ echarts 未加载，曲线面板停用', 'warn');
+}
+function chartPush(s0, s1) {
+  hist.s0.push(+s0.toFixed(2)); hist.s1.push(+s1.toFixed(2));
+  if (hist.s0.length > 60) { hist.s0.shift(); hist.s1.shift(); }
+  if (chart) chart.setOption({ series: [{ data: hist.s0.slice() }, { data: hist.s1.slice() }] });
+}
+
+/* ═══ Scheduler 任务序列引擎（Step 4） ═══ */
+const SCHED_DEFAULT = [
+  { t: 0,    cmd: 'I 7 255' },
+  { t: 3000, cmd: 'S 7' },
+  { t: 5000, cmd: 'R 7' },
+  { t: 7000, cmd: 'S 7' }
+];
+let rows = SCHED_DEFAULT.map(r => ({ ...r }));
+let schedTimers = [];
+let schedRunning = false;
+
+function renderSched() {
+  $('schedbody').innerHTML = rows.map((r, i) => `
+    <tr id="str${i}">
+      <td>${i + 1}</td>
+      <td><input class="tcell" type="number" value="${r.t}" onchange="updRow(${i},'t',this.value)"></td>
+      <td><input type="text" value="${r.cmd.replace(/"/g, '&quot;')}" onchange="updRow(${i},'c',this.value)"></td>
+      <td id="strs${i}" style="color:var(--dim)">待机</td>
+    </tr>`).join('');
+}
+function updRow(i, k, v) {
+  if (!rows[i]) return;
+  if (k === 't') rows[i].t = Math.max(0, parseInt(v) || 0);
+  else rows[i].cmd = v.trim();
+}
+function schedAddRow() { rows.push({ t: 0, cmd: 'I 7 255' }); renderSched(); dlog('＋ 序列行 ' + rows.length); }
+function schedDelRow() { if (!rows.length) return; rows.pop(); renderSched(); dlog('－ 删除末行'); }
+function schedReset() {
+  schedStopSeq(true);
+  rows = SCHED_DEFAULT.map(r => ({ ...r }));
+  renderSched();
+  dlog('↺ 序列复位为默认');
+}
+function schedPlay() {
+  if (schedRunning || !rows.length) return;
+  schedStopSeq(true);                              /* 清掉旧计时器，状态列复位 */
+  schedRunning = true;
+  $('schedPlayBtn').disabled = true;
+  dlog(`▶ 序列开始（${rows.length} 行，按 t0 偏移执行）`);
+  let maxT = 0;
+  rows.forEach((r, i) => {
+    maxT = Math.max(maxT, r.t);
+    schedTimers.push(setTimeout(() => {
+      const tr = $('str' + i), st = $('strs' + i);
+      if (tr) tr.className = 'run';
+      if (st) st.textContent = '已执行';
+      send(r.cmd);
+    }, Math.max(0, r.t)));
+  });
+  schedTimers.push(setTimeout(() => {
+    schedRunning = false;
+    $('schedPlayBtn').disabled = false;
+    dlog('■ 序列完成');
+  }, maxT + 400));
+}
+function schedStopSeq(silent) {
+  schedTimers.forEach(clearTimeout);
+  schedTimers = [];
+  const was = schedRunning;
+  schedRunning = false;
+  $('schedPlayBtn').disabled = false;
+  rows.forEach((r, i) => {
+    const tr = $('str' + i), st = $('strs' + i);
+    if (tr) tr.className = '';
+    if (st) st.textContent = '待机';
+  });
+  if (was && !silent) dlog('■ 序列已停止');
+}
+
+/* ═══ 物理注入（仿真） ═══ */
+function simInject() {
+  const body = $('simIdx').value + ' ' + $('simVal').value;
+  fetch('/api/sim', { method: 'POST', body })
+    .then(r => r.json())
+    .then(j => dlog('◆ 注入 S' + $('simIdx').value + ' = ' + $('simVal').value + ' kPa' + (j.ok ? '' : ' ✗')))
+    .catch(e => dlog('✗ 注入失败 ' + e.message, 'warn'));
+}
+
+/* ═══ 状态轮询 + 渲染（Step 3，200ms） ═══ */
+async function poll() {
+  let s;
+  try {
+    s = await (await fetch('/api/state', { cache: 'no-store' })).json();
+  } catch (e) {
+    if (!connWarned) { dlog('⚠ 通信中断：/api/state 不可达', 'warn'); connWarned = true; }
+    return;
+  }
+  connWarned = false;
+  S = s;
+  render();
+}
+
+function render() {
+  const s = S;
+  /* 顶栏 */
+  $('tbstate').textContent = '0x' + (s.state & 0xFFFF).toString(16).toUpperCase().padStart(4, '0');
+  if (s.cl !== prevCl) { dlog('闭环: ' + prevCl + ' → ' + s.cl); prevCl = s.cl; }
+  $('tbcl').textContent = s.cl;
+  $('errdot').classList.toggle('err', !!s.err);
+  $('tberr').textContent = s.err ? '错误' : '无错误';
+  if (s.err && !prevErr) dlog('⚠ 状态字错误位置位 (bit15)', 'warn');
+  prevErr = s.err;
+  $('tbclk').textContent = new Date().toLocaleTimeString('zh-CN', { hour12: false });
+
+  /* 阀活塞 ×7：duty>0 = 导通（绿+下压） */
+  for (let i = 0; i < 7; ++i) $('pn' + (i + 1)).classList.toggle('on', s.valves[i] > 0);
+
+  /* 泵叶轮 */
+  const pumpOn = s.pump > 0;
+  $('imp').classList.toggle('on', pumpOn);
+  $('pumpc').classList.toggle('on', pumpOn);
+  $('pumpv2').textContent = s.pump;
+
+  /* 流向箭头：充气(青)/抽气(紫)/释放(绿) */
+  const inlet = s.valves[5] > 0, vent = s.valves[6] > 0;
+  $('flowIn').classList.toggle('show',  pumpOn && inlet);
+  $('flowVac').classList.toggle('show', pumpOn && !inlet && vent);
+  $('flowRel').classList.toggle('show', !pumpOn && vent);
+
+  /* 压力表：-120°…+120° ↔ 0…130 kPa */
+  const p0 = s.sensors[0], p1 = s.sensors[1];
+  const deg = -120 + Math.max(0, Math.min(130, p0)) / 130 * 240;
+  $('needle').style.transform = 'rotate(' + deg.toFixed(1) + 'deg)';
+  $('gval').textContent = p0.toFixed(1);
+  $('sns0').textContent = p0.toFixed(1) + ' kPa';
+  $('sns1').textContent = p1.toFixed(1) + ' kPa';
+
+  /* 端口卡片：S1 读数 + 阀位标签 */
+  for (let i = 0; i < 5; ++i) {
+    $('pvp' + i).innerHTML = p1.toFixed(1) + '<small> kPa</small>';
+    const open = (s.state >> i) & 1;
+    const tag = $('pvs' + i);
+    tag.textContent = open ? '阀开' : '阀关·密封';
+    tag.className = 'tag' + (open ? ' open' : '');
+  }
+
+  chartPush(p0, p1);
+}
+
+/* ═══ 启动 ═══ */
+buildCards();
+renderSched();
+dlog('✅ FlowIO-CN P0 数字孪生控制台就绪');
+dlog('轮询 /api/state @200ms · 命令 POST /api/cmd');
+poll();
+setInterval(poll, 200);
+</script>
+</body>
+</html>
