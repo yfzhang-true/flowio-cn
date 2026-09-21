@@ -1,0 +1,16 @@
+# ── 工具缓存 / 临时文件 ──
+.mimosa/
+.tmp_*
+*.log
+__pycache__/
+
+# ── 仓库整理暂存目录（subtree 合并期间存在，完成后删除）──
+/.fwkeep/
+
+# ── 第三方参考库解包目录（453M 不入库；官方 zip 已保留在根目录）──
+/FlowIO-Arduino-Libraries-master/
+
+# ── OS 杂物 ──
+Thumbs.db
+Desktop.ini
+.DS_Store
