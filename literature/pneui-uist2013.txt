@@ -1,0 +1,835 @@
+PneUI: Pneumatically Actuated Soft Composite Materials 
+for Shape Changing Interfaces 
+Lining Yao1, Ryuma Niiyama1, Jifei Ou1, Sean Follmer1, Clark Della Silva2, Hiroshi Ishii1 
+1MIT Media Lab 
+Cambridge, MA 02139 USA 
+{lining, ryuma, jifei, sean, ishii}@ media.mit.edu 
+2MIT EECS 
+Cambridge, MA 02139 USA 
+clarkds@ mit.edu 
+ 
+ 
+Figure 1:  Application demonstration s. (a) A shape changing mobile . (b) Height changing tangible phicons . (c) A transformable 
+tablet case.  (d) A shape-shifting lamp.
+ABSTRACT 
+This paper presents PneUI, an enabling technology  to build 
+shape-changing interfaces through pneumatically -actuated 
+soft composite materials. The composite materials integrate 
+the capabilities of both input sensing and active shape 
+output. This is enabled by the composites’ multi- layer 
+structures with di fferent mechanical or electrical properties. 
+The shape changing states are computationally controllable 
+through pneumatics and pre- defined structure.  We explore 
+the design space of PneUI through four applications: height 
+changing tangible phicons,  a shape changing mobile , a 
+transformable tablet case  and a shape shifting lamp.  
+Author Keywords 
+Soft Composite Material;  Pneumatic System; Soft Actuator; 
+Soft Robotics;  Human-Material Interaction; Shape 
+Changing Interface; Radical Atoms; Organic User Interface  
+ACM Classification Keywords  
+H.5.2. User Interfaces : Haptic I/O; Prototype 
+INTRODUCTION 
+Hard bodies with construction of rigid structural and 
+electronic elements have limited the form, function and 
+interaction of shape changing interfaces in HCI  [37]. Thus a 
+range of technologies in HCI have been developed to 
+enable soft and organic in terfaces, including flexible 
+sensing techniques [ 28], dynamic stiffness  [3], texture and 
+buttons on malleable surfaces [6, 7], soft deformable 
+surface output [ 1, 13], and 2.5D shape display with elastic 
+covers [18].  In contrast, inspired by marine organisms that 
+sense and accomplish drastic body deformation and 
+locomotion by soft actuators [28], we take a holistic view of 
+the material itself and envision a composite material that 
+integrates input sensing and active shape output.  Materials 
+with different mechanical properties can be combined to  
+form separate structural layers for the soft composites, 
+which can be utilized to create shape changing interfaces 
+without rigid mechanical elements. This research is driven 
+by the vision of Radical Atoms [ 11], which proposes a 
+group of physical materials as a dynamic manifestation of 
+digital information. 
+While the study of soft motion and mechanisms is a 
+growing topic in robotics , approaches and techniques in soft 
+robotics have not been fully explored in HCI.  In this paper, 
+we presented PneUI, pneumatically actuated soft composite 
+materials, that follow three principles:  1) the shape output is 
+computationally controllable through pneumatics and pre -
+defined structure; 2) the material should enable either 
+isotropic (uniform in all orientations) or anisotropic 
+(directionally dependent) deformation determined by the 
+intrinsic properties of the  composite; 3) the material should 
+integrate both input sensing and active shape output. 
+Examples of utilizing shape changing primitives for HCI 
+applications are illustrated in Figure 1.  
+In this paper , we first describe the design considerations of 
+applying our soft composite materials for HCI. We then talk 
+about the layered structures of soft composite materials  and 
+explain the composites’ active shape output and input 
+Permission to make digital or hard copies of all or part of this work for 
+personal or classroom use is granted without fee provided that copies  are 
+not made or distributed for profit or commercial advantage and that 
+copies bear this notice and the full citation on the first page. Copyrights 
+for components of this work owned by others than ACM must be 
+honored. Abstracting with credit is permitted.  To copy otherwise, or 
+republish, to post on servers or to redistribute to lists, requires prior 
+specific permission and/or a fee. Request permissions from 
+permissions@acm.org. 
+UIST'13, October 08 – 11, 2013, St. Andrews, United Kingdom. 
+Copyright © 2013 ACM 978-1-4503-2268-3/13/10...$15.00. 
+http://dx.doi.org/10.1145/2501988.2502037  
+sensing capabilities in separate chapters. Finally, we 
+describe pneumatic control systems and applications.  
+We present the following main contributions: 
+• Creation of pneumatically actuated soft composite 
+materials, which integrate s both input sensing and 
+active shape output.  
+• Development of a framework for creation and testing 
+of selected materials, structures, soft fabrication 
+processes, and pneumatic control systems to construct 
+soft composite materials.  
+• Primitives of soft shape changing at both macro and 
+micro scales, including curvature change of surfaces, 
+unidirectional volume change of solid geometries, and 
+dynamic texture change.  
+• Development of two techniques that embed sensing 
+into composite material and interfaces: 1) conductive 
+pads composited on structural layers for sensing shape 
+output and gestural input using capacitive and electric 
+field sensing; 2) liquid metal embedded in elastomeric 
+air channels for sensing deformation of soft surfaces.  
+RELATED WORK 
+Soft Robotics 
+Soft robotics is an emerging domain that is dedicated to 
+robots comprised of soft components including soft 
+actuators, flexible sensor/circuits, and soft bodies [ 10]. In 
+contrast to other techniques for shape change, such as 
+spatial arrangement of actuated modules [ 20], self -foldable 
+chains [9], self-foldable surfaces [ 8, 15], soft robotics often 
+focuses on pneumatic actuation of elastomeric channels and 
+bladders. Pneumatic actuation is chosen because air is a 
+lightweight, compressible and environmentally benign 
+energy source [32].  
+While a primary focus of soft robotics is  the improvement 
+of the robot's performance and the exploration of the bio -
+inspired mechanism itself, there is a large space to 
+introduce soft robotic technology in constructing shape 
+changing interfaces. One design space is to explore not only 
+isotropic, but also anisotropic deformation with soft 
+composite materials: an elastomer by itself deforms 
+uniformly under stress; however, by compositing different 
+structural layers with various mechanical properties, t he 
+orientation of deformation can be pre -defined [ 19]. We 
+build on this work by exploring other topologies, 
+integrating sensing, and applying these concepts to HCI.   
+Shape Changing User Interfaces  
+The exploration of Shape Changing User Interfaces in HCI 
+is still in its infancy, as techniques for shape change, 
+flexible sensing and interaction techniques are being 
+developed [ 2, 37]. Shape- Changing Mobile s [9] are 
+actuated by RC servo motors  to provide tapering of the 
+back of the mobile phone. Densely arranged linear actuator 
+arrays have demonstrated successful results in presenting 
+complex 2.5D relief forms [ 18]. Those rigid mechanisms 
+can achieve controllable transformations, yet not compliant, 
+making it hard for these systems to conform to intricate 
+shapes and limiting the amount of possible shape change  
+states. Shape memory alloy (SMA) based actuators have 
+been used to bend surfaces [ 1]. It has been integrated into 
+mobile devices [ 27, 5] allowing for edges to be bent. SMA 
+is lightweight and strong for its weight, but often slow.  
+In the field of HCI , pneumatic inflation has also been 
+explored as an approach for shape change. Volflex [ 12] is a 
+volumetric display consisting of independently co ntrolled 
+balloons. Deformable convex or concave hemispherical 
+membranes with rims can be used for an inflatable multi -
+touch display [35]. Inflatable Mouse [ 13] is a shape- shifting 
+mouse that can change the volume by using an air balloon 
+and a built -in pump. Closely related to our work , Harrison 
+explored dynamically changeabl e physical buttons on a 
+display, with a variety of different materials for creating 
+soft and ridged buttons, and integrated multi -touch sensing 
+on the surface through diffuse illumination, pressure 
+sensing for input [ 7]. Granular jamming [ 3], which can also 
+be controlled pneumatically, can provide malleable surface 
+with adjustable stiffness, and allows for passive shape 
+change. In contrast to jamming, this work focuses on 
+pneumatic actuation – allowing for active shape change . 
+The types of shape change in HCI have been categorized as: 
+orientation, form, volume, texture, viscosity, spatiality, 
+adding/subtracting and permeability [ 26]. We chose to 
+focus on curvature, volume and texture as shape change 
+primitives because we believe those encompass a large 
+space of shape change in mobile and tangible applications, 
+as demonstrated by past work [ 9, 6, 27]. 
+Flexible Sensing Techniques 
+A range of sensing techniques on soft surf aces has been 
+explored in HCI, optical sensing [ 3] and flexible capacitive 
+sensing [ 3, 31] are amon g common approaches. “Sensing 
+through structure” has been introduced to sense the 
+deformation of flexible surfaces and structures [ 33, 8]. 
+In Soft Robotics, sensing through the deformation of the 
+surface itself is a unique approach afforded by the elastic 
+nature of soft materials.  A range of stretchy sensors, bend 
+sensors and pressure sensors have been built [ 1, 22,16, 17]. 
+Soft Fabrication  
+We choose fabrication processes that are feasible in 
+common fabrication laboratories. One notable case is Soft 
+Lithography [ 25], which is used to generate 3D structures 
+within elastic polymers. Soft roboticists adapted the process 
+for fabricating elastomer, especially silicon rubber, with 
+integrated air bladders and channels. This process requires 
+high precision equipment and fabrication processes, such as 
+high resolution molds, spin coaters, and precise deposition 
+process.   
+ 
+Figure 2:  Diagram of composite structure. Structure Layer I responds isotropically  to stress; Structure Layer II enables 
+anisotropic deformation in response to air pressure; Sensing Layer enables the sensing of both hand input and shape output; Add -
+on Layer manipulates other material properties rather than the shape change, either hap tically or visually. The underlined 
+materials and structures are the ones that have been tested out.
+SOFT COMPOSITE INTER FACE FOR HCI 
+Pneumatic soft c omposites provide many opportunities for 
+designing significant and novel applications for  HCI, 
+primarily as an enabling technology for shape changing 
+user interfaces.  Shape change can be used to convey 
+information to the user about computational state and 
+provide dynamic affordances. By combining a sensing layer 
+in the soft composite interface, PneUI interface  can sense a 
+range of inputs and outputs.  
+Information Representation 
+Shape change, both at the macro and micro level, can be 
+used to convey computational states to users as a type of 
+display. For example, smaller scale shape change, which we 
+call texture change, has previously been shown to enable a 
+separate haptic channel for representing or communicating 
+information [ 6]. Pneumatic soft c omposites provide 
+dynamically controllable texture patterns that can vary 
+density, frequency and sequence.  A shape changing iPad 
+case is introduced in the paper as an example of dynamic 
+textures.   
+Dynamic Affordances and Ergonomics  
+Shape c hange can also provide new ways for users to 
+interact with devices on demand. In addition to dynamic 
+physical affordances, adaptable shapes can increase 
+economic performance for specific tasks.  We develop a 
+prototype of mobile phone that can change shape and 
+motion for different use cases. 
+Sensing Modalities 
+We categorize the achievable sensing modalities into: 1) 
+sensing gestures on the surface, 2) gestures hovering over 
+the surface, 3) gestures that deform the surface, and 4) air 
+deforming the surface. The first three are input modalities, 
+and the last one i s shape output. Further, the innate 
+characteristics of soft interface could afford a wider variety 
+of manipulations to deform the surface, such as pushing, 
+stretching, bending, embracing, stroking and squeezing.  A 
+system of shape changing tangible phicons is developed to 
+demonstrate different gesture sensing modalities. 
+STRUCTURE OF THE SOF T COMPOSITE MATERIAL  
+Layered Structure 
+Our pneumatically -actuated soft composite material is 
+designed to enable both isotropic and anisotropic 
+deformation in response to air pressure. The composite 
+material is fabricated with three main layers, including two 
+structural layers and one sensing layer  (Figure 2) . One 
+structural layer utilizes an elastomeric polymer (or 
+elastomer) as the main material to enable isotropic shape 
+deformation. To go beyond isotropic deformation, an 
+additional structural layer includes a range of materials with 
+different elasticity to create constrained anisotrop ic 
+deformation in response to air pressure. Moreover, 
+conductive materials, either solid  or liquid, such as 
+conductive thread and liquid metal, are composited as the 
+sensing layer to sense both input and output. Finally an add -
+on layer can be composited to control other material 
+properties other than active shape output. For example, 
+Jamming particles can control surface stiffness to give 
+haptic affordances or lock shapes in a certain state [3 ]; and 
+thermochromic liquid crystals can be injected into air 
+channels of elastomer to cha nge the color of surfaces . 
+Materials Choices 
+Each layer of the composite includes one or more materials 
+with extrinsically designed structures. These structures can 
+enhance or modify the  deformations caused by pneumatic 
+inflation. For example, copy paper itself has  relatively low 
+elasticity, however, origami structure enables increased 
+
+flexibility in a specific directions. Further, composited 
+conductive layers can form a sensing network. For example, 
+placing electrodes on to 3D substrates enables sensing  the 
+3D shape output through changes in capacitance. 
+Selecting different materials from Figure 2 , and layering  
+them in different orders allow  the construction of multiple 
+soft composite materials. The choice of materials is driven 
+both by the type of shape change we want to achieve and 
+also materials that we think other researchers would have 
+ready access to, so as to make our work more accessible.  
+The underlined materials from Figure 2 are the ones that 
+have been verified during our exploratory experiments. We 
+constructed the table assuming that air is the main actuation 
+method. By introducing a greater variety of energy sources, 
+we could composite additional ranges of active materials, 
+such as heat -driven shape memory alloys and 
+thermoplastics. 
+SHAPE CHANGING PRIMITIVES 
+We choose curvature, volume and texture to explore how 
+soft pneumatic composite material s provide  a range of 
+deformation behaviors and thus enable or enhance shape  
+changing interfaces on bo th the macro and micro level  
+(Figure 3). 
+ 
+Figure 3: Shape changing primitives: curvature, volume and 
+texture. 
+Curvature Change on Surfaces - Bending and Curling 
+The soft mechanical alphabet [2 ] describes the combination 
+of compression and elongat ion to generate curvatures at 
+given point s of a surface.  This is the basis to create 
+physical forms under the constraints of preserved 
+topological equivalents. We introduce two types of 
+composite materials to generate such surface curvatures, 
+utilizing compression and elongation behaviors with 
+inflatable airbags (Figure 4). For both cases, crease patterns 
+on the paper layer or the location of airbags define the 
+position of the deformation.  Air pressure determines the 
+degree of curvature.  
+Elongation with Elastic Airbags for Bending and Curling  
+This composite material includes three layers, a silicon 
+layer with embedded airbags connected with air channels, a 
+paper layer with crease patterns, and a thin silicon layer at 
+the bottom to bond and protect the paper la yer (Figure 5). 
+ 
+Figure 4. Surface curvature can be determined by the 
+compression of airbags with low elasticity (a), or the 
+elongation of airbags with high elasticity (b) . 
+While soft actuators have been introduced before [ 19], our 
+work focuses on introducing paper composite with various 
+crease patterns  to control the bending behavior.  When 
+inflated, the inner airbags function as actuators to generate 
+elongation and force the surface to bend towards the 
+opposite direction. 
+ 
+Figure 5: (a, b) Structure of the composite . (c, d, e) Fabrication 
+process. (c) Pre-mixture of silicon (EcoFlex 00-30, Smooth-on, 
+Inc) is poured into a 3D printed mold designed to form a shape 
+with air channels. (d) Creased paper is soaked into the same 
+silicon mixture. (e) Silicon and paper layer are peeled off 
+molds separately once thermally cured. Two layers are then 
+bonded with uncured silicon.  
+In this case, dynamic control of the curvature is determined 
+by two factors: air pressure and crease pattern. First, air 
+pressure can control the degree of curvature. Our 
+experiments show how pumping additional air w ill make a 
+single bending ( Figure 6d) turn into a curl ing with 
+continuous bending  (Figure 6e). Secondly, the design of 
+paper crease patterns will affect the deformation. We vary 
+three factors of crease patterns i n our experiments: density, 
+location and angle. Figure 6a and 6b indicate how density 
+affects the sharpness of bending.  Low density creases 
+enable sharper bends and by varying the location of crease, 
+we can control the bending location on the surface ( Figure 
+6c and 6d).  Laying out the crease lines diagonally (Figure 
+
+6f) generates  helical shapes instead of curling on a single 
+plane (Figure 6e). Finally, through Figure 6g and 6h we 
+demonstrate a variation of on -surface pattern cuts on thin 
+pieces of wood instead of paper. It shows similar bending 
+and curling behaviors.  
+ 
+Figure 6: (a, b) Crease patterns with varied density; (b, c ) 
+Crease patterns at varied location; (d, e) (e, f) Crease patterns 
+with varied angles; (g, h) Crease patterns on thin wood.  
+To apply the aforementioned approaches of dynamic 
+control of shape changing states, we test how specifically 
+designed c rease patterns and respective control of airbags 
+can make a flat circular shape morph into different spatial 
+structures with three stands ( Figure 7a). We also show a 
+progressive transformatio n from a line to a square ( Figure 
+7b). 
+ 
+Figure 7: Specifically designed crease patterns and respective 
+control of airbags enabling dynamic transformation of shapes.  
+Compression with Nonelastic Airbags  
+This composite material includes two layers: a plain paper 
+layer and plastic ai rbags with low elasticity (Figure 8a). 
+Airbags are fabricated using plastic welding and glued with 
+the paper layer. While inflated, the airbags behave like the 
+biceps (the muscle to pull the arm up), and compresses 
+itself to cause the surface to bend. The inflation of 
+nonelastic airbags happens on the same side as the surfa ce 
+bends towards ( Figure 8). Experiments indicate that  muscle 
+like nonelastic airbags have stronger bending force  than 
+aforementioned elastic airbags , and can bend thicker paper 
+or surfaces made from thin wood or plastic.  
+ 
+Figure 8: (a, b, c) Curvature control by size of the airbag. (d) 
+Combination of the two different airbag sizes.  
+Unidirectional Volume Change of Solid Geometries  
+Origami is adapted through engineering methods to create 
+3D structures out of paper folds [ 36]. Inspired by the work 
+in soft robotics that combines origami with elastomer s to 
+build soft actuators [ 19], we explore the orientational 
+volume changing behaviors. We do this through 
+compositing a range of origami structures with elastomer s. 
+The origami  structures are spin coated and sealed with 
+silicon (EcoFlex 00- 30, Smooth -on, Inc), allowing the 
+volume change to be actuated with air transported into the 
+hollow space (Figure  9). Direct manipulation can also 
+deform the shape. 
+ 
+Figure 9: (a) Structure of the composite surface that forming 
+the volume. (b) Air is pumped into the hollow space for 
+actuation. 
+Three orientational volume changing behaviors are 
+explored: 1) linear elongation, 2) angular expansion and 3) 
+rotatory elongation. Acco rdion structure folded from V -
+pleats [24] enables linear elongation (Figure 10a). Utilizing 
+the same pleating pattern and bonding one side of the folds 
+with silico n, we are able to achieve angular expansion 
+(Figure 10b). Lastly, rotatory elongation can be achieved 
+with cylindrical structure s folded with triangular pleats 
+(Figure 10c) [29]. In this case silicon serves  three functions: 
+sealing the origami structure for air actuation, coating the 
+paper surface for enhancing material durability, and 
+
+constraining elasticity of origami structure within a specific 
+range. 
+ 
+Figure 10: (a) Linear elongation. (b) Angular elongation. (c) 
+Rotatory elongation. 
+Dynamic Texture Change  
+We perceive the change of texture as a local and micro 
+level shape changing behavior occurring on the surface. 
+Two approaches are examined to generate textures on soft 
+surfaces: fabricating air bubbles inside elastomer and 
+compositing fabric with cut patte rns. Conductive threads, 
+such as  plated silver type threads , can be embedded in the 
+composite material for human touch and gesture sensing.  
+ 
+Figure 11: (a, b) Structure of the composite material. (c, d, e) 
+Fabrication process. (c) Pouring pre -mixture of silicon into a 
+mold with threads of beads suspended in the mid -air. (d) 
+Thermally curing the silicon and peeling it off the mold. (e) 
+Pulling the beads out of the silicon for the final sample.  
+Fabricating Air Bubbles inside Elastomer  
+In the sample from Figure  11, each column of air bubbles 
+can be inflated separately.  We can vary the density, 
+frequency and sequence of texture by pumping and 
+vacuuming air in separate columns at different times. The 
+combination of the three factors is capable of 
+communicating different types of information, such as 
+directional signals  and speed. Also, by compositing a 
+second silicon layer with bigger airbags, we can combine 
+deformation on both macro and micro level, to create 
+texture patterns on a deformable, 3D surface.  
+Compositing Fabric with Cut Patterns  
+Another approach to generate texture on soft surfaces is to 
+composite flexible material with cut patterns (Figure 12). 
+Elastic fabri c (Spandex) was chosen due to its compliance 
+under stress when composited with silicon.  
+ 
+Figure 12: (a) Structure of composite material. (b) Fabric 
+constraints of deformation in local areas of surface.  
+The difference in the elastic modulus of fabric compared 
+with silicon creates multi -state deformation. We 
+demonstrate that the same surface will deform from macro 
+to micro level as air pressure is increased (Figure 13). 
+ 
+Figure 13: As the increase of air pressure, the su rface deform 
+from global to local region.  
+One advantage of a fabric -elastomer composite is the ease 
+of designing and fabricating  different patterns. Rather than 
+making customized molds for textures, patterns can be 
+quickly designed and cut w ith digital fabrication methods , 
+such as laser cutting . Figure 14  shows a variety of texture 
+patterns we have explored.  
+ 
+Figure 14: Different textures are generated due to different cut 
+patterns on the fabric composite layer.   
+COMPOSITE SENSING LA YER 
+To sense input and output, we have explored different 
+sensing techniques, including compositing elect rodes to 
+sense global structur al change , and embedding fluid 
+conductors to sense local surface defor mation with high 
+sensitivities. The cause of shape deformation can be air or 
+human gestures. 
+Composite Thin and Flexible Circuitry  
+Flexible circuitry, which is cut out of copper tape or printed 
+by an inkjet printer with conductive ink, can be composited 
+as a sensing layer in the soft composite material. We 
+designed customizable electrode patterns to sense direct 
+touch and near range proximity by measuring the 
+
+capacitance between human fingers and the electrode 
+network. A coating of silicon layer on top of the sensing 
+pads enables insulation. Multilayer circuitry can be 
+composited with silicon layer s in between. Furt her, through 
+the application of shape shifting lamp, we have also 
+demonstrated the possibility of compositing rigid electrical 
+components, such as surface mounted LEDs, with in soft 
+bodies. 
+Composite Sensors on Folding Structures  
+In the case of using origami as a supporting and 
+constraining structure, electrodes  made from copper tape  
+can be composited with paper folds to sense structural 
+deformations.  These deformations can be caused by either 
+pneumatic actuation or direct manipulation .  The separation 
+distance between folds correlates to the capacitance 
+between the electrodes as shown in Figure 15. For a linear 
+accordion, four electrode pairs on both sides of the structure 
+were sufficient to measure the height of each side. Other 
+electrode placemen ts can be extended to sense additional 
+geometrical folding structures.  
+ 
+Figure 15: Four pairs of electrodes on adjacent faces of the 
+folds are used to sense geometrical deformation.  (a, b) Sensing 
+the height. (c) Sensing side bending. (d) Sensing diagonal 
+bending. 
+Measurements are taken by stimulating one electrode with a 
+square wave and then reading the induced voltage on the 
+adjacent electrodes .  Readings are taken at time T after the 
+rising and falling edges of the square wave, and the 
+difference between these measurements is averaged for 23 
+cycles (Figure 16 ).  Because the time constant of an RC 
+circuit is dependent on C, as C changes, the voltage at time 
+T changes, allowing for relative changes in capacitance to 
+be measured.  Sensor data for each side is averaged and 
+then passed through a windowed time averag e in order to 
+eliminate noise.  The value for each side is then unity -
+normalized to determine the relative height of each side.  
+Composite Liquid Metal in Elastomeric Channels  
+Soft robotic engineers have shown how to construct elastic 
+sensing surfaces by i njecting conductive liquid metal 
+(eGaIn) into inner channels of elastomer [ 1]. The resistance 
+of liquid metal changes in response to the deformation of 
+the channels. 
+ 
+Figure 16: Relative side heights for various deformations of a 
+linear accordion 
+We adapt this sensing technique  to fabricate the top layer of 
+the composite material.  It can  sense surface deformation 
+through both direct  manipulation and air actuation  (Figure 
+17). These conductive channels can also be used for 
+capacitive sensing. 
+ 
+Figure 17:  The resistance of liquid metal sensor changes in 
+response to the deformation of the elastomeric channels 
+through either air actuation (b) or direct manipulation (c) .  
+PNEUMATIC CONTROL SY STEMS 
+The pneumatic control system energize s the soft composite 
+material. Air can be either injected into air channels inside 
+elastomer, or introduced into the space wrapped  around by 
+the composite material.  
+There are three modes to control the airflow in and out of 
+the soft composite material: supply, exhaust, and close. The 
+supply/exhaust is the mode to inflate/deflate an air bag. The 
+close mode stops the airflow to air ins ide the composite.  
+Figure 18 shows a pn eumatic control circuit consisting  of 
+two 3 -port solenoid valves, an air compressor, and a 
+vacuum pump for a single air bag.  
+ 
+Figure 18: (Left) Basic pneumatic circuit for single air bag; 
+(Right) self-contained pneumatic system  
+We use a large -sized stationary air compressor  (Silent Aire 
+Tech., Super Silent compressor 50 ) and a vacuum pump 
+(Rocker Scientific, Oil -Free Pump 300 ) for experiments. 
+However, t ypical tethered pneumatic systems with a 
+
+stationary air compressor limits use in portable applications. 
+Therefore, we developed a miniature pneumatic control 
+system with small solenoid valves (SMC, Series S070), a 
+pump used as both supply and vacuum (Koge Electronics, 
+Series KPV), and lithium polymer battery (3.7V, 110mAh). 
+The system indicates feasibility of a further mobile 
+application. The noise levels of the systems are 40dB and 
+72dB for the stationary air co mpressor and the miniature 
+pump used in the portable system, respectively (catalog 
+value). 
+APPLICATIONS 
+We build four prototypes to explore the potential of shape 
+changing interfaces enabled by the soft composite material. 
+Different soft fabrication proces ses that combine structural 
+layers with sensing layers are described in brief. 
+Shape Changing Mobile : Fabricating Multi-state 
+Bending Surfaces 
+The shape changing mobile  is a flexible body that enables 
+multiple bending states, to give users dynamic affordances 
+for various use cases. The surface will animate between flat 
+and bending state  when a call comes in . It can morph from 
+a bar  shape to a curved phone shape if a user answers the  
+phone call; when placed over the user’s arm , it turns into  a 
+wearable wristband  (Figure 19). 
+The fabrication of the shape changing mobile  is based on 
+one type of the aforementioned primitives: curvature 
+change on surfaces.  Touch sensing pads are composited on 
+both upper and bottom side to detect direct touch.  
+ 
+Figure 19: (a) Wrist band mode (b) Bar mode (c) Phone mode  
+Height Changing Tangible Phicons:  Origami Composite 
+with Sensing 
+This application  demonstrates the controllability and 
+connectivity of multiple height -changing objects mediated 
+by graphics  (Figure 20). The system casts computationally 
+generated digital shadows on a graphic touch screen 
+corresponding to the height of the box and imaginary time. 
+Users can change the height of the box by push/pull and 
+release the top. In addition, a user can change the height of 
+the box by editing the digital shadow with drag gesture. 
+This application is intended for computer -aided urban 
+planning in which total capacity of the buildings is one of 
+the conditions. By making bridge between boxes, users can 
+also examine the height of the boxes w ithout changing total 
+volume of the multiple boxes.  
+ 
+Figure 20: (a) Direct push/pull height -changing of the box with 
+shadow simulation (b) Height -changing by editing digital 
+shadow (c) Connecting two boxes with bridge and setting total 
+volume constraint 
+The construction is based on linear elongation of shape 
+changing primitives. The composite sensing techniques of 
+the folding structure is adapted to sense the height change 
+of the buildings. The main fabrication process includes 
+pasting electrodes on paper, folding origami  structures, dip 
+coating and spin coating with silicon.  
+Transformable Tablet Cases : Fabricating Multilayer 
+Airbags 
+For this prototype, while bigger airbags are inflated as 
+grippers for a car racing game controller, columns of 
+smaller air bubbles on top can be inflated sequentially to 
+directions through haptics  (Figure 21). 
+ 
+Figure 21: (a) Flat tablet cover in initial state. (b) Macro 
+volume change for forming grips and micro volume change for 
+haptic sensation. 
+This prototype demonstrates the hybrid of macro and micro 
+level shape change, based on the isotropic deformation 
+behavior exhibited by homogeneous elastomer. Flexible 
+texture layer is molded on top of the bigger airbags.  The 
+fabrication involves multi -stage molding and casting. To 
+keep the prototype thin an d light, we embed two flat Mylar 
+pieces during the casting process, to create two flat yet 
+inflatable airbags below finer texture bubbles.  
+Shape-shifting Lamp : Soft Lithography with Embedded 
+Sensing and Light 
+This lamp supports large deformation from  a straight strip 
+shape to a rounded bulb shape. User s can pull the strip like 
+pulling the chain of a conventional lamp. The strip is the 
+illuminating light itself and it starts to curl and light up . 
+
+This demonstrates Shape- changing combined with optical 
+properties (Figure 22). 
+ 
+Figure 22: (a, b) Lamp in straight state capable of user input 
+by pulling the entire body . (b) Silicon with embedded liquid 
+metal as pulling sensor. (c, d) Lamp in bulb state by curling  
+The construction of the lamp is inspired by one type of 
+shape changing primitives: the curling behavior under 
+curvature change on surfaces. Silicon with embedded liquid 
+metal is fabricated as pulling se nsor, which is attached to 
+the top of the lamp stip.  Soft lithography is adapted for 
+fabricating the shape -shifting lamp. Before the casting 
+process, surface mounted LEDs are soldered on top of 
+flexible copper strips. We then bond the copper strips with 
+a paper substrate with angular cut patterns. The two layers, 
+paper layer and air channel layer, are bonded together with 
+half cured silicon. 
+LIMITATION AND FUTURE WORK 
+While the current soft composite material s have unique 
+limitations in both design and fabrication processes, it 
+opens up exciting directions to explore in the future. 
+Compositing Active Material  
+The current fabrication process allows the interf aces to 
+morph between two shapes, by designing certain structure 
+layers that composite with airbags. It is still desired that the 
+interface can have multiple shape -changing states that can 
+be dynamically controlled in real -time. This could be 
+achieved by i ntroducing other active stimulus  and 
+compositing a wider range of active materials. For example, 
+by embedding memory alloy or heat reactive polymers, and 
+combining two actuation sources (air and heat respectively), 
+we might be able to achieve more flexible control of shape 
+changing states. This is a step closer towards 
+programmable, dynamically controllable, shape changing 
+interfaces. 
+Variations of Source for Actuation  
+Current stationary system has limited mobility. We have 
+shown an untethered  mobile pneumati c system in the 
+previous section. However the pumping and vacuuming 
+speed drops significantly in the mobile system. Another 
+issue of the pneumatic system is the continuous noise of the 
+pump. The noise can be reduced with an insulation 
+enclosure. 
+Future work is required to explore new approaches to 
+enable smaller, faster  and more integrated pneumatic 
+control systems. Exploring other types of fl uid rather than 
+air to actuate and deform the soft composites is also an 
+exciting direction, and it may enable new interaction 
+behaviors. For example, Helium, or hot air can let inflated 
+surfaces float in air or water.  Using chemical reactions to 
+generate gas sources may help eliminate hard pneumatic 
+control systems. 
+Extension of Shape Changing Behaviors  
+Other types of shape changing behaviors are yet to be 
+explored systematically. A broader and systematic 
+exploration of shape changing primitives could inc rease use 
+cases in the design of shape changing interfaces. For 
+example, topological change, including creating holes on 
+surfaces, can give interesting affordances for interaction. 
+Locomotion as a bio- inspired mechanism can be achieved 
+with programmable co nstraints in the material structure 
+[32]. Shape locking is currently implemented with solenoid 
+switches. However, stiffness changing materials, such as 
+Jamming particles, can be adapted to lock shapes or 
+introduce dynamic constraints.  
+3D Printing as a Promising Fabrication Approach  
+Soft fabrication requires handwork and time -consuming 
+cast molding processes. This issue could be improved by 
+using enhanced 3D printing technology . While current 
+commercially available 3D printers are not able to print 
+material with high elasticity, we envision printing elastic 
+polymer will be feasible in the near future. It is helpful for 
+constructing complex air channels, combining soft and hard 
+materials, and additional automatic fabrication process.  
+CONCLUSION 
+We have presented various types of shape -changing 
+interface enabled by pneumati c soft composite materials . 
+By i ntroducing constraints through materials with pre -
+programmed structures, we can design and control the 
+direction, location and angle of deformation. We 
+demonstrated shape-changing primitives , and  present a 
+framework and test results of the selection of materials, 
+structures, soft fabrication processes, and pneumatic control 
+systems to construct soft composite materials. The soft 
+composite material is a fusion of sensing and actuation on 
+the single -piece of malleable material. This approach 
+creates new opportunities to employ shape -changing 
+interfaces by using responsive material s. 
+CONCLUSION 
+We thank Chengyuan Wei, Daniel Leithinger, Ken Perlin, 
+Sheng Kai Tang, Jie Qi and David  Mellis for their  
+willingness to brainstorm  ideas, Hiroshi Chigira for sharing 
+his network platform,  James Weaver and Mike Tolley for 
+their suggestion on 3D printed molds, and Nan -Wei Gong 
+for her support on the inject printed conductive pads.  
+REFERENCES 
+1. Coelho, M., Ishii, H., and Maes, P. Surflex: a 
+programmable surface for the design of tangible 
+interfaces. In CHI EA  ’08, ACM (2008), 3429-3434. 
+2.  Coelho, M. and Zigelbaum, J. Shape -changing 
+interfaces. Personal and Ubiquitous Computing 15 , 2 
+(2010), 161–173. 
+
+3. Follmer, S., Leithinger, D., Olwal, A. , Cheng, N., and 
+Ishii, H. Jamming user interfaces: programmable particle 
+stiffness and sensing for malleable and shape -changing 
+devices. In UIST ’12, ACM (2012), 519-528. 
+4. Frey, M. CabBoots: Shoes with integrated Guidance 
+System. In TEI  ’07, ACM(2007), 245–246. 
+5. Gomes, A., Nesbitt, A., and Vertegaal, R. MorePhone  : A 
+Study of Actuated Shape Deformations for Flexible Thin -
+Film Smartphone Notifications. In CHI ’13, ACM (2013), 
+583–592. 
+6. Harrison, C. and Hudson, S. Texture displays: a passive 
+approach to tactile presentation. In CHI ’09, ACM (2009), 
+2261–2264. 
+7. Harrison, C. and Hudson, S.E. Providing dynamically 
+changeable physical buttons on a visual display. In CHI 
+’09, ACM (2009), 299–308. 
+8. Hawkes, E., An, B., Benbernou, N.M.,  Tanaka, H., Kim, 
+S., Demaine, E. D., Rus, D., and Wood. R. J . 
+Programmable matter by folding. PNAS 107, 28 (2010), 
+12441–12445. 
+9. Hemmert, F., Hamann, S., Löwe, M., Zeipelt, J., and 
+Joost, G. Shape-changing mobiles: tapering in two -
+dimensional deformat ional displays in mobile phones . In 
+CHI EA  ’10, ACM (2010), 3075–3079. 
+10. Ilievski, F., Mazzeo , A.D., Shepherd, R.F., Chen, X., 
+and Whitesides, G.M. Soft robotics for chemists.  Angew. 
+Chem.Int. Ed., 50, 8 (2011), 1890–1895.  
+11. Ishii, H., Lakatos, D., Bonanni, L. , and Labrune J.B. 
+Radical Atoms  : Beyond Tangible Bits , Toward 
+Transformable Materials. Interactions 19, 1 (2012), 38–
+51. 
+12. Iwata, H., Yano, H., and Ono, N. Volflex. In 
+SIGGRAPH  ’05, ACM (2005). 
+13. Kim, S., Kim, H., Lee, B., Nam, T. -J., and Lee, W. 
+Inflatable mouse: volume -adjustable mouse with air -
+pressure-sensitive input and haptic feedback . In CHI  ’08, 
+ACM (2008), 211-214. 
+14. Knaian, A.N., Cheung, K.C., Lobovsky, M.B., Oines, 
+A.J., Schmidt-Neilsen, P., and Gershenfeld, N.A. T he 
+Milli-Motein: A self-folding chain of programmable 
+matter with a one centimeter module pitch. In IROS ’02, 
+1447–1453. 
+15. Koizumi, N., Yasu, K., Liu, A., Sugimoto, M., and 
+Inami, M. Animated Paper: A Toolkit for Building 
+Moving Toys. Computers in Entertainment 8 , 2 (2010). 
+16. Kramer, R.K., Majidi, C., Sahai, R., and Wood, R.J. 
+Soft curvature sensors for joint angle proprioception. In 
+IROS ’11, IEEE/RSJ (2011), 1919–1926. 
+17. Kramer, R.K., Majidi, C., and Wood, R.J. Wearable 
+tactile keypad with stretchable artificial skin.  In IROS ’11, 
+IEEE/RSJ (2011), 1103–1107. 
+18. Leithinger, D., Lakatos, D., DeVincenzi, A., 
+Blackshaw, M., and Ishii, H. Direct and gestural 
+interaction with relief: a 2.5D shape display.  In TEI  ’10, 
+ACM Press (2010), 221 –222. 
+19. Martinez, R. V., Fish, C.R., Chen, X., and Whitesides, 
+G.M. Elastomeric Origami: Programmable Paper -
+Elastomer Composite s as Pneumatic Actuators. Advanced 
+Functional Materials 22 , 7 (2012), 1376–1384. 
+20. Murata, S., Yoshida, E., Tomita, K., Kurokawa, H., 
+Kamimura, A., and Kokaji, S. Hardware design of 
+modular robotic system. In IROS ’10, IEEE/RSJ (2010), 
+2210–2217.  
+21. Park, Y., Chen, B., and Wood, R. Soft artificial skin 
+with multimodal sensing capability using embedded 
+liquid conductors. IEEE Sensors, 12, 8 (2012), 2711-
+2718. 
+22. Park, Y., Chen, B., and Wood, R. Design and 
+Fabrication of Soft Artificial Skin Using Embedded 
+Microchannels and Liquid Conductors. Sensors Journal, 
+IEEE 12, 8 (2012), 2711–2718. 
+23. Park, Y.-L., Majidi, C., Kramer, R., Bérard, P., and 
+Wood, R.J. Hyperelastic pressure sensing with a liquid-
+embedded elastomer. Journal of Micromechanics and 
+Microengineering 20, 12 (2010), 125029. 
+24. Paul Jackson. Folding techniques for designers. 
+Laurence King Publishers, 2011.  
+25. Qin, D., Xia, Y., and Whitesides, G.M. Soft lithography 
+for micro- and nanoscale patterning. Nature protocols 5, 3 
+(2010), 491–502. 
+26. Rasmussen, M., Pedersen, E., Petersen, M., and 
+Hornbæk, K. Shape-changing interfaces: a review of the 
+design space and open research questions. In CHI ’12, 
+ACM (2012), 735–744. 
+27. Roudaut, A., Karnik, A., Löchtefeld, M., and 
+Subramanian, S. Morphees   : Toward High “ Shape 
+Resolution ” in Self- Actuated Flexible Mobile Devices. In 
+CHI ’13, ACM (2013), 593–602. 
+28. Rekimoto, J. SmartSkin: an infrastructure for freehand 
+manipulation on interactive surfaces. In CHI ’02, ACM 
+(2002), 113–120. 
+29. S.D. Guest, S. Pellegrino. The Folding of Triangulated 
+Cylinders, Part 1: Geometric consideration. J. Appl. 
+Mech. 1994. 61(4): 773-777. 
+30. S. Vogel, Life in Moving Fluids: The Physical Biology 
+of Flow. Grant, 1981. 
+31. Sergio, M., Manaresi, N., and Tartagni, M. A  Textile 
+Based Capacitive Pressure Sensor. Sensors, 2002. 1625–
+1630. 
+32. Shepherd, R.F., Ilievski, F., Choi, W., et al. Multigait 
+soft robot. In PNAS ’11. 108, 51 (2011), 20400 –3. 
+33. Slyper, R., Poupyrev, I., and Hodgins, J. Sensing 
+through structure: designing soft silicone sensors . In  
+TEI  ’11, ACM (2011), 213 - 220. 
+34. Steltz, E., Mozeika, A., Rembisz, J., Corson, N., and 
+Jaeger, H.M. Jamming as an enabling technology for soft 
+robotics. In SPIE Smart ’10. 
+35. Stevenson, A., Perez, C., and Vertegaal, R. An 
+inflatable hemispherical multi -touch display. In TEI  ’11, 
+ACM (2011), 289–292. 
+36. Thomus Hull. Project Origami: Activities for Exploring 
+Mathematics. A K Peters/CRC Press, 2006. 
+37. Vertegaal, R., and Poupyrev, I. Organic User Interfaces. 
+Communications of the ACM. 51, 6 (2008), 26–30.

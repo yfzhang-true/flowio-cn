@@ -1,0 +1,442 @@
+FlowIO Development Platform – the Pneumatic “Raspberry Pi” 
+for Sof Robotics 
+Ali Shtarbanov 
+MIT Media Lab, Cambridge, MA 02139, USA 
+alims@media.mit.edu 
+Figure 1: (a) The FlowIO platform with all modules. (b, c, d) Three application scenarios utilizing the small, medium, and large 
+pump modules for (b) wearable, (c) desktop, and (d) hybrid wearable & desktop applications, respectively. 
+ABSTRACT 
+FlowIO is a miniature, modular, pneumatic development platform 
+with a software toolkit for control, actuation, and sensing of soft 
+robots and programmable materials. Five pneumatic ports and mul-
+tiple fully-integrated modules to satisfy various pressure, fow, and 
+size requirements make FlowIO suitable for most wearable and non-
+wearable pneumatic applications in HCI and soft robotics. FlowIO 
+includes a software stack with APIs, Bluetooth capabilities, and 
+web-GUI supported on all major mobile and desktop operating sys-
+tems. The system is fully compatible with Arduino, JavaScript, and 
+Google Chrome, while support for Scratch, Python, and Unity is 
+planned for future development, making FlowIO suitable for makers 
+from any technical background. Over a dozen people have used the 
+FlowIO platform, ranging from high-school and college students 
+to graduate students and researchers. In this paper I introduce the 
+FlowIO platform, its signifcance to the HCI community, and pre-
+liminary eforts towards deploying FlowIO as a community-driven 
+open-source project. 
+CCS CONCEPTS 
+• Human-centered computing; • Human computer interac-
+tion (HCI); • Interactive systems and tools; • User interface 
+toolkits; 
+KEYWORDS 
+Platforms, Toolkits, Control Systems, Soft Robotics, Programmable 
+Materials, Shape Change, Tangible User Interface (TUI), Wearables, 
+Creative Learning, Community, Arduino 
+Permission to make digital or hard copies of part or all of this work for personal or 
+classroom use is granted without fee provided that copies are not made or distributed 
+for proft or commercial advantage and that copies bear this notice and the full citation 
+on the frst page. Copyrights for third-party components of this work must be honored. 
+For all other uses, contact the owner/author(s). 
+CHI ’21 Extended Abstracts, May 08–13, 2021, Yokohama, Japan 
+© 
+2021 Copyright held by the owner/author(s). 
+ACM ISBN 978-1-4503-8095-9/21/05. 
+https://doi.org/10.1145/3411763.3451513 
+ACM Reference Format: 
+Ali Shtarbanov. 2021. FlowIO Development Platform – the Pneumatic 
+“Raspberry Pi” for Soft Robotics. In CHI Conference on Human Factors 
+in Computing Systems Extended Abstracts (CHI ’21 Extended Abstracts), 
+May 08–13, 2021, Yokohama, Japan. ACM, New York, NY, USA, 6 pages. 
+https://doi.org/10.1145/3411763.3451513 
+1 INTRODUCTION AND RELATED WORK 
+Platforms such as Arduino [1], Raspberry Pi [2], Lego Mindstorms 
+[3], and Scratch [4] have liberated entire felds by diminishing 
+barriers to entry. Arduino transformed electronics, Raspberry Pi 
+– portable computing, Lego Mindstorms – robotics, and Scratch – 
+programming. These and similar platforms [5] have not only made 
+esoteric felds more accessible for artists, designers, and makers, 
+but they have also enabled researchers and engineers to prototype 
+more rapidly. For instance, a prototype that two decades ago may 
+have required a small team of engineers and a week of work in 
+a lab setting with expensive equipment, today could be done in 
+a weekend, by a high-school student, in their living room! This 
+transformation is thanks to: (1) the availability of platforms and 
+tools that are easy to learn and use; (2) the emergence of modules 
+from companies like Adafruit, designed specifcally for popular 
+platforms; and (3) a growing community that is continuously con-
+tributing software, projects, ideas, tutorials, and other content – 
+inspiring even more people to be part of that community as both 
+users and contributors. 
+Today, prototyping in soft robotics and programmable materials 
+has high barriers to entry and is as inaccessible to most people as 
+electronics prototyping was two decades ago. This problem exists 
+because the three aforementioned factors that transformed elec-
+tronics prototyping have yet to occur in the domain of soft robotics. 
+And I predict an analogous transformation will occur in the soft 
+programmable materials domain over the next few years. In recent 
+years, projects such as PneUI [6], aeroMorph [7], MorphIO [8],
+Bubble [9], AuxeticBreath [10], and numerous others, demonstrate 
+a growing interest in soft robotics from HCI researchers, students, 
+CHI ’21 Extended Abstracts, May 08–13, 2021, Yokohama, Japan Ali Shtarbanov 
+artists, designers, and makers. However, a challenge faced by nearly 
+everyone working on pneumatically actuated projects is that one 
+typically has to build their own driving systems from the ground 
+up and dedicate sometimes most of their time on developing the 
+pneumatics, electronics, and software, instead of developing novel 
+soft actuators, applications, or user experiences. This challenge 
+creates signifcant time inefciencies, stifes innovation, and even 
+discourages the pursuit of ideas requiring more sophisticated drive 
+electronics or software. 
+While many platforms exist for electronics and computing, plat-
+forms or toolkits for soft robotics and programmable materials 
+still lag far behind. The Soft Robotics Toolkit (SRT) fuidic control 
+board [11], Pneuduino [12, 13], and Programmable Air [4] are the 
+three most well-known pneumatic toolkit attempts. However, they 
+all have major limitations – primarily their large and bulky size, 
+limited sensing and control capabilities, and the need for exter-
+nal pressure and/or power sources, making them impractical for 
+most real-world wearable or complex soft-robotics projects, such 
+as Bubble [9]. The SRT is a DIY solution with of-the-shelf parts. 
+Pneuduino is smaller than SRT, has custom modular hardware, and 
+comes with an Arduino library; however, it still requires exter-
+nal pumps and power sources. Programmable Air provides similar 
+capabilities to Pneuduino while using more afordable parts and 
+integrating the pumps into the device itself. However, the base 
+version has only a single pneumatic I/O port (with the possibility 
+to add more), external high-current power source is still required, 
+and the pumps cannot be changed easily to accommodate difer-
+ent pressure or fow-rate needs. All of the aforementioned toolkits 
+also lack any GUIs and are compatible only with Arduino, making 
+them not entirely user friendly and accessible only to users familiar 
+with Arduino programming. In contrast, FlowIO addresses all of 
+the aforementioned hardware and software limitations of related 
+systems. FlowIO was built to be a truly general-purpose, miniature, 
+pneumatics platform that is accessible for everyone. 
+FlowIO was inspired out of pure necessity when I was working 
+on project Bubble in 2019 [9], which required a miniature fuidics 
+driver with 5 pneumatic ports, but nothing existed to satisfy that 
+need. This led me on a 2-year quest resulting in over 20 prototype 
+iterations to create the world’s smallest, wearable, full-featured, 
+pneumatics development platform. Continuous feedback from di-
+verse users helped FlowIO become not just a toolkit but a true 
+general-purpose platform technology with both hardware and soft-
+ware, capable of satisfying the needs of nearly anyone working on 
+wearable or non-wearable pneumatics projects, while also being 
+highly user-friendly for both novice and expert users and cross-
+platform compatible. 
+Key Contributions: 
+- Novel pneumatics development platform suitable for artists, re-
+searchers, students, and makers of any background. 
+- Software stack for FlowIO compatible with a variety of devices, 
+operating systems, and programming languages. 
+- Generalized framework for constructing modular, integrated, pneu-
+matic development platforms. 
+- Vision towards more seamless programmable materials prototyp-
+ing. 
+2 FLOWIO PLATFORM OVERVIEW 
+FlowIO was designed using a frst-principles approach and was 
+based on my familiarity with the challenges and unmet needs in 
+the HCI, soft robotics, and maker communities, as well as the needs 
+of my own future projects. FlowIO is a miniature, modular, fully-
+integrated development platform with 5 pneumatic I/O ports for 
+driving soft robots and other pneumatically-actuated devices. It is 
+a general-purpose toolkit with modular hardware and full-stack 
+software designed for the needs of researchers, makers, students, 
+designers, and artists working on projects involving pneumatics. 
+FlowIO consists of hardware, software, and community aspect. The 
+hardware modules enable a wide variety of pneumatic applications 
+with pressure ranges from -26 psi to +30 psi and variable fow-
+rates up to 3.2 L/min. A complete software stack with multiple 
+layers of abstraction includes libraries, frmware, APIs for Arduino 
+and JavaScript, and a web-GUI accessible via the Google Chrome 
+web browser from any device and operating system that supports 
+Google Chrome. 
+Modularity and reconfgurability are core characteristics of 
+FlowIO. Integrated modules with multiple pneumatic confgura-
+tions enable a user to confgure and reconfgure a FlowIO sys-
+tem within seconds and on-the-fy — to satisfy their project needs 
+for pressure, fow rate, and size — just by swapping magnetically-
+connected modules. A complete FlowIO device consists of a main 
+module and a pump module connected to each other. Expansion 
+modules and accessories provide additional capabilities for broader 
+range of application. Presently, three kinds of pump modules are 
+available to choose from. Figure 2 shows the full list of modules 
+and accessories currently in existence. The most important char-
+acteristic of FlowIO, however, is the software behind it, which is 
+what makes FlowIO a true platform technology suitable for nearly 
+everyone. One can control FlowIO in a variety of ways including (1) 
+via a web-GUI that does not require any downloads or installations 
+thanks to web-Bluetooth in Google Chrome, (2) via a JavaScript 
+API over Bluetooth Low Energy, (3) via direct serial commands 
+sent over USB, and (4) via Arduino-compatible APIs by writing 
+custom frmware. Other means of controlling FlowIO are also being 
+developed and scheduled for future release, including via Python, 
+Unity, and Scratch. 
+3 HARDW ARE CONSTITUENTS 
+The main module (controller) features up to 5 pneumatic I/O ports, 
+each port supporting the actions of infation, vacuum, release to 
+atmospheric pressure, pressure hold, pressure sense, and fow-rate 
+variability. The main module contains 7 normally-closed solenoid 
+valves in a manifold confguration of which two are for inlet and 
+outlet, and the remaining fve for the I/O ports. A pressure sensor is 
+connected directly to the manifold, enabling pressure-monitoring of 
+any channel via time-multiplexing. Integrated is a microcontroller 
+board (Adafruit Feather Sense nrf52840) with Bluetooth low-energy 
+capabilities and a large number of sensors including 9-DoF IMU, 
+altimeter, and light sensor among others. The main driver PCB 
+features a magnetic connector with 4 pins for connection to the 
+pump module, a power button with programmable auto-of timer, 
+and a 14-pin expansion port providing access to I2C, SPI, UART, and 
+analog GPIO pins. A 500mAh LiPo battery is located underneath 
+FlowIO Development Platform – the Pneumatic “Raspberry Pi” for Sof Robotics CHI ’21 Extended Abstracts, May 08–13, 2021, Yokohama, Japan 
+Figure 2: (top) The complete set of FlowIO modules, grouped 
+into 4 categories. This set gives rise to various assemblies as 
+shown by the 9 images below (bottom). 
+the valves and is rechargeable via the USB port. The entire main 
+module has a mass of only 77 grams. 
+The pump module comes in a small, medium, and large ver-
+sion to serve diferent pressure, fow-rate, or dimensional needs 
+of users. The primary diference between them is the choice of 
+pumps and batteries used. A pump module consists of 2 identical 
+pumps, a custom driver board, and a LiPo battery, all enclosed in a 
+3D printed snap-ft enclosure (Figure 3). The driver board features 
+power electronics for driving the pumps, a charging circuit with a 
+USB port for easy battery charging, and electronics that support 
+switching between a 3.7V battery source and an external power 
+source up to 24V. The pump module connects to the main module 
+via a 4-pin magnetic connector and via 2 silicone tubes. I made the 
+design choice to have the pump and the main modules be voltage 
+independent of each other, in order to allow virtually any kind of 
+DC pumps to be used with FlowIO, and for users to be able to make 
+their own pump modules using any pumps they desire operating 
+between 3V and 24V. Thus, I also designed the driver board to 
+Figure 3: Exploded view of a FlowIO device with main mod-
+ule and small pump module. 
+support input and output voltages between 3V and 24V, and output 
+currents up to 5 amps or more, while being highly power-efcient. 
+The small, medium, and large pump modules weigh 37g, 90g, and 
+251g, respectively, and their pressure and fow rate specifcations 
+are listed in Table 1 
+A variety of expansion modules can be connected to FlowIO 
+either via the 14-pin expansion port or wirelessly via Bluetooth 
+Low Energy. Three such expansion modules have been created 
+so far as previously shown in Figure 2, motivated by the needs 
+and requests of FlowIO users. (1) A breakout module exposes the 
+14 pins of the expansion port and makes them accessible via an 
+electronics breadboard, giving users access to I2C, SPI, UART, and 
+additional GPIO and power pins. (2) A 16-channel analog input 
+module allows a user to connect up to 16 analog sensors to the 
+FlowIO device by using a set of three multiplexers, and also features 
+electronics for signal conditioning. (3) Sensors++ is a standalone 
+module with its own microcontroller and battery that provides 5 
+additional pressure sensors as well as a variety of other sensors that 
+are on the microcontroller. This module fts underneath FlowIO 
+and operates as an independent system, but can communicate with 
+FlowIO via Bluetooth Low Energy. FlowIO’s main module already 
+provides pressure sensing at any port, but only one port at a time 
+and only when a port valve is open. Sensors++ was designed exactly 
+to eliminate this limitation and to extend the capabilities of FlowIO 
+by allowing parallel pressure monitoring on all 5 ports, independent 
+of the state of the valves. 
+Accessories for FlowIO augment its capabilities and enable 
+users to integrate the device seamlessly with their projects or wear 
+it on their bodies. FlowIO was designed as a wearable-frst platform, 
+and therefore the enclosure has tabs on the bottom to which a wrist 
+strap can be attached within seconds as shown on Figure 2. The 
+design allows wearability just like a wrist watch, which is especially 
+valuable for assistive applications. Other kinds of straps can also 
+be attached, enabling the device to be worn on the upper arm or 
+leg or be attached to a belt. Additionally, a LEGO compatible enclo-
+sure base makes the device easy to integrate with LEGO projects. 
+Moreover, because the enclosure is 3D-printed and the design fles 
+CHI ’21 Extended Abstracts, May 08–13, 2021, Yokohama, Japan Ali Shtarbanov 
+freely available on the FlowIO website, users have the ability to 
+modify them and make FlowIO better-suited for their wearable or 
+non-wearable applications. 
+4 PNEUMATIC ARCHITECTURE AND 
+CONFIGURATIONS 
+Figure 4(a) presents the standard pneumatic confguration of FlowIO. 
+A set of 7 normally-closed solenoid valves are connected in a mani-
+fold (shown in green), with the rightmost serving as an inlet and 
+leftmost as an outlet, with infation and vacuum pumps connected to 
+them, respectively. A pressure sensor is connected to the manifold 
+channel. The standard confguration supports infation, vacuum, 
+pressure-sensing, pressure hold, pressure release, and fow-rate 
+variability. Moreover, the same pneumatic action can be performed 
+simultaneously on more than one port. The choice of normally-
+closed valves allows pressure hold to occur by default, and therefore 
+the system can maintain diferent pressures at diferent ports even 
+in the of state. While infation and vacuum rely on the pumps, 
+pressure release is passive and can happen from an initial state of 
+either high pressure or vacuum. The pressure release operation 
+exploits the fact that the pumps allow one-way fow even when not 
+powered. Finally, fow rate variability is achieved by driving the 
+pumps with PWM signals at variable duty cycles. 
+The manifold-connected pressure sensors allow the pressure 
+to be measured at any of the 5 ports, but only one port at a time, 
+as the corresponding port valve must frst be opened. For certain 
+applications requiring continuous pressure monitoring on multiple 
+ports simultaneously, this poses a limitation, which is why the 
+Sensors++ module was developed to address that specifc need. As 
+shown in Figure 4(a1), with Sensors++ added, a pressure sensor 
+Figure 4: Pneumatic architecture and all confgurations sup-
+ported by FlowIO. 
+Table 1: Pressure ranges and fow rate specifcations for each 
+module and each confguration. Data obtained from mea-
+surements. 
+(shown in red) is available at the output of each port, enabling 
+fully-independent pressure monitoring agnostic to valve state. 
+Besides the standard confguration, FlowIO supports 4 additional 
+confgurations, shown in Figure 4(b,c,d,e), where the pumps can 
+be connected in series or in parallel, and either for infation or for 
+vacuum. A series confguration achieves higher pressures, while a 
+parallel confguration achieves higher fow rate. For example, if a 
+user only needs infation and release capabilities but no vacuum, 
+then they can switch to the infation series or infation parallel 
+confguration for better performance. Or, if they need only vacuum 
+and release capabilities, they can use the vacuum series or vacuum 
+parallel confgurations. Switching between confgurations requires 
+only seconds and is achieved by adding the auxiliary tube, while 
+the software libraries and GUI automatically adapt to confguration 
+changes with the push of a button as shown in Figure 6 
+5 SOFTW ARE STACK, API’S, AND GUI 
+I developed the FlowIO software in an object-oriented style and as a 
+stack with multiple layers of abstraction. Each higher layer emerged 
+gradually and organically as a generalization and abstraction of 
+the layer underneath it, with the intent to enable highly versatile, 
+intuitive, and seamless user experience suitable for a vast range 
+of user preferences and application needs. Figure 5 shows all the 
+layers. 
+The Pneumatic driver contains the lowest level methods that 
+control individual pneumatic components – pumps, valves, and 
+Figure 5: FlowIO Software Stack 
+FlowIO Development Platform – the Pneumatic “Raspberry Pi” for Sof Robotics CHI ’21 Extended Abstracts, May 08–13, 2021, Yokohama, Japan 
+Figure 6: FlowIO Web-GUI. (Left) An interactive device 
+graphic showing the state and confguration of the con-
+nected FlowIO device. The 5 buttons besides the graphic set 
+the confguration; the controls above it select the port and 
+activate pneumatic actions. (Middle) A dynamic task sched-
+uler allows the user to defne and execute a sequence of ac-
+tions with any number of steps. (Right) A status log showing 
+real-time device feedback. (Top) A tabbed interface allows 
+multiple BLE devices to be connected simultaneously, and 
+each tab has its own set of independent controls. 
+pressure sensors. The Pneumatic API is the second layer, which 
+defnes the 5 pneumatic confgurations discussed earlier and pro-
+vides abstract methods that control entire procedures involving 
+multiple components, switching sequences, and confgurations. The 
+Command API uses a custom protocol that maps all of the func-
+tions and methods supported by the Pneumatic API into 3-byte 
+commands. Above that lies the FlowIO frmware which defnes 8 
+custom BLE services with 15 characteristics, enabling complete 
+feedback-based real-time control of FlowIO over BLE. 
+The higher layers of the stack rely on Web-Bluetooth, a new 
+web protocol currently supported on Google Chrome that enables a 
+web page to connect with Bluetooth devices directly. Based on the 
+Web-Bluetooth protocol, I developed a JavaScript API for FlowIO 
+as well as a Web-GUI. This enables a user to interact with the 
+FlowIO device simply by visiting the FlowIO dashboard webpage, 
+and without having to download or install any software whatsoever, 
+making this interaction possible from any BLE capable device and 
+operating system that supports Chrome – Windows, Linux, MacOS, 
+iOS, Android, and more. 
+The various layers of the software stack give users the freedom 
+to interact with FlowIO in a variety of ways, ranging from interact-
+ing with the GUI and using the JavaScript API, to entering serial 
+commands, to writing new frmware using the provided Arduino 
+libraries. Moreover, I am developing additional software capabilities 
+such as P2P web connectivity for remote telepresence applications 
+and plan to add support for Unity, Scratch, and Python. 
+6 COMMUNITY AND DEPLOYMENT 
+Over a dozen people have used FlowIO, from PhD researchers to 
+high-school students and makers. FlowIO was also used as a teach-
+ing tool in a graduate digital fabrication course at MIT. FlowIO has 
+enabled people to develop projects in various categories including 
+Figure 7: Projects by users of FlowIO including a fsh, assis-
+tive grasping device, compression sleeve, and more. 
+interactivity, artistic expression, locomotion, telepresence, haptic 
+feedback, assistive technologies, and more. The various projects 
+made by users are listed on the FlowIO website, www.softrobotics.io 
+(screenshot in Figure 7). 
+My goal is to lead FlowIO as a continuously evolving, community-
+driven project and engage the community in the development pro-
+cess, by enabling others to contribute with suggestions, new mod-
+ules, software, and accessories. I am currently building an online-
+community platform at www.softrobotics.io, where the FlowIO 
+documentation and web-GUI are located, and where people will 
+also be able to post their own soft robotics projects, ideas, sugges-
+tions, designs for new modules, and tools for soft programmable 
+materials. The goal is to also allow users to gain visibility for their 
+work and then inspire more makers, artists, and students to unleash 
+their creativity in soft robotics and programmable materials. 
+7 A VISION TOW ARDS SOFTROBOTICS.IO 
+In this paper, I have presented FlowIO – a modular, wearable-
+frst, integrated development platform for soft robotics and other 
+pneumatics applications. FlowIO is just the beginning of my much 
+broader vision called SoftRobotics.IO, aimed at making prototyping 
+in soft robotics and programmable materials just as easy and ubiq-
+uitous as prototyping in electronics is today. Pneumatic actuation is 
+just one of several kinds of actuation used in HCI and Soft Robotics. 
+Others include tendon-driven, electromagnetic, hydraulic, thermal, 
+and more. Thus, I am extending FlowIO to go beyond pneumatics, 
+by creating new modules called TendonIO, MagnetoIO and HydroIO. 
+The goal is to ofer a single modular toolkit, called SoftRobotics.IO 
+(Figure 8), that supports various kinds of actuation mechanisms, all 
+sharing the same software APIs and GUI. This generalized platform 
+will enable users to efortlessly bring to life nearly any project in 
+the soft robotics and programmable materials domains, be able to 
+CHI ’21 Extended Abstracts, May 08–13, 2021, Yokohama, Japan 
+Figure 8: Ongoing and future works towards SoftRobotics.IO 
+go from one actuation approach to another just by swapping a 
+module, and be able to create projects requiring simultaneous use 
+of multiple actuation approaches. 
+ACKNOWLEDGMENTS 
+I would like to thank all people who have used FlowIO and pro-
+vided feedback and suggestions to make it better, as well as my 
+academic advisor, Dr. Joseph Paradiso, for supporting this work. 
+Special thanks to Ozgun Kilic Afsar, Michael Bell, Hyejun Youn, 
+and Francesco Bondesani for their contributions with application 
+scenarios for FlowIO. 
+Ali Shtarbanov 
+REFERENCES 
+[1] Arduino. Retrieved Jan. 8, 2021 from http://arduino.cc 
+[2] Raspberry Pi. Retrieved Jan. 8, 2021 from https://www.raspberrypi.org 
+[3] Lego Mindstorms. Retrieved Jan. 8, 2021 from https://www.lego.com/en-us/ 
+themes/mindstorms 
+[4] Scratch. Retrieved Jan. 8, 2021 from https://scratch.mit.edu 
+[5] Singh, Dhawan & Sandhu, Amanpreet & Sharma Thakur, Aditi & Priyank, Nikhil. 
+(2020). An Overview of IoT Hardware Development Platforms. International 
+Journal on Emerging Technologies. 
+[6] Lining Yao, Ryuma Niiyama, Jifei Ou, Sean Follmer, Clark Della Silva, and Hiroshi 
+Ishii. 2013. PneUI: pneumatically actuated soft composite materials for shape 
+changing interfaces. In Proceedings of the 26th annual ACM symposium on 
+User interface software and technology (UIST ’13). Association for Computing 
+Machinery, New York, NY, USA, 13–22. 
+[7] Ou, J., Skouras, M., Vlavianos, N., Heibeck, F., Cheng, C. Y., Peters, J., & Ishii, 
+H. (2016, October). aeroMorph-heat-sealing infatable shape-change materials 
+for interaction design. In Proceedings of the 29th Annual Symposium on User 
+Interface Software and Technology (pp. 121-132). 
+[8] Ryosuke Nakayama, Ryo Suzuki, Satoshi Nakamaru, Ryuma Niiyama, Yoshihiro 
+Kawahara, and Yasuaki Kakehi. 2019. MorphIO: Entirely Soft Sensing and Actua-
+tion Modules for Programming Shape Changes through Tangible Interaction. In 
+Proceedings of the 2019 on Designing Interactive Systems Conference (DIS ’19). 
+Association for Computing Machinery, New York, NY, USA, 975–986. 
+[9] Xinlei Zhang, Ali Shtarbanov, Jiani Zeng, Valerie K. Chen, V. Michael Bove, Pattie 
+Maes, and Jun Rekimoto. 2019. Bubble: Wearable Assistive Grasping Augmenta-
+tion Based on Soft Infatables. In Extended Abstracts of the 2019 CHI Conference 
+on Human Factors in Computing Systems (CHI EA ’19). Association for Comput-
+ing Machinery, New York, NY, USA, Paper LBW2313, 1–6. 
+[10] Hye Jun Youn. 2021. AuxeticBreath: Changing Perception of Respiration. In 
+Proceedings of the Fifteenth International Conference on Tangible, Embedded, 
+and Embodied Interaction (TEI ’21). Association for Computing Machinery, New 
+York, NY, USA, Article 76, 1–4. 
+[11] D. P. Holland, et al., "The Soft Robotics Toolkit: Strategies for Overcoming Obsta-
+cles to the Wide Dissemination of Soft-Robotic Hardware, " IEEE Robotics and 
+Automation Magazine, Special Issue on Open Source and Widely Disseminated 
+Robot Hardware, vol. 24, no. 1, pp. 57-64, 2017. 
+[12] Pneuduino. Retrieved Jan. 8, 2021 from http://pneuduino.org 
+[13] Jifei Ou, Felix Heibeck, and Hiroshi Ishii. 2016. TEI 2016 Studio: Infated Curiosity. 
+In Proceedings of the TEI ‘16: Tenth International Conference on Tangible, Em-
+bedded, and Embodied Interaction (TEI ‘16). ACM, New York, NY, USA, 766-769. 
+DOI: http://dx.doi.org/10.1145/2839462.2854119 
+[14] Programmable Air. Retrieved Jan. 8, 2021 from https://www.programmableair. 
+com 
