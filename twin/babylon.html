@@ -215,6 +215,10 @@ async function send(line){
   addLog('▶ ' + line);
   await fetch('/api/cmd', {method:'POST', body:line});
 }
+function sendCmd(){
+  const v = $('cmd').value.trim();
+  if (v){ send(v); $('cmd').value=''; }
+}
 
 function ports(){ const v = parseInt($('pm').value)||1; return v & 31; }
 function sim(){
@@ -224,7 +228,7 @@ function sim(){
 function adv(){ fetch('/api/cmd', {method:'POST', body:`W ${$('wm').value||1000}`}); }
 function clStart(){ send(`G ${ports()} ${$('gt').value||40} ${$('gs').value}`); }
 
-$('gt').addEventListener('input', () => $('tgt2') && ($('tgt2').textContent = $('gt').value||40));
+function clStart(){ send(`G ${ports()} ${$('gt').value||40} ${$('gs').value}`); }
 
 let simT = 0;
 engine.runRenderLoop(() => {

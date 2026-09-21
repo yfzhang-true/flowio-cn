@@ -51,8 +51,13 @@ class Handler(BaseHTTPRequestHandler):
             self._send(200, (ROOT / "index.html").read_bytes(), "text/html; charset=utf-8")
         elif path in ("/babylon", "/babylon.html"):
             self._send(200, (ROOT / "babylon.html").read_bytes(), "text/html; charset=utf-8")
+        elif path in ("/proto3d", "/proto3d.html"):
+            self._send(200, (ROOT / "proto3d.html").read_bytes(), "text/html; charset=utf-8")
         elif path == "/lib/babylon.min.js":
             self._send(200, (ROOT / "lib" / "babylon.min.js").read_bytes(),
+                       "application/javascript; charset=utf-8")
+        elif path == "/lib/echarts.min.js":
+            self._send(200, (ROOT / "lib" / "echarts.min.js").read_bytes(),
                        "application/javascript; charset=utf-8")
         elif path == "/api/state":
             self._json({
@@ -70,7 +75,7 @@ class Handler(BaseHTTPRequestHandler):
         n = int(self.headers.get("Content-Length", 0))
         body = self.rfile.read(n).decode("utf-8", errors="replace")
         if self.path == "/api/cmd":
-            lib.pn_twin_command(body.strip())
+            lib.pn_twin_command(body.strip().encode("utf-8"))
             self._json({"ok": True})
         elif self.path == "/api/sim":
             try:

@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<title>FlowIO P0 · 气动控制器 3D 可视化控制界面</title>
+<script src="/lib/babylon.min.js"></script>
+<script src="/lib/echarts.min.js"></script>
+<style>
+:root{--bg:#0A0E17;--card:rgba(20,25,40,.72);--line:rgba(255,255,255,.09);
+--fg:#E6EDF3;--dim:#8B949E;--accent:#00D4FF;--hold:#3B82F6;--vac:#8B5CF6;
+--rel:#6B7280;--alarm:#F87171;--ok:#00FF88}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--fg);font-family:"Segoe UI",system-ui,sans-serif}
+#c3d{position:fixed;inset:0;width:100vw;height:100vh;display:block;outline:none;touch-action:none}
+.panel{position:fixed;background:var(--card);border:1px solid var(--line);
+border-radius:12px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.panel h4{font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:1.2px;
+margin-bottom:8px;font-weight:600}
+#topbar{top:0;left:0;right:0;height:46px;border-radius:0;border-width:0 0 1px 0;
+display:flex;align-items:center;gap:14px;padding:0 18px;font-size:13px}
+#topbar .brand{font-weight:700;letter-spacing:1px}
+#topbar .sep{color:var(--dim)}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block;background:var(--ok);
+box-shadow:0 0 6px var(--ok)}
+.badge{padding:2px 10px;border-radius:10px;background:rgba(255,255,255,.06);font-size:12px}
+#topbar a{margin-left:auto;color:var(--dim);font-size:12px}
+#ports{left:12px;top:58px;width:236px;bottom:12px;overflow-y:auto;padding:12px}
+#ports h4{margin-bottom:10px}
+.pcard{border:1px solid var(--line);border-radius:10px;padding:9px 10px;margin-bottom:9px;
+cursor:pointer;transition:.15s;background:rgba(255,255,255,.02)}
+.pcard.sel{border-color:var(--accent);box-shadow:0 0 10px rgba(0,212,255,.25)}
+.pcard.un{opacity:.38}
+.pcard .hd{display:flex;justify-content:space-between;align-items:center;font-size:12px}
+.pcard .st{font-size:11px;padding:1px 8px;border-radius:9px;background:rgba(255,255,255,.06)}
+.pcard .pv{font-size:20px;font-weight:600;margin:5px 0 3px}
+.pcard .pv small{font-size:11px;color:var(--dim);font-weight:400}
+.pbtns{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:6px}
+.pbtns button{padding:5px 0;font-size:11px;border-radius:6px}
+.pcard input[type=range]{width:100%;margin-top:6px;accent-color:var(--accent)}
+.st-inf{color:var(--accent);background:rgba(0,212,255,.12)}
+.st-hold{color:var(--hold);background:rgba(59,130,246,.12)}
+.st-rel{color:var(--rel);background:rgba(255,255,255,.08)}
+.st-vac{color:var(--vac);background:rgba(139,92,246,.12)}
+#panel,#ctrl{position:fixed;background:var(--card);border:1px solid var(--line);
+border-radius:12px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+#ctrl{left:50%;transform:translateX(-50%);bottom:14px;padding:10px 14px;font-size:13px;
+display:flex;gap:8px;align-items:center}
+#ctrl input{width:64px}
+#ctrl select{background:#0d1218;border:1px solid var(--line);color:var(--fg);border-radius:6px;padding:5px}
+#center canvas{width:100%;height:100%;outline:none;touch-action:none}
+#hint{position:absolute;left:50%;top:10px;transform:translateX(-50%);color:var(--dim);
+font-size:11px;pointer-events:none}
+#right{right:12px;top:58px;width:288px;bottom:12px;padding:12px}
+#chart{width:100%;height:200px}
+.sysrow{display:flex;justify-content:space-between;font-size:12px;margin:5px 0;color:var(--dim)}
+.sysrow b{color:var(--fg);font-weight:500}
+#seq{left:12px;right:312px;bottom:12px;height:206px;padding:12px;display:flex;gap:12px}
+#seq .col{flex:1;display:flex;flex-direction:column;min-width:0}
+#seq textarea{flex:1;background:rgba(10,14,20,.8);border:1px solid var(--line);color:var(--fg);
+border-radius:8px;padding:8px;font-family:Consolas,monospace;font-size:12px;resize:none}
+#seq .btns{display:flex;gap:6px;margin-top:8px}
+#seqlog{flex:1;overflow-y:auto;font-family:Consolas,monospace;font-size:11.5px;color:#7ee787;
+background:rgba(10,14,20,.8);border:1px solid var(--line);border-radius:8px;padding:8px}
+#seqlog div{margin:1px 0}
+.blink{animation:blink 1s infinite}
+@keyframes blink{50%{opacity:.3}}
+</style>
+</head>
+<body>
+<canvas id="c3d"></canvas>
+
+<div class="panel" id="topbar">
+  <span class="brand">FlowIO-CN P0</span><span class="sep">|</span>
+  <span><span class="dot"></span> 本地仿真已连接</span><span class="sep">|</span>
+  <span class="badge" id="tbstate">state=0x0000</span>
+  <span class="badge" id="tbcl">IDLE</span>
+  <span class="badge" id="tberr">无错误</span>
+  <a href="/" title="2D 控制台">2D 版</a><span class="sep">|</span>
+  <a href="/babylon" title="Babylon 基础版">基础 3D</a>
+</div>
+
+<div class="panel" id="ports">
+  <h4>端口控制 · 点卡片选中</h4>
+  <div id="pcards"></div>
+</div>
+
+<div class="panel" id="center">
+  <canvas id="c3d"></canvas>
+  <div id="hint">拖拽旋转 · 滚轮缩放 · 点击气球选中端口</div>
+  <div class="panel" id="ctrl">
+    <b id="selname">端口 1</b> ｜
+    目标 <input id="gt" type="number" value="40"> kPa
+    传感 <select id="gs"><option>0</option><option>1</option></select>
+    <button class="big" onclick="clStart()">◎ 闭环</button>
+    <button onclick="send('S '+(1<<selPort))">保压</button>
+    <button onclick="send('R '+(1<<selPort))">释放</button>
+    <button onclick="send('X')">复位</button>
+    <button onclick="send('F')">自检</button>
+    <button onclick="send('P')">读压力</button>
+    <input id="pm" value="1" hidden>
+    ｜ 注入 S<select id="si"><option>0</option><option>1</option></select>
+    = <input id="sv" type="number" value="50"> kPa
+    <button onclick="sim()">注入</button>
+  </div>
+</div>
+
+<div class="panel" id="right">
+  <h4>压力实时曲线（kPa）</h4>
+  <div id="chart"></div>
+  <h4 style="margin-top:10px">系统状态</h4>
+  <div class="sysrow"><span>状态字</span><b id="sysstate">0x0000</b></div>
+  <div class="sysrow"><span>闭环</span><b id="syscl">IDLE</b></div>
+  <div class="sysrow"><span>泵 PWM</span><b id="syspwm">0</b></div>
+  <div class="sysrow"><span>时钟</span><b id="sysclk">0 ms</b></div>
+  <div class="sysrow"><span>错误</span><b id="syserr">无</b></div>
+</div>
+
+<div class="panel" id="seq">
+  <div class="col">
+    <h4>任务序列（每行一条命令）</h4>
+    <textarea id="seqtext" spellcheck="false">I 1 255
+W 2000
+S 1
+W 1500
+R 1
+W 1000</textarea>
+    <div class="btns">
+      <button onclick="seqRun()" id="seqrun">▶ 运行序列</button>
+      <button onclick="seqStop()">■ 停止</button>
+      <button onclick="send('F')">硬件自检</button>
+    </div>
+  </div>
+  <div class="col">
+    <h4>执行日志</h4>
+    <div id="seqlog"><div>—</div></div>
+  </div>
+</div>
+
+<script>
+/* ═════════ 全局状态 ═════════ */
+const $ = id => document.getElementById(id);
+let S = {state:0, valves:[0,0,0,0,0,0,0], pump:0, sensors:[0,0], cl:'IDLE', err:0};
+let selPort = 0;
+let bp = [0,0,0,0,0];
+let seqStopFlag = false;
+const addLog = (s, el) => {
+  const t = new Date().toLocaleTimeString();
+  const d = document.createElement('div');
+  d.textContent = `[${t}] ${s}`;
+  (el ? $(el) : $('seqlog')).prepend(d);
+};
+
+/* ═════════ 端口卡片 ═════════ */
+const pcard = [];
+(function buildCards(){
+  const wrap = $('pcards');
+  for (let i = 0; i < 5; ++i) {
+    const un = i >= 3;
+    const div = document.createElement('div');
+    div.className = 'pcard' + (un ? ' un' : '') + (i === 0 ? ' sel' : '');
+    div.id = 'pc' + i;
+    div.innerHTML = `
+      <div class="hd"><span>端口 ${i+1}${un ? ' <small>(未接)</small>' : ''}</span>
+        <span class="st" id="ps${i}">空闲</span></div>
+      <div class="pv"><span id="pp${i}">0.0</span> <small>kPa</small></div>
+      <div class="pbtns">
+        <button onclick="pAct(${i},'I')">充</button>
+        <button onclick="pAct(${i},'S')">保</button>
+        <button onclick="pAct(${i},'R')">释</button>
+        <button onclick="pAct(${i},'V')">抽</button>
+      </div>
+      <input type="range" min="5" max="120" value="40" id="pt${i}"
+        oninput="pTarget(${i}, this.value)" title="目标压力 kPa">`;
+    div.addEventListener('click', () => selectPort(i));
+    wrap.appendChild(div);
+    pcard.push({div, st: $('ps'+i), pv: $('pp'+i)});
+  }
+})();
+function selectPort(i){
+  selPort = i;
+  document.querySelectorAll('.pcard').forEach((c,k)=>c.classList.toggle('sel',k===i));
+  $('pm') && ($('pm').value = 1<<i);
+  const sn = $('selname'); if (sn) sn.textContent = '端口 ' + (i+1);
+}
+function clStart(){
+  send('G ' + (1<<selPort) + ' ' + ($('gt').value||40) + ' ' + $('gs').value);
+}
+function pAct(i, a){ send(a + ' ' + (1<<i) + (a==='I'||a==='V' ? ' 255' : '')); }
+function pTarget(i, v){ send('G ' + (1<<i) + ' ' + v + ' 0'); }
+
+/* ═════════ 通信 ═════════ */
+async function send(line){
+  addLog('▶ ' + line);
+  await fetch('/api/cmd', {method:'POST', body:line});
+}
+async function apiState(){ try { return await (await fetch('/api/state')).json(); } catch(e){ return null; } }
+function sim(){
+  fetch('/api/sim',{method:'POST', body:`${$('si').value} ${$('sv').value}`})
+    .then(()=>addLog(`◆ 注入 S${$('si').value} = ${$('sv').value} kPa`));
+}
+
+/* ═════════ Babylon 3D 场景 ═════════ */
+const canvas = $('c3d');
+const engine = new BABYLON.Engine(canvas, true, {antialias:true});
+const scene  = new BABYLON.Scene(engine);
+scene.clearColor = new BABYLON.Color4(0.038,0.055,0.09,1);
+
+const camera = new BABYLON.ArcRotateCamera('cam', -1.25, 1.05, 13,
+  new BABYLON.Vector3(1.2, 1.1, 0), scene);
+camera.attachControl(canvas, true);
+camera.lowerRadiusLimit = 4; camera.upperRadiusLimit = 28; camera.wheelPrecision = 25;
+
+const hemi = new BABYLON.HemisphericLight('h', new BABYLON.Vector3(0,1,0), scene);
+hemi.intensity = 0.7;
+const dl = new BABYLON.DirectionalLight('d', new BABYLON.Vector3(-0.4,-1,0.35), scene);
+dl.intensity = 0.85; dl.position = new BABYLON.Vector3(5,10,-3);
+
+const ground = BABYLON.MeshBuilder.CreateGround('g', {width:30, height:18}, scene);
+const gmat = new BABYLON.StandardMaterial('gm', scene);
+gmat.diffuseColor = new BABYLON.Color3(0.05,0.07,0.10);
+gmat.specularColor = BABYLON.Color3.Black();
+ground.material = gmat;
+ground.enableEdgesRendering();
+ground.edgesWidth = 1.5;
+ground.edgesColor = new BABYLON.Color4(0.2,0.35,0.5,0.35);
+
+const mkMat = (r,g,b,e=0) => { const m = new BABYLON.StandardMaterial('m'+Math.random(), scene);
+  m.diffuseColor = new BABYLON.Color3(r,g,b); m.specularColor = new BABYLON.Color3(.08,.08,.08);
+  m.emissiveColor = new BABYLON.Color3(e*r,e*g,e*b); return m; };
+const mBody = mkMat(.5,.53,.58), mDark = mkMat(.1,.11,.13),
+      mAcc  = mkMat(0,.55,.7,.5),   mOff = mkMat(.1,.11,.13),
+      mBal  = mkMat(.3,.45,.7,.15), mWarn = mkMat(.5,.4,.05,.3);
+
+/* 泵机组 + 叶轮 */
+const pump = BABYLON.MeshBuilder.CreateBox('pump', {width:2.3, height:1.4, depth:1.5}, scene);
+pump.position.set(-3.8, 0.7, 0); pump.material = mBody;
+const pumpCap = BABYLON.MeshBuilder.CreateCylinder('pc', {diameter:0.9, height:0.2}, scene);
+pumpCap.position.set(-3.8, 1.55, 0); pumpCap.material = mDark;
+const fan = new BABYLON.TransformNode('fan', scene);
+fan.position.set(-3.8, 1.55, 0);
+for (let i = 0; i < 3; ++i) {
+  const b = BABYLON.MeshBuilder.CreateBox('fbl'+i, {width:0.8, height:0.04, depth:0.2}, scene);
+  b.material = mAcc; b.parent = fan; b.rotation.y = i * Math.PI / 3;
+}
+
+/* 进气阀 / 排气阀 */
+const vIn = BABYLON.MeshBuilder.CreateBox('vin', {width:0.85, height:0.55, depth:0.65}, scene);
+vIn.position.set(-1.4, 1.95, 0); vIn.material = mOff;
+const vVe = vIn.clone('vve'); vVe.position.set(-1.4, 0.75, 0);
+const vInL = BABYLON.MeshBuilder.CreateSphere('vil', {diameter:0.15}, scene);
+vInL.position.set(-1.02, 1.95, 0.3); vInL.material = mOff;
+const vVeL = vInL.clone('vvl'); vVeL.position.set(-1.02, 0.75, 0);
+
+/* 汇流管 + 传感器 */
+const mani = BABYLON.MeshBuilder.CreateCylinder('mani',
+  {height:6.8, diameter:0.4, tessellation:24}, scene);
+mani.rotation.z = Math.PI/2; mani.position.set(1.6, 2.15, 0);
+mani.material = mkMat(0.25,0.4,0.55,.15);
+
+const sensor = BABYLON.MeshBuilder.CreateBox('sns', {width:0.4, height:0.5, depth:0.38}, scene);
+sensor.position.set(0.8, 1.6, 0.55); sensor.material = mWarn;
+const sensor2 = sensor.clone('s2'); sensor2.position.set(2.6, 1.6, 0.55);
+
+/* 端口阀 + 气球 ×5 */
+const balloons = [], pvalves = [], stems = [];
+for (let i = 0; i < 5; ++i) {
+  const x = 0.4 + i * 1.5;
+  const v = BABYLON.MeshBuilder.CreateBox('pv'+i, {width:0.6, height:0.46, depth:0.52}, scene);
+  v.position.set(x, 1.9, 0); v.material = i < 3 ? mAcc : mDark;
+  const t = BABYLON.MeshBuilder.CreateCylinder('st'+i,
+    {height:0.9, diameter:0.14, tessellation:8}, scene);
+  t.position.set(x, 1.35, 0); t.material = mDark;
+  const b = BABYLON.MeshBuilder.CreateSphere('bal'+i, {diameter:1.5, segments:20}, scene);
+  b.position.set(x, 0.62, 0); b.material = mBal; b.scaling.setAll(0.38);
+  b.actionManager = new BABYLON.ActionManager(scene);
+  b.actionManager.registerAction(
+    new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickTrigger, () => selectPort(i)));
+  balloons.push(b); pvalves.push(v);
+}
+
+/* 气流粒子 */
+const pathInflate = [[-3.8,1.3,0],[-2.2,1.95,0],[-0.5,2.15,0],[1.6,2.15,0],[3.2,2.15,0]]
+  .map(a => new BABYLON.Vector3(...a));
+const pathVent = [[3.2,2.15,0],[0,2.15,0],[-3.2,1.2,0],[-5.4,0.8,0]]
+  .map(a => new BABYLON.Vector3(...a));
+const puffs = [];
+for (let i = 0; i < 16; ++i) {
+  const s = BABYLON.MeshBuilder.CreateSphere('pf'+i, {diameter:0.15, segments:6}, scene);
+  s.material = mAcc; s.isVisible = false;
+  puffs.push({m:s, t: Math.random(), path: pathInflate, on:false, sp:0.45+Math.random()*0.4});
+}
+const lerpPath = (pts, t) => {
+  const seg = (pts.length-1) * Math.min(Math.max(t,0),1);
+  const i = Math.min(Math.floor(seg), pts.length-2);
+  return BABYLON.Vector3.Lerp(pts[i], pts[i+1], seg - i);
+};
+
+/* 点击气球选中端口 */
+scene.onPointerDown = (evt, pickInfo) => {
+  if (pickInfo.hit && pickInfo.pickedMesh && pickInfo.pickedMesh.name.startsWith('bal')) {
+    const i = parseInt(pickInfo.pickedMesh.name.slice(3));
+    selectPort(i);
+    addLog(`◈ 选中端口 ${i+1}`);
+  }
+};
+
+/* ═════════ ECharts 压力曲线 ═════════ */
+const chart = echarts.init($('chart'), null, {renderer:'canvas'});
+chart.setOption({
+  backgroundColor:'transparent',
+  grid:{left:38, right:10, top:14, bottom:22},
+  xAxis:{type:'category', data:[], axisLine:{lineStyle:{color:'#2a313a'}},
+    axisLabel:{color:'#8b949e', fontSize:9, interval:19}},
+  yAxis:{type:'value', max:130, axisLine:{lineStyle:{color:'#2a313a'}},
+    splitLine:{lineStyle:{color:'rgba(255,255,255,.05)'}},
+    axisLabel:{color:'#8b949e', fontSize:9}},
+  series:[
+    {name:'S0 汇流', type:'line', showSymbol:false, smooth:true,
+     data:[], lineStyle:{color:'#00D4FF', width:2},
+     areaStyle:{color:'rgba(0,212,255,.08)'}},
+    {name:'S1 端口', type:'line', showSymbol:false, smooth:true,
+     data:[], lineStyle:{color:'#8B5CF6', width:2}}
+  ]
+});
+const hist = {t:[], s0:[], s1:[]};
+function pushHist(t, a, b){
+  hist.t.push(t); hist.s0.push(a); hist.s1.push(b);
+  if (hist.t.length > 120){ hist.t.shift(); hist.s0.shift(); hist.s1.shift(); }
+  chart.setOption({xAxis:{data:hist.t},
+    series:[{data:hist.s0},{data:hist.s1}]});
+}
+
+/* ═════════ 轮询：状态 → 3D + 图表 + 卡片 ═════════ */
+const CLC = {IDLE:'#8B949E', RUNNING:'#00D4FF', DONE:'#00FF88', TIMEOUT:'#F87171', ERR:'#F87171'};
+const STC = {0:'空闲', 1:'充气中', 2:'保压', 3:'释放中', 4:'抽气中'};
+let simPump = false, lastP0 = 0, prevCL = '—', clk = 0;
+
+setInterval(async () => {
+  const s = await apiState(); if (!s) return;
+  S = s;
+  const bits = i => (s.state >> i) & 1;
+  clk += 0.5;
+  lastP0 = s.sensors[0];
+
+  $('tbstate').textContent = 'state=0x' + s.state.toString(16).padStart(4,'0').toUpperCase();
+  $('tbcl').textContent = s.cl;
+  $('tberr').textContent = s.err ? '⚠ 错误' : '无错误';
+  $('tberr').style.color = s.err ? 'var(--alarm)' : 'var(--dim)';
+  $('sysstate').textContent = '0x' + s.state.toString(16).padStart(4,'0');
+  $('syscl').textContent = s.cl;
+  $('syspwm').textContent = s.pump;
+  $('sysclk').textContent = Math.round(clk*1000)/1000 + ' s';
+  $('syserr').textContent = s.err ? '⚠ ' + s.err : '无';
+
+  /* 端口卡片 + 气球视觉物理 */
+  for (let i = 0; i < 5; ++i) {
+    const open = bits(i) && i < 3;
+    const wired = i < 3;
+    if (open) bp[i] += (lastP0 - bp[i]) * 0.4;
+    else if (bp[i] > 0) bp[i] = Math.max(0, bp[i] - 0.5);
+    const pv = $('pp'+i);
+    if (pv) pv.textContent = wired ? bp[i].toFixed(1) : '—';
+    const stEl = $('ps'+i);
+    if (stEl) stEl.textContent = open ? '阀开' : '阀关(密封)';
+    balloons[i].scaling.setAll(0.38 + Math.min(bp[i]/130,1) * 1.4);
+    pvalves[i].material = open ? mAcc : (i < 3 ? mOff : mDark);
+  }
+
+  pushHist(clk.toFixed(1), lastP0, s.sensors[1] || 0);
+  if (prevCL !== s.cl){
+    addLog(`闭环: ${prevCL} → ${s.cl}`, 'seqlog');
+    prevCL = s.cl;
+  }
+}, 400);
+
+/* 3D 每帧动画 */
+let fanAng = 0;
+engine.runRenderLoop(() => {
+  const dt = engine.getDeltaTime()/1000;
+  if (simPump) { fanAng += dt * 10; fan.rotation.y = fanAng; }
+  /* 气流粒子 */
+  const inflow = simPump && bits(5);
+  const ventflow = bits(6) && !simPump;
+  for (let i = 0; i < puffs.length; ++i) {
+    const pf = puffs[i];
+    if (inflow || (ventflow && i % 2 === 0)) {
+      pf.t += dt * pf.sp;
+      if (pf.t > 1) pf.t -= 1;
+      pf.m.position.copyFrom(lerpPath(i % 2 ? pathVent : pathInflate, pf.t));
+      pf.m.isVisible = true;
+    } else pf.m.isVisible = false;
+  }
+  scene.render();
+});
+
+/* bits 访问器暴露给轮询（轮询里重新实现，避免跨帧闭包问题） */
+function refresh(){
+  const s = S; if (!s.state && !s.pump) return;
+  const bits = i => (s.state >> i) & 1;
+  simPump = !!bits(7);
+  lastP0 = s.sensors[0];
+  vIn.material = bits(5) ? mAcc : mOff;
+  vVe.material = bits(6) ? mAcc : mOff;
+  vInL.material = bits(5) ? mAcc : mOff;
+  vVeL.material = bits(6) ? mAcc : mOff;
+  for (let i = 0; i < 5; ++i) pvalves[i].material = bits(i) ? mAcc : mDark;
+  /* 气流粒子路径 */
+  const inflow = bits(7) && bits(5);
+  const ventflow = bits(6) && !bits(7);
+  for (let i = 0; i < puffs.length; ++i) {
+    const pf = puffs[i];
+    if (inflow || (ventflow && i % 2 === 0)) {
+      pf.t += 0.02;
+      if (pf.t > 1) pf.t -= 1;
+      pf.m.position.copyFrom(lerpPath(i % 2 ? pathVent : pathInflate, pf.t));
+      pf.m.isVisible = true;
+    } else pf.m.isVisible = false;
+  }
+}
+setInterval(refresh, 180);
+
+/* ═════════ 任务序列 ═════════ */
+let seqRunning = false;
+async function seqRun(){
+  if (seqRunning) return;
+  seqRunning = true;
+  const lines = $('seqtext').value.split('\n').map(l=>l.trim()).filter(l=>l && !l.startsWith('#'));
+  for (const line of lines) {
+    if (!seqRunning) break;
+    addLog('序列 ▶ ' + line, 'seqlog');
+    await fetch('/api/cmd', {method:'POST', body:line});
+    await new Promise(r => setTimeout(r, 700));
+  }
+  seqRunning = false;
+  addLog('序列完成', 'seqlog');
+}
+function seqStop(){ seqRunning = true; /* 置位后循环自然结束 */ seqRunning = false; }
+</script>
+</body>
+</html>
