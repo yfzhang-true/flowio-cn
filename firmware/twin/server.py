@@ -5,12 +5,14 @@
 """
 import ctypes
 import json
+import os
 import threading
 import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 ROOT = Path(__file__).parent
+PORT = int(os.environ.get("TWIN_PORT", "8000"))
 
 lib = ctypes.CDLL(str(ROOT / "pn_twin.dll"))
 lib.pn_twin_state.restype = ctypes.c_uint32
@@ -92,5 +94,5 @@ class Handler(BaseHTTPRequestHandler):
 if __name__ == "__main__":
     lib.pn_twin_init()
     threading.Thread(target=tick_loop, daemon=True).start()
-    print("FlowIO P0 数字孪生服务 → http://127.0.0.1:8000")
-    ThreadingHTTPServer(("127.0.0.1", 8000), Handler).serve_forever()
+    print(f"FlowIO P0 数字孪生服务 → http://127.0.0.1:{PORT}")
+    ThreadingHTTPServer(("127.0.0.1", PORT), Handler).serve_forever()

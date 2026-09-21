@@ -42,7 +42,15 @@ function T(name, cond) {
   }));
 
   console.log('─ 功能：页面加载 ─');
-  await p.goto('http://127.0.0.1:8000/gui', { waitUntil: 'load' });
+  /* 测试实例由 run_tests.sh 在 8017 端口拉起（与用户操作中的 8000 隔离） */
+  const BASE = 'http://127.0.0.1:8017';
+  try {
+    await p.goto(BASE + '/gui', { waitUntil: 'load', timeout: 8000 });
+  } catch (e) {
+    console.log('SKIP: 测试服务未启动。先运行 bash run_tests.sh（或在 8017 端口启动 server.py）');
+    await b.close();
+    process.exit(2);
+  }
   await p.waitForTimeout(1200);
   /* 虚拟断电重启：从确定性零状态开始（避免上一轮/手工实验残留压力影响断言） */
   await p.evaluate(() => fetch('/api/reset', { method: 'POST' }));
@@ -56,6 +64,9 @@ function T(name, cond) {
     gaugeOk: document.getElementById('gval') !== null,
   }));
   T('5 张端口卡片', load.cards === 5);
+  T('端口 4/5 已启用（无备用灰显）', await p.evaluate(() =>
+    !document.getElementById('pvcard3').classList.contains('un') &&
+    !document.getElementById('pvcard4').classList.contains('un')));
   T('Scheduler 默认 4 行', load.rows === 4);
   T('日志已启动(≥2 行)', load.log >= 2);
   T('ECharts 已渲染 canvas', load.chart);
@@ -74,6 +85,8 @@ function T(name, cond) {
   T('气球长大(>0.5)', parseFloat(s.bal[0].match(/[\d.]+/)[0]) > 0.5);
   const g1 = parseFloat(s.gauge);
   T('压力上升 >20 kPa', g1 > 20);
+  const cardP = await p.evaluate(() => parseFloat(document.getElementById('pvp0').textContent));
+  T('端口卡片压力跟随上升(>5)', cardP > 5);
 
   console.log('─ 功能：保压 ─');
   await p.click('text=■ 保压');
@@ -83,6 +96,8 @@ function T(name, cond) {
   T('泵停', !s.imp);
   const balHold = s.bal[0];
   T('气球密封定格(不回落)', balHold !== 'scale(0.450)');
+  const cardHold = await p.evaluate(() => parseFloat(document.getElementById('pvp0').textContent));
+  T('端口卡片压力密封保持(≈充气值)', cardHold >= cardP - 1);
 
   console.log('─ 功能：释放 ─');
   await p.click('text=↗ 释放');

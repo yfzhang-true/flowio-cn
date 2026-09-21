@@ -6,7 +6,20 @@
 #   抽气阀型、闭环 G(RUNNING→DONE 自动关阀)、仿真注入。
 # 前置：server.py 已运行。用法：bash test_api.sh
 set -u
-BASE=http://127.0.0.1:8000
+# 测试隔离：默认在 8017 端口自起独立实例，避免与用户正在操作的 8000 服务互相干扰。
+# 可用 TWIN_URL 指向已有服务（如 http://127.0.0.1:8000），或 TWIN_PYTHON 指定解释器。
+TPORT="${TWIN_PORT:-8017}"
+BASE="${TWIN_URL:-http://127.0.0.1:$TPORT}"
+SRV_PID=""
+cleanup() { [ -n "$SRV_PID" ] && kill "$SRV_PID" 2>/dev/null; }
+trap cleanup EXIT
+if [ -z "${TWIN_URL:-}" ]; then
+  PY="${TWIN_PYTHON:-D:/MiniConda/envs/paper20-cu128/python.exe}"
+  [ -x "$PY" ] || PY=python
+  TWIN_PORT=$TPORT "$PY" server.py >/dev/null 2>&1 &
+  SRV_PID=$!
+  for _ in $(seq 1 40); do curl -s -m 1 "$BASE/api/state" >/dev/null 2>&1 && break; sleep 0.25; done
+fi
 pass=0; fail=0
 
 ok() { if [ "$2" = "1" ]; then pass=$((pass+1)); echo "  ✓ $1"; else fail=$((fail+1)); echo "  ✗ $1"; fi }

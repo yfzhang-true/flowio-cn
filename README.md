@@ -24,15 +24,22 @@ python server.py           # → http://127.0.0.1:8000/gui
 
 **Web 前端三层测试（cd firmware/twin，改 gui.html 必跑）**
 
-| 层 | 命令 | 覆盖 |
+一键运行（推荐，自起 8017 隔离实例，不干扰浏览器正在用的 8000）：
+
+```bash
+bash run_tests.sh        # 静态冒烟 + 接口 36 + 单元 28 + 功能 39
+```
+
+| 层 | 单独运行 | 覆盖 |
 |----|------|------|
 | 静态冒烟 | `node check.js gui.html` | 内联脚本语法 / 处理函数 / id 引用 |
-| 单元 | `node test_gui.js` | buildFlowPaths 气流路径 / balloonScale / 端口掩码 / Scheduler 计时器编排 / 请求体（需 playwright-core） |
-| 接口 | `bash test_api.sh` | /api/state /api/cmd /api/sim 协议契约 + 物理语义（32 项，纯 curl） |
-| 功能 | `node test_e2e.js` | 真实浏览器：加载/充/保/释/抽/卡片/序列/刷新（27 项，需 playwright-core） |
+| 单元 | `node test_gui.js` | buildFlowPaths 气流路径 / balloonScale / 端口掩码 / Scheduler 计时器编排 / 请求体 |
+| 接口 | `bash test_api.sh` | 三端点协议契约 + 物理语义 + 超压锁存/虚拟断电（纯 curl，自起隔离实例） |
+| 功能 | `node test_e2e.js` | 真实浏览器全场景（加载/充/保/释/抽/卡片/序列/闭环/注入/超压/刷新） |
 
-单元与功能测试依赖 playwright-core（`npm i playwright-core`；Chromium 用本地 ms-playwright 缓存，`TWIN_CHROME` 可指定路径；启动命令示例 `NODE_PATH=<其 node_modules 父目录> node test_gui.js`）。
-注意：固件超压保护是**硬规则锁存**（state bit15 置位后重启服务才清），接口测试带前置守卫会明确提示。
+用例明细见 `firmware/twin/TEST-CASES.md`（103 项，含未覆盖项与审查指引）。
+单元与功能测试依赖 playwright-core（`npm i playwright-core`；Chromium 用本地 ms-playwright 缓存，`TWIN_CHROME` 可指定路径）。
+注意：测试与手工操作**必须用不同端口实例**（脚本默认 8017），否则命令串扰产生假失败；固件超压保护是硬规则锁存，接口测试带虚拟断电自愈。
 
 **主机单元测试（改逻辑必跑）** 与 **目标机构建/烧录**：见 `firmware/README.md`。
 

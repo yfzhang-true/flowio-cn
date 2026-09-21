@@ -31,11 +31,20 @@ function T(name, cond) {
 }
 
 (async () => {
+  /* 测试实例由 run_tests.sh 在 8017 端口拉起（与用户操作中的 8000 隔离）。
+     未就绪时给出可操作提示，不算失败。 */
+  const BASE = 'http://127.0.0.1:8017';
   const b = await pw.chromium.launch({ executablePath: CHROME, headless: true });
   const p = await b.newPage();
   const errs = [];
   p.on('pageerror', e => errs.push(e.message));
-  await p.goto('http://127.0.0.1:8000/gui', { waitUntil: 'load' });
+  try {
+    await p.goto(BASE + '/gui', { waitUntil: 'load', timeout: 8000 });
+  } catch (e) {
+    console.log('SKIP: 测试服务未启动。先运行 bash run_tests.sh（或在 8017 端口启动 server.py）');
+    await b.close();
+    process.exit(2);
+  }
   await p.waitForTimeout(900);
   await p.evaluate(() => send('S 31'));           /* 从全关状态起步 */
   await p.waitForTimeout(400);
