@@ -22,6 +22,18 @@ cd firmware/twin
 python server.py           # → http://127.0.0.1:8000/gui
 ```
 
+**Web 前端三层测试（cd firmware/twin，改 gui.html 必跑）**
+
+| 层 | 命令 | 覆盖 |
+|----|------|------|
+| 静态冒烟 | `node check.js gui.html` | 内联脚本语法 / 处理函数 / id 引用 |
+| 单元 | `node test_gui.js` | buildFlowPaths 气流路径 / balloonScale / 端口掩码 / Scheduler 计时器编排 / 请求体（需 playwright-core） |
+| 接口 | `bash test_api.sh` | /api/state /api/cmd /api/sim 协议契约 + 物理语义（32 项，纯 curl） |
+| 功能 | `node test_e2e.js` | 真实浏览器：加载/充/保/释/抽/卡片/序列/刷新（27 项，需 playwright-core） |
+
+单元与功能测试依赖 playwright-core（`npm i playwright-core`；Chromium 用本地 ms-playwright 缓存，`TWIN_CHROME` 可指定路径；启动命令示例 `NODE_PATH=<其 node_modules 父目录> node test_gui.js`）。
+注意：固件超压保护是**硬规则锁存**（state bit15 置位后重启服务才清），接口测试带前置守卫会明确提示。
+
 **主机单元测试（改逻辑必跑）** 与 **目标机构建/烧录**：见 `firmware/README.md`。
 
 ## 版本管理说明

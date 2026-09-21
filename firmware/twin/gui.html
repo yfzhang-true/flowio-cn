@@ -388,6 +388,34 @@ function buildSchem() {
   for (let i = 0; i < 5; ++i) balRefs[i] = { g: $('bal' + i), c: $('bal' + i).querySelector('circle') };
 }
 
+/* ═══ 纯逻辑（可单元测试）：气流路径构建 / 气球缩放 ═══ */
+function buildFlowPaths(scen, open) {
+  const cls = scen === 'in' ? 'fsin' : scen === 'va' ? 'fsva' : 'fsre';
+  const mk = scen === 'in' ? 'arwC' : scen === 'va' ? 'arwP' : 'arwG';
+  let d = '';
+  if (scen === 'in') {
+    d += `<path class="flowp ${cls}" d="M42,300 H272" marker-end="url(#${mk})"/>`;
+    d += `<path class="flowp ${cls}" d="M310,268 V195"/>`;
+    for (const i of open) {
+      const rail = Math.abs(PORT_CX[i] - 310) < 2 ? '' : ` H${PORT_CX[i]}`;
+      d += `<path class="flowp ${cls}" d="M310,195${rail} V80" marker-end="url(#${mk})"/>`;
+    }
+  } else if (scen === 'va') {
+    if (open.length) for (const i of open)
+      d += `<path class="flowp ${cls}" d="M${PORT_CX[i]},80 V195 H545 V300 H592" marker-end="url(#${mk})"/>`;
+    else
+      d += `<path class="flowp ${cls}" d="M310,195 H545 V300 H592" marker-end="url(#${mk})"/>`;
+  } else if (scen === 're') {
+    d += `<path class="flowp ${cls}" d="M70,195 H545 V300 H592" marker-end="url(#${mk})"/>`;
+    for (const i of open)
+      d += `<path class="flowp ${cls}" d="M${PORT_CX[i]},80 V195"/>`;
+  }
+  return d;
+}
+function balloonScale(p) {
+  return 0.45 + Math.max(0, Math.min(130, p)) / 130 * 0.55;
+}
+
 /* ═══ ECharts 压力曲线（60 点窗口） ═══ */
 let chart = null;
 const hist = { s0: [], s1: [] };
@@ -541,27 +569,7 @@ function render() {
   const key = scen + '|' + open.join(',');
   if (key !== flowKey) {
     flowKey = key;
-    const cls = scen === 'in' ? 'fsin' : scen === 'va' ? 'fsva' : 'fsre';
-    const mk = scen === 'in' ? 'arwC' : scen === 'va' ? 'arwP' : 'arwG';
-    let d = '';
-    if (scen === 'in') {
-      d += `<path class="flowp ${cls}" d="M42,300 H272" marker-end="url(#${mk})"/>`;
-      d += `<path class="flowp ${cls}" d="M310,268 V195"/>`;
-      for (const i of open) {
-        const rail = Math.abs(PORT_CX[i] - 310) < 2 ? '' : ` H${PORT_CX[i]}`;
-        d += `<path class="flowp ${cls}" d="M310,195${rail} V80" marker-end="url(#${mk})"/>`;
-      }
-    } else if (scen === 'va') {
-      if (open.length) for (const i of open)
-        d += `<path class="flowp ${cls}" d="M${PORT_CX[i]},80 V195 H545 V300 H592" marker-end="url(#${mk})"/>`;
-      else
-        d += `<path class="flowp ${cls}" d="M310,195 H545 V300 H592" marker-end="url(#${mk})"/>`;
-    } else if (scen === 're') {
-      d += `<path class="flowp ${cls}" d="M70,195 H545 V300 H592" marker-end="url(#${mk})"/>`;
-      for (const i of open)
-        d += `<path class="flowp ${cls}" d="M${PORT_CX[i]},80 V195"/>`;
-    }
-    $('flowg').innerHTML = d;
+    $('flowg').innerHTML = buildFlowPaths(scen, open);
   }
 
   /* 压力表：-120°…+120° ↔ 0…130 kPa */
@@ -576,7 +584,7 @@ function render() {
   for (let i = 0; i < 5; ++i) {
     if ((s.state >> i) & 1) balP[i] = p0;
     const f = Math.max(0, Math.min(130, balP[i])) / 130;
-    balRefs[i].g.style.transform = `scale(${(0.45 + f * 0.55).toFixed(3)})`;
+    balRefs[i].g.style.transform = `scale(${balloonScale(balP[i]).toFixed(3)})`;
     balRefs[i].c.setAttribute('fill', `hsl(152,52%,${Math.round(20 + f * 20)}%)`);
   }
 
