@@ -45,9 +45,15 @@ class Handler(BaseHTTPRequestHandler):
         self._send(200, json.dumps(obj, ensure_ascii=False), "application/json; charset=utf-8")
 
     def do_GET(self):
-        if self.path in ("/", "/index.html"):
+        path = self.path.split("?")[0]
+        if path in ("/", "/index.html"):
             self._send(200, (ROOT / "index.html").read_bytes(), "text/html; charset=utf-8")
-        elif self.path == "/api/state":
+        elif path in ("/babylon", "/babylon.html"):
+            self._send(200, (ROOT / "babylon.html").read_bytes(), "text/html; charset=utf-8")
+        elif path == "/lib/babylon.min.js":
+            self._send(200, (ROOT / "lib" / "babylon.min.js").read_bytes(),
+                       "application/javascript; charset=utf-8")
+        elif path == "/api/state":
             self._json({
                 "state": lib.pn_twin_state(),
                 "valves": [lib.pn_twin_valve_duty(i) for i in range(7)],
