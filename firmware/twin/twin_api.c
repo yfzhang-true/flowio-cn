@@ -30,6 +30,7 @@ PN_TWIN_API void pn_twin_init(void)
     pn_mock_reset();
     pn_cli_set_delay_fn(pn_mock_advance_ms);
     pn_init(pn_mock_hal(), PN_CFG_GENERAL);
+    s_last_cl = PN_CL_IDLE;   /* 虚拟断电重启：闭环状态一并归零，不残留旧值 */
 }
 
 PN_TWIN_API uint32_t pn_twin_state(void) { return pn_get_state(); }

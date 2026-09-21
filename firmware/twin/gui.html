@@ -123,6 +123,12 @@ input[type=range]{padding:0;accent-color:var(--accent)}
   <span class="badge" id="tbclk" style="margin-left:auto;font-family:Consolas">--:--:--</span>
 </header>
 
+<div id="errbanner" style="display:none;background:#3d1418;border-bottom:1px solid #a03030;
+     color:#f85149;padding:8px 16px;font-size:12px">
+  ⚠ 状态字错误位置位（bit15）——超压保护为固件安全硬规则，锁存后仅断电重启清除（真机语义）
+  <button onclick="vmReset()" style="margin-left:12px;background:#5c1a1a;border-color:#a03030">⟳ 虚拟断电重启</button>
+</div>
+
 <div class="layout">
 
   <!-- ═══════════ 左栏：气路示意 + 全局控制 + 端口卡片 ═══════════ -->
@@ -266,7 +272,7 @@ input[type=range]{padding:0;accent-color:var(--accent)}
         <span style="color:var(--dim)">传感器</span>
         <select id="simIdx"><option value="0">S0</option><option value="1">S1</option></select>
         <input id="simVal" type="number" value="50" style="width:70px"> kPa
-        <button onclick="simInject()">注入</button>
+        <button id="simbtn" onclick="simInject()">注入</button>
       </div>
       <div class="hint">S0 会被物理模型持续演化（充升/排降/微漏），注入即设定起点。</div>
     </div>
@@ -313,6 +319,15 @@ async function send(line) {
   }
 }
 function pw() { return $('pwmI').value; }
+async function vmReset() {
+  try {
+    await fetch('/api/reset', { method: 'POST' });
+    dlog('⟳ 虚拟断电重启（等效真机断电，清除安全锁存）');
+    poll();
+  } catch (e) {
+    dlog('✗ 重启失败 ' + e.message, 'warn');
+  }
+}
 function pwShow(v) { $('pwmv').textContent = v; }
 function tShow(i, v) { $('pvtv' + i).textContent = v + ' kPa'; }
 function cmdI() { send('I ' + mask + ' ' + pw()); }
@@ -545,6 +560,7 @@ function render() {
   $('tbcl').textContent = s.cl;
   $('errdot').classList.toggle('err', !!s.err);
   $('tberr').textContent = s.err ? '错误' : '无错误';
+  $('errbanner').style.display = s.err ? 'block' : 'none';
   if (s.err && !prevErr) dlog('⚠ 状态字错误位置位 (bit15)', 'warn');
   prevErr = s.err;
   $('tbclk').textContent = new Date().toLocaleTimeString('zh-CN', { hour12: false });

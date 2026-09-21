@@ -44,6 +44,9 @@ function T(name, cond) {
   console.log('─ 功能：页面加载 ─');
   await p.goto('http://127.0.0.1:8000/gui', { waitUntil: 'load' });
   await p.waitForTimeout(1200);
+  /* 虚拟断电重启：从确定性零状态开始（避免上一轮/手工实验残留压力影响断言） */
+  await p.evaluate(() => fetch('/api/reset', { method: 'POST' }));
+  await p.waitForTimeout(400);
   const load = await p.evaluate(() => ({
     cards: document.getElementById('pcards').childElementCount,
     rows: document.getElementById('schedbody').childElementCount,
@@ -128,6 +131,73 @@ function T(name, cond) {
   await p.waitForTimeout(300);
   T('停止后行状态复位', await p.evaluate(() =>
     document.getElementById('strs1').textContent === '待机'));
+  await p.evaluate(() => send('S 31'));   /* 序列停止≠硬件停止：立即停掉行1的充气，防状态污染 */
+
+  console.log('─ 功能：PWM 滑块 ─');
+  await p.waitForTimeout(300);
+  await p.evaluate(() => { const r = document.getElementById('pwmI'); r.value = 150; pwShow('150'); });
+  await p.click('text=▶ 充气');
+  await p.waitForTimeout(600);
+  const pwm = await p.evaluate(() => fetch('/api/state', { cache: 'no-store' }).then(r => r.json()));
+  T('滑块 PWM=150 生效到泵', pwm.pump === 150);
+  await p.evaluate(() => send('S 31'));
+  await p.evaluate(() => { const r = document.getElementById('pwmI'); r.value = 255; pwShow('255'); });
+
+  console.log('─ 功能：端口卡片 ◎闭环按钮 ─');
+  await p.evaluate(() => send('R 31'));
+  await p.waitForTimeout(1100);
+  await p.evaluate(() => send('S 31'));
+  await p.waitForTimeout(200);
+  await p.evaluate(() => {
+    const s = document.getElementById('pvt1'); s.value = 60;
+    tShow(1, '60');
+  });
+  await p.click('#pvcard1 .clrow button');
+  await p.waitForTimeout(500);
+  let g = await p.evaluate(() => fetch('/api/state', { cache: 'no-store' }).then(r => r.json()));
+  T('G 命令已发(闭环启动)', g.cl === 'RUNNING' || g.cl === 'DONE');
+  for (let i = 0; i < 30 && g.cl === 'RUNNING'; ++i) {
+    await p.waitForTimeout(200);
+    g = await p.evaluate(() => fetch('/api/state', { cache: 'no-store' }).then(r => r.json()));
+  }
+  T('闭环达到 DONE', g.cl === 'DONE');
+  T('停在 60±4 kPa', Math.abs(g.sensors[0] - 60) <= 4);
+
+  console.log('─ 功能：物理注入按钮 ─');
+  await p.selectOption('#simIdx', '1');
+  await p.fill('#simVal', '42');
+  await p.click('#simbtn');
+  await p.waitForTimeout(600);
+  T('注入后 S1=42.0', await p.evaluate(() => document.getElementById('sns1').textContent) === '42.0 kPa');
+  await p.evaluate(() => fetch('/api/sim', { method: 'POST', body: '1 0' }));
+
+  console.log('─ 功能：超压锁存 + 虚拟断电重启 ─');
+  await p.evaluate(() => send('R 31'));
+  await p.waitForTimeout(1400);
+  await p.evaluate(() => send('S 31'));
+  await p.waitForTimeout(200);
+  await p.evaluate(() => send('I 7 255'));      /* 4.7s ≈ 冲到 130kPa 封顶，越过 120 触发硬保护 */
+  await p.waitForTimeout(4700);
+  await p.evaluate(() => send('S 7'));
+  await p.waitForTimeout(500);
+  const ov = await p.evaluate(async () => {
+    const s = await fetch('/api/state', { cache: 'no-store' }).then(r => r.json());
+    return {
+      banner: document.getElementById('errbanner').style.display,
+      dot: document.getElementById('errdot').classList.contains('err'),
+      err: s.err,
+    };
+  });
+  T('超压触发 err=1', ov.err === 1);
+  T('错误横幅出现(含虚拟断电按钮)', ov.banner === 'block');
+  T('顶栏红点', ov.dot);
+  await p.click('#errbanner button');
+  await p.waitForTimeout(600);
+  const rs = await p.evaluate(async () => {
+    const s = await fetch('/api/state', { cache: 'no-store' }).then(r => r.json());
+    return { banner: document.getElementById('errbanner').style.display, err: s.err };
+  });
+  T('⟳ 虚拟断电后锁存清除+横幅消失', rs.err === 0 && rs.banner === 'none');
 
   console.log('─ 功能：刷新恢复 ─');
   await p.reload({ waitUntil: 'load' });

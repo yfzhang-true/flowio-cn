@@ -22,12 +22,15 @@ sim()   { curl -s -m 3 -X POST "$BASE/api/sim" -d "$1"; }
 clean() { cmd 'S 31'; cmd 'X'; sleep 0.3; }
 
 s=$(state)
-# 超压等错误位是固件安全锁存（set 后不复位，重启服务才清）。
-# 带锁存跑测试会让所有状态字断言失真——前置守卫直接指出修复动作。
+# 超压等错误位是固件安全锁存（set 后不复位）。检测到锁存→POST /api/reset 虚拟断电重启自愈。
 st0=$(jnum state "$s")
 if [ $((st0 & 32768)) -ne 0 ] 2>/dev/null; then
-  echo "FATAL: 服务带错误锁存 (state=$st0, bit15)。超压保护为硬规则：重启服务后重跑（taskkill python.exe + server.py）"
-  exit 2
+  echo "  … 检测到错误锁存 (state=$st0, bit15)，/api/reset 虚拟断电重启"
+  curl -s -m 3 -X POST "$BASE/api/reset" >/dev/null; sleep 0.3
+  s=$(state); st0=$(jnum state "$s")
+  if [ $((st0 & 32768)) -ne 0 ] 2>/dev/null; then
+    echo "FATAL: 虚拟重启未能清除锁存 (state=$st0)"; exit 2
+  fi
 fi
 
 echo "─ 接口：协议契约 ─"
@@ -101,6 +104,16 @@ sim '1 0' >/dev/null
 ok "注入 S1=0 复位" "$([ "$(sens 2 "$(state)")" = "0.0" ] && echo 1 || echo 0)"
 ok "非法注入体回 {ok:false}" "$(sim 'bad body' | grep -c '"ok": *false')"
 
+echo "─ 接口：超压保护锁存 + /api/reset 虚拟断电 ─"
 clean
-echo ""
+cmd 'R 31'; sleep 1.5; cmd 'S 31'; sleep 0.2
+cmd 'I 7 255'; sleep 4.6; cmd 'S 7'; sleep 0.3
+s=$(state)
+ok "冲过 120kPa 触发超压锁存(bit15)" "$([ $(( $(jnum state "$s") & 32768 )) -ne 0 ] && echo 1 || echo 0)"
+ok "err 字段=1" "$([ "$(jnum err "$s")" = "1" ] && echo 1 || echo 0)"
+ok "POST /api/reset 回 {ok:true}" "$(curl -s -m 3 -X POST "$BASE/api/reset" | grep -c '"ok": *true')"
+s=$(state)
+ok "虚拟断电后锁存清除(err=0,bit15=0)" "$([ $(( $(jnum state "$s") & 32768 )) -eq 0 ] && [ "$(jnum err "$s")" = "0" ] && echo 1 || echo 0)"
+
+clean
 if [ "$fail" = "0" ]; then echo "✓ 接口测试 $pass/$pass"; exit 0; else echo "✗ 接口测试 $pass/$((pass+fail))"; exit 1; fi

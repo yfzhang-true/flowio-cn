@@ -70,6 +70,11 @@ class Handler(BaseHTTPRequestHandler):
         if self.path == "/api/cmd":
             lib.pn_twin_command(body.strip().encode("utf-8"))
             self._json({"ok": True})
+        elif self.path == "/api/reset":
+            # 虚拟断电重启：超压等错误位是固件安全锁存（set 后不复位），
+            # 真机需断电重启；孪生用 re-init 等效模拟这一动作。
+            lib.pn_twin_init()
+            self._json({"ok": True})
         elif self.path == "/api/sim":
             try:
                 idx, kpa = (float(x) for x in body.strip().split())
