@@ -65,7 +65,7 @@ ok "进气阀>0、排气阀=0" "$(v=($(grep -o '"valves": \[[^]]*\]' <<<"$s" | g
 ok "泵 duty=255" "$([ "$(jnum pump "$s")" = "255" ] && echo 1 || echo 0)"
 p1=$(sens 1 "$s")
 ok "0.4s 升压 >5 kPa (≈30kPa/s)" "$(numgt "$p1" 5 && echo 1 || echo 0)"
-sleep 1.0
+sleep 1.5
 s=$(state); p2=$(sens 1 "$s")
 ok "持续充气单调上升(>+15)" "$(awk -v a="$p2" -v b="$p1" 'BEGIN{exit !(a>b+15)}' && echo 1 || echo 0)"
 v=($(grep -o '"valves": \[[^]]*\]' <<<"$s" | grep -o '[0-9]*'))
@@ -89,7 +89,9 @@ ok "排气阀>0、进气阀=0、泵停" "$(v=($(grep -o '"valves": \[[^]]*\]' <<
   [ "${v[6]}" -gt 0 ] && [ "${v[5]}" = 0 ] && [ "$(jnum pump "$s")" = 0 ] && echo 1 || echo 0)"
 pr=$(sens 1 "$(state)"); sleep 1.0
 pr2=$(sens 1 "$(state)")
-ok "被动排气降压（>15 kPa/s）" "$(awk -v a="$pr" -v b="$pr2" 'BEGIN{exit !(a-b>15)}' && echo 1 || echo 0)"
+RT=$(awk -v a="$pr2" -v b="$pr" 'BEGIN{printf "%.2f", a/b}')
+ok "被动排气指数衰减（1s 比值 ${RT}∈0.35~0.72，理论 e^-1/1.6≈0.53）" \
+  "$(awk -v a="$pr2" -v b="$pr" 'BEGIN{r=a/b; exit !(r>0.35 && r<0.72)}' && echo 1 || echo 0)"
 
 echo "─ 接口：抽气 V（阀型 0x2C7） ─"
 cmd 'V 7 255'; sleep 0.3
@@ -117,16 +119,47 @@ sim '1 0' >/dev/null
 ok "注入 S1=0 复位" "$([ "$(sens 2 "$(state)")" = "0.0" ] && echo 1 || echo 0)"
 ok "非法注入体回 {ok:false}" "$(sim 'bad body' | grep -c '"ok": *false')"
 
-echo "─ 接口：超压保护锁存 + /api/reset 虚拟断电 ─"
+echo "─ 接口：传感器量程饱和与超压保护盲区 ─"
 clean
-cmd 'R 31'; sleep 1.5; cmd 'S 31'; sleep 0.2
-cmd 'I 7 255'; sleep 4.6; cmd 'S 7'; sleep 0.3
+sim '0 125' >/dev/null; sleep 0.1
+sv1=$(sens 1 "$(state)")
+ok "注入 125 → 按量程饱和（实测 ${sv1} ∈ 99~101）" \
+  "$(awk -v a="$sv1" 'BEGIN{exit !(a>99 && a<101)}' && echo 1 || echo 0)"
+sim '0 -150' >/dev/null; sleep 0.1
+sv2=$(sens 1 "$(state)")
+ok "注入 -150 → 饱和（实测 ${sv2} ∈ -101~-99）" \
+  "$(awk -v a="$sv2" 'BEGIN{exit !(a<-99 && a>-101)}' && echo 1 || echo 0)"
 s=$(state)
-ok "冲过 120kPa 触发超压锁存(bit15)" "$([ $(( $(jnum state "$s") & 32768 )) -ne 0 ] && echo 1 || echo 0)"
-ok "err 字段=1" "$([ "$(jnum err "$s")" = "1" ] && echo 1 || echo 0)"
+ok "饱和不触发超压(err=0)：阈值120>量程100=固件保护盲区(已记录)" \
+  "$([ "$(jnum err "$s")" = "0" ] && [ $(( $(jnum state "$s") & 32768 )) -eq 0 ] && echo 1 || echo 0)"
 ok "POST /api/reset 回 {ok:true}" "$(curl -s -m 3 -X POST "$BASE/api/reset" | grep -c '"ok": *true')"
-s=$(state)
-ok "虚拟断电后锁存清除(err=0,bit15=0)" "$([ $(( $(jnum state "$s") & 32768 )) -eq 0 ] && [ "$(jnum err "$s")" = "0" ] && echo 1 || echo 0)"
+
+echo "─ 接口：一阶气动物理模型 ─"
+# 每项测量前 /apireset 归零（clean 只关阀不清压），保证速率从同一零表压起点可比
+curl -s -m 2 -X POST "$BASE/api/reset" >/dev/null; sleep 0.2
+cmd 'I 7 255'; sleep 1.0; pa=$(sens 1 "$(state)")
+curl -s -m 2 -X POST "$BASE/api/reset" >/dev/null; sleep 0.2
+cmd 'I 7 100'; sleep 1.0; pb=$(sens 1 "$(state)")
+ok "充压速率随 duty 缩放（255:${pa}kPa vs 100:${pb}kPa / 1s @零表压）" \
+  "$(awk -v a="$pa" -v b="$pb" 'BEGIN{exit !(a>b*1.8)}' && echo 1 || echo 0)"
+curl -s -m 2 -X POST "$BASE/api/reset" >/dev/null; sleep 0.2
+cmd 'I 7 255'; sleep 8.0; cmd 'S 7'; sleep 0.2
+pp=$(sens 1 "$(state)")
+ok "泵压渐近死点 55~70kPa（实测 ${pp}，无 130 假上限）" \
+  "$(awk -v a="$pp" 'BEGIN{exit !(a>55 && a<70)}' && echo 1 || echo 0)"
+curl -s -m 2 -X POST "$BASE/api/reset" >/dev/null; sleep 0.2
+cmd 'V 7 255'; sleep 1.0
+pv1=$(sens 1 "$(state)")
+ok "抽气产生真实负压（1s 实测 ${pv1} < -15）" \
+  "$(awk -v a="$pv1" 'BEGIN{exit !(a<-15)}' && echo 1 || echo 0)"
+sleep 7.0; cmd 'S 7'; sleep 0.2
+pv2=$(sens 1 "$(state)")
+ok "真空渐近极限 -50~-35kPa（实测 ${pv2}）" \
+  "$(awk -v a="$pv2" 'BEGIN{exit !(a>-50 && a<-35)}' && echo 1 || echo 0)"
+sleep 1.0
+pv3=$(sens 1 "$(state)")
+ok "负压密封缓慢回充（朝 0 方向：${pv3} > ${pv2}）" "$(awk -v a="$pv3" -v b="$pv2" 'BEGIN{exit !(a>b)}' && echo 1 || echo 0)"
 
 clean
+echo ""
 if [ "$fail" = "0" ]; then echo "✓ 接口测试 $pass/$pass"; exit 0; else echo "✗ 接口测试 $pass/$((pass+fail))"; exit 1; fi

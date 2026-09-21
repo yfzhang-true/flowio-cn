@@ -77,15 +77,15 @@ function T(name, cond) {
   console.log('─ 单元：balloonScale 气球缩放 ─');
   const r2 = await p.evaluate(() => ({
     zero: Math.abs(balloonScale(0) - 0.45) < 1e-9,
-    full: Math.abs(balloonScale(130) - 1) < 1e-9,
-    neg: balloonScale(-20) === 0.45,
+    full: Math.abs(balloonScale(65) - 1) < 1e-9,
+    vac: Math.abs(balloonScale(-45) - 0.30) < 1e-9,
     over: balloonScale(999) === 1,
-    mid: Math.abs(balloonScale(33) - 0.5896) < 0.001,
+    mid: Math.abs(balloonScale(33) - 0.729) < 0.002,
   }));
-  T('0 kPa → 0.45', r2.zero);
-  T('130 kPa → 1.0', r2.full);
-  T('负压钳 0.45 / 超压钳 1.0', r2.neg && r2.over);
-  T('33 kPa → ≈0.590', r2.mid);
+  T('0 kPa → 0.45（静息）', r2.zero);
+  T('65 kPa（泵死点）→ 1.0', r2.full);
+  T('负压 -45 → 0.30（吸瘪）/ 超钳 1.0', r2.vac && r2.over);
+  T('33 kPa → ≈0.729', r2.mid);
 
   console.log('─ 单元：togglePort 端口掩码 ─');
   const r3 = await p.evaluate(() => {

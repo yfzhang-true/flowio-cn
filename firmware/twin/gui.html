@@ -430,7 +430,8 @@ function buildFlowPaths(scen, open) {
   return d;
 }
 function balloonScale(p) {
-  return 0.45 + Math.max(0, Math.min(130, p)) / 130 * 0.55;
+  if (p <= 0) return 0.45 - 0.15 * Math.min(1, -p / 45);   /* 负压：被吸瘪 */
+  return 0.45 + 0.55 * Math.min(1, p / 65);                /* 正压：随泵死点渐近饱满 */
 }
 
 /* ═══ ECharts 压力曲线（60 点窗口） ═══ */
@@ -590,9 +591,9 @@ function render() {
     $('flowg').innerHTML = buildFlowPaths(scen, open);
   }
 
-  /* 压力表：-120°…+120° ↔ 0…130 kPa */
+  /* 压力表：-120°…+120° ↔ 传感器量程 -100…+100 kPa（0 在正中） */
   const p0 = s.sensors[0], p1 = s.sensors[1];
-  const deg = -120 + Math.max(0, Math.min(130, p0)) / 130 * 240;
+  const deg = -120 + (Math.max(-100, Math.min(100, p0)) + 100) / 200 * 240;
   $('needle').style.transform = 'rotate(' + deg.toFixed(1) + 'deg)';
   $('gval').textContent = p0.toFixed(1);
   $('sns0').textContent = p0.toFixed(1) + ' kPa';
@@ -601,7 +602,7 @@ function render() {
   /* 气球：阀开→压力跟随汇流管 S0，阀关→密封保持；大小+颜色随压力 */
   for (let i = 0; i < 5; ++i) {
     if ((s.state >> i) & 1) balP[i] = p0;
-    const f = Math.max(0, Math.min(130, balP[i])) / 130;
+    const f = Math.max(0, Math.min(65, balP[i])) / 65;
     balRefs[i].g.style.transform = `scale(${balloonScale(balP[i]).toFixed(3)})`;
     balRefs[i].c.setAttribute('fill', `hsl(152,52%,${Math.round(20 + f * 20)}%)`);
   }

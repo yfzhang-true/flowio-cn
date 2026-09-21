@@ -171,7 +171,7 @@ function T(name, cond) {
   await p.waitForTimeout(500);
   let g = await p.evaluate(() => fetch('/api/state', { cache: 'no-store' }).then(r => r.json()));
   T('G 命令已发(闭环启动)', g.cl === 'RUNNING' || g.cl === 'DONE');
-  for (let i = 0; i < 30 && g.cl === 'RUNNING'; ++i) {
+  for (let i = 0; i < 45 && g.cl === 'RUNNING'; ++i) {
     await p.waitForTimeout(200);
     g = await p.evaluate(() => fetch('/api/state', { cache: 'no-store' }).then(r => r.json()));
   }
@@ -186,33 +186,24 @@ function T(name, cond) {
   T('注入后 S1=42.0', await p.evaluate(() => document.getElementById('sns1').textContent) === '42.0 kPa');
   await p.evaluate(() => fetch('/api/sim', { method: 'POST', body: '1 0' }));
 
-  console.log('─ 功能：超压锁存 + 虚拟断电重启 ─');
-  await p.evaluate(() => send('R 31'));
-  await p.waitForTimeout(1400);
+  console.log('─ 功能：传感器饱和与保护盲区 ─');
   await p.evaluate(() => send('S 31'));
-  await p.waitForTimeout(200);
-  await p.evaluate(() => send('I 7 255'));      /* 4.7s ≈ 冲到 130kPa 封顶，越过 120 触发硬保护 */
-  await p.waitForTimeout(4700);
-  await p.evaluate(() => send('S 7'));
-  await p.waitForTimeout(500);
-  const ov = await p.evaluate(async () => {
+  await p.waitForTimeout(300);
+  await p.selectOption('#simIdx', '0');
+  await p.fill('#simVal', '125');
+  await p.click('#simbtn');
+  await p.waitForTimeout(700);
+  const sat = await p.evaluate(async () => {
     const s = await fetch('/api/state', { cache: 'no-store' }).then(r => r.json());
     return {
+      gauge: document.getElementById('gval').textContent,
       banner: document.getElementById('errbanner').style.display,
-      dot: document.getElementById('errdot').classList.contains('err'),
       err: s.err,
     };
   });
-  T('超压触发 err=1', ov.err === 1);
-  T('错误横幅出现(含虚拟断电按钮)', ov.banner === 'block');
-  T('顶栏红点', ov.dot);
-  await p.click('#errbanner button');
-  await p.waitForTimeout(600);
-  const rs = await p.evaluate(async () => {
-    const s = await fetch('/api/state', { cache: 'no-store' }).then(r => r.json());
-    return { banner: document.getElementById('errbanner').style.display, err: s.err };
-  });
-  T('⟳ 虚拟断电后锁存清除+横幅消失', rs.err === 0 && rs.banner === 'none');
+  T('注入 125 → 压力表如实饱和显示 ≈100', parseFloat(sat.gauge) > 99 && parseFloat(sat.gauge) < 101);
+  T('饱和不触发超压横幅（阈值120>量程100=固件盲区，已上报）', sat.err === 0 && sat.banner === 'none');
+  await p.evaluate(() => fetch('/api/sim', { method: 'POST', body: '0 0' }));
 
   console.log('─ 功能：刷新恢复 ─');
   await p.reload({ waitUntil: 'load' });
