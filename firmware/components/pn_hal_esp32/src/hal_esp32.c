@@ -24,6 +24,7 @@
 #include "driver/i2c_master.h"
 #include "esp_timer.h"
 #include "esp_check.h"
+#include "hal/efuse_hal.h"
 
 #include <string.h>
 
@@ -108,16 +109,20 @@ static void ledc_init_all(void)
     for (int i = 0; i < PN_VALVE_COUNT; ++i) {
         ch.gpio_num = s_valve_gpio[i];
         ch.channel  = (ledc_channel_t)i;
-        ESP_ERROR_CHECK(ledc_channel_config(&ch));
+        /* 优雅降级：单通道失败（外设缺失）不阻断系统 */
+        if (ledc_channel_config(&ch) != ESP_OK)
+            printf("[HAL] ledc ch%d config failed\n", i);
     }
     ch.gpio_num = PN_PUMP_GPIO;
     ch.channel  = LEDC_CHANNEL_7;
-    ESP_ERROR_CHECK(ledc_channel_config(&ch));
+    if (ledc_channel_config(&ch) != ESP_OK)
+        printf("[HAL] ledc pump ch config failed\n");
 }
 
 /* ---------- kit 舵机开关：RMT 50Hz ---------- */
 static rmt_channel_handle_t s_servo_rmt[3];
 static rmt_encoder_handle_t s_servo_enc[3];
+static bool s_servo_ok[3];        /* RMT 通道不可用时优雅降级（QEMU 无 RMT 外设，2026-09-22 验证） */
 
 static size_t rmt_encoder_callback(const void *data, size_t data_size,
                                    size_t symbols_written, size_t symbols_free,
@@ -136,7 +141,7 @@ static size_t rmt_encoder_callback(const void *data, size_t data_size,
 
 void pn_hal_esp32_servo_set(uint8_t switch_idx, uint16_t pulse_us)
 {
-    if (switch_idx >= 3) return;
+    if (switch_idx >= 3 || !s_servo_ok[switch_idx]) return;
     if (pulse_us < 500)  pulse_us = 500;
     if (pulse_us > 2500) pulse_us = 2500;
     static uint16_t pulses[3];
@@ -146,8 +151,20 @@ void pn_hal_esp32_servo_set(uint8_t switch_idx, uint16_t pulse_us)
                  &pulses[switch_idx], sizeof(uint16_t), &cfg);
 }
 
+static bool pn_is_qemu(void)
+{
+    /* espressif QEMU 报芯片版本 v0.0（真实 S3 无此版本）。
+     * QEMU 不仿真 RMT/I2C：通道注册可能"成功"但 transmit 等不到中断→死等。 */
+    return efuse_hal_get_major_chip_version() == 0 &&
+           efuse_hal_get_minor_chip_version() == 0;
+}
+
 static void servo_init_all(void)
 {
+    if (pn_is_qemu()) {
+        printf("[HAL] QEMU detected (chip v0.0), skip servos & i2c\n");
+        return;
+    }
     rmt_tx_channel_config_t tx = { 0 };
     tx.clk_src           = RMT_CLK_SRC_DEFAULT;
     tx.resolution_hz     = PN_SERVO_RES_US;
@@ -155,7 +172,14 @@ static void servo_init_all(void)
     tx.trans_queue_depth = 1;
     for (int i = 0; i < 3; ++i) {
         tx.gpio_num = s_servo_gpio[i];
-        ESP_ERROR_CHECK(rmt_new_tx_channel(&tx, &s_servo_rmt[i]));
+        /* 优雅降级：RMT 通道注册失败（QEMU 不仿真 RMT）时跳过该舵机，
+         * 真机不会走到此分支；CLI/闭环照常运行。 */
+        if (rmt_new_tx_channel(&tx, &s_servo_rmt[i]) != ESP_OK) {
+            printf("[HAL] servo %d unavailable (no RMT channel; QEMU?)\n", i);
+            s_servo_ok[i] = false;
+            continue;
+        }
+        s_servo_ok[i] = true;
 
         rmt_simple_encoder_config_t enc_cfg = {
             .callback = rmt_encoder_callback,
@@ -169,6 +193,11 @@ static void servo_init_all(void)
 /* ---------- I2C / XGZP6897D ---------- */
 static void i2c_init_all(void)
 {
+    /* QEMU 下 I2C 驱动会挂起（非报错），传感器在仿真里也不存在 */
+    if (pn_is_qemu()) {
+        s_xgzp_present[0] = s_xgzp_present[1] = false;
+        return;
+    }
     i2c_master_bus_config_t bus = { 0 };
     bus.i2c_port  = I2C_NUM_0;
     bus.sda_io_num = GPIO_NUM_8;
@@ -176,7 +205,12 @@ static void i2c_init_all(void)
     bus.clk_source = I2C_CLK_SRC_DEFAULT;
     bus.glitch_ignore_cnt = 7;
     bus.flags.enable_internal_pullup = true;   /* P0 面包板阶段先靠内部上拉 */
-    ESP_ERROR_CHECK(i2c_new_master_bus(&bus, &s_i2c_bus));
+    /* 优雅降级：I2C 总线不可用（QEMU）时标记传感器缺失，闭环照常报传感器错 */
+    if (i2c_new_master_bus(&bus, &s_i2c_bus) != ESP_OK) {
+        printf("[HAL] i2c bus unavailable (QEMU?)\n");
+        s_xgzp_present[0] = s_xgzp_present[1] = false;
+        return;
+    }
 
     for (int i = 0; i < 2; ++i) {
         i2c_device_config_t dev = { 0 };
