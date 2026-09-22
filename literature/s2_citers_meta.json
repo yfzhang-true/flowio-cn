@@ -1,0 +1,3499 @@
+[
+ {
+  "paperId": "1ae84d650a37e9ff905a2fd0c2157a986e010935",
+  "externalIds": {
+   "ArXiv": "2609.00612",
+   "CorpusId": 291543961
+  },
+  "title": "A Wearable Pneumatic Device for Continuous, Closed-Loop, Bidirectional Tactile Interaction",
+  "venue": "",
+  "year": 2026,
+  "citationCount": 0,
+  "isOpenAccess": false,
+  "openAccessPdf": {
+   "url": "",
+   "status": null,
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "137135379",
+    "name": "Cosima du Pasquier"
+   },
+   {
+    "authorId": "2300397203",
+    "name": "Aliyah Smith"
+   },
+   {
+    "authorId": "2352265319",
+    "name": "Serin Huber"
+   },
+   {
+    "authorId": "2473106342",
+    "name": "Joshua Phelps"
+   },
+   {
+    "authorId": "2473138048",
+    "name": "Ilana A. Cohen"
+   },
+   {
+    "authorId": "114285202",
+    "name": "Ava Chen"
+   },
+   {
+    "authorId": "2310337160",
+    "name": "Monroe D. Kennedy"
+   },
+   {
+    "authorId": "2344619305",
+    "name": "Allison M. Okamura"
+   }
+  ]
+ },
+ {
+  "paperId": "3e71e078a108d66c1b34306346573e02eebada32",
+  "externalIds": {
+   "DOI": "10.1109/TMECH.2026.3697122",
+   "CorpusId": 289225027
+  },
+  "title": "A Silent, Low-Heat Pinch Valve Driven by a Single Rolled Dielectric Elastomer Actuator",
+  "venue": "IEEE/ASME transactions on mechatronics",
+  "year": 2026,
+  "citationCount": 0,
+  "isOpenAccess": false,
+  "openAccessPdf": {
+   "url": "",
+   "status": "CLOSED",
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "2061559297",
+    "name": "Qi Shao"
+   },
+   {
+    "authorId": "2191500334",
+    "name": "Xin-Jun Liu"
+   },
+   {
+    "authorId": "2241442510",
+    "name": "Fumiya Iida"
+   },
+   {
+    "authorId": "2353258169",
+    "name": "Hui-Chan Zhao"
+   }
+  ]
+ },
+ {
+  "paperId": "a671a8ff995dbca6a3c570ea8ae2bcc5d257347c",
+  "externalIds": {
+   "DBLP": "conf/candc/SambiZTLBB26",
+   "DOI": "10.1145/3803784.3809294",
+   "CorpusId": 290161639
+  },
+  "title": "A Cabinet of Affective Touches: Building Design Repository Linking Somatic Experience with Soft Robotic Systems",
+  "venue": "Creativity & Cognition",
+  "year": 2026,
+  "citationCount": 0,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://doi.org/10.1145/3803784.3809294",
+   "status": "GOLD",
+   "license": "CCBY"
+  },
+  "authors": [
+   {
+    "authorId": "2449848451",
+    "name": "Henrique Sambi"
+   },
+   {
+    "authorId": "2307743507",
+    "name": "Caroline Yan Zheng"
+   },
+   {
+    "authorId": "2311631",
+    "name": "P. Tennent"
+   },
+   {
+    "authorId": "2113611053",
+    "name": "Yoav Luft"
+   },
+   {
+    "authorId": "2278856704",
+    "name": "Steve Benford"
+   },
+   {
+    "authorId": "2264235429",
+    "name": "M. Balaam"
+   }
+  ]
+ },
+ {
+  "paperId": "65c4fffa4bd7bf26a6c40820d2c8dfcca1f4578a",
+  "externalIds": {
+   "ArXiv": "2607.13058",
+   "DBLP": "journals/corr/abs-2607-13058",
+   "DOI": "10.1109/TOH.2026.3708136",
+   "CorpusId": 289687258,
+   "PubMed": "42371873"
+  },
+  "title": "Power from Potential: A Survey of Electrostatic Actuators for Haptics",
+  "venue": "IEEE Transactions on Haptics",
+  "year": 2026,
+  "citationCount": 0,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://arxiv.org/pdf/2607.13058",
+   "status": "GREEN",
+   "license": "CCBYSA"
+  },
+  "authors": [
+   {
+    "authorId": "1622424352",
+    "name": "A. M. Rauf"
+   },
+   {
+    "authorId": "2261937091",
+    "name": "Ran Zhou"
+   },
+   {
+    "authorId": "12437689",
+    "name": "E. Acome"
+   },
+   {
+    "authorId": "2286264990",
+    "name": "Madeline Balaam"
+   },
+   {
+    "authorId": "2770912",
+    "name": "Sean Follmer"
+   },
+   {
+    "authorId": "2154279289",
+    "name": "Teng Han"
+   },
+   {
+    "authorId": "1922059",
+    "name": "Craig D. Shultz"
+   },
+   {
+    "authorId": "3136322",
+    "name": "Daniel Leithinger"
+   }
+  ]
+ },
+ {
+  "paperId": "b836b704ac2853db3bbc8c8b0dd4c8a57a03ecf1",
+  "externalIds": {
+   "DOI": "10.1002/adfm.75714",
+   "CorpusId": 288054504
+  },
+  "title": "Texoskeletons: Developing the Fundamental Technologies for Creating Intelligent Soft Robotic Clothing With Integrated 1D Sensors and Actuators",
+  "venue": "Advanced Functional Materials",
+  "year": 2026,
+  "citationCount": 2,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://doi.org/10.1002/adfm.75714",
+   "status": "HYBRID",
+   "license": "CCBY"
+  },
+  "authors": [
+   {
+    "authorId": "2433438204",
+    "name": "Amy Lukomiak"
+   },
+   {
+    "authorId": "2129349068",
+    "name": "R. Bulathsinghala"
+   },
+   {
+    "authorId": "2312236870",
+    "name": "J. Varga"
+   },
+   {
+    "authorId": "2433319822",
+    "name": "Shuxin Meng"
+   },
+   {
+    "authorId": "2219519633",
+    "name": "Kalana Marasinghe"
+   },
+   {
+    "authorId": "2433435874",
+    "name": "Imaad Refai"
+   },
+   {
+    "authorId": "2299345274",
+    "name": "Biyon Fernando"
+   },
+   {
+    "authorId": "2284785863",
+    "name": "Amitkumar V. Patel"
+   },
+   {
+    "authorId": "2433436106",
+    "name": "Chamika M. Halloluwa‐Arachchige"
+   },
+   {
+    "authorId": "2290027561",
+    "name": "Carlos Oliveira"
+   },
+   {
+    "authorId": "47936466",
+    "name": "A. Shahidi"
+   },
+   {
+    "authorId": "1569678485",
+    "name": "Zahra Rahemtulla"
+   },
+   {
+    "authorId": "2065457438",
+    "name": "Alexander P. Turner"
+   },
+   {
+    "authorId": "2284245219",
+    "name": "Zi-Yun Ding"
+   },
+   {
+    "authorId": "145339611",
+    "name": "B. Liew"
+   },
+   {
+    "authorId": "2304350773",
+    "name": "Andrew Kerr"
+   },
+   {
+    "authorId": "152500208",
+    "name": "E. Preatoni"
+   },
+   {
+    "authorId": "2304223282",
+    "name": "Theo Hughes-Riley"
+   },
+   {
+    "authorId": "2091744255",
+    "name": "I. Dharmasena"
+   },
+   {
+    "authorId": "26434272",
+    "name": "Pasindu Lugoda"
+   }
+  ]
+ },
+ {
+  "paperId": "11b5edc7127db99be9e7be0bfec7e1ea424a11c4",
+  "externalIds": {
+   "DBLP": "conf/chi/BrockerKSMSB26",
+   "DOI": "10.1145/3772318.3791295",
+   "CorpusId": 287255497
+  },
+  "title": "Emotion Through Motion: How Shape-Changing Jewelry Conveys Emotions",
+  "venue": "International Conference on Human Factors in Computing Systems",
+  "year": 2026,
+  "citationCount": 0,
+  "isOpenAccess": false,
+  "openAccessPdf": {
+   "url": "",
+   "status": null,
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "40962228",
+    "name": "Anke Brocker"
+   },
+   {
+    "authorId": "2429488877",
+    "name": "Felix Kasteel"
+   },
+   {
+    "authorId": "2497943884",
+    "name": "Sören Schröder"
+   },
+   {
+    "authorId": "2198636513",
+    "name": "Heiko Mueller"
+   },
+   {
+    "authorId": "2313115235",
+    "name": "Jürgen Steimle"
+   },
+   {
+    "authorId": "2257162356",
+    "name": "Jan O. Borchers"
+   }
+  ]
+ },
+ {
+  "paperId": "8e17759009341f73a046821925976c7835aae956",
+  "externalIds": {
+   "DBLP": "conf/chi/RamboldKDNGHLFK26",
+   "DOI": "10.1145/3772318.3791706",
+   "CorpusId": 287441917
+  },
+  "title": "AirForce: Personal Fabrication of Large-Scale, Load-Bearing Animatronics Structures from a Single Tube",
+  "venue": "International Conference on Human Factors in Computing Systems",
+  "year": 2026,
+  "citationCount": 2,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://doi.org/10.1145/3772318.3791706",
+   "status": "GOLD",
+   "license": "CCBYNCND"
+  },
+  "authors": [
+   {
+    "authorId": "30615067",
+    "name": "Lukas Rambold"
+   },
+   {
+    "authorId": "39998843",
+    "name": "Róbert Kovács"
+   },
+   {
+    "authorId": "2281570867",
+    "name": "Min Deng"
+   },
+   {
+    "authorId": "2269505192",
+    "name": "A. Naumann"
+   },
+   {
+    "authorId": "2429488746",
+    "name": "Konrad Gerlach"
+   },
+   {
+    "authorId": "2429487809",
+    "name": "H. Hamkins"
+   },
+   {
+    "authorId": "2260650852",
+    "name": "Helena Lendowski"
+   },
+   {
+    "authorId": "2189226134",
+    "name": "Chiao Fang"
+   },
+   {
+    "authorId": "40973920",
+    "name": "Shohei Katakura"
+   },
+   {
+    "authorId": "1471826106",
+    "name": "Conrad Lempert"
+   },
+   {
+    "authorId": "2089551724",
+    "name": "Muhammad Abdullah"
+   },
+   {
+    "authorId": "1729393",
+    "name": "Patrick Baudisch"
+   }
+  ]
+ },
+ {
+  "paperId": "11ba14e29b484de010c0dda66d8762369d4ee826",
+  "externalIds": {
+   "DBLP": "conf/chi/CaiYL26",
+   "DOI": "10.1145/3772363.3798734",
+   "CorpusId": 287444252
+  },
+  "title": "MistMaker and Large Language Model MistMaker(LLMMM): LLM Operated Mist Making",
+  "venue": "CHI Extended Abstracts",
+  "year": 2026,
+  "citationCount": 0,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://doi.org/10.1145/3772363.3798734",
+   "status": "GOLD",
+   "license": "CCBY"
+  },
+  "authors": [
+   {
+    "authorId": "2422582066",
+    "name": "Shuangshuang Cai"
+   },
+   {
+    "authorId": "2343797023",
+    "name": "David Yang"
+   },
+   {
+    "authorId": "35109962",
+    "name": "Sang-won Leigh"
+   }
+  ]
+ },
+ {
+  "paperId": "4ab0ae32b3b9f083f7bd745633dbef93afda1127",
+  "externalIds": {
+   "DBLP": "conf/tei/KanazawaNTK26",
+   "DOI": "10.1145/3731459.3773317",
+   "CorpusId": 286327149
+  },
+  "title": "Foldflatables: Programmable Folding in Inflatable Structures with Stiffness-Tunable Thermoplastic Hinges",
+  "venue": "International Conference on Tangible, Embedded, and Embodied Interaction",
+  "year": 2026,
+  "citationCount": 0,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://doi.org/10.1145/3731459.3773317",
+   "status": "GOLD",
+   "license": "CCBY"
+  },
+  "authors": [
+   {
+    "authorId": "2337116845",
+    "name": "Masanobu Kanazawa"
+   },
+   {
+    "authorId": "2184412164",
+    "name": "Yuki Nakata"
+   },
+   {
+    "authorId": "2422377546",
+    "name": "Kanako Toyoshima"
+   },
+   {
+    "authorId": "2163707599",
+    "name": "Y. Kakehi"
+   }
+  ]
+ },
+ {
+  "paperId": "c2355d814f1b2c5d2232d3cbb2a1cfdc074c570d",
+  "externalIds": {
+   "ArXiv": "2602.22604",
+   "DBLP": "journals/corr/abs-2602-22604",
+   "DOI": "10.1145/3772318.3791040",
+   "CorpusId": 286083455
+  },
+  "title": "DuoMorph: Synergistic Integration of FDM Printing and Pneumatic Actuation for Shape-Changing Interfaces",
+  "venue": "International Conference on Human Factors in Computing Systems",
+  "year": 2026,
+  "citationCount": 0,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://doi.org/10.1145/3772318.3791040",
+   "status": "GOLD",
+   "license": "CCBY"
+  },
+  "authors": [
+   {
+    "authorId": "2312872176",
+    "name": "Xueqing Li"
+   },
+   {
+    "authorId": "47817817",
+    "name": "Dan Huang"
+   },
+   {
+    "authorId": "1664873336",
+    "name": "Tianyu Yu"
+   },
+   {
+    "authorId": "2358779132",
+    "name": "Shuzi Yin"
+   },
+   {
+    "authorId": "2358830608",
+    "name": "Bingjie Gao"
+   },
+   {
+    "authorId": "2279468427",
+    "name": "A. Matsumoto"
+   },
+   {
+    "authorId": "2106209853",
+    "name": "Zhihao Yao"
+   },
+   {
+    "authorId": "2109836313",
+    "name": "Yiwei Zhao"
+   },
+   {
+    "authorId": "2301060295",
+    "name": "Shiqing Lyu"
+   },
+   {
+    "authorId": "2265576384",
+    "name": "Yu-Cheng Tian"
+   },
+   {
+    "authorId": "2260844380",
+    "name": "L. Yao"
+   },
+   {
+    "authorId": "2266530290",
+    "name": "Haipeng Mi"
+   },
+   {
+    "authorId": "2301139064",
+    "name": "Qiuyu Lu"
+   }
+  ]
+ },
+ {
+  "paperId": "102f8d1f64ab758e9279cde23015ebb148209c38",
+  "externalIds": {
+   "DBLP": "journals/ral/ChenANTT26",
+   "DOI": "10.1109/LRA.2025.3632714",
+   "CorpusId": 283038039
+  },
+  "title": "Fluidic Control of Untethered Underwater Soft Robots",
+  "venue": "IEEE Robotics and Automation Letters",
+  "year": 2026,
+  "citationCount": 1,
+  "isOpenAccess": false,
+  "openAccessPdf": {
+   "url": "",
+   "status": "CLOSED",
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "2392905400",
+    "name": "Allyson E. Chen"
+   },
+   {
+    "authorId": "51920813",
+    "name": "Iman Adibnazari"
+   },
+   {
+    "authorId": "2392551527",
+    "name": "George Nakoud"
+   },
+   {
+    "authorId": "2392548492",
+    "name": "G. Torres"
+   },
+   {
+    "authorId": "2388170250",
+    "name": "Michael T. Tolley"
+   }
+  ]
+ },
+ {
+  "paperId": "d6a9fb37c613874e3b12969b03e18e87c7239c50",
+  "externalIds": {
+   "DOI": "10.1002/aisy.202500967",
+   "CorpusId": 283861554
+  },
+  "title": "Electropermanent Magnetic Muscles: Power‐Efficient, Low‐Voltage, Compact Magnetic Actuators to Power Wearables and Untethered Robots",
+  "venue": "Advanced Intelligent Systems",
+  "year": 2025,
+  "citationCount": 3,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://doi.org/10.1002/aisy.202500967",
+   "status": "GOLD",
+   "license": "CCBY"
+  },
+  "authors": [
+   {
+    "authorId": null,
+    "name": "Arturo Castillo Ugalde"
+   },
+   {
+    "authorId": "2398333536",
+    "name": "Carina Carrasco"
+   },
+   {
+    "authorId": "2398520441",
+    "name": "Brijesh Chavda"
+   },
+   {
+    "authorId": "2303747737",
+    "name": "T. Stalin"
+   },
+   {
+    "authorId": "2303838236",
+    "name": "P. V. Alvarado"
+   }
+  ]
+ },
+ {
+  "paperId": "afa90b07d29e0b95b67bc44680e53ee258b27839",
+  "externalIds": {
+   "DOI": "10.1038/s41928-025-01515-x",
+   "CorpusId": 284040407
+  },
+  "title": "An 18-g haptic feedback ring with a three-axis force-sensing skin",
+  "venue": "Nature Electronics",
+  "year": 2025,
+  "citationCount": 14,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://infoscience.epfl.ch/handle/20.500.14299/257207",
+   "status": "GREEN",
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "144256159",
+    "name": "Sunju Kang"
+   },
+   {
+    "authorId": "2290883468",
+    "name": "Mustafa Mete"
+   },
+   {
+    "authorId": "35295224",
+    "name": "Srinivas Gandla"
+   },
+   {
+    "authorId": "2487789683",
+    "name": "Dila Türkmen"
+   },
+   {
+    "authorId": null,
+    "name": "Rohit Kadungamparambil John"
+   },
+   {
+    "authorId": "2496306522",
+    "name": "Merve Acer Kalafat"
+   },
+   {
+    "authorId": "2238891814",
+    "name": "Sunkook Kim"
+   },
+   {
+    "authorId": "2061006299",
+    "name": "J. Paik"
+   }
+  ]
+ },
+ {
+  "paperId": "9203d0c0f7e4ad7f5f7196ef24e8aebe45c66f58",
+  "externalIds": {
+   "DOI": "10.1088/1361-665X/ae2555",
+   "CorpusId": 283362081
+  },
+  "title": "Automatic enclosure system with tunable strapping pressure for active physical interface using soft actuated straps: a proof of concept",
+  "venue": "Smart materials and structures (Print)",
+  "year": 2025,
+  "citationCount": 0,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://biblio.vub.ac.be/vubirfiles/143114092/van_Vlerken_2025_Smart_Mater._Struct._34_127001.pdf",
+   "status": "GREEN",
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": null,
+    "name": "Christopher van Vlerken"
+   },
+   {
+    "authorId": "2094913772",
+    "name": "Kevin Langlois"
+   },
+   {
+    "authorId": "2370948280",
+    "name": "Mengnan Wu"
+   },
+   {
+    "authorId": "2267987300",
+    "name": "Bram Vanderborght"
+   },
+   {
+    "authorId": "3281541",
+    "name": "T. Verstraten"
+   }
+  ]
+ },
+ {
+  "paperId": "ae740fba6182c78844d7f5ff8b0d95323e21d9e3",
+  "externalIds": {
+   "DOI": "10.3390/app152312373",
+   "CorpusId": 283338010
+  },
+  "title": "An FPGA-Based Networked Hybrid Valve Pneumatic System for a Multi-Layer Soft Sponge Robot",
+  "venue": "Applied Sciences",
+  "year": 2025,
+  "citationCount": 1,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://www.mdpi.com/2076-3417/15/23/12373/pdf?version=1763730583",
+   "status": "GOLD",
+   "license": "CCBY"
+  },
+  "authors": [
+   {
+    "authorId": "2341462879",
+    "name": "Haiming Huang"
+   },
+   {
+    "authorId": "2404956843",
+    "name": "Xujing Li"
+   },
+   {
+    "authorId": "2394761911",
+    "name": "Ya-Ge Fan"
+   },
+   {
+    "authorId": "2367026105",
+    "name": "Yang Liu"
+   },
+   {
+    "authorId": "2394775245",
+    "name": "Lin-Ru Zhan"
+   }
+  ]
+ },
+ {
+  "paperId": "62635f6630aed8d89bd6d58db37c96548e4e8095",
+  "externalIds": {
+   "DBLP": "conf/ismar/LiuW25",
+   "DOI": "10.1109/ISMAR-Adjunct68609.2025.00025",
+   "CorpusId": 283097987
+  },
+  "title": "MemoGlove: Capturing and Recreating XR Memory with Haptic Interaction Traces",
+  "venue": "2025 IEEE International Symposium on Mixed and Augmented Reality Adjunct (ISMAR-Adjunct)",
+  "year": 2025,
+  "citationCount": 0,
+  "isOpenAccess": false,
+  "openAccessPdf": {
+   "url": "",
+   "status": null,
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "2393209984",
+    "name": "Qingyun Liu"
+   },
+   {
+    "authorId": "2347485376",
+    "name": "Yu-Han Wang"
+   }
+  ]
+ },
+ {
+  "paperId": "7014bc51e9d3f26739ade8e5511c26c575d21f82",
+  "externalIds": {
+   "DBLP": "conf/uist/0001HWWLWLYTWLM25",
+   "DOI": "10.1145/3746059.3747685",
+   "CorpusId": 281683093
+  },
+  "title": "MorphingSkin: A Skin-like Platform that Integrates Multimodal Hydraulic Actuators Based on Flexible Electroosmotic Pumps",
+  "venue": "ACM Symposium on User Interface Software and Technology",
+  "year": 2025,
+  "citationCount": 9,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://doi.org/10.1145/3746059.3747685",
+   "status": "GOLD",
+   "license": "CCBY"
+  },
+  "authors": [
+   {
+    "authorId": "2312866580",
+    "name": "Tianyu Yu"
+   },
+   {
+    "authorId": "40866191",
+    "name": "Peisheng He"
+   },
+   {
+    "authorId": "2325608204",
+    "name": "Bob Tianqi Wei"
+   },
+   {
+    "authorId": "2459845277",
+    "name": "Chenyuheng Wang"
+   },
+   {
+    "authorId": "2312872176",
+    "name": "Xueqing Li"
+   },
+   {
+    "authorId": "2288874127",
+    "name": "Xuezhu Wang"
+   },
+   {
+    "authorId": "2211087986",
+    "name": "Yao Lu"
+   },
+   {
+    "authorId": "2063760936",
+    "name": "Wei Yue"
+   },
+   {
+    "authorId": "2273620914",
+    "name": "Megan Teng"
+   },
+   {
+    "authorId": "2354522636",
+    "name": "Zihan Wang"
+   },
+   {
+    "authorId": "2373439722",
+    "name": "Liwei Lin"
+   },
+   {
+    "authorId": "2057372078",
+    "name": "Haipeng Mi"
+   },
+   {
+    "authorId": "2297115888",
+    "name": "Qi Lu"
+   },
+   {
+    "authorId": "2260844380",
+    "name": "L. Yao"
+   }
+  ]
+ },
+ {
+  "paperId": "b0675bc5c0e858637b491db92e5ef917a7f511f6",
+  "externalIds": {
+   "DBLP": "conf/uist/HuangCWP25",
+   "DOI": "10.1145/3746058.3758984",
+   "CorpusId": 281691304
+  },
+  "title": "Demonstrating NeuroFlux: A Non-Invasive Peripheral Magnetic Stimulation Device for Multimodal Haptic Feedback",
+  "venue": "UIST Adjunct",
+  "year": 2025,
+  "citationCount": 0,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://dl.acm.org/doi/pdf/10.1145/3746058.3758984",
+   "status": "GOLD",
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "2278800618",
+    "name": "Bingjian Huang"
+   },
+   {
+    "authorId": "2301057035",
+    "name": "Sam Chin"
+   },
+   {
+    "authorId": "2278612758",
+    "name": "Daniel Wigdor"
+   },
+   {
+    "authorId": "2256153295",
+    "name": "Joe A. Paradiso"
+   }
+  ]
+ },
+ {
+  "paperId": "87de93ff47f5610c0e61808af2c05aee3727ea68",
+  "externalIds": {
+   "DBLP": "conf/uist/Huang25",
+   "DOI": "10.1145/3746058.3758459",
+   "CorpusId": 281694817
+  },
+  "title": "Exploring On-Body Haptic Systems through HCI Methods: From Perception to Hardware and Application Innovation",
+  "venue": "UIST Adjunct",
+  "year": 2025,
+  "citationCount": 0,
+  "isOpenAccess": false,
+  "openAccessPdf": {
+   "url": "",
+   "status": "CLOSED",
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "2278800618",
+    "name": "Bingjian Huang"
+   }
+  ]
+ },
+ {
+  "paperId": "e7446c25d5d380a62a67e4097c7738fca92ed599",
+  "externalIds": {
+   "DBLP": "conf/ACMdis/SafariHP25",
+   "DOI": "10.1145/3715336.3735440",
+   "CorpusId": 279913771
+  },
+  "title": "SOFT OBJECTS: Prototyping for Tactile Interpersonal Communication",
+  "venue": "Conference on Designing Interactive Systems",
+  "year": 2025,
+  "citationCount": 3,
+  "isOpenAccess": false,
+  "openAccessPdf": {
+   "url": "",
+   "status": "CLOSED",
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "2347421786",
+    "name": "Mona Safari"
+   },
+   {
+    "authorId": "2370299319",
+    "name": "Kate Hartman"
+   },
+   {
+    "authorId": "2333660073",
+    "name": "Nick Puckett"
+   }
+  ]
+ },
+ {
+  "paperId": "2689650fd2e6a9eaf35baeea1ddf3fd6d3aa5ef0",
+  "externalIds": {
+   "DBLP": "conf/urai/YuUKFHF25",
+   "DOI": "10.1109/UR65550.2025.11078133",
+   "CorpusId": 280116801
+  },
+  "title": "Soft Haptic Display Toolkit: A Low-Cost, Open-Source Approach to High Resolution Tactile Feedback",
+  "venue": "2025 22nd International Conference on Ubiquitous Robots (UR)",
+  "year": 2025,
+  "citationCount": 2,
+  "isOpenAccess": false,
+  "openAccessPdf": {
+   "url": "",
+   "status": null,
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "2337848027",
+    "name": "Pijuan Yu"
+   },
+   {
+    "authorId": "2372713464",
+    "name": "Alexis Urquhart"
+   },
+   {
+    "authorId": "2850107",
+    "name": "Anzu Kawazoe"
+   },
+   {
+    "authorId": "2337483033",
+    "name": "Thomas K. Ferris"
+   },
+   {
+    "authorId": "102645815",
+    "name": "M. C. Hipwell"
+   },
+   {
+    "authorId": "2353108819",
+    "name": "R. F. Friesen"
+   }
+  ]
+ },
+ {
+  "paperId": "a9fdf7f53c5d0aa614aedb320e9d617b600f3332",
+  "externalIds": {
+   "DBLP": "journals/ral/MassoudAL25",
+   "DOI": "10.1109/LRA.2025.3563163",
+   "CorpusId": 277974275
+  },
+  "title": "Enhancing Dual-Loop Pressure Control in Pneumatic Soft Robotics With a Comparison of Evolutionary Algorithms for PID & FOPID Controller Tuning",
+  "venue": "IEEE Robotics and Automation Letters",
+  "year": 2025,
+  "citationCount": 12,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://doi.org/10.1109/lra.2025.3563163",
+   "status": "HYBRID",
+   "license": "CCBYNCND"
+  },
+  "authors": [
+   {
+    "authorId": "2197601565",
+    "name": "M. Massoud"
+   },
+   {
+    "authorId": "2238974517",
+    "name": "P. Alves"
+   },
+   {
+    "authorId": "2326023415",
+    "name": "Jacqueline Libby"
+   }
+  ]
+ },
+ {
+  "paperId": "b13c6a15aa1541b22c0ffe2db2d422fa52778072",
+  "externalIds": {
+   "DBLP": "conf/chi/LiFPLGW025",
+   "DOI": "10.1145/3706598.3714282",
+   "CorpusId": 277114105
+  },
+  "title": "Xstrings: 3D Printing Cable-Driven Mechanism for Actuation, Deformation, and Manipulation",
+  "venue": "International Conference on Human Factors in Computing Systems",
+  "year": 2025,
+  "citationCount": 13,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://doi.org/10.1145/3706598.3714282",
+   "status": "GOLD",
+   "license": "CCBYNC"
+  },
+  "authors": [
+   {
+    "authorId": "2144520109",
+    "name": "Jiaji Li"
+   },
+   {
+    "authorId": "2350330714",
+    "name": "Shuyue Feng"
+   },
+   {
+    "authorId": "1748947342",
+    "name": "Maxine Perroni-Scharf"
+   },
+   {
+    "authorId": "2350860903",
+    "name": "Yujia Liu"
+   },
+   {
+    "authorId": "2267824642",
+    "name": "Emily Guan"
+   },
+   {
+    "authorId": "1960053",
+    "name": "Guanyun Wang"
+   },
+   {
+    "authorId": "2197124209",
+    "name": "Stefanie Mueller"
+   }
+  ]
+ },
+ {
+  "paperId": "f08c77e58580c1e4dfa8cdac331b769afb647a6f",
+  "externalIds": {
+   "DBLP": "conf/ci/YounLS25",
+   "DOI": "10.1145/3706598.3713175",
+   "CorpusId": 278062809
+  },
+  "title": "HaptiCoil: Soft Programmable Buttons with Hydraulically Coupled Haptic Feedback and Sensing",
+  "venue": "International Conference on Human Factors in Computing Systems",
+  "year": 2025,
+  "citationCount": 6,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://doi.org/10.1145/3706598.3713175",
+   "status": "GOLD",
+   "license": "CCBY"
+  },
+  "authors": [
+   {
+    "authorId": "153539538",
+    "name": "Jung-Hwan Youn"
+   },
+   {
+    "authorId": "2300484046",
+    "name": "Seung Heon Lee"
+   },
+   {
+    "authorId": "2357279440",
+    "name": "Craig Shultz"
+   }
+  ]
+ },
+ {
+  "paperId": "1889416120f9be81f6ac9910a4e562b6342a59d3",
+  "externalIds": {
+   "DBLP": "conf/chi/ZhuCZK25",
+   "DOI": "10.1145/3706598.3713156",
+   "CorpusId": 278082282
+  },
+  "title": "LivingLoom: Investigating Human-Plant Symbiosis Through Integrating Living Plants Into (E-)Textiles",
+  "venue": "International Conference on Human Factors in Computing Systems",
+  "year": 2025,
+  "citationCount": 16,
+  "isOpenAccess": false,
+  "openAccessPdf": {
+   "url": "",
+   "status": "CLOSED",
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "2358238366",
+    "name": "Jingwen Zhu"
+   },
+   {
+    "authorId": "2350526018",
+    "name": "Samantha Chang"
+   },
+   {
+    "authorId": "2359793415",
+    "name": "Ruth Zhao"
+   },
+   {
+    "authorId": "2163710026",
+    "name": "Cindy Hsin-Liu Kao"
+   }
+  ]
+ },
+ {
+  "paperId": "dee6839df67ca4b3eec90c038890cfe0c80c174e",
+  "externalIds": {
+   "DBLP": "conf/robosoft/LalakloSIM25",
+   "DOI": "10.1109/RoboSoft63089.2025.11020952",
+   "CorpusId": 279125735
+  },
+  "title": "BiFlu2: A Miniaturized Electro-Fluidic Circuit for All-On-Board Control of Hydraulically-Actuated Biorobotic Organs",
+  "venue": "International Conference on Soft Robotics",
+  "year": 2025,
+  "citationCount": 0,
+  "isOpenAccess": false,
+  "openAccessPdf": {
+   "url": "",
+   "status": null,
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "2365111585",
+    "name": "Amin Hamed Lalaklo"
+   },
+   {
+    "authorId": "2007256586",
+    "name": "F. Semproni"
+   },
+   {
+    "authorId": "2589349",
+    "name": "V. Iacovacci"
+   },
+   {
+    "authorId": "2237322321",
+    "name": "A. Menciassi"
+   }
+  ]
+ },
+ {
+  "paperId": "0ab0bc037ba4a7f17998f1927927a424f473f147",
+  "externalIds": {
+   "DBLP": "conf/aughuman2/PaniaguaOHPUK25",
+   "DOI": "10.1145/3745900.3746092",
+   "CorpusId": 281979452
+  },
+  "title": "Tape-Tics: A Flexible and Modular Vibrotactile Feedback System for Rapid Prototyping of Haptic Applications in Education",
+  "venue": "NASA/ESA Conference on Adaptive Hardware and Systems",
+  "year": 2025,
+  "citationCount": 1,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://dl.acm.org/doi/pdf/10.1145/3745900.3746092",
+   "status": "GOLD",
+   "license": "CCBY"
+  },
+  "authors": [
+   {
+    "authorId": "2357284238",
+    "name": "Carlos Paniagua"
+   },
+   {
+    "authorId": "2296821063",
+    "name": "Hiroki Ota"
+   },
+   {
+    "authorId": "2292170464",
+    "name": "Yutaro Hirao"
+   },
+   {
+    "authorId": "1403936061",
+    "name": "Monica Perusquía-Hernández"
+   },
+   {
+    "authorId": "2069152127",
+    "name": "H. Uchiyama"
+   },
+   {
+    "authorId": "2237784797",
+    "name": "Kiyoshi Kiyokawa"
+   }
+  ]
+ },
+ {
+  "paperId": "4c1be303f4d36e29b7083f86f3cc5d0f6414fdcd",
+  "externalIds": {
+   "DBLP": "conf/tei/YiBE25",
+   "DOI": "10.1145/3689050.3704932",
+   "CorpusId": 276638135
+  },
+  "title": "AirCraft: Exploring Air as a Design Medium",
+  "venue": "International Conference on Tangible, Embedded, and Embodied Interaction",
+  "year": 2025,
+  "citationCount": 2,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://doi.org/10.1145/3689050.3704932",
+   "status": "GOLD",
+   "license": "CCBYNCSA"
+  },
+  "authors": [
+   {
+    "authorId": "2260653798",
+    "name": "Semina Yi"
+   },
+   {
+    "authorId": "2260345120",
+    "name": "Daragh Byrne"
+   },
+   {
+    "authorId": "1405518245",
+    "name": "Dina El-Zanfaly"
+   }
+  ]
+ },
+ {
+  "paperId": "adfb51d0e0afdf274caac1da6ef8ed007795d79c",
+  "externalIds": {
+   "DBLP": "journals/ral/LiuWQLZTZYLYDW25",
+   "DOI": "10.1109/LRA.2025.3531147",
+   "CorpusId": 275655045
+  },
+  "title": "Single Pump-Valve Pneumatic Actuation With Continuous Flow Rate Control for Soft Robots",
+  "venue": "IEEE Robotics and Automation Letters",
+  "year": 2025,
+  "citationCount": 5,
+  "isOpenAccess": false,
+  "openAccessPdf": {
+   "url": "",
+   "status": "CLOSED",
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "2108637700",
+    "name": "Sicong Liu"
+   },
+   {
+    "authorId": "2340901427",
+    "name": "Lin Wang"
+   },
+   {
+    "authorId": "3391281",
+    "name": "Zhongfeng Qian"
+   },
+   {
+    "authorId": "2291865664",
+    "name": "Dihan Liu"
+   },
+   {
+    "authorId": "1557388812",
+    "name": "Wen-Pei Zhu"
+   },
+   {
+    "authorId": "2197036053",
+    "name": "Shao-Wu Tang"
+   },
+   {
+    "authorId": "2341008295",
+    "name": "Xuda Zhao"
+   },
+   {
+    "authorId": "2292887157",
+    "name": "Wen-Jian Yang"
+   },
+   {
+    "authorId": "2146424199",
+    "name": "Ying Lu"
+   },
+   {
+    "authorId": "2087122347",
+    "name": "Juan Yi"
+   },
+   {
+    "authorId": "2316367039",
+    "name": "Jian S. Dai"
+   },
+   {
+    "authorId": "2278059922",
+    "name": "Zheng Wang"
+   }
+  ]
+ },
+ {
+  "paperId": "160dc611076bc764247ff910006f82b696b24972",
+  "externalIds": {
+   "DBLP": "journals/scirobotics/PasquierTSTCTO24",
+   "DOI": "10.1126/scirobotics.ado3887",
+   "CorpusId": 274856348,
+   "PubMed": "39693404"
+  },
+  "title": "Haptiknit: Distributed stiffness knitting for wearable haptics",
+  "venue": "Sci. Robotics",
+  "year": 2024,
+  "citationCount": 60,
+  "isOpenAccess": false,
+  "openAccessPdf": {
+   "url": "",
+   "status": null,
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": null,
+    "name": "Cosima du Pasquier"
+   },
+   {
+    "authorId": "83301075",
+    "name": "Lavender Tessmer"
+   },
+   {
+    "authorId": "2336057764",
+    "name": "Ian Scholl"
+   },
+   {
+    "authorId": "2300485319",
+    "name": "Liana Tilton"
+   },
+   {
+    "authorId": "2244648132",
+    "name": "Tian Chen"
+   },
+   {
+    "authorId": "6138023",
+    "name": "S. Tibbits"
+   },
+   {
+    "authorId": "2328975638",
+    "name": "Allison M. Okamura"
+   }
+  ]
+ },
+ {
+  "paperId": "5d8ad7070ed78b0929597c78e24b81170f260ba4",
+  "externalIds": {
+   "DOI": "10.1109/CACRE62362.2024.10635037",
+   "CorpusId": 271940192
+  },
+  "title": "3D-Printed Modified Pinch Valve for Controlling Pneumatic Artificial Muscles",
+  "venue": "International Conference on Automation, Control and Robotics Engineering",
+  "year": 2024,
+  "citationCount": 0,
+  "isOpenAccess": false,
+  "openAccessPdf": {
+   "url": "",
+   "status": "CLOSED",
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "2367338701",
+    "name": "Mohamed Gaber"
+   },
+   {
+    "authorId": "2258140199",
+    "name": "David T. Branson"
+   },
+   {
+    "authorId": "2241890682",
+    "name": "I. Ashcroft"
+   },
+   {
+    "authorId": "1949402",
+    "name": "K. Goher"
+   }
+  ]
+ },
+ {
+  "paperId": "173896fca72b5304a7d2744a4312ff297a064408",
+  "externalIds": {
+   "DBLP": "journals/ijhci/TerentiV25",
+   "DOI": "10.1080/10447318.2024.2372145",
+   "CorpusId": 271002997
+  },
+  "title": "Wear + Touch: An Exploration of Wearables for Vibrotactile Feedback During Touchscreen Input",
+  "venue": "International journal of human computer interactions",
+  "year": 2024,
+  "citationCount": 8,
+  "isOpenAccess": false,
+  "openAccessPdf": {
+   "url": "",
+   "status": "CLOSED",
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "2145979186",
+    "name": "Mihail Terenti"
+   },
+   {
+    "authorId": "1794666",
+    "name": "Radu-Daniel Vatavu"
+   }
+  ]
+ },
+ {
+  "paperId": "52412fe8bb35a2043d6c001eecd41ab3c7cfea19",
+  "externalIds": {
+   "DBLP": "conf/ACMdis/WangZFZLZLWRZLZ24",
+   "DOI": "10.1145/3643834.3661828",
+   "CorpusId": 270822736
+  },
+  "title": "KiPneu: Designing a Constructive Pneumatic Platform for Biomimicry Learning in STEAM Education",
+  "venue": "Conference on Designing Interactive Systems",
+  "year": 2024,
+  "citationCount": 8,
+  "isOpenAccess": false,
+  "openAccessPdf": {
+   "url": "",
+   "status": null,
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "1960053",
+    "name": "Guanyun Wang"
+   },
+   {
+    "authorId": "2367660330",
+    "name": "Chen Zheng"
+   },
+   {
+    "authorId": "2304302914",
+    "name": "Yan-Bo Fu"
+   },
+   {
+    "authorId": "2189226284",
+    "name": "Kuangqi Zhu"
+   },
+   {
+    "authorId": "2393325596",
+    "name": "Fu-Yi Lai"
+   },
+   {
+    "authorId": "2475760867",
+    "name": "Li-Kang Zhang"
+   },
+   {
+    "authorId": "2301078112",
+    "name": "Mengyang Li"
+   },
+   {
+    "authorId": "2308914198",
+    "name": "Xiao-Yang Wu"
+   },
+   {
+    "authorId": "2308853461",
+    "name": "Mu-Yi Ren"
+   },
+   {
+    "authorId": "2157200010",
+    "name": "Yan-Pei Zheng"
+   },
+   {
+    "authorId": "2301053339",
+    "name": "Boyi Lian"
+   },
+   {
+    "authorId": "2358441853",
+    "name": "Ke-Xin Zhang"
+   },
+   {
+    "authorId": "2151572511",
+    "name": "Qi Wang"
+   },
+   {
+    "authorId": "2301178855",
+    "name": "Cheng Yao"
+   },
+   {
+    "authorId": "2308977554",
+    "name": "Shi-Jian Luo"
+   },
+   {
+    "authorId": "1848748",
+    "name": "F. Ying"
+   },
+   {
+    "authorId": "2110887936",
+    "name": "Lingyun Sun"
+   },
+   {
+    "authorId": "2301140644",
+    "name": "Ye Tao"
+   }
+  ]
+ },
+ {
+  "paperId": "53e05521336d93b6a767bd74ed8f579bf244af64",
+  "externalIds": {
+   "DBLP": "conf/chi/MargaritiVD024",
+   "DOI": "10.1145/3613904.3642396",
+   "CorpusId": 269750837
+  },
+  "title": "Evaluating ActuAir: Building Occupants' Experiences of a Shape-Changing Air Quality Display",
+  "venue": "International Conference on Human Factors in Computing Systems",
+  "year": 2024,
+  "citationCount": 10,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://dl.acm.org/doi/pdf/10.1145/3613904.3642396",
+   "status": "GOLD",
+   "license": "CCBY"
+  },
+  "authors": [
+   {
+    "authorId": "2083016411",
+    "name": "E. Margariti"
+   },
+   {
+    "authorId": "32334041",
+    "name": "Vasilis Vlachokyriakos"
+   },
+   {
+    "authorId": "2267794651",
+    "name": "Abigail C Durrant"
+   },
+   {
+    "authorId": "2301087489",
+    "name": "David Kirk"
+   }
+  ]
+ },
+ {
+  "paperId": "85233d35275c80626f4f21685e453e89d3174143",
+  "externalIds": {
+   "DBLP": "conf/chi/YangRCHZLSZJZNW24",
+   "DOI": "10.1145/3613904.3642933",
+   "CorpusId": 269745405
+  },
+  "title": "SnapInflatables: Designing Inflatables with Snap-through Instability for Responsive Interaction",
+  "venue": "International Conference on Human Factors in Computing Systems",
+  "year": 2024,
+  "citationCount": 30,
+  "isOpenAccess": false,
+  "openAccessPdf": {
+   "url": "",
+   "status": "CLOSED",
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "2109409571",
+    "name": "Yue Yang"
+   },
+   {
+    "authorId": "2214743389",
+    "name": "Lei Ren"
+   },
+   {
+    "authorId": "2214794260",
+    "name": "Chuang Chen"
+   },
+   {
+    "authorId": "2301107650",
+    "name": "Bin Hu"
+   },
+   {
+    "authorId": "2301111581",
+    "name": "Zhuo-Yi Zhang"
+   },
+   {
+    "authorId": "2261904940",
+    "name": "Xinyan Li"
+   },
+   {
+    "authorId": "2193690179",
+    "name": "Yanchen Shen"
+   },
+   {
+    "authorId": "2189226284",
+    "name": "Kuangqi Zhu"
+   },
+   {
+    "authorId": "2151886050",
+    "name": "Junzhe Ji"
+   },
+   {
+    "authorId": "2220032608",
+    "name": "Yu-Yang Zhang"
+   },
+   {
+    "authorId": "2301036799",
+    "name": "Yongbo Ni"
+   },
+   {
+    "authorId": "2478995502",
+    "name": "Jia-Yi Wu"
+   },
+   {
+    "authorId": "2301178822",
+    "name": "Qi Wang"
+   },
+   {
+    "authorId": "2214823803",
+    "name": "Jiang Wu"
+   },
+   {
+    "authorId": "2110887936",
+    "name": "Lingyun Sun"
+   },
+   {
+    "authorId": "2301140644",
+    "name": "Ye Tao"
+   },
+   {
+    "authorId": "1960053",
+    "name": "Guanyun Wang"
+   }
+  ]
+ },
+ {
+  "paperId": "b15bc5dbfb3fa8caaba351ee9069befd47e49861",
+  "externalIds": {
+   "DBLP": "conf/chi/NetoHCRHN024",
+   "DOI": "10.1145/3613904.3642525",
+   "CorpusId": 269036567
+  },
+  "title": "Conveying Emotions through Shape-changing to Children with and without Visual Impairment",
+  "venue": "International Conference on Human Factors in Computing Systems",
+  "year": 2024,
+  "citationCount": 12,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://dl.acm.org/doi/pdf/10.1145/3613904.3642525",
+   "status": "GOLD",
+   "license": "CCBY"
+  },
+  "authors": [
+   {
+    "authorId": "2065990225",
+    "name": "Isabel Neto"
+   },
+   {
+    "authorId": "49994805",
+    "name": "Yuhan Hu"
+   },
+   {
+    "authorId": "144106225",
+    "name": "Filipa Correia"
+   },
+   {
+    "authorId": "2052174160",
+    "name": "Filipa Rocha"
+   },
+   {
+    "authorId": "2282846210",
+    "name": "Guy Hoffman"
+   },
+   {
+    "authorId": "2167579395",
+    "name": "Hugo Nicolau"
+   },
+   {
+    "authorId": "2264824312",
+    "name": "Ana Paiva"
+   }
+  ]
+ },
+ {
+  "paperId": "f7914df540d8172891b33458840a1d99e6f97c96",
+  "externalIds": {
+   "ArXiv": "2504.00222",
+   "DBLP": "conf/robosoft/JohnsonCCK24",
+   "DOI": "10.1109/RoboSoft60065.2024.10521958",
+   "CorpusId": 269776942
+  },
+  "title": "PneuDrive: An Embedded Pressure Control System and Modeling Toolkit for Large-Scale Soft Robots",
+  "venue": "International Conference on Soft Robotics",
+  "year": 2024,
+  "citationCount": 6,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://arxiv.org/pdf/2504.00222",
+   "status": "GREEN",
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "2302296779",
+    "name": "Curtis C. Johnson"
+   },
+   {
+    "authorId": "2301346749",
+    "name": "Daniel G. Cheney"
+   },
+   {
+    "authorId": "2301351008",
+    "name": "Dallin L. Cordon"
+   },
+   {
+    "authorId": "2591016",
+    "name": "Marc D. Killpack"
+   }
+  ]
+ },
+ {
+  "paperId": "a506c43a89b2fe515e86e0948cc709a7bb6050da",
+  "externalIds": {
+   "DBLP": "conf/hri/NetoHCRNBHN024",
+   "DOI": "10.1145/3610977.3634992",
+   "CorpusId": 268357522
+  },
+  "title": "\"I’m Not Touching You. It’s The Robot!\": Inclusion Through A Touch-Based Robot Among Mixed-Visual Ability Children",
+  "venue": "IEEE/ACM International Conference on Human-Robot Interaction",
+  "year": 2024,
+  "citationCount": 9,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://dl.acm.org/doi/pdf/10.1145/3610977.3634992",
+   "status": "GOLD",
+   "license": "CCBY"
+  },
+  "authors": [
+   {
+    "authorId": "2065990225",
+    "name": "Isabel Neto"
+   },
+   {
+    "authorId": "49994805",
+    "name": "Yuhan Hu"
+   },
+   {
+    "authorId": "144106225",
+    "name": "Filipa Correia"
+   },
+   {
+    "authorId": "2052174160",
+    "name": "Filipa Rocha"
+   },
+   {
+    "authorId": "2290791746",
+    "name": "J. Nogueira"
+   },
+   {
+    "authorId": "2290803280",
+    "name": "Katharina Buckmayer"
+   },
+   {
+    "authorId": "2282846210",
+    "name": "Guy Hoffman"
+   },
+   {
+    "authorId": "2167579395",
+    "name": "Hugo Nicolau"
+   },
+   {
+    "authorId": "2264824312",
+    "name": "Ana Paiva"
+   }
+  ]
+ },
+ {
+  "paperId": "899be4c5bad71ad8684436e0166e2706b0fa9b21",
+  "externalIds": {
+   "DBLP": "conf/robosoft/AhlquistJBO24",
+   "ArXiv": "2403.01086",
+   "DOI": "10.1109/RoboSoft60065.2024.10522055",
+   "CorpusId": 268230888
+  },
+  "title": "phloSAR: A Portable, High-Flow Pressure Supply and Regulator Enabling Untethered Operation of Large Pneumatic Soft Robots",
+  "venue": "International Conference on Soft Robotics",
+  "year": 2024,
+  "citationCount": 5,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://arxiv.org/pdf/2403.01086",
+   "status": "GREEN",
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "2289841908",
+    "name": "Maxwell Ahlquist"
+   },
+   {
+    "authorId": "1904026213",
+    "name": "Rianna M. Jitosho"
+   },
+   {
+    "authorId": "2299846516",
+    "name": "Jiawen Bao"
+   },
+   {
+    "authorId": "2289840483",
+    "name": "Allison M. Okamura"
+   }
+  ]
+ },
+ {
+  "paperId": "b83023163f9c1d16e7af37a05e1e2091bba27bbe",
+  "externalIds": {
+   "DBLP": "journals/ral/HuKL0L24",
+   "DOI": "10.1109/LRA.2024.3355732",
+   "CorpusId": 267184951
+  },
+  "title": "Peristaltic Pump-Based Palm-Sized Multi-Mode Pressure Supply System for Soft Robots",
+  "venue": "IEEE Robotics and Automation Letters",
+  "year": 2024,
+  "citationCount": 2,
+  "isOpenAccess": false,
+  "openAccessPdf": {
+   "url": "",
+   "status": "CLOSED",
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "46622756",
+    "name": "Cheng-Quan Hu"
+   },
+   {
+    "authorId": "2280677564",
+    "name": "Jingyi Kang"
+   },
+   {
+    "authorId": "2280855670",
+    "name": "Jiayuan Liu"
+   },
+   {
+    "authorId": "2198884442",
+    "name": "Jie Wang"
+   },
+   {
+    "authorId": "48917324",
+    "name": "Hongen Liao"
+   }
+  ]
+ },
+ {
+  "paperId": "1ca91fabde31b16e4f3f1bfb3943bec31de76200",
+  "externalIds": {
+   "DBLP": "conf/tei/Yao24",
+   "DOI": "10.1145/3623509.3633397",
+   "CorpusId": 267212404
+  },
+  "title": "Info-Motion: Using the Metaphor of Plant Motion for Information Communication in Shape-changing Interface: Info-motion",
+  "venue": "International Conference on Tangible, Embedded, and Embodied Interaction",
+  "year": 2024,
+  "citationCount": 5,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://dl.acm.org/doi/pdf/10.1145/3623509.3633397",
+   "status": "GOLD",
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "2357272295",
+    "name": "Jiawen Yao"
+   }
+  ]
+ },
+ {
+  "paperId": "28bd4ecdc831f7c2287302dcb13cf4a75f098e61",
+  "externalIds": {
+   "DBLP": "conf/tei/WaldschutzKH24",
+   "DOI": "10.1145/3623509.3635263",
+   "CorpusId": 267212397
+  },
+  "title": "pneuCNTRL: a Pneumatic Control System for User Studies on Dynamic, Haptic Inflatables",
+  "venue": "International Conference on Tangible, Embedded, and Embodied Interaction",
+  "year": 2024,
+  "citationCount": 4,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://dl.acm.org/doi/pdf/10.1145/3623509.3635263",
+   "status": "GOLD",
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": null,
+    "name": "Hannes Waldschütz"
+   },
+   {
+    "authorId": "2198636338",
+    "name": "Rosa van Koningsbruggen"
+   },
+   {
+    "authorId": "2281042449",
+    "name": "Eva Hornecker"
+   }
+  ]
+ },
+ {
+  "paperId": "03772b055228cdfcb0803fee535ee5037a8a3821",
+  "externalIds": {
+   "DBLP": "journals/tog/MaestreHCT23",
+   "DOI": "10.1145/3618382",
+   "CorpusId": 265659839
+  },
+  "title": "ToRoS: A Topology Optimization Approach for Designing Robotic Skins",
+  "venue": "ACM Transactions on Graphics",
+  "year": 2023,
+  "citationCount": 9,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://dl.acm.org/doi/pdf/10.1145/3618382",
+   "status": "BRONZE",
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "2218671345",
+    "name": "Juan Sebastian Montes Maestre"
+   },
+   {
+    "authorId": "15276716",
+    "name": "R. Hinchet"
+   },
+   {
+    "authorId": "2138444534",
+    "name": "Stelian Coros"
+   },
+   {
+    "authorId": "2065061425",
+    "name": "Bernhard Thomaszewski"
+   }
+  ]
+ },
+ {
+  "paperId": "8241028b11d37068dc4d3ea70627e3db1529cc1b",
+  "externalIds": {
+   "DBLP": "journals/corr/abs-2311-00390",
+   "ArXiv": "2311.00390",
+   "DOI": "10.1109/RoboSoft60065.2024.10521918",
+   "CorpusId": 264832943
+  },
+  "title": "A Modular Pneumatic Soft Gripper Design for Aerial Grasping and Landing",
+  "venue": "International Conference on Soft Robotics",
+  "year": 2023,
+  "citationCount": 15,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://arxiv.org/pdf/2311.00390",
+   "status": "GREEN",
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "2143023584",
+    "name": "Hiu-Ching Cheung"
+   },
+   {
+    "authorId": "1511673995",
+    "name": "Ching-Wei Chang"
+   },
+   {
+    "authorId": "2165021668",
+    "name": "Bailun Jiang"
+   },
+   {
+    "authorId": "2264262521",
+    "name": "Chih-Yung Wen"
+   },
+   {
+    "authorId": "2295412873",
+    "name": "Henry K. Chu"
+   }
+  ]
+ },
+ {
+  "paperId": "04396540936df29af5f67b17fe150340a02c29cd",
+  "externalIds": {
+   "DBLP": "conf/uist/ShtarbanovZCM23",
+   "DOI": "10.1145/3586183.3606739",
+   "CorpusId": 264350247
+  },
+  "title": "SleeveIO: Modular and Reconfigurable Platform for Multimodal Wearable Haptic Feedback Interactions",
+  "venue": "ACM Symposium on User Interface Software and Technology",
+  "year": 2023,
+  "citationCount": 25,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://dl.acm.org/doi/pdf/10.1145/3586183.3606739",
+   "status": "GOLD",
+   "license": "CCBY"
+  },
+  "authors": [
+   {
+    "authorId": "40975285",
+    "name": "Ali Shtarbanov"
+   },
+   {
+    "authorId": "2260652779",
+    "name": "Mengjia Zhu"
+   },
+   {
+    "authorId": "2190760912",
+    "name": "Nicholas Colonnese"
+   },
+   {
+    "authorId": null,
+    "name": "Amirhossein Hajiagha Memar"
+   }
+  ]
+ },
+ {
+  "paperId": "8d9572eb5597cef32af417f92d411dd49ebff0e1",
+  "externalIds": {
+   "DBLP": "journals/pacmhci/ScurtoSBC23",
+   "DOI": "10.1145/3610099",
+   "CorpusId": 263622733
+  },
+  "title": "Probing Respiratory Care With Generative Deep Learning",
+  "venue": "Proc. ACM Hum. Comput. Interact.",
+  "year": 2023,
+  "citationCount": 2,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://dl.acm.org/doi/pdf/10.1145/3610099",
+   "status": "BRONZE",
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "21196663",
+    "name": "Hugo Scurto"
+   },
+   {
+    "authorId": "2244332012",
+    "name": "T. Similowski"
+   },
+   {
+    "authorId": "2879845",
+    "name": "Samuel Bianchini"
+   },
+   {
+    "authorId": "2046048",
+    "name": "Baptiste Caramiaux"
+   }
+  ]
+ },
+ {
+  "paperId": "2eafc8babf8ec57dc91cec09e3305c32ab5e87d0",
+  "externalIds": {
+   "DOI": "10.1007/s44223-023-00036-x",
+   "CorpusId": 261358283
+  },
+  "title": "Framing responsive architecture with soft robots—the exploratory practice of soft pneumatic robotic architectural system",
+  "venue": "Architectural Intelligence",
+  "year": 2023,
+  "citationCount": 1,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://link.springer.com/content/pdf/10.1007/s44223-023-00036-x.pdf",
+   "status": "HYBRID",
+   "license": "CCBY"
+  },
+  "authors": [
+   {
+    "authorId": "2116420343",
+    "name": "Sihui Wang"
+   }
+  ]
+ },
+ {
+  "paperId": "bb57560f0d7b1833701738377de87c0d15b42f98",
+  "externalIds": {
+   "DBLP": "journals/fcomp/MaderDWE23",
+   "DOI": "10.3389/fcomp.2023.848023",
+   "CorpusId": 260074316
+  },
+  "title": "Tinkering with social touch technology",
+  "venue": "Frontiers Comput. Sci.",
+  "year": 2023,
+  "citationCount": 0,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://www.frontiersin.org/articles/10.3389/fcomp.2023.848023/pdf",
+   "status": "GOLD",
+   "license": "CCBY"
+  },
+  "authors": [
+   {
+    "authorId": "2166065925",
+    "name": "Angelika Mader"
+   },
+   {
+    "authorId": "3196654",
+    "name": "Edwin Dertien"
+   },
+   {
+    "authorId": "2134993795",
+    "name": "Judith Weda"
+   },
+   {
+    "authorId": "2485842438",
+    "name": "J. V. van Erp"
+   }
+  ]
+ },
+ {
+  "paperId": "aaa9aae9f252e87778d0f58aff9befdb8b0c2358",
+  "externalIds": {
+   "DOI": "10.32865/2346/94614",
+   "CorpusId": 267754887
+  },
+  "title": "Design, Development, and Testing of Peristaltic Suit: Active-Dynamic Compression and Physiological Sensing Intra-vehicular Activity Spacesuit for Cardiovascular Deconditioning",
+  "venue": "52nd International Conference on Environmental Systems",
+  "year": 2023,
+  "citationCount": 2,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://ttu-ir.tdl.org/bitstreams/f4ecdc9f-6346-4dcd-9da6-4b5cc76880e6/download",
+   "status": "GOLD",
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "34570622",
+    "name": "Irmandy Wicaksono"
+   },
+   {
+    "authorId": "40975285",
+    "name": "Ali Shtarbanov"
+   },
+   {
+    "authorId": "2188111161",
+    "name": "Esha V. Ranade"
+   },
+   {
+    "authorId": "2254656499",
+    "name": "R. Slater"
+   },
+   {
+    "authorId": "2284710753",
+    "name": "Dava J. Newman"
+   },
+   {
+    "authorId": "2261058720",
+    "name": "Joseph A. Paradiso"
+   }
+  ]
+ },
+ {
+  "paperId": "c769d8a06e34b08074ffba08addd30b8e92606d4",
+  "externalIds": {
+   "DBLP": "conf/ACMdis/ShtarbanovBCH0M23",
+   "DOI": "10.1145/3563703.3591460",
+   "CorpusId": 259370385
+  },
+  "title": "Soft Robotics and Programmable Materials for Human-Computer Interaction",
+  "venue": "Conference on Designing Interactive Systems",
+  "year": 2023,
+  "citationCount": 4,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://dl.acm.org/doi/pdf/10.1145/3563703.3591460",
+   "status": "BRONZE",
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "40975285",
+    "name": "Ali Shtarbanov"
+   },
+   {
+    "authorId": "40962228",
+    "name": "Anke Brocker"
+   },
+   {
+    "authorId": "80454093",
+    "name": "Adriana Cabrera"
+   },
+   {
+    "authorId": "49994805",
+    "name": "Yuhan Hu"
+   },
+   {
+    "authorId": "2198636513",
+    "name": "Heiko Mueller"
+   },
+   {
+    "authorId": "103839812",
+    "name": "Alex Mazursky"
+   }
+  ]
+ },
+ {
+  "paperId": "21c55272555a83ce86e2150d40d2f041c562a2f6",
+  "externalIds": {
+   "DBLP": "conf/ACMdis/YounZSC23",
+   "DOI": "10.1145/3563703.3596651",
+   "CorpusId": 259370428
+  },
+  "title": "NugiTex: An Interactive, Affective Wearable that Informs Users of a Plant’s “Comfort” Level through Haptic Cues",
+  "venue": "Conference on Designing Interactive Systems",
+  "year": 2023,
+  "citationCount": 11,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://dl.acm.org/doi/pdf/10.1145/3563703.3596651",
+   "status": "HYBRID",
+   "license": "CCBY"
+  },
+  "authors": [
+   {
+    "authorId": "2049432696",
+    "name": "H. Youn"
+   },
+   {
+    "authorId": "52226785",
+    "name": "Sailin Zhong"
+   },
+   {
+    "authorId": "40975285",
+    "name": "Ali Shtarbanov"
+   },
+   {
+    "authorId": "3432652",
+    "name": "Patrick Chwalek"
+   }
+  ]
+ },
+ {
+  "paperId": "fd4f8227e3c578c1f3f97725926cbfa93a293fe9",
+  "externalIds": {
+   "DBLP": "conf/ACMdis/CuiWLLI23",
+   "DOI": "10.1145/3563657.3596108",
+   "CorpusId": 259376458
+  },
+  "title": "MiuraKit: A Modular Hands-On Construction Kit For Pneumatic Shape-Changing And Robotic Interfaces",
+  "venue": "Conference on Designing Interactive Systems",
+  "year": 2023,
+  "citationCount": 11,
+  "isOpenAccess": false,
+  "openAccessPdf": {
+   "url": "",
+   "status": "CLOSED",
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "2089582635",
+    "name": "Zhitong Cui"
+   },
+   {
+    "authorId": "2135566676",
+    "name": "Shuhong Wang"
+   },
+   {
+    "authorId": "2221329490",
+    "name": "Junxian Li"
+   },
+   {
+    "authorId": "2117956659",
+    "name": "Shi-Jian Luo"
+   },
+   {
+    "authorId": "2215759610",
+    "name": "Alexandra Ion"
+   }
+  ]
+ },
+ {
+  "paperId": "67cc87f3f166d31fe7a9e1ba71ebfcaf53b97baa",
+  "externalIds": {
+   "DBLP": "conf/chi/AfsarLCSNKA0H23",
+   "DOI": "10.1145/3544548.3581294",
+   "CorpusId": 258217314
+  },
+  "title": "Corsetto: A Kinesthetic Garment for Designing, Composing for, and Experiencing an Intersubjective Haptic Voice",
+  "venue": "International Conference on Human Factors in Computing Systems",
+  "year": 2023,
+  "citationCount": 40,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://dl.acm.org/doi/pdf/10.1145/3544548.3581294",
+   "status": "GOLD",
+   "license": "CCBY"
+  },
+  "authors": [
+   {
+    "authorId": "2132059438",
+    "name": "Ozgun Kilic Afsar"
+   },
+   {
+    "authorId": "2113611053",
+    "name": "Yoav Luft"
+   },
+   {
+    "authorId": "2089409847",
+    "name": "Kelsey Cotton"
+   },
+   {
+    "authorId": "2693433",
+    "name": "Ekaterina R. Stepanova"
+   },
+   {
+    "authorId": "1402222161",
+    "name": "Claudia Núñez-Pacheco"
+   },
+   {
+    "authorId": "2418542",
+    "name": "Rébecca Kleinberger"
+   },
+   {
+    "authorId": "2488382427",
+    "name": "Fehmi Ben Abdesslem"
+   },
+   {
+    "authorId": "2089554211",
+    "name": "Hiroshi Ishii"
+   },
+   {
+    "authorId": "1724769",
+    "name": "K. Höök"
+   }
+  ]
+ },
+ {
+  "paperId": "d65ec19bce06fb493e1735080361f3739aaed55a",
+  "externalIds": {
+   "DBLP": "conf/chi/MoritaJAMKHMK23",
+   "DOI": "10.1145/3544548.3581353",
+   "CorpusId": 258217206
+  },
+  "title": "InflatableMod: Untethered and Reconfigurable Inflatable Modules for Tabletop-sized Pneumatic Physical Interfaces",
+  "venue": "International Conference on Human Factors in Computing Systems",
+  "year": 2023,
+  "citationCount": 34,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://doi.org/10.1145/3544548.3581353",
+   "status": "GOLD",
+   "license": "CCBYNCSA"
+  },
+  "authors": [
+   {
+    "authorId": "46710098",
+    "name": "Takafumi Morita"
+   },
+   {
+    "authorId": "97234066",
+    "name": "Ziyuan Jiang"
+   },
+   {
+    "authorId": "2205654356",
+    "name": "Kanon Aoyama"
+   },
+   {
+    "authorId": "67278446",
+    "name": "Ayato Minaminosono"
+   },
+   {
+    "authorId": "38712505",
+    "name": "Yu Kuwajima"
+   },
+   {
+    "authorId": "10662448",
+    "name": "N. Hosoya"
+   },
+   {
+    "authorId": "6556661",
+    "name": "Shingo Maeda"
+   },
+   {
+    "authorId": "2163707599",
+    "name": "Y. Kakehi"
+   }
+  ]
+ },
+ {
+  "paperId": "04fcdb1ebc4ac81833ef9076fc2e16be6f9abbce",
+  "externalIds": {
+   "DBLP": "conf/chi/LuftKH23",
+   "DOI": "10.1145/3544548.3580722",
+   "CorpusId": 258217057
+  },
+  "title": "Boards Hit Back: Reflecting on Martial Arts Practices Through Soma Design",
+  "venue": "International Conference on Human Factors in Computing Systems",
+  "year": 2023,
+  "citationCount": 22,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://dl.acm.org/doi/pdf/10.1145/3544548.3580722",
+   "status": "GOLD",
+   "license": "CCBYSA"
+  },
+  "authors": [
+   {
+    "authorId": "2113611053",
+    "name": "Yoav Luft"
+   },
+   {
+    "authorId": "8703400",
+    "name": "Pavel Karpashevich"
+   },
+   {
+    "authorId": "1724769",
+    "name": "K. Höök"
+   }
+  ]
+ },
+ {
+  "paperId": "d03ba884327377be83959caf8f8fbc1f2e969b66",
+  "externalIds": {
+   "DBLP": "conf/robosoft/ShiGJSW23",
+   "DOI": "10.1109/RoboSoft55895.2023.10122041",
+   "CorpusId": 258732551
+  },
+  "title": "Characterisation and control platform for pneumatically driven soft robots: Design and applications",
+  "venue": "International Conference on Soft Robotics",
+  "year": 2023,
+  "citationCount": 4,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://discovery.ucl.ac.uk/10164958/1/Shi__et_all_Platform%20%282%29.pdf",
+   "status": "GREEN",
+   "license": "other-oa"
+  },
+  "authors": [
+   {
+    "authorId": "32631111",
+    "name": "Jia-Lei Shi"
+   },
+   {
+    "authorId": "2163787441",
+    "name": "Wenlong Gaozhang"
+   },
+   {
+    "authorId": "2217456444",
+    "name": "Hanyu Jin"
+   },
+   {
+    "authorId": "2067726594",
+    "name": "Ge Shi"
+   },
+   {
+    "authorId": "1780420",
+    "name": "H. Wurdemann"
+   }
+  ]
+ },
+ {
+  "paperId": "2bcd9f5c27dfd1e4d1b2f74bfa6ecf2e97a6a44c",
+  "externalIds": {
+   "DBLP": "journals/ral/BarhydtA23",
+   "DOI": "10.1109/LRA.2023.3246389",
+   "CorpusId": 257012816
+  },
+  "title": "A High-Strength, Highly-Flexible Robotic Strap for Harnessing, Lifting, and Transferring Humans",
+  "venue": "IEEE Robotics and Automation Letters",
+  "year": 2023,
+  "citationCount": 8,
+  "isOpenAccess": false,
+  "openAccessPdf": {
+   "url": "",
+   "status": "CLOSED",
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "104343128",
+    "name": "Kentaro Barhydt"
+   },
+   {
+    "authorId": "144946162",
+    "name": "H. Asada"
+   }
+  ]
+ },
+ {
+  "paperId": "beb495bcbdc84a1987918762e8cf019552aa25ba",
+  "externalIds": {
+   "DBLP": "journals/pervasive/EkblawCLWHSP23",
+   "DOI": "10.1109/MPRV.2023.3242667",
+   "CorpusId": 257579354
+  },
+  "title": "From UbiComp to Universe—Moving Pervasive Computing Research Into Space Applications",
+  "venue": "IEEE pervasive computing",
+  "year": 2023,
+  "citationCount": 8,
+  "isOpenAccess": false,
+  "openAccessPdf": {
+   "url": "",
+   "status": null,
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "3459979",
+    "name": "A. Ekblaw"
+   },
+   {
+    "authorId": "3396788",
+    "name": "Juliana Cherston"
+   },
+   {
+    "authorId": "2158336976",
+    "name": "Fangzheng Liu"
+   },
+   {
+    "authorId": "34570622",
+    "name": "Irmandy Wicaksono"
+   },
+   {
+    "authorId": "3396094",
+    "name": "D. D. Haddad"
+   },
+   {
+    "authorId": "69322750",
+    "name": "V. Sumini"
+   },
+   {
+    "authorId": "1733194",
+    "name": "J. Paradiso"
+   }
+  ]
+ },
+ {
+  "paperId": "86f06e7c28aec7adf61cf134a56e46f0512d5742",
+  "externalIds": {
+   "DBLP": "conf/uist/HuNRSN0H22",
+   "DOI": "10.1145/3526114.3558643",
+   "CorpusId": 253205335
+  },
+  "title": "Touchibo: Multimodal Texture-Changing Robotic Platform for Shared Human Experiences",
+  "venue": "ACM Symposium on User Interface Software and Technology",
+  "year": 2022,
+  "citationCount": 11,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://dspace.mit.edu/bitstream/1721.1/146510/1/3526114.3558643.pdf",
+   "status": "GREEN",
+   "license": "CCBYNC"
+  },
+  "authors": [
+   {
+    "authorId": "49994805",
+    "name": "Yuhan Hu"
+   },
+   {
+    "authorId": "2065990225",
+    "name": "Isabel Neto"
+   },
+   {
+    "authorId": "1484199932",
+    "name": "Jin Ryu"
+   },
+   {
+    "authorId": "40975285",
+    "name": "Ali Shtarbanov"
+   },
+   {
+    "authorId": "2334545",
+    "name": "Hugo Nicolau"
+   },
+   {
+    "authorId": "46948533",
+    "name": "A. Paiva"
+   },
+   {
+    "authorId": "145666784",
+    "name": "Guy Hoffman"
+   }
+  ]
+ },
+ {
+  "paperId": "f5661adf6c1e7bc5f5b1f6b7b1ec5100cb89d8f8",
+  "externalIds": {
+   "DBLP": "conf/iros/NunezDLBYO22",
+   "DOI": "10.1109/IROS47612.2022.9981919",
+   "CorpusId": 255173159
+  },
+  "title": "A Large-Area Wearable Soft Haptic Device Using Stacked Pneumatic Pouch Actuation",
+  "venue": "IEEE/RJS International Conference on Intelligent RObots and Systems",
+  "year": 2022,
+  "citationCount": 8,
+  "isOpenAccess": false,
+  "openAccessPdf": {
+   "url": "",
+   "status": null,
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "41094051",
+    "name": "Cara M. Nunez"
+   },
+   {
+    "authorId": "11601956",
+    "name": "Brian H. Do"
+   },
+   {
+    "authorId": "2082377654",
+    "name": "Andrew K. Low"
+   },
+   {
+    "authorId": "19206919",
+    "name": "Laura H. Blumenschein"
+   },
+   {
+    "authorId": "103054429",
+    "name": "Katsumi Yamane"
+   },
+   {
+    "authorId": "1713767",
+    "name": "A. Okamura"
+   }
+  ]
+ },
+ {
+  "paperId": "67c68c6a6264c01abaee757daba3ee246e163443",
+  "externalIds": {
+   "DBLP": "journals/ijhci/TerentiV23",
+   "DOI": "10.1080/10447318.2022.2109584",
+   "CorpusId": 251707062
+  },
+  "title": "VIREO: Web-based Graphical Authoring of Vibrotactile Feedback for Interactions with Mobile and Wearable Devices",
+  "venue": "International journal of human computer interactions",
+  "year": 2022,
+  "citationCount": 17,
+  "isOpenAccess": false,
+  "openAccessPdf": {
+   "url": "",
+   "status": "CLOSED",
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "2145979186",
+    "name": "Mihail Terenti"
+   },
+   {
+    "authorId": "1794666",
+    "name": "Radu-Daniel Vatavu"
+   }
+  ]
+ },
+ {
+  "paperId": "de883ebdd278546a586f270bfd4c7c18e74daa1c",
+  "externalIds": {
+   "DBLP": "conf/ACMdis/SilveiraAA22",
+   "DOI": "10.1145/3532106.3533499",
+   "CorpusId": 249579145
+  },
+  "title": "Wearable Choreographer: Designing Soft-Robotics for Dance Practice",
+  "venue": "Conference on Designing Interactive Systems",
+  "year": 2022,
+  "citationCount": 25,
+  "isOpenAccess": false,
+  "openAccessPdf": {
+   "url": "",
+   "status": "CLOSED",
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": null,
+    "name": "Catarina Allen d'Ávila Silveira"
+   },
+   {
+    "authorId": "2132059438",
+    "name": "Ozgun Kilic Afsar"
+   },
+   {
+    "authorId": "148042281",
+    "name": "Sarah Fdili Alaoui"
+   }
+  ]
+ },
+ {
+  "paperId": "9d4a534cc38986268d4f8e126683bcaf017cc641",
+  "externalIds": {
+   "DBLP": "conf/avi/ZhangADL22",
+   "DOI": "10.1145/3531073.3531111",
+   "CorpusId": 249400254
+  },
+  "title": "Pulling, Pressing, and Sensing with In-Flat: Transparent Touch Overlay for Smartphones",
+  "venue": "International Working Conference on Advanced Visual Interfaces",
+  "year": 2022,
+  "citationCount": 10,
+  "isOpenAccess": false,
+  "openAccessPdf": {
+   "url": "",
+   "status": "CLOSED",
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "2109110045",
+    "name": "Zhuoming Zhang"
+   },
+   {
+    "authorId": "2317579636",
+    "name": "Jessalyn Alvina"
+   },
+   {
+    "authorId": "1693932",
+    "name": "F. Détienne"
+   },
+   {
+    "authorId": "1794025",
+    "name": "E. Lecolinet"
+   }
+  ]
+ },
+ {
+  "paperId": "9567cbcdfd0c096150eacbfdaac526089721e127",
+  "externalIds": {
+   "DBLP": "conf/chi/MoritaKMMK22",
+   "DOI": "10.1145/3491102.3502096",
+   "CorpusId": 248419833
+  },
+  "title": "HydroMod : Constructive Modules for Prototyping Hydraulic Physical Interfaces",
+  "venue": "International Conference on Human Factors in Computing Systems",
+  "year": 2022,
+  "citationCount": 29,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://dl.acm.org/doi/pdf/10.1145/3491102.3502096",
+   "status": "BRONZE",
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "46710098",
+    "name": "Takafumi Morita"
+   },
+   {
+    "authorId": "38712505",
+    "name": "Yu Kuwajima"
+   },
+   {
+    "authorId": "67278446",
+    "name": "Ayato Minaminosono"
+   },
+   {
+    "authorId": "6556661",
+    "name": "Shingo Maeda"
+   },
+   {
+    "authorId": "2163707599",
+    "name": "Y. Kakehi"
+   }
+  ]
+ },
+ {
+  "paperId": "e9c0f556c68f19e8d716e6099a8a60a85f5a3ca8",
+  "externalIds": {
+   "DBLP": "conf/chi/KimPMCK22",
+   "DOI": "10.1145/3491102.3502142",
+   "CorpusId": 248420156
+  },
+  "title": "KnitSkin: Machine-Knitted Scaled Skin for Locomotion",
+  "venue": "International Conference on Human Factors in Computing Systems",
+  "year": 2022,
+  "citationCount": 29,
+  "isOpenAccess": false,
+  "openAccessPdf": {
+   "url": "",
+   "status": "CLOSED",
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "2152679597",
+    "name": "Jin Hee Kim"
+   },
+   {
+    "authorId": "2113320117",
+    "name": "Shreyas Patil"
+   },
+   {
+    "authorId": "2163711951",
+    "name": "Sarina Matson"
+   },
+   {
+    "authorId": "2115692070",
+    "name": "Melissa Conroy"
+   },
+   {
+    "authorId": "2163710026",
+    "name": "Cindy Hsin-Liu Kao"
+   }
+  ]
+ },
+ {
+  "paperId": "5421b0678c1ffbeb040c536528ee723761ba042a",
+  "externalIds": {
+   "DBLP": "conf/chi/MoritaKMMK22a",
+   "DOI": "10.1145/3491101.3519893",
+   "CorpusId": 248419346
+  },
+  "title": "Demonstrating HydroMod : Constructive Modules for Prototyping Hydraulic Physical Interfaces",
+  "venue": "CHI Extended Abstracts",
+  "year": 2022,
+  "citationCount": 0,
+  "isOpenAccess": false,
+  "openAccessPdf": {
+   "url": "",
+   "status": "CLOSED",
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "46710098",
+    "name": "Takafumi Morita"
+   },
+   {
+    "authorId": "38712505",
+    "name": "Yu Kuwajima"
+   },
+   {
+    "authorId": "67278446",
+    "name": "Ayato Minaminosono"
+   },
+   {
+    "authorId": "6556661",
+    "name": "Shingo Maeda"
+   },
+   {
+    "authorId": "2163707599",
+    "name": "Y. Kakehi"
+   }
+  ]
+ },
+ {
+  "paperId": "267d729e9fa44e6013dbc0e7835c91b3a211f569",
+  "externalIds": {
+   "DBLP": "conf/chi/BrockerBSGAS22",
+   "DOI": "10.1145/3491101.3503711",
+   "CorpusId": 248419479
+  },
+  "title": "Actuated Materials and Soft Robotics Strategies for Human-Computer Interaction Design",
+  "venue": "CHI Extended Abstracts",
+  "year": 2022,
+  "citationCount": 16,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://dspace.mit.edu/bitstreams/2dc90254-d1b0-40ae-831d-0c3f8f3267e8/download",
+   "status": "GREEN",
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "40962228",
+    "name": "Anke Brocker"
+   },
+   {
+    "authorId": "144306197",
+    "name": "Jose A. Barreiros"
+   },
+   {
+    "authorId": "40975285",
+    "name": "Ali Shtarbanov"
+   },
+   {
+    "authorId": "3025363",
+    "name": "Kristian Gohlke"
+   },
+   {
+    "authorId": "2132059438",
+    "name": "Ozgun Kilic Afsar"
+   },
+   {
+    "authorId": "2497943884",
+    "name": "Sören Schröder"
+   }
+  ]
+ },
+ {
+  "paperId": "3b4ccda732c51f417adc0d45bf7e19759c15fd72",
+  "externalIds": {
+   "DBLP": "conf/chi/YounS22",
+   "DOI": "10.1145/3491101.3514490",
+   "CorpusId": 248419680
+  },
+  "title": "PneuBots: Modular Inflatables for Playful Exploration of Soft Robotics",
+  "venue": "CHI Extended Abstracts",
+  "year": 2022,
+  "citationCount": 13,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://dl.acm.org/doi/pdf/10.1145/3491101.3514490",
+   "status": "BRONZE",
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "2049432696",
+    "name": "H. Youn"
+   },
+   {
+    "authorId": "40975285",
+    "name": "Ali Shtarbanov"
+   }
+  ]
+ },
+ {
+  "paperId": "0ef20d8675eea517cbe1ac81aa06d670ca35355c",
+  "externalIds": {
+   "DBLP": "conf/robosoft/CaasenbroodBCK22",
+   "DOI": "10.1109/RoboSoft54090.2022.9762137",
+   "CorpusId": 248435279
+  },
+  "title": "A Desktop-sized Platform for Real-time Control Applications of Pneumatic Soft Robots",
+  "venue": "International Conference on Soft Robotics",
+  "year": 2022,
+  "citationCount": 25,
+  "isOpenAccess": false,
+  "openAccessPdf": {
+   "url": "",
+   "status": null,
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "1752910255",
+    "name": "B. Caasenbrood"
+   },
+   {
+    "authorId": "2486195870",
+    "name": "F. V. van Beek"
+   },
+   {
+    "authorId": "2466581024",
+    "name": "Chu Khanh Hoang"
+   },
+   {
+    "authorId": "2505550",
+    "name": "I. Kuling"
+   }
+  ]
+ },
+ {
+  "paperId": "35fd85044194c90b98052cfd7f90f3c729e55524",
+  "externalIds": {
+   "DBLP": "journals/imwut/GonzalezH22",
+   "DOI": "10.1145/3517251",
+   "CorpusId": 247780483
+  },
+  "title": "Layer by Layer, Patterned Valves Enable Programmable Soft Surfaces",
+  "venue": "Proceedings of the ACM on Interactive Mobile Wearable and Ubiquitous Technologies",
+  "year": 2022,
+  "citationCount": 12,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://dl.acm.org/doi/pdf/10.1145/3517251",
+   "status": "HYBRID",
+   "license": "CCBY"
+  },
+  "authors": [
+   {
+    "authorId": "2160685047",
+    "name": "Jesse T. Gonzalez"
+   },
+   {
+    "authorId": "1749296",
+    "name": "Scott E. Hudson"
+   }
+  ]
+ },
+ {
+  "paperId": "e2dd47d0d627de35d6d166261139cf05d178d6bc",
+  "externalIds": {
+   "PubMedCentral": "8967410",
+   "DBLP": "journals/firai/XavierFY22",
+   "DOI": "10.3389/frobt.2022.818187",
+   "CorpusId": 247454215,
+   "PubMed": "35368434"
+  },
+  "title": "Model-Based Nonlinear Feedback Controllers for Pressure Control of Soft Pneumatic Actuators Using On/Off Valves",
+  "venue": "Frontiers in Robotics and AI",
+  "year": 2022,
+  "citationCount": 16,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://www.frontiersin.org/articles/10.3389/frobt.2022.818187/pdf",
+   "status": "GOLD",
+   "license": "CCBY"
+  },
+  "authors": [
+   {
+    "authorId": "65740042",
+    "name": "Matheus S. Xavier"
+   },
+   {
+    "authorId": "2061441196",
+    "name": "Andrew J. Fleming"
+   },
+   {
+    "authorId": "2059487095",
+    "name": "Yuen K. Yong"
+   }
+  ]
+ },
+ {
+  "paperId": "4d268cf88a72ab20aa7ea0683cc141b01b6328a4",
+  "externalIds": {
+   "DBLP": "conf/tei/GohlkeSH22",
+   "DOI": "10.1145/3490149.3505568",
+   "CorpusId": 246653164
+  },
+  "title": "AirPinch – An Inflatable Touch Fader with Pneumatic Tactile Feedback",
+  "venue": "International Conference on Tangible, Embedded, and Embodied Interaction",
+  "year": 2022,
+  "citationCount": 8,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://doi.org/10.1145/3490149.3505568",
+   "status": "GREEN",
+   "license": "CCBYSA"
+  },
+  "authors": [
+   {
+    "authorId": "3025363",
+    "name": "Kristian Gohlke"
+   },
+   {
+    "authorId": "2089891556",
+    "name": "Wolfgang Sattler"
+   },
+   {
+    "authorId": "1718572",
+    "name": "E. Hornecker"
+   }
+  ]
+ },
+ {
+  "paperId": "5a9b85500b7fe615c2db39031169a388f580e643",
+  "externalIds": {
+   "DBLP": "conf/uist/AfsarSMNFMJHH021",
+   "DOI": "10.1145/3472749.3474802",
+   "CorpusId": 238638689
+  },
+  "title": "OmniFiber: Integrated Fluidic Fiber Actuators for Weaving Movement based Interactions into the ‘Fabric of Everyday Life’",
+  "venue": "ACM Symposium on User Interface Software and Technology",
+  "year": 2021,
+  "citationCount": 121,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://dl.acm.org/doi/pdf/10.1145/3472749.3474802",
+   "status": "GOLD",
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "2132059438",
+    "name": "Ozgun Kilic Afsar"
+   },
+   {
+    "authorId": "40975285",
+    "name": "Ali Shtarbanov"
+   },
+   {
+    "authorId": "1401582370",
+    "name": "Hila Mor"
+   },
+   {
+    "authorId": "40059027",
+    "name": "Ken Nakagaki"
+   },
+   {
+    "authorId": "153376277",
+    "name": "Jack Forman"
+   },
+   {
+    "authorId": "2132050949",
+    "name": "Karen Modrei"
+   },
+   {
+    "authorId": "48118579",
+    "name": "S. Jeong"
+   },
+   {
+    "authorId": "2002610",
+    "name": "K. Hjort"
+   },
+   {
+    "authorId": "1724769",
+    "name": "K. Höök"
+   },
+   {
+    "authorId": "2089554211",
+    "name": "Hiroshi Ishii"
+   }
+  ]
+ },
+ {
+  "paperId": "5578691d7f746c8e071db6559a505de3a54bbf15",
+  "externalIds": {
+   "DBLP": "conf/candc/CottonALSA21",
+   "DOI": "10.1145/3450741.3466718",
+   "CorpusId": 235474065
+  },
+  "title": "SymbioSinging: Robotically transposing singing experience across singing and non-singing bodies",
+  "venue": "Creativity & Cognition",
+  "year": 2021,
+  "citationCount": 9,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://doi.org/10.1145/3450741.3466718",
+   "status": "HYBRID",
+   "license": "CCBY"
+  },
+  "authors": [
+   {
+    "authorId": "2089409847",
+    "name": "Kelsey Cotton"
+   },
+   {
+    "authorId": "1415102505",
+    "name": "Ozgun Kilic Afsar"
+   },
+   {
+    "authorId": "2113611053",
+    "name": "Yoav Luft"
+   },
+   {
+    "authorId": "2400203462",
+    "name": "Priyanka Syal"
+   },
+   {
+    "authorId": "2434353",
+    "name": "F. Abdesslem"
+   }
+  ]
+ },
+ {
+  "paperId": "5cadd08dfb2dc96d76a9e9087f428f802950d16d",
+  "externalIds": {
+   "DBLP": "conf/mum/SchiporV21",
+   "DOI": "10.1145/3490632.3497780",
+   "CorpusId": 247085088
+  },
+  "title": "Software Architecture Based on Web Standards for Gesture Input with Smartwatches and Smartglasses",
+  "venue": "International Conference on Mobile and Ubiquitous Multimedia",
+  "year": 2021,
+  "citationCount": 3,
+  "isOpenAccess": false,
+  "openAccessPdf": {
+   "url": "",
+   "status": null,
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "2716436",
+    "name": "O. Schipor"
+   },
+   {
+    "authorId": "1794666",
+    "name": "Radu-Daniel Vatavu"
+   }
+  ]
+ },
+ {
+  "paperId": "730869cec32438606c79ae5450c2a12fb19918e3",
+  "externalIds": {
+   "DBLP": "journals/tlt/CayetanoJimenezMBRR24",
+   "DOI": "10.1109/TLT.2024.3372894",
+   "CorpusId": 268282434
+  },
+  "title": "Experimenting With Soft Robotics in Education: A Systematic Literature Review From 2006 to 2022",
+  "venue": "IEEE Transactions on Learning Technologies",
+  "year": 2024,
+  "citationCount": 8,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://ieeexplore.ieee.org/ielx7/4620076/4620077/10460415.pdf",
+   "status": "HYBRID",
+   "license": "CCBY"
+  },
+  "authors": [
+   {
+    "authorId": "2290332778",
+    "name": "I. U. Cayetano-Jiménez"
+   },
+   {
+    "authorId": "2119604009",
+    "name": "E. Martinez-Ríos"
+   },
+   {
+    "authorId": "1403868298",
+    "name": "R. Bustamante-Bello"
+   },
+   {
+    "authorId": "2319554812",
+    "name": "R. Ramírez-Mendoza"
+   },
+   {
+    "authorId": "2273156381",
+    "name": "M. Ramírez-Montoya"
+   }
+  ]
+ },
+ {
+  "paperId": "8722c409e8f3da6be75f64a03a01b4e746481dc8",
+  "externalIds": {
+   "DBLP": "journals/access/MassoudL24",
+   "DOI": "10.1109/ACCESS.2024.3480834",
+   "CorpusId": 273361289
+  },
+  "title": "Comparative Analysis of Evolutionary Algorithms for PID Controller Optimization in Pneumatic Soft Robotic Systems: A Simulation and Experimental Study",
+  "venue": "IEEE Access",
+  "year": 2024,
+  "citationCount": 14,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://doi.org/10.1109/access.2024.3480834",
+   "status": "GOLD",
+   "license": "CCBYNCND"
+  },
+  "authors": [
+   {
+    "authorId": "2197601565",
+    "name": "M. Massoud"
+   },
+   {
+    "authorId": "2326023415",
+    "name": "Jacqueline Libby"
+   }
+  ]
+ },
+ {
+  "paperId": "5b52d9682f1961574da8ed9b0247082354df3b0b",
+  "externalIds": {
+   "DBLP": "journals/access/XavierTZPHYLHYB22",
+   "DOI": "10.1109/access.2022.3179589",
+   "CorpusId": 249289144
+  },
+  "title": "Soft Pneumatic Actuators: A Review of Design, Fabrication, Modeling, Sensing, Control and Applications",
+  "venue": "IEEE Access",
+  "year": 2022,
+  "citationCount": 313,
+  "isOpenAccess": true,
+  "openAccessPdf": {
+   "url": "https://ieeexplore.ieee.org/ielx7/6287639/6514899/09785890.pdf",
+   "status": "GOLD",
+   "license": "CCBY"
+  },
+  "authors": [
+   {
+    "authorId": "65740042",
+    "name": "Matheus S. Xavier"
+   },
+   {
+    "authorId": "47302124",
+    "name": "C. Tawk"
+   },
+   {
+    "authorId": "50559645",
+    "name": "A. Zolfagharian"
+   },
+   {
+    "authorId": "9215486",
+    "name": "Joshua Pinskier"
+   },
+   {
+    "authorId": "2054586389",
+    "name": "D. Howard"
+   },
+   {
+    "authorId": "2146543754",
+    "name": "Taylor R. Young"
+   },
+   {
+    "authorId": "51211271",
+    "name": "Jie-Wen Lai"
+   },
+   {
+    "authorId": "2167609372",
+    "name": "Simon M. Harrison"
+   },
+   {
+    "authorId": "2059487095",
+    "name": "Yuen K. Yong"
+   },
+   {
+    "authorId": "117078976",
+    "name": "M. Bodaghi"
+   },
+   {
+    "authorId": "2061441196",
+    "name": "Andrew J. Fleming"
+   }
+  ]
+ },
+ {
+  "paperId": "ae6448bf852d3b1b8930891815a7c7e1a1e811a0",
+  "externalIds": {
+   "CorpusId": 276765868
+  },
+  "title": "MIT Open Access",
+  "venue": "",
+  "year": null,
+  "citationCount": 0,
+  "isOpenAccess": false,
+  "openAccessPdf": {
+   "url": "",
+   "status": null,
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "1415102505",
+    "name": "Ozgun Kilic Afsar"
+   },
+   {
+    "authorId": "2113611053",
+    "name": "Yoav Luft"
+   },
+   {
+    "authorId": "2266467307",
+    "name": "Kelsey Cotton"
+   },
+   {
+    "authorId": "2333600035",
+    "name": "Ekaterina R. Stepanova"
+   },
+   {
+    "authorId": "1402222161",
+    "name": "Claudia Núñez-Pacheco"
+   },
+   {
+    "authorId": "2418542",
+    "name": "Rébecca Kleinberger"
+   },
+   {
+    "authorId": "2348437790",
+    "name": "Fehmi Ben"
+   },
+   {
+    "authorId": "2348439975",
+    "name": "Abdesslem Hiroshi"
+   },
+   {
+    "authorId": "2348439944",
+    "name": "Ishii Kristina"
+   },
+   {
+    "authorId": null,
+    "name": "Höök"
+   },
+   {
+    "authorId": "1932150107",
+    "name": "Ishii"
+   }
+  ]
+ },
+ {
+  "paperId": "5a23d81bfc3945093a771b920449fcc63e0f98bd",
+  "externalIds": {
+   "CorpusId": 279392511
+  },
+  "title": "What to Design Next: Actuated Materials and Soft Robots for Children",
+  "venue": "",
+  "year": null,
+  "citationCount": 0,
+  "isOpenAccess": false,
+  "openAccessPdf": {
+   "url": "",
+   "status": null,
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "2250096078",
+    "name": "C. Hill"
+   }
+  ]
+ },
+ {
+  "paperId": "004a9559f3fa86a9bdc680c050b82c493ae1c636",
+  "externalIds": {
+   "CorpusId": 279392625
+  },
+  "title": "Designing and Fabricating Pneumatic Textures for Human-Robot Interaction",
+  "venue": "",
+  "year": null,
+  "citationCount": 1,
+  "isOpenAccess": false,
+  "openAccessPdf": {
+   "url": "",
+   "status": null,
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "49994805",
+    "name": "Yuhan Hu"
+   },
+   {
+    "authorId": "2282846210",
+    "name": "Guy Hoffman"
+   }
+  ]
+ },
+ {
+  "paperId": "30b0a7ccba2783f7fdf2717d02eef273ee24507d",
+  "externalIds": {
+   "CorpusId": 279392815
+  },
+  "title": "Threads of Possibility: Diverse Youth Designers, Soft Robotics, and Sports Wearables Making soft robotics accessible to youth designers",
+  "venue": "",
+  "year": null,
+  "citationCount": 0,
+  "isOpenAccess": false,
+  "openAccessPdf": {
+   "url": "",
+   "status": null,
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "2328468997",
+    "name": "Herminio Bodon"
+   },
+   {
+    "authorId": "2367059051",
+    "name": "M. E. B. Utler"
+   },
+   {
+    "authorId": "2151725773",
+    "name": "V. Umar"
+   },
+   {
+    "authorId": "2367058807",
+    "name": "M. A. W. Orsley"
+   }
+  ]
+ },
+ {
+  "paperId": "193200b8656dd29cab2cb90ac833637ef069cd5b",
+  "externalIds": {
+   "CorpusId": 279395103
+  },
+  "title": "The Rise of Organic Soft Robotics : Strategies for Fabrication",
+  "venue": "",
+  "year": null,
+  "citationCount": 0,
+  "isOpenAccess": false,
+  "openAccessPdf": {
+   "url": "",
+   "status": null,
+   "license": null
+  },
+  "authors": [
+   {
+    "authorId": "2189224974",
+    "name": "Madalina Nicolae"
+   },
+   {
+    "authorId": "2221116116",
+    "name": "Zacharie Guillaume"
+   },
+   {
+    "authorId": "2367083219",
+    "name": "Valentin Martinez Missir"
+   },
+   {
+    "authorId": "2490581264",
+    "name": "Théo Rossignol"
+   },
+   {
+    "authorId": "143704607",
+    "name": "M. Teyssier"
+   },
+   {
+    "authorId": "2490581264",
+    "name": "Théo Rossignol"
+   }
+  ]
+ }
+]
