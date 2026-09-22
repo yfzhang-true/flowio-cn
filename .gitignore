@@ -10,6 +10,9 @@ __pycache__/
 # ── 第三方参考库解包目录（453M 不入库；官方 zip 已保留在根目录）──
 /FlowIO-Arduino-Libraries-master/
 
+# ── 厂商原始资料包（64M：YD-ESP32-S3 RAR/驱动/说明书，本地保留即可）──
+/资源/
+
 # ── OS 杂物 ──
 Thumbs.db
 Desktop.ini

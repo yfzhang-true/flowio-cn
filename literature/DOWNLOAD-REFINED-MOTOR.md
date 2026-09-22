@@ -1,7 +1,11 @@
-# 待下载文献清单（精细动作控制技术方案，2026-09-22）
+# 待下载文献清单（精细动作控制技术方案，2026-09-22，v2 修正）
 
 > 下载后放入 `E:\FLOWIO\literature\`，AI 将继续提取阅读并纳入 SPEC/PLAN。
 > 按对 B2B 产品的价值排序。
+>
+> **v2 修正（2026-09-22）**：
+> ① #5 综述此前链接有误（旧 DOI 指向不存在的 Advanced Science 文章），已通过 Crossref 验证修正为 **Advanced Materials Technologies, DOI 10.1002/admt.202502282**，且为 **CC-BY 4.0 开放获取**（免费全文）。
+> ② Syrebo C12 拆机（¥2000-3000）**已取消**——用免费专利分析替代，见 `study-notes/20-专利CN108392375A拆解.md`。
 
 ## ① 强烈推荐（直接决定执行器设计与制造工艺）
 
@@ -16,7 +20,7 @@
 | # | 文献 | 来源 | 获取方式 | 为什么重要 |
 |---|------|------|---------|-----------|
 | 4 | **A Portable Soft Robotic Glove with Fully Functional Thumb Assistance** | [ResearchGate](https://www.researchgate.net/publication/408131101) | ResearchGate（可能需登录） | 2025 最新：拇指对掌+精细动作的便携方案 |
-| 5 | **Fabric-Based Wearable Robotic Exoskeleton Gloves: A Review** | [Wiley Advanced Science](https://advanced.onlinelibrary.wiley.com/doi/10.1002/advs.202500000) | Wiley（可能付费墙） | 2026 综述：织物基手套的材料/制造/传感/控制全景 |
+| 5 | **Fabric-Based Wearable Robotic Exoskeleton Gloves: Advancements and Challenges**（Yilmaz, Ince, Atalay） | [Advanced Materials Technologies, DOI 10.1002/admt.202502282](https://advanced.onlinelibrary.wiley.com/doi/10.1002/admt.202502282) ✅Crossref已验证 | **CC-BY 4.0 开放获取，浏览器打开直接免费下载 PDF**（[PDF直链](https://advanced.onlinelibrary.wiley.com/doi/pdf/10.1002/admt.202502282)）。2026-03-15 出版，Vol 11 Issue 12。Koç 大学 Atalay 组 | **2026 综述：织物基手套的材料/制造/传感/控制全景** |
 | 6 | **Pneumatic Circuits for Soft Robotics and Wearables**（博士论文） | [DiVA](https://www.diva-portal.org/smash/get/diva2:0000000/FULLTEXT01.pdf) | DiVA 开放获取 | 气动回路+阀控制的系统设计方法论 |
 
 ## ③ 可选（基础理论与补充）
@@ -37,6 +41,7 @@
 | Xavier Frontiers 2022（气动方程） | `literature/2022-xavier-frontiers-nonlinear-controllers.pdf` | ✅ 已读 |
 | Syrebo SY-HR03E 产品手册 | `literature/Brochure-SYHR03E.pdf` | ✅ 已读（图片 PDF） |
 | Syrebo RCT 论文（华山医院） | AMiner 元数据 `6a933b620a96f8c83cffe1dc` | 摘要已读，PDF 未下载 |
+| **专利 CN108392375A 全文（气动康复手套，郑州大学）** | [Google Patents](https://patents.google.com/patent/CN108392375A/zh) | ✅ **已抓取全文并完成拆解**，见 `study-notes/20-专利CN108392375A拆解.md`（替代 C12 实物拆机） |
 
 ## 补充：实物采购建议（配合文献阅读）
 
@@ -46,4 +51,4 @@
 | **TPU 气管**（外径 4mm / 内径 2.5mm） | 1688（已在采购车？） | ¥1-2/米 | 气路连接 |
 | **硅胶 Ecoflex 00-30**（备选制造） | 淘宝 | ¥80-120/套 | 路线 B 的硅胶模具 |
 | **Kevlar 纤维线** | 淘宝 | ¥10-20/卷 | 纤维增强（路线 B） |
-| Syrebo C12 家用版（竞品拆机） | 京东 | ¥2000-3000 | 精确获取通道数/传感器/气压规格 |
+| ~~Syrebo C12 家用版（竞品拆机）~~ | ~~京东~~ | ~~¥2000-3000~~ | **已取消**：用专利 CN108392375A 免费分析替代（双泵/双作用执行器/12 传感器/迭代学习控制等关键规格已提取，见 study-notes/20） |
