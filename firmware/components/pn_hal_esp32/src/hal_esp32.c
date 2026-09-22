@@ -1,11 +1,19 @@
 /**
- * pn_hal_esp32.c — ESP32-S3 硬件层实现
+ * pn_hal_esp32.c — ESP32-S3 硬件层实现（目标板：YD-ESP32-S3 / HW-678A，N16R8）
  *
- * 引脚分配（study-notes/10 第三节）：
+ * 引脚分配（study-notes/10 第三节，与 P0 实际接线一致）：
  *   阀:  PORT1=4 PORT2=5 PORT3=6 PORT4=7 PORT5=10 INLET=11 VENT=12   (LEDC ch0-6)
  *   泵:  GPIO21                                                       (LEDC ch7)
  *   kit 舵机开关: 泵=15 充气=16 吸气=17                                (RMT ch0-2)
  *   I2C: SDA=8 SCL=9（XGZP6897D + TCA9548A）
+ *
+ * 板卡事实（厂商资料包 SCH-V1.4 + 产品介绍，2026-09-22 验证）：
+ *   - 板载 WS2812 RGB 指示灯 = GPIO48（地址型，非普通 GPIO；状态灯待加时用它）
+ *   - 双 Type-C：丝印 COM 的口走 CH343P 串口（烧录/monitor 用它）；
+ *     另一口 USB-OTG 需焊 0Ω 桥接才可用，P0 不用
+ *   - BOOT 键=GPIO0，RST 键=EN；出厂固件为 AP 模式（RGB 连上 WiFi 才亮）
+ *   - N16R8 的 PSRAM 是 Octal（sdkconfig 已改 SPIRAM_MODE_OCT@80M），
+ *     ⚠️ GPIO35/36/37 被 Octal PSRAM 独占，本文件所有引脚已避开
  *
  * 铁律：阀全走 LEDC（开=255 满占空比，保持=降占空比），绝不用纯数字写。
  */

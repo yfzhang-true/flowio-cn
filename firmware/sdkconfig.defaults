@@ -1,0 +1,21 @@
+# sdkconfig.defaults — YD-ESP32-S3（HW-678A，ESP32-S3-WROOM-1-N16R8）
+# 依据：厂商资料包（原理图 SCH-V1.4 + 16R8产品介绍.docx，2026-09-22 解包验证）
+# 作用：fullclean 后重新生成 sdkconfig 时锁定关键硬件配置
+# 详见 study-notes/10-P0连接装配指南.md 第三节
+
+# ── 芯片 ──
+CONFIG_IDF_TARGET="esp32s3"
+
+# ── Flash：N16R8 = 16MB（Quad SPI 颗粒；DIO@80M 为 ESP-IDF 安全默认）──
+CONFIG_ESPTOOLPY_FLASHSIZE_16MB=y
+CONFIG_ESPTOOLPY_FLASHMODE_DIO=y
+CONFIG_ESPTOOLPY_FLASHFREQ_80M=y
+
+# ── PSRAM：R8 = 8MB **Octal**（八线）——Quad 模式下 8MB 八线 PSRAM 无法工作 ──
+# ⚠️ Octal PSRAM 独占 GPIO35/36/37，任何外设不得使用这三个脚
+CONFIG_SPIRAM=y
+CONFIG_SPIRAM_MODE_OCT=y
+CONFIG_SPIRAM_SPEED_80M=y
+
+# ── CPU ──
+CONFIG_ESP_DEFAULT_CPU_FREQ_MHZ_240=y
