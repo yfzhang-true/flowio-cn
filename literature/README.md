@@ -1,7 +1,7 @@
 # 文献库总台账
 
 > 命名规范：`YYYY-一作姓[-venue]-slug.pdf`（经内容验证后统一重命名，2026-09-22）
-> 结构：根目录 = 14 篇精读核心；`citers/` = 81 篇 FlowIO 被引（S2 元数据对账）
+> 结构：根目录 = 15 篇精读核心；`citers/` = 81 篇 FlowIO 被引（S2 元数据对账）
 > 全部 PDF 配同名 `.txt` 提取文本（图片扫描件除外）；原始数据 `s2_*.json`
 
 ## 一、核心文献（根目录，14 篇，全部深读）
@@ -28,6 +28,7 @@
 | `2026-xie-advsci-portable-thumb-glove.pdf` | Xie 2026（Advanced Science，CUHK 汤启宇组，CC-BY，DOI 10.1002/advs.76275） | **拇指精细答案**：双腔折纸差压（143°）、18N、XGZP6857A 传感器（同我们 BOM）、IMU 测角、贝叶斯 AAN 控制 |
 | `2026-yilmaz-amt-fabric-gloves-review.pdf` | Yilmaz 2026 综述（Adv. Mater. Technol.，CC-BY，DOI 10.1002/admt.202502282） | **行业地图**：5 大制造家族；"开环对康复手套根本不够"；行业无统一测试标准=评估卖点机会 |
 | `2026-xu-uppsala-pneumatic-circuits-thesis.pdf` | Xu 2026 博士论文（Uppsala） | 无电子气动逻辑+多路复用（技术雷达）；RC 类比验证一阶充放气建模 |
+| `2022-wang-appsci-thumb-assist-comparison.pdf` | Wang 2022（Applied Sciences 12:3735，千叶大学，CC-BY） | **拇指通道裁决**：3C-ACT 三腔独立 Kapandji 满分 vs M-ACT 模块化耦合 0-5；最优组合=3C 拇指+模块四指；"控制方法待开发"=B2B 定位原文 |
 | `2018-cn108392375a-patent-pneumatic-glove.pdf` | 专利 CN108392375A（郑州大学） | 免费竞品拆机（图片扫描件，无 txt；全文拆解见笔记 20）：双泵/双作用/12 传感/迭代学习 |
 | `2022-sansone-actuators-sma-torsion.pdf` | Sansone 2022（Actuators 11:81） | ⚠️ 误下载（想要 3C-ACT 拇指论文，此为 SMA 扭转执行器）；留档，与产品无关 |
 
