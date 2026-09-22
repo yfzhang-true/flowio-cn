@@ -1,0 +1,1167 @@
+Andrew A. Stanley1
+Facebook Reality Labs,
+10545 Willows Rd.,
+Redmond 98052, WA
+e-mail: astan@fb.com
+Amirhossein Amini
+Facebook Reality Labs,
+10545 Willows Rd.,
+Redmond 98052, WA
+Casey Glick
+Facebook Reality Labs,
+10545 Willows Rd.,
+Redmond 98052, WA
+Nathan Usevitch
+Facebook Reality Labs,
+10545 Willows Rd.,
+Redmond 98052, WA
+Yi/C21git Meng€uc¸
+Facebook Reality Labs,
+10545 Willows Rd.,
+Redmond 98052, WA
+Sean J. Keller
+Facebook Reality Labs,
+10545 Willows Rd.,
+Redmond 98052, WA
+Lumped-Parameter Response
+Time Models for Pneumatic
+Circuit Dynamics
+Resistor–capacitor (RC) response time models for pressurizing and depressurizing a
+pneumatic capacitor (mass accumulator) through a resistor (ﬂow restriction) comprise a
+framework to systematically analyze complex ﬂuidic circuits. A model for pneumatic
+resistance is derived from a combination of fundamental ﬂuid mechanics and experimen-
+tal results. Models describing compressible ﬂuid capacitance are derived from thermody-
+namic ﬁrst principles and validated experimentally. The models are combined to derive
+the ordinary differential equations that describe the RC dynamics. These equations are
+solved analytically for rigid capacitors and numerically for deformable capacitors to
+generate pressure response curves as a function of time. The dynamic pressurization and
+depressurization response times to reach 63.2 % (or 1 /C0 e
+/C0 1) of exponential decay are
+validated in simple pneumatic circuits with combinations of ﬂow restrictions ranging
+from 100 lm to 1 mm in diameter, source pressures ranging from 5 to 200 kPa, and
+capacitor volumes of 0.5 to 16 mL. Our RC models predict the response times, which
+range from a few milliseconds to multiple seconds depending on the combination, with a
+coefﬁcient of determination of r 2 ¼ 0:983. The utility of the models is demonstrated in a
+multicomponent ﬂuidic circuit to ﬁnd the optimal diameter of tubing between a three-way
+electromechanical valve and a pneumatic capacitor to minimize the response time for the
+changing pressure in the capacitor. These lumped-parameter models represent founda-
+tional blocks upon which timing models of pneumatic circuits can be built for a variety of
+applications from soft robotics and industrial automation to high-speed microﬂuidics.
+[DOI: 10.1115/1.4049009]
+1 Introduction and Motivation
+In the early days of computing, both ﬂuidics and electronics
+showed promise as logic elements for general-purpose digital
+computers, including the ﬂuid operated digital automatic com-
+puter (FLODAC), constructed from ﬂuid jet-based ampliﬁers in
+the 1960s [ 1], and the more famous electrical cousin, the elec-
+tronic numerical integrator and computer (ENIAC), constructed of
+vacuum tubes in the 1940s. Over the remainder of the 20th cen-
+tury, the electrical transistor progressed to power the greatest
+advances in modern technology while the ﬂuidic switches largely
+disappeared from view. However, in recent decades, microﬂuidic
+large-scale integration [2] has shown potential in new ﬂuid control
+applications, driving the size of ﬂuidic components smaller and
+into increasingly complex circuits. One application area, the ﬁeld
+of soft robotics, has found use for ﬂuidic circuits in demonstra-
+tions ranging from oscillating octopus arms [ 3] to crawling [ 4]
+and rolling [ 5]. These robots exhibit response times in the range
+of seconds to tens of seconds and are modeled with linear ﬂuidic
+analogies to linear electrical timing models or application-speciﬁc
+ﬂuidic timing models. Linear resistance models for duct ﬂow
+require several assumptions, including purely viscous losses, fully
+developed laminar (low Reynolds number) ﬂow, and incompressi-
+ble ﬂuids. Linear capacitance models rely on linear material defor-
+mation properties and often neglect important thermodynamic
+considerations. A more general timing model for pneumatic com-
+ponents should include nonlinear effects due to compressible ﬂu-
+ids, the inertial losses from turbulence caused by faster ﬂow and
+ﬂow through bending or rough pipes, and the thermodynamic
+effects of expansions and contractions. Such a model would allow
+improved optimization of component designs and pneumatic cir-
+cuits for speed.
+In electrical timing models, resistors ( R), inductors ( L), and
+capacitors ( C) provide the fundamental passive building blocks
+for circuit analysis. Fluidic circuit analogies exist for each of these
+three components [6,7], where pressure ( P) is analogous to voltage
+(V) and volumetric or mass ﬂow (Q or _m, respectively) is analogous
+to current ( i). While inductance plays an important role in the
+dynamics of hydraulic systems, exhibited in second-order dynamic
+effects like the ringing of a “water hammer,” our focus on pneu-
+matic systems allows us to neglect this piece of the timing model
+due to the low density of air. This ﬁrst-order dynamics assumption
+is validated by signiﬁcant response time testing in this paper.
+This paper deﬁnes a pneumatic response time model as a build-
+ing block of a framework that generalizes to many devices, cir-
+cuits, and wide pressure ranges while relying on only two
+parameters, compressible resistance (R), and capacitance (C) that
+can either be directly measured or calculated for any given device.
+Rather than choosing a single application or design to model and
+ﬁt with phenomenological resistance and capacitance parameters,
+we aim to build models for simpler foundational building blocks that
+can combine to cover a wide range of systems. As a result, we start
+with rigid, precision-machined components before adding in linear
+springs to demonstrate how any measured or designed material
+model can be included in our lumped-parameter resistor–capacitor
+(RC) ﬂuid dynamics models. We derive a general pneumatic capaci-
+tance model from thermodynamic ﬁrst principles. The relationship
+between pressure drop and ﬂow rate in a duct does not generalize so
+easily, forcing us to combine fundamental ﬂuid mechanics with
+experimental results to build a lumped-parameter model for resist-
+ance. We take care to experimentally validate any assumptions we
+make in order to lump parameters into simpliﬁed models.
+We can abstract the building blocks of soft robotics and micro-
+ﬂuidics systems as three subsystems: an input pressure source res-
+ervoir, a ﬂow restriction like a valve or tube, and an output into an
+1Corresponding author.
+Contributed by the Dynamic Systems Division of ASME for publication in the
+JOURNAL OF DYNAMIC SYSTEMS,M EASUREMENT, AND CONTROL. Manuscript received
+December 10, 2019; ﬁnal manuscript received October 9, 2020; published online
+November 18, 2020. Assoc. Editor: Roger Fales.
+Journal of Dynamic Systems, Measurement, and Control MAY 2021, Vol. 143 / 051001-1
+Copyright VC 2021 by ASME
+Downloaded from asmedigitalcollection.​asme.​org/​dynamicsystems/​article-pdf/​143/​5/​051001/​6595715/​ds_143_05_051001.​pdf by Fudan University Library, li bai on 22 September 2026
+
+application-speciﬁc capacitive reservoir like a soft actuator. The
+electrical analogies for these subsystems are shown in Fig. 1.W e
+discuss existing ﬂuidic RC models and applications in Sec. 2.I n
+Sec. 3, we derive a lumped-parameter model for the resistance of
+air ﬂow through such a contraction and experimentally validate it
+with precision-machined oriﬁces before demonstrating that this
+model extends to relatively short ( L/d /C28 1000) tubes and multiple
+air resistors in series. In Sec. 4, we derive a pneumatic capacitance
+model from ﬁrst thermodynamic principles. To fully validate
+these models into simple dynamic RC circuits in Sec. 5, we com-
+bine resistors and capacitors into dynamic response time tests of
+the circuit shown in Fig. 1. The electrical analogy assumes that the
+ﬁrst high-pressure reservoir and drain to atmosphere are large
+enough to be modeled as an ideal source and ground sink, respec-
+tively, though with the modeling framework presented in this paper
+one could easily replace the ideal source or drain with additional
+capacitor components. Finally, we demonstrate how this framework
+can optimize the selection of a tubing diameter for overall system
+response time in Sec. 6. Ultimately, ﬂuid mechanics provides only
+one piece of the timing of a soft robotics system (in addition to
+material properties and electromechanical valving), but it is a key
+component that warrants a more rigorous, generalizable analysis.
+2 Background
+Timing for microﬂuidic computing has previously been
+explored through embodiments as complex as ring oscillators [ 8],
+comparators [ 9], and serial-in parallel-out shift registers [ 10].
+However, diagnostics [ 11], drug delivery [ 12], and biological lab
+automation [ 2] represent the driving applications behind the bulk
+of this research, for which timing models are not critical and out-
+put volumes and ﬂow rates are intentionally small (on the order of
+nanoliters [ 13] or smaller, and often in the form of droplets
+[14,15]), resulting in responses that are relatively slow (on the
+order of seconds or longer) [ 10]. At these scales, viscous and cap-
+illary effects dominate pressure losses in what Squires and Quake
+call “inertial irrelevance” [ 16]. The resistor models are thus
+assumed to be a linear function of pressure drop
+R ¼
+Ph /C0 Pl
+_m (1)
+where Ph is the high pressure at the inlet to the resistor, Pl is the
+low pressure at the outlet, _m is the mass ﬂow rate, and R is the lin-
+ear resistance. One can substitute volumetric ﬂow rate, Q, for
+mass ﬂow rate by a factor of the ﬂuid density, q, but because this
+can lead to confusion for compressible ﬂuids where the density
+varies signiﬁcantly with pressure and temperature we work exclu-
+sively with mass ﬂow in this paper. These linear models from the
+microﬂuidics literature, while valid at scales below thousands of
+Pascals and tens of microns for incompressible ﬂuids, have been
+applied to domains across signiﬁcantly larger size and pressure
+scales with signiﬁcant geometric complexities, and even to com-
+pressible ﬂuids [ 4,5,17]. Any of these three scenarios individually,
+let alone all of them together, invalidates the fundamental assump-
+tions necessary to generate linear equations of ﬂow resistance and
+thus the Hagen–Poiseuille equation no longer applies.
+To power soft robots and high-speed microﬂuidics, higher ﬂow
+rates are required to generate faster response times for ﬁlling and
+draining ﬂuidic capacitors on the order of milliliters. Furthermore,
+the pressures needed to generate noticeable forces in small actua-
+tors are orders of magnitude higher than the pressures in existing
+microﬂuidic systems. Linear resistor models do not accurately
+describe the complexity of the ﬂuid mechanics at these scales, par-
+ticularly when the working ﬂuid is compressible. We address the
+nonlinearities introduced by removing the laminar, fully devel-
+oped, incompressible ﬂow assumptions while maintaining a
+single-parameter resistance ﬁt in Sec. 3.
+Fluidic capacitance (C) is deﬁned as the change of mass ( dm)i n
+a container due to its pressure changing by an amount dP
+C ¼
+dm
+dP (2)
+which for incompressible ﬂuids can also be described as the
+change in volume for a given change in pressure. Capacitance
+models for incompressible ﬂuids [ 7] are determined by the mate-
+rial properties [ 9], which affect how much the volume, and there-
+fore the mass enclosed, changes with pressure. Often the
+relationship between pressure and volume is assumed to be linear
+so that capacitance is constant [ 18–20]. Existing models for com-
+pressible ﬂuids either ignore the compressibility effects and use
+incompressible models [ 21] or consist of a simple calculation
+using the ideal gas law for a rigid capacitor using compressible
+ﬂuids with an isothermal assumption [ 5]. In Sec. 4, we derive a
+lumped-parameter capacitance for both deformable containers and
+compressible ﬂuids from thermodynamic ﬁrst principles.
+3 Lumped-Parameter Resistance Models
+For our lumped-parameter pneumatic resistance model, we
+focus on nonlinear behavior where inertial losses dominate vis-
+cous losses for two reasons. First, for a millimeter-scale system to
+pressurize or depressurize on a short (milliseconds) time scale, the
+peak ﬂow rates will likely be turbulent. Second, and more crit-
+ically, even if the peak ﬂow is laminar or for the ﬁnal portion of a
+pressurization response near equilibrium that happens at laminar
+ﬂow rates, local recirculation regions still exist around nonuni-
+form geometry features. Even for smooth pipes with low Reynolds
+numbers, the ratio of the length, L, to the diameter, d, plays an
+important role in determining whether viscous or inertial forces
+will dominate. While “typical pipe ﬂow applications involve an
+L/d value of 1000 or more, in which case the entrance effect may
+be neglected and a simple analysis made for fully developed
+ﬂow,” [ 22] ﬂuidic routing and tubing in both microﬂuidics and
+soft robotics often fall in a regime where the inviscid entrance
+region plays a major role in the ﬂow characteristics ( L/d /C28 1000).
+Thus, it is an oversimpliﬁcation to neglect “minor losses,” from
+expansions, contractions, bends, and valves to use a linear viscous
+resistance model, and in many systems, these complicating fea-
+tures are the most important for component design and can con-
+tribute signiﬁcantly more to pressure drop than viscous losses.
+3.1 Compressible Fluid Resistance Derivation. Consider a
+ﬂuidic resistor with a given geometry working in a system where
+the ﬂow is not choked. To relate the pressure loss DP ¼ P
+h /C0 Pl
+to mass ﬂow rate, we ﬁrst employ the well-known minor-loss rela-
+tionship [22], i.e.,
+DP ¼ 1
+2 KqU2 (3)
+which is often used to produce experimentally measured coefﬁ-
+cients for pipe entrance or exit, sudden expansion or contraction,
+Fig. 1 A dynamic ﬂuidic circuit of pressurizing and depressu-
+rizing an accumulator through a three way valve with a ﬂow
+restriction is analogous to a simple RC electrical circuit
+051001-2 / Vol. 143, MAY 2021 Transactions of the ASME
+Downloaded from asmedigitalcollection.​asme.​org/​dynamicsystems/​article-pdf/​143/​5/​051001/​6595715/​ds_143_05_051001.​pdf by Fudan University Library, li bai on 22 September 2026
+
+bends, elbows, tees, and other ﬁttings, valves (open or partially
+closed), and gradual expansions or contraction. Here, K is known
+as the loss coefﬁcient, q represents the density, and U denotes the
+average velocity. Next, employ conservation of mass
+_m ¼ qAU (4)
+where A represents the cross-sectional area normal to the ﬂow
+direction. As a result, the pressure-ﬂow relationship takes the fol-
+lowing form:
+qDP ¼ K
+2A2 _m2 (5)
+Finally, we group all constant values into a single parameter to be
+measured experimentally. For the incompressible ﬂuid both the
+density and minor-loss coefﬁcient are independent of pressure for
+a given geometry. Thus, the pressure ﬂow relationship (5) can be
+simpliﬁed into
+DP ¼ R
+i _m2 (6)
+where Ri is the incompressible resistance of the device which can
+be measured experimentally. To account for variable density and
+minor-loss coefﬁcient in compressible ﬂow, we modify (5) as
+qhDP ¼ Y _m2 (7)
+where qh represents the inlet density and Y includes all constants
+and the correction factor for compressibility which generally
+depends on the absolute values of pressure. Moreover, we apply
+an experimentally validated assumption and assume that the cor-
+rection factor depends linearly on the pressure ratio, i.e.,
+Y ¼ C
+o
+Ph
+Pl
+(8)
+where Co is constant for a given geometry. We consider this
+assumption together with constant temperature ideal gas law at
+the inlet to group all parameters that are constant into the com-
+pressible resistance Rc deﬁned as
+PlDP ¼ Rc _m2 (9)
+For compressible ﬂuids, as the downstream pressure Pl is
+reduced, the ﬂow _m increases until the ﬂuid velocity through the
+resistor becomes sonic. At this point, _m becomes independent of
+further reductions in Pl and the ﬂow is said to be choked. The tran-
+sition to choked ﬂow occurs at the choking pressure P/C3
+l at the local
+maximum of _m, which occurs for P/C3
+l ¼ð Ph=2Þ. By inserting this
+back into Eq. (9), we can ﬁnd the choked ﬂow rate _m/C3 as
+_m/C3 ¼ Ph
+2 ﬃﬃﬃﬃﬃRc
+p (10)
+Thus, the full resistance model for unchoked and choked ﬂow
+takes the form of
+ﬃﬃﬃﬃﬃ
+Rc
+p
+_m ¼
+ﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃ
+Pl Ph /C0 PlðÞ
+p
+for 1
+2 Ph /C20 Pl /C20 Ph
+1
+2 Ph for 0 < Pl /C20 1
+2 Ph
+8
+>><
+>>
+:
+(11)
+Finally, we conduct a change of variables
+R
+†
+¼
+ﬃﬃﬃﬃﬃ
+Rc
+p
+(12)
+where R
+†
+is our lumped resistance parameter in dimensions of
+pressure/ﬂow similar to the linear resistor models used in micro-
+ﬂuidics. Our combined unchoked and choked model is deﬁned as
+R
+†
+_m ¼
+ﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃ
+Pl Ph /C0 PlðÞ
+p
+for 1
+2 Ph /C20 Pl /C20 Ph
+1
+2 Ph for 0 /C20 Pl /C20 1
+2 Ph
+8
+>><
+>>
+:
+(13)
+Note that while all experimental data in this paper are shown in
+units of gage pressure for intuitive interpretation, the models
+require units of absolute pressure.
+3.2 Orifice Resistance Experimental Validation. To vali-
+date the resistance model in Eq. (13), we generated a set of ﬂow-
+pressure curves for a set of precision-machined Beswick oriﬁces
+ranging in diameter from 100 lm to 1 mm. Our experimental
+setup included a Honeywell (Charlotte, NC) ASDX Series pres-
+sure sensor located on each side of the oriﬁce, each connected to a
+Hoerbiger (Zug, Switzerland) Pre-U2 pressure regulator to pre-
+cisely control both the high inlet pressure and the low outlet pres-
+sure of the oriﬁce. A Honeywell Zephyr high accuracy ﬂow
+(HAF) series mass ﬂow sensor located upstream of the high-
+pressure sensor measures the ﬂow through the resistor. A sche-
+matic of this experimental setup is shown in Fig. 2.
+The set of ﬂow-pressure curves for each resistor is generated
+through ﬁve separate pressure sweeps repeated twice each. In the
+ﬁrst sweep, the low pressure is held constant at atmosphere while
+the high pressure is swept slowly from atmosphere up to 200 kPa
+gage (301 kPa absolute) and back down to atmosphere, which we
+call a “high pressure sweep.” The other four curves consist of
+holding the high “source” pressure constant at either 50, 100, 150,
+or 200 kPa gage while the low pressure is swept from atmosphere
+up to the value of the constant high source pressure and back
+down to atmosphere, which we refer to as a “low-pressure sweep.”
+We sweep the pressures slowly enough to ensure that we do not
+see any hysteresis in the resulting ﬂow-pressure curves. Thus, we
+can consider each data point to have been collected at a steady-
+state or “quasi-static” equilibrium where holding the high and low
+pressures steady at those values would result in a constant ﬂow of
+the measured value at the ﬂow sensor upstream of the resistor and
+pressure sensors. The time history of a complete set of sweeps to
+generate a set of pressure-ﬂow curves is shown in Fig. 3(a).
+An example set of data collected for ﬂow-pressure sweeps on a
+100 lm diameter oriﬁce is shown in Fig. 3(b). Due to dependence of
+compressible ﬂow rate on absolute pressure and not only pressure
+drop, the same pressure drops result in higher ﬂow rates for the low-
+pressure sweep where the upstream pressure is held high than for the
+high-pressure sweep where the downstream pressure is held low.
+In Fig. 4, we plot the oriﬁce resistance as a function of diame-
+ter. Three unique oriﬁces were tested at each size in both ﬂow
+directions, resulting in six data points at each diameter tested. The
+Fig. 2 Block diagram of the experimental setup to generate the
+ﬂow-pressure curves of a ﬂuidic resistor. Pneumatic connec-
+tions are shown above and electrical connections are shown
+below.
+Journal of Dynamic Systems, Measurement, and Control MAY 2021, Vol. 143 / 051001-3
+Downloaded from asmedigitalcollection.​asme.​org/​dynamicsystems/​article-pdf/​143/​5/​051001/​6595715/​ds_143_05_051001.​pdf by Fudan University Library, li bai on 22 September 2026
+
+results show that the R
+†
+resistance scales with 1 =d2 for oriﬁce
+plates.
+3.3 Compressible Resistance of Tubing. For oriﬁce plates
+or valves, it appears safe to assume that inertial “minor” losses
+dominate viscous losses. For tubes, however, this assumption will
+eventually break down as the ratio of the length of the tube to the
+diameter of the tube ( L/d) grows. To experimentally test the value
+of L/d where our inertial resistance model breaks down and vis-
+cous losses must be considered, we used a wire electrical dis-
+charge machining process to precisely manufacture tubes with an
+inner diameter of 1 mm at lengths of 5, 10, 20, 40, and 80 mm and
+repeated the ﬂow-pressure experiments we used to test the resist-
+ance of the oriﬁces. The results in Fig. 5 show that for this particu-
+lar diameter of tube, the viscous losses start to change the shape
+of the ﬂow-pressure curve when L=d > 40. However, even as L/d
+grows to 80, the entirely inertial R
+†
+model still captures the bulk
+of the resistance behavior ( r2 ¼ 0:987), so we remain conﬁdent
+that we can apply this model to relatively short tubes in more
+complex pneumatic circuits. We also tested ﬁve tubes at diameters
+of 0.2, 0.4, 0.6, 0.8, 1, and 2 mm each with a length of 20 mm to
+validate that R
+†
+resistance scales with 1 =d2 for these tubes as it
+did for oriﬁce plates.
+3.4 Air Resistors in Series. Unlike electrical resistors or lin-
+ear models of microﬂuidic resistors which simply sum in series,
+the behavior of air resistors in series is too complicated to be
+solved analytically. This is in part due to the nonlinear nature of
+the ﬂow and in part due to the choking effect that creates a piece-
+wise function. Both of these aspects are captured by the R
+†
+ﬁt in
+Eq. (13), which, because it is contained to a single lumped param-
+eter, we can build into a custom simulation block that will work
+with any number of components in series or parallel.
+To experimentally validate that our lumped-parameter resistor
+model is suitable for chaining multiple resistors together in series,
+we ran ﬂow-pressure tests with two of the wire electrical dis-
+charge machining steel tubes, each 10 mm in length with a 1 mm
+diameter. We added an additional pressure sensor between the
+two tubes, in addition to the high-pressure sensor upstream and
+the low-pressure sensor downstream of the two tubes. This middle
+pressure sensor simply provided data for us to calculate the pres-
+sure drop across each of the resistors individually, unlike the high
+and low-pressure sensors which are also used for feedback control
+of the high and low-pressure regulators. After ﬁtting an R
+†
+resist-
+ance value to a single tube, we can simulate how we expect two to
+behave in series.
+The results in Fig. 6 validate the expected complexity of com-
+bining air resistors in series while also providing additional conﬁ-
+dence in our R
+†
+resistance model to predict their behavior even
+when multiple components are combined. Whereas two linear
+resistors in series would expect to show half the ﬂow for the same
+pressure drop as a single resistor, adding a second air resistor only
+reduces the total ﬂow by 20–30% depending on the pressure drop.
+Additional insights from simulating and testing two equal air
+resistors in series include that nearly two thirds of the pressure
+drop occurs across the downstream resistor, which enters a choked
+condition well before the upstream resistor as the pressure drop
+increases. The shape of the ﬂow-pressure curves for the combined
+resistors in series is notably different from the shape of the curves
+for an individual resistor but the simulation predicts this complex
+behavior very accurately ( r
+2 > 0:99 for all individual and com-
+bined segments).
+4 Lumped-Parameter Capacitance Models
+An accurate dynamic model of ﬂuidic circuits requires the char-
+acterization of the capacitance of ﬂexible and rigid cavities when
+ﬁlled with a compressible ﬂuid such as air, where the capacitance
+C ¼ dm=dP relates the change in mass to the change in pressure.
+The simplest case to derive is a rigid cavity in isothermal (con-
+stant temperature) conditions. For dynamic processes that happen
+on a faster time scale than heat transfer into or out of the system,
+an adiabatic (no heat transfer to or from the environment) assump-
+tion is more realistic. In this paper, we derive the capacitance rela-
+tionship using an adiabatic assumption by considering a variable
+Fig. 3 ( a) The time history of the pressures commanded to run
+a pressure-ﬂow test, color coded by region to match the curves
+generated by measuring the ﬂow through a resistor shown in
+Figs. 3(b) and 3(b) a sample of set of ﬂow-pressure curves for a
+100um-diameter precision machined oriﬁce resistor with the
+single parameter R
+y
+ﬁt generated by Eq. (13) shown overlaid
+Fig. 4 Running sets of ﬂow-pressure curves for a set of oriﬁ-
+ces across an order of magnitude of diameters shows a clear
+scaling of R
+y
+with the inverse square of the diameter
+051001-4 / Vol. 143, MAY 2021 Transactions of the ASME
+Downloaded from asmedigitalcollection.​asme.​org/​dynamicsystems/​article-pdf/​143/​5/​051001/​6595715/​ds_143_05_051001.​pdf by Fudan University Library, li bai on 22 September 2026
+
+Fig. 5 ( a) Resistance testing of precision manufactured tubes with L/d of 5, 10, 20, 40, and 80 shows that the viscous losses
+have small effects compared to the inertial losses at these scales. ( b)U pt o L/d 5 20 the inertial R
+y
+model ﬁts well ( r 2 5 0:998)
+but for ( c) L/d 5 40 and ( d) L/d 5 80 the viscous losses start to change the shape of the pressure-ﬂow curves and the quality
+of the ﬁt decreases ( r 2 5 0:996 and r 2 5 0:987, respectively).
+Fig. 6 A pair of equal air resistors in series have noticeably different behavior from a single air resistor and do not sum sim-
+ply like two linear resistors, but a simulation using the R
+y
+resistance model for each resistor captures this complex behavior.
+The resistors that generated this data were tubes with L 5 10 mm and of d 5 1 mm: (a) individual tube resistor, ( b) two equal
+tube resistors in series, ( c) upstream of two resistors in series, and ( d) downstream of two resistors in series.
+Journal of Dynamic Systems, Measurement, and Control MAY 2021, Vol. 143 / 051001-5
+Downloaded from asmedigitalcollection.​asme.​org/​dynamicsystems/​article-pdf/​143/​5/​051001/​6595715/​ds_143_05_051001.​pdf by Fudan University Library, li bai on 22 September 2026
+
+temperature within the container over time and using relationships
+taken from conservation of mass, conservation of energy, and the
+ideal gas equation of state. We also provide the simpler isothermal
+capacitance equations for comparison or use in slower response
+time applications.
+4.1 Isothermal and Adiabatic Capacitance. Consider a
+deformable container connected to a constant pressures source P
+s,
+as shown in Fig. 7. The container pressure, temperature, and den-
+sity are represented by PcðtÞ; TcðtÞ and qcðtÞ, respectively. The
+volume of the container is denoted by VcðtÞ¼ Vo þ VmðtÞ, where
+Vo is the undeformed volume and Vm is the volume created as a
+result of membrane deformation due to the imbalance between
+PcðtÞ and the environment pressure Po. Initially, we assume the
+pressure is the same inside and outside of the container, i.e.,
+Pcð0Þ¼ Po. Accordingly, the volume is initially assumed to be
+undeformed, i.e., Vmð0Þ¼ 0 and Vcð0Þ¼ Vo.
+Assume that the valve opens at t ¼ 0 and as a result PcðtÞ
+increases from Po to Ps. The dynamics of this process depends on
+the resistance between the source and container and the capaci-
+tance of the container which will be discussed in Sec. 5. In this
+section, we limit our attention to the capacitance of the container.
+The conservation of mass indicates that the mass ﬂux _min into
+the container is equal to the rate of change of mass _mc inside the
+container, i.e.,
+dmin
+dt ¼ dmc
+dt ¼ Vo þ VmðÞ dqc
+dt þ qc
+dVm
+dt (14)
+Moreover, to relate the density change term dqc=dt to pressure
+change, we employ the ideal gas law for the ﬂuid inside the con-
+tainer. For the isothermal case, i.e., when TcðtÞ¼ To
+dqc
+dt ¼ 1
+RTo
+dPc
+dt (15)
+where R is the speciﬁc gas constant. As a result of replacing the
+density change term in Eq. (14) with Eq. (15) and rearranging the
+result as dmin=dt ¼ CdPc=dt, we obtain the isothermal
+capacitance
+Cisothermal ¼ qo
+Po
+Vo þ Vm þ Pc
+dVm
+dPc
+/C18/C19
+(16)
+For a rigid container, the volume remains undeformed and all
+terms associated with Vm vanish. Accordingly, the isothermal
+capacitance for a rigid container is simpliﬁed into
+Cisothermal
+rigid ¼ qoVo
+Po
+(17)
+For the adiabatic case, a new unknown, dTc=dt, is added to the
+problem since the temperature is no longer constant. As a result,
+the ideal gas law is not sufﬁcient to close the problem and must be
+supported by conservation of energy. Similar to the isothermal
+case, we employ the ideal gas law to relate the density change
+term dq
+c=dt to pressure change, i.e.,
+dPc
+dt ¼ dqc
+dt RTc þ qcR dTc
+dt (18)
+To quantify dTc=dt, we employ the conservation of energy for
+an open system with an inlet
+_Q /C0 _W ¼ _Esys /C0 _minðhi þ V2
+i þ gziÞ (19)
+where _Q is the rate of heat transfer into the system, _W is the rate
+of work done by the ﬂuid, _Esys is the rate of change of the system
+internal energy, _min is the rate of mass entering the system with
+enthalpy hi, velocity Vi and gravitational potential energy gzi. Per
+our adiabatic assumption, we assume _Q ¼ 0. We neglect the con-
+tributions of inlet velocity and the gravitational potential energy,
+as those effects tend to be small relative to other terms. We write
+E
+sys ¼ cvmcTc where cv is the speciﬁc heat of the ﬂuid at constant
+volume, and hi ¼ cpTin, where cp is the speciﬁc heat at constant
+pressure. We apply conservation of mass to write _min ¼ _mc.
+Applying these relationships to Eq. (19), considering c ¼ cp=cv,
+and rearranging the result to isolate dTc=dt, we obtain
+dTc
+dt ¼ 1
+mc
+cTin /C0 TcðÞ dmc
+dt /C0
+_W
+cv
+(20)
+Next, we substitute Eq. (20) into Eq. (18), and combine the
+result with Eq. (14) to achieve
+dmc
+dt ¼ 1
+cRTin
+Vo þ VmðÞ dPc
+dt þ R
+cv
+dW
+dt þ Pc
+dVm
+dt
+/C18/C19
+(21)
+We then approximate the rate of work as _W ¼ PcdVm=dt,
+assume that the inlet temperature remains constant Tin ¼ To, apply
+Meyer’s Relationships, i.e., cp /C0 cv ¼ R, and rearrange the result
+to obtain an expression for adiabatic capacitance
+Cadiabatic ¼ qo
+cPo
+Vo þ Vm þ cPc
+dVm
+dPc
+/C18/C19
+(22)
+Accordingly, the adiabatic capacitance for a rigid chamber is
+Cadiabatic
+rigid ¼ qoVo
+cPo
+(23)
+We note that the deﬁnition of capacitance for a ﬂexible cham-
+ber is ill-posed without a material pressure volume curve since it
+depends on ðdVm=dPcÞ.
+4.2 Compressible Capacitance Experimental Validation.
+We measure capacitance in a setup designed to minimize leakage
+and parasitic capacitance from dead volume or soft materials. We
+validate our rigid models with a set of precision machined alumi-
+num volumes at sizes of 0, 0.5, 1, 2, 4, 8, and 16 mL, as well as
+three linearly deformable capacitors that consist of a low friction
+(Braun medical periﬁx loss of resistance) syringe with a coil
+spring, shown in the dynamic RC experimental setup in Sec. 5.
+The 0 mL capacitor gives us a baseline for the amount of parasitic
+capacitance in the setup that we then subtract out from the other
+capacitance data. The experiment consists of slowly (30 s) ramp-
+ing the source pressure while recording the pressure in the capaci-
+tor while measuring the mass ﬂow rate into or out of the
+capacitor. We differentiate the pressure data with respect to time
+and divide the mass ﬂow rate by this time-correlated data to ﬁnd
+the capacitance as a function of pressure. Data from the rigid
+capacitors are shown in Fig. 8. The slow ramp in pressure, along
+Fig. 7 Schematic of the ﬂexible capacitor analyzed in this
+document. Vo is the volume when Pc 5 Po. The ambient pres-
+sure is Po. The volume increase due to the material deformation
+at pressure Ps is denoted Vm.
+051001-6 / Vol. 143, MAY 2021 Transactions of the ASME
+Downloaded from asmedigitalcollection.​asme.​org/​dynamicsystems/​article-pdf/​143/​5/​051001/​6595715/​ds_143_05_051001.​pdf by Fudan University Library, li bai on 22 September 2026
+
+with high rate of heat transfer from the aluminum material leads
+to values closer to the isothermal model than the adiabatic model
+in the capacitance characterization test. In the dynamic tests in
+Sec. 5, there is less time for heat transfer and therefore we use the
+adiabatic approximation for RC responses.
+Data for the spring capacitors with either a 0 mL (i.e., just a
+pressure sensor) or 5 mL rigid volume in parallel are shown in
+Fig. 9. The spring-loaded pistons have inner diameters of
+15.6 mm, and therefore a cross-sectional area, A, of 765 mm
+2 and
+spring stiffness values, k, of 1000, 1700, and 4600 N/m. To calcu-
+late the theoretical capacitance for these deformable capacitors,
+we know that the force balance on the piston is
+PcA /C0 PoA ¼ kx (24)
+where x is the distance the piston is pushed to expand the volume
+in the syringe, and that the volume deformed by the pressure is
+Vm ¼ Ax (25)
+Combining Eqs. (24) and (25) gives
+Vm ¼ð Pc /C0 PoÞA2=k (26)
+which we differentiate with respect to the pressure in the
+capacitor
+dVm
+dPc
+¼ A2=k (27)
+Combining Eqs. (26) and (27) with our capacitance models in
+Eqs. (17) and (22) gives the isothermal capacitance of a linear
+spring-loaded deformable container as
+Cisothermal
+spring ¼ qoVo
+Po
+/C0 qoA2
+k þ 2qoA2
+Pok Pc (28)
+and the adiabatic capacitance of a linear spring-loaded deformable
+as
+Cadiabatic
+spring ¼ qoVo
+cPo
+/C0 qoA2
+k þ 1 þ cðÞ qoA2
+cPok Pc (29)
+5 Dynamic Resistor–Capacitor Models
+Given that we are assuming negligible inductance, we can focus
+our dynamic system modeling on RC models. A basic RC circuit
+is shown in Fig. 1. In the ﬂuidic analogy of this simple circuit, the
+voltage source is replaced with a pressure supply and the switch is
+a 3-way electromechanical valve that drains to atmosphere. We
+ﬁrst review the established linear RC timing model before com-
+bining our ﬂuidic resistance and capacitance models to achieve
+the governing ordinary differential equations (ODEs) for pressure
+response and experimentally validate the models with response
+time tests.
+5.1 Analytical Solutions to Response Time Ordinary Dif-
+ferential Equations. The linear RC circuit and the laws that gov-
+ern its dynamics form a linear ODE that can easily be solved
+analytically. Rearranging Eq. (2) and differentiating with respect
+to time gives
+Fig. 8 Top: Capacitance measurements as a function of pres-
+sure for rigid containers with air as the working ﬂuid. Bottom:
+Comparison of the experimental data for rigid containers with
+the theoretical models. These slow quasi-static capacitance
+tests allow more time for heat transfer than the dynamic RC
+tests and thus more closely match the isothermal model than
+the adiabatic model used in Sec. 5.
+Fig. 9 Capacitance curves for three linear spring-loaded pis-
+tons with two different values of Vo, with the rigid dead volume
+capacitance measurements provide experimental validation for
+the theoretical isothermal deformable capacitance models
+shown dotted
+Journal of Dynamic Systems, Measurement, and Control MAY 2021, Vol. 143 / 051001-7
+Downloaded from asmedigitalcollection.​asme.​org/​dynamicsystems/​article-pdf/​143/​5/​051001/​6595715/​ds_143_05_051001.​pdf by Fudan University Library, li bai on 22 September 2026
+
+dm
+dt ¼ C dP
+dt (30)
+where dm/dt can be substituted for _m in Eq. (1). Setting Ph equal
+to the source pressure Ps and Pl equal to the pressure of the capac-
+itor Pc with an initial condition of Pcð0Þ¼ Po, where the initial
+pressure Po is typically atmospheric pressure, results in the differ-
+ential equation
+Ps /C0 Pc ¼ RC dPc
+dt (31)
+Solving Eq. (31) gives the pressure in the capacitor any given
+time, t
+Pc tðÞ ¼ Ps /C0 PoðÞ 1 /C0 e/C0 t
+RCðÞ þ Po (32)
+where Ps is the source pressure and s ¼ RC, known as the time con-
+stant, gives the amount of time to reach the 63.2% point of exponen-
+tial decay. Because this is a linear system, Eqs.(31) and (32) hold for
+both pressurizing and depressurizing the capacitor by simply swap-
+ping all instances ofPo and Ps for the case of depressurization.
+The complexity increases when we replace the linear resistor
+with a compressible ﬂow resistor, even if we keep the capacitance
+constant and ignore choking effects. Unlike the linear resistance
+model, the compressible resistance model in Eq. (13) is direction
+dependent, resulting in slightly different governing ODEs for the
+pressurization (rise response)
+ﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃ
+Pc Ps /C0 PcðÞ
+p
+¼ R
+†
+C dPc
+dt (33)
+and depressurization (fall response)
+ﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃ
+Po Pc /C0 PoðÞ
+p
+¼ R
+†
+C dPc
+dt (34)
+of a ﬂuidic capacitor. Solving these ODEs analytically using a
+symbolic solver, we get different solutions for rise and fall
+dynamics. The analytical solution for the dynamics of the rise
+response is
+Pc;rise tðÞ ¼ Po
+Ps
+2Po
+þ cos t
+R
+†
+C
+/C18/C19
+/C0 Ps
+2Po
+cos t
+R
+†
+C
+/C18/C19/C18
+þ sin t
+R
+†
+C
+/C18/C19 ﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃ
+Ps
+Po
+/C0 1
+r /C19
+(35)
+where this is only valid up to the point where the pressure in the
+capacitor reaches equilibrium at the source pressure. The analyti-
+cal solution for the dynamics of the fall response is
+Pc;fall tðÞ ¼ Po
+Ps
+Po
+þ t
+4R
+†
+C /C0 4
+ﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃ
+Ps
+Po
+/C0 1
+r
+þ t
+R
+†
+C
+ ! !
+(36)
+which is again only physically valid until the pressure in the
+capacitor drops to equilibrium at the source pressure. We analyti-
+cally compute the time to reach any given threshold pressure, P
+s,
+which gives a closed form expression for the rise and fall times
+trise ¼ R
+†
+C asin 2Ps
+Ps
+/C0 1
+/C18/C19
+/C0 asin 2Po
+Ps
+/C0 1
+/C18/C19/C18/C19
+(37)
+tfall ¼ R
+†
+C 2ﬃﬃﬃﬃﬃPo
+p
+ﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃ
+Ps /C0 Po
+p
+/C0
+ﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃ
+Ps /C0 Po
+p/C16/C17
+(38)
+and note that these are linear in both R
+†
+and C.
+There are two immediate consequences of note with the com-
+pressible model. First is the dependence on source pressure for the
+time constant, which is not present in the linear RC model. The
+second is that response time is faster for rise times (capacitor pres-
+surizing) than it is for fall times (capacitor depressurizing), due to
+the higher average pressure, and therefore higher average density
+and mass ﬂow rate, during the rise than the fall. Another way to
+explain the faster rise than fall times comes from examining the
+compressible ﬂow versus pressure drop curves in Fig. 3(b). When
+pressurizing the capacitor the pressure drop across the resistor is
+tracing the low-pressure sweep curve because the high pressure is
+ﬁxed at the source pressure, whereas when depressurizing the
+capacitor it is tracing the high-pressure sweep curve because the
+low pressure is ﬁxed at atmosphere. Because mass is conserved
+between pressurizing and depressurizing a given capacitor, higher
+ﬂow rates during pressurization lead to a faster dynamic response
+on the rise.
+5.2 Numerical Simulation. As models and circuits grow
+more complex, the feasibility of solving for analytical solutions to
+dynamic systems decreases, as demonstrated by our attempt to
+combine even a single compressible ﬂow resistor with a linear
+capacitor. Simulation can be used to validate complex analytical
+solutions, and is a necessary tool for understanding system
+responses that involve nonlinearities like choking or capacitor
+material properties that lead to capacitance values that change
+with pressure. Much of the simulation infrastructure already exists
+for simulating ﬂuidic circuits due to the prevalence of electrical
+circuit simulation tools, and we leverage the customizable nature
+of the
+SIMULINK SIMSCAPE toolbox to add in our own custom mod-
+els. For example, a custom air resistor block includes if/else state-
+ments based on the high and low pressure in each time-step to
+dictate whether or not ﬂow is choked and thus which portion of
+Eq. (13) is used in the following loop of the numerical solver.
+5.3 Experimental Validation. To validate our models, we
+built a response time test setup with a simple RC ﬂuidic circuit for
+both air and water. An Enﬁeld (Trumbull, CT) LS-V05 s valve,
+chosen for its high ﬂow rate and fast actuation time (2 ms), acts as
+a 3-way valve between the source pressure and atmosphere to ﬁll
+or drain a tube or cartridge capacitor through a Beswick (Green-
+land, NH) oriﬁce resistor. A pressure sensor embedded in the
+capacitor records the dynamic response at 1 kHz sample rate
+through a National Instruments (Austin, TX) CompactRIO con-
+troller. Figure 10 shows the experimental setup for the simplest
+case of an oriﬁce resistor with a rigid capacitor. For each of seven
+oriﬁce diameters (100, 180, 250, 410, 510, 760, and 1000
+microns), seven capacitor sizes (0, 0.5, 1, 2, 4, 8, and 16 mL), and
+seven source pressures (2, 5, 10, 20, 50, 100, 200 kPa gage) for a
+total of 7
+3 ¼ 343 combinations we ran ﬁve trials each of toggling
+the RC circuit input between the high-pressure source and the low
+pressure of atmosphere. The 0-mL capacitor was included to
+Fig. 10 The experimental setup for response time tests with a
+resistor, a rigid capacitor, and a high-speed electromechanical
+valve
+051001-8 / Vol. 143, MAY 2021 Transactions of the ASME
+Downloaded from asmedigitalcollection.​asme.​org/​dynamicsystems/​article-pdf/​143/​5/​051001/​6595715/​ds_143_05_051001.​pdf by Fudan University Library, li bai on 22 September 2026
+
+provide an idea of baseline capacitance of our test setup, which
+we added to the models before comparing against our results.
+The set of rise and fall responses generated for an example
+resistor-capacitor combination at a range of source pressures is
+shown in Fig. 11. This plot clearly shows response time increasing
+with source pressure as well as the longer fall times than rise times
+for a given pressure as predicted in the previous subsection. The
+results compared to our analytical calculations using the adiabatic
+capacitance model are shown in Fig. 12. While this plot shows the
+scaling relationship to be quite accurate with a coefﬁcient of
+determination of r
+2 ¼ 0:983, the root-mean-square (RMS) error is
+non-negligible at 16.5% for rise times and 11.1% for fall times. It
+is possible this error occurs because the adiabatic assumptions
+used in our capacitance model ignore heat transfer for the slower
+dynamic response, or that our assumption of negligible parasitic
+capacitance and resistance in the test setup was not perfectly
+accurate.
+To extend the RC model validation to deformable capacitance,
+we added the linear spring capacitors downstream of the resistor
+in parallel with the rigid capacitor, as shown in Fig. 13. We chose
+a single oriﬁce to test with nine deformable and rigid capacitor
+combinations from three rigid volumes (0, 5, and 10 mL) and the
+three spring-loaded syringes from Sec. 4. The rigid capacitor pro-
+vides the V
+o component of Eq. (22) while the spring-loaded
+syringe adds the Vm term.
+We tested all nine combinations of the three deformable capaci-
+tors in parallel with each of the three rigid volumes at each of the
+same seven pressure levels tested for the rigid RC dynamic
+experiments. We relied on our custom simulation blocks to com-
+bine the deformable capacitor model with the pneumatic resist-
+ance model into differential equations that can be solved
+numerically to generate expected dynamic responses of the pres-
+sure inside the capacitor. Figure 14 shows the comparison of our
+experimentally measured rise and fall times to those generated by
+our models in simulation. While the model still captures the trends
+quite well with a coefﬁcient of determination of r
+2 ¼ 0:956, the
+RMS error increased relative to the rigid RC results to 19.4% for
+rise times and 21.2% for fall times. Examining some of the raw
+data show that this is likely due to dynamics added by friction or
+Fig. 11 Response time tests run on a single resistor–capacitor
+combination at a range of source pressures validate the
+dependence of the model on source pressure as well as the fact
+that rise times to pressurize a pneumatic capacitor are faster
+than fall times to depressurize it. The example shown here is
+for a 180 lm oriﬁce and a 16 mL rigid capacitor.
+Fig. 12 Evaluation of the response time model for air by show-
+ing actual response time as a function of modeled response
+time. A perfect model ﬁt would have a unity slope with an inter-
+cept at zero, shown by the black line.
+Fig. 13 The experimental setup for response time tests with a
+resistor, a spring-loaded capacitor, and a high-speed electro-
+mechanical valve is used to validate the deformable capaci-
+tance model in a dynamic circuit
+Fig. 14 The response time data from the spring-loaded syringe
+capacitors compared to the theoretical model simulations
+shows an increase in error relative to the rigid response time
+data, likely due to added dynamics from friction or mass in the
+syringe that are not included in the model
+Journal of Dynamic Systems, Measurement, and Control MAY 2021, Vol. 143 / 051001-9
+Downloaded from asmedigitalcollection.​asme.​org/​dynamicsystems/​article-pdf/​143/​5/​051001/​6595715/​ds_143_05_051001.​pdf by Fudan University Library, li bai on 22 September 2026
+
+mass in the syringe that is not included in the model, which have
+a more signiﬁcant effect at lower source pressures and faster
+response times. When the friction or inertia is blocking the piston
+motion, the volume, and therefore capacitance, of the container
+will be smaller than modeled, resulting in a faster rise in pressure
+than predicted by the model.
+6 Tube Diameter Optimization
+One example use for our RC models that may beneﬁt a wide
+range of applications is to optimize the tube diameter that will
+minimize the response time to ﬁll or drain a capacitive ﬂuidic like
+a soft actuator when the actuator and the valve cannot be perfectly
+colocated and thus require a length of tubing to connect them. A
+tube that has a very large diameter will have minimal resistance to
+ﬂow, but at the expense of a large amount of parasitic capacitance.
+A tube with a very small diameter will add negligible capacitance
+to the system, but at the expense of greatly increasing the ﬂow
+resistance. This tradeoff is illustrated in Fig. 15. In this section,
+we aim to demonstrate that the models developed and validated
+on the simplest RC circuits in the previous sections still hold for
+more complex circuits, even when some of the underlying
+assumptions of the lumped-parameter models have to be
+stretched.
+While this is no longer the simple RC circuit shown in Fig. 1,
+our custom simulation blocks allow numerical modeling of more
+complex circuits for which the ODEs do not have analytical solu-
+tions. While a tube cannot be perfectly modeled by an oriﬁce due
+to viscous losses, the results in Sec. 3 give us conﬁdence that it is
+a sufﬁcient approximation to perform an optimization. A second
+challenge introduced by adding a tube to the model is that the
+tube resistance and capacitance cannot be perfectly separated. The
+air that ﬁlls the tube volume immediately at its entry only travels
+through the resistance of the valve, whereas the air that ﬁlls the
+volume at the far end of the tube must pass through both the valve
+resistance and the full tube resistance. We can approximate this in
+discrete circuit components by placing half of the tube capaci-
+tance at each end of the tube resistance.
+We experimentally validate this more complex RC model with
+1 mm valve oriﬁce ( R
+†
+¼ 3:1 /C2 108 Pa/(kg/s)) connected to a
+250 mm length tube at a range of diameters that leads to a 25 mL
+rigid ﬂuidic capacitor ( Cadiabatic ¼ 2:3 /C2 10/C0 10 kg/Pa). We sweep
+the tube diameter (and associated tube resistance and capacitance)
+in simulation to ﬁnd that the response time is theoretically mini-
+mized at a diameter of 2.5 mm, and then measure the actual
+response time for each of the four commercially available poly-
+vinyl chloride (PVC) tubing inner diameters within the range of
+interest. The results in Fig. 16 show that despite the assumptions
+we make about the circuit in order to use our lumped-parameter
+resistance and capacitance models, the simulation correctly identi-
+ﬁes the tube diameter that minimizes response time to pressurize
+and depressurize the capacitor.
+7 Conclusion
+This paper examines the various forms of RC timing models
+typically used in microﬂuidics then highlights the shortcomings of
+applying linear models directly to the size scales and ﬂow rates
+frequently seen in soft robotics and other pneumatic applications.
+We emphasize the importance of inertial losses in any ﬂuidic
+resistor that is not a straight, smooth pipe with low ﬂow rates and
+use this as motivation to develop a lumped-parameter resistance
+model from the ﬂuid mechanics of “minor” losses in duct ﬂow.
+Experimental data show that our R
+†
+single parameter ﬁt accurately
+captures the nonlinearities and pressure dependence associated
+with compressible and turbulent ﬂow, including sharp geometry
+changes like an oriﬁce plate and even through tubes with length-
+to-diameter ratios signiﬁcantly smaller than those used to generate
+Moody charts and viscous pipe ﬂow theory. We expand capaci-
+tance models to capture compressible behavior not only for rigid
+volumes with an isothermal assumption, but also for deformable
+volumes and adiabatic conditions that are more likely to deﬁne
+fast dynamic ﬂuidic circuits. We combine our lumped-parameter
+pneumatic resistance and capacitance components into a simple
+dynamic RC circuit and experimentally validate the timing mod-
+els by measuring the time required to pressurize and depressurize
+Fig. 15 When pressurizing and depressurizing a ﬂuidic capacitor with an electromechanical
+valve of known oriﬁce size through a tube of a speciﬁed length, choosing a tube with larger than
+optimal diameter (left) will add a large amount of capacitance while a tube with smaller than opti-
+mal diameter (right) will add a large amount of parasitic resistance. The RC models presented in
+this paper allow for the selection of the optimal tubing diameter to minimize the response time
+to pressurize and depressurize the capacitor.
+Fig. 16 A simulated sweep of tube diameters for pressurizing
+and depressurizing a 25 mL ﬂuidic capacitor through a 1 mm
+oriﬁce and a 0.25 m length tube shows an optimal tube diameter
+of 2.5 mm. While the experimental data do not perfectly ﬁt the
+simulation of this multicomponent RC circuit, it does show that
+the optimization led to the correct tubing diameter selection to
+minimize response time.
+051001-10 / Vol. 143, MAY 2021 Transactions of the ASME
+Downloaded from asmedigitalcollection.​asme.​org/​dynamicsystems/​article-pdf/​143/​5/​051001/​6595715/​ds_143_05_051001.​pdf by Fudan University Library, li bai on 22 September 2026
+
+a wide range of rigid and deformable capacitors through a range
+of oriﬁce resistors at a variety of source pressures. Finally, we
+demonstrate that the utility of these models extends to nonideal-
+ized ﬂuidic circuits by combining them as building blocks to opti-
+mize a tube diameter to minimize response time. This work builds
+a set of lumped-parameter modeling primitives that can then gen-
+eralize to the growing need for ﬂuidic control applications in the
+future.
+Acknowledgment
+The authors thank Bobby Manson and John Walczak for their
+work in building the ﬂuidic test bench used in the experiments,
+Erik Roby for building the capacitors used to validate the capaci-
+tance models, and Deborah Hutchinson for help reviewing the ﬂu-
+idic timing models literature.
+Nomenclature
+A ¼ area (m2)
+c ¼ speciﬁc heat (J/(K-kg))
+C ¼ ﬂuidic capacitance (kg/Pa)
+_E ¼ rate of change of internal energy (J/s)
+g ¼ acceleration due to gravity (m/s 2)
+k ¼ stiffness (N/m)
+K ¼ loss coefﬁcient
+m ¼ mass (kg)
+_m ¼ mass ﬂow rate (kg/s)
+P ¼ pressure (Pa)
+_Q ¼ rate of work done (J/s)
+R ¼ ﬂuidic resistance (Pa /C1 s/kg)
+t ¼ time (s)
+T ¼ temperature (K)
+U ¼ average velocity (m/s)
+V ¼ volume (m3)
+_W ¼ rate of heat transfer (J/s)
+x ¼ displacement (m)
+Y ¼ compressibility correction factor
+z ¼ height (m)
+c ¼ ratio of speciﬁc heats (unitless)
+q ¼ density (kg/m3)
+s ¼ time constant (s)
+References
+[1] Gluskin, R., Jacoby, M., and Reader, T., 1964, “Flodac: A Pure Fluid Digital
+Computer,” Proceedings of the Fall Joint Computer Conference, San Francisco,
+CA, Oct. 27–29, pp. 631–641.
+[2] Thorsen, T., Maerkl, S. J., and Quake, S. R., 2002, “Microﬂuidic Large-Scale
+Integration,” Science, 298(5593), pp. 580–584.
+[3] Wehner, M., Truby, R. L., Fitzgerald, D. J., Mosadegh, B., Whitesides, G. M.,
+Lewis, J. A., and Wood, R. J., 2016, “An Integrated Design and Fabrication
+Strategy for Entirely Soft, Autonomous Robots,” Nature, 536(7617), pp.
+451–455.
+[4] Vasios, N., Gross, A. J., Soifer, S., Overvelde, J. T., and Bertoldi, K., 2020,
+“Harnessing Viscous Flow to Simplify the Actuation of Fluidic Soft Robots,”
+Soft Rob., 7(1), pp. 1–9.
+[5] Preston, D. J., Jiang, H. J., Sanchez, V., Rothemund, P., Rawson, J., Nemitz, M.
+P., Lee, W.-K., Suo, Z., Walsh, C. J., and Whitesides, G. M., 2019, “A Soft
+Ring Oscillator,” Sci. Rob., 4(31), p. eaaw5496.
+[6] Li, S.-S., and Cheng, C.-M., 2013, “Analogy Among Microﬂuidics, Microme-
+chanics, and Microelectronics,” Lab Chip, 13(19), p. 3782.
+[7] Perdigones, F., Luque, A., and Quero, J. M., 2014, “Correspondence Between
+Electronics and Fluids in MEMS: Designing Microﬂuidic Systems Using Elec-
+tronics,” IEEE Ind. Electron. Mag. , 8(4), pp. 6–17.
+[8] Duncan, P. N., Nguyen, T. V., and Hui, E. E., 2013, “Pneumatic Oscillator Cir-
+cuits for Timing and Control of Integrated Microﬂuidics,” Proc. Natl. Acad.
+Sci., 110(45), pp. 18104–18109.
+[9] Cartas-Ayala, M. A., and Karnik, R., 2014, “Time Limitations and Geometrical
+Parameters in the Design of Microﬂuidic Comparators,” Microﬂuid. Nanoﬂuid.,
+17(2), pp. 359–373.
+[10] Weaver, J. A., Melin, J., Stark, D., Quake, S. R., and Horowitz, M. A., 2010,
+“Static Control Logic for Microﬂuidic Devices Using Pressure-Gain Valves,”
+Nat. Phys., 6(3), pp. 218–223.
+[11] Schulte, T. H., Bardell, R. L., and Weigl, B. H., 2002, “Microﬂuidic Technolo-
+gies in Clinical Diagnostics,” Clin. Chim. Acta , 321(1–2), pp. 1–10.
+[12] Cousseau, P., Hirschi, R., Frehner, B., Gamper, S., and Maillefer, D., 2001,
+“Improved Micro-Flow Regulator for Drug Delivery Systems,” 14th IEEE
+International Conference on Micro Electro Mechanical Systems In Technical
+Digest (MEMS 2001), Interlaken, Switzerland, Jan. 25, pp. 527–530.
+[13] Groisman, A., and Quake, S. R., 2004, “A Microﬂuidic Rectiﬁer: Anisotropic
+Flow Resistance at Low Reynolds Numbers,” Phys. Rev. Lett. , 92(9),
+p. 094501.
+[14] Cristobal, G., Benoit, J.-P., Joanicot, M., and Ajdari, A., 2006, “Microﬂuidic
+Bypass for Efﬁcient Passive Regulation of Droplet Trafﬁc at a Junction,” Appl.
+Phys. Lett., 89(3), p. 034104.
+[15] Vourdas, N., Moschou, D. C., Papadopoulos, K. A., Davazoglou, D., and Sta-
+thopoulos, V. N., 2018, “A New Microﬂuidic Pressure-Controlled Field Effect
+Transistor (pFET) in Digital Fluidic Switch Operation Mode,” Microelectron.
+Eng., 190, pp. 28–32.
+[16] Squires, T. M., and Quake, S. R., 2005, “Microﬂuidics: Fluid Physics at the
+Nanoliter Scale,” Rev. Mod. Phys. , 77(3), pp. 977–1026.
+[17] Russomanno, A., Gillespie, R. B., O’Modhrain, S., and Barber, J., 2014, Model-
+ing Pneumatic Actuators for a Refreshable Tactile Display , Springer, Berlin,
+Heidelberg, pp. 385–393.
+[18] Kim, Y., Kuczenski, B., LeDuc, P. R., and Messner, W. C., 2009, “Modulation
+of Fluidic Resistance and Capacitance for Long-Term, High-Speed Feedback
+Control of a Microﬂuidic Interface,” Lab Chip, 9(17), p. 2603.
+[19] Leslie, D. C., Easley, C. J., Seker, E., Karlinsey, J. M., Utz, M., Begley, M.
+R., and Landers, J. P., 2009, “Frequency-Speciﬁc Flow Control in Microﬂui-
+dic Circuits With Passive Elastomeric Features,” Nat. Phys. , 5(3), pp.
+231–235.
+[20] Mosadegh, B., Kuo, C.-H., Tung, Y.-C., Torisawa, Y.-S., Bersano-Begey, T.,
+Tavana, H., and Takayama, S., 2010, “Integrated Elastomeric Components for
+Autonomous Regulation of Sequential and Oscillatory Flow Switching in
+Microﬂuidic Devices,” Nat. Phys., 6(6), pp. 433–437.
+[21] Bourouina, T., and Grandchamp, J.-P., 1996, “Modeling Micropumps With
+Electrical Equivalent Networks,” J. Micromech. Microeng. , 6(4), pp. 398–404.
+[22] White, F. M., 1994, Fluid Mechanics, WCB/McGraw-Hill, Boston, MA.
+Journal of Dynamic Systems, Measurement, and Control MAY 2021, Vol. 143 / 051001-11
+Downloaded from asmedigitalcollection.​asme.​org/​dynamicsystems/​article-pdf/​143/​5/​051001/​6595715/​ds_143_05_051001.​pdf by Fudan University Library, li bai on 22 September 2026

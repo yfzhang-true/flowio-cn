@@ -7,7 +7,12 @@
 - [x] Xavier 等《Modelling and Simulation of Pneumatic Sources…》→ `xavier-pumpsources-2021.pdf`
 - [x] OmniFiber（UIST'21）→ `omnifiber-uist2021.pdf`（原文件名误标 MorphIO，已按内容更正）
 - [x] PneuBots（TEI'22）→ `pneubots-tei2022.pdf`
-- [x] 用户自选：PneuKnit 学位论文（MIT SMArchS 2022）
+- [x] PneuKnit 学位论文（MIT SMArchS 2022，用户自选）→ `AlHajri-…-thesis.pdf`
+- [x] **Lumped-Parameter Response Time Models（ASME 2020）** → `Lumped-Parameter Response Time Models for Pneumatic Circuit Dynamics.pdf`（已提取 `lumped-param-asme2020.txt`，阻力模型已并入 PHYSICS-SPEC）
+
+## ⚠ 待确认
+
+**Shtarbanov MIT 学位论文**：用户反馈已下载，但 `literature/` 与 Downloads/Desktop/Documents 近期文件中均未找到——请确认保存位置（或重新下载后移入 `literature/`）。它是各泵模块实测压力-流量数据（Table 1 扩展版）的唯一来源，物理标定等它落地。
 
 ## ① 仍强烈推荐（物理 SPEC 标定关键）
 
