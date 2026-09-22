@@ -1,0 +1,1060 @@
+Self-Shaping Mechanisms  
+Prototyping of PneuKnit Systems  
+by 
+Maryam Aljomairi 
+Bachelors of Architecture 
+American University of Sharjah, 2017 
+ 
+Submitted to the 
+Department of Architecture 
+in Partial Fulfillment of the Requirements for the Degree of 
+Master of Science in Architecture Studies 
+at the 
+Massachusetts Institute of Technology 
+ 
+May 2022 
+© 2022 Maryam Aljomairi. 
+ All rights reserved. 
+The author hereby grants to MIT permission to reproduce and to distribute publicly paper and 
+electronic copies of this thesis document in whole or in part in any medium now known or 
+hereafter created. 
+Signature of Author: ____________________________________________________________________ 
+Department of Architecture 
+May 6, 2022 
+Certified by: __________________________________________________________________________ 
+Caitlin Mueller 
+Associate Professor of Architecture  
+Thesis Supervisor 
+Certified by: __________________________________________________________________________ 
+Skylar Tibbits 
+Associate Professor of Design Research 
+Thesis Supervisor 
+Accepted by: __________________________________________________________________________ 
+Leslie K. Norford 
+Professor of Building Technology 
+Chair, Department Committee on Graduate Students 
+ 
+ 
+ 
+ 
+Thesis Supervisors 
+Caitlin Mueller, PhD 
+Associate Professor of Architecture 
+ 
+ 
+Skylar Tibbits, SMArchS 
+Associate Professor of Design Research 
+ 
+ and readers 
+Ozgun Kilic Afsar, PhD 
+Research Assistant (Ph.D.) at Media Lab 
+ 
+Svetlana Boriskina, PhD 
+Principal Research Scientist of Mechanical Engineering 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Self-Shaping Mechanisms  
+Prototyping of PneuKnit Systems  
+by 
+ 
+Maryam Aljomairi 
+ 
+Submitted to the Department of Architecture on 
+May 25, 2022 
+in Partial Fulfillment of the Requirements for the Degree of 
+Master of Science in Architecture Studies 
+ 
+ABSTRACT 
+ 
+Our surroundings are constantly in flux, whether it is changes in the environment or changes in those who 
+inhabit it. However, most of our spaces and building components are designed for permanence and 
+durability without acknowledging the nuanced fluctuations of the user’s behavior, lifestyle, or changes in 
+the natural environment. The strive for building permanence, designed to resist change, contributes to 
+the 100 million tons of wasted materials annually due to recurring renovations and remodeling that 
+inevitably addresses these fluctuations. What if our parts were active and could sense, react, respond, 
+adapt, and co -evolve with their inhabitants and surrounding context?   Rather than building with static 
+dormant components, this alternative pr esents us with opportunities to advance the built environment 
+and rethink its interrelations with its users and its context, resulting in spaces that are performative and 
+attuned to user needs. 
+ 
+This thesis seeks to develop a typology of lightweight adapta ble systems that are rapid and affordable to 
+manufacture. It investigates the fabrication of responsive self -actuating mechanisms; specifically, hybrid 
+pneumatic-knitted (pneu -knit) systems that are autonomous and adaptable to changes within the 
+environment through embedded sensors. The integrated sensors detect the input stimuli –in this 
+particular case study user proximity –transmitting the data to a signal processor and interpreter, which 
+then generates output values for the air pressure settings. This act s as a direct informer and physical 
+shaper of the pneu-knit system, whereby the differentiated shaping generates through the structure and 
+the design of the pneumatic component. The contributions of this work include developing a fabrication 
+framework and method to integrate the knitted, pneumatic, and sensing components for the assembly of 
+affordable, adaptable, lightweight material systems that are attuned to their surroundings. 
+ 
+Thesis Supervisor: Caitlin Mueller 
+Title: Associate Professor of Architecture 
+ 
+Thesis Supervisor: Skylar Tibbits 
+Title: Associate Professor of Design Research 
+ 
+ 
+ 
+ 
+ACKNOWLEDGEMENTS 
+ 
+I would like to acknowledge and extend my deepest gratitude to my advisors, 
+mentors, peers, friends, and family who’ve helped shape my thesis and my MIT 
+experience. 
+Thank you, Caitlin Mueller, for being a thoughtful mentor, educator, and advisor 
+– you’ve provided invaluable guidance for this thesis, my time at MIT , and 
+beyond. I’m sincerely grateful to have had a wonderful mentor to look up to and 
+to learn from. You have played a significant part in my MIT experience and in 
+shaping the way I think today, and for that I am grateful. 
+Thank you, Skylar Tibbits, for your insightful guidance, honesty, feedback and 
+for inspiring many aspects of this research. 
+Thank you, Ozgun Kilic Afsar , for your time and invaluable discussions that 
+helped shape this research.  
+Thank you, Svetlana Boriskina, for your time and enthusiasm on the research. 
+Thank you, Joann Lee , for your incredible insights into the world of knitti ng, 
+you have been an amazing resource and I’m sincerely grateful to have learned 
+from you. 
+Thank you, Ali Shtarbanov, you’ve been an incredible resource and I’ve learned 
+a lot from you. 
+Thank you, Terry Knight, Brandon Clifford, Yoel Fink, Larry Sass, and 
+Elizabeth Meiklejohn, for being sources of inspiration at MIT. I’m grateful to 
+have learned from you. 
+Thank you, to my wonderful friends, for your support, energy, and enthusiasm 
+throughout my thesis and my MIT experience. You’ve been a source of light on 
+the dimmest days. Thank you, Khushi Nansi, Latifa Alkhayat , Kimball Kaiser, 
+Meriam Soltan,  ShanChun Wen, Ibrahim Ibrahim, Saad Boujane, Salwa 
+Alkhudairi, Rania Kaadan, Nada Almulla, Rui Wang, Deborah Tsogbe, Sarah 
+Mokhtar, Nada Tarkhan, Amira Abdelrahman, Demircan Tas, Rohit  Sanatani, 
+Myles Sampson, Lavender Tessmer and the rest of the SMArchS family. 
+Thank you, to my family for their constant support over the years – Mom, Dad, 
+Fajer, Falah, Fatima, Abdulla, and Noora. 
+  
+Contents 
+ 
+1 INTRODUCTION...................................................................................................................... 6 
+1.1 Permanent Temporality & Temporal Permanence ............................................................... 6 
+1.2 Research Vision and Scope ................................................................................................... 8 
+ 
+2 ACTUATION MECHANISMS .............................................................................................. 10 
+2.1 An Intro to Self-Shaping Systems ....................................................................................... 10 
+2.2 Overview of Pneumatic Composites (Mckibben Muscle) .................................................. 11 
+2.2.1 Pneumatic Composites Across Scales ......................................................................... 11 
+2.2.2 Further Developments .................................................................................................. 14 
+2.2.3 How It Works ............................................................................................................... 15 
+ 
+3 PROCESS ................................................................................................................................. 16 
+3.1 Pneumatic Composite Types and Assembly ....................................................................... 16 
+3.2 Embedding Pneumatic in Tensile Surfaces ......................................................................... 19 
+3.2.1 Subtract and Add.......................................................................................................... 19 
+3.2.2 Weave .......................................................................................................................... 20 
+3.2.3 Knit .............................................................................................................................. 22 
+3.3 Embedding Responsiveness ................................................................................................ 29 
+3.3.1 Sensing Fibers .............................................................................................................. 29 
+3.3.2 Actuation Control......................................................................................................... 31 
+ 
+4 Prototypes ................................................................................................................................. 34 
+4.1 Knit Prototypes ................................................................................................................... 34 
+4.2 Vision and Opportunities .................................................................................................... 45 
+ 
+5 CONCLUSIONS ...................................................................................................................... 47 
+5.1 Challenges and Next Steps .................................................................................................. 47 
+5.2 Recap and Contributions ..................................................................................................... 48 
+ 
+5 BIBLIOGRAPHY .................................................................................................................... 51 
+ 
+6 IMAGE CREDITS ................................................................................................................... 54 
+ 
+ 
+1 INTRODUCTION 
+1.1 Permanent Temporality & Temporal Permanence  
+ 
+Our surroundings are constantly in flux, whether it is changes in the environment or  changes in 
+the species that reside within it. Living organisms across scales, ranging from cells, insects, plants, 
+animals, and ourselves, are provided with a set of sensorial tools to achieve adaptation in response 
+to their environment and as a means for auto-preservation. (Zulas, 2004)  
+ 
+With change being a constant since the beginning of time and permanence being temporary, our 
+buildings still fail to add ress the nuanced daily, seasonal, or yearly variabilities in user lifestyle, 
+user behavior, or context. Buildings that are  designed for permanence are inherently designed to 
+resist change; however, due to that very reason buildings undergo invasive methods  to introduce 
+the inevitable adaptation, which consists of demolition, expansion, renovation, and re -
+construction. This contributes to the 100 million tons of waste materials generated annually, 
+disrupts the daily activities of the building residents, is t ime-consuming, and costly. (US EPA, 
+2016) 
+ 
+Therefore, our building materials must be rethought as adaptable  responsive organisms. Rather 
+than building with static dormant components, what if our parts were active and could sense, react, 
+respond, adapt, and co-evolve with its inhabitants and surrounding context?  This presents us with 
+opportunities to build with systems that exhibit unique states as opposed to building with unique 
+one-off parts. This allows us to advance the built environment and rethink its interrelations with 
+its users and its context, resulting in spaces that are performative and attuned to user needs. In that 
+sense, the built environment can be perceived as a continuously evolving space, co- created by its 
+occupants and context. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Figure 1. left:  single cell, example of responsive organism, right: smart responsive knitted structure. 
+Figure 2. diagram illustrates varied configurations and states within one unique 
+artifact. 
+1.2 Research Vision and Scope 
+ 
+Adaptation has been a topic of interest in the field of architecture and investigated under many 
+different lenses, whether engineering highly specific materials that are responsive to a single 
+stimulus, designing reconfigurable spaces that are dependent on humans to reconfigure them, or 
+designing mechanically driven system s that are complex and require various discrete parts and 
+connections.  
+ 
+This thesis seeks to formulate a generalized adaptable system that can be implemented for on -
+demand response to various stimulus, can be self -reconfigured (eliminating the need for manual 
+labor or configuration), and requires minimal discrete parts for adaptability. The research outlines 
+a framework for the development of lightweight adaptable systems that are rapid and affordable 
+to man ufacture. It investigates the fabrication of  responsive self-actuating mechanisms ; 
+specifically, hybrid pneumatic -knitted systems  that are adaptable to changes within the 
+environment through embedded sensors.  
+ 
+A set of constraints is imposed on the research framework as follows:  
+ 
+ For the actuation system to utilize off -the-shelf materials , open-source libraries , and 
+software. Thus, allowing for reproducibility of the system in different contexts beyond a 
+specific institute or lab.  
+ For the shaping mechanism to be reversible, allowing for multiple states or configurations 
+to exist within a single entity. 
+ For the fabrication and material system to be scalable and exhibit structural qualities to be 
+implemented in architectural applications.  
+ 
+In regards to the adaptation timeline, this thesis follows F rank Duffy’s concept of “Shearing 
+Layers”, whereby the focus is on a daily/monthly adaptive framework.  This translates to building 
+components that require regular adaptations, such as outdoor roof deployments or  adjustable 
+façade skins to be discussed in a later section. (Milwicz & Pasławski, 2018) 
+ 
+ 
+ 
+ 
+The research is broken down into three categories: 
+ 
+1. Self-Shaping Actuation Mechanism  
+2. Integration of Actuator 
+3. Sensing and Information Exchange  
+ 
+ 
+The first section introduces the actuation mechanism used, providing a historical and application 
+overview, as well as design opportunities that are possible with the developed material system. 
+The second section tests, evaluates, and identifies the most feasible method of integrating the 
+actuator into a flexible material system. Lastly, the third section highlights str ategies for 
+embedding responsiveness to the material system which would allow for it to self-actuate through 
+the integration of sensing fibers and the utilization of an air control unit.   
+  
+Figure 3. frank duffy’s shearing layers of change. 
+2 ACTUATION MECHANISMS 
+2.1 An Intro to Self-Shaping Systems 
+ 
+Self-shaping or shape-changing materials are autonomous material systems that can operate with 
+minimal human or machine intervention. The system moves from one geometric state to the other 
+once triggered by an external stimulus (change in  temperature, humidity , etc..). This 
+transformation is a result of encoding digital information into the material, translating logic  of 
+formation into the physical environment.  
+ 
+Research on adaptable self-shaping systems explores  a multitude of materials ranging from 
+hydrogels, composites, photopolymers, shape memory alloys (SMA), and shape memory polymers 
+(SMP). The most prominent research has been done at the Self-Assembly Lab and the T angible 
+Media Group at MIT, Morphing Matter Lab at Carnegie Mellon, the Wyss Institute at H arvard 
+University, and by Achim Menges from the Institute of Computational Design (ICD) at Stuttgart.  
+ 
+One of the biggest challenges in self -shaping materials is scale, structure, cost, and speed of 
+actuation or shaping. For instance,  the self -shaping of Hygroshape and similar multi -material 
+printed research at ICD requires a few hours for the shaping to be realized and in that case, is able 
+to respond to one specific stimulus which is humidity. As such, the developed system cannot be 
+customized to respond to different stimuli to trigger the self -shaping and is limited to a small 
+number of pre-determined and engineered forms. (HygroShape, n.d.) 
+ 
+On the other hand, projects like uniMorph from the Tangible Media Group (Heibeck et al., 2015) 
+or 4D print ed shape-shifting hydrogel from the Wyss Institute (Sydney Gladman et al., 2016)  
+exhibit a much faster response rate; however, in both cases, the materials used lack the structural 
+capabilities to be implemented architecturally and is therefore difficult to scale up.   
+ 
+Consequently, this thesis aims to develop a generalized rapidly adaptable framework that does not 
+rely on the engineering of the material for responsiveness, in that sense, it is not limited to a definite 
+trigger but in fact can be in dialogue with multiple stimuli in accordance with the integrated sensors 
+and can demonstrate various states and configurations. In addition, it is imperative for the 
+developed system to implement off-the-shelf commercially available materials that are affordable, 
+easily manufactured, rapidly deployed, and scalable. In consideration of the aforementioned 
+criteria, pneumatic composites have been selected as a feasible material system that addresses the 
+considerations and goals of this research . So how did these pneumatic composites c ome about, 
+how have they been applied, and what can we do differently? 
+ 
+2.2 Overview of Pneumatic Composites (Mckibben Muscle)  
+2.2.1 Pneumatic Composites Across Scales  
+ 
+These particular pneumatic composites have been coined as pneumatic artificial muscles (PAM) 
+or Mckibben muscles. They are lightweight axial actuators that were first invented in the 1950s by 
+physician Joseph L. McKibben  as an orthoti c appliance for polio patients. PAM is  typically 
+composed of two layers: a synthetic rubber tube and an envelope of braided fibers; where the two 
+layers are fitted with metal caps at each end. One of the main features of PAM is converting 
+pneumatic power to a pulling force, high force to weight ratio, low pressurized air consumption, 
+and variable installation possibilities. PAMs have a wide range of ap plications most prominently 
+in soft robotics as they emulate the physiology of the compliant muscles and te ndons, with 
+additional applications in the fields of medicine and aerospace. (Andrikopoulos et al., 2011) 
+Figure 4. left: Joseph L. McKibben with his daughter, right: 
+close-up of assistive device. 
+Figure 5. Biorobotic applications of PAM. From left to right: Shadow Biped Walker by 
+David Buckley, Airic's Arm by Festo USA, Multifilament Muscles by Suzomori Endo Lab, 
+and Hydraulic AM for Tough Robots, Suzumori Endo Lab. 
+Recent advancements include the development of very thin pneumatic composites. This is apparent 
+in OmniFiber from the Media Lab at MIT and Active Textile from the Tokyo Institute of 
+Technology. 
+ 
+OmniFiber is a reconfigurable fiber actuator based on 
+fluidic artificial muscles, it exhibits a range of 
+morphing states such as coiling, extension, contraction, 
+and bending. The thin fluidic artificial muscles (ø outer 
+< 1.8 mm) can be integrated into haptic devices, remote 
+communication through tangible interface, and robotic 
+expressivity. The fluidic artificial muscle is thin enough to act as an actuated fiber that is weaved 
+and knitted into a fabric structure. (Kilic Afsar et al., 2021) 
+ 
+Similarly, Active Textile utilizes thin Mckibben muscles that are weaved through a textile, acting 
+as an actuation mechanism. The actuated textile is implemented within the domain of wearable 
+robots, musculoskeletal robotics, and robotic structures. (Wang, 2016) 
+ 
+ 
+Spatial implementation of these pneumatic composites can be seen in projects developed by the 
+Hyperbody Research Group at TU Delft. Over the years they’ve produced a series of interactive 
+spatial and sculptural prototypes which integrate the air pressurized actuators into tensile surfaces 
+such as the NSA Muscle, the Muscle Body, the Muscle Space, and the Muscle Facade. These 
+spatial installations have a pre-determined fixed shape in which subtle deformations are introduced 
+through the actuators such as actions of hopping, contraction, and twisting that would respond to 
+sensor inputs. (Oosterhuis & Biloria, 2008) 
+Figure 7. Work by the HyperBody Research Group - left to right: Muscle Tower 1 + 2, 
+NSA Muscle, The Muscle Body. 
+Figure 6.  left: Active Textile, Tokyo Institute 
+of Technology. right: OmniFiber, Tangible 
+Media. 
+Muscle Tower 1 + 2 
+The muscle tower is approximately 6 meters high, consistent of thin  aluminum rods, 
+galvanized steel spheres, and Festo muscles (actuators). The starting position of the tower 
+is upright and makes use of a half-inflated muscle and can twist and deform up to 1.2 meters 
+outside of its center. The tower provides an insight into how built structures can be e-
+motive and responsive to real-time. (Oosterhuis, 2012) 
+ 
+NSA Muscle: 
+The NSA muscle is a responsive inflated space, consistent of 72 pneumatic actuators 
+controlled independently, and 24 sensors placed at reference points on the tensile surface. 
+The data collected through the input devices converts human behavior into parameters for 
+change in the audio and the form of the space by varying the length of the air muscle . 
+(Oosterhuis, 2012) 
+ 
+Muscle Body 
+The Muscle Body is an interactive installation of an interior space. The space is based on 
+a single 80m spiraling tubular element. The installation is a soft volume composed of 
+stretchable lycra fabric  and 26 Festo muscles that contract and relax . Each actuator is 
+individually controlled, and thus the varying pressure allow s for a change in the height, 
+width, and overall form of the installation. The behavior and movement of the users serve 
+as the input to which the actuators would relax and contract affecting the overall form.  
+(Oosterhuis, 2012) 
+ 
+On an industrial level, A&P Braiding technology has utilized 
+this pneumatic composite at a larger scale wi th structural 
+capabilities such as the AirBeam and Composite Bridge 
+Arch. The AirBeam structure developed at Solon, OH is used 
+for framing aircraft maintenance hangers and is strong 
+enough to lift a suspended car. This system utilizes highly 
+oriented fiber reinforcement to create a high bending 
+stiffness and high inflation pressure air beam. (HDT Vertigo 
+Figure 8.  left: composite bridge arch 
+right: airbeam. 
+Inc. | A&P Technology, n.d.) Another development of A&P braiding technology is the Composite 
+Bridge Arches with the goal to reduce the cost of steel-reinforced concrete in bridge structures, 
+more specifically the cost and time of bridge assembly. The braided structure is inflated and then 
+infused with resin to create a composi te onto which concrete is cast . (Composite Bridge Arches | 
+A&P Technology, n.d.) 
+ 
+This overview demonstrates the wide range of applications possible by using simple, affordable, 
+readily available materials. This material assembly exemplifies promising implementations across 
+scales, from soft-wearables to air beams that are strong enough to replace steel-reinforced concrete. 
+So, what can be done to further advance this material assembly and how can we contribute to this 
+domain? 
+ 
+2.2.2 Further Developments 
+ 
+The previous section illustrates a wide range of applications of the pneumatic composites. In most 
+spatial precedents shown, the pneumatic composites only utilize linear contraction for subtle 
+movements on a fixed predetermined shape, or the material transforms to a fixed state. This thesis 
+aims to utilize the pneumatics in a manner to allow for reversible shape-shifting to occur, whereby 
+the system has the ability to transform from a flat sheet to a 3D artifact and vice versa. In addition, 
+the research seeks to develop a material framework that allows for multiple configurations /states 
+to exist within one entity, meaning a single entity has the ability to transform into multiple different 
+shapes, therefore making the system truly reconfigurable and adaptive.  This thesis exemplifies a 
+step-by-step construction of the developed system, the utiliz ation of contracting, bending, and 
+extending versions of the pneumatic composites, and various means of integration into a flexible 
+system to allow for self-actuation.  
+ 
+2.2.3 How It Works 
+The p neumatic composite is an assembly of various components, at its most basic level , it is 
+consistent of a rubber or silicone tube encased in a sleeve. Once inflated with pressurized air or 
+liquids, the tube expands radially. Without the addition of the sleeve, the tube will continue to 
+expand behaving like a balloon as shown in the figure  above. The sleeve aids in restricting th e 
+radial expansion and thus causes  the composite to shrink linearly. O nce deflated the outer mesh 
+behaves as a spring restoring the deformed tube to its original form. (Andrikopoulos et al., 2011) 
+ 
+The aforementioned sleeve is composed of continuously interlocked fibers usually of two or three 
+orientations. For the precedents shown above and the scope of this research, biaxial braided tubes 
+are implemented. They are composed of two fiber orientations and are comparable to the Chinese 
+finger trap, whereby the diameter reduces as the structure is pulled along its length. 
+ 
+Since the fibers are continuous, this allows for the even distribution of loads throughout, as a result, 
+the structure is impact resistant and can  use large amounts of energy in the instance of failure. 
+These structures are found in fan blades within commercial aircrafts and in formula one racing 
+cars for crash absorption. Additionally, since the fibers are weaved on bias, they are able to 
+reinforce areas that are subjected to torsional loads. (Braid Basics | A&P Technology, n.d.) 
+ 
+The actuation behavior is highly dependent on two factors: the durometer of the rubber tube and 
+the structure of the braided sleeve. For example, the lower the durometer the higher the actuation 
+whether it’s contracting, extending, or bending, and vice versa. This particular research utilizes 
+40A durometer tubes. Meanwhile, the braided sleeve structure is impacted by  the braid length , 
+angle, diameter, and expansion ratio. Since the braided sleeves are commercially sourced, fiber 
+customization is not possible and is beyond the scope of this research.  (Andrikopoulos et al., 2011) 
+Figure 9. pneumatic component: silicone tube deflated and inflated state. 
+3 PROCESS 
+3.1 Pneumatic Composite Types and Assembly 
+ 
+ 
+Figure 10. pneumatic composite kit of parts. 
+Three types of pneumatic composites have been explored:  contraction, extension, and bending.  
+The following section describes the assembly process and components required to achieve each 
+behavior. All components and materials have been sourced from Amazon and McMaster.  
+ 
+Contraction: 
+Contraction is the simplest behavior of the three, requiring the least number of components and no 
+post-processing of any of the materials. At its most basic level, it requires a silicone tube which is 
+encased in a biaxial polyester braided sleeve and capped with barbed tube fittings. 
+ 
+Extending: 
+To achieve the extensible pneumatic, the braided sleeve must be post -processed by pushing the 
+sleeve downwards along a metal rod and securing it to create crimps. While it is at that state, it 
+must be baked for about 20 minutes at 250 degrees Celsius. This process bakes in the memory of 
+the crimped geometry into the fiber.  As the silicone tube expands radially, it adds pressure on the 
+crimped fibers pushing on the sleeve in all directions. This pressure flattens the crimps hence 
+extending the overall tube linearly when actuated. 
+ 
+Figure 11. type of braided sleeves used - from left to right: regular braid, post-processed 
+braid for extensible pneumatic, braid with rigid material insert for bending pneumatic. 
+Figure 12. left: contracting composite, right: extending composite. 
+Bending: 
+The bending pneumatic follows the assembly of the contraction pneumatic but with an additional 
+component.  A simple inelastic yet flexible stiffener is added in -between the sleeve and the tube. 
+This restricts the expansion in a radial axis and allows for bending to occur. According to where 
+the stiffener is added, a wide range of 2D and 3D bending motions ca n be achieved as illustrated 
+in the diagram below.  
+ 
+  
+ 
+ 
+ 
+ 
+ 
+Figure 13. bending pneumatics directory. 
+3.2 Embedding Pneumatic in Tensile Surfaces  
+ 
+Three strategies were explored in integrating the pneumatic into the tensile surface : cutting + 
+adding, weaving, and knitting. The criteria  for evaluation included the speed of the fabrication 
+process, ease of customization, and ease of integration of the pneumatic and sensing component. 
+After testing and evaluating each of t he mentioned methods, it was concluded that knitting, 
+specifically using a double -bed machine  would be the most efficient i n accordance with  the 
+outlined criteria. The sections below highlight the fabrication process, the opportunities , and 
+limitations of each method.  
+ 
+3.2.1 Subtract and Add 
+ 
+Instead of constructing the fabric from scratch, this exploration uses 
+commercially available textiles. A series of slits are cut through the 
+fabric either by hand, using the laser cutter, or the zund machine. To 
+integrate the pneumatic, it is manually weaved through the slits. One 
+of the limitations encountered with this strategy is that  this system 
+only works with thick, rigid fabrics such as felt, as the thinner more 
+elastic fabrics such as lycra are too feeble and delicate for the 
+actuation to have any kind of defined shaping. The drawba ck of 
+using thicker textiles with the pneumatics is motion resistance, in particular to bending. As such, 
+the globalized geometry of the fabric is misshapen with many undesired lumps forming in between 
+the pneumatics.  In addition, the integration of the pneumatic component is laboriously intensive, 
+as it requires manual weaving, in and out of every distinct slit. Therefore, this fabrication method 
+is regarded impractical and does not satisfy the criteria outlined in the earlier section.  
+Figure 14. actuated prototype. 
+3.2.2 Weave 
+ 
+The second strategy ex plores weaving. Weaving is the production of 
+fabric by inter twining two sets of yarns so that they cross each other 
+perpendicularly using a hand or power -operated loom. There are three 
+basic weaves: satin, twill, and plain. In this particular exploration, a small 
+hand-operated wooden loom (9.85” x 15.75” x 1.3”) is used to create a 
+plain weave. Plain weaves are produced by passing each row of weft yarn 
+over and under each column of warp yarn in an alternating fashion.  
+(Textile - Basic Weaves | Britannica, n.d.) 
+ 
+The pneumatic component is weaved through in  the weft direction, 
+passing it over and under each warp yarn. This result s in a very well 
+secured binding;  however, some of the limitations encountered 
+included lack of customization of the overall weaved fabric, inability 
+to remove or exchange the pneumatic component once integrated, and 
+finally lack of concealment of the pneumatic which causes exposure 
+to damage. Therefore, this fabrication method is regarded impractical 
+and does not satisfy the criteria outlined in the earlier section. 
+ 
+ 
+Figure 15. left: pneumatic integration diagram, right: close-up of pneumatic 
+integration. 
+ 
+ 
+ 
+ 
+ 
+Figure 16. actuated weaved prototype using contracting pneumatic. 
+Figure 17. actuated weaved prototype using bending pneumatic. 
+3.2.3 Knit 
+ 
+The third exploration implements  knitting, where both a single and double 
+bed knitting machine were tested. Knitting is an additive fabrication process 
+that utilizes needles to form a series of interlocking loops  of one or more 
+continuous yarn. (Knitting | Textile | Britannica, n.d.) . This process allows 
+for customization on the micro and macro scale, ranging from the local stitch 
+length and type to the global fabric form. 
+ 
+A flatbed and double bed machines were tested, examining the fabrication process of the knit, the 
+creation of channels for pneumatic integration, and sensor integration as follows: 
+ 
+1. Single Flatbed (Silver Reed SK280): 
+a. The Knitting Process 
+The first step before knitting on a  flatbed is to ensure the machine is set up properly 
+and the yarn is threaded through the Auto Tension and Tension Dial. Once that is done, 
+the yarn must be added onto the bed through a process called an e-wrap cast-on; where 
+stitches are manually wrapped around the needles counter -clockwise. This step is 
+followed by sequentially moving the carriage back and forth across the bed until a 
+desired row of stitches is achieved.  To finish off, the final step is to cast-off or bind-
+off the knit, this is a critical step as it prevents the knit from unraveling by creating an 
+end to the structure. This step requires the user to manually close off each stitch 
+individually, although tedious at the start with practice it becomes a fast process.  
+ 
+b. Pneumatic Integration 
+The air tube integration into a knit requires hollow channels to be created. The process 
+of creating channels on a flatbed machine requires the manual transfer of stitches from 
+one needle to another in order to close the channel, this was a slow and labor-intensive 
+process requiring meticulous handling. During the transfer, if a stitch accidentally falls 
+off of the needle latch, the knit unravels prompting a redo of the entire cast-on knitting 
+process.  
+
+ 
+c. Sensor integration  
+The flatbed machine only allows for the integration of conductive ya rn by mixing it 
+with an existing yarn as shown in the figure below. Some issues faced with blending 
+the two yarns  was a difficulty in knitting unless the tension dial was set on a  high 
+number which results in a very loose and stretchy knit. The looser the knit, the more 
+difficult it is to actuate with the pneumatic composite.  
+ 
+Figure 18. top images: process of transferring each stitch to 
+create a channel, bottom images: knit sample with channel. 
+Figure 19. close up of knit sample with conductive yarn. 
+Although the flatbed machine allows for customization on both the macro and micro scale, 
+challenges were faced when fabricating the channels and integrating the sensing yarn . Therefore, 
+the double-bed knitting machine was tested next.  
+ 
+2. Double Bed (Silver Reed SRP-60N Ribber): 
+Figure 20. top left: double bed machine knitting tools, top right: double bed machine model, bottom: close-up of 
+the double-bed machine with both beds engaged. 
+The double bed is a knitting machine with two beds of needles (front and back). The beds 
+are in an inverted V shape so that the knitted fabric is formed with the yarn evenly tension 
+between the beds. 
+ 
+a. The Knitting Process 
+ 
+Similar to the single bed, the machine must be set -up and yarn threaded. The cast -on 
+process on the double -bed machine is straightforward  and quick. Done by simply 
+pushing the needles on either bed forward, threading the yarn into the yarn feeder, then 
+moving the carriage from right to left. This motion automatically hooks the yarn into 
+the knitter and ribber needles.  
+ 
+The final step for the cast -on is to suspend the cast -on comb with weights from the 
+stitches formed. That is done by inserting the comb between the knitter and ribber, then 
+pushing it upwards until the teeth of the comb are between the stitches formed. Next, a 
+wire is inserted through the holes of the comb to secure it in pla ce. Once that step is 
+done, we can start to knit regularly until a desired length/number  of stitch rows is 
+achieved. 
+ 
+As for the cast-off, it is a two-step process. First, we need to transfer every ribber stitch 
+to the corresponding knitter needle using a double -eye transfer tool, the next step is 
+similar to that of the single-bed.  
+Figure 21. left: initial cast-on process, right: cast-on comb while wire is being inserted. 
+ 
+ 
+ 
+ 
+Figure 22. machine configuration for having either bed engaged(active) or both engaged. 
+Figure 23. knitting technique for different zones of the textile. 
+b. Pneumatic Integration 
+Similarly, to integrate the pneumatic component, channels must be created. Fabrication 
+of the channels using the double bed machine is significantly simpler than the flatbed, 
+requiring only switching of  the set levers and the pick knob. For starters, to create a 
+regular full rib knit, both levers much be switched to 1 and the knob pointing towards 
+the middle, in this case , both the front and back nee dles are in use. The yarn travels 
+from the needle on one bed (front) to a needle on the other bed (back).  
+ 
+To create the channel, the front and back beds should be active and independent from 
+one another, starting with activating the back bed and deactiva ting the front bed by 
+setting both levers at 0 and rotating the knob to the ( -) sign. This allows the knit to be 
+continued on one bed (back), once the required length is achieved the back bed is 
+deactivated with the front activated, this creates a knit on the front bed leaving us with 
+a Y knit.  
+ 
+To close the loop, we switch back to having both beds activated similar to how we 
+started, and continue moving the carriage back and forth until the desired length is 
+achieved. To take off the knit, a simple cast-off is required.  
+ 
+c. Sensor Integration 
+ 
+The double bed machine allows for the integration of both, conductive yarn and 
+conductive fiber (slightly thicker in diameter). For this test, a conductive fiber with 
+controlled elasticity is used. This particular cond uctive fiber was produced by 
+FIBERS@MIT. The conductive fiber is composed of a buckled 50µm copper wire in a 
+hollow COCe (Cyclic Olefin Copolymer Elastomer) channel. The buckling of the wire 
+creates an elastic fiber that is critical within the fabric construction process in either 
+knitting or weaving. (Marion et al., 2022) 
+ 
+ 
+ 
+ 
+                   Figure 24. integration of conductive fiber in knitting. 
+ 
+Once a row of stitches is formed between the two beds, the conductive fiber is inlaid in 
+between, moving the carriage once more to create a row of sti tches and then again 
+placing the fiber repetitively. The weaving of the fiber between the rows of stitches 
+firmly secures it in place.  
+ 
+To conclude, the double bed knitting machine has been selected as the preferred fabrication method 
+as it is the most efficient for the embedding of the pneumatic composites and for the integration of 
+the sensing element.  
+ 
+To summarize, the double-bed knitting machine allows for the following: 
+ Freedom of yarn choice, as some yarns are not suitable for weaving. 
+ Ability to use one continuous yarn without requirement of machine set -up in contrast 
+to a loom. 
+ Ability of customization on the micro and macro scale. Stitch types, length, fabric 
+porosity, and form.  
+ Ease and speed in fabricating channels.  
+ Ease and speed of integrating sensing components. 
+ Ease of scaling-up, simply by switching to a fully automated version of the machine. 
+ 
+ 
+ 
+ 
+
+3.3 Embedding Responsiveness  
+ 
+One of the goals of this thesis is to embed responsiveness to the material system without 
+necessarily engineering the material to respond to a specific stimulus, but rather having a material 
+system that can accept and integrate various sensors. In this case, functional sensing fibers are 
+integrated into the knitted textile. For this particular case study, a capaci tive sens ing fiber  is 
+implemented; however, the system can  swap out and exchange it with other sensors. Regarding 
+the general framework, the sensing fiber collect s input data to control the opening and closure of  
+a set of  valves which either restricts or  facilitates airflow for the inflation of the pneumatic 
+component.  
+ 
+The capacitive sensor utilized in this study has been developed at FIBERS@MIT, research group 
+led by Professor Yoel Fink. (Marion et al., 2022) Additionally, FlowIO is implemented, an open-
+source guide for the design and assembly of a set  of valves  and pumps  for actuation control . 
+(Shtarbanov, 2021) 
+3.3.1 Sensing Fibers 
+ 
+Yoel Fink, alongside researchers from FIBERS@MIT, have been developing a series of functional 
+fibers, ranging from capacitive sensors to temperature sensing fibers, which follow Moore’s Law; 
+a new class of functional fibers that behave more like computer chips with the ability to  sense, 
+store, process information, analyze, and communicate. (Loke et al., 2020) 
+Figure 25. system architecture. 
+This research implements a capacitive sensing fiber into the knitted textile, whereby the fiber 
+senses the electrical capacitance of the human body. The closer you are to the sensor  the higher 
+the values are and the further you are away the lower the values are.  
+ 
+The first prototype implements Arduino  UNO – a microcontroller board based on the 
+ATmega328P - to test simple ways of transmitting information from a single capacitive fiber.  The 
+circuit consists of the capacitive fiber  for input, two 10ohm resistors, and an LED lightbulb for 
+signaling.  A simple code was made on Arduino utilizing the CapacitiveSensor library created by 
+Paul Stoff regen.  (CapacitiveSensor - Arduino Reference, n.d.)  The first circuit implements a 
+program that can detect a hand nearby and signals to the user that it has been recognized. Moving 
+from an inactive state (light is off, hand is distant from the sensor) to an approaching state (light is 
+blinking, hand is approaching the sensor) to an active state (light is on, hand is touching the sensor) 
+ 
+A flaw with circuit design a nd programming was the amount of noise that was detected from 
+nearby devices, such as laptops, phones, etc. In order to minimize the noise and stabilize the sensor 
+readings, a moving average is implemented in the programming and an additional 100pF 
+capacitance is added to the circuit between the ground and sense pin. Although this significantly 
+stabilized the readings produced, it still did not filter out all unwanted noise; however, it was robust 
+enough to carry out the case-study.  
+ 
+ 
+With the isolated circuit operational, the next step is to map the values from the sensor to a set of 
+valves that either restrict or facilitate airflow. Details are outlined in the next section.    
+Figure 26. capacitive sensor in action. left: proximity not detected, right: proximity detected, therefore 
+led turns on. 
+3.3.2 Actuation Control 
+ 
+ 
+ 
+A set of valves are used for the control of ai rflow 
+into the pneumatic system. The design, 
+fabrication, and assembly of the valves follow 
+FlowIO which implements commercially 
+available hardware and open-source software. It is 
+consistent of five pneumatic ports and 
+exchangeable modules for various pres sure and 
+flow needs. The system is fully compatible with 
+Arduino, JavaScript , and google chrome . 
+Therefore, it is suitable for makers from any 
+technical background (Shtarbanov, 2021) 
+ 
+ 
+ 
+The main module consists of five operable valves, with the inlet connected to an external air source 
+and one or many of the operable valves connected to the pneumatic components. In this particular 
+Figure 27. capacitive sensor with values being plotted on Arduino IDE. 
+Figure 28. screenshot of guidelines to build FlowIO. 
+module, C valves are implemented as they have an operating maximum pressure of 44 PSI which 
+satisfies the 30 PSI minimum required to actuate the pneumatic composite. 
+ 
+In order to map the values of the capacitive sensors to the valves, an expansion board is added to 
+the main module using a flex cable which f ollows a similar circuit design to the prior tests, 
+however, in this example, it is connected to Adafruit Feather nrf52840 sense microcontroller. The 
+sensor values are calibrated and mapped to control the opening and closure of the val ves, for 
+instance, if the sensor reading goes beyond a certain threshold, say 50, an electrical current is sent 
+to one of the specified solenoid valves which cause the spring to contract and therefore air to flow 
+out of the specific valve. This causes the actuation of the pneumatic component connected to that 
+particular valve.  
+ 
+The configuration of the actuation control is light, compact, and allows for the portability of the 
+entire material. Additionally, as there are 5 ports, we are able to control and actuate 5 independent 
+channels; however, for the scope of this research only one valve is utilized in the prototypes. Future 
+work will incorporate full utilization of the 5 ports and more.   
+Figure 29. left: air restricted, right: air flows through on specific valve. 
+ 
+ 
+ 
+ 
+  
+Figure 30. left: expansion board circuit diagram, right: system architecture overview. 
+4 Prototypes 
+4.1 Knit Prototypes 
+ 
+The figure below indicates the first set of prototypes developed (2 2cm x 8cm) which use regular 
+cotton yarn and incorporates two channels for the pneumatics to be inserted. The tension dial was 
+set on 6 for the upper carriage and 7 for the lower carriage which resulted in a very loose knit. A 
+series of contracting and bending pneumatics were inserted  and inflated using a regular air 
+compressor.  
+ 
+In order to introduce rigidity and stability to the knit, a series of tight rib structures were test ed: 
+1x1, 2x1, and 2x2. The stitch dial for all three was placed on 1 for the upper carriage and 0 for the 
+lower carriage. The 1x1  test was the most rigid structure  out of the three in both its activated 
+(inflated) and deactivated (deflated) states. At its deactivated state the textile is tight and firm; 
+however, due to the structure of the ribbed knit, once acti vated it allowed for seamless expansion 
+and growth of the knit. The 1x1 ribbed structure was then utilized for a second prototype (22cm x 
+14cm), which incorporated three channels as shown in the figures below. 
+Figure 31. first prototype studies with bending and contracting 
+pneumatics. 
+Figure 32. left: 1x1 ribbing, center: 2x1 ribbing, right: 2x2 ribbing. 
+ 
+Figure 33. close-ups of 
+prototype 2. 
+ 
+ 
+ 
+ 
+Figure 34. top: bending pneumatic, bottom: combination of bending and extending pneumatics. 
+ 
+ 
+ 
+ 
+ 
+Figure 35. combination of bending and extending pneumatics. 
+An issue encountered with t he second prototype was in the channels, as they were slightly loose 
+and thus allowed the pneumatic component to twist and slip out occasionally , specifically when 
+the extensible pneumatics were used. In order to mitigate that, a tight elastic yarn is impl emented 
+in the formation of the channel where the stitch dials on the front and back carriages were set on 1 
+and 2 respectively. That allowed for a tight grip on the pneumatic component which prevented it 
+from slipping or rotating. The third prototype (25cm x 20cm) implements three elastic channels as 
+shown in the images below, no issues were faced during the inflation process. 
+ 
+ 
+Figure 36. integration of elastic channel studies. 
+Figure 37. prototype with elastic channels. 
+ 
+Figure 38. prototype with elastic channels. 
+ 
+Figure 39. activated knit to proximity. 
+ 
+Other Explorations: 
+The next two prototypes highlight a work-in-progress textile collaboration done with RISD student 
+JoAnne Lee, this collaboration was made possible through the Computing Fabrics class taught by 
+Yoel Fink in the spring 2022 semester. Both textiles were made using the STOLL machine  at the 
+Rhode Island School of Design. 
+ 
+Prototype 4 investigates a change of cross -section in a knitted textile, moving from a deep cross -
+section at its deactivated state to a thin cross -section at its activated state. The interest in this 
+particular prototype is to investigate textiles with potentials in thermal regulations and integrating 
+temperature sensing fibers.  
+ 
+Prototype 5 investigates volumetric shape -shifting of the system, it integrates six bending 
+pneumatic components placed radially in a tubular knit. In  its deactivated state, the knit is 
+suspended from its top- end using elastic fishing wires and anchored at the bottom end. Once 
+activated, the upper half of the pneumatic components bend outwards in a radial manner, creating 
+a canopy formation.  
+
+ 
+ 
+ 
+  
+Figure 40. varying cross section of knit, deep cross section when inactive, shallow cross section when active. 
+Figure 41. prototype test with sensing fiber. 
+  
+Figure 42. prototype test with sensing fiber. 
+ 
+ 
+ 
+ 
+ 
+ 
+Figure 43. volumetric knit with 6 activated pneumatic components. 
+4.2 Vision and Opportunities  
+ 
+The goal of this research is to embed soft responsive systems in the domain of architecture. The 
+images below illustrate potential applications that integrate motion detection and temperature 
+sensors in the system. This embedding of responsiveness into the built environment challenges the 
+notion of authorship going beyond the architect or designer, but rather can be thought of as a 
+collective authorship between the designer, the material system, the context, and the users. As 
+opposed to designing fixed inert spaces, this material system leverages opportunities in an 
+architecture that co-evolves, learns, and anticipates from its surrounding context and users.  
+ 
+ 
+ 
+ 
+Figure 44. active knit simulation proposal. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Figure 45. active knit proposal simulation. 
+5 CONCLUSIONS  
+5.1 Challenges and Next Steps 
+ 
+Certain challenges were faced in each phase of the research. Below is an outline of the issues 
+encountered and the next steps.  
+ 
+Pneumatic Composite:  
+Issues 
+ The current pneumatic composites require a high PSI of 45 to be activated and as 
+such the prototyping process is noisy. This issue can be mitigated as we scale up, 
+since the larger the diameter of the pneumatic composite the lower the required PSI.  
+Next Steps 
+ Test and evaluate the structural capabilities and limitations of the pneumatic 
+composites across different scales.  
+ Scale up for larger architectural applications  
+ 
+Knitting Process: 
+Issues 
+ Intricate details and various configurations of the channels that are not linear are 
+difficult to achieve with the current semi- automated double-bed, as such we are 
+limited to linear channels only. 
+ Although we can technically knit infinitely on a certain axis using the knitting 
+machine, the width is always limited to the number of needles available. So, scaling 
+and assembly of textile sheets remain a challenge yet to be explored.  
+Next Steps 
+ Incorporate large-scale channels for architectural applications. 
+ Utilize a fully-automated machine for the fabrication process. 
+ Test out different patterning possibilities for non-linear channel arrangements. 
+ Test out st ructural capabilities of the overall system once activated with the 
+pneumatic component. 
+ 
+Sensors: 
+Issues 
+ The biggest challenge faced with the sensors is the noise. Sensor noise is the 
+random variations of the sensor output unrelated to the input. Although most of the 
+noise has been filtered out as mentioned in the earlier section, it is still not fully 
+eliminated.  
+Next Steps 
+ Create a robust system to discard unwanted noise. 
+ Integrate different types of sensors into the knit.  
+ Create a system that is able to record and collect data over time so that the material 
+system can anticipate and learn from its surrounding.  
+ Control channels independently using the ports available in the main module. 
+ 
+5.2 Recap and Contributions 
+ 
+Building with easily deployed active and adaptive materials is one of the key principles to further 
+advance our built environment on an individual, social, economic, and sustainable level.  On an 
+individual level, responsiveness and adaptation promote safety, comfort, improve the user’s well-
+being and living quality. (Nakib, 2010)  On a social level, adaptation facilitates an exchange 
+between user and space and user and user, resulting in a co-authored space of shared identities. On 
+an economic and sustainable level, adaptability reduces material waste and the need for constant 
+remodeling/refurbishment of the space as building components are able to co- evolve with the 
+building/user needs over time and therefore can last longer.  
+ 
+Subsequently, this thesis investigates adaptable soft systems. It demonstrates a feasible continuous 
+fabrication system of the integration of knits, actuator s, and sensors that is low -cost, easily 
+reproducible, and utilizes open source software and technologies. The proposed material system is 
+a generalized adaptable system that can be i mplemented for on- demand responses to various 
+stimuli, can be self -actuated, and requires minimal discrete parts for adaptability. The research 
+outlines a framework for the develop ment of lightweight adaptable systems that are rapid and 
+affordable to manuf acture. It investigates the fabrication of  responsive self-actuating 
+mechanisms; specifically, hybrid pneumatic -knitted systems that are adaptable to changes 
+within the environment through embedded sensors. The research promotes notions of building 
+with active responsive systems that behave similarly to living organisms that can adapt and evolve 
+with their surroundings.  
+ 
+ 
+  
+Figure 46. QR code for video. 
+5 BIBLIOGRAPHY 
+ 
+Andrikopoulos, G., Nikolakopoulos, G., & Manesis, S. (2011). A Survey on applications of 
+Pneumatic Artificial Muscles. 2011 19th Mediterranean Conference on Control & 
+Automation (MED), 1439–1446. https://doi.org/10.1109/MED.2011.5982983 
+Braid Basics | A&P Technology. (n.d.). Retrieved March 31, 2022, from 
+https://www.braider.com/braid-basics/ 
+CapacitiveSensor— Arduino Reference. (n.d.). Retrieved May 17, 2022, from 
+https://www.arduino.cc/reference/en/libraries/capacitivesensor/ 
+Composite Bridge Arches | A&P Technology. (n.d.). Retrieved April 13, 2022, from 
+https://www.braider.com/Case-Studies/Composite-Bridge-Arches.aspx 
+HDT Vertigo Inc. | A&P Technology. (n.d.). Retrieved April 13, 2022, from 
+https://www.braider.com/Case-Studies/High-Pressure-Airbeam.aspx 
+Heibeck, F., Tome, B., Della Silva, C., & Ishii, H. (2015). uniMorph: Fabricating Thin Film 
+Composites for Shape-Changing Interfaces. Proceedings of the 28th Annual ACM 
+Symposium on User Interface Software & Technology, 233–242. 
+https://doi.org/10.1145/2807442.2807472 
+HygroShape: Self-Shaping Wood Furniture | Institute for Computational Design and 
+Construction | University of Stuttgart. (n.d.). Retrieved May 17, 2022, from 
+https://www.icd.uni-stuttgart.de/projects/hygroshape/ 
+Kilic Afsar, O., Shtarbanov, A., Mor, H., Nakagaki, K., Forman, J., Modrei, K., Jeong, S. H., 
+Hjort, K., Höök, K., & Ishii, H. (2021). OmniFiber: Integrated Fluidic Fiber Actuators for 
+Weaving Movement based Interactions into the ‘Fabric of Everyday Life.’ The 34th 
+Annual ACM Symposium on User Interface Software and Technology, 1010–1026. 
+https://doi.org/10.1145/3472749.3474802 
+Knitting | textile | Britannica. (n.d.). Retrieved April 10, 2022, from 
+https://www.britannica.com/technology/knitting 
+Loke, G., Alain, J., Yan, W., Khudiyev, T., Noel, G., Yuan, R., Missakian, A., & Fink, Y. 
+(2020). Computing Fabrics. Matter, 2(4), 786–788. 
+https://doi.org/10.1016/j.matt.2020.03.007 
+Marion, J. S., Gupta, N., Cheung, H., Monir, K., Anikeeva, P., & Fink, Y. (2022). Thermally 
+Drawn Highly Conductive Fibers with Controlled Elasticity. Advanced Materials, 
+2201081. https://doi.org/10.1002/adma.202201081 
+Milwicz, R., & Pasławski, J. (2018). Adaptability in buildings – housing context – literature 
+review. MATEC Web of Conferences, 222, 01011. 
+https://doi.org/10.1051/matecconf/201822201011 
+Nakib, F. (2010). Toward an Adaptable Architecture: Guidelines to Integrate Adaptability in the 
+Building. ResearchGate. 
+https://www.researchgate.net/publication/260277772_Toward_an_Adaptable_Architectur
+e_Guidelines_to_Integrate_Adaptability_in_the_Building 
+Oosterhuis, K. (2012). Hyperbody: First Decade of Interactive Architecture. Jap Sam Books. 
+Oosterhuis, K., & Biloria, N. (2008). Interactions with proactive architectural spaces: The muscle 
+projects. Communications of the ACM, 51(6), 70–78. 
+https://doi.org/10.1145/1349026.1349041 
+Shtarbanov, A. (2021). FlowIO Development Platform – the Pneumatic “Raspberry Pi” for Soft 
+Robotics. Extended Abstracts of the 2021 CHI Conference on Human Factors in 
+Computing Systems, 1–6. https://doi.org/10.1145/3411763.3451513 
+Sydney Gladman, A., Matsumoto, E. A., Nuzzo, R. G., Mahadevan, L., & Lewis, J. A. (2016). 
+Biomimetic 4D printing. Nature Materials, 15(4), 413–418. 
+https://doi.org/10.1038/nmat4544 
+textile— Basic weaves | Britannica. (n.d.). Retrieved April 10, 2022, from 
+https://www.britannica.com/topic/textile/Basic-weaves 
+US EPA, O. (2016, March 8). Sustainable Management of Construction and Demolition 
+Materials [Overviews and Factsheets]. https://www.epa.gov/smm/sustainable-
+management-construction-and-demolition-materials 
+Wang, A. A. (2016). Pneumatic Textile System. ACADIA // 2016: POSTHUMAN FRONTIERS: 
+Data, Designers, and Cognitive Machines [Proceedings of the 36th Annual Conference 
+of the Association for Computer Aided Design in Architecture (ACADIA) ISBN 978-0-
+692-77095-5] Ann Arbor 27-29 October, 2016, Pp. 290-297. 
+http://papers.cumincad.org/cgi-bin/works/paper/acadia16_290 
+Zulas, A. (2004). Adaptable architecture: A computational exploration into responsive design 
+systems [Thesis, Massachusetts Institute of Technology]. 
+https://dspace.mit.edu/handle/1721.1/27033 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+6 IMAGE CREDITS 
+  
+All non-captioned and non-credited images are project photos and drawings provided by the 
+author. 
+Figure 1 (far left) – image traced.  
+Tao, X. (n.d.). 1.1 Introduction. In Smart Fibres, Fabrics and Clothing (p. 2). Woodhead 
+Publishing. https://app.knovel.com/hotlink/pdf/id:kt003BGNN3/smart-fibres-fabrics/smart-
+technology-introduction 
+Figure 3 – drawing based off of following image. 
+Milwicz, R., & Pasławski, J. (2018). Adaptability in buildings – housing context – literature 
+review. MATEC Web of Conferences, 222, 01011. 
+https://doi.org/10.1051/matecconf/201822201011 
+Figure 4 
+1957—"Artificial Muscle" —Joseph Laws McKibben (American). (2012, April 8). 
+Cyberneticzoo.Com. https://cyberneticzoo.com/bionics/1957-artificial-muscle-joseph-laws-
+mckibben-american/ 
+Figure 5a (far left) 
+David Buckley—Shadow Biped Walker. (n.d.). Retrieved May 18, 2022, from 
+http://davidbuckley.net/DB/ShadowBiped/ShadBiped.htm 
+Figure 5b 
+Airic’s_arm | Festo USA. (n.d.). Retrieved May 18, 2022, from 
+https://www.festo.com/us/en/e/about-festo/research-and-development/bionic-learning-
+network/highlights-from-2006-to-2009/airic-s-arm-id_33870/ 
+Figure 5c 
+Suzumori Endo Robotics Laboratory. (2016, July 4). Musculoskeletal Robot Driven by 
+Multifilament Muscles. https://www.youtube.com/watch?v=0ZBD2tcKOU4 
+Figure 5d  
+High-Power Hydraulic Artificial Muscle for Tough Robots—YouTube. (n.d.). Retrieved May 
+18, 2022, from https://www.youtube.com/watch?v=a6mRhuR_g-E 
+Figure 6a 
+Active Textile made of Thin McKibben Muscles. (n.d.). Retrieved May 18, 2022, from 
+https://www.youtube.com/watch?v=PYSqkEhVe6k 
+Figure 6b  
+OmniFiber. (n.d.). Retrieved May 18, 2022, from 
+https://tangible.media.mit.edu/project/omnifiber/ 
+Figure 7 
+Oosterhuis, K., & Biloria, N. (2008). Interactions with proactive architectural spaces: The muscle 
+projects. Communications of the ACM, 51(6), 70–78. https://doi.org/10.1145/1349026.1349041  
+Figure 8a  
+Composite Bridge Arches | A&P Technology. (n.d.). Retrieved May 18, 2022, from 
+https://www.braider.com/Case-Studies/Composite-Bridge-Arches.aspx 
+Figure 8b 
+HDT Vertigo Inc. | A&P Technology. (n.d.). Retrieved May 18, 2022, from 
+https://www.braider.com/Case-Studies/High-Pressure-Airbeam.aspx 
+Figure 28  
+SoftRobotics.IO | Make FlowIO. (n.d.). Retrieved May 18, 2022, from 
+https://www.softrobotics.io/flowio
+ 
+ 
+ 
+ 
+ 
