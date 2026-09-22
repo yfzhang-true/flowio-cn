@@ -70,6 +70,42 @@
 | **教育/科研市场空白** | 司羿只做临床/家用，不做高校实验平台 | FlowIO-CN 的"Raspberry Pi"定位无直接竞品 |
 | **价格断层** | 医用万元级 vs 家用 ¥69 白牌，中间 ¥300-1000 空 | 08 号文档的切口 A 仍然成立 |
 
+## 四点五、C12 精细动作裁决（2026-09-22 官方页+零售商交叉验证）
+
+> 触发：用户提问"市面康复手套难以实现精细动作——C12 解决了吗？"
+> 证据：[syrebocare.com C12 官方页](https://syrebocare.com/en-gb/products/stroke-hand-finger-rehabilitation-trainer-robot-gloves-c12-with-6-training-modes)（£458）+ RehabShop SG/Rehastar/Amazon UK 零售页 + [官网 C12 上线公告](https://www.siyizn.com)
+
+### C12 官方规格（新证据）
+
+| 项 | 规格（官方原文） |
+|---|------|
+| 6 模式 | passive / mirror / **pinch** / extend / **fine-motor** / functional |
+| **fine-motor 模式** | "glove drives **each affected finger individually** through extension and flexion"——**逐指依次**屈伸，非同时独立 |
+| 单指选择 | **仅镜像模式**："Single-finger mirror training: individual finger movements can be selected during mirror exercises"（被动等模式未提单指可选） |
+| 驱动 | **三泵气动**（"Three-pump pneumatic drive: powers assisted finger flexion and extension"）——屈伸均主动 |
+| 拇指专项 | **页面零提及**外展/内收/对掌/拇指独立腔——只有 pinch 模式算部分覆盖 |
+| 旋转 | **无任何描述** |
+| 评估/报表 | 该页**未提及** App 数据/评估输出（与 HR03E 一致：传感器仅做触发） |
+| 价格 | £458 ≈ ¥4200（出口版阿里 ¥1568 起报价） |
+
+### 按用户痛点逐项裁决
+
+| 痛点 | C12 | 裁决 | 依据 |
+|------|-----|------|------|
+| 单个手指屈伸 | fine-motor 模式逐指屈伸 + 镜像单指选择 | ✅ **基本解决**（但为"逐指依次"，非同时独立协同） | 官方 6 模式描述 |
+| 对指 | pinch 模式（拇-指捏合训练） | ⚠️ **部分解决**——无外展自由度，按 Wang 2022 的 Kapandji 标准够不到远离拇指的手指（小指位） | pinch 模式 + Wang 三腔/模块化对照结论 |
+| 旋转 | 无 | ❌ **未解决**（文献也确认 CMC 旋转可省略——非自愿动作，此项其实是伪需求） | 官方页零提及；Wang 2022："rotation can be omitted since not voluntary" |
+| 拇指内收 | 无 | ❌ **未解决** | 零提及 |
+| 拇指外展 | 无 | ❌ **未解决**——这是对掌的关键自由度（CMC -8~16° 覆盖 100% ADL，Xie 2026） | 零提及 + Xie 解剖需求 |
+| 拇指伸展 | 三泵屈伸或含拇指伸展，未区分 | ⚠️ 存疑（"extend 模式"面向全手） | 措辞模糊 |
+
+### 结论：C12 = 精细动作的"及格线"，不是答案
+
+- **6 项痛点了 1.5 项**：单指屈伸✅、对指半⚠️、旋转❌、拇指三自由度基本全空缺❌
+- 这不是司羿做不好——是**全行业现状**：Chen 2026（Sant'Anna）也自认拇指外展"仅单方向"；真正做到拇指多自由度的是 Xie 2026（CUHK，折纸双腔差压）和 Wang 2022（3C-ACT 三腔）的实验室方案，**都还没有产品化**
+- **三泵驱动**是新信号：消费旗舰已从单泵走向三泵（与专利拆解的双泵方向一致）——Pro 版泵预算应按 2-3 泵规划
+- **我们的机会原文**：C12 的 fine-motor 只是"逐指依次"；我们的 12 通道（4 指×2 双作用 + 拇指 3C-ACT 三腔）= **同时独立协同** + 拇指外展/内收/屈曲三自由度——正是 C12 缺的那 4.5 项。加上 Kapandji/FMA 评估报表（C12 无），对白牌厂商的卖点闭环成立
+
 ## 五、战略定位修正
 
 ### 修正后的竞争地图
