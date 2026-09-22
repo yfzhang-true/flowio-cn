@@ -1,0 +1,688 @@
+An Ergonomic, Customizable Soft Robotic Glove toward
+Personalized Hand Rehabilitation
+Rui Chen1*, Firman Isma Serdana 2, Domenico Chiaradia 1, Xianlong Mai 1,3,
+Elena Losanno 2,4, Gabriele Righi 5, Claudia De Santis 5, Federica Serra 1,
+Vincent Mendez 6, Cristian Camardella 1, Daniele Leonardis 1, Giulio Del Popolo 5,
+Silvestro Micera2,4,6, and Antonio Frisoli1
+1Institute of Mechanical Intelligence and Department of Excellence in Robotics and
+AI, Scuola Superiore Sant’Anna (SSSA), 56127, Pisa, Italy
+2The Biorobotics Inst. and Dept. of Excellence in Robotics and AI, Scuola
+Superiore Sant’Anna, Pisa, Italy
+3CAS Key Laboratory of Mechanical Behavior and Design of Materials, Institute of
+Humanoid Robots, School of Engineering Sciences, University of Science and
+Technology of China, Hefei, China
+4Modular Implantable Neuroprostheses (MINE) Laboratory, Universit` a Vita-Salute
+San Raffaele & Sant’Anna School of Advanced Studies, Milan, Italy
+5 Careggi University Hospital, 50134 Florence, Italy
+6Bertarelli Fndn. Chair in Translational Neuroengineering, Neuro X Institute, ´Ecole
+Polytechnique F´ ed´ erale de Lausanne (EPFL), Laussane, Switzerland
+*Corresponding author. Email: rui.chen@santannapisa.it
+Abstract
+Hand impairment following neurological disorders substantially limits independence in activi-
+ties of daily living, motivating the development of effective assistive and rehabilitation strategies.
+Soft robotic gloves have attracted growing interest in this context, yet persistent challenges in
+customization, ergonomic fit, and user comfort constrain their clinical utility. Here, we present
+an ergonomic, customizable fabric-based soft robotic glove whose actuators can be tailored to
+individual finger-joint geometry. The glove comprises five dual-action actuators supporting fin-
+ger flexion and extension, together with a dedicated thumb abduction actuator. Leveraging
+computer numerical control heat sealing technology, we fabricated symmetrical-chamber actu-
+ators that adopt a concave outer surface upon inflation, thereby increasing finger contact area
+and improving comfort. Characterization confirmed joint moment and grasping force sufficient
+for ADL-relevant tasks. In ten healthy subjects, active assistance significantly reduced forearm
+1
+arXiv:2604.00768v2  [cs.RO]  15 Jun 2026
+
+muscle activity during manipulation, and a pilot study in three individuals with cervical spinal
+cord injury showed more natural grasp patterns and reduced reliance on tenodesis grasp.
+Keywords:soft actuator; hand rehabilitation; pneumatic actuator; spinal cord injury; wearable
+exoskeleton
+Introduction
+The human hand is central to a broad range of activities of daily living (ADLs) [1], and neurological
+disorders such as stroke [2, 3], cervical spinal cord injury (SCI) [4], and muscular dystrophy [5]
+can substantially impair it, often reducing ADL independence [3, 6, 7]. Cervical SCI is illustrative:
+affected individuals frequently rely on tenodesis grasp, a passive strategy in which wrist extension
+tightens the finger flexors to produce a weak closing force [8, 9] that is often insufficient for reli-
+able manipulation [10, 11]. Restoring hand function in such populations requires not only active
+finger flexion but also powered extension for intentional object release [12, 13], together with thumb
+abduction, a motion critical for prehensile grasping [14–17].
+Robotic rehabilitation has emerged as a promising paradigm, offering controlled and repeat-
+able assistance that supports functional recovery [3, 18]. Among robotic rehabilitation devices, soft
+robotic gloves have attracted considerable interest [19]. By employing compliant materials and flex-
+ible actuation mechanisms, these devices can approximate natural hand motion while reducing the
+mechanical constraints associated with rigid exoskeletons [11, 20, 21]. A range of actuation technolo-
+gies has been integrated into soft glove designs, including cable-driven systems [13, 22–24], shape
+memory alloys [25, 26], elastomeric pneumatic actuators [10, 27–29], and fabric-based pneumatic
+actuators [12, 30–35]. Despite this breadth of approaches, persistent challenges in customization,
+ergonomic fit, and user comfort continue to limit the clinical utility of existing designs [36].
+Per-user fit and ergonomic conformity are two challenges that bear directly on actuator design.
+First, hand size and joint geometry vary considerably across individuals, so an actuator built to
+a generic geometry tends to misalign with a given user’s joint axes, introducing unintended joint
+torques that reduce force-transmission efficiency and comfort [37]; effective assistance therefore re-
+quires a fit tailored to each user, yet rigid or modular designs achieve size adaptability at the cost
+of added weight and complexity [36, 38–40], and per-individual geometric tailoring remains uncom-
+mon among soft and lightweight designs. Second, single-chamber pneumatic actuators inflate into a
+convex shape; because the finger dorsum is itself convex, the two convex surfaces meet over only a
+small area, limiting contact and comfort [10, 27, 33]. Pleated or folded fabric structures can improve
+joint alignment but still present a convex contact profile [41, 42]. No existing soft rehabilitation
+glove combines ergonomic concave contact and per-user geometric customizability with dual-action
+assistance and thumb abduction in a single lightweight fabric device (Supplementary Tables 4 and 5).
+To address these challenges, we present an ergonomic, customizable fabric-based soft robotic
+glove for hand rehabilitation. Each actuator is formed from two symmetric chambers and a bottom
+constraint layer, shaped by CNC heat sealing, and this single design provides two properties at
+once: the symmetric chambers inflate into a concave contact surface that conforms to the convex
+finger dorsum, increasing contact area and comfort; and the CNC-defined chamber profile sets
+2
+
+the inflated bending angle, allowing each actuator to be tailored to a wearer’s individual joint
+angles. These actuators are assembled into a single lightweight (90 g) all-fabric glove providing
+active flexion, extension, and thumb abduction across all five digits. We characterized actuator
+moment and force output, evaluated whole-glove grasping performance, conducted a preliminary
+surface electromyography (sEMG) study with healthy subjects to quantify muscle-activity reduction
+during assisted manipulation, and carried out a pilot feasibility study in individuals with cervical
+SCI, providing validation across the device, healthy-subject, and clinical levels.
+Results
+Glove Design
+Each actuator is built from two symmetric chambers and a bottom constraint layer (as baffle) that
+restricts outward expansion, with the chambers shaped by CNC heat sealing. A conventional single-
+chamber actuator inflates into a convex shape that, meeting the convex finger dorsum, contacts the
+finger over only a small area. By contrast, the two symmetric chambers cause the actuator to adopt a
+slightly concave outer surface upon inflation, which conforms to the finger dorsum and increases the
+contact area (Fig. 1A), distributing contact pressure more evenly and improving wearing comfort.
+The same two chambers are profiled by CNC heat sealing; because the deflated profile geom-
+etry maps near-linearly to the inflated bending angle [43], the required profile can be computed
+for any target joint angle, so each actuator is also customizable to a wearer’s hand. Whereas our
+prior symmetrical-chamber glove provided flexion assistance only [44], here each finger actuator
+pairs a flexion and an extension chamber set assembled by CNC heat sealing (Fig. 1B), so that
+selective inflation drives the finger toward flexion or extension. The glove consists of a fabric base,
+five dual-action finger actuators with fingertip sleeves, one thumb abduction actuator, and three
+Velcro-secured straps (Fig. 1C). All actuators are mounted to the fabric base via Velcro, enabling
+straightforward adjustment and rapid replacement as needed. The open strap-and-sleeve configura-
+tion facilitates donning and doffing, which is particularly important for patients with limited hand
+function. The assembled glove weighs only 90 g and is entirely fabric-based, providing a lightweight
+and compliant interface well suited to prolonged rehabilitation use.
+A custom control box provides independent inflation control of the flexion and extension chambers
+of each finger via a smartphone web interface (Fig. 1D). This per-finger capability is intended to
+support task-oriented actuation strategies [45, 46], although the present study employed only whole-
+hand flexion and extension commands. Full hand opening and full hand closure are illustrated in
+Fig. 1E and F.
+Glove Fabrication
+Advances in CNC heat sealing technology for fabrics [47–49] now enable the fabrication of highly
+customized chamber geometries from user-defined digital models. Combining CNC heat sealing with
+the symmetrical-chamber design and bottom constraint layer of our prior glove [44], we developed
+dual-action actuators for the soft robotic glove.
+3
+
+Figure 1:Glove system overview. (A)Comparison of finger contact between single-chamber and
+symmetrical-chamber actuators upon inflation.(B)and(C)Design of the dual-action actuator and
+soft glove.(D)Complete system comprising the control box, dual-action soft glove, and smartphone
+web interface.(E)and(F)Glove in fully extended and fully flexed configurations, respectively.
+4
+
+Actuator fabrication begins by measuring the target joint angles at the desired flexed and ex-
+tended postures directly from the patient’s hand. These angles define the inflated geometry of each
+actuator segment. Prior work has established a near-linear relationship between the deflated actuator
+geometry and the inflated bending angle [43, 50], from which the required fabrication geometry—
+and thus the CNC sealing path—can be derived directly, as shown in Fig. 2A and B. To assemble
+a dual-action actuator, two flexion chambers, two extension chambers, and a bottom constraint
+layer are heat sealed together (Fig. 2C, D). Selective inflation of the respective chambers drives
+the actuator toward the target flexion or extension posture, providing individualized assistance in
+either direction (Fig. 2E, F). The thumb abduction actuator is produced using the same fabrication
+procedure (Fig. 2G). This finger-level process can be applied independently to each digit, allowing
+the glove configuration to be tailored to an individual’s hand geometry.
+Actuator Characterization
+We systematically characterized the force and bending moment output of the proposed actuators.
+The thumb actuator was selected as a representative case, with flexion and extension components
+evaluated separately (Fig. 3A). Bending moment was measured as a function of fold angle and
+inflation pressure using a rotational servo motor and load cell (Fig. 3B). Results showed that moment
+increased monotonically with both fold angle and inflation pressure, reaching a torque of 0.27 N·m
+at 80 kPa for the flexion actuator (Fig. 3C, D). Fingertip blocking force for the flexion actuator
+reached 12.2 N at 80 kPa (Fig. 3E, F), comparable to previously reported fabric-based designs [12,
+32]. Characterization of the extension actuator under comparable conditions yielded a peak bending
+moment of 0.23 N·m at 80 kPa (Fig. 3G, H, I), with the combined five-finger extension moment
+exceeding 1 N·m at that pressure. The slightly lower extension moment relative to flexion is due to
+the smaller actuator used. Together, these results confirm that the dual-action actuators provide
+sufficient mechanical output for both assistive and rehabilitative hand tasks.
+Glove Grasping Performance
+Grasp force is a critical performance metric for rehabilitation gloves, as it directly determines the
+range of ADL tasks the device can support. Force output was measured using two sensors positioned
+as illustrated in Supplementary Figure 1A. Grasp force exhibited directional variation (Fig. 4B, C):
+at 80 kPa, the total pinch output reached 9.8 N, with the sensor proximate to the thumb consistently
+recording higher forces, consistent with the dominant role of the thumb in opposition-based grasping.
+Normal grasping force, evaluated under the configuration shown in Supplementary Figure 1B,
+reached a maximum of 24.8 N at 100 kPa, demonstrating the glove’s capacity to support power
+grasp tasks. This is comparable to previously reported fabric-based soft gloves [12] and sufficient to
+assist with ADLs such as gripping bottles and cylindrical objects [51].
+Frictional grasping force, which governs the ability to hold objects against gravitational or re-
+sistive loads, was further characterized using the configuration shown in Supplementary Figure 1C.
+The effects of inflation pressure and cylinder diameter on frictional output were systematically in-
+vestigated (Fig. 4H, I). Frictional force increased with inflation pressure across all cylinder diameters
+5
+
+Figure 2:Actuator design and fabrication. (A)and(B)Customized flexion and extension
+actuators fabricated via CNC heat sealing.(C)and(D)dual-action actuator assembly by heat
+sealing flexion chambers, extension chambers, and a bottom constraint layer.(E)and(F)Actuator
+deflection toward the target flexion and extension postures upon selective chamber inflation.(G)
+Thumb abduction actuator fabrication process.
+6
+
+Figure 3:Thumb actuator characterization. (A)Extension and flexion actuator operating
+configurations.(B)Moment characterization experimental setup.(C)and(D)Effects of fold
+angle and inflation pressure on flexion bending moment.(E)and(F)Fingertip blocking force
+measurement setup and results.(G)Extension actuator moment characterization setup.(H)and
+(I)Effects of fold angle and inflation pressure on extension bending moment.
+7
+
+tested, and larger diameters generally yielded higher friction due to increased contact area between
+the glove and the object surface. These results suggest that the glove is particularly well suited for
+grasping cylindrical objects commonly encountered in ADL-based rehabilitation protocols [51].
+Taken together, the characterization results demonstrate that the proposed glove provides me-
+chanically sufficient and functionally relevant grasping performance across multiple grasp types,
+supporting its suitability for structured hand rehabilitation.
+Preliminary study with healthy subjects
+To evaluate the glove’s capacity to reduce muscle activity during object manipulation, we conducted a
+preliminary study with ten healthy subjects (demographics in Supplementary Table 1). Participants
+transported six representative objects of varying dimensions and mass (Supplementary Figure 2A
+and Supplementary Table 2) while wearing a Medium-density surface electromyography (sEMG)
+sleeve with 32 channels to capture the forearm muscle activation throughout the tasks (Fig. 5A–C;
+Supplementary Figures 2B and 2C). Three conditions were evaluated: no glove (bare hand), passive
+glove (worn but unactuated), and active glove (60 kPa applied to both flexion and extension channels
+for all participants).
+Compared to the no-glove condition, active glove use reduced muscle activity across channels,
+whereas the passive glove condition did not significantly increase muscular effort, indicating that
+the device imposes minimal mechanical impedance when unactuated (Fig. 5D–F). The degree of
+assistance varied across objects (Supplementary Figures 3–8). Statistically significant reductions in
+muscle activity were observed for Objects 2, 3, 5, and 6, with mean reductions of 37% (p= 0.001),
+29% (p= 0.001), 7% (p= 0.007), and 35% (p= 0.005), respectively. For Object 4, the reduction
+approached but did not reach the significance threshold (p= 0.053). The button-switch actuation
+interface increased task completion time by 101% for Object 1 (p= 0.005), 46% for Object 2
+(p= 0.003), 76% for Object 3 (p= 0.005), 69% for Object 4 (p= 0.001), 55% for Object 5
+(p= 0.014), and 39% for Object 6 (p= 0.001), relative to the no-glove condition (all one-tailed
+Wilcoxon signed-rank tests). This additional time reflects the manual button-switch interface and
+the finite inflation and deflation latency of the pneumatic system rather than mechanical resistance
+from the glove, consistent with the absence of a significant time or muscle-activity increase in the
+passive condition. Despite this overhead, the consistent reductions in muscle activity for larger and
+heavier objects confirm that the glove provides effective mechanical assistance during functional
+manipulation tasks (Fig. 5G–H; Supplementary Figure 2E).
+Pilot Feasibility Study with Cervical SCI Patients
+Given that individuals with cervical SCI exhibit different muscle strength and coordination patterns
+compared to healthy subjects, and that the glove’s primary target population is neurologically
+impaired users, we conducted a pilot feasibility study with three individuals with cervical SCI (2
+male, 1 female; injury levels C5–C7; AIS grades A–D; time since injury 2–24 months), as shown in
+Fig. 6A. Detailed participant demographics are provided in Supplementary Table 3.
+8
+
+Figure 4:Glove grasping performance characterization. (A)Directional grasp force mea-
+surement setup.(B)and(C)Directional grasp force at different inflation pressures.(D)and(E)
+Normal grasp force measurement configuration.(F)Normal grasp force as a function of inflation
+pressure.(G)Frictional grasp force measurement setup.(H)and(I)Effects of inflation pressure
+and cylinder diameter on frictional grasp force.
+9
+
+Figure 5:Protocol and results of the preliminary healthy subjects study. (A)–(C)Partic-
+ipants performing six transport tasks with the sEMG sleeve under three glove conditions (no glove,
+passive, and active).(D)–(F)Averaged sEMG amplitude across 31 active channels for Object 2,
+illustrating differences between conditions.(G)–(H)Mean muscle activity and task completion
+time across six objects under the three conditions.
+10
+
+Each participant completed a personalized subset of seven tasks (Fig. 6B) selected according
+to their residual motor capacity: T1—box and block test, T2—water pouring test (GRASSP sub-
+task), T3—jar opening test (GRASSP sub-task), T4—nine-hole peg test, and three non-standardized
+object-transport tasks: T5—spherical grasp, T6—cylindrical grasp, and T7—lateral grasp.
+For Task 1, Subjects 1 and 2 transferred fewer blocks per trial relative to the unassisted condition,
+likely attributable to the additional actuation time required per grasp cycle; in contrast, Subject 3
+achieved a higher block count with glove assistance (Fig. 6C). Notably, all three participants exhib-
+ited fewer object drops with the glove than in the unassisted condition, indicating improved grasp
+stability across the cohort.
+For Task 2 (water pouring), Subject 1 was unable to initiate the task without the glove but could
+partially complete it with assistance, representing a clinically meaningful functional gain. Subject 2
+could complete the task without the glove only through tenodesis grasp; with glove assistance, the
+same task was accomplished without this compensation, yielding a higher functional score. For
+Tasks 3 and 4, a modest performance improvement was observed for Subject 2 with glove assistance,
+while no notable difference was recorded for the other participants.
+For Tasks 5 and 6, task completion time increased marginally with glove use; however, glove
+assistance enabled Subject 3 to eliminate tenodesis grasp entirely, achieving more anatomically
+consistent movement patterns. For Task 7, Subject 3 was unable to perform the task under either
+condition, and no meaningful difference was observed for Subject 2.
+Although all participants required additional time for actuation, the overall results indicate that
+glove assistance enhanced hand function in several respects: promoting more natural grasp patterns,
+reducing reliance on tenodesis grasp, and decreasing the incidence of object drops (Supplementary
+Figure 9). These findings support the feasibility of the proposed approach in a clinical cervical SCI
+population.
+Discussion
+We have developed a dual-action fabric-based soft robotic glove that addresses key limitations of
+current hand rehabilitation devices through geometric customizability and ergonomic design.
+Symmetrical-chamber architecture and ergonomic conformity.The symmetrical-chamber
+actuator offers a practical alternative to conventional single-chamber pneumatic actuators. Its two
+symmetric chambers, shaped by CNC heat sealing, serve a dual role: their symmetry yields a con-
+cave contact surface that conforms to the convex finger dorsum and is intended to distribute contact
+pressure more evenly, while their CNC-defined profile, mapped to the inflated bending angle by the
+near-linear relationship from our prior work [43], can be tailored to a wearer’s joint angles. Whereas
+our prior symmetrical-chamber glove provided flexion assistance only [44], here we extend the design
+to a dual-action glove adding extension and thumb abduction, a degree of freedom often absent from
+existing designs, while retaining the compliance and low weight of fabric-based actuators. The same
+profile customization can also target different postures, such as the distinct finger configurations of
+a power grasp versus a pinch, pointing to future potential for task-oriented training.
+Mechanical performance and assistive effectiveness.The characterization confirms that
+11
+
+Figure 6:Pilot clinical feasibility study. (A)Experimental setup for clinical testing.(B)
+Overview of the seven evaluation tasks.(C)–(J)Task-level results for three individuals with cervical
+SCI under assisted and unassisted conditions.
+12
+
+the actuators and glove generate forces adequate for ADL-relevant tasks, comparable to previously
+reported fabric-based designs [12, 32]. The passive glove produced no significant increase in muscular
+effort over the bare hand, indicating negligible mechanical impedance when unactuated, which suits
+continuous wear across both active and passive phases of a session. The consistent EMG reductions
+for larger and heavier objects further suggest that the assistive benefit scales with task demand.
+Positioning relative to existing soft rehabilitation gloves.We compared the proposed
+glove against representative soft rehabilitation gloves spanning pneumatic, cable-driven, and shape-
+memory-alloy actuation (Supplementary Tables 4 and 5). Several prior fabric-based gloves report
+fingertip or grasping forces comparable to, or higher than, those measured here. The design objective
+of a wearable rehabilitation glove, however, differs from that of a standalone gripper optimized for
+maximal output: the target is force sufficient for activities of daily living while remaining safe and
+comfortable on the hand, rather than maximal. The fingertip force (12.2 N at 80 kPa), grasp force
+(9.8 N at 80 kPa), and normal grasping force (24.8 N at 100 kPa) reported here fall within the range
+required for common ADL objects [51]. What distinguishes the present device is therefore not any
+single metric but the combination, within a 90 g all-fabric package, of ergonomic concave contact,
+geometric customizability, dual-action assistance, and thumb abduction; to our knowledge, no prior
+design in this comparison offers all four.
+Functional completeness and clinical relevance.Many existing soft gloves provide flexion
+assistance only, limiting their utility for users who also need active finger extension for volitional
+object release in cervical SCI [10, 12]. By adding active extension and thumb abduction in a single
+lightweight device, the proposed glove supports a more complete set of functional movements. In
+the pilot SCI study, glove assistance was associated with new task initiation, reduced reliance on
+tenodesis strategies, and fewer object drops. These preliminary findings suggest potential clinical
+value, though the study did not isolate the contribution of any individual design element and the
+small sample precludes definitive conclusions.
+Limitations and future directions.Several limitations remain. First, actuators are fabricated
+individually from manual hand measurements, and customization was not applied systematically:
+the present devices used representative hand dimensions, with dimensional adaptation demonstrated
+in only one participant; automated measurement and a controlled comparison of customized versus
+standardized configurations are needed. Second, both studies are small and demographically narrow
+(ten healthy males, and three individuals with cervical SCI over a few sessions), so the findings
+are preliminary; larger, more diverse, and longitudinal trials, including individuals with stroke, are
+required to establish efficacy. Third, the study used only two whole-hand gestures under simultane-
+ous actuation; although the control box supports per-finger actuation, its potential for task-specific
+grasps such as pinch, and for task-oriented training, was not evaluated [45, 46]. Fourth, the button-
+switch interface increased task completion time; more natural intent detection such as surface EMG
+or wrist motion sensing could reduce this overhead. Fifth, the thumb abduction actuator provides
+only a single direction; active bidirectional abduction could further extend the achievable thumb
+workspace. Finally, further miniaturization of the control box and assessment of long-term actuator
+durability remain for future work.
+Conclusion.In summary, the proposed glove demonstrates that a customizable, ergonomically
+13
+
+informed design can improve both comfort and functional performance in hand rehabilitation. Real-
+ized through CNC heat sealing, the symmetrical-chamber actuators are designed to conform to the
+finger dorsum and to provide active flexion, extension, and thumb abduction across all five digits,
+with mechanical output adequate for ADL-relevant tasks. Evaluation in healthy subjects and in-
+dividuals with cervical SCI provides encouraging preliminary evidence of functional utility; further
+controlled clinical investigation is needed to establish therapeutic efficacy and support translation
+to practice.
+Materials and Methods
+Actuator and Glove Materials
+All actuator chambers were fabricated from thermoplastic polyurethane (TPU)-coated nylon fabric
+(Adventure Expert, Slovenia). Two fabric variants were used depending on their functional role:
+40D ripstop nylon with single-sided TPU coating was used for the flexion-side outer layers (depicted
+in orange in Fig. 2), providing higher tensile stiffness to resist outward expansion during flexion
+inflation; 20D nylon ripstop with double-sided TPU coating was used for the extension-side layers
+and the bottom constraint layer (depicted in green). The double-sided TPU coating of the 20D fabric
+ensures reliable thermal bonding between adjacent layers during assembly. TPU pneumatic tubing
+(outer diameter 4 mm, inner diameter 2.5 mm) connected the actuator chambers to the solenoid
+valves. Tubes were inserted through a small incision at the proximal end of each chamber and secured
+with cyanoacrylate adhesive. Velcro hook-and-loop fasteners were used for all actuator-to-base and
+strap attachment points. Fingertip sleeves were adapted from commercially available gloves and
+heat sealed to the distal end of each dual-action actuator. For the clinical SCI study, all fingertip
+sleeves were additionally coated with a thin layer of platinum-cure silicone rubber (Smooth-On Mold
+Max 40, Shore A 40) applied by brush and allowed to cure at room temperature for 24 h, to increase
+friction between the glove surface and grasped objects.
+CNC Heat Sealing Fabrication and Glove Assembly
+A commercial FDM 3D printer (Anycubic Mega, Anycubic, China) was modified into a CNC ther-
+mal sealing platform by replacing the extruder assembly with a custom resistive heating element.
+Sealing path coordinates were derived from 3D geometric models of the target actuator contours
+and exported as G-code for the CNC platform; all corresponding STL files are provided in the Sup-
+plementary Material. Following CNC heat sealing, chamber outlines were manually trimmed along
+the outer sealed boundary, leaving a 4 mm bonded margin to prevent delamination under inflation
+pressure.
+Flexion and extension chambers were paired for each finger and heat sealed together with a
+bottom constraint layer to form a dual-action actuator. Assembly-layer heat sealing was performed
+manually using a flat-tip handheld heat sealer at 200 ◦C. Each completed dual-action actuator was
+fitted with a fingertip sleeve at the distal end and a Velcro patch at the proximal end for attachment
+to the fabric hand base. Five dual-action finger actuators were arranged on the fabric base. The
+14
+
+thumb abduction actuator, fabricated following the same procedure, was positioned between the
+thumb and index finger and attached via Velcro. Three adjustable Velcro straps at the dorsal hand,
+wrist, and forearm provided secure anchoring of the glove to the user’s hand.
+Pneumatic Control System
+A portable silent piston air compressor (FIAC, Italy) provided regulated compressed air at up to
+800 kPa for all characterization experiments. Proportional pressure control valves (ITV0010, SMC,
+Japan) regulated outlet pressure to each actuator channel. An ESP32 microcontroller (Espressif
+Systems) issued pressure commands via the analog output interface of the ITV0010 valves and
+received pressure feedback from the valves’ built-in sensors.
+The wearable control box housed the ESP32 microcontroller, 12 N-channel MOSFET gate drivers,
+12 miniature solenoid on/off valves (operating voltage 12 V DC), a lithium polymer battery pack,
+and a step-down voltage regulation board (Supplementary Figure 2D). The 12 solenoid channels
+provided independent binary switching (inflate or deflate) for each actuator port: two channels per
+dual-action finger actuator (one flexion, one extension) for five fingers, plus one channel for the thumb
+abduction actuator. The microcontroller communicated with a smartphone via a Wi-Fi access point
+hosted on the ESP32 through a browser-based graphical interface. Predefined gesture programs
+(full flexion, full extension, index pointing, and lateral pinch) were implemented as sequential valve
+switching commands; in the present study, only the full flexion and full extension programs were
+used during experimental sessions.
+Actuator Mechanical Characterization
+Bending moment was characterized using a servo motor (CubeMars AK80-8, T-Motor) mounted
+rigidly to a steel frame. The actuator was fixed at its proximal end to a clamp attached to the
+motor shaft. As the motor rotated the actuator at a constant angular velocity of 3 ◦/s through the
+target range of fold angles, a single-axis load cell (LSB205, Futek, USA) measured the reaction force
+at a fixed moment arm, from which bending moment was computed. Inflation pressure was held
+constant during each sweep by the ITV0010 valve. The load cell signal was sampled at 80 Hz and
+processed with a 20-point moving average filter. Fingertip blocking force was measured with the
+actuator fixed in the straight (unbent) configuration, with a load cell positioned at the fingertip
+contact point.
+Glove Grasping Force Characterization
+For directional grasp force measurement, a custom cylinder (diameter 40 mm) was instrumented with
+two LSB205 load cells (Futek, USA) positioned on opposite sides to measure the force components
+exerted by each side of the glove independently, thereby avoiding internal reaction force cancellation
+that would occur with a single centrally mounted sensor. One subject was instructed to wear the
+glove and maintain a fully relaxed hand posture throughout the measurement. Inflation pressure
+15
+
+was increased incrementally and the corresponding force output was recorded at each step. Three
+repetitions were conducted and results are reported as mean±standard deviation.
+Normal and frictional grasping forces were evaluated using a universal materials testing machine
+(FMT-313, PPT GmbH, Germany) equipped with a 50 N load cell. For normal force measurement,
+the glove was donned on a rigid hand frame secured to the lower fixture of the testing machine. A
+rotatable rigid cylinder was placed at a standardized starting position between the glove-covered
+fingers, and the upper fixture displaced the cylinder vertically upward at 200 mm/min while the
+compressive grasp force was recorded as a function of displacement. For frictional force measurement,
+the cylinder was displaced axially at the same traverse speed while the glove maintained a fixed
+inflation pressure of 100 kPa, with the displacement direction opposing the frictional resistance
+generated by the grasp. Two cylinder diameters (60 mm and 80 mm) were tested to characterize the
+effect of object geometry on frictional output. Three repetitions were conducted for each condition
+and averaged for analysis.
+Healthy Subjects Study
+Participants
+A preliminary user study was conducted with 10 healthy male subjects (height: 180.4±7.1 cm;
+weight: 80.0±9.6 kg; age: 29.9±3.7 years; hand length: 20.0±0.4 cm; full demographic data in
+Supplementary Table 1). All participants reported no history of upper-limb injury or neurological
+disease. All experimental tasks were performed on the right hand. The study protocol was approved
+by the Research Ethics Committee of Scuola Superiore Sant’Anna, and all participants provided
+written informed consent prior to participation.
+Experimental Protocol
+Six objects of varying dimensions and mass, representative of common household items encountered
+in ADL-based rehabilitation, were prepared (Supplementary Table 2). Participants were instructed
+to pick up each object with minimal effort, transport it horizontally 25 cm, and set it down, proceed-
+ing sequentially from Object 1 to Object 6. Three glove conditions were evaluated: no glove (bare
+hand), passive glove (worn but unactuated, to assess added mechanical impedance), and active glove
+(60 kPa applied simultaneously to both the flexion and extension channels). Three repetitions were
+completed per object per condition. Condition order was randomized across participants to reduce
+order and learning effects. Actuation was controlled by the participant via a handheld button switch
+held in the contralateral hand, enabling manual toggling between the full extension and full flexion
+gestures.
+sEMG Recording and Processing
+Muscle activity was recorded using a customized medium-density sEMG sleeve with 32 independent
+channels (31 active, 1 non-functional), adapted from our prior work [52] (Supplementary Figures 2B
+and 2C). The sleeve is easy to don and doff and provides coverage of the relevant forearm region. Data
+16
+
+were sampled at 1000 Hz and preprocessed using a 50 Hz notch filter (Q= 30) and a 15–450 Hz fifth-
+order Butterworth band-pass filter. Muscle activation was quantified using RMS features computed
+with 0.25 s windows (0.15 s shift), and amplitudes were normalized to each participant’s maximum
+voluntary contraction (MVC) and expressed as %MVC [44, 53]. Using the recorded time labels,
+pick-and-place epochs were extracted for each of the six objects. The RMS amplitude of each epoch
+was computed per channel, object, and condition, yielding 30 values per combination (10 subjects
+×3 repetitions), with occasional reduction to 29 due to data loss.
+Statistical analysis employed the one-tailed Wilcoxon signed-rank test for both task completion
+time and normalized muscle activation (%MVC), following confirmation of non-normality in several
+conditions via the Shapiro–Wilk test. Directional hypotheses were specified a priori as follows: the
+active glove was expected to reduce muscle activation (Active<No glove) and increase task com-
+pletion time (Active>No glove); the passive glove was expected to increase both muscle activation
+(Passive>No glove) and task completion time (Passive>No glove) relative to the no-glove con-
+dition. The absence of significant differences in the passive glove comparisons was interpreted as
+evidence of minimal mechanical impedance introduced by the passive structure. Significance levels
+are denoted as ∗∗∗:p <0.005; ∗∗:p <0.01; ∗:p <0.05.
+Pilot Feasibility Study in Cervical SCI
+Participants
+Two individuals with chronic and one with acute cervical SCI were recruited from Careggi Hospital
+(Unit` a Spinale Unipolare), Florence, Italy. Injury levels ranged from C4 to C7, with AIS grades from
+A to D. Time since injury ranged from 2 to 24 months. All participants presented with clinically
+confirmed upper-limb motor impairment affecting hand function. Detailed demographic and clinical
+characteristics are summarized in Supplementary Table 3. Given the limited sample size inherent
+to a pilot study, findings should be interpreted as preliminary evidence of device feasibility rather
+than definitive clinical efficacy.
+All ethical and experimental procedures were approved by the Ethics Committee of Careggi
+University Hospital (Florence, Italy) in compliance with the Declaration of Helsinki and applicable
+Good Clinical Practice guidelines. All participants provided written informed consent prior to
+enrolment.
+Experimental Protocol
+Seven functional tasks were administered to assess the effect of glove assistance on upper-limb
+performance (details of task see Supplementary notes). The first four tasks followed established
+standardized protocols, while the remaining three were purpose-designed for this study. Task 1 was
+the box and block test [54]: participants transferred as many blocks as possible across a central
+partition within 1 minute; the number of successful transfers and accidental drops were recorded
+to quantify gross hand dexterity. Tasks 2 and 3 comprised sub-tasks from the GRASSP clinical
+assessment protocol [55, 56]: a water pouring test and a jar opening test, respectively. Task 4 was
+the nine-hole peg test, in which participants transferred nine pegs into a pegboard; total completion
+17
+
+time was recorded as a measure of fine manual dexterity. For Tasks 5–7, three lightweight objects
+were custom 3D-printed to elicit distinct grasp patterns: a sphere (34 g,ϕ70 mm) for spherical
+grasp, a cylinder (22 g,ϕ30×130 mm) for cylindrical grasp, and a handled cup (58 g, 5 mm wall
+thickness) for lateral grasp. Participants were instructed to transport each object to a designated
+target location. These three tasks were inspired by [57] and are compatible with the glove’s actuation
+design.
+Each participant completed three repetitions of each assigned task under two conditions: with
+and without glove assistance. Participants operated the actuation system using a contralateral hand-
+held button switch. Task allocation was individualized according to each participant’s residual motor
+capacity: Subject 1 completed Tasks 1–4; Subject 3 completed Tasks 1 and 5–7; Subject 2 completed
+all seven tasks. To accommodate Subject 3 (female), the index and middle finger actuators were
+replaced with smaller-sized counterparts, and active assistance was restricted to the thumb, index,
+and middle fingers. All fingertip sleeves were coated with a thin silicone layer (Smooth-On Mold
+Max 40) to enhance friction with grasped objects.
+The glove was fitted to the more affected hand as determined by clinical assessment. Subject 1
+was assisted on the right hand; Subjects 2 and 3 received assistance on the left hand. Actuation
+pressure was individually calibrated prior to the experimental session based on subjective comfort
+and perceived adequacy of assistance: Subject 1 at 70 kPa, Subject 2 at 50 kPa, and Subject 3 at
+60 kPa. Pressure was adjusted iteratively during a brief familiarization protocol until the participant
+reported satisfactory assistive force without discomfort.
+Performance Scoring
+For Tasks 2–4, task performance was quantified using a six-level ordinal scoring rubric adapted from
+the GRASSP protocol [56], with a maximum allowable duration of 2 min per task:
+0— The task cannot be initiated.
+1— Less than 50% of the task is completed; the expected grasp pattern is not achieved.
+2— 50% or more of the task is completed; the expected grasp pattern is not achieved.
+3— The task is completed using tenodesis or an alternative compensatory grasp pattern.
+4— The task is completed using the expected grasp pattern with difficulty (slow or non-fluid
+movement).
+5— The task is completed fluently using the expected grasp pattern.
+The 50% completion threshold for Task 2 is defined as the onset of liquid pouring; for Task 4, it is
+defined as the moment the participant positions a peg at the pegboard insertion point.
+18
+
+Declaration statements
+Data Availability
+All data are available in the main text or the supplementary materials. The control software, and
+experimental datasets supporting the conclusions of this article are available from the corresponding
+author upon reasonable request.
+Acknowledgments
+This project was funded by MSCA-DN / Project 101073374 - ReWIRE. Views and opinions expressed
+are however those of the author(s) only and do not necessarily reflect those of the European Union
+or the European Research Executive Agency (REA). Neither the European Union nor the granting
+authority can be held responsible for them.
+Author Contributions
+R.C.: Conceptualization, Methodology, Investigation, Formal analysis, Visualization, Writing – orig-
+inal draft, Validation. F.I.S.: Investigation, Methodology, Visualization. D.C.: Methodology, In-
+vestigation, Writing – review and editing. X.M.: Investigation, Validation. E.L.: Methodology,
+Resources, Writing – review and editing. G. R.: Methodology, Investigation, Data curation, Re-
+sources. C.D.S: Methodology, Investigation, Data curation. F. S.: Methodology, Investigation.
+C.C.: Methodology. V.M.: Resources. D.L.: Methodology, Supervision. G. D. P.: Supervision,
+Methodology, Resources. S.M.: Supervision, Funding acquisition, Writing – review and editing.
+A.F.: Supervision, Funding acquisition, Writing – review and editing. All authors reviewed and
+approved the final manuscript.
+Conflicts of Interest
+The authors declare that there is no conflict of interest regarding the publication of this article.
+References
+1. Kottink A, Nikamp C, Bos F, et al. Therapeutic Effect of a Soft Robotic Glove for Activities
+of Daily Living In People With Impaired Hand Strength: Protocol for a Multicenter Clinical
+Trial (iHand). JMIR Res Protoc. 2022; 11 (4): e34200. DOI: https://doi. org/10.2196/34200.
+PMID: https://www. ncbi. nlm. nih. gov/pubmed/35380115.
+2. Feigin VL, Brainin M, Norrving B, et al. World Stroke Organization (WSO): global stroke fact
+sheet 2022. International Journal of Stroke 2022;17:18–29.
+3. Park YH, Lee DH, and Lee JH. A comprehensive review: robot-assisted treatments for gait
+rehabilitation in stroke patients. Medicina 2024;60:620.
+19
+
+4. Hu X, Xu W, Ren Y, et al. Spinal cord injury: molecular mechanisms and therapeutic inter-
+ventions. Signal transduction and targeted therapy 2023;8:245.
+5. Roberts TC, Wood MJ, and Davies KE. Therapeutic approaches for Duchenne muscular dys-
+trophy. Nature Reviews Drug Discovery 2023;22:917–34.
+6. Martin SS, Aday AW, Almarzooq ZI, et al. 2024 heart disease and stroke statistics: a report of
+US and global data from the American Heart Association. Circulation 2024;149:e347–e913.
+7. Michaelsen SM, Dannenbaum R, and Levin MF. Task-Specific Training With Trunk Restraint
+on Arm Recovery in Stroke. Stroke 2006;37:186–92.
+8. Pripotnev S, Bruce J, Novak CB, Kennedy CR, and Fox IK. Quantifying tenodesis hand func-
+tion in cervical spinal cord injury: implications for function. The Journal of Hand Surgery
+2023;48:700–10.
+9. Jung HY, Lee J, and Shin HI. The natural course of passive tenodesis grip in individuals with
+spinal cord injury with preserved wrist extension power but paralyzed fingers and thumbs.
+Spinal Cord 2018;56:900–6.
+10. Cappello L, Meyer JT, Galloway KC, et al. Assisting hand function after spinal cord injury with
+a fabric-based soft robotic glove. Journal of neuroengineering and rehabilitation 2018;15:1–10.
+11. Correia C, Nuckols K, Wagner D, et al. Improving Grasp Function After Spinal Cord Injury
+With a Soft Robotic Glove. IEEE Transactions on Neural Systems and Rehabilitation Engi-
+neering 2020;28:1407–15.
+12. Lim DYL, Lai HS, and Yeow RCH. A bidirectional fabric-based soft robotic glove for hand func-
+tion assistance in patients with chronic stroke. Journal of NeuroEngineering and Rehabilitation
+2023;20:120.
+13. Kim DH, Lee Y, and Park HS. Bioinspired high-degrees of freedom soft robotic glove for
+restoring versatile and comfortable manipulation. Soft robotics 2022;9:734–44.
+14. Nanayakkara VK, Cotugno G, Vitzilaios N, Venetsanos D, Nanayakkara T, and Sahinkaya
+MN. The role of morphology of the thumb in anthropomorphic grasping: a review. Frontiers in
+mechanical engineering 2017;3:5.
+15. Ingram JN, K¨ ording KP, Howard IS, and Wolpert DM. The statistics of natural hand move-
+ments. Experimental brain research 2008;188:223–36.
+16. Xie D, Su Y, Shi X, Li Z, and Tong RKy. Soft Hand Extension Glove with Thumb Abduction
+and Extension Assistance. In:2024 IEEE International Conference on Robotics and Automation
+(ICRA). 2024:2993–9.doi:10.1109/ICRA57147.2024.10610770.
+17. de Kraker M, Selles R, Schreuders T, Hovius S, and Stam H. The Pollexograph®: A New Device
+for Palmar Abduction Measurements of the Thumb. Journal of Hand Therapy 2009;22:271–7.
+18. Gassert R and Dietz V. Rehabilitation robots for the treatment of sensorimotor deficits: a
+neurophysiological perspective. Journal of neuroengineering and rehabilitation 2018;15:1–15.
+19. Tiboni M and Amici C. Soft gloves: A review on recent developments in actuation, sensing,
+control and applications. In:Actuators. Vol. 11. 8. MDPI. 2022:232.
+20
+
+20. Maceira-Elvira P, Popa T, Schmid AC, and Hummel FC. Wearable technology in stroke reha-
+bilitation: towards improved diagnosis and treatment of upper-limb motor impairment. Journal
+of neuroengineering and rehabilitation 2019;16:1–18.
+21. Polygerinos P, Wang Z, Galloway KC, Wood RJ, and Walsh CJ. Soft robotic glove for combined
+assistance and at-home rehabilitation. Robotics and Autonomous Systems 2015;73. Wearable
+Robotics:135–43.
+22. Bagneschi T, Chiaradia D, Righi G, Popolo GD, Frisoli A, and Leonardis D. A Soft Hand
+Exoskeleton With a Novel Tendon Layout to Improve Stable Wearing in Grasping Assistance.
+IEEE Transactions on Haptics 2023;16:311–21.
+23. Kang BB, Lee H, In H, Jeong U, Chung J, and Cho KJ. Development of a polymer-based
+tendon-driven wearable robotic hand. In:2016 IEEE International Conference on Robotics
+and Automation (ICRA). 2016:3750–5.doi:10.1109/ICRA.2016.7487562.
+24. Alicea R, Xiloyannis M, Chiaradia D, Barsotti M, Frisoli A, and Masia L. A soft, synergy-based
+robotic glove for grasping assistance. Wearable Technologies 2021;2:e4.
+25. Lai J, Song A, Shi K, Ji Q, Lu Y, and Li H. Design and Evaluation of a Bidirectional Soft
+Glove for Hand Rehabilitation-Assistance Tasks. IEEE Transactions on Medical Robotics and
+Bionics 2023;5:730–40.
+26. Lee SM and Park J. A soft wearable exoglove for rehabilitation assistance: a novel application
+of knitted shape-memory alloy as a flexible actuator. Fashion and Textiles 2024;11:14.
+27. Hong Kai Yap, Jeong Hoon Lim, Fatima Nasrallah, James Cho Hong Goh, and Chen-Hua Yeow.
+Characterisation and evaluation of soft elastomeric actuators for hand assistive and rehabilita-
+tion applications. Journal of Medical Engineering & Technology 2016;40. PMID: 27007297:199–
+209.
+28. Polygerinos P, Galloway KC, Sanan S, Herman M, and Walsh CJ. EMG controlled soft robotic
+glove for assistance during activities of daily living. In:2015 IEEE International Conference
+on Rehabilitation Robotics (ICORR). 2015:55–60.doi:10.1109/ICORR.2015.7281175.
+29. Suulker C, Hassan A, Skach S, and Althoefer K. A Comparison of Silicone and Fabric Inflatable
+Actuators for Soft Hand Exoskeletons. In:2022 IEEE 5th International Conference on Soft
+Robotics (RoboSoft). 2022:735–40.doi:10.1109/RoboSoft54090.2022.9762074.
+30. Yap HK, Ang BWK, Lim JH, Goh JCH, and Yeow CH. A fabric-regulated soft robotic glove
+with user intent detection using EMG and RFID for hand assistive application. In:2016 IEEE
+International Conference on Robotics and Automation (ICRA). 2016:3537–42.doi:10.1109/
+ICRA.2016.7487535.
+31. Ge L, Chen F, Wang D, et al. Design, Modeling, and Evaluation of Fabric-Based Pneumatic
+Actuators for Soft Wearable Assistive Gloves. Soft Robotics 2020;7. PMID: 31995436:583–96.
+32. Lai J, Song A, Wang J, et al. A Novel Soft Glove Utilizing Honeycomb Pneumatic Actuators
+(HPAs) for Assisting Activities of Daily Living. IEEE Transactions on Neural Systems and
+Rehabilitation Engineering 2023;31:3223–33.
+21
+
+33. Feng M, Yang D, and Gu G. High-Force Fabric-Based Pneumatic Actuators With Asymmetric
+Chambers and Interference-Reinforced Structure for Soft Wearable Assistive Gloves. IEEE
+Robotics and Automation Letters 2021;6:3105–11.
+34. Yap HK, Khin PM, Koh TH, et al. A fully fabric-based bidirectional soft robotic glove for
+assistance and rehabilitation of hand impaired patients. IEEE Robotics and Automation Letters
+2017;2:1383–90.
+35. Yap HK, Sebastian F, Wiedeman C, and Yeow CH. Design and characterization of low-cost
+fabric-based flat pneumatic actuators for soft assistive glove application. In:2017 International
+Conference on Rehabilitation Robotics (ICORR). IEEE. 2017:1465–70.
+36. Low JH, Ang MH, and Yeow CH. Customizable soft pneumatic finger actuators for hand
+orthotic and prosthetic applications. In:2015 IEEE International Conference on Rehabilitation
+Robotics (ICORR). 2015:380–5.doi:10.1109/ICORR.2015.7281229.
+37. Polygerinos P, Wang Z, Overvelde JTB, et al. Modeling of Soft Fiber-Reinforced Bending
+Actuators. IEEE Transactions on Robotics 2015;31:778–89.
+38. Kokubu S, Nishimura R, and Yu W. Deriving Design Rules for Personalization of Soft Reha-
+bilitation Gloves. IEEE Access 2024;12:14474–86.
+39. Kokubu S, Vinocour PET, and Yu W. Development and evaluation of fiber reinforced mod-
+ular soft actuators and an individualized soft rehabilitation glove. Robotics and Autonomous
+Systems 2024;171:104571.
+40. Yun SS, Kang BB, and Cho KJ. Exo-glove PM: An easily customizable modularized pneumatic
+assistive glove. IEEE Robotics and Automation Letters 2017;2:1725–32.
+41. Lee SM and Park J. Ergonomic glove pattern drafting method for hand assistive devices:
+considering 3D hand dimensions and finger mobility. Fashion and Textiles 2024;11:31.
+42. Liu H, Wu C, Lin S, and Chen Y. Finger joint aligned flat tube folding structure for robotic
+glove design. Smart Materials and Structures 2023;33:015001.
+43. Chen R, Leonardis D, Chiaradia D, and Frisoli A. Geometry-based pneumatic actuators for
+soft robotics. arXiv preprint arXiv:2602.24104 2026.
+44. Chen R, Leonardis D, Frisoli A, and Chiaradia D. A Powerful Customized Fabric-Based Soft
+Robotic Glove for Assistance and Rehabilitation. In:2025 International Conference On Reha-
+bilitation Robotics (ICORR). 2025:669–74.doi:10.1109/ICORR66766.2025.11063169.
+45. Li Y, Lian Y, Chen X, et al. Effect of task-oriented training assisted by force feedback hand
+rehabilitation robot on finger grasping function in stroke patients with hemiplegia: a randomised
+controlled trial. Journal of neuroengineering and rehabilitation 2024;21:77.
+46. Lee CY and Howe TH. Effectiveness of activity-based task-oriented training on upper extremity
+recovery for adults with stroke: a systematic review. The American Journal of Occupational
+Therapy 2024;78:7802180070.
+47. Nguyen PH and Zhang W. Design and computational modeling of fabric soft pneumatic actu-
+ators for wearable assistive devices. Scientific reports 2020;10:9638.
+22
+
+48. Gohlke K, Waldsch¨ utz H, and Hornecker E. WireShape-A Hybrid Prototyping Process for Fast
+& Reliable Manufacturing of Inflatable Interface Props with CNC-Fabricated Heat–Sealing
+Tools. In:Proceedings of the 8th ACM Symposium on Computational Fabrication. 2023:1–8.
+49. Goshtasbi A, Seyido˘ glu B, Murali Babu SP, Parvaresh A, Do CD, and Rafsanjani A. Weld
+n’Cut: Automated fabrication of inflatable fabric actuators. In:2025 IEEE 8th International
+Conference on Soft Robotics (RoboSoft). 2025:1–6.doi:10 . 1109 / RoboSoft63089 . 2025 .
+11020948.
+50. Andrade-Silva I and Marthelot J. Fabric-Based Star Soft Robotic Gripper. Advanced Intelligent
+Systems 2023;5:2200435.
+51. Matheus K and Dollar AM. Benchmarking grasping and manipulation: Properties of the Ob-
+jects of Daily Living. In:2010 IEEE/RSJ International Conference on Intelligent Robots and
+Systems. 2010:5020–7.doi:10.1109/IROS.2010.5649517.
+52. Mendez V, Prestia A, Xu A, Demarchi D, Micera S, and Artoni F. Decoding Finger Move-
+ments from Medium-Density EMG Using GA-Optimized CNNs and Biomechanical Validation.
+Authorea Preprints 2025.
+53. Chen R, Frisoli A, and Chiaradia D. Lateral Pleated Pneumatic Artificial Muscles: High-
+Contraction and Extended High-Force Range Actuators for Soft Robotics. IEEE/ASME Trans-
+actions on Mechatronics 2025:1–11.
+54. Desrosiers J, Bravo G, H´ ebert R, Dutil ´E, and Mercier L. Validation of the Box and Block Test
+as a measure of dexterity of elderly people: reliability, validity, and norms studies. Archives of
+physical medicine and rehabilitation 1994;75:751–5.
+55. Kalsi-Ryan S, Curt A, Fehlings M, and Verrier M. Assessment of the hand in tetraplegia
+using the Graded Redefined Assessment of Strength, Sensibility and Prehension (GRASSP)
+impairment versus function. Topics in Spinal Cord Injury Rehabilitation 2009;14:34–46.
+56. Kalsi-Ryan S, Curt A, Verrier MC, and Fehlings MG. Development of the Graded Redefined
+Assessment of Strength, Sensibility and Prehension (GRASSP): reviewing measurement specific
+to the upper limb in tetraplegia. Journal of Neurosurgery: Spine 2012;17:65–76.
+57. Light CM, Chappell PH, and Kyberd PJ. Establishing a standardized clinical assessment tool
+of pathologic and prosthetic hand function: normative data, reliability, and validity. Archives
+of physical medicine and rehabilitation 2002;83:776–83.
+23

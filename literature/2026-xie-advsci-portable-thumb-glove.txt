@@ -1,0 +1,877 @@
+Advanced Science 
+www.advancedscience.com
+RESEARCH ARTICLE
+A Portable Soft Robotic Glove with Fully Functional Thumb 
+Assistance for Complex Dexterous Fine Motor Skills 
+Disheng Xie1 Zhen Wang1 Zhongping Ye1 Minghao Liu1 Xiangqian Shi1 Shuk Fan Tong1 Jianbin Liu2 
+Chuanbin Mao1 Thomas W. Leung3 Haitao Liu2 Raymond Kai-yu Tong1 
+1 Department of Biomedical Engineering, the Chinese University of Hong Kong, Hong Kong SAR, China 2 Key Laboratory of Mechanism Theory and Equipment 
+Design of Ministry of Education, Tianjin University, Tianjin, China 3 Faculty of Medicine, the Chinese University of Hong Kong, Hong Kong SAR, China 
+Correspondence: Raymond Kai-yu Tong ( kytong@cuhk.edu.hk) 
+Received: 27 February 2026 Revised: 18 May 2026 Accepted: 8 June 2026 
+Keywords: assist as need | origami actuator | rehabilitation | soft robotic glove | thumb 
+ABSTRACT 
+Stroke causes millions of cases of hand disability annually, impairing fine motor skills needed for daily tasks like pinching, 
+circumduction, phone swiping, cap twisting, and thumb opposition. Existing hand exoskeletons and soft gloves often lack adequate 
+thumb support, are bulky, and rely on unsensorized open-loop control. We developed a portable soft robotic glove that provides 
+comprehensive, task-oriented assistance for the thumb and fingers. A novel soft continuous-segmented dual-chamber origami 
+thumb actuator enables active carpometacarpal abduction/adduction, flexion/extension, metacarpophalangeal flexion/extension, 
+and interphalangeal extension, covering the full functional range and generating 18 N tip force–about twice what’s required to 
+overcome typical post-stroke spasticity. The glove integrates a sensorized portable driving and an “assist-as-needed”controller to 
+minimize support and maximize user engagement. Three chronic stroke participants with varied impairment levels performed 
+pinching, lateral pinching, circumduction, phone swiping, cap twisting, and thumb opposition while wearing the glove; all 
+completed the tasks. Across participants, the glove increased lateral pinch force by 62.9% and expanded thumb range of motion 
+ninefold. These results indicate the system’s potential as a practical solution for dexterous, task-oriented rehabilitation to restore 
+functional hand movements and improve daily living. 
+1 Introduction 
+Every year, strokes lead to millions of disabilities [ 1 ], with over 
+half of patients facing difficulties in hand functions that are 
+essential for activities of daily living (ADLs) [ 2 ]. Physical therapy 
+[ 3 ] is the primary intervention that helps patients regain hope 
+for limb control. However, the labor-intensive nature of this 
+therapy, combined with a shortage of qualified physical therapists 
+[ 4 ] presents significant challenges. In response, robotic-assisted 
+rehabilitation [ 5 ] has emerged over the past few decades, with 
+innovations such as hand exoskeletons [ 6 ] and soft robotic 
+gloves [ 7 ] providing repetitive and task-oriented training [ 8, 
+9 ], aiming to address existing shortcomings. These years, evi- 
+dence indicates that task-oriented training, particularly when 
+delivered with varying degrees of complexity that mimic daily 
+activities, enhances neuroplasticity and functional outcomes [ 10 ]. 
+Specifically, the diversity of tasks addressed by assistive devices 
+correlates positively with better recovery. For hand exoskeletons 
+or soft robotic gloves, having greater degrees of freedom to facil- 
+itate finger and thumb movements across a wider range of daily 
+activities leads to improved rehabilitation outcomes. Therefore, 
+the following section reviews the advantages and limitations of 
+Disheng Xie and Zhen Wang contributed equally to this work. 
+This is an open access article under the terms of the Creative Commons Attribution License,whichpermitsuse,distributionandreproduction  in any medium, provided the 
+original work is properly cited. 
+©2026 The Author(s). Advanced Science published by Wiley-VCH GmbH 
+Advanced Science , 2026; 0:e76275 
+https://doi.org/10.1002/advs.76275
+1of12
+
+various robotic-assisted rehabilitation designs, focusing on this 
+critical aspect. Note S1 and Table S1 also provide a detailed 
+comparison of existing methods from more aspects such as 
+weight, response time, etc. 
+Hand exoskeletons first appeared with designs that use motors 
+to drive finger movements through rigid links [ 11, 12 ] showing 
+promise in facilitating recovery through repetitive hand opening 
+and closing movement training [ 13, 14 ]. They are capable of 
+driving the fingers and thumb to flex and extend. Although 
+thumb improved design has emerged with greater degrees of 
+freedom (DOFs) [ 15–17 ], their large volume causes problem to 
+be integrated into daily life [ 4 ] and heavy weight and stiffness 
+impose a burden on stroke survivors with weakened upper limbs 
+[ 18, 19 ], limiting their use in task-oriented training [ 20 ]. To 
+solve aforementioned drawbacks, researchers tend to remove the 
+rigid links away and drive the finger using actuators through 
+lightweight cables forming the cable-driven soft robotics gloves 
+[ 21–24 ], achieving assistance around carpometacarpal (CMC) 
+joint [ 25, 26 ]. The routing of pulling cables between the palm 
+and thenar eminence remains difficult, limiting thumb adduction 
+assistance. Soft robotic gloves driven by soft actuators [ 27, 28 ] 
+have emerged with inherent compliance for natural movement 
+and self-alignment properties. These gloves [ 29, 30 ] demonstrate 
+improved rehabilitative effects [ 31 ] compared to hand exoskele- 
+tons. However, most soft robotic gloves primarily assist the fingers 
+and thumb in flexion and extension, making ADLs such as 
+twisting caps and swiping phones impossible. 
+In summary, at the mechanical level, there are currently few 
+gloves that adequately address the tasks required for daily life 
+as shown in Note S1 and Table S1 . Furthermore, as the DOFs 
+increase, the design of the control box becomes increasingly 
+sophisticated. Previously reported high-DOF hand gloves have 
+seldom reported portable driving methods, let alone demon- 
+strated compatibility with advanced control techniques as shown 
+in Table S1 , limiting their integration into daily life. These 
+limitations render soft robotic gloves ineffective for assisting with 
+complex, dexterous fine motor skills in everyday situations, clas- 
+sifying them as devices for controlled environments. This paper 
+proposes an improved soft robotic glove featuring a dexterous 
+thumb assistance, as illustrated in Figure 1a . It incorporates a 
+soft continuous-segmented dual-chamber origami actuator that 
+actively assists with bidirectional motion for the CMC joint and 
+bending of the metacarpophalangeal (MCP) joint, along with an 
+extension plate for the interphalangeal (IP) joint. This design 
+allows users to perform various daily tasks, such as pinching, 
+swiping a phone, and twisting a cap. The glove integrates an 
+adaptive, “assist as needed” control method and a portable 
+driving system, making it usable in various scenarios. The 
+thumb actuator, shown in Figure 1b , is a dual-chamber origami 
+actuator made from soft, non-stretchable material. By using a 
+continuous segmentation method, the actuator is divided into 
+two continuous-segmented chambers without compromising its 
+deformation. This design maximizes assistive force, range of 
+motion (ROM), and efficiency ever reported, enabling bidirec- 
+tional bending when differential pressures are applied to the 
+two chambers, as illustrated in Figure 1c . This establishes the 
+mechanical foundation of the glove, making it the first to support 
+most daily activities for stroke survivors during task-oriented 
+training. The system allows for user-friendly interaction, and its 
+single-pump driven addresses the compactness issue associated 
+with increased DOFs. Furthermore, it is compatible with assist- 
+as-needed control techniques based on Bayesian optimization, 
+achieving tasks with lowest assistive level to encourage the 
+maximized involvement of users. Overall, the system achieves 
+superior performance compared to other solutions, as shown in 
+Figure 1d,e and in Note S1 . The proposed system represents and 
+pushes a significant advancement in hand assistive and reha- 
+bilitation technology, offering a practical solution for restoring 
+functional hand movements in both task-oriented training and 
+daily life scenarios. 
+2 Results 
+2.1 Continuous-Segmented Dual-Chamber 
+Origami Actuator 
+The dexterous core of the hand originates from the thumb, 
+with the major joint being the CMC joint. This joint is illus- 
+trated by two vertical axes representing abduction/adduction 
+and flexion/extension movements [ 32 ], as depicted in Figure 2a . 
+The MCP joint is a single DOF joint. The two joints can be 
+strategically assisted by a single two-DOF bending actuator to 
+improve compactness. 
+The ROM for the CMC joint is as follows: flexion (21.7 ◦), extension 
+(19.5 ◦), and abduction/adduction (0-51.1 ◦) [ 33–35 ]. However, a 
+range of -8 to 16 ◦forabduction/adduction hasbeen identifiedas  
+sufficient to cover 100% of ADLs [ 26 ]. The force exerted by the 
+thumb is also a crucial factor in facilitating movements related 
+to ADLs. It is found that the torque required for thumb flexion, 
+extension, abduction, and adduction ranges from 0.06 to 1.4 Nm 
+[ 36 ]. During typical ADLs, the force at the thumb tip ranges from 
+3 to 9 N [ 37 ]. Hence the thumb part of the glove must fulfill 
+these requirements. 
+Recent advancements in soft actuators enable multi-directional 
+bending and extension/contraction through parallel arrays. For 
+instance, three 120 ◦-symmetric unstretchable material bending- 
+based bellows achieve two-DOF motion [ 38 ], while four origami 
+actuators enable three-DOF (axial/bidirectional) movement [ 39 ]. 
+However, integrating multiple actuators requires a large volume, 
+whereas to achieve compactness, the cross-sectional area of each 
+chamber may be compromised, resulting in insufficient assistive 
+force. Another approach enhances compactness by adding inter- 
+nal partitions to a single large stretch-based actuator, resulting 
+in dual-chamber [ 40 ], three-chamber [ 41 ], and four-chamber 
+soft actuators [ 42 ]. Unstretchable material bending-based soft 
+actuator, such as bellow or origami actuator has its advantages 
+over the large-stretch based actuator such as the high-upper 
+bound pressure bearing ability [ 43 ] to ensure enough assistive 
+force. However, its low stretching nature hinders the segmen- 
+tation of the actuator, i.e., the wrong segmentation hinders the 
+movement of the original motion and causes the ROM to be 
+less and even the failure of the structure. Hence there requires a 
+continuous segmentation method to divide the origami actuator 
+into a multi-chamber one not to affect the deformation of the 
+actuator. To achieve 2-DOF bending at the CMC joint and 
+bending motion at the MCP joint, a segmented three-chamber 
+design, not two-chamber is the most intuitive choice. However, 
+2of12 AdvancedScience,2026
+
+FIGURE 1 System of the portable soft robotic glove with fully functional thumb assistance. (a) An overview showing how the soft glove assists 
+stroke survivors in performing various daily activities, such as lateral pinching, swiping a phone, and twisting a cap. The core innovation is the multi- 
+degree- of-freedom single actuator and the assist-as-needed control method deployed on it. The user first selects the desired task mode via a smartphone 
+app, after which the system detects the user’s intention to perform the task. The optimization module then assists the movements of the thumb at the 
+lowest level of assistance, maximizing user involvement to achieve the tasks using the actuation and sensing components. (b) Schematic illustration 
+of the soft robotic glove with an enhanced thumb component utilizing the proposed dual-chamber origami actuator. This design also incorporates a 
+force sensor and inertial measurement units (IMUs) mounted on top and bottom end of the actuator to detect thumb motion and the interaction force 
+between the thumb and actuator. The origami actuator is segmented by planes that intersect the parallel edges on both sides. (c) Photos of the soft robotic 
+glove demonstrating thumb adduction, abduction, extension, and flexion. (d) Comparison of daily tasks covered, degrees of freedom, thumb tip force, 
+AdvancedScience,2026 3of12
+
+response speed, control method, and system weight among typical robotic devices that assist hand movement, the Hand of Hope [ 14 ], SMA-driven glove 
+[ 23 ], Exo-Glove Poly III [ 25 ], and this work. Our soft glove demonstrates superior performance compared to these methods. (e) The working principle of 
+the soft glove, in which commands for the desired task are sent to the human-machine interface (HMI), processed by the control circuit, and executed 
+by opening and closing valves to deform the target thumb and fingers. The actual bending angle of the thumb is measured by the relative postures of 
+two IMUs–one mounted on the fingertip and the other on the wrist. The assistive force, measured by the force sensor, is fed to the optimization module 
+for closed-loop control. 
+increasing the number of chambers reduces the cross-sectional 
+area of each chamber, resulting in decreased output force for 
+the same pressure or volume [ 44 ]. Consequently, the generated 
+force may be inadequate to overcome the inherent stiffness of 
+the CMC joint, restricting its application in practical wearable 
+scenarios. Hence, a segmented dual-chamber origami actuator 
+with constraint is chosen for the actuation. 
+To address the issue of internal partitions affecting the extension 
+and contraction of the actuator and to ensure motion continuity 
+between the internal partition and the external surface, this 
+paper proposes a chamber segmentation method performed at the 
+diagonal positions of the actuator, based on the folding theory 
+of origami structure [ 45, 46 ], as shown in Figure 2b . A basic 
+quadrilateral origami structure is used, ensuring that the angles of 
+FIGURE 2 Design concepts of the continuous-segmented dual-chamber origami actuator (a) A biomechanical schematic illustrating the 
+carpometacarpal (CMC), metacarpophalangeal (MCP), and interphalangeal (IP) joints. (b) The continuous segmentation method for a single origami 
+actuator and the trapezoidal design process. (c) The modeled relationship among tip force, taper angle, and bending angle. (d) Finite element method 
+simulations of the relationship among taper angle, tip force, and pressure. (e) Modeled and experimental relationships between tip force and bending 
+angle. (f) Modeled and experimental relationships between tip force and pressure. (g) Comparison of the dual-chamber actuator with other methods. (h) 
+Model tests demonstrate that the dual-chamber actuator enables the model thumb to achieve circumduction motion. (i) The actuator’s range of motion 
+encompasses the typical range of thumb movement for daily activities. 
+4of12 AdvancedScience,2026
+
+the mountain creases match those of the valley creases, resulting 
+in parallel intersection lines of the staggered diagonal creases. 
+Specifically, in Figure 2b , edges 𝑖 𝑗 and 𝐼 𝐽 are parallel, as are 
+edges 𝑗𝑘and 𝐽 𝐾 . Using edges 𝑖 𝑗 and 𝐼 𝐽 as references, a sketch 
+plane is established, connecting points 𝑖and 𝐼, and points 𝑗
+and 𝐽to generate the spatial rectangular plane 𝑖 𝑗 𝐽 𝐼 . The same 
+method is applied to create another spatial rectangular plane 
+𝑗𝑘𝐾 𝐽 using edges 𝑗𝑘and 𝐽 𝐾 . Finally, a continuous internal 
+partition is generated through an array operation, resulting in 
+the dual-chamber structure. More detailed continuation proofs 
+are provided in the Note S2 , where the comparison with other 
+segmentation method is also compared. It is recognized that a 
+higher length-to-side length ratio leads to increased instability, 
+significantly reducing the tip force of soft actuators [ 47 ], whereas 
+a larger taper angle improves structural stability, resulting in 
+greater tip force [ 48, 49 ]. Therefore, the proposed actuator is 
+designed in a trapezoidal origami configuration, as shown in 
+Figure 2b . A mathematical model is proposed in Note S3 to 
+describe the relationships among taper angle, bending angle, and 
+tip force. To enhance the pressure-bearing capacity and enable 
+a higher output sufficient for assisting thumb movement, a soft 
+constraint is applied to the actuator, as shown in Figure 2b . 
+The tested constrained dual-chamber actuator can withstand 
+pressures of up to 150 kPa and support a weight of 60 N at its 
+end. As shown in Figure 2c , the tip force exhibits a significant 
+increase when the taper angle is enlarged from 0 ◦to 15 ◦. This 
+increase is attributed to the improved structural stability under 
+larger taper angles, thereby optimizing the energy conversion 
+efficiency from pneumatic input to tip force output. The model 
+also shows that the tip force reduces with the increasing of initial 
+height as shown in Figure S1 , emphasizing that the parameters 
+require customization for certain user. Finite element method 
+(FEM) model also shows the same trend that increasing the 
+taper angle, the tip force increases a lot at the same pressure, as 
+shown in Figure 2d . The parameters used for FEM are shown in 
+Table S2 . 
+To measure the bending angle under various pressures, the 
+inertial measurement unit (IMU) is installed on the top of the 
+actuator. As shown in Figures S2 and S3 , only inflating one 
+chamber to 60 kPa, the bending angle can reach 102 ◦, while 
+a dual-chamber pressure coordination strategy (simultaneous 
+inflation of one chamber and vacuum of the other) significantly 
+increased the bending angle to 143 ◦. This enables the actuator 
+to exceed the natural range of human thumb motion under no- 
+load conditions, thereby establishing a foundation for multi-DOF 
+assistive applications. 
+The mechanical characteristics under different bending angles 
+and pressures are analyzed. The experimental results are shown 
+in the Figure 2e,f conforming to the mathematical model results. 
+The results show that even under the maximum angle of the CMC 
+joint, the actuator can still maintain a tip force output of about 4 
+N at only 60 kPa input. This performance meets the requirements 
+of joint assistance. 
+Figure 2g is a comparison of the bending angle and tip force with 
+other types of dual-chamber actuators [ 40, 50–52 ]. More detailed 
+comparisons are shown in Table S3 . Due to the varying dimen- 
+sions of different actuators, as well as the tip force and bending 
+angle are proportional to the cross-sectional area ( 𝑆𝑎𝑣𝑒 ) and length 
+of the actuator, respectively, the two parameters are normalized 
+by area or length for fair comparison [ 53 ]. The results demonstrate 
+that the improved origami has the highest normalized tip force 
+and normalized bending angle compared with other large-stretch 
+based and unstretchable material bending-based methods. After 
+a stroke, thumb stiffness from spasticity makes the output force 
+of actuator crucial: the actuator must overcome this stiffness 
+and still have enough force to assist tasks. Yet the actuator 
+cannot be large due to the thumb’s limited surface area. Simply 
+increasing volume or cross-sectional area would compromise 
+the glove design and hinder natural movement. This is another 
+reason why we compare existing works using normalized tip 
+force. 
+Hysteresis is a universal phenomenon in practical use of the 
+soft actuator [ 54 ]. The pressure-bending angle and pressure-tip 
+force hysteresis loop are tested, as shown in Figure S4 . It can be 
+concluded that the hysteresis of the pressure-tip force and that of 
+the pressure-bending angle are about 13% and 18%, respectively. 
+The lifetime of the proposed actuator is shown in Figure S5 . 
+After 5850 cycles, the breakage appears and the bending angle 
+reduces by 4.2%. The dual-chamber actuator can be made using 
+the manufacturing method shown in Experimental Section. 
+To demonstrate the potential range of motion of the dual- 
+chamber actuator, a model hand is constructed with a universal 
+joint at the CMC joint position to represent this joint. The dual- 
+chamber actuator is applied at the same position when wearing, 
+as shown in Figure 2h . Two tests are conducted: first is the 
+circumferential rotation test as illustrated in Figure 2i . To quan- 
+titatively evaluate the workspace of the proposed mechanism, 3D 
+spatial coordinates of the mechanism’s end effector are captured 
+in real time using the NOKOV motion capture system. A healthy 
+male subject with 180 cm height is recruited, conducting the 
+circumferential movement to compare the range data with that of 
+the model hand directly. The range shown in Figure 2i is similar to 
+that of a database from 28 subjects [ 55 ]. Analysis reveals that the 
+mechanism achieves 86.8% coverage of the natural thumb motion 
+range, as shown in Figure 2i covering the requirements of ADL, 
+indicating its feasibility in terms of motion range. 
+The second test is the phone swiping test, which represents one 
+of the most important activities in modern life. By fine-tuning the 
+pressure in the two chambers, the mechanism replicated thumb 
+movement while swiping on phones, as shown in Figure S6 and 
+Movie S1 . Experimental results indicate a range of 20 mm for each 
+swiping up and 18 mm for each swiping down, demonstrating the 
+mechanism’s efficacy. 
+2.2 Ergonomic Design of the Thumb and Finger 
+Part 
+To maximize the assistive effect of the dual-chamber actuator, 
+the design of the anchor must be carefully considered, as 
+previous research on the human-exosuit interface suggests [ 56 ]. 
+Specifically, lower stiffness at the interface or anchor causes more 
+energy absorbed by the interface. However, while high-stiffness 
+materials can be employed to increase stiffness, the DOFs of CMC 
+joint should not be restricted by inhibiting the deformation of the 
+thenar eminence [ 57 ]. Additionally, the thumb tip must remain 
+AdvancedScience,2026 5of12
+
+unobstructed to ensure proper task performance. Therefore, as 
+shown in Figure 1b,e , top end of the actuator is fixed to the 
+proximal phalanx between the IP and MCP joints of thumb 
+through a MCP brace whereas the bottom end is secured to a 
+wrist brace as shown in Figure 1b and Figure S7a,b . The MCP 
+brace is a flexible plate that covers the IP joint and MCP joint, 
+secured to the thumb with a muscle patch to provide a firm 
+connection between the actuator and the thumb. Notably, the 
+IP joint is fixed at an extended angle using the muscle patch 
+by the MCP brace to overcome the increased muscle tone in IP 
+joint. The active assistance of the IP joint was considered but not 
+implemented, as to finish the tasks specified in the paper does not 
+require the assisting of IP joint actively. In addition, elongating 
+the actuator would reduce the tip force due to the increased 
+instability. Maintaining the same tip force requires a lar ger 
+bottom area, increasing the bulkiness of the system. Some stroke 
+patients, while exhibiting spasticity, retain residual volitional 
+control. This flexible MCP brace accommodates active bending 
+motion through intentional subject engagement, following the 
+same design concept as the previous successful practice [ 58 ]. The 
+MCP joint remains movable to let the dual-chamber actuator 
+drives flexion/extension around the MCP brace and prevent 
+hyperextension when the thumb is pushed by the actuator, as 
+shown in Figure S7a,b . 
+During thumb adduction assisted by the actuator, the tip force is 
+transmitted from the thumb to the wrist, as shown in Figure S7c . 
+At certain postures, the stiffness of the CMC joint can exceed that 
+of the wrist joint, leading to wrist extension instead of thumb 
+adduction, as shown in Figure S7c . To address this, a wrist brace 
+covering the back of the hand and wrist brace is designed to 
+constrain wrist movement, as shown in Figure S7d . Research 
+indicates that optimal grip strength is achieved when the wrist 
+is positioned at 30 ◦[ 59 ]. Therefore, the wrist brace maintains the 
+wrist in this extended position for optimal assistive effect. 
+Thermoplastic plates are selected as the material for the brace 
+structure. The plates are heated in hot water until they become 
+flexible and are then carefully molded onto the subject’s hand 
+after partial cooling to ensure complete anatomical conformity 
+and comfort. Once fully cooled and solidified, the structure is 
+trimmed with fully exposed CMC joint and assembled with 
+the dual-chamber actuator, secured using Velcro straps for a 
+comfortable, wearable fit, as shown in Figure 1b,e . One elastic 
+Velcro strap secures the wrist joint, while the other crosses 
+the palm to stabilize the hand. This method allows for cus- 
+tomized adjustments based on individual anatomical variations, 
+and the individualized design of the dual-chamber actuator is 
+detailed in Note S4 to tailor the actuator parameters according 
+to user requirements. 
+The finger actuator is adapted from previous work, utilizing a 
+single-chamber actuator with a steel plate in the chamber [ 58, 60 ], 
+as shown in Figure 1b . This design passively extends the spastic 
+finger when deflated and helps flex the finger when the chamber 
+is inflated, making it suitable for assisting stroke patients with 
+a Modified Ashworth Scale (MAS) score [ 61 ] of 3 or lower. The 
+design around thumb IP joint is also inspired by the success of 
+this practice. 
+2.3 Control System, Deployed Air Circuit, and 
+Low Level Control Method 
+The overall control system is shown in Figure 3a . The user wears 
+the glove on the impaired side while holding a smartphone 
+with the healthy side. An “I. Human-Machine Interface (HMI)”
+application is installed on the smartphone. The user selects the 
+task they wish to perform within the application, and then the 
+“II. Intention-Driven Module” polls the user’s intent to execute 
+the “III. Bayesian Optimization Algorithm” on the “IV. Single 
+Pump-Driven System” mounted on their back, assisting the 
+users’ movements with the glove. 
+The core control hardware, the IV. single pump-driven system 
+shown in Figure 3b , consists of one pulse width modulation 
+(PWM) speed-adjustable pump and nine solenoid valves. Among 
+these, seven are 2-way, 2-position solenoid valves, while the 
+remaining two are 2-way, 3-position valves, labeled I-IX in 
+Figure 3b . Valves I and IV control the pressurization and vacuum 
+for chamber 1 of the dual-chamber actuator, while valves II and 
+V manage the same for chamber 2. Similarly, valves III and VI 
+regulate the inflation and deflation of the finger actuator. Valves 
+VII and VIII ensure that when the system is inactive, pressur- 
+ized air in the air pipes can flow to the ambient atmosphere, 
+preventing obstruction of the pump during the next activation. 
+Valve IX is used because the pressure required for the finger 
+actuator is greater than that for the dual-chamber actuator; thus, 
+the pressurization time for the finger actuator is longer and is 
+delivered through valve IX. The logic for opening and closing the 
+valves for different tasks is illustrated in Figure 3c . 
+It is important to note that pinch, opposition, and lateral pinch 
+movements consist of single elemental movements; therefore, 
+once these movements are completed, the system returns to its 
+initial conditions. In contrast, swipe, twist, and circumduction 
+movements involve multiple elemental movements. For example, 
+the swipe task requires the thumb to first contact the screen and 
+then swipe up or down. The twist task necessitates the thumb 
+to flex while the finger extends, followed by the opposite action. 
+Circumduction starts with thumb abduction, proceeds to flexion, 
+and concludes with adduction. Consequently, the valve logic 
+changes once for single elemental movements but multiple times 
+for tasks involving several elemental movements. 
+The intention trigger module is illustrated in Figure 3a,d and 
+features two surface electromyography (EMG) sensors mounted 
+on the forearm to detect muscle signals for finger flexion 
+and extension, thereby triggering the system. When the signal 
+exceeds a specified threshold, the system activates a low-level 
+optimization algorithm on the single pump-driven system. 
+The glove is initially used for rehabilitation training, hence the 
+low-level control method must align with the training protocol. 
+As previously mentioned, single tasks can be divided into elemen- 
+tal movements, with each task requiring the user to perform these 
+movements multiple times. Consequently, the system undergoes 
+several cycles to adjust its parameters. Recent research indicates 
+that assistive systems should provide the minimum level of 
+assistance while maximizing user involvement in training for 
+6of12 AdvancedScience,2026
+
+FIGURE 3 Schematic of the overall control system. (a) The control system consists of a human-machine interface app installed on a smartphone. 
+The user chooses the task they wish to perform in the app, and the intention-driven module detects their intent to execute the Bayesian optimization 
+algorithm on the single pump-driven system, utilizing the glove to assist with the task. (b) Components of the single pump-driven system. (c) The 
+on/off logic of the valves in the single pump-driven system for conducting different tasks, with pink blocks indicating open valves and other conditions 
+indicating closed valves. (d) The intention trigger logic based on EMG signals. (e) Controlled parameter changes during subject validation. The 
+optimization comprises three phases: the initial sample phase, where the system samples the preset motion to obtain the assistive force at different 
+angles; phase 1, where only the bending angle of the thumb is optimized to allow the user to quickly achieve the task without losing confidence, thereby 
+increasing the speed of convergence; and phase 2, where the system not only ensures the task is accomplished but also minimizes the assistive force. 
+The right side illustrates the landscape of the optimization objectives during task execution in phase 2, showing that all objective functions reach a peak, 
+indicating the achievement of the desired task while maintaining the lowest level of assistive force, in accordance with the “assist-as-needed”control 
+concept. 
+AdvancedScience,2026 7of12
+
+optimal rehabilitation effects, a concept known as the “assist 
+as needed” (AAN) method [ 62, 63 ]. The control method must 
+also accommodate individual variability. The human-in-the-loop 
+(HIL) approach, utilizing Bayesian optimization, addresses this 
+variability and has gained attention, particularly for lower limb 
+applications, where cyclic movements allow for optimization to 
+minimize metabolic costs during walking [ 64 ]. However, reports 
+on upper limb applications are limited. 
+During training, multiple repetitions of elemental movements 
+create a cyclic behavior, making the HIL method applicable in this 
+context with a training-oriented cost function to achieve the AAN 
+effect. As shown in Figure 1e , IMU and force sensors mounted 
+on the thumb tip detect the bending angle and interaction force 
+between the thumb and the actuator. According to the AAN 
+method, the assistive force should be minimal while still enabling 
+task completion, meaning the thumb must bend to a prescribed 
+angle. Thus, the cost function is formulated as follows: 
+𝐽2 = 𝜔𝑟 ⋅𝑅𝑎𝑛 𝑔 𝑙𝑒 − 𝜔𝑓 ⋅𝑃𝑓𝑜 𝑟 𝑐 𝑒 (1) 
+here, 𝜔𝑓 balances the minimization of force against angle 
+maintenance, ensuring the system reduces assistance without 
+compromising movement quality. 𝑅𝑎𝑛 𝑔 𝑙𝑒 is the prescribed and 
+preprocessed angle needed to complete one elemental task, 
+measured by the IMU, while 𝑃𝑓𝑜 𝑟 𝑐 𝑒 refers to the preprocessed 
+assistive force measured by the force sensor. Detailed control 
+methods are presented in Note S5 . 
+Figure 3e illustrates the optimization process for one elemental 
+movement. The first seven cycles are initial sample stage to 
+collect the data to construct the probabilistic mapping. In the 
+following five cycles of stage 1, the system conducts single- 
+objective optimization to quickly reach the required angle for 
+task completion, building the user’s confidence. After two cycles, 
+dual objectives are optimized to minimize assistive force while 
+maintaining the prescribed angle. The right part of Figure 3e 
+shows the changes in the objective function value with thumb 
+angle and assistive force. Each task displays a peak, indicating 
+the lowest assistive force while successfully achieving the task, 
+conforming to the concept of AAN. 
+2.4 Subject Validation 
+The following inclusion-exclusion criteria are applied for recruit- 
+ing subjects to participate in the on-body tests: (a) patients 
+with chronic stroke (at least six months post-onset) presenting 
+with motor paralysis due to unilateral brain injury; (b) adequate 
+cognitive capacity to follow simple instructions and understand 
+the training content and purposes; (c) ability to sit up for at 
+least 45 min; and (d) a MAS score for finger extension of 
+≤ 3. The exclusion criteria include the presence of significant 
+language barriers that hinder effective communication or com- 
+prehension of research instructions. The study is approved by 
+the Joint Chinese University of Hong Kong–New Territories 
+East Cluster Clinical Research Ethics Committee (The Joint 
+CUHK NTEC CREC). Ref No. CREC 2020.698 and complies 
+with the Declaration of Helsinki. All subjects provided written 
+informed consent before the experiments. According to the 
+stratification method using FMAue [ 65 ], where scores of 0–28 
+indicate severe impairment, 29–42 indicate moderate impair- 
+ment, and 43–66 indicate mild impairment, three chronic stroke 
+subjects with varying impairment levels from severe to mild are 
+recruited, and their demographic information is presented in 
+Table S4 . 
+Similar to the lateral pinch task, subjects are instructed to press 
+against a high-precision force transducer (Baseline Muscle Test 
+Pinch Dynamometer) as shown in Figure 4a with their thumb 
+under two conditions: glove-assisted and without the glove. The 
+peak force values are recorded three times and averaged. As 
+shown in Figure 4a , the soft robotic glove demonstrates an 
+average enhancement of 62.9% in thumb tip force compared to 
+the condition without the glove, exceeding the requirements for 
+daily life use. 
+The ROM test is conducted using four markers placed at key 
+anatomical landmarks of the subjects’ hands: the thumb tip, 
+IP joint, MCP joint, and CMC joint. As shown in Figure 4b , 
+the experimental results revealed a significant increase in the 
+thumb’s ROM with the soft robotic glove compared to the without 
+wearing condition. As shown in Figure 4b , the circumferential 
+motion area exhibited a substantial enhancement–over nine 
+times–when assisted by the soft robotic glove, compared to the 
+minimal range observed without it. Figure 4c–e show the range of 
+motion changes of the subject S1, S2, and S3. It is worth noting that 
+the subject S3, although with the highest MAS scores, her ROM 
+of thumb also increases about nine times, showing the sufficient 
+driving force of the thumb part for rehabilitation training. 
+To validate the efficiency of the proposed soft robotic glove as a 
+rehabilitation/assistive device, subjects are required to perform 
+the following tasks under two conditions: with (assisted condi- 
+tion) and without (without wearing condition) the soft robotic 
+glove: 
+(a) Pinch: pinch differently sized wooden blocks (25–70 mm), a 70 
+mm-diameter sphere; The difficulty is gradually increased until 
+they cannot pinch a larger size. 
+(b) Lateral pinch: holding a wooden strip (10 mm thick) or 
+a smartphone; 
+(c) Opposition test: thumb-to-little-finger opposition; 
+(d) Screen operation: swiping up or down the screen of smart- 
+phone; 
+(e) Thumb circumduction: full-range circular movement of 
+the thumb; 
+(f) Rotary manipulation: twisting bottle cap clockwise and 
+counterclockwise (55 mm diameter) using the coordination of 
+thumb and index finger, rather than relying on wrist pronation 
+and supination. 
+As shown in Figure 4f–k and Movie S1 , all tasks are per- 
+formed under two conditions. The results demonstrate that 
+the proposed soft robotic glove significantly improves motor 
+function in stroke patients, validating its efficiency as a rehabili- 
+tation/assistive device. 
+8of12 AdvancedScience,2026
+
+FIGURE 4 Subject test results. (a) Wearing the glove increases lateral pinch force by 62.9% compared to not wearing the glove. (b) Wearing the 
+glove increases the range of motion for thumb circumduction by 904.7%. Range of motion comparisons for subjects S1 (c), S2 (d), and S3 (e) between 
+wearing the glove and not wearing it. (f) Photos of test activities: pinch (f), lateral pinch (g), swiping a phone (h), circumduction (i), twisting a cap (j), 
+and opposition (k) on subjects. 
+3 Conclusion 
+This paper proposes a portable, dexterous, thumb-enhanced soft 
+robotic glove that utilizes a dual-chamber origami actuator to 
+drive the full degrees of freedom around the thumb CMC and 
+MCP joint, while passively keeping the IP joint extended, thereby 
+facilitating various daily tasks for stroke rehabilitation training. 
+This design effectively addresses the long-standing challenge of 
+providing an effective thumb-driven method. The dual-chamber 
+origami actuator can achieve up to 18 N of tip force, nearly 
+double the force required for daily activities. A mathematical 
+model based on the pseudo-rigid body method is developed to 
+explain the effects of taper angle, original length, and pressure 
+on the tip force, guiding the actuator’s design. Using a model 
+hand to test the thumb part, results show that the proposed 
+design covers approximately 86.8% of the CMC joint range 
+of motion of a healthy subject, covering the daily activities 
+requirements. A control system composed of an HMI, intention- 
+driven module, and Bayesian optimization module is deployed 
+on a portable single pump-driven system to provide rehabilitation 
+and assistance in non-structured scenarios, achieving assistance 
+only when the user intends and implementing an “assist as 
+needed” control algorithm. By recruiting three stroke subjects 
+with varying levels of impairment, the most common daily 
+tasks are successfully performed by all participants. These tasks 
+included pinch, lateral pinch, thumb circumduction, phone swip- 
+ing, cap twisting, and opposition. The pinch force of the thumb 
+increased by 62.9% compared to the unassisted condition over the 
+requirements of daily use, and the range of motion of the thumb 
+improved nine times, demonstrating the efficacy of the system. 
+AdvancedScience,2026 9of12
+
+The proposed system represents a significant advancement in 
+hand rehabilitation medicine, offering a practical solution for 
+dexterous, task-oriented training aimed at restoring functional 
+hand movements and assisting in daily life scenarios. In future 
+studies, a two-arm clinical trial will be conducted to compare 
+thumb-specific dexterous training combined with hand opening 
+and closing training versus hand opening and closing training 
+alone, and to assess whether thumb training can effectively 
+improve hand function. 
+4 Experimental Section 
+4.0.1 Manufacturing Method of the Actuator 
+Figure S8 illustrates the actuator’s fabrication process, primarily 
+using 3D printing and injection molding. First, a solid prototype is 
+produced via 3D printing. Next, silicone molding created a mold 
+for the actuator, with liquid silicone poured in and allowed to cool 
+and solidify. After removing the solid prototype, the mold was 
+resealed, and a pouring port was added based on material fluidity 
+and workpiece dimensions. Three rubber components (DPI 8400, 
+YinKe Tech. Ltd., China) were mixed to achieve the desired 
+hardness, and a vacuum infusion machine evacuated air from the 
+mold before injecting the mixed material. Once filled, the mold 
+was placed in an oven to accelerate curing before demolding. 
+Finally, a compression device compresses the actuator, which 
+was then tempered in a constant temperature chamber at 220 ◦C 
+for half an hour, yielding the final actuator. It was worth 
+noting that the actuator is first made in an extended state and 
+then compressed into a contracted state before solidifying. This 
+approach was necessary because the angle between each plate 
+in the contracted state was too small (20 ◦shown in Table S5 ), 
+making the injection molding process difficult. 
+4.1 Characterization Setup 
+The bending angle–pressure, force-pressure relations through a 
+series of quasi-static experiments were characterized. Pressure 
+data was recorded by pressure sensor (XGZP6857A, -100-300 
+kPa, CFSensor Inc), while bending angle was recorded through 
+an IMU module (JYP61, WitMotion). And a microcontroller 
+(Arduino Mega 2560) was responsible for real-time signal acqui- 
+sition. Tip force was measured using a force sensor (DYMH-103, 
+DAYSENSOR). 
+Author Contributions 
+Conceptualization: D.X., R.K.T. Methodology: D.X., Z.W. Validation: D.X., 
+Z.W. Formal analysis: D.X., Z.W. Investigation: D.X., Z.W. Resources: D.X., 
+Z.W., Z.Y., X.S., Y.S., H.W., J.L., H.L., and T.L. Data curation: D.X., Z.W. 
+Writing –original draft: D.X. and Z.W. Writing –review and editing: D.X., 
+Z.W., and R.K.T. Visualization: D.X. and M.L. Supervision: R.K.T. Project 
+administration: R.K.T. Funding acquisition: R.K.T. 
+Funding 
+This work was supported by HKSAR Research Grants Council General 
+Research Fund, Grant No: 14204925. C.M. would like to thank the Hong 
+Kong Jockey Club Charities Trust for supporting the JC STEM Lab of 
+Nature-Inspired Precision Medical Engineering. 
+Conflicts of Interest 
+D.X., Z.W., and R.K.T. are the inventors on a provisional patent application 
+filed relating to this work by The Chinese University of Hong Kong. The 
+other authors declare that they have no conflicts of interests. 
+Data Availability Statement 
+All data are available in the main text or the supplementary materials. 
+References 
+1 . P. W. Duncan, R. K. Bode, S. M. Lai, et al., “Rasch Analysis of a New 
+Stroke-Specific Outcome Scale: The Stroke Impact Scale,”Archives of 
+Physical Medicine and Rehabilitation 84, no. 7 (2003): 950–963. 
+2 . B. H. Dobkin, “Rehabilitation After Stroke,”New England Journal of 
+Medicine 352, no. 16 (2005): 1677–1684. 
+3 . J. Nessa, M. A. Khaleque, S. Begum, A. H. Ahmed, S. Islam, and M. 
+Afsan, “Rehabilitation of Stroke Patients–Effects of Early Intervention 
+of Physical Therapy on Functional Outcome,” Bangladesh Journal of 
+Anatomy 7, no. 1 (2009): 62–67. 
+4 . P. Maciejasz, J. Eschweiler, K. Gerlach-Hahn, A. Jansen-Troy, and S. 
+Leonhardt, “A Survey on Robotic Devices for Upper Limb Rehabilitation,”
+Journal of NeuroEngineering and Rehabilitation 11 (2014): 1–29. 
+5 . A. A. Timmermans, A. I. Spooren, H. Kingma, and H. A. Seelen, 
+“Influence of Task-Oriented Training Content on Skilled Arm-Hand 
+Performance in Stroke: A Systematic Review,”Neurorehabilitation and 
+Neural Repair 24, no. 9 (2010): 858–870. 
+6 . S. Ueki, H. Kawasaki, S. Ito, et al., “Development of a Hand- 
+Assist Robot with Multi-Degrees-of-Freedom for Rehabilitation Therapy,”
+IEEE/ASME Transactions on Mechatronics 17, no. 1 (2010): 136–146. 
+7 . C.-Y. Chu and R. M. Patterson, “Soft Robotic Devices for Hand Rehabil- 
+itation and Assistance: A Narrative Review,”Journal of NeuroEngineering 
+and Rehabilitation 15 (2018): 1–14. 
+8 . C. D. Takahashi, L. Der-Yeghiaian, V. Le, R. R. Motiwala, and S. C. 
+Cramer, “Robot-Based Hand Motor Therapy After Stroke,”Brain 131, no. 
+2 (2008): 425–437. 
+9 . P. Sale, M. Franceschini, S. Mazzoleni, E. Palma, M. Agosti, and F. 
+Posteraro, “Effects of Upper Limb Robot-Assisted Therapy on Motor 
+Recovery in Subacute Stroke Patients,”Journal of NeuroEngineering and 
+Rehabilitation 11 (2014): 1–8. 
+10 . A. Basteris, S. M. Nijenhuis, A. H. Stienen, J. H. Buurke, G. B. Prange, 
+and F. Amirabdollahian, “Training Modalities in Robot-Mediated Upper 
+Limb Rehabilitation in Stroke: A Framework for Classification Based on 
+a Systematic Review,”Journal of NeuroEngineering and Rehabilitation 11 
+(2014): 1–15. 
+11 . E. A. Susanto, R. K. Tong, and N. S. Ho, “Hand Exoskeleton Robot 
+for Assessing Hand and Finger Motor Impairment After Stroke,”HKIE 
+Transactions 22, no. 2 (2015): 78–87. 
+12 . Y. Yun, S. Dancausse, P. Esmatloo, A. Serrato, C. A. Merring, P. 
+Agarwal, and A. D. Deshpande, “Maestro: An EMG-Driven Assistive 
+Hand Exoskeleton for Spinal Cord Injury Patients,” in 2017 IEEE 
+International Conference on Robotics and Automation (ICRA) (2017): 
+2904–2910. 
+13 . W. Rong, K. Y. Tong, X. L. Hu, and S. K. Ho, “Effects of 
+Electromyography-Driven Robot-Aided Hand Training with Neuromus- 
+cular Electrical Stimulation on Hand Control Performance After Chronic 
+Stroke,”Disability and Rehabilitation: Assistive Technology 10, no. 2 (2015): 
+149–159. 
+14 . E. A. Susanto, R. K. Tong, C. Ockenfeld, and N. S. Ho, “Efficacy 
+of Robot-Assisted Fingers Training in Chronic Stroke Survivors: A 
+Pilot Randomized-Controlled Trial,”Journal of NeuroEngineering and 
+Rehabilitation 12 (2015): 1–9. 
+15 . G. Li, L. Cheng, Z. Gao, X. Xia, and J. Jiang, “Development of an 
+Untethered Adaptive Thumb Exoskeleton for Delicate Rehabilitation 
+10of12 AdvancedScience,2026
+
+Assistance,” IEEE Transactions on Robotics 38, no. 6 (2022): 3514–
+3529. 
+16 . M. Gabardi, M. Solazzi, D. Leonardis, and A. Frisoli, “Design and 
+Evaluation of a Novel 5 DOF Underactuated Thumb-Exoskeleton,”IEEE 
+Robotics and Automation Letters 3, no. 3 (2018): 2322–2329. 
+17 . P. Agarwal, Y. Yun, J. Fox, K. Madden, and A. D. Deshpande, 
+“Design, Control, and Testing of a Thumb Exoskeleton with Series Elastic 
+Actuation,”The International Journal of Robotics Research 36, no. 3 (2017): 
+355–375. 
+18 . R. Gopura, D. Bandara, K. Kiguchi, and G. K. Mann, “Developments in 
+Hardware Systems of Active Upper-Limb Exoskeleton Robots: A Review,”
+Robotics and Autonomous Systems 75 (2016): 203–220. 
+19 . G. M. Achilli, C. Amici, M. Dragusanu, et al., “Soft, Rigid, and 
+Hybrid Robotic Exoskeletons for Hand Rehabilitation: Roadmap with 
+Impairment-Oriented Rationale for Devices Design and Selection,”
+Applied Sciences 13, no. 20 (2023): 11287. 
+20 . N. G. Kutner, R. Zhang, A. J. Butler, S. L. Wolf, and J. L. Alberts, 
+“Quality-of-Life Change Associated with Robotic-Assisted Therapy to 
+Improve Hand Motor Function in Patients with Subacute Stroke: A 
+Randomized Clinical Trial,”Physical Therapy 90, no. 4 (2010): 493–504. 
+21 . D. H. Kim, Y. Lee, and H.-S. Park, “Bioinspired High-Degrees of 
+Freedom Soft Robotic Glove for Restoring Versatile and Comfortable 
+Manipulation,”Soft Robotics 9, no. 4 (2022): 734–744. 
+22 . W. Chen, G. Li, N. Li, et al., “Soft Exoskeleton with Fully Actuated 
+Thumb Movements for Grasping Assistance,” IEEE Transactions on 
+Robotics 38, no. 4 (2022): 2194–2207. 
+23 . M. Sui, Y. Ouyang, H. Jin, et al., “A Soft-Packaged and Portable 
+Rehabilitation Glove Capable of Closed-Loop Fine Motor Skills,”Nature 
+Machine Intelligence 5, no. 10 (2023): 1149–1160. 
+24 . P. T. Phan, M. T. Thai, T. T. Hoang, N. H. Lovell, and T. N. Do, 
+“HFAM: Soft Hydraulic Filament Artificial Muscles for Flexible Robotic 
+Applications,”IEEE Access 8 (2020): 226637–226652. 
+25 . K. B. Kim, H. Choi, B. Kim, B. B. Kang, S. Cheon, and K.-J. Cho, 
+“Exo-Glove Poly III: Grasp Assistance by Modulating Thumb and Finger 
+Motion Sequence with a Single Actuator,”Soft Robotics (2025). 
+26 . T. Bützer, O. Lambercy, J. Arata, and R. Gassert, “Fully Wearable Actu- 
+ated Soft Exoskeleton for Grasping Assistance in Everyday Activities,”Soft 
+Robotics 8, no. 2 (2021): 128–143. 
+27 . D. Xie, Y. Su, X. Shi, Z. Li, and R. K.-Y. Tong, “Soft Hand Extension 
+Glove with Thumb Abduction and Extension Assistance,” in 2024 IEEE 
+International Conference on Robotics and Automation (ICRA) (IEEE, 
+2024), 2993–2999. 
+28 . L. Ge, F. Chen, D. Wang, et al., “Design, Modeling, and Evaluation of 
+Fabric-Based Pneumatic Actuators for Soft Wearable Assistive Gloves,”
+Soft Robotics 7, no. 5 (2020): 583–596. 
+29 . P. Polygerinos, Z. Wang, K. C. Galloway, R. J. Wood, and C. J. 
+Walsh, “Soft Robotic Glove for Combined Assistance and At-Home 
+Rehabilitation,”Robotics and Autonomous Systems 73 (2015): 135–143. 
+30 . X. Shi, C. Yang, P. C. Lee, et al., “An Interactive Soft Robotic Hand-Task 
+Training System with Wireless Task Boards and Daily Objects on Post- 
+Stroke Rehabilitation,”Wearable Technologies 6 (2025): e4. 
+31 . X.-Q. Shi, C.-H. E. Ti, H.-Y. Lu, et al., “Task-Oriented Training by 
+a Personalized Electromyography-Driven Soft Robotic Hand in Chronic 
+Stroke: A Randomized Controlled Trial,”Neurorehabilitation and Neural 
+Repair 38, no. 8 (2024): 595–606. 
+32 . I. Kapandji, “The Physiology of the Joints, Volume I, Upper Limb,”
+American Journal of Physical Medicine & Rehabilitation 50, no. 2 (1971): 
+96. 
+33 . J. White, L. Coppola, A. Skomurski, and E. Mitchell-Rekrut, “Influ- 
+ence of Age and Gender on Normative Passive Range of Motion Values of 
+the Carpometacarpal Joint of the Thumb,”Journal of Hand Therapy 31, 
+no. 3 (2018): 390–397. 
+34 . C. C. Norkin and D. J. White, Measurement of Joint Motion: A Guide to 
+Goniometry (F.A. Davis, 2016), google-Books-ID: TSluDQAAQBAJ. 
+35 . B. Chen, Y. Wu, X. Ni, L. Qin, and E. Li, “Robotic Hand Exoskeletons 
+for Rehabilitation and Assistance: A State-of-the-Art,”Journal of Medical 
+Devices 19, no. 1 (2024): 1–53. 
+36 . W. Cooney 3rd and E. Chao, “Biomechanical Analysis of Static Forces 
+in the Thumb During Hand Function,”JBJS 59, no. 1 (1977): 27–36. 
+37 . C. Pylatiuk and L. Döderlein, ““Bionic”Arm Prostheses: State of the 
+Art in Research and Development,”Der Orthopäde 35 (2006): 1169–1175. 
+38 . D. Drotman, M. Ishida, S. Jadhav, and M. T. Tolley, “Application- 
+Driven Design of Soft, 3-D Printed, Pneumatic Actuators with Bellows,”
+IEEE/ASME Transactions on Mechatronics 24, no. 1 (2018): 78–87. 
+39 . Y. Su, X. Chen, Z. Fang, D. Liu, J. Lam, and Z. Wang, “Spatial Position–
+Force Perception for a Soft Parallel Joint via Pressure-Deformation 
+Self-Sensing,”IEEE/ASME Transactions on Mechatronics 29, no. 5 (2024): 
+3590–3601. 
+40 . X. Yang, N. Zhang, X. Huang, et al., “Multidirectional Bending 
+Soft Pneumatic Actuator with Fishbone-Like Strain-Limiting Layer for 
+Dexterous Manipulation,”IEEE Robotics and Automation Letters (2024). 
+41 . Q. Xie, T. Wang, S. Yao, Z. Zhu, N. Tan, and S. Zhu, “Design and 
+Modeling of a Hydraulic Soft Actuator with Three Degrees of Freedom,”
+Smart Materials and Structures 29, no. 12 (2020): 125017. 
+42 . M. S. Xavier, C. D. Tawk, Y. K. Yong, and A. J. Fleming, “3D- 
+Printed Omnidirectional Soft Pneumatic Actuators: Design, Modeling 
+and Characterization,” Sensors and Actuators A: Physical 332 (2021): 
+113199. 
+43 . D. Xie, J. Liu, R. Kang, and S. Zuo, “Fully 3D-Printed Modular Pipe- 
+Climbing Robot,”IEEE Robotics and Automation Letters 6, no. 2 (2020): 
+462–469. 
+44 . Y. Wang, S. Kokubu, Z. Zhou, X. Guo, Y.-H. Hsueh, and W. Yu, 
+“Designing Soft Pneumatic Actuators for Thumb Movements,” IEEE 
+Robotics and Automation Letters 6, no. 4 (2021): 8450–8457. 
+45 . J. Cai, X. Deng, J. Feng, and Y. Zhou, “Geometric Design and 
+Mechanical Behavior of a Deployable Cylinder with Miura Origami,”
+Smart Materials and Structures 24, no. 12 (2015): 125031. 
+46 . Y. X. Mak, A. Dijkshoorn, and M. Abayazid, “Design Methodology for 
+a 3D Printable Multi-Degree of Freedom Soft Actuator Using Geometric 
+Origami Patterns,”Advanced Intelligent Systems 6, no. 6 (2024): 2300666. 
+47 . M. Feng, J. Sun, D. Yang, and G. Gu, “Characterization and Modeling 
+of Fabric-Based Pneumatic Actuators with Asymmetric Chambers for Soft 
+Gloves,”IEEE Robotics and Automation Letters (2024). 
+48 . Z. Xie, A. G. Domel, N. An, et al., “Octopus Arm-Inspired Tapered 
+Soft Actuators with Suckers for Improved Grasping,”Soft Robotics 7, no. 
+5 (2020): 639–648. 
+49 . S. Liu, F. Wang, Z. Liu, W. Zhang, Y. Tian, and D. Zhang, “A Two- 
+Finger Soft-Robotic Gripper with Enveloping and Pinching Grasping 
+Modes,” IEEE/ASME Transactions on Mechatronics 26, no. 1 (2020): 
+146–155. 
+50 . O. Shorthose, L. He, A. Albini, and P. Maiolino, “Design of a Multima- 
+terial 3D-Printed Soft Actuator with Bi-Directional Variable Stiffness,”in 
+Annual Conference Towards Autonomous Robotic Systems (Springer, 2021), 
+238–248. 
+51 . J. Yoon, J. Yang, and D. Yun, “A Two-Chamber Soft Actuator with 
+an Expansion Limit Line for Force Enhancement,”IEEE Robotics and 
+Automation Letters (2024). 
+52 . Q. Tan, Y. Chen, M. Zhou, S. F. Tong, S. Liu, and R. K.-Y. Tong, 
+“Dual-Chamber One-Step Molding Actuator with Straight-Curved Crease 
+Prismatic Design for Large-Range Motions and Structural Stability,”
+Advanced Science 13, no. 2 (2026): e14441. 
+53 . D. P. Holland, E. J. Park, P. Polygerinos, G. J. Bennett, and C. J. Walsh, 
+“The Soft Robotics Toolkit: Shared Resources for Research and Design,”
+Soft Robotics 1, no. 3 (2014): 224–230. 
+AdvancedScience,2026 11of12
+
+54 . I. D. Mayergoyz, Mathematical Models of Hysteresis and Their Applica- 
+tions (Academic Press, 2003). 
+55 . X. Zhang, P. Braido, S.-W. Lee, R. Hefner, and M. Redden, “A Norma- 
+tive Database of Thumb Circumduction In Vivo: Center of Rotation and 
+Range of Motion,”Human Factors 47, no. 3 (2005): 550–561. 
+56 . M. B. Yandell, B. T. Quinlivan, D. Popov, C. Walsh, and K. E. Zelik, 
+“Physical Interface Dynamics Alter How Robotic Exosuits Augment 
+Human Movement: Implications for Optimizing Wearable Assistive 
+Devices,”Journal of NeuroEngineering and Rehabilitation 14, no. 1 (2017): 
+40. 
+57 . D. H. Kim and H.-S. Park, “Cable Actuated Dexterous (CADEX) Glove 
+for Effective Rehabilitation of the Hand for Patients with Neurological 
+Diseases,”in 2018 IEEE/RSJ International Conference on Intelligent Robots 
+and Systems (IROS) (IEEE, 2018), 2305–2310. 
+58 . K. H. Heung, R. K. Tong, A. T. Lau, and Z. Li, “Robotic Glove with 
+Soft-Elastic Composite Actuators for Assisting Activities of Daily Living,”
+Soft Robotics 6, no. 2 (2019): 289–304. 
+59 . J.-A. Lee and S. Sechachalam, “The Effect of Wrist Position on Grip 
+Endurance and Grip Strength,”The Journal of Hand Surgery 41, no. 10 
+(2016): e367–e373. 
+60 . H. L. Heung, Z. Q. Tang, X. Q. Shi, K. Y. Tong, and Z. Li, “Soft 
+Rehabilitation Actuator with Integrated Post-Stroke Finger Spasticity 
+Evaluation,”Frontiers in Bioengineering and Biotechnology 8 (2020): 111. 
+61 . J. H. Carr, R. B. Shepherd, L. Nordholm, and D. Lynne, “Investigation 
+of a New Motor Assessment Scale for Stroke Patients,”Physical Therapy 
+65, no. 2 (1985): 175–180. 
+62 . H. J. Asl, M. Yamashita, T. Narikiyo, and M. Kawanishi, “Field- 
+Based Assist-as-Needed Control Schemes for Rehabilitation Robots,”
+IEEE/ASME Transactions on Mechatronics 25, no. 4 (2020): 2100–2111. 
+63 . Y. Cao, X. Chen, M. Zhang, and J. Huang, “Adaptive Position 
+Constrained Assist-as-Needed Control for Rehabilitation Robots,”IEEE 
+Transactions on Industrial Electronics 71, no. 4 (2023): 4059–4068. 
+64 . P. Slade, C. Atkeson, J. M. Donelan, et al., “On Human-in-the-Loop 
+Optimization of Human–Robot Interaction,”Nature 633, no. 8031 (2024): 
+779–788. 
+65 . E. J. Woytowicz, J. C. Rietschel, R. N. Goodman, et al., “Determining 
+Levels of Upper Extremity Movement Impairment by Applying a Cluster 
+Analysis to the Fugl-Meyer Assessment of the Upper Extremity in 
+Chronic Stroke,”Archives of Physical Medicine and Rehabilitation 98, no. 
+3 (2017): 456–462. 
+Supporting Information 
+Additional supporting information can be found online in the Supporting 
+Information section. 
+Supporting File 1: advs76275-sup-0001-SuppMat.pdf. 
+Supporting File 2: advs76275-sup-0002-MovieS1.mp4. 
+12of12 AdvancedScience,2026

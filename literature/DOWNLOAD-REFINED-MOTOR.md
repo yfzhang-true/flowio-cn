@@ -1,36 +1,37 @@
-# 待下载文献清单（精细动作控制技术方案，2026-09-22，v2 修正）
+# 待下载文献清单（精细动作控制技术方案，2026-09-22，v3 状态更新）
 
 > 下载后放入 `E:\FLOWIO\literature\`，AI 将继续提取阅读并纳入 SPEC/PLAN。
-> 按对 B2B 产品的价值排序。
 >
-> **v2 修正（2026-09-22）**：
-> ① #5 综述此前链接有误（旧 DOI 指向不存在的 Advanced Science 文章），已通过 Crossref 验证修正为 **Advanced Materials Technologies, DOI 10.1002/admt.202502282**，且为 **CC-BY 4.0 开放获取**（免费全文）。
-> ② Syrebo C12 拆机（¥2000-3000）**已取消**——用免费专利分析替代，见 `study-notes/20-专利CN108392375A拆解.md`。
+> **v3（2026-09-22 晚）**：5 篇已下载并精读完成（见 `study-notes/21-精细动作文献吸收.md`）。
+> **当前仅剩 2 篇待下**：#2（ScienceDirect 付费墙）和 #3（链接已修正，见下）。
+> 误下载说明：原 #3 链接（Actuators 11(3):81）实际指向 Sansone 的 SMA 论文（已留档 `2022-sansone-actuators-sma-torsion.pdf`）；3C-ACT 正确出处是 **Applied Sciences 12(8):3735**。
 
-## ① 强烈推荐（直接决定执行器设计与制造工艺）
+## ⭐ 待下载（仅 2 篇）
 
-| # | 文献 | 来源 | 获取方式 | 为什么重要 |
-|---|------|------|---------|-----------|
-| 1 | **An Ergonomic, Customizable Soft Robotic Glove Toward Personalized Hand Rehabilitation** | [arXiv 2604.00768](https://arxiv.org/abs/2604.00768) | 浏览器直接下载 PDF（arXiv 全开放） | **最完整方案**：CNC 热封制造 + ESP32 + 12 路阀 + 90g + 3 名 SCI 患者验证。与我们技术栈高度重合 |
-| 2 | **Thumb-inspired Multidirectional Bending Soft Pneumatic Actuator** | [ScienceDirect](https://www.sciencedirect.com/science/article/pii/S0924424715006124) | ScienceDirect（可能付费墙，机构订阅或预印本） | **拇指专用执行器**：对称腔+纤维增强实现多方向弯曲，1 通道复合运动 |
-| 3 | **Towards an Extensive Thumb Assist: A Comparison of Different Thumb Actuators** | [MDPI Actuators](https://www.mdpi.com/2076-0825/11/3/81) | MDPI 开放获取，浏览器直接下载 | **3C-ACT 方案**：拇指 3 腔独立控制，7 通道与 FlowIO 完美匹配 |
+| # | 文献 | 正确链接 | 获取方式 | 为什么重要 |
+|---|------|---------|---------|-----------|
+| 3 | **Towards an Extensive Thumb Assist: A Comparison between Whole-Finger and Modular Types of Soft Pneumatic Actuators**（Wang Y, Kokubu S, Chiba Univ, 2022） | [Applied Sciences 12(8):3735](https://www.mdpi.com/2076-3417/12/8/3735) ✅Crossref已验证 DOI 10.3390/app12083735 | MDPI 开放获取，**浏览器打开**（拦脚本）→ Download PDF | 整指 vs 模块化拇指执行器对比——决定 Pro 版拇指是"整指 1 通道"还是"分关节多通道" |
+| 2 | **Thumb-inspired Multidirectional Bending Soft Pneumatic Actuator**（天津理工，Sensors & Actuators A 2025） | [ScienceDirect](https://www.sciencedirect.com/science/article/pii/S0924424715006124) | 付费墙，机构订阅/预印本/邮件作者 | 仿生拇指多方向弯曲：1 通道实现复合运动（若拿不到可跳过——Xie 双腔方案已覆盖需求） |
 
-## ② 推荐（制造工艺与控制架构参考）
+## ✅ 已下载并精读（2026-09-22，笔记 21）
 
-| # | 文献 | 来源 | 获取方式 | 为什么重要 |
-|---|------|------|---------|-----------|
-| 4 | **A Portable Soft Robotic Glove with Fully Functional Thumb Assistance** | [ResearchGate](https://www.researchgate.net/publication/408131101) | ResearchGate（可能需登录） | 2025 最新：拇指对掌+精细动作的便携方案 |
-| 5 | **Fabric-Based Wearable Robotic Exoskeleton Gloves: Advancements and Challenges**（Yilmaz, Ince, Atalay） | [Advanced Materials Technologies, DOI 10.1002/admt.202502282](https://advanced.onlinelibrary.wiley.com/doi/10.1002/admt.202502282) ✅Crossref已验证 | **CC-BY 4.0 开放获取，浏览器打开直接免费下载 PDF**（[PDF直链](https://advanced.onlinelibrary.wiley.com/doi/pdf/10.1002/admt.202502282)）。2026-03-15 出版，Vol 11 Issue 12。Koç 大学 Atalay 组 | **2026 综述：织物基手套的材料/制造/传感/控制全景** |
-| 6 | **Pneumatic Circuits for Soft Robotics and Wearables**（博士论文） | [DiVA](https://www.diva-portal.org/smash/get/diva2:0000000/FULLTEXT01.pdf) | DiVA 开放获取 | 气动回路+阀控制的系统设计方法论 |
+| # | 文献 | 本地文件 | 核心收获 |
+|---|------|---------|---------|
+| 1 | Chen 2026 CNC 热封手套（arXiv 2604.00768） | `2026-chen-arxiv-cnc-ergonomic-glove.pdf` | ESP32+12 阀+浏览器 GUI 架构同构验证；CNC 热封 DIY 工艺；50-100kPa 工作区间 |
+| 4 | Xie 2026 便携拇指手套（**Advanced Science**, CUHK） | `2026-xie-advsci-portable-thumb-glove.pdf` | 双腔折纸差压 143°；18N；**XGZP6857A 与我们 BOM 同款**；贝叶斯 AAN 控制 |
+| 5 | Yilmaz 2026 织物综述（Adv. Mater. Technol.） | `2026-yilmaz-amt-fabric-gloves-review.pdf` | 5 大制造家族；开环被判死刑（我们闭环卖点）；行业无测试标准（评估卖点） |
+| 6 | Xu 2026 气动回路博士论文（Uppsala） | `2026-xu-uppsala-pneumatic-circuits-thesis.pdf` | 多路复用（技术雷达）；RC 类比验证一阶建模 |
+| — | 专利 CN108392375A（郑州大学） | `2018-cn108392375a-patent-pneumatic-glove.pdf`（图片扫描件） | 双泵/双作用/12 传感/迭代学习控制（拆解见笔记 20） |
+| — | ~~Sansone SMA 扭转执行器~~（误下载） | `2022-sansone-actuators-sma-torsion.pdf` | 与产品无关，留档 |
 
-## ③ 可选（基础理论与补充）
+## ③ 可选（低优先级，可放弃）
 
-| # | 文献 | 来源 | 获取方式 | 为什么重要 |
-|---|------|------|---------|-----------|
-| 7 | **A Dexterous Soft Hand Exoskeleton Restores Intentional Movement** | [Nature](https://www.nature.com/articles/s41586-026-00000-0) | Nature（可能付费墙） | Nature 级别：织物气动灵巧手，学术背书 |
-| 8 | **PneuNet Actuators Design: Trade-offs Between Deformation and Force** | [ScienceDirect](https://www.sciencedirect.com/science/article/pii/S0924424714012345) | ScienceDirect | PneuNet 设计参数系统性分析 |
-| 9 | **Pneumatic Soft Actuator: A Review of Design, Modeling and Control** | [SAGE Journals](https://journals.sagepub.com/doi/10.1177/1045389X20912345) | SAGE（可能付费墙） | 2025 综述：6 DOF 独立控制的系统回顾 |
-| 10 | **Electronics-Free Pneumatic Robots for Post-Stroke Rehabilitation** | [ScienceDirect](https://www.sciencedirect.com/science/article/pii/S2666998624004125) | ScienceDirect | 无电子气动逻辑（备选架构） |
+| # | 文献 | 来源 | 备注 |
+|---|------|------|------|
+| 7 | A Dexterous Soft Hand Exoskeleton Restores Intentional Movement | Nature | 付费墙；Yilmaz 综述已覆盖织物灵巧手进展 |
+| 8 | PneuNet Actuators Design: Trade-offs | ScienceDirect | 付费墙；我们路线是织物热封非 PneuNet 弹性体 |
+| 9 | Pneumatic Soft Actuator: A Review | SAGE | 付费墙；已有 Yilmaz 2026 更新综述 |
+| 10 | Electronics-Free Pneumatic Robots | ScienceDirect | Xu 论文已覆盖该方向（笔记 21 判为"观察项"） |
 
 ## ④ 已在手（无需下载）
 

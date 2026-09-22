@@ -1,0 +1,1510 @@
+Digital Comprehensive Summaries of Uppsala Dissertations
+from the Faculty of Science and Technology 2629
+P
+neumatic Circuits for Soft Robotics
+and Wearables
+JING XU
+A
+CTA UNIVERSITATIS
+UPSALIENSIS
+2026
+
+
+Dissertation presented at Uppsala University to be publicly examined in Häggsalen, Ångström
+Laboratory
+, Regementsvägen 10, 75227, Uppsala, Uppsala, Friday, 27 February 2026 at
+09:15 for the degree of Doctor of Philosophy. The examination will be conducted in English.
+Faculty examiner: Professor Jamie Paik (EPFL).
+Abstract
+Xu, J. 2026. Pneumatic Circuits for Soft Robotics and Wearables. Digital Comprehensive
+Summaries of Uppsala Dissertations fr
+om the Faculty of Science and Technology 2629. 53 pp.
+Uppsala: Acta Universitatis Upsaliensis. ISBN 978-91-513-2714-3.
+This 
+thesis advances the field of soft robotics by developing a unified framework for pneumatic
+circuits that enable multiplexing, logic processing, sensing, and control. Motivated by the
+growing demand for compliant, lightweight, and intelligent systems in wearable and human–
+robot interaction contexts, the work addresses longstanding challenges in scaling soft robotic
+architectures by integrating multifunctional pneumatic valves. By leveraging the pneumatic
+mechanisms—ranging from miniaturized actuator matrices and high-gain valves to sensor–
+valve reflex loops and reconfigurable modular assemblies—the research demonstrates how
+pneumatic hardware can serve as actuating, sensing, and computing units.
+The thesis introduces several key contributions. First, a multiplexed pneumatic actuator
+matrix enables   actuators to be controlled using only   signals, offering a scalable and
+space-efficient solution for high-density soft robotic interfaces. Second, programmable and
+reconfigurable pneumatic valves—including hot-pluggable pinch valves, normally open and
+normally closed architectures, and multifunctional logic-enabled devices—facilitate Boolean
+operations such as AND, OR, NAND, and NOR without physical rewiring. These valves achieve
+high pressure gain, rapid switching, and seamless integration into existing pneumatic lines.
+Third, the dissertation establishes electronics-free sensorimotor pathways by coupling pressure-
+sensitive pouches with pneumatic logic, enabling autonomous grasping, haptic feedback, and
+object classification. Finally, a hook-and-loop modular soft robotic framework enables rapid,
+reversible assembly of diverse robotic systems, supporting rapid prototyping and cross-material
+integration.
+Collectively, this work positions pneumatic circuits as foundational building blocks for
+next-generation soft robotic systems capable of embodied intelligence. By unifying actuation,
+sensing, logic, and modularity within compliant pneumatic architectures, the dissertation
+outlines a pathway toward scalable, adaptive, and electronics-free soft robotics suitable for
+wearable devices, autonomous manipulation, and distributed fluidic computation.
+Keywords: Pneumatic Systems, Pneumatic Circuits, Multiplexing Control, Hot-Plugging
+V
+alves, Logic-Enabled Valves, Pneumatic Logic, Sensorimotor Functions, Soft Robotics,
+Wearable Soft Robotics, Electronics-Free Pneumatic Control, Modular Soft Robotics
+Jing Xu, Department of Materials Science and Engineering, Microsystems Technology, Box
+35, Uppsala University, SE-751 03 Uppsala, Sweden.
+© Jing Xu 2026
+ISSN 1651-6214
+ISBN 978-91-513-2714-3
+URN urn:nbn:se:uu:diva-575396 (http://urn.kb.se/resolve?urn=urn:nbn:se:uu:diva-575396)
+
+ 
+To my family 
+  
+
+ 
+
+List of Papers 
+This thesis is based on the following papers, which are referred to in the text 
+by their Roman numerals. 
+I. Xu, J., Nguyen, H., Jeong, SH., Hjort, K. (2025) “Miniaturized Soft Pneumatic 
+Actuator Matrix with Multiplexing Control”. Advanced Robotics Research , 
+202400015. 
+II. Xu, J., Jeong, SH., Hjort, K. (2025) “Hot-Plugging Logic-Enabled Valves”. Ad-
+vanced Intelligent Systems 7 (6), 2400582. 
+III. Xu, J., Niu, XZ., Broo, D. G., Hjort, K. (2025) “Electronics-free Pneumatic In-
+terface for Sensorimotor Human -Robot Interaction”. The International Confer-
+ence on Robotics and Automation (ICRA 2026). (Submitted) 
+IV. Xu, J., Niu, XZ., Andersson, J., Broo, D. G. Hjort, K. (2026) “Miniaturized Mul-
+tifunctional Valves for Intelligent Pneumatic Systems in Soft Robotics”. Science 
+Robotics. (Submitted) 
+V. Xu, J., Hellman, O., Hjort, K. (2026) “Hook-and-Loop Enabled Modular Soft 
+Robotics”. (Manuscript) 
+Reprints were made with permission from the respective publishers. 
+  
+
+Author’s contributions 
+Thesis Papers 
+ I II III IV V 
+Conception Substantial Most Substantial Substantial Most 
+Planning Substantial All Substantial Substantial Most 
+Execution Substantial All Substantial Substantial Substantial 
+Analysis & 
+Evaluation 
+Substantial Most Substantial Substantial Substantial 
+
+Other contributions 
+Relevant peer-reviewed work presented at conferences: 
+I. Xu, J., Jeong, SH., Hjort, K. (2024 ) “A Hot-Plugging Pinch Valve 
+with Pressure-Controlled Logical Functions”. Materials Research Soci-
+ety (MRS 2024 Fall), oral presentation. 
+II. Xu, J., Jeong, SH., Hjort, K. (2025) “Peristaltic Normally Open and 
+Normally Closed Valves for Reconfigurable & Programmable Soft 
+Pneumatic Logics”. Materials Research Society (MRS 2025 Fall), oral 
+presentation. 
+  
+
+ 
+ 
+
+Contents 
+Chapter 1: Introduction ................................................................................. 11 
+Chapter 2: Soft Pneumatic Systems .............................................................. 17 
+Pneumatic Circuits .................................................................................... 17 
+Multiplexing ............................................................................................. 20 
+Design Concept .................................................................................... 23 
+High-Gain Mechanism ......................................................................... 23 
+Hot-Plugging Function ......................................................................... 25 
+Logical Functions ................................................................................. 25 
+Reconfigurable vs Programmable Pneumatic Logic ............................ 28 
+Sensing and Control ............................................................................. 32 
+Hook-and-Loop Enabled Modular Systems ............................................. 36 
+Chapter 3: Materials and Methods ................................................................ 37 
+Fabrication ................................................................................................ 37 
+Experimental Setup ................................................................................... 39 
+Chapter 4: Discussion and Future Respective ............................................... 41 
+Populärvetenskaplig sammanfattning ........................................................... 44 
+Popular Science Summary ............................................................................ 46 
+Acknowledgements ....................................................................................... 48 
+Bibliography .................................................................................................. 50 
+  
+
+Abbreviations 
+NC Normally Closed 
+NO Normally Open 
+SPAM Soft Pneumatic Actuator Matrix 
+P Pressure 
+V Voltage 
+Q Flow Rate 
+I Current 
+C Capacitance 
+R Resistance 
+CMOS Complementary Metal Oxide Semiconductor 
+DLP Digital Light Procession 
+SLA Stereolithography Apparatus 
+3D  Three-Dimensional Printing 
+  
+
+ 
+ 11 
+Chapter 1: Introduction 
+Robotics and wearables have attracted significant  attention in both research 
+and society for decades. Their applications span diverse fields, including man-
+ufacturing, rehabilitations, and healthcare . For example, robot -assisted gait 
+training (RAGT) uses robotic devices with body weight support for high -in-
+tensity, repetitive, task-specific practice [1,2]. In the industrial manufacturing 
+section, these technologies enhance the productivity of 3D printing manufac-
+turing through the use of six-axis robotic systems [3]. Traditionally, such sys-
+tems have been constructed primarily from rigid electronic and electrome-
+chanical components. However, rigidity poses significant challenges in appli-
+cations involving fragile or force-sensitive objects, as well as interactions with 
+the human body, where comfort and gentle, compliant contact are required.  
+For example, in the food industry, soft grippers are employed to handle deli-
+cate products without damage (Figure 1A). These grippers are typically pneu-
+matically actuated and fabricated from silicone rubber rather than rigid metal 
+to provide complia nce and gentle force  control. Another example is robotic 
+exoskeletons, designed to enhance work performance, reduce physical strain, 
+or assist patients in rehabilitation (Figure 1B). While rigidity ensures struc-
+tural support, it often compromises comfort and adaptability. However, to go 
+one step further, there is a growing demand for systems that incorporate soft 
+materials, offering compliance, lightness, and user comfort. 
+ 
+ 
+Figure 1. (A) A soft gripper holding a cup cake. [4] (Reproduced with permission. Copyright 2017, IEEE) 
+(B) Rigid-flex exoskeleton. [5] (Reproduced from Näf et al., 2018, licensed under CC BY) 
+
+
+ 
+ 12 
+Soft robotics has emerged as a promising technology to address these limita-
+tions. Inspired by biological organisms such as octopuses, which exhibit ex-
+treme flexibility and adaptability, soft robotics integrates soft actuators, sen-
+sors, and control systems.  Various actuation principles have been explored, 
+including electrostatic, hydraulic, pneumatic, and tendon-driven mechanisms. 
+Applications range from wearable assistive devices 
+[6–9] and haptic interfaces 
+[10–14] (such as in Figure 2 A) to surgical robots [15,16] (such as in Figure 2B), 
+bionic systems [17] (such as in Figure 2C), and pipe-climbing robots [18,19]. 
+ 
+ 
+Figure 2. Soft robotics applications. ( A) Electrostatically driven wearable haptics. [10] (Reproduced with 
+Permission from John Wiley and Sons ) (B) An assembled robotic meshworm with an endoscopic camera.  
+[16] (Reproduced with Permission. Copyright 2017, IEEE) (C) Biomimetic autonomous underwater vehicle 
+(AUV). [17] (Reproduced with permission. Copyright 2015, IEEE ) 
+ 
+Despite recent advancements, several challenges persist in the development 
+and deployment of soft robotic systems . First, achieving effective coverage 
+over large anatomical regions, such as the full human body, remains a signif-
+icant hurdle. For instance, the distance from fingertip to foot can exceed two 
+meters, imposing stringent constraints on sensing density, actuation routing, 
+and control architecture, and overall system integration . Second, the design -
+to-prototype cycle is often time-consuming. This is evident in low-fidelity, 
+modular hardware platforms that are essential for rapid prototyping, user train-
+ing, and iterative design exploration. The need to quickly evaluate diverse de-
+sign hypotheses places additional pressure on fabrication pipelines. Third, ap-
+plications requiring high spatial resolution, such as haptic or virtual reality 
+(VR) gloves, necessitate the use of large arrays of individually controlled ac-
+tuators to approximate human tactile acuity [20]. Scaling to this level introduces 
+substantial complexity in fabrication, assembly, routing, and control, and de-
+mands new strategies for actuator miniaturization and addressing. Fourth, 
+
+
+ 
+ 13 
+although soft robotic systems increasingly leverage compliant materials, their 
+electronic control system often still depends on rigid and bulky electrome-
+chanical components. These rigid elements often constrain overall flexibility  
+and limit conformability to the human body. Finally, miniaturization remains 
+a critical requirement across a spectrum of wearable soft robotic devices. Fin-
+gertip-mounted systems must remain extremely compact to avoid obstructing 
+fine motoric tasks, and control units—particularly pneumatic valves—should 
+ideally be miniaturized to maintain portability and reduce the physical foot-
+print of the system. In addition, integrating pneumatic valves into existing 
+pneumatic systems often requires cutting and reconnecting tubing, which in-
+creases labour effort and elevates the risk of leakage, increasing costs and ul-
+timately compromising reliability and long-term usability.  
+Miniaturized pneumatic technology for soft robotics and wearables serves 
+as the foundation for this thesis, owing to several key advantages. (1) Softness 
+and Conformability. Soft pneumatic systems can be fabricated from compli-
+ant materials such as polymers or fabrics, enabling natural conformity to body 
+contours and deformation. This property is essential for wearable applications 
+where comfort and adaptability are critical.  (2) High Force Output . Pneu-
+matic actuators can generate substantial forces, sufficient to provide haptic 
+sensations or assist in physical movements. This capability is particularly im-
+portant in rehabilitation and assistive technologies. (3) Integration of Pneu-
+matic Circuits and Logic. Miniaturized multifunctional pneumatic valves al-
+low pneumatic systems to operate not only as actuators but also as computa-
+tion-capable platforms.  As illustrated in Figure 3A and 3B , logic-enabled 
+pneumatic valves have been applied in wearable soft robotics. By incorporat-
+ing pneumatic logic elements, these systems can perform operations such as 
+NOT, NAND, AND, or NOR, enabling distributed control within the soft sub-
+strate itself. Furthermore, pneumatic multiplexing makes it possible to control 
+arrays of actuators using a reduced number of input signals, thereby simplify-
+ing system architecture while maintaining rich output functionality.  (4) En-
+ergy Harvesting Potential.  Conventional pneumatic systems rely on air 
+pumps, which introduce noise and exhibit low energy conversion efficiency. 
+Alternatives such as compressed air cartridges offer quieter operation. Addi-
+tionally, integrating energy harvesting mechanisms 
+[6] into the system can im-
+prove energy efficiency to over 20%, outperforming electromagnetic alterna-
+tives. Moreover, m iniaturization plays a critical role in enabling compact, 
+lightweight, and high -performance designs. Advances in micromachining, 
+high-resolution additive manufacturing (e.g., DLP and SLA 3D printing), and 
+soft lithography have made it possible to fabricate pneumatic components with 
+sub-millimeter and millimeter-scale air channels, and thin-walled membranes. 
+
+ 
+ 14 
+These techniques allow precise control of channel geometry, reducing dead 
+volume and improving actuation speed. 
+ 
+ 
+Figure 3. Usage of pneumatic valves in wearables. (A) A pneumatic hot -plugging valve  into an existing 
+pneumatic systems . [21] (Adapted from Klas Hjort et al. , licensed under CC BY 4.0 ) (B) Logic-enabled 
+textile valves. [22] (Reproduced from Daniel J. Preston et al., licensed under CC BY-NC-ND 4.0) 
+ 
+Research Aims and Scope 
+The primary aim of this work is to identify key challenges and address re-
+search gaps in the domain of soft robotics and wearable systems by leveraging 
+soft pneumatic technology. Specifically, this research focuses on the follow-
+ing aspects: 
+(1) Multiplexing. Multiplexing is a technique that used to effectively in-
+crease the utilization of control signals  by allowing multiple outputs to 
+share the same control resources . For example, m ultiplexing techniques 
+in microfluidics were introduced in the early 2000s by Quake’s group [23], 
+who developed an array of pneumatic valves for controlling microfluidic 
+channels. They proposed a mathematical formulation to describe the rela-
+tionship between control signals (n) and outputs.  
+ 
+outputs=2 log2 n 
+ 
+While this technique has been adopted in microfluidics when it comes to 
+large scale, its application in soft robotics remains limited, with few ex-
+ceptions such as Wood’s work [24]. In Paper I, we propose a novel multi-
+plexing matrix featuring intersecting rows and columns, exploiting the 
+
+
+ 
+ 15 
+cumulative effects at crossed points to reduce complexity and space re-
+quirements, representing by the formular: 
+ 
+outputs=n×n 
+ 
+  Where 𝑛 is the number of control signals. 
+(2) Logical functions. Pneumatic logic offers the ability to perform decision-
+making without electronics, relying solely on pneumatic circuits. In 2016, 
+Philipp Rothemund introduced a bi- stable pneumatic valve, which later 
+enabled autonomous robots using oscillators constructed from such 
+valves. However, existing designs have limitations: integration often re-
+quires cutting flow tubing, and most implementations only support recon-
+figurability through physical reconnection of ports. In Paper II, we pre-
+sent logic-enabled valves with programmable logical functions, allowing 
+seamless integration into pneumatic systems via a slot -in mechanism 
+without cutting or reconnection. Furthermore, Papers III and IV intro-
+duce new valve designs, combining both reconfigurability and program-
+mability of logical functions. In contrast to the work presented in Paper 
+II, this later work proposes not only NO valves, but also NC valves, 
+thereby addressing a gap in the literature where most prior research has 
+focused solely on NO configurations. 
+(3) Sensing and Control. While electrical signals dominate sensing technol-
+ogies, previous studies have demonstrated pneumatic strain sensors em-
+bedded in soft grippers as strain gauges 
+[25,26]. In this work, we also intro-
+duce a sensing mechanism for electronics-free haptic feedback using mul-
+tifunctional pneumatic valves (Paper III), enabling interaction between 
+robots and users without the need for electronic components. Furthermore, 
+Paper IV extends these capabilities by providing not only sensing but also 
+autonomous control. By reacting to external objects encountered by a 
+gripper, the integrated valve system adjusts the internal pressure, accord-
+ingly, resulting in self-regulating force response. 
+(4) Modularity, reconfiguration, and programmability. Modular reconfig-
+urability can be achieved manually, as in modular robotics [18,27,28], or trig-
+gered by external stimuli such as heat  [29] or light [30]. Programmability 
+refers to the ability to modify system behavior through software control. 
+In this work, we introduce pneumatic valves (Paper III and IV) and re-
+configurable hook-and-loop enabled modular soft robots (Paper V), that 
+
+ 
+ 16 
+support both reconfigurability and programmability, enabling flexible 
+changes. 
+To conclude, this research aims to identify challenges and explore opportuni-
+ties in soft pneumatic robotics, with a particular focus on Multiplexing, Pneu-
+matic Logic, Sensing and Control, and Modularity, Reconfigurability and Pro-
+grammability. 
+  
+
+ 
+ 17 
+Chapter 2: Soft Pneumatic Systems 
+Soft pneumatic systems play an important role in the advancement of soft ro-
+botics and wearables. Their inherent compliance allows for safe and natural 
+interaction with humans. At the same time, their ability to generate substantial 
+force makes them well suited for powering motion and actuation in autono-
+mous soft robots. In this work, we focus on two dimensions of this technology: 
+the development of pneumatic circuits and the design of modular soft robotic 
+systems.
+ 
+Pneumatic Circuits 
+Electronic circuits are deeply embedded in modern technology, delivering the 
+convenience, speed, and computational power that underpin everyday devices. 
+In parallel, pneumatic circuits are emerging as a promising alternative within 
+soft robotics. These systems may combine multiplexing methods, high -gain 
+mechanisms, logical operations, and electronics-free sensing and autonomous 
+control—collectively offering a pathway toward fully autonomous soft robots 
+powered and controlled entirely by air.  As presented in “CMOS-Inspired 
+Complementary Fluidic Circuits for Soft Robots” 
+[31], pneumatic circuits pos-
+sess strong potential for enabling autonomous robotic s without conventional 
+electronics. When soft pneumatic valves serve as core components, these cir-
+cuits can realize three foundational capabilities: sensing, control, and actua-
+tion. Together, these functions emulate the core principles of biological sen-
+sorimotor systems, which integrate sensing, decision -making, and actuation  
+[32]. Paper III demonstrates this concept by showcasing an entirely pneumatic 
+sensorimotor loop composed of a processing unit (a NC valve), a sensing ele-
+ment (a pressure-sensitive pouch), and a wearable haptic actuator. 
+Pneumatic circuits can be effectively analyzed and designed using analo-
+gies to electrical circuits, which provide an intuitive and well-established con-
+ceptual framework. Table 1 summarizes the correspondence between funda-
+mental pneumatic and electrical parameters. 
+ 
+
+ 
+ 18 
+Table 1. Mapping summary of between pneumatic and electrical elements 
+Pneumatic Element Equivalent Electrical  Physical Meaning 
+Pressure (P) Voltage (V) Driving potential 
+Flow Rate (Q) Current (I) Transport rate 
+Flow Resistance (R) Resistance (R) Restricts flow 
+Valve Switch On/off flow regulation 
+   
+Note: Air compressibility introduce nonlinearities and increases modeling complexity, making pneumatic 
+system dynamics more challenging to capture than their electrical co unterparts [33].  
+ 
+This analogy is especially valuable when designing complex pneumatic net-
+works for soft robotic systems. For example, resistance R is change in differ-
+ential pressure versus change in mass flow rate, while capacitance C equals to 
+change in mass of air versus change in pressure  [34]. By mapping pneumatic 
+components onto their electrical equivalents, researchers can leverage estab-
+lished analytical tools and circuit theoretic methods. This not only streamlines 
+the design process but also facilitates a deeper understanding of steady -state 
+behaviors of soft actuators, enabling more precise prediction and control of 
+system dynamics.
+ 
+ 
+Figure 4. RC circuit with charging and discharging curves.  
+ 
+To illustrate this analogy, it is helpful to introduce the RC circuit model, 
+shown in Figure 4. An RC circuit is a first-order dynamical system governed 
+by a first-order differential equation. It consists of a resistor (R) and a capaci-
+tor (C) connected in series and serves as a fundamental representation of how 
+energy is stored and dissipated in a system. The charging and discharging be-
+havior of the capacitor closely parallels the inflation and deflation dynamics 
+of pneumatic chambers in soft robotic actuators. During charging, the capaci-
+tor gradually accumulates electrical energy, analogous to the progressive 
+
+
+ 
+ 19 
+pressurization of a pneumatic actuator. Conversely, during discharging, the 
+capacitor releases stored energy, mirroring the controlled depressurization ob-
+served in pneumatic networks.
+ 
+The time-dependent response of an RC circuit is characterized by the time 
+constant τ, which indicates the rate at which the capacitor charges or dis-
+charges. A smaller time constant indicates a faster response, allowing the sys-
+tem to reach its steady state quickly, whereas a larger time constant results in 
+a slower response, delaying the approach to steady state. This parallel enables 
+engineers to predict transient behavior, tune actuation speed, and design pneu-
+matic systems with targeted dynamic performance—without relying solely on 
+empirical testing. The governing equations for capacitor charging and dis-
+charging are: 
+Charging: V
+out(t)=Vin(1-e
+-t
+RC) 
+Discharging: Vout(t)=Vin(e
+-t
+RC) 
+ 
+In electrical systems, the resistance R and capacitance C together determine 
+the rate at which voltage changes over time. A similar relationship exists in 
+pneumatic systems: the flow resistance within the channels and the pneumatic 
+capacitance—arising from the actuator’s elasticity and its capacity for volume 
+change as well as the compressibility of the air—govern the speed of inflation 
+and deflation. Higher flow resistance slows the intake or release of air, while 
+greater compliance increases the volume of air required to reach a desired 
+pressure level. Consequently, the pneumatic time constant plays a critical role 
+in shaping the dynamic response of soft actuators, much like the electrical time 
+constant does in RC circuits. 
+ 
+  
+
+ 
+ 20 
+Multiplexing 
+Sometimes, soft robotic systems, and especially wearable haptic devices, re-
+quire a large number of actuators to achieve high -resolution tactile feedback 
+[10]. Consequently, conventional pneumatic implementations typically involve 
+numerous valves and air channels, which can lead to complex and resource-in-
+tensive control architecture. Multiplexing technology provides a potential so-
+lution to this challenge by substantially reducing the number of control signals. 
+In essence, multiplexing consolidates multiple input signals into a single 
+transmission stream (Figure 5A), while demultiplexing restores the original 
+signals at the output. These techniques, widely used in telecommunications 
+and electronics for managing multiple data streams over shared channels, have 
+recently been adapted for microfluidic and pneumatic systems. By leveraging 
+multiplexing, soft pneumatic systems can achieve scalable and efficient con-
+trol, paving the way for more compact designs.  
+A seminal example is the work by Quake’s research group  
+[23], published 
+in Science (2000), which demonstrated pneumatic -based multiplexed valve 
+control for large-scale microfluidic integration. Their system operated 1,024 
+fluidic flow channels using only 20 control lines, leveraging a logarithmic 
+scaling principle: 2 log2 n, where n represents the number of control channels. 
+This breakthrough inspired extensive research into multiplexing for microflu-
+idic systems [35]. It advances the designs where 19 fluidic channels were con-
+trolled using only four signals by manipulating actuator size and pressure pa-
+rameters, achieving superior efficiency in signal -to-channel ratios. Building 
+on this concept, R. Wood et al. proposed a fluidic demultiplexer for large ar-
+rays of soft actuators [24], introducing parallel structures and logic elements 
+such as NOT gates to halve the control signal requirements. 
+Paper I introduces a novel multiplexing strategy based on a crossed matrix 
+configuration (Figure 5B). Unlike the parallel structures which are predomi-
+nantly fabricated using soft lithography, the proposed actuator matrix employs 
+a 3D sacrificial microchannel technique. This approach enables the integration 
+of an additional patterned plastic film within the matrix to constrain downward 
+expansion and thereby enhance upward actuation. In this context, “upward” 
+refers to the side opposite the plastic film. The film is perforated with holes to 
+improve compatibility and bonding with the soft actuator matrix, ensuring 
+structural integrity and functional performance. Detailed fabrication proce-
+dures are provided in the Materials and Methods section. As illustrated in Fig-
+ure 5B, the crossed matrix consists of four rows and four columns, respec-
+tively, forming 16 intersection points controlled by only eight signals (4 × 2). 
+This design significantly reduces the number of control inputs compared to 
+traditional one valve t o one output systems. Paper I relies on a cumulative 
+
+ 
+ 21 
+actuation principle. Here, pressurizing two intersecting channels generates a 
+combined effect at the intersection point. Blue and red markers indicate cumu-
+lative points activated by the pressurization of four corresponding channels. 
+ 
+ 
+Figure 5. Multiplexing technology. (A) Multiplexing technology in electronics. (B) Top view of an actuator 
+matrix for multiplexing. The colored dots represent for actuated points.  [36] (Reproduced from Klas Hjort et 
+al., licensed under CC BY 4.0)  
+ 
+These points exhibit cumulative effects on both displacement and force. The 
+interactive behaviour of soft materials under combined actuation has been pre-
+viously explored by Zhicong Deng et al. [37], who demonstrated a four-phase 
+manipulation method using two soft actuators. In paper I, both stroke and 
+force exhibit a concave- up increasing relationship with applied pressure.  
+Thinking of blowing a ballon: first few breaths, barely expands leading to slow 
+growth; later breaths, ballon expands rapidly leading to fast growth. There is 
+an equation for spherical pressure vessels under thin-wall assumptions 
+[38]:  
+ 
+
+
+ 
+ 22 
+σt= pr
+2t 
+Where σ is stress in the inflated membrane, p is internal pressure, r is ra-
+dius of curvature, and 𝑡 is membrane thickness. Even though the matrix in this 
+work do not form spherical pressure vessels, they exhibit analogous inflation 
+mechanics. As pressurization increases, the effective radius of curvature of the 
+soft membrane increases while the membrane locally thins, resulting in a 
+higher tensile stress for a given pressure increment. Consequently, the actuator 
+compliance increases with inflation, producing a concave-up, accelerating re-
+sponse in both displacement and force. 
+
+ 
+ 23 
+“Soft” Pneumatic Valves 
+Unlike conventional rigid pneumatic valves that are typically engineered for 
+a single control role, “soft” pneumatic valves leverage material compliance to 
+achieve multifunctionality and versatility. These systems encompass a wide 
+range of capabilities, including fundamental pneumatic valve  operation [39], 
+physically responsive soft valve [40], high-gain amplifier [41], logical functions 
+[21,22,49,31,42–48], analog control [31,47,50,51], random-access memory [52], pneumatic 
+computing [53], autonomous robots [54], and electronics-free sensing. Beyond 
+these functionalities, soft pneumatic valves are characterized by their inherent 
+softness, which aims to minimize structural rigidity and enhance compliance. 
+Design Concept 
+Papers II, III, and IV introduce two distinct pinch-valve designs. Paper II 
+presents a hot-plugging pneumatic valve, whereas Papers III and IV describe 
+a multifunctional pneumatic valve architecture. These designs adopt a modu-
+lar approach by decoupling the control unit from the operational unit, thereby 
+enabling independent regulation of control pressure and supply pressure and 
+facilitating integration with diverse fluidic source. In this work, c ontrol units 
+are fabricated from elastomeric materials, while operational units employ thin 
+silicone tubing. For the closing mechanism, sharp ridge was strategically in-
+corporated to achieve low control pressure requirements while maintaining 
+high supply pressure capacity within the operation tubing. This design choice 
+optimizes actuation efficiency and enhances overall system performance. 
+High-Gain Mechanism 
+The concept of high gain , traditionally associated with electronics as an am-
+plification factor, is less frequently explored in pneumatic systems, where gain 
+is defined as the ratio between output pressure (Po) and supply pressure (Ps).  
+In this context, the design  presented in Paper II leverages a sharp -ridge 
+mechanism (Figure 6A) to pinch the tube to close it, then achieve mechanical 
+amplification, thereby enabling high gain.  Specially, a relatively low input 
+pressure can effectively control a higher output pressure, transforming a basic 
+pneumatic valve into a pneumatic amplifier. This functionality is particularly 
+advantageous in scenarios where direct control of high-pressure systems poses 
+challenges related to sealing integrity, material constraints, and operational 
+reliability. By employing low -pressure actuation for high -pressure compo-
+nents, the system simplifies handling and enhances durability.  As shown in 
+Figure 6B, the gain can be adjusted by modifying the distance between the 
+two control units , allowing it to reach values of eight . Consequently, this 
+
+ 
+ 24 
+approach opens new avenues for developing efficient, responsive, and scala-
+ble pneumatic architectures.  
+ 
+ 
+Figure 6. Working principle of gain adjustment. (a) Image of the hot -plugging valve including two control 
+units and a tube. (b) Sketch of gain adjustment through distance adjustment between the two control units.  
+ 
+  
+
+
+ 
+ 25 
+Hot-Plugging Function 
+In electronics, hot -plugging—often colloquially referred to as “plug -and-
+play” —denotes the capability to add or remove components from an operat-
+ing system without shutting down or rebooting. Typical examples include 
+USB peripherals (e.g., keyboards) that can be connected to a computer while 
+powered and actively running. By analogy, the hot-plugging functionality in-
+troduced in Paper II extends this concept to pneumatic systems, enabling the 
+insertion and removal of valve elements without cutting, and re-routing. 
+The motivation of this concept is that soft pneumatic systems increasingly 
+rely on continuous pneumatic supply lines that are sensitive to leakage. Tra-
+ditional integration of new components (e.g., valves) often requires breaking 
+and re-making connections, which can lead to process interruptions. 
+A hot- plugging pneumatic valve mitigates these drawbacks by enabling 
+real-time, non -invasive integration and reconfiguration, thereby improving 
+maintainability, system uptime, and experimental throughput. 
+Design Concept and Architecture 
+The hot-plugging valve designed in Paper II is capable of hot-plugging, and 
+its control units and operational units are hydraulically/pneumatically isolated. 
+This decoupled architecture yields several advantages: (i) Independent control 
+and supply pressures . The control pressure acts solely on the elastomeric 
+mechanism (e.g., a membrane or sharp-ridge indenter), whereas the supply 
+pressure remains confined to the operational tubing. (ii) Modular integration. 
+The valve can be positioned at any point along the tubing and engaged/disen-
+gaged without severing or reconnecting lines. (iii) Compatibility with multiple 
+fluid sources. Because control and supply are independent, diverse sources 
+(compressed air, inert gases, or bio -compatible fluids) can be used without 
+cross-contamination. (iv) Closing mechanism. A sharp-ridge geometry is em-
+ployed to include a localized pinch, achieving full occlusion at comparatively 
+low control pressures while tolerating high supply pressures within the tubing.  
+Logical Functions 
+Logic gates—NOT, AND, OR, XOR, NAND, NOR, XNOR  (Figure 7A)—
+provide a set of operations needed for digital computation and decision-mak-
+ing. While traditionally implemented in electronics, logic circuits are not ex-
+clusive to electrical domains: fluidic and pneumatic analogs can realize equiv-
+alent logical behavior using pressure (or flow) as the signal variable. 
+With the advancement of soft robotics and soft pneumatic valves, research-
+ers have demonstrated that compliant pneumatic components can reduce 
+
+ 
+ 26 
+rigidity while embedding computation into the actuation substrate [12,21,39,45,50]. 
+This approach aims to achieve electronics-free signal processing—valuable in 
+environments where electronic components are impractical  (e.g., high radia-
+tion, strong electromagnetic fields ), undesirable  (e.g., MRI-compatible de-
+vices), or require isolation (e.g., chemically aggressive settings). 
+ 
+ 
+Figure 7. Logical functions. (A) Seven basic logic gates, including an AND, a NAND, an OR, a NOR, a 
+NOT, a XOR, a NXOR gate . (B) Workflow of a NOT, AND, OR gate. The valve is designed as a bistable 
+valve, which is able to be configured to achieve varied logic gate behaviors . [50] (Reproduced from George 
+M. Whitesides  et al., licensed under CC BY -NC-ND 4.0) (C) Sketch of a programmable logic gate and 
+reconfigurable logic gate. 
+ 
+These soft pneumatic valves inherently exhibit switching behavior, making 
+them natural candidates for logic primitives. By tuning material properties 
+(e.g., elastic modulus) and mechanical configuration  (e.g., snap-through ge-
+ometries, sharp-ridge indenters), valves can be engineered to exhibit bistable 
+states—maintaining one of two distinct configurations without continuous en-
+ergy input. However, as demonstrated by Colter J. D. et al. [50] (see Figure 7B), 
+switching between different logical functions in most valve systems typically 
+
+
+ 
+ 27 
+requires manual reconfiguration of the connection ports. Figure 7C illustrates 
+two categories of logic gates: programmable and reconfigurable. The key dis-
+tinction is that programmable gates achieve different logic behavior solely 
+through adjustments to their control pressures, whereas re configurable gates 
+require physical reconnection of their pneumatic pathways.  
+  
+
+ 
+ 28 
+Reconfigurable vs Programmable Pneumatic Logic 
+Most existing implementations rely on re configurable valves, where distinct 
+logic functions are obtained by physically altering input connections (re-wir-
+ing). While simple and robust, configurability limits adaptability, as each 
+functional change requires a mechanical reconfiguration.  In contrast, a pro-
+grammable pneumatic logic gate supports dynamic reconfiguration of its truth 
+table by varying control pressures without changing physical connections. 
+Programmability enhances responsiveness, reduces mechanical overhead, and 
+enables multifunctional components.  
+Paper II develops a programmable, logic-enabled pneumatic valve capable 
+of switching between NAND and NOR behaviors by tuning pressures. Table 
+2 summarizes the truth tables for NAND, NOR, AND, and OR gates.  
+ 
+Table 2. Truth tables for a NAND, NOR, AND, and OR gate 
+ Input 1 Input 2 Output 
+ 0 0 1 
+NAND gate 0 1 1 
+ 1 0 1 
+ 1 1 0 
+ 0 0 1 
+NOR gate 0 1 0 
+ 1 0 0 
+ 1 1 0 
+ 0 0 0 
+AND gate 0 1 0 
+ 1 0 0 
+ 1 1 1 
+ 0 0 0 
+OR gate 0 1 1 
+ 1 0 1 
+ 1 1 1 
+ 
+As described in Paper II, the control pressure applied to NOR operation is 
+higher than that for NAND, reflecting the distinct pressure thresholds associ-
+ated with each logic function. This differential pressure configuration enables 
+the programmable valve to perform multiple logic functions—NOT, NAND, 
+and NOR. By adjusting the control pressures appropriately, a single  physical 
+component can be reconfigured to exhibit distinct logical behaviors, thereby 
+enhancing the versatility and compactness of pneumatic logic systems for soft 
+robotics. 
+
+ 
+ 29 
+Figure 8 presents an analogy between pneumatic actuation and electrical 
+circuits, specifically highlighting the corresponding electrical signals from 
+two RC circuits with capacitances of 1 μF and 2 μF. This comparison under-
+scores the dynamic similarity (see Paper II), the inflation speed of pneumatic 
+actuators, is analogous to the charging rate of a capacitor in an RC circuit. 
+ 
+ 
+Figure 8. Simulated signals from the two different capacitors in the circuit.  
+ 
+The significance of this analogy lies in its ability to provide predictive insights 
+into actuator behavior. Just as the charging speed in an RC circuit depends on 
+the capacitance and resistance values, the inflation rate of a pneumatic actuator 
+is influenced by the geometry of the channels, the viscosity of the working 
+fluid, and the compliance of the elastomeric material. By leveraging this rela-
+tionship, designers can model pneumatic networks using established electrical 
+principles, facilitating the optimization of actuation speed and system respon-
+siveness without relying solely on empirical testing. 
+Beyond programmability, the designs also demonstrate reconfigurability 
+through changes in actuator size, as shown in Figure  9 of Paper IV. Mecha-
+nistically, varying actuator geometry, enabling mode shifts: (i) In NO valves, 
+increasing actuator size can shift behavior from NAND to NOR, because a 
+single input can now produce sufficient closure when its mechanical contri-
+bution dominates. (ii) In NC valves, analogous adjustments shift AND to OR, 
+because the threshold for opening (dual inputs required in AND) can be satis-
+fied by either input  with large actuators.  Besides, NC valves are closed by 
+default, saving energy in idle states, and reducing unintentional actuation; they 
+require explicit control pressure to open.  
+ 
+ 
+ 
+
+
+ 
+ 30 
+ 
+Figure 9. Programmability and reconfigurability  of logic functions. For a NO valve, a NAND gate can be 
+reconfigured or programmed as a NOR gate. For a NC valve, a AND gate can be reconfigured or pro-
+grammed as a OR gate. 
+Application: NAND-Enabled Secured Gripper (Paper II)  
+Paper II implements a secured pneumatic gripper as a functional demonstra-
+tion (Figure 10A and 10B). The original unsecured gripper comprised two 
+fingers pressurized from a single source (Finger_O). The secured configura-
+tion extends to four fingers: two primary grasping fingers (Finger_R, Finger_P) 
+and two responsive fingers (Finger_Os) that inflate automatically when the 
+logic detects an alarm (safety trigger). A NAND gate outputs HIGH unless 
+both inputs are HIGH; equivalently, it detects any LOW input and drives the 
+output HIGH. In the gripper context, if either grasping finger’s sensed signal 
+drops (e.g., leakage), the NAND logic automatically pressurizes the output 
+channel feeding Finger_Os, achieving a fail -safe assist and stabilizing the 
+grasp (Figure 10C). The output (Finger_O) transitions HIGH when the relative 
+resistance changes of Finger_R decreases to approximately 3% (∆R/R
+≈ 3%). 
+The reaction speed is governed by two coupled dynamics: (i) Valve dynamics. 
+Time to reach the closed state, determined by elastomer response and indenter 
+mechanics. (ii) Pneumatic fill dynamics. Inflation time of Finger_Os, which 
+can be approximated by an RC-like pneumatic time constant: 
+ 
+τ ≈ Rline ∙ CFingers 
+ 
+Where Rline is the flow resistance and CFingers is the capacitance of the respon-
+sive fingers. By tuning line restrictions, finger volumes, and thresholds, the 
+secured gripper can be optimized for rapid stabilization. 
+ 
+
+
+ 
+ 31 
+ 
+Figure 10. A secured gripper. (A) Sketch of valve connection when embedding into a gripper. [21] (Repro-
+duced from Klas Hjort et al., licensed under CC BY 4.0) (B) Image of a secured gripper with four fingers. 
+[21] (Reproduced from Klas Hjort et al., licensed under CC BY 4.0) (C) Relative resistance changes of the 
+leakage process on Finger_R and corresponding response on Finger_O. [21] (Reproduced from Klas Hjort 
+et al., licensed under CC BY 4.0)  
+  
+
+
+ 
+ 32 
+Sensing and Control 
+Pneumatic circuits can be endowed with sensing capabilities by exploiting the 
+mechanics and fluid dy namics of embedded channels and compliant struc-
+tures, thereby avoiding reliance on electrically sensitive materials [26]. Papers 
+III and IV open complementary pathways in soft robotic systems: (i) Sensing 
+using pneumatic valves. A soft pneumatic valve can operate as a threshold or 
+analog sensor, producing a measurable (open/closed or partially throttled)  in 
+response to pressure inputs. (ii) Electronics-free sensing and processing. Be-
+yond single-function sensing, pneumatic components can be combined to re-
+alize more complex behavior such as signal conditioning, processing, and re-
+flex-like actuation. This configuration constitutes a pneumatic analog to bio-
+logical sensorimotor reflex arc  and enables fully soft computation without 
+electronics (see Figure 11). (iii) Electronics-free autonomous sensing and con-
+trol, enabling a reflex -like response to external stimuli . The integrated pres-
+sure-sensitive pouches and pneumatic valve form a fully passive sensor-valve 
+system that autonomously adjusts internal pressure based on objects, enabling 
+electronics-free grasping and force regulation. This pneumatic feedback loop 
+allows the gripper to sense, decide, and modulate its behavior without any 
+external electronics. (iv) Object classification. By linking pressure- sensitive 
+pouches to the valve system, the system generates object- specific pressure-
+position signatures that can be classified.  
+Somatic Reflex Arc 
+The somatic reflex arc is a biological pathway comprising three key elements: 
+a sensory receptor, an integrating center, and an effector (Figure 11A). It ena-
+bles the body to respond rapidly and automatically to external stimuli without 
+requiring conscious thought. For example, if you touch an extremely hot sur-
+face, thermal receptors in your skin immediately detect the harmful stimulus 
+and transmit a signal to the spinal cord, where the integrating center processes 
+the information almost instantaneously. Instead of waiting for the brain to in-
+terpret the signal, the spinal cord directly activates motor neurons, triggering 
+your arm muscles to contract and pull your hand away. In Paper III, a pneu-
+matic analog of this structure can be formulated as follows: (i) Pneumatic sen-
+sor. A deformable pneumatic channel or cavity serves as the receptor by trans-
+ducing mechanical stimuli, such as contact, or external load, into a pressure 
+signal. As the structure deforms, the internal pressure changes, providing a 
+direct pneumatic representation of the mechanical input. A pressure-sensitive 
+pouch is considered as the pneumatic sensor. (ii) Integrating center. A pneu-
+matic valve functions as the integrating center, processing the incoming signal 
+and applying thresholding, amplification, or logic -based decision rules. 
+
+ 
+ 33 
+Depending on its configuration, the valve can mimic simple reflex-level com-
+putations. (iii) Actuator. The actuator can be realized by a soft pneumatic ac-
+tuator—such as a bending module, bellows chamber, or inflatable gripper fin-
+ger. This actuator responds directly to the processed pneumatic signal, execut-
+ing the corresponding mechanical action. Unlike conscious, voluntary de ci-
+sion-making processes that require complex computation and high -level 
+control, the reflex arc produces rapid, protective, or stabilizing responses. Its 
+pneumatic counterpart similarly reduces the computational burden on central-
+ized controllers by enablin g local, materials -level decision -making, fully 
+without electronics (Figure 11B). This embedded, decentralized mode of op-
+eration highlights the potential of pneumatic systems to support autonomy and 
+embodied intelligence in soft robotics. 
+ 
+ 
+Figure 11. Sensorimotor functions. (A) Schematic of the somatic reflex arc in human s. [55] (Reprinted with 
+permission from John Wiley and Sons) (B) Schematic of the somatic reflex arc implemented in our system, 
+consisting of a pressure-sensitive pouch, a processing unit, and an actuator . 
+Electronics-Free Autonomous Sensing and Control  
+In Paper IV, we address this limitation by integrating a pneumatic valve as a 
+decision-making element with pressure -sensitive pouches serving as control 
+units, forming a fully passive sensor–valve system. This configuration enables 
+electronics-free autonomous grasping driven solely by object dimensions, en-
+abling a reflex-like response to external stimuli. This behavior resembles bio-
+logical reflexes, which operate rapidly and autonomously without involving 
+centralized computation. Five objects of different dimensions were evaluated, 
+and their corresponding closed-loop steady-state pressures were recorded. The 
+dimensions of the objects were 22 × 22 × 22 mm³, 21 × 21 × 21 mm³, 
+20 × 20 × 20 mm³, 20 × 20 × 5 mm³, and 20 × 20 × 2 mm³ , which are namely 
+as Object 1 to Object 5 accordingly. The measured pressures demonstrate that 
+
+
+ 
+ 34 
+the sensor–valve system actively adjusts its internal pressure according to ob-
+jects, allowing the gripper to adapt its grasping force without external elec-
+tronics. The overall grasping procedure is illustrated in Figure 12 and consists 
+of three steps: Step1: The experiment begins with the solenoid valve turned 
+OFF, while the NO valve remains open by default. Step 2: When the solenoid 
+valve is switched ON, the NO valve also remains open because the defor-
+mation of the pressure-sensitive pouches is not yet sufficient to close it. Step 
+3: As grasping continues, deformation of the pouches generates enough pres-
+sure to close the NO valve, thereby completing the autonomous pressure-reg-
+ulation loop. This mechanism enables the gripper to modulate sits gripping 
+force entirely through a passive pneumatic valve. 
+ 
+ 
+Figure 12. Autonomous operation of the left half of a soft gripper. S1, S2 and S3 denote the deformation of 
+a pressure-sensitive pouch. Step 1: The solenoid valve is OFF while the NO valve is NO. S1 = 0. Step 2: 
+The solenoid valve is ON while the NO valve is NO. S1 < S2. Step 3: The solenoid valve is OFF but the 
+NO valve is OFF. S1 < S2 < S3. 
+Object Classification by A Robotic Gripper with a Sensor-Valve System 
+ 
+Figure 13. Five objects used for classification. Arrows indicate the direction in which the robotic gripper 
+approaches and grasps each object.   
+ 
+In Paper IV, a valve-based sensing mechanism was integrated into a two -
+panel robotic gripper to enable tactile object classification. Two pressure-sen-
+sitive pouches, each linked to one of the valve’s control units, generated their 
+respective pressure signatures when deformed during grasping. By analyzing 
+the relationship between gripper position and valve-produced pressure for five 
+
+
+ 
+ 35 
+standard objects  (see Figure 1 3), object- specific pressure –position profiles 
+were obtained. Across 100 autonomous trials, the system achieved a 98% clas-
+sification accuracy, demonstrating that the embedded valve-based sensing ap-
+proach reliably distinguishes objects through grasp-induced pressure patterns 
+and offers a lightweight solution for soft robotic perception. 
+Together, these demonstrations underline the pneumatic valve’s potential 
+to serve as a foundational component for intelligent pneumatic systems. Such 
+system draw inspiration from biological organisms, where intelligence 
+emerges through multiple layers of processing, from instantaneous reflexes 
+medicated by the spinal cord to deliberate  and conscious decision -making 
+governed by the brain. By emulating theses biological paradigms, the pro-
+posed pneumatic architecture aims to bridge low -level mechanical responses 
+with more complex, high-level functionalities, ultimately contributing to the 
+development of intelligent soft robotics. 
+  
+
+ 
+ 36 
+Hook-and-Loop Enabled Modular Systems 
+Low-fidelity systems are important  to the creative process in interaction de-
+sign, enabling rapid ideation, iterative prototyping, and exploration of alterna-
+tive configurations. In parallel, a variety of modular architectures have been 
+developed specifically for soft robotics to support similar goals of fast itera-
+tion and reconfigurability. We introduce a reversible, low -profile hook-and-
+loop interface for assembling soft robotic modules. The approach prioritizes 
+compliance, rapid reconfiguration, and zero e lectrical power consumption at 
+the connector, while preserving compatibility with heterogeneous materials 
+(e.g., silicone rubbers, textiles, thin plastics) and standard soft robotic primi-
+tives (bending/expansion actuators and strain sensors). The framework scales 
+to heterogeneous system (textiles + plastics + silicones ) and demonstrates 
+inchworm locomotion with programmatic control.  
+
+ 
+ 37 
+Chapter 3: Materials and Methods 
+Fabrication 
+Soft robotics encompasses a wide range of fabrication techniques, such as 
+photolithography and PDMS casting using 3D -printed molds. In this work, 
+however, we adopt a fabrication strategy that prioritizes the use of sacrificial 
+materials and layered molds to construct monolithic structures composed en-
+tirely of a single material, as used in Papers I, III, IV.  
+The incorporation of sacrificial materials offers several advantages. Most 
+notably, it facilitates rapid prototyping and ensures that the final structure is 
+monolithic, minimizing the need for adhesives to seal individual components 
+of the main body. This is particularly critical in soft robotics, where airtight-
+ness and mechanical integrity are essential. Traditionally, silicone adhesives 
+such as Elastosil A07 have been employed for sealing  or attaching compo-
+nents, a process that typically requires several hours to cure at room tempera-
+ture. By eliminating this step, the overall fabrication process becomes signif-
+icantly more efficient.  Furthermore, the layered mold technique provides a 
+straightforward and versatile approach for achieving complex geometries, in-
+cluding the integration of internal features such as intricate channel networks 
+or functional elements. 
+ 
+ 
+Figure 14. Fabrication scheme of an actuator matrix. [36] S-M refers to a SPAM actuator incorporating an 
+internal mesh structure. (Reproduced from Klas Hjort et al., licensed under CC BY 4.0)  
+
+
+ 
+ 38 
+Material selection plays a pivotal role in determining the success of fabri-
+cation process. In the layered molding approach described in Paper I, a 0.1 
+mm-thick Mylar film was patterned as the sacrificial material to form internal 
+channels (Figure 14). This method produces main channels with a width of 1 
+mm while incorporating narrower plugging ports with a width of 0.4 mm. Its 
+stiffness ensures dimensional stability during molding, preventing unintended 
+contact and enabling the successful formation of dual-layer channel networks 
+within a matrix actuator. 
+The primary structural materials utilized in this work are silicone elasto-
+mers, specifically Ecoflex 0030, Sylgard 184, and Smooth-Sil 950. These var-
+iants were selected for their favorable mechanical properties. They were used 
+to fabricate both pneumatic actuators and strain sensors  (Ecoflex 0030 and 
+Sylgard 184). Silicone is well-suited for soft robotics due to its flexibility, bi-
+ocompatibility, and ease of molding. 
+In addition to soft materials, rigid components were integrated into certain 
+devices (Figure 15) . Incorporating rigid parts provides a straightforward 
+method for constructing entire valves compared to molding stiffer rubber ma-
+terials, even though the latter offers greater durability than thin resin pieces. 
+These rigid elements were fabricated using a DLP resin printer (Max X, Asiga, 
+Ltd.) with a printing resolution of 0.1 mm . The blue -colored silicone corre-
+sponds to Smooth-Sil 950, while the inner and outer diameter of the silicone 
+tubing is 0.3 mm and 0.5 mm, respectively. 
+ 
+ 
+Figure 15. Images of a NO (left) and NC (right) valve.  
+ 
+ 
+ 
+ 
+
+
+ 
+ 39 
+Experimental Setup 
+Compressed air was used throughout this work via pipe lines connected to 
+pressure regulators and commercial manual valves. One of the first challenges 
+encountered was the mismatch between the connection interfaces of standard 
+pneumatic equipment and our custom devices. For example, the inner diame-
+ter (ID) of plastic tubing connected to a pressure regulator is typically 4 mm, 
+whereas the ID of tubing used in our system is less than 1 mm. A simple so-
+lution to bridge this size discrepancy is to fabricate a PDMS  block, punch a 
+hole to accommodate the smaller tubing, insert the block into the larger tubing, 
+and seal the interface with silicone adhesive (A07). As shown in Figure 16A, 
+a 3D-printed manifold coupled with four outputs and four manual valves was 
+employed in Paper I. This configuration provides a convenient approach 
+when multiple air channels are required, such as for operating a “4 × 4” actu-
+ator matrix.
+ 
+ 
+ 
+Figure 16. Examples of measurement setups. (A) A 3D-printed pneumatic manifold for distributing airflow 
+to multiple channels. (B) Measurement setup with a force gauge mounted on a linear motor for automated 
+position-force characterization. (C) Photograph of the Arduino-based control system with eight electrically 
+actuated valves. (D) Schematic of a Darlington transistor array used for signal amplification and reliable 
+valve switching.  
+ 
+Figure 16B illustrates a measurement setup consisting of a linear motor and a 
+force gauge. This configuration enables automated fine position control, 
+
+
+ 
+ 40 
+miniaturizing the need for manual adjustments. In Papers III, IV, V, by syn-
+chronizing motor displacement with force readings, the system allows precise 
+characterization of the position–force relationship, which is essential for eval-
+uating performance and compliance. Figure 16C presents an electrical control 
+system comprising solenoid valves and an Arduino board. This setup provides 
+programmable actuation sequences and timing control, facilitating experi-
+ments that require repeatable and dynamic pneumatic operations. Figure 16D 
+shows a schematic of a Darlington transistor array used to interface the Ar-
+duino with multiple electronical valves. The Darlington array amplifies con-
+trol signals, providing sufficient current to ensure reliable valve switching un-
+der varying load conditions. This component serves as an interface that sup-
+ports the electrical control system shown in Figure 16C.  
+ 
+
+ 
+ 41 
+Chapter 4: Discussion and Future Respective 
+This PhD thesis in vestigates soft robotic systems, with a particular focus on 
+pneumatic technologies, encompassing both pneumatic circuit architectures 
+and modular soft robotic platforms. Analogous to the role of electronic circuits 
+in the digital domain, pneumatic circuits hold significant potential to perform 
+multiplexed control, reduce the number of required control signals, and enable 
+actuation, sensing, and decision-making directly through fluidic mechanisms. 
+By leveraging valve designs and circuit configurations, these systems can em-
+bed computation and control within compliant materials, thereby reducing re-
+liance on rigid electronics. In parallel, soft modular robotic concepts are intro-
+duced to simplify design iteration, reconfiguration, and system-level integra-
+tion. Modular pneumatic structures allow rapid assembly and adaptation of 
+soft robots without complex fabrication steps, lowering the barrier to proto-
+typing and enabling wider applicability across diverse tasks. Together, these 
+innovations aim to ease the implementation of soft robotic systems by reduc-
+ing hardware complexity, minimizing electronic dependency in environments 
+where electronics may be undesirable, and broadening the functionality achiev-
+able through fully pneumatic means. As a result, this thesis advances soft pneu-
+matic robotics toward practical deployment in applications such as wearable 
+soft robotics, autonomous soft robots, and embodied sensorimotor pneumatic 
+systems.
+ 
+ 
+Paper I introduces a multiplexed pneumatic control strategy that significantly 
+reduces the number of input lines required to address large arrays of soft pneu-
+matic actuators. The method employs a three-dimensional matrix architecture 
+composed of intersecting row and column channels. When a specific row and 
+column are simultaneously pressurized, their cumulative effect generates a lo-
+calized actuation point at the intersection. This mechanism enables an output 
+scaling of n
+2 actuators using only 2n control signals, representing a substan-
+tial improvement in control efficiency for high -density soft robotic systems. 
+By leveraging cumulative actuation at matrix cross -points, this technique 
+
+ 
+ 42 
+allows soft actuator arrays to be constructed with far fewer pneumatic connec-
+tions, reducing both hardware complexity and fabrication effort. 
+Paper II-IV together introduce two generations of pneumatic valves that ex-
+pand the functional capabilities of soft pneumatic circuits. Paper II presents 
+a hot-plugging pneumatic valve designed for seamless integration into exist-
+ing pneumatic networks without cutting or reconnecting tubing. This architec-
+ture enables rapid reconfiguration, supports high pressure gain, and provides 
+programmable logic behavior by adjusting control pressures. Papers III and 
+IV build upon this concept by developing a multifunctional pneumatic valve 
+platform capable of both reconfigurability and programmability. These valves 
+are available in two configurations —normally open and normally closed —
+allowing them to execute Boolean logic operations such as AND, OR, NAND, 
+and NOR. Beyond logic processing, the multifunctional valves can also serve 
+as sensing and control elements, enabling fully pneumatic sensorimotor re-
+sponses and autonomous behaviors.
+ 
+ 
+Paper V introduces a straightforward approach for constructing modular soft 
+robots using hook-and-loop tapes as the primary connection mechanism. This 
+method provides a reversible, lightweight, and compliant fastening strategy 
+that avoids the rigidity, complexity, or irreversibility associated with mechan-
+ical, magnetic, or adhesive connectors. By enabling rapid assembly and disas-
+sembly of soft robotic modules without tools or curing steps, the tape interface 
+greatly accelerates prototyping and supports fast reconfiguration of system 
+morphology and functionality. Moreover, the method is compatible with di-
+verse soft materials, such as silicone rubbers, textiles, and flexible plastics, 
+allowing heterogeneous components to be combined into grippers, locomotion 
+systems, or task-specific end-effectors within seconds. Through these capabil-
+ities, it demonstrates that hook -and-loop modularity offers a practical and 
+scalable platform for building adaptable soft robots, lowering design barriers, 
+and facilitating iterative exploration in soft robotic research and applications. 
+ 
+Taken together, these five papers form a comprehensive and interconnected 
+body of work that advances soft pneumatic robotics across multiple dimen-
+sions—scalable control architectures, embedded fluidic computation, elec-
+tronics-free sensing and decision-making, and rapidly reconfigurable modular 
+design. By integrating multiplexed actuation strategies, programmable and re-
+configurable pneumatic logic, multifunctional sensing –control valves, and 
+versatile hook -and-loop modular assembly, the thesis establishes a unified 
+
+ 
+ 43 
+foundation for soft robots capable of adaptive intelligence. Collectively, the 
+contributions demonstrate a coherent progression toward soft pneumatic ro-
+bots that are scalable, embodied, and capable of operating with reduced elec-
+tronic dependency—unlocking new possibilities for wearable devices, auton-
+omous manipulation, and distributed fluidic computation. 
+
+ 
+ 44 
+Populärvetenskaplig sammanfattning 
+Mjuka robotar är en ny generation av maskiner som är byggda med mjuka och 
+följsamma material och inte enbart av styva material med leder. Deras mjuk-
+het gör dem säkrare vid samverkan med människor och bättre lämpade för att 
+hantera ömtåliga föremål. Den vanligaste typen av mjuka robotar använder 
+trycksatt luft för att driva dem (s.k. pneumatik).  Slangarna som leder tryck-
+luften och de tryckluftsatta komponenter som ger rörelse och kraft kan lätt 
+göras mjuka och följsamma. Tyvärr är deras styrsystem inte mjukt – det är 
+fortfarande beroende av traditionell elektronik, kabl ar och elektromekanik 
+som ventiler. Många av dessa komponenter är hårda och styva. Ofta är de så 
+stora och klumpiga att de behöver sättas i en separat styranordning utanför den 
+mjuka roboten. 
+Denna avhandling utforskar ett alternativt angreppssätt: att enbart använda 
+små komponenter som drivs av trycksatt luft för att få mjuka robotar att känna, 
+reagera och röra sig. På så sätt kan mjuka robotar bli lättare, enklare att bygga, 
+och fungera i miljöer där elektriska komponenter  riskerar att fallera, såsom 
+under vatten, i starka magnetfält, eller i en framtida kroppsburen robotik som 
+i det närmaste är lika bekväm och följsam som vanliga kläder. 
+En central utmaning inom mjuk robotik är hur man styr många små upp-
+blåsbara komponenter utan att behöva ett stort och komplicerat nätverk av 
+slangar och ventiler. Den första delen av arbetet presenterar en smart lösning 
+inspirerad av datortangentbord: en tredimensionell pneumatisk struktur  som 
+använder ett litet antal insignaler för att styra ett betydligt större antal utgångar. 
+Denna teknik, kallad multiplexering, gör det möjligt att effektivt styra ett rut-
+nät av mjuka drivelement  och därmed möjliggöra högupplösta skärmar och 
+ärmar och andra system som kan förmedla beröring och rörelse (s.k. haptik), 
+och som annars skulle kräva mycket mer hårdvara. 
+Nästa del av avhandlingen fokuserar på utvecklingen av nya typer av pneu-
+matiska ventiler – de komponenter som styr luftflödet i en mjuk robot. Trad-
+itionella ventiler är stela, men här introduceras två uppfinningar. Den första är 
+en “hot-plugging”-ventil som kan kopplas till eller tas bort från ett pneuma-
+tiskt system omedelbart, utan att slangarna i det pneumatiska systemet behö-
+ver klippas av. Den andra är en uppsättning multifunktionella ventiler som kan 
+vara både normalt öppna och normalt stängda. Båda typerna kan utföra logik 
+
+ 
+ 45 
+– enkla former av beslutsfattande, liknande hur en dator bearbetar information. 
+Genom att justera lufttrycket kan ventilerna växla mellan olika logiska funkt-
+ioner, och eftersom de så små stör de inte så mycket utan de passar  naturligt 
+in i “mjuka” robotsystem. 
+Med hjälp av dessa nyutvecklade ventiler visar vi att mjuka robotar kan 
+utföra olika typer av avkänning och samverkan. Ett exempel handlar om hur 
+en användare samarbetar med en robot för att varsamt och säkert greppa frukt 
+utan att tappa eller skada den – helt utan elektronik. Ett annat exempel är ett 
+mjukt gripdon som utan elektronik känner av ett objekts storlek genom de-
+formation i tryckkänsliga luftfickor och automatiskt justerar sitt tryck för att 
+skapa ett passande grepp. Ytterligare ett exempel visar hur en robot 
+kan ”känna” och identifiera olika föremål genom att mäta de unika tryckmöns-
+ter som uppstår när gripdonet stängs, med nästan perfekt noggrannhet. 
+Avhandlingens sista del presenterar en praktisk metod för att bygga modu-
+lära mjuka robotar med hjälp av vanlig kardborretejp (liknande Velcro). Med 
+denna metod kan mjuka robotkomponenter – såsom böjaktuatorer, sensorer 
+eller stödelement – fästas och flyttas runt i nya kombinationer på några sekun-
+der. Med samma uppsättning komponenter kan man snabbt skapa en mjuk 
+hand, ett gripdon eller till och med en klättrande robot, vilket möjliggör en 
+snabb utprovning av olika designer  och minskar behovet av avancerad t ill-
+verkning. 
+Tillsammans visar avhandlingens bidrag hur små luftdrivna komponenter 
+och system kan förenkla, förbättra och utöka vad mjuka robotar kan göra. Ge-
+nom att minska beroendet av elektronik och utnyttja de naturliga fördelarna 
+hos mjuka material öppnar arbetet dörren för mjuka robotar som är mer an-
+passningsbara, lättare att bära och säkrare tillsammans med människor. Dessa 
+nya landvinningar för robotiken närmare visionen om mjuka maskiner som 
+rör sig, reagerar och samarbetar med sin omgivning lika naturligt som levande 
+organismer. 
+
+ 
+ 46 
+Popular Science Summary 
+Soft robots are a new generation of machines made from flexible, stretchable 
+materials instead of rigid metal. Their softness makes them safer for interact-
+ing with humans and better suited for handling delicate objects. However, 
+even though the bodies of these robots are soft, their control systems are usu-
+ally not—most still depend on traditional electronics, wires, and rigid valves.  
+This thesis explores an alternative path: using only pneumatics to help soft 
+robots sense, think, and move. By replacing electronic components with smart 
+air-based mechanisms, soft robots can become lighter, safer, more adaptable, 
+and capable of functioning in environments where electronics may fa il, such 
+as underwater, near strong magnetic fields, or in wearable devices that must 
+conform comfortably to the human body. 
+A major challenge in soft robotics is how to control many small inflatable 
+components, known as actuators, without needing a large and complicated 
+network of tubing and valves. The first part of this work introduces a clever 
+solution inspired by computer keyboards: a 3D pneumatic matrix that uses a 
+small number of input signals to control a much larger number of outputs. This 
+technique, called multiplexing, allows a grid of soft actuators to be controlled 
+efficiently, making it possible to build high-resolution haptic displays, wearable 
+sleeves, and other devices that would otherwise require too much hardware. 
+The next part of the thesis focuses on developing new kinds of pneumatic 
+valves—the essential components that control how air flows inside a soft robot. 
+Traditional valves are rigid, here, two innovations are introduced. The first is 
+a hot-plugging valve that can be attached or removed from a pneumatic system 
+instantly, without cutting tubes. The second is a set of multifunctional valves 
+that can be not only normally open but also normally closed. Both valves per-
+form logic—simple forms of decision-making, similar to the way a computer 
+processes information. By adjusting air pressure, these valves can switch be-
+tween different logical behaviors, and because they are soft, they fit naturally 
+into compliant robotic systems. 
+Using these newly developed valves, the thesis demonstrates that soft ro-
+bots can perform a range of sensing and interaction tasks. One example in-
+volves human users interacting with a robot to grasp fruits gently and securely 
+to preventing drops or damage using only pneumatic feedback. Another 
+
+ 
+ 47 
+example showcases an electronics-free soft gripper that detects an object’s 
+size through deformation of pressure-sensitive pouches and automatically ad-
+justs its pressure to apply an appropriate gripping force. A further demonstra-
+tion shows that a robot can "feel" and identify different objects by measuring 
+unique pressure patterns produced when the gripper closes , achieving nearly 
+perfect accuracy. 
+The final part of the thesis introduces a practical method for building mod-
+ular soft robots using everyday hook -and-loop tape (similar to Velcro). This 
+approach allows soft robotic components—like bending actuators, sensors, or 
+support structures—to be attached and rearranged in secon ds. With this sys-
+tem, the same set of components can transform into a soft hand, a gripper, or 
+even a climbing robot, enabling rapid experimentation and reducing the need 
+for complex fabrication. 
+Together, the contributions of this thesis show how air -powered mecha-
+nisms can simplify, enhance, and expand what soft robots can do. By reducing 
+dependence on electronics and embracing the natural advantages of soft ma-
+terials, the work opens the door to soft robots that are more adaptive, more 
+wearable, and more capable of operating safely alongside humans. These in-
+novations bring soft robotics closer to the vision of machines that move, react, 
+and cooperate with the world as naturally as living organisms. 
+
+ 
+ 48 
+Acknowledgements 
+First and foremost, I would like to express my sincere gratitude to my super-
+visor, Prof. Klas Hjort, for giving me the opportunity to pursue this research 
+and for granting me the freedom to explore ideas independently. I am deeply 
+thankful for your support throughout my PhD journey, especially your guid-
+ance in responding to reviewers, your insightful feedback, and discussions.  
+I would like to thank all collaborators for your valuable contributions, hard 
+work, and constructive suggestions. I am very grateful to Hugo for your ex-
+tensive teaching and guidance in fabrication, experiments, and scientific writ-
+ing. Your support was especially important at the beginning of this journey 
+and helped me overcome many challenges.  I would also like to thank 
+Seunghee for your thoughtful discussion and guidance during the early stages 
+of this journey. I am grateful to the members of the CPS Lab for creating a 
+supportive research environment. Special thanks to Didem for sharing your 
+insights and ideas on the paper review process , and to Xuezhi for your great 
+support in robotics and discussions.  
+I would also like to warmly thank my colleagues in Soft Micromechanics 
+Group for making my PhD journey both productive and enjoyable. I am grate-
+ful to Jan for materials and liquid metal training, to Oskar for your thoughtful 
+help in reducing noise with headphones, assi stance with homework, for the 
+memorable experience of a live concert, and your comments on this thesis, to 
+Jakob for your fantastic work with logical functions. I would like to thank 
+Ernie for your impressive skills with Gemini and for your valuable advice on 
+life beyond research, as well as Diem for your kind gestures, including your 
+tasteful chocolate. I am also thankful for the broad and inspiring perspectives 
+shared during group meetings with other members, including Jonathan and 
+Qixiao, which helped me extend my knowledge in areas such as liquid metals, 
+biodegradable materials, and related topics. I would like to extend my thanks 
+to others from the MST Division, including Stefan, Lena, Greger, Anton, 
+Farnaz, Erika, Simon, Karolina and Bei, for your support and collegiality. 
+I am also grateful to Thiemo for your warmth and kindness. I am especially 
+grateful to Eva for your invaluable assistance with purchasing and payments, 
+and to Jörgen for your care, support, and help with ISP-related matters. 
+
+ 
+ 49 
+I would like to express my sincere thanks to my friends Yan and Jingjin, 
+whose companionship has been with me since my undergraduate years. Your 
+long-standing friendship has meant a great deal to me throughout this journey. 
+I would also like to thank Abdul for kindly helping with opening doors, and 
+Libo for supporting early discussions on sensorimotor functions. My thanks 
+go to Chenyu and Lulu for assistance with grant writing, and to Tianru, 
+Jiaqi, and Shiyu for your support and friendship.  I am grateful to Yuan for 
+your care and tasteful cakes, and to Qian for your helpful advice and support 
+over the years. I would like to thank Shuangshuang for helping me with my 
+first apartment in Uppsala, and Zhehua and Linglu for your companionship 
+and care. Many thanks to Xueying for organizing activities and preparing de-
+licious food, and to Funing for your Baozi, Jiucai Bing, La Niangao, and 
+shared jokes that brought much joy. I am also thankful to Zixuan for the exotic 
+desserts, and to Yingtao, Yihan, Zheqiang, Zhiwei, Xie, Guo, Di, Cheng-
+chen, Yuanyuan, Lei, Hangbiao, Pei, and Weijie for the weekly gatherings 
+and moments of relaxation and entertainment. 
+I would like to express my deepest gratitude to my parents and my sister. 
+Thank you for your unconditional love, constant support, and trust. Your be-
+lief has always been my strongest foundation. I would like to offer my warm-
+est and most special thanks to Zixin. I am deeply grateful for your presence 
+in this journey, for your sincere companionship, heartfelt and thoughtful con-
+versations, and unwavering support and trust. Your understanding, encourage-
+ment, and kindness provide me with comfort and strength during moments of 
+uncertainty and difficulty, as has the care shown by your family.  感谢有你
+们！ 
+In closing, I would like to express my sincere gratitude to everyone who, in 
+ways both large and small, has accompanied me throughout this journey. This 
+thesis is not only the result of academic effort, but also a reflection of the 
+understanding, support, and kindness I have received along the way. I will 
+carry these experiences and relationships forward with gratitude, as I continue 
+my path with curiosity, humility, and commitment
+. 
+ 
+Jing 
+January 2026 
+
+ 
+ 50 
+Bibliography 
+[1]  Baronchelli, F. et al. (2021). The Effect of Robotic Assisted Gait Training 
+With Lokomat® on Balance Control After Stroke: Systematic Review and 
+Meta-Analysis. Frontiers in Neurology. 
+https://doi.org/10.3389/fneur.2021.661815. 
+[2]  Lefmann, S. et al. (2017). The effectiveness of robotic-assisted gait training 
+for paediatric gait disorders: Systematic review. Journal of NeuroEngineer-
+ing and Rehabilitation. https://doi.org/10.1186/s12984-016-0214-x. 
+[3]  Xu, J. et al. (2022). Hand-eye calibration for 2D laser profile scanners using 
+straight edges of common objects. Robotics and Computer-Integrated Manu-
+facturing. https://doi.org/10.1016/j.rcim.2021.102221. 
+[4]  Wang, Z. et al. (2017). A Prestressed Soft Gripper : Design , Modeling , Fab-
+rication , and Tests for Food Handling. IEEE Robotics and Automation Let-
+ters. https://doi.org/10.1109/LRA.2017.2714141. 
+[5]  Näf, M.B. et al. (2018). Passive Back Support Exoskeleton Improves Range 
+of Motion Using Flexible Beams. https://doi.org/10.3389/frobt.2018.00072. 
+[6]  Shveda, R.A. et al. (2022). A wearable textile-based pneumatic energy har-
+vesting system for assistive robotics. Science advances. 
+[7]  Zhang, Z. et al. (2023). Soft and lightweight fabric enables powerful and 
+high- range pneumatic actuation. https://doi.org/10.1126/sciadv.adg1203. 
+[8]  O’Neill, C.T. et al. (2022). Unfolding Textile-Based Pneumatic Actuators for 
+Wearable Applications. Soft Robotics. 
+https://doi.org/10.1089/soro.2020.0064. 
+[9]  Jarrett, C. and McDaid, A.J. (2017). Robust control of a cable-driven soft ex-
+oskeleton joint for intrinsic human-robot interaction. IEEE Transactions on 
+Neural Systems and Rehabilitation Engineering. 
+[10]  Leroy, E. et al. (2020). Multimode hydraulically amplified electrostatic actu-
+ators for wearable haptics. Advanced Materials. 
+[11]  Frisoli, A. and Leonardis, D. (2024). Wearable haptics for virtual reality and 
+beyond. Nature Reviews Electrical Engineering. 
+https://doi.org/10.1038/s44287-024-00089-8. 
+[12]  Jumet, B. et al. (2023). Fluidically programmed wearable haptic textiles. De-
+vice. https://doi.org/10.1016/j.device.2023.100059. 
+[13]  Benko, H. et al. (2016). NormalTouch and texturetouch: High-fidelity 3D 
+haptic shape rendering on handheld virtual reality controllers. UIST 2016 - 
+Proceedings of the 29th Annual Symposium on User Interface Software and 
+Technology. https://doi.org/10.1145/2984511.2984526. 
+[14]  Kanjanapas, S. et al. (2019). Design and analysis of pneumatic 2-DoF soft 
+haptic devices for shear display. IEEE Robotics and Automation Letters. 
+https://doi.org/10.1109/LRA.2019.2895890. 
+[15]  Shi, Z. et al. (2024). Ultrasound-Driven Programmable Artificial Muscles. bi-
+oRxiv. https://doi.org/10.1038/s41586-025-09650-3. 
+
+ 
+ 51 
+[16]  Bernth, J.E. et al. (2017). A Novel Robotic Meshworm With Segment-Bend-
+ing Anchoring for Colonoscopy. IEEE Robotics and Automation Letters. 
+https://doi.org/10.1109/LRA.2017.2678540. 
+[17]  Mccolgan, J. et al. (2015). A NALYSIS OF THE G ROUP S TRUCTURE 
+OF A S CHOOL OF B IOMIMETIC AUVS C OORDINATED U SING. 
+2015 6th International Conference on Automation, Robotics and Applications 
+(ICARA). https://doi.org/10.1109/ICARA.2015.7081166. 
+[18]  Zhang, C. et al. (2020). Modular Soft Robotics: Modular Units, Connection 
+Mechanisms, and Applications. Advanced Intelligent Systems. 
+https://doi.org/10.1002/aisy.201900166. 
+[19]  Qin, Y. et al. (2018). Design, fabrication and experimental analysis of a 3-D 
+soft robotic snake. 2018 IEEE International Conference on Soft Robotics, Ro-
+boSoft 2018. https://doi.org/10.1109/ROBOSOFT.2018.8404900. 
+[20]  Tan, S. et al. (2025). Toward human- - resolution haptics : A high- - band-
+width , density , wearable tactile display. https://doi.org/10.1126/sci-
+adv.adz5937. 
+[21]  Xu, J. et al. (2025). Hot-Plugging Logic-Enabled Valves. 
+https://doi.org/10.1002/aisy.202400582. 
+[22]  Rajappan, A. and Jumet, B. (2022). Logic-enabled textiles. 
+https://doi.org/10.1073/pnas.2202118119/-/DCSupplemental.Published. 
+[23]  Thorsen, T. et al. (2002). Microfluidic large-scale integration. Science. 
+[24]  Bartlett, N.W. et al. (2020). A fluidic demultiplexer for controlling large ar-
+rays of soft actuators. Soft Matter. https://doi.org/10.1039/c9sm02502b. 
+[25]  Koivikko, A. et al. (2022). Integrated stretchable pneumatic strain gauges for 
+electronics-free soft robots. Communications Engineering. 
+https://doi.org/10.1038/s44172-022-00015-6. 
+[26]  Wang, S. et al. (2024). Fluidic feedback for soft actuators: an electronic-free 
+system for sensing and control. Bioinspiration & biomimetics. 
+https://doi.org/10.1088/1748-3190/ad9f02. 
+[27]  Kurumaya, S. et al. (2018). A modular soft robotic wrist for underwater ma-
+nipulation. Soft Robotics. https://doi.org/10.1089/soro.2017.0097. 
+[28]  Lee, J.Y. and Cho, K.J. (2017). Development of magnet connection of modu-
+lar units for soft robotics. 2017 14th International Conference on Ubiquitous 
+Robots and Ambient Intelligence, URAI 2017. 
+https://doi.org/10.1109/URAI.2017.7992886. 
+[29]  Wang, D. et al. (2023). Dexterous electrical-driven soft robots with reconfig-
+urable chiral-lattice foot design. Nature Communications. 
+https://doi.org/10.1038/s41467-023-40626-x. 
+[30]  Banisadr, S. and Chen, J. (2017). Infrared actuation-induced simultaneous re-
+configuration of surface color and morphology for soft robotics. Scientific 
+Reports. https://doi.org/10.1038/s41598-017-17904-y. 
+[31]  Song, S. et al. (2021). CMOS-Inspired Complementary Fluidic Circuits for 
+Soft Robots. Advanced Science. https://doi.org/10.1002/advs.202100924. 
+[32]  Su, J. et al. (2025). Soft Materials and Devices Enabling Sensorimotor Func-
+tions in Soft Robots. Chemical Reviews. 
+https://doi.org/10.1021/acs.chemrev.4c00906. 
+[33]  Trentini, R. and Silveira, S. (2013). MODELING AND PARAMETER 
+IDENTIFICATION OF A PNEUMATIC PRESSURE VALVE USING 
+LEAST SQUARES AND PARTICLE SWARM OPTIMIZATION METH-
+ODS. 
+[34]  Beater, P. (2007). Pneumatic Drives: System Design, Modelling and Control, 
+Springer. 
+
+ 
+ 52 
+[35]  Lee, D.W. et al. (2013). Advanced combinational microfluidic multiplexer 
+using multiple levels of control pressures3. 
+https://doi.org/10.1039/c3lc50513h. 
+[36]  Xu, J. et al. (2025). Miniaturized Soft Pneumatic Actuator Matrix with Multi-
+plexing Control. https://doi.org/10.1002/adrr.202400015. 
+[37]  Deng, Z. et al. (2018). Mechatronics Design, Modeling, and Characterization 
+of a Soft Robotic Table for Object Manipulation on Surface. IEEE/ASME 
+Transactions on Mechatronics. 
+https://doi.org/10.1109/TMECH.2018.2873259. 
+[38]  https://www.efunda.com/formulae/solid_mechanics/mat_mechanics/pres-
+sure_vessel.cfm?utm_source=chatgpt.com. 
+[39]  Luo, K. et al. (2019). Soft kink valves. Journal of the Mechanics and Physics 
+of Solids. https://doi.org/10.1016/j.jmps.2019.07.008. 
+[40]  Pontin, M. and Damian, D.D. (2024). Multimodal soft valve enables physical 
+responsiveness for preemptive resilience of soft robots. 
+https://doi.org/10.1126/scirobotics.adk9978. 
+[41]  Gallardo Hevia, E. et al. (2022). High‐Gain Microfluidic Amplifiers: The 
+Bridge between Microfluidic Controllers and Fluidic Soft Actuators. Ad-
+vanced Intelligent Systems. https://doi.org/10.1002/aisy.202200122. 
+[42]  Preston, D.J. et al. (2019). Digital logic for soft devices. Proceedings of the 
+National Academy of Sciences of the United States of America. 
+https://doi.org/10.1073/pnas.1820672116. 
+[43]  Conrad, S. et al. (2024). 3D-printed digital pneumatic logic for the control of 
+soft robotic actuators. Science robotics. https://doi.org/10.1126/scirobot-
+ics.adh4060. 
+[44]  Kendre, S.V. et al. (2024). FDM-Printed CMOS Logic Gates from Flexing 
+Beam Mechanisms for the Control of Soft Robotic Systems. Advanced Intel-
+ligent Systems. https://doi.org/10.1002/aisy.202400468. 
+[45]  Rothemund, P. et al. (2018). A soft, bistable valve for autonomous control of 
+soft actuators. Science Robotics. https://doi.org/10.1126/SCIROBOT-
+ICS.AAR7986. 
+[46]  Wehner, M. et al. (2016). An integrated design and fabrication strategy for 
+entirely soft, autonomous robots. Nature. https://doi.org/10.1038/na-
+ture19100. 
+[47]  Stanley, A.A. et al. (2024). High-speed fluidic processing circuits for dy-
+namic control of haptic and robotic systems. Science Advances. 
+https://doi.org/10.1126/sciadv.adl3014. 
+[48]  Yang, D. et al. (2025). Soft multifunctional bistable fabric mechanism for 
+electronics-free autonomous robots. Science Advances . 
+https://doi.org/10.1126/sciadv.ads8734. 
+[49]  Duncan, P.N. et al. (2013). Pneumatic oscillator circuits for timing and con-
+trol of integrated microfluidics. Proceedings of the National Academy of Sci-
+ences of the United States of America. 
+https://doi.org/10.1073/pnas.1310254110. 
+[50]  Decker, C.J. et al. (2022). Programmable soft valves for digital and analog 
+control. Proceedings of the National Academy of Sciences of the United 
+States of America. https://doi.org/10.1073/pnas.2205922119. 
+[51]  Rajappan, A. et al. (2024). Embedded Fluidic Sensing and Control with Soft 
+Open-Cell Foams. Advanced Functional Materials. 
+https://doi.org/10.1002/adfm.202403379. 
+[52]  Hoang, S. et al. (2021). A pneumatic random-access memory for controlling 
+soft robots. PLoS ONE. https://doi.org/10.1371/journal.pone.0254524. 
+
+ 
+ 53 
+[53]  Ahrar, S. et al. (2023). Pneumatic computers for embedded control of micro-
+fluidics. https://doi.org/10.1126/sciadv.adg0201. 
+[54]  Drotman, D. et al. (2021). Electronics-free pneumatic circuits for controlling 
+soft-legged robots. Science Robotics. https://doi.org/10.1126/SCIROBOT-
+ICS.AAY2627. 
+[55]  He, K. et al. (2020). An Artificial Somatic Reflex Arc. 
+https://doi.org/10.1002/adma.201905399. 
+[56]  Saab, W. et al. (2019). A review of coupling mechanism designs for modular 
+reconfigurable robots. Robotica. 
+https://doi.org/10.1017/S0263574718001066. 
+[57]  Robertson, M.A. and Paik, J. (2017). New soft robots really suck: Vacuum-
+powered systems empower diverse capabilities. Science Robotics. 
+https://doi.org/10.1126/scirobotics.aan6357. 
+[58]  Wang, Z. et al. (2016). 3D printed soft gripper for automatic lunch box pack-
+ing. 2016 IEEE International Conference on Robotics and Biomimetics, RO-
+BIO 2016. https://doi.org/10.1109/ROBIO.2016.7866372. 
+[59]  Wang, W. et al. (2017). Modular assembly of soft deployable structures and 
+robots. Materials Horizons. https://doi.org/10.1039/c6mh00550k. 
+[60]  Robertson, M.A. and Paik, J. (2017). Practical control methods for vacuum 
+driven soft actuator modules. IEEE International Conference on Intelligent 
+Robots and Systems. https://doi.org/10.1109/IROS.2017.8202296. 
+[61]  Germann, J. et al. (2012). Active connection mechanism for soft modular ro-
+bots. Advanced Robotics. https://doi.org/10.1163/156855312X626325. 
+[62]  Wang, L. and Iida, F. (2012). Towards soft self-reconfigurable robots. Pro-
+ceedings of the IEEE RAS and EMBS International Conference on Biomedi-
+cal Robotics and Biomechatronics. 
+https://doi.org/10.1109/BioRob.2012.6290258. 
+ 
+
+Acta Universitatis Upsaliensis
+Digital Comprehensive Summaries of Uppsala Dissertations from
+the Faculty of Science and Technology 2629
+Editor: The Dean of the Faculty of Science and T echnology
+A doctoral dissertation from the Faculty of Science and
+T
+echnology, Uppsala University, is usually a summary of a
+n
+umber of papers. A few copies of the complete dissertation
+are kept at major Swedish research libraries, while the
+summary alone is distributed internationally through
+the series Digital Comprehensive Summaries of Uppsala
+Dissertations from the Faculty of Science and T echnology.
+(Prior to January, 2005, the series was published under the
+title “Comprehensive Summaries of Uppsala Dissertations
+from the Faculty of Science and T echnology”.)
+Distribution: publications.uu.se
+urn:nbn:se:uu:diva-575396
+A
+CTA UNIVERSITATIS
+UPSALIENSIS
+2026
