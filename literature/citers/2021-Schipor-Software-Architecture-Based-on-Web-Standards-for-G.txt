@@ -1,0 +1,234 @@
+Software Architecture Based on Web Standards for Gesture
+Input with Smartwatches and Smartglasses
+Ovidiu-Andrei Schipor
+MintViz Lab, MANSiD Research Center
+Ştefan cel Mare University of Suceava
+Suceava, Romania
+ovidiu.schipor@usm.ro
+Radu-Daniel Vatavu
+MintViz Lab, MANSiD Research Center
+Ştefan cel Mare University of Suceava
+Suceava, Romania
+radu.vatavu@usm.ro
+ABSTRACT
+We employ the ISO/IEC 25010 standard for systems and software
+quality requirements and evaluation to present a proposal of a
+software architecture design for gesture input with two types of
+wearables: smartwatches, which have already entered mainstream,
+and smartglasses, forecast to become a growing market due to in-
+creased adoption of augmented reality applications. We present the
+technical details of our software architecture and describe practical
+implementation aspects that employ web standards.
+CCS CONCEPTS
+•Human-centered computing → Ubiquitous and mobile com-
+puting; •Software and its engineering → Software design en-
+gineering; Requirements analysis.
+KEYWORDS
+Software architecture, software quality, gesture input, wearable
+computing, web standards.
+ACM Reference Format:
+Ovidiu-Andrei Schipor and Radu-Daniel Vatavu. 2021. Software Architec-
+ture Based on Web Standards for Gesture Input with Smartwatches and
+Smartglasses. In 20th International Conference on Mobile and Ubiquitous
+Multimedia (MUM 2021), December 5–8, 2021, Leuven, Belgium. ACM, New
+York, NY, USA, 3 pages. https://doi.org/10.1145/3490632.3497780
+1 INTRODUCTION
+Gesture input for interactive computing systems has been exten-
+sively examined in the scientific literature in terms of gesture
+taxonomies, models of user performance, gesture recognition al-
+gorithms, interaction techniques, and methods to study user in-
+put [10,12,15]. Gestures also represent a preferred input modality
+for wearables that embed touch and motion sensors [ 4–6,8,17].
+However, wearables come in many flavors in terms of hardware
+and software platforms and, thus, dedicated software architecture is
+needed to support interactions among such heterogeneous devices
+while offering extensibility and personalization [11]. In this work,
+we employ the Software Product Quality Model from the SQuaRE
+ISO/IEC 25010 standard [ 7] to present a proposal of a software
+Permission to make digital or hard copies of part or all of this work for personal or
+classroom use is granted without fee provided that copies are not made or distributed
+for profit or commercial advantage and that copies bear this notice and the full citation
+on the first page. Copyrights for third-party components of this work must be honored.
+For all other uses, contact the owner/author(s).
+MUM 2021, December 5–8, 2021, Leuven, Belgium
+© 2021 Copyright held by the owner/author(s).
+ACM ISBN 978-1-4503-8643-2/21/05.
+https://doi.org/10.1145/3490632.3497780
+ 
+R1 - modularity 
+R2 - reusability 
+R3 - testability 
+R4 - co-existence 
+R5 - interoperability 
+R6 - replaceability 
+R7 - appropriateness 
+R8 - operability 
+R9 - learnability 
+HUB            LINK        DEVICES 
+Figure 1: Nine design requirements (R 1 to R 9) and the rela-
+tion to the three components of our software architecture.
+The Hub and Device components are logically connected
+through the Link; see the text for details.
+architecture that facilitates gesture input acquisition for wearable
+devices with touch and/or motion sensing capabilities. We focus
+on smartwatches, a category of wearables that has already entered
+mainstream [16], and smartglasses, a growing consumer market [9].
+2 SOFTW ARE ARCHITECTURE DESIGN
+The ISO/IEC 25010 standard [7] defines a comprehensive software
+quality model with requirements that are grouped in eight cate-
+gories—functional suitability, performance efficiency, compatibility,
+usability, reliability, security, maintainability, and portability—and
+several properties, e.g., time behavior, resource utilization, and ca-
+pacity for performance efficiency. From these properties, we select
+nine directly relevant for gesture input with wearables (Figure 1),
+which we set as requirements for our software architecture.
+Our architecture design features three components:Hub, Device,
+and Link. The Device component runs on the wearable that ac-
+quires gesture input. The Hub provides the user interface with our
+software architecture, e.g., specification of wearables and definition
+of gesture commands. For instance, the Hub allows adding, remov-
+ing, and configuration of smartwatches and smartglasses devices as
+186
+MUM 2021, December 5–8, 2021, Leuven, Belgium Ovidiu-Andrei Schipor and Radu-Daniel Vatavu
+well as acquisition, processing, and recognition of touch and motion
+gestures collected via theDevice component. The Link implements
+full-duplex communications between the Hub and instances of the
+Device component running on each wearable. This decoupling
+enables a distributed architecture that can process gestures from
+multiple devices, e.g., to enable cross-device input [1,2,4].
+Starting from our quality requirements, we adopted an engineer-
+ing approach centered on the following six pillars:
+(1) Web-based user interface. The presentation layer of the Hub
+rests on HTML elements, which enables portability across
+many devices (requirements R1, R2, R7, and R8).
+(2) Web-based languages. The three components use JavaScript
+to enable portability across a variety of platforms, while the
+Link runs as a node.js1 server (R5 and R6). This design choice
+follows similar approaches from the HCI community that
+employ JavaScript to implement interactions on mobile and
+wearable devices [3,13,14].
+(3) Web-based communication standards. Both half-duplex and
+full-duplex communication among the software components
+are implemented via web technologies via the HTTP and
+WebSocket protocols (R4-R6, R8-R9).
+(4) IoC-DI. We implement inversion of control through depen-
+dency injection for the decoupling of creation and usage of
+software objects and of high and low-level classes (R1 to R3).
+(5) MVVM-C. By following the Model-View-View-Model Coordi-
+nator structural design pattern, we implement the principle
+of separation of concerns for software classes (R1-R3).
+(6) Open-source. Our architecture is available under an open-
+source license (Figure 2) to foster further extension (R2-R7).
+This engineering approach makes our software architecture suitable
+for collecting gesture input from any smartwatch or smartglasses
+device that supports WiFi and WebSockets. TheDevice component
+needs to be implemented for each wearable to send gestures to
+the Hub that implements the recognition algorithm and informs
+the Link about the result. As long as the wearable device supports
+JavaScript, either natively for devices running Tizen2 or via a web
+browser, touch and motion gestures are straightforward to collect.3
+3 RESOURCES AND FUTURE WORK
+Our source code is freely available on the web; see Figure 2. The
+web page features (i) an overview of the architecture, (ii) the source
+code of our software with a demonstrative implementation of touch
+gesture and acceleration motion gesture acquisition for Samsung
+Galaxy smartwatches and Vuzix Blade AR smartglasses, and (iii)
+a walk-through video showing how to use the Hub user interface
+to configure wearables in our architecture. Future work will ad-
+dress applications for cross-device input with smartwatches and
+smartglasses supported by our software architecture.
+1https://nodejs.org/en/
+2Examples include Samsung Galaxy smartwatches. For the Tizen operating system, a
+web application consists of HTML, JavaScript, and CSS combined in a package, which
+can be installed on the Tizen device; https://docs.tizen.org/application/web/index.
+3https://developer.mozilla.org/en-US/docs/Web/API/Touch_events, https://developer.
+mozilla.org/en-US/docs/Web/API/DeviceMotionEvent
+Figure 2: Our architecture is available on the web at http:
+//www.eed.usv.ro/mintviz/resources/GearWheels.
+ACKNOWLEDGMENTS
+This work was supported by a grant of the Ministry of Research,
+Innovation and Digitization, CNCS/CCCDI-UEFISCDI, project no.
+PN-III-P2-2.1-PED-2019-0352 (276PED/2020), within PNCDI III.
+REFERENCES
+[1] Sunggeun Ahn, Seongkook Heo, and Geehyuk Lee. 2017. Typing on a Smartwatch
+for Smart Glasses. In Proceedings of the 2017 ACM International Conference on
+Interactive Surfaces and Spaces (Brighton, United Kingdom) (ISS ’17). Association
+for Computing Machinery, New York, NY, USA, 201–209. https://doi.org/10.
+1145/3132272.3134136
+[2] Frederik Brudy, Christian Holz, Roman Rädle, Chi-Jui Wu, Steven Houben,
+Clemens Nylandsted Klokmose, and Nicolai Marquardt. 2019. Cross-Device
+Taxonomy: Survey, Opportunities and Challenges of Interactions Spanning
+Across Multiple Devices. In Proceedings of the 2019 CHI Conference on Hu-
+man Factors in Computing Systems (CHI ’19) . ACM, New York, NY, USA, 1–28.
+https://doi.org/10.1145/3290605.3300792
+[3] Pei-Yu (Peggy) Chi and Yang Li. 2015. Weave: Scripting Cross-Device Wear-
+able Interaction. In Proceedings of the 33rd Annual ACM Conference on Hu-
+man Factors in Computing Systems (Seoul, Republic of Korea) (CHI ’15). As-
+sociation for Computing Machinery, New York, NY, USA, 3923–3932. https:
+//doi.org/10.1145/2702123.2702451
+[4] Petru-Vasile Cioată and Radu-Daniel Vatavu. 2018. In Tandem: Exploring In-
+teractive Opportunities for Dual Input and Output on Two Smartwatches. In
+Proceedings of the 23rd International Conference on Intelligent User Interfaces
+Companion (IUI ’18). 1–2. https://doi.org/10.1145/3180308.3180369
+[5] Tilman Dingler, Rufat Rzayev, Alireza Sahami Shirazi, and Niels Henze. 2018.
+Designing Consistent Gestures Across Device Types: Eliciting RSVP Controls for
+Phone, Watch, and Glasses. In Proceedings of the 2018 CHI Conference on Human
+Factors in Computing Systems (Montreal QC, Canada) (CHI ’18). Association
+for Computing Machinery, New York, NY, USA, 1–12. https://doi.org/10.1145/
+3173574.3173993
+[6] Bogdan-Florin Gheran, Jean Vanderdonckt, and Radu-Daniel Vatavu. 2018. Ges-
+tures for smart rings: Empirical results, insights, and design implications. In
+Proceedings of the 2018 Designing Interactive Systems Conference (DIS ’18) . 623–
+635. https://doi.org/10.1145/3196709.3196741
+[7] ISO. 2014. ISO/IEC 25000:2014 Systems and software engineering — Systems and
+software Quality Requirements and Evaluation (SQuaRE) - Guide to SQuaRE.
+https://www.iso.org/standard/64764.html
+[8] Yiqin Lu, Bingjian Huang, Chun Yu, Guahong Liu, and Yuanchun Shi. 2020.
+Designing and Evaluating Hand-to-Hand Gestures with Dual Commodity Wrist-
+Worn Devices. Proc. ACM Interact. Mob. Wearable Ubiquitous Technol. 4, 1, Article
+20 (March 2020), 27 pages. https://doi.org/10.1145/3380984
+187
+Software Architecture Based on Web Standards for Gesture Input with Smartwatches and Smartglasses MUM 2021, December 5–8, 2021, Leuven, Belgium
+[9] MarketWatch. 2021. Augmented Reality Smart Glasses Market Size In
+2021 with Top Countries Data : What is the CAGR scope of the Aug-
+mented Reality Smart Glasses Industry in the forthcoming period?
+https://www.marketwatch.com/press-release/augmented-reality-smart-
+glasses-market-size-in-2021-with-top-countries-data-what-is-the-cagr-
+scope-of-the-augmented-reality-smart-glasses-industry-in-the-forthcoming-
+period-latest-124-pages-report-2021-08-27
+[10] Pradyumna Narayana, Ross Beveridge, and Bruce A Draper. 2018. Gesture
+recognition: Focus on the hands. InProceedings of the IEEE Conference on Computer
+Vision and Pattern Recognition (CVPR ’18). 5235–5244. https://doi.org/10.1109/
+CVPR.2018.00549
+[11] Ovidiu-Andrei Schipor, Stefan-Gheorghe Pentiuc, and Maria-Doina Schipor. 2011.
+Towards a multimodal emotion recognition framework to be integrated in a
+Computer Based Speech Therapy System. In Proceedings of the 6th Conference on
+Speech Technology and Human-Computer Dialogue (SpeD ’11). IEEE, 1–6. https:
+//doi.org/10.1109/SPED.2011.5940727
+[12] Ovidiu-Andrei Schipor and Radu-Daniel Vatavu. 2018. Invisible, inaudible, and
+impalpable: Users’ preferences and memory performance for digital content in
+thin air. IEEE Pervasive Computing 17, 4 (2018), 76–85. https://doi.org/10.1109/
+MPRV.2018.2873856
+[13] Ovidiu-Andrei Schipor, Radu-Daniel Vatavu, and Wenjun Wu. 2019. SAPIENS:
+Towards Software Architecture to Support Peripheral Interaction in Smart En-
+vironments. Proc. ACM Hum.-Comput. Interact. 3, EICS, Article 11 (June 2019),
+24 pages. https://doi.org/10.1145/3331153
+[14] Ali Shtarbanov. 2021. FlowIO Development Platform – the Pneumatic “Raspberry
+Pi” for Soft Robotics. In Extended Abstracts of the 2021 CHI Conference on Human
+Factors in Computing Systems (Yokohama, Japan) (CHI EA ’21). Association for
+Computing Machinery, New York, NY, USA, Article 479, 6 pages. https://doi.
+org/10.1145/3411763.3451513
+[15] Santiago Villarreal-Narvaez, Jean Vanderdonckt, Radu-Daniel Vatavu, and Ja-
+cob O. Wobbrock. 2020. A Systematic Review of Gesture Elicitation Studies:
+What Can We Learn from 216 Studies?. In Proceedings of the 2020 ACM De-
+signing Interactive Systems Conference (Eindhoven, Netherlands) (DIS ’20). As-
+sociation for Computing Machinery, New York, NY, USA, 855–872. https:
+//doi.org/10.1145/3357236.3395511
+[16] Emily A. Vogels. 2020. About one-in-five Americans use a smart watch or fitness
+tracker. https://www.pewresearch.org/fact-tank/2020/01/09/about-one-in-five-
+americans-use-a-smart-watch-or-fitness-tracker/
+[17] Hongyi Wen, Julian Ramos Rojas, and Anind K. Dey. 2016. Serendipity: Finger
+Gesture Recognition Using an Off-the-Shelf Smartwatch. In Proceedings of the
+2016 CHI Conference on Human Factors in Computing Systems (CHI ’16) . ACM,
+New York, NY, USA, 3847–3851. https://doi.org/10.1145/2858036.2858466
+188

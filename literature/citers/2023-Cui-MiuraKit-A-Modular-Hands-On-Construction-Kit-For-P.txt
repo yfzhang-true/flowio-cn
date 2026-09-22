@@ -1,0 +1,969 @@
+MiuraKit: A Modular Hands-On Construction Kit For Pneumatic 
+Shape-Changing And Robotic Interfaces 
+Zhitong Cui∗ Shuhong Wang∗ Junxian Li 
+Zhejiang University Carnegie Mellon University Zhejiang University 
+Carnegie Mellon University Zhejiang University Hangzhou, China 
+Pittsburgh, USA Pittsburgh, USA junxianli@zju.edu.cn 
+zhitongcui@zju.edu.cn shuhongwang@zju.edu.cn 
+Shijian Luo Alexandra Ion 
+Zhejiang University Carnegie Mellon University 
+Hangzhou, China Pittsburgh, USA 
+sjluo@zju.edu.cn alexandraion@cmu.edu 
+Figure 1: We present (a) MiuraKit, a hands-on construction kit for pneumatically actuated shape-changing interfaces. It 
+consists of generic Miura-ori-based actuators, of novel, manually confgurable connectors, and of a design tool supporting 
+complex designs. These few parts enable (b) a range of applications, including a snake-like robot, a shape-changing lamp, or a 
+creature-like chair. 
+ABSTRACT 
+Building shape-changing, robotic or deployable interfaces is no-
+toriously difcult, often requiring fabrication skills or specialized 
+hardware. We present a construction kit for novice users to en-
+able immediate hands-on exploration of custom shape-changing or 
+robotic structures through pneumatically actuated origami tubes. 
+Our construction kit consists of generic origami actuators that can 
+be combined with our connectors to result in a variety of shapes 
+and motions. Our novel connectors support simple mechanical con-
+nections through snap fts and pneumatic confgurations through 
+plugs. To assist users in designing and previewing complex defor-
+mations, we provide a design tool that generates control code for 
+user-defned designs. We envision that our construction kit will 
+facilitate creativity support tasks (e.g. product design) or education. 
+∗Both authors contributed equally to this research. 
+Permission to make digital or hard copies of all or part of this work for personal or 
+classroom use is granted without fee provided that copies are not made or distributed 
+for proft or commercial advantage and that copies bear this notice and the full citation 
+on the frst page. Copyrights for components of this work owned by others than the 
+author(s) must be honored. Abstracting with credit is permitted. To copy otherwise, or 
+republish, to post on servers or to redistribute to lists, requires prior specifc permission 
+and/or a fee. Request permissions from permissions@acm.org. 
+DIS ’23, July 10–14, 2023, Pittsburgh, PA, USA 
+© 2023 Copyright held by the owner/author(s). Publication rights licensed to ACM. 
+ACM ISBN 978-1-4503-9893-0/23/07. . . $15.00 
+https://doi.org/10.1145/3563657.3596108 
+We demonstrate the capabilities of our construction kit with three 
+application examples and a series of objects created during our 
+co-creation study with novice users. 
+CCS CONCEPTS 
+• Human-centered computing; 
+KEYWORDS 
+Construction kit, Soft robotics, Shape changing interfaces, Pneu-
+matics, Design, Education 
+ACM Reference Format: 
+Zhitong Cui, Shuhong Wang, Junxian Li, Shijian Luo, and Alexandra Ion. 
+2023. MiuraKit: A Modular Hands-On Construction Kit For Pneumatic 
+Shape-Changing And Robotic Interfaces. In Designing Interactive Systems 
+Conference (DIS ’23), July 10–14, 2023, Pittsburgh, PA, USA. ACM, New York, 
+NY, USA, 13 pages. https://doi.org/10.1145/3563657.3596108 
+1 INTRODUCTION 
+Dynamic interfaces are highly expressive, but hard to build for 
+novice users. We consider dynamic interfaces to include shape-
+changing interfaces, which are popular because they can convey 
+dynamic afordances [15, 17] or physically manifest digital contents 
+[9, 32, 38]; deployable structures, which can unfold into predefned 
+shapes based on simple actuation [26, 49]; or soft robots [5, 20, 43]. 
+2066
+DIS ’23, July 10–14, 2023, Pitsburgh, PA, USA Zhitong Cui, Shuhong Wang, Junxian Li, Shijian Luo, and Alexandra Ion 
+These interfaces need actuation. Some systems use motors [9, 17] 
+or active materials [53, 57], but many use pneumatic actuation 
+[38, 45, 49, 56] because the hardware is readily accessible, it provides 
+fast and powerful actuation while allowing the shape-changing 
+end-efectors to be soft and safe for interaction. However, such 
+airtight systems are hard to build and to control for novice users. 
+Recent research aims to support users in building such pneumatic 
+systems but either require users to fabricate the airtight actuators 
+themselves [16, 52, 58], which is notoriously difcult, or the systems 
+propose specialized hardware [38, 45, 49] that is not available to 
+users. 
+In this paper, we propose a construction kit that supports imme-
+diate hands-on exploring and prototyping of custom pneumatically 
+actuated shape changing and robotic interfaces. While designing 
+our research prototype, we envision the simplicity of Lego with 
+the power of shape-changing interfaces. We summarize our design 
+goals in the following: 
+G1. No fabrication required. Users are not required to fabricate 
+any parts, the construction kit contains everything that is 
+necessary to build and run shape-changing prototypes. 
+G2. Reusable and reconfgurable. The parts of the construction 
+kit can be disassembled and reassembled into diferent inter-
+faces. 
+G3. Hands-on confguration. The construction kit supports hands-
+on confguration of spatial arrangement (i.e., the geometry 
+of the interface) and of the air groups (i.e., trigger the shape 
+change). 
+G4. Assisting design of complex shapes. Complementary to the 
+hands-on design, the kit should support users in creating 
+more complex designs with digital design, simulation, and 
+control code. 
+In the following, we give an overview of the construction kit we 
+developed guided by our design goals. 
+1.1 Overview of MiuraKit 
+To implement our design goals, we developed our construction kit 
+(Figure 1) to consist of (1) generic pneumatic actuators, such that 
+users do not need to fabricate parts, (2) simple manually confg-
+urable connectors, and (3) design software to assist with assembly 
+instructions and control of complex designs. We show our con-
+struction kit in Figure 1a and showcase example applications in 
+Figure 1b. Because of the dynamic nature of our interfaces, we refer 
+the reader to our supplemental video which depicts the motion of 
+the actuators. 
+(1) Generic pneumatic actuators: Since pneumatically actuated 
+soft robots are an active research topic, we reviewed developments 
+in robotics and related engineering felds. We found that origami 
+structures make for an efcient soft actuator that is fexible, tunable, 
+and generic. After replicating and testing several origami structures, 
+we selected the Miura-ori tube as our actuator. They ofer the ad-
+vantages of being easy to actuate to compress or bend and to tile 
+them into diferent shapes or surfaces. Efectively, it’s a versatile 
+structure to minimize the number of parts in our construction kit, 
+yet enable many functions through combination. Since the struc-
+ture is generic, we design them with mass-fabrication in mind such 
+that we don’t burden users with the difcult fabrication of air-tight 
+actuators, implementing our design goal G1. 
+(2) Manually confgurable connectors: The pneumatic Miura-ori 
+tubes need to be arranged into their target shape to implement the 
+shape-changing interface. We provide a simple yet confgurable 
+connector with our kit. To lock the Miura tubes mechanically in 
+place, we add snap-fts on the connector (see Figure 1a). The snap-ft 
+designs allow easy assembly and disassembly of the shape, realiz-
+ing our design goal G2. Additionally, the orientation of actuators 
+can be manipulated by adding adapters of diferent angles, which 
+implements the mechanical hands-on confguration aspect of G3. 
+The connector has air channels inside which can be confgured by 
+users hands-on by inserting silicone plugs to confgure the airways 
+through the connector. The connector design supports all possible 
+permutations of air groups, allowing users to experiment hands-on, 
+which implements G3. 
+(3) Design software: While our construction kit is designed for 
+users to experiment manually with diferent confgurations, we 
+also complement our construction kit with an online design editor. 
+This editor is built to support designing more complex shapes 
+and/or time-dependent pneumatic control. It is easy to access online 
+without installation, and simulates the shape-change and export 
+control code for time-dependent valve control, if desired. This part 
+of our kit implements G4. 
+1.2 Contributions 
+In summary, we contribute MiuraKit, a pneumatic construction kit 
+for immediate hands-on exploration of shape-changing interfaces. 
+Specifcally, we contribute: 
+(1) the design and development of the construction kit consisting 
+of linear and bending origami actuators, with a series of 
+pneumatic and mechanical connectors, 
+(2) a design tool assisting novice users with complex designs, 
+which includes motion simulation and control code genera-
+tion, 
+(3) demonstration of the utility of our construction kit by laying 
+out the design space and showcasing multiple application 
+examples, and 
+(4) validating our construction kit and its potential for hands-on 
+design of shape-changing interfaces with a user study. 
+1.3 Broader Impact 
+Due to its modular design, this work might have a positive impact 
+on the reduction of waste in prototyping. Most 3D printers used 
+in industry are primarily used for rapid prototyping of products 
+[12]. Especially such shape-changing applications, where the mech-
+anism and the efect of the change might be hard to assess, product 
+designers might create many versions that all get tossed when the 
+fnal design is found. Our kit makes exploration of such dynamic, 
+shape-changing interfaces tangible and easily to explore while re-
+maining reusable. Additionally, distributed product design teams 
+would have to re-print versions to explore the current design’s 
+haptic properties. 
+2067
+MiuraKit DIS ’23, July 10–14, 2023, Pitsburgh, PA, USA 
+Additionally, we believe that this construction kit can be benef-
+cial in K-12 education to teach concepts such as geometry or dy-
+namic mechanical properties such as damping and elasticity. Since 
+the kit is reusable and low-cost when mass-manufactured, schools 
+and community centers can use it for playful STEM education. 
+We acknowledge that if the actuators break, they will produce 
+some plastic waste in the end. We hope to fnd sustainable, com-
+postable materials that can be used to manufacture the actuators in 
+the future. 
+2 RELATED WORK 
+Our work builds on previous work on shape-changing interfaces 
+and soft robotic actuators. 
+2.1 Shape-Changing Interfaces 
+Shape-changing interfaces have been investigated using various 
+actuation methods [42, 48], such as fuid-driven [14, 23, 29], electro-
+hydraulic [41], shape memory alloys [30, 50], tendon [1, 55], and 
+phase change [28, 33]. Meanwhile, the pneumatic actuation method 
+is attractive due to its quick response, large power, and accessi-
+ble hardware [34, 38, 56, 60]. Specifcally, PneUI [56] and Sticky 
+Actuators [35] introduced pneumatically-actuated soft structural 
+composites and elastomers with integrated sensing. PneuMesh [10] 
+explores the pneumatic actuation on piston actuators to form truss 
+structure deformable robotic system. 
+Recently, Shape-changing toolkits [19] have been explored to en-
+able end-users to build customized artifacts and simplify the design 
+and fabrication process. TEX(alive) explores temporal expressions 
+in shape-changing textile interfaces [25]. Compressables [6] intro-
+duced a prototyping toolkit for wearable compression-based haptic 
+feedback. MorpheesPlug [16] provided a parametric design of six 
+primitive 3D-printable shape-changing widgets. To further lower 
+the barrier of creating soft robotics, PneuBots [58] provided a con-
+struction starter kit with seven types of self-foldable segments with 
+high tensile strength. 
+We expand the above systems such as PneuBots by introducing a 
+pneumatic connector that enables fexible air-group confguration 
+of actuators, which can enable users with more hands-on ideation 
+of the dynamic motion of shape-changing objects. Meanwhile, our 
+pneumatic actuators can be disassembled after use and reassembled 
+for temporal interfaces with versatile spatial arrangements com-
+pared to TEX(alive). Our construction kit consists of tube-shaped 
+origami actuators with a series of pneumatic and mechanical con-
+nectors. The proposed origami actuators are driven by negative 
+pressure with multiple degrees of freedom, and can also be recon-
+fgured to use as passive structures for force feedback or shape 
+morphing [7, 39]. 
+2.2 Soft Robotic Actuators 
+The adaption of soft robotics principles and actuators into the HCI 
+domain enables more natural user interfaces that leverage the ability 
+to programmatically control physical structures [2, 44]. Soft robotic 
+actuators have shown enormous applications such as interactive 
+devices [24, 31], assistive wearables [45], or haptic feedbacks [61]. 
+For example, Luo et al. [24] present soft pneumatic actuators via 
+machine knitting with sensing abilities for assistive wearables and 
+soft robotics. OmniFiber [14] developed line-like fuidic artifcial 
+muscles for movement-based interactions. 
+Among the soft robotic actuators, origami actuators exhibit in-
+herent compliance through their deployable structures. They can 
+be constructed with rigid materials without losing their shape-
+morphing capability, bringing soft-rigid hybrid functionalities [13, 
+46]. Origami tubes are cylinder-shaped structures that can not only 
+act as the robot skeleton but also be used for driving motion in 
+robotic systems, exhibiting diverse robotic behaviors such as loco-
+motion, manipulation, and grasping. Onal et al. [36] laser-machined 
+polymer flms to build Yoshimura and Waterbomb tubular struc-
+tures. Wu et al. [54] introduced magnetically controlled origami 
+robotic arms based on Kresling patterns for multimodal deforma-
+tions, including stretching, folding, omnidirectional bending, and 
+twisting. Woongbae et al. [18] present dual-morphing stretchable 
+origami with the Miura-ori tube. Kiju et al. [21] present a cable-
+driven underactuated robotic gripper with the 3D-printed twisted 
+tower origami tube. 
+We use the Miura-ori tube structure as the generic actuator in our 
+construction kit because it has fexible motion and is easy to actuate. 
+Meanwhile, the geometry of it is easy to be coupled together into a 
+variety of shapes and spatial arrangements. 
+3 MIURAKIT COMPONENTS 
+Our MiuraKit consists of 3 main components, i.e., soft actuators, a 
+novel connector that allows users to confgure their shape-changing 
+applications hands-on, and an interactive design tool assisting them 
+with complex design and control. We show an overview of our kit 
+in Figure 3. 
+3.1 Miura-ori Tube Actuators 
+The soft actuators in our construction kit enable the shape-change 
+of the structure and are based on the Miura-ori pattern. Figure 2 (top 
+left) shows how the Miura-ori tube compresses upon the negative 
+air pressure, and bends when we augment it by adhering a simple 
+3D-printed constraint to its side to increase the stifness of one side. 
+We ofer users these 2 versions of the Miura-ori tube in our kit, 
+which can be used as linear and bending actuators. 
+These simple deformations enable a large design space, as we 
+show in Figure 2. Our tubes can achieve transformations across 
+diferent dimensions. Simple 1D static arrangements can result 
+in 1D or 2D actuated states, as well as in 3D shapes by coupling 
+bending tubes in diferent directions. 
+Our tubes can be coupled into a variety of spatial arrangements 
+(see Figure 2 center). Users can connect the Miura-ori tubes to con-
+fgure the skeleton or wireframe of their shape-changing geometry. 
+By bundling 2 or 3 Miura tubes together, users can dynamically 
+control the compression and direction of bending. The geometry 
+of the Miura-ori tubes afords tiling them into surfaces that can be 
+actuated as one or partially resulting in organic deformation, as 
+depicted in Figure 2. The free confguration of the tubes naturally 
+enables combinations of skeleton and surface arrangements. 
+The pneumatic actuation of the tubes can be confgured, as de-
+picted in Figure 2 (right column). All tubes can be actuated uni-
+formly as one unit, which is the simplest confguration. Users may 
+choose to form pneumatic groups of diferent numbers of actuators, 
+2068
+DIS ’23, July 10–14, 2023, Pitsburgh, PA, USA Zhitong Cui, Shuhong Wang, Junxian Li, Shijian Luo, and Alexandra Ion 
+Figure 2: We outline the design space that our MiuraKit covers and depict primitives and their transformation. 
+2069
+MiuraKit DIS ’23, July 10–14, 2023, Pitsburgh, PA, USA 
+Figure 3: Our MiuraKit consists of (a) soft actuators, con-
+nectors, and adapters for spatial and pneumatic confgura-
+tion, and an interactive design tool. It is designed to (b) sup-
+port hands-on exploration of (c) shape-changing applications 
+(here, a lamp). 
+e.g., grouping 3 tubes to be actuated as one entity and actuating 
+the 4th tube individually. For complex shape-changing applications, 
+users may choose to control coupled tubes separately. 
+Why Miura-ori over other patterns. Since soft actuators are an 
+active research topic in engineering disciplines, we investigated 
+several cylindrical origami tube designs before choosing the Miura-
+ori pattern for our actuators. We evaluated the Yoshimura tube, 
+which has similar properties to the Miura tube in that it can be 
+compressed linearly and has omnidirectional bending abilities. How-
+ever, its geometry of it is not easy to be combined for shape mor-
+phing [11, 40]. The Kresling tube exhibits compressing-twisting 
+deformation which makes it not easy to be connected [59]. The 
+bistable origami tube can maintain its deployed shape without the 
+need for continuous actuation, but it can not be used for fexible 
+bending motion [27]. Therefore, we choose the Miura-ori pattern 
+as it is simple and allows for the most fexibility to be reconfgured 
+to use [8]. 
+3.2 Connector Design 
+To enable hands-on building with pneumatically driven origami 
+actuators, we developed a novel connector that allows users to 
+confgure both the spatial arrangement of Miura tubes and their 
+pneumatic grouping for dynamic control. 
+3.2.1 Mechanical Connection. Our connector enables users to cou-
+ple Miura tubes spatially. As shown in Figure 4a, we use snap-fts 
+for the assembly and disassembly of the parts, such that users can 
+reuse them for diferent designs. The kit includes 2 versions of the 
+connector, i.e. rectangular one to connect up to 4 Miura tubes and 
+a triangular one to connect max. 3 tubes, as shown in Figure 4b. By 
+default, the connectors couple the tube in plane. To enable users to 
+create 3D spatial arrangements, we include 5 adapters in our kit, as 
+shown in Figure 4c. They use the same snap-ft interface and can 
+be simply inserted between the connector and the tube. 
+Figure 4: We ofer (a) connectors for rectangular or triangular 
+arrangements of tubes. The connectors feature (b) snap-fts 
+for hands-on assembly and disassembly. To support 3D con-
+nections, we ofer (c) several adapters in 30°, 45°, 60°, 75°, and 
+90°. 
+3.2.2 Pneumatic Configuration. Beyond the mechanical connec-
+tion, users need to be able to confgure how the Miura-ori actuators 
+are controlled. Since we use pneumatic actuation, users need to 
+be able to confgure the air groups, i.e., which tubes should move 
+together and which should move at a diferent time. Again, we want 
+to enable users to do this confguration hands-on. We designed our 
+connector with simplicity of use in mind while ofering many con-
+fguration options. As we have shown in Figure 6a, our connector 
+has air channels on the inside, which can be confgured with sim-
+ple silicone plugs. The shorter white plugs let air pass through the 
+channel, while the longer black plugs block that channel. The colors 
+are intended to signify the air channel confguration to users intu-
+itively, as shown in Figure 6b. Additionally, each slot can be used 
+as an inlet for the air source to form new independent air groups, 
+as shown in Figure 6c. These few parts (plugs, inlets) paired with 
+our intentionally simple connector design allow users to achieve 
+all permutations of possible air groups. 
+3.3 Control Board 
+When users confgure multiple air groups with our connector, they 
+will want to control the timing of actuation with valves. The elec-
+tromagnetic valves are controlled by an Arduino microcontroller 
+which switches the negative pressure from the vacuum pump on 
+or of. While we used standard of-the-shelf components in our 
+research prototype, the recent rise in pneumatic control kits for 
+novice users, such as FlowIO [47] or Pneuduino [37] is a promis-
+ing extension to this construction kit. In this prototype, we used 
+two-way two-position solenoid valves (HOFUJING 2V02508) and a 
+2070
+DIS ’23, July 10–14, 2023, Pitsburgh, PA, USA Zhitong Cui, Shuhong Wang, Junxian Li, Shijian Luo, and Alexandra Ion 
+Figure 5: Walkthrough of step1, 2, and 3 of the interactive design tool. 
+Figure 6: Our MiuraKit connectors have (a) integrated air 
+channels, which (b) can be confgured manually by inserting 
+simple silicone plugs to let air through (white plugs, short) 
+or block the airfow (black plugs, long). (c) We show diferent 
+confgurations, including one featuring an additional inlet. 
+stationary 8 CFM vacuum pump (Robinair 15800 VacuMaster Econ-
+omy) for actuation and control. Note that a vacuum chamber can 
+be used for actuation to avoid the noise of the pump. 
+4 INTERACTIVE DESIGN TOOL 
+We provide a web-based design tool to assist novice users in creating 
+desired shape-changing or robotic structures and previewing their 
+motion with our origami actuators. The user workfow consists of 
+the following steps. 
+4.1 Step 1: Creating a Structure 
+Users can create an arbitrary shape-changing object by connecting 
+linear or bending origami actuators with diferent angles in the 
+user interface (Figure 5a). By default, the viewport shows a simple 
+triangle with three linear actuators to help users get familiar with 
+the software. To add one new actuator, users start by clicking a 
+connector and selecting an operating axis, and then they can rotate 
+the newly generated actuator around the operating axis to a specifc 
+angle with a 15 degrees rotation snap. Users can also remove an 
+existing actuator by clicking it or changing the bending direction 
+of one bending actuator. During the editing process, a connector 
+is automatically added to the end of a new actuator. All connec-
+tors are shown as spheres in this step. In the future, an inverse 
+design pipeline can be implemented to help users design complex 
+shapes with expected dynamic motion, e.g., locomotion, rolling, or 
+jumping. 
+4.2 Step 2: Grouping Origami Actuators 
+Having diferent origami actuators work independently enables 
+versatile shape-changing behaviors. Thus, our user interface sup-
+ports users to confgure multiple air channels by selecting diferent 
+actuators into a group that shares the same air chamber. We show 
+the interface in Figure 5b. Actuators across diferent groups will be 
+displayed in diferent colors. Actuators that do not belong to any 
+group will not be simulated in the next step. 
+4.3 Step 3: Previewing Motion 
+Next, the system allows users to specify the defation or infation 
+status for each air channel in a sequential time. They can specify 
+the start time and the end time of the actuation. Then, users can 
+preview the real-time motion of the actuators to test if the shape-
+changing object works as expected (Figure 5c). If not, they can go 
+back to the above steps to re-edit the shape or re-arrange the air 
+group of the object. 
+4.4 Step 4: Physical Assembly & Generating 
+Control Code 
+Once satisfed, users can assemble the designed objects with the 
+components in our MiuraKit. After that, they can let the system gen-
+erate a control code for the Arduino board to control the switching 
+state of the electromagnetic valves. The control code is automati-
+cally saved as a .ino fle which users can directly upload. 
+4.5 Software Implementation 
+Our interactive design tool uses Cannon-es [3], a lightweight 3D 
+physics engine, to simulate the motion of the origami actuators, 
+e.g., defation, infation, and bending. We also use Three.js [51] to 
+render the scene and geometry of the Miura-ori tube, and uses 
+lil.gui [22] for the user interface interactions. All the code is written 
+in JavaScript and tested on Google Chrome. We open-source our 
+code1 for replicability. 
+1https://github.com/zhitongcui/Origami-Actuators 
+2071
+MiuraKit DIS ’23, July 10–14, 2023, Pitsburgh, PA, USA 
+The defation of the actuator is approximated by simulating the 
+rigid folding process of the miura-ori tube, thus, the infation is the 
+deployable process of the tube. To simulate the rigid folding behav-
+ior with cannon-es, we treat each quadrilateral of the Miura-ori tube 
+as the triangle mesh shape [4] in cannon-es, and then we defne the 
+mountains and valleys of the origami creases as hinge constraints 
+with opposing orientations. After applying a force to each hinge, 
+the origami will fold at a specifed speed, which simulates defation. 
+Meanwhile, to avoid the collision of each quadrilateral, we set the 
+velocity of all the physical bodies to zero after detecting a distance 
+threshold, which is the thickness of the actuator after defation. To 
+simulate the bending behavior of the actuator after adding a me-
+chanical constraint, we apply diferent stifness values and opposite 
+velocity directions to the hinge constraints on the diferent sides of 
+the Miura-ori tube geometry. All the parameters are fne-tuned to 
+approximate the actuation performance of the physical actuators. 
+Users can add a new actuator by clicking an existing connector. 
+When adding a new actuator, connectors on the two ends of it are 
+automatically attached with a lock constraint, which removes all 
+degrees of freedom between them. Thus, the connectors always 
+move with the actuator. Whenever the system detects that there is 
+an existing connector in the end position of a newly added actuator, 
+the system will lock them together for interconnect movement. 
+In the software, the airfow of each actuator is programmed based 
+on the users’ group arrangement of actuators. The connector that 
+connects actuators within one group is treated as the only air inlet 
+for the previewing motion process. We then generate the Arduino 
+control code based on users’ settings of grouping air channels and 
+sequence of motion. The parameters and pre-defned control code 
+are initialized as a fle-like Blob object2, and then saved with the .ino 
+fle format which can be directly uploaded to the Arduino board. 
+5 APPLICATIONS 
+To highlight the capability of our construction kit, we demonstrate 
+a series of design examples. 
+5.1 Shielding Chair Figure 7: Our example application of a shape-changing chair 
+to protect users’ focus time for deep work. We implemented a demonstration of an organic chair that can 
+react to its environment and change its shape to communicate to 
+others. Figure 7 shows how the chair resembles a porcupine to 
+communicate that the user is in focus mode and does not want to 
+be disturbed. As the user switches to simpler tasks, the spikes, that 
+are implemented with our Miura tubes, soften and appear more 
+inviting. This is an artistic take on a focus communication tool, 
+which our MiuraKit allows to prototype quickly. 
+Additionally, we implemented shape changing arm rests, as 
+shown in Figure 8. The arm rests consist of Miura tubes coupled 
+as surfaces, which are upright (non-actuated) when users work, 
+but can curl (actuated) to hug the user’s body to comfort them. We 
+implemented the physical side of this application, which could be 
+combined with algorithms from the afective computing feld for 
+emotion detection. 
+2https://developer.mozilla.org/en-US/docs/Web/API/Blob 
+Figure 8: (a) Our example of an arm rest. It (b) is straight for 
+regular work, but can (c) curl to hug the user upon detecting 
+emotional distress. 
+5.2 Shape Changing Lamp 
+Figure 9 shows a shape-changing lamp application. This application 
+showcases how Miura tubes can be connected into a 3D shape and 
+be integrated with external objects, here a light bulb. The lamp 
+shade can change its shape to adapt how the light is shed through 
+its structure. 
+2072
+DIS ’23, July 10–14, 2023, Pitsburgh, PA, USA Zhitong Cui, Shuhong Wang, Junxian Li, Shijian Luo, and Alexandra Ion 
+Figure 9: A simple shape-changing lamp example made with 
+MiuraKit. 
+5.3 Interactive Curtain 
+We also showcase an interactive curtain application, which is con-
+structed with MiuraKit. We sew simple linearly coupled Miura 
+tubes onto the backside of a curtain (see Figure 10a-b). The tubes 
+add interactivity to the curtain. In this scenario depicted in Fig-
+ure 10c-e, a user left a small gift for their friend. The gift is initially 
+hidden behind the curtain, but is being revealed when their friend 
+enters the room, which triggers the shape change to reveal the 
+gift. Additionally, we demonstrate how the curtain implements 
+telepresence-like interactions in Figure 10f. Here, a user wants to 
+stay connected with their sibling, who lives on a diferent continent 
+now. They connect their curtain to the keyboard of their sibling, 
+which triggers the curtain to ‘dance’ when their sibling plays the 
+keyboard—an activity they used to do together. 
+5.4 Envisioned Application Space 
+We illustrate the larger application space that we envision in Fig-
+ure 11, which goes beyond our exemplary research prototypes 
+shown here in this paper. We see potential in new designs of shape-
+changing interfaces in domains such as large-scale interactive walls, 
+embedded within furniture for object manipulation, robotic appli-
+cations, or deployable shelters. Once non-experts have tools, such 
+as MiuraKit, for shape-changing interfaces in hand, the potential 
+for a larger push in dynamic interfaces and objects is fathomable. 
+We believe that the creativity of the mass can be a catalyst for new 
+technology. 
+6 USER STUDY 
+We conducted a user study to validate the construction process of 
+dynamic shape-changing interfaces with our construction kit. The 
+aim of this study was to observe how users would engage with our 
+construction kit to realize their independent ideas. 
+Participants. We recruited 8 participants, mainly from our in-
+stitution or visitors. They were compensated with $15/hour for 
+their participation. All had no prior experience with designing or 
+constructing shape-changing interfaces, soft robotics, or with fab-
+rication processes. Our participants (3 female) were between the 
+ages of 24 and 32 years (M = 26.14, SD = 2.53). 
+Procedure. After greeting the participants, obtaining their con-
+sent, and having them fll out a background questionnaire, we frst 
+introduced them to the construction kit. We walked them through 
+the components of the kit, showing (1) how the Miura-ori Actu-
+ators compress or bend, (2) how the air paths can be confgured 
+Figure 10: We show an interactive curtain application. (a-
+d) The MiuraKit parts are attached to the back of the curtain. 
+In our scenario, the curtain can (e) reveal hidden objects or 
+(f) move in a rhythmic pattern. 
+on the connector, (3) how the adapters snap together to enable 
+diferent spatial arrangements, and (4) how to use the software to 
+edit a shape, simulate the motion, and export the control code for 
+actuation. We spent about 10 min on this walkthrough. 
+After this introductory walkthrough, we left the participants 
+with the pictorial of our primitive library shown in Figure 2 and 
+asked them to design and build a shape changing interface of their 
+choice. Participants were asked to perform this task on their own 
+and to think out loud. The study conductors took notes during 
+the session and reminded participants to verbalize their thoughts 
+if necessary. If participants asked for help, the study conductors 
+encouraged them to fnd a solution on their own and referred them 
+back to the depicted and demonstrated shape-changing primitives. 
+After about 40 min of creating their own shape-changing objects 
+(see Figure 12), the study conductors performed about 10 min of 
+semi-structured interviews with the participants to further under-
+stand their experience with our MiuraKit. Participants were asked 
+to comment on (1) the utility of the kit and if it supported them 
+in making their envisioned objects, (2) their experience using the 
+kit, and (3) on the main benefts and challenges of this kit. At the 
+end, we also gave our participants the opportunity to add any other 
+comments or suggestions. We recorded the data by taking notes 
+during the study sessions and through video recordings. 
+2073
+MiuraKit DIS ’23, July 10–14, 2023, Pitsburgh, PA, USA 
+Figure 11: Beyond our implemented application examples, we outline ideas for a larger application space, spanning large-scale, 
+fashion, robotics, or deployable structures. 
+Figure 12: During our user study, participants had access to 
+all MiuraKit components. 
+6.1 Results 
+As a result of this study, participants made a range of objects, in-
+cluding a dynamic interlocking chain (P1), a three-legged walking 
+robot (P2), a shape-changing clothing hanger (P3), a directionally 
+actuated lamp (P4), a simple swimming robot (P5), a hugging dog 
+puppet (P6), a dynamic fower (P7), and a model of adjustable train 
+tracks (P8). We show 4 of their creations in Figure 13. We discuss 
+the participants’ comments from the study session in the following. 
+Usability. Generally, all participants expressed that the construc-
+tion kit is easy to understand. In particular, they mentioned how 
+the actuators work, and that the pneumatic and mechanical confg-
+uration with our connectors was clear and understandable. P5 said 
+“I think it took me less than 5 min to learn. I could understand how 
+this kit is moving, how the motion was built, and what things I can 
+do with it.“ Similarly, P2 explained that “The afordance is very clear, 
+I know in which direction the bending tube will bend and how it will 
+contract. I can also clearly understand how the pneumatic connectors 
+work and how the connectors can help me group the air chambers. 
+The mechanical connector is easy to use.” P7 and P8 explicitly stated 
+that the black and white colors of the silicone plugs facilitates their 
+understanding of the air groups, with P8 saying “I can just imagine 
+there is a path.” 
+The participants also commented on the control of their shape-
+changing object, with P8 wishing for full automatic control of the air 
+supply, but P2, on the contrary, mentioning that they preferred the 
+hands-on pneumatic confguration because it was straightforward. 
+We did not have the participants use our design tool for the study, 
+which would allow them to independently control their objects. In-
+stead, the study conductor helped them with actuating their design, 
+which left some participants wishing for more independence. Our 
+design tool will come in handy. 
+2074
+DIS ’23, July 10–14, 2023, Pitsburgh, PA, USA Zhitong Cui, Shuhong Wang, Junxian Li, Shijian Luo, and Alexandra Ion 
+Figure 13: An overview of the shape-changing designs that our study participants built. 
+Our participants mentioned that they noticed air leakage, which 
+the study conductors again helped with. This was the major cri-
+tique of participants, which further confrms the need for non-user 
+fabricated parts. While our research prototypes were still made 
+in the lab, this confrms that industrially manufactured parts are 
+necessary and that our easy-to-understand components are a viable 
+path we will pursue further. 
+Utility & Creativity. Our participants expressed that the kit sup-
+ported their creativity with the multiple degrees of freedom and 
+the fexible confguration of connectors. For example, P1 originally 
+intended to build crab claws, but pivoted to an interlocking chain 
+after experiencing deformation of the tubes, which sparked a new 
+idea. In total, six of our participants considered the hands-on ex-
+ploration of creating desired shape-changing objects as interesting. 
+P2 noted “It’s very cool, I like it. It’s like creating artifcial creatures.” 
+P4 said that they like how MiuraKit makes the physical design 
+process like tinkering, which can be thought of as “thinking with 
+your hands”. P2 and P7 compared our construction kit to Lego, but 
+for movement. P6 said that the kit “is helping me to imagine how it 
+will move rather than how it looks. I mean I was thinking about both 
+of them [shape and movement], but a lot of times when you make 
+something you’re more focused on how it looks.” P6 further compared 
+the static thinking about the shape to Lego, which is in line with 
+our design goals of providing a dynamic construction kit. They also 
+mentioned that MiuraKit might be benefcial in education, e.g., to 
+educate children about mechanisms. 
+Future extensions. Participants had very valuable feedback for 
+future extensions to the kit. Three participants mentioned that 
+they could see use in allowing connectors to be connected to each 
+other, such that they can connect more actuators around them for 
+more versatile shapes. P7 also suggested producing the adapters in 
+diferent colors to color-code their angle and making them easier to 
+fnd. P3 and P6 mentioned that they can see actuators of diferent 
+lengths or diferent diameters being useful for high-resolution or 
+large-scale shapes. On the same line, P1, P7, and P8 also envisioned 
+that they can build some human-scale objects with our construction 
+kit. 
+Overall, the feedback from the participants confrms that such 
+kits must be professionally produced for robustness for real-world 
+use and that our kit is a promising design. They thought that our 
+construction kit is very easy to understand and that the hands-on 
+building does support their creativity around movement and shape-
+changing objects. Participants then proposed expanding the kit by 
+diferent sizes of actuators such that they could use it for an even 
+wider range of applications across scales. 
+7 LAMINATING ORIGAMI ACTUATORS 
+Our construction is designed explicitly such that users do not have 
+to fabricate anything, but rather obtain the kit with all necessary 
+components. However, for replicability of our work, we describe 
+our fabrication process of the tubes. Our fabrication method builds 
+on fast fabrication techniques that are common in industry. We use 
+laser cutting and lamination via heat bonding. 
+The frst step in our fabrication method is to laser cut the outside 
+and engrave the creases of the Miura tube pattern, as shown in 
+Figure 14 (top). We use 0.6 mm PETG material that we heat bond to 
+0.2 mm transparent TPU flm using a heat press (Figure 14 (center)). 
+This results in one side of the Miura tube fold pattern. We then seal 
+the outside of the two halves of the Miura tubes together by placing 
+them in a mold that raises only the outside of the Miura tubes to 
+receive heat and melt the TPU locally (Figure 14 (bottom)). In this 
+step, we place a strip of TPU on the inside, which we pull to keep 
+the Miura tube in a pre-folded state, preventing it from going fat 
+under suction. This strip is also heat bonded at its top and bottom 
+to the TPU of the tube. We then place the barb connectors into 
+the top and bottom of the Miura tubes by piercing small holes and 
+screwing them in using a small gasket. Lastly, we glue the rigid 
+connectors that will receive the snap-ft connections onto the tubes. 
+After this fabrication process, our Miura tube actuator has a 
+length of 16 cm and a width of 3.5 cm. Our tubes contracts to their 
+2075
+MiuraKit DIS ’23, July 10–14, 2023, Pitsburgh, PA, USA 
+compact state within about 0.2 s, which we actuate with a 8 CFM3 
+pump (Robinair 15800 VacuMaster Economy Vacuum Pump). The 
+Miura tube provides a force of about 12 N when contracting. When 
+actuating multiple Miura tubes in parallel, the speed and force will 
+decrease proportionally to the total volume. 
+8 CONCLUSION 
+We presented MiuraKit, a construction kit for immediate hands-on 
+exploration of shape-changing interfaces. Our kit provides generic 
+soft actuators that incorporate the Miura-ori pattern. We developed 
+a novel connector for users to couple the actuators into their desired 
+applications by snapping them together. Additionally, the connector 
+allows users to confgure the air paths going through their structure 
+hands-on in a compact design. Users can couple the actuators as a 
+skeleton, as surfaces due to the tileable nature of the Miura pattern, 
+or a combination thereof. Our user study shows that novice users 
+understood our construction kit very quickly and felt supported in 
+making shape-changing and robotic interfaces. 
+In the future, we plan to further investigate MiuraKit’s utility 
+through long-term studies. We plan to give it out to design frms 
+and schools to evaluate it over several weeks. To do that, we also 
+plan to investigate smaller-scale air supply, such as FlowIO [47], or 
+integrate micro air pumps within the Miura tubes. Additionally, we 
+plan to establish automated manufacturing options to prepare for a 
+larger-scale study. 
+ACKNOWLEDGMENTS 
+This research is supported by the National Key Research and De-
+velopment Program of China (No. 2021YFF0900603). The authors 
+also thank all the reviewers’ valuable feedback to help us improve 
+the paper, and all the participants who joined our user study. 
+REFERENCES 
+[1] Lea Albaugh, Scott Hudson, and Lining Yao. 2019. Digital Fabrication of 
+Soft Actuated Objects by Machine Knitting. In Proceedings of the 2019 CHI 
+Conference on Human Factors in Computing Systems (Glasgow, Scotland Uk) 
+(CHI ’19). Association for Computing Machinery, New York, NY, USA, 1–13. 
+https://doi.org/10.1145/3290605.3300414 
+[2] Anke Brocker, Jose A. Barreiros, Ali Shtarbanov, Kristian Gohlke, Ozgun Kilic Af-
+sar, and Sören Schröder. 2022. Actuated Materials and Soft Robotics Strategies 
+for Human-Computer Interaction Design. In Extended Abstracts of the 2022 CHI 
+Conference on Human Factors in Computing Systems (New Orleans, LA, USA) (CHI 
+EA ’22). Association for Computing Machinery, New York, NY, USA, Article 81, 
+7 pages. https://doi.org/10.1145/3491101.3503711 
+[3] cannon es. 2023. cannon-es. https://pmndrs.github.io/cannon-es/ 
+[4] cannon es. 2023. Cannon-es Documentation. https://pmndrs.github.io/cannon-
+es/docs/classes/Trimesh.html 
+[5] Cosima du Pasquier, Tian Chen, Skylar Tibbits, and Kristina Shea. 2019. Design 
+and Computational Modeling of a 3D Printed Pneumatic Toolkit for Soft Robot-
+ics. Soft Robotics 6, 5 (2019), 657–663. https://doi.org/10.1089/soro.2018.0095 
+arXiv:https://doi.org/10.1089/soro.2018.0095 PMID: 31173562. 
+[6] Shreyosi Endow, Hedieh Moradi, Anvay Srivastava, Esau G Noya, and Ce-
+sar Torres. 2021. Compressables: A Haptic Prototyping Toolkit for Wearable 
+Compression-Based Interfaces. In Designing Interactive Systems Conference 2021 
+(Virtual Event, USA) (DIS ’21). Association for Computing Machinery, New York, 
+NY, USA, 1101–1114. https://doi.org/10.1145/3461778.3462057 
+[7] Evgueni T Filipov, Glaucio H Paulino, and Tomohiro Tachi. 2019. Deployable sand-
+wich surfaces with high out-of-plane stifness. Journal of Structural Engineering 
+145, 2 (2019), 04018244. 
+[8] Evgueni T Filipov, Tomohiro Tachi, and Glaucio H Paulino. 2015. Origami tubes 
+assembled into stif, yet reconfgurable structures and metamaterials. Proceedings 
+of the National Academy of Sciences 112, 40 (2015), 12321–12326. 
+3Cubic Feet per Minute, a measurement of the speed of the vacuum fow. 
+Figure 14: The lamination process we used for our research 
+prototypes of the Miura-ori tubes. We aim for professional 
+mass fabrication in the future. 
+[9] Sean Follmer, Daniel Leithinger, Alex Olwal, Akimitsu Hogge, and Hiroshi Ishii. 
+2013. InFORM: Dynamic Physical Afordances and Constraints through Shape 
+and Object Actuation. In Proceedings of the 26th Annual ACM Symposium on 
+User Interface Software and Technology (St. Andrews, Scotland, United Kingdom) 
+(UIST ’13). Association for Computing Machinery, New York, NY, USA, 417–426. 
+https://doi.org/10.1145/2501988.2502032 
+2076
+DIS ’23, July 10–14, 2023, Pitsburgh, PA, USA Zhitong Cui, Shuhong Wang, Junxian Li, Shijian Luo, and Alexandra Ion 
+[10] Jianzhe Gu, Yuyu Lin, Qiang Cui, Xiaoqian Li, Jiaji Li, Lingyun Sun, Cheng Yao, 
+Fangtian Ying, Guanyun Wang, and Lining Yao. 2022. PneuMesh: Pneumatic-
+Driven Truss-Based Shape Changing System. In Proceedings of the 2022 CHI 
+Conference on Human Factors in Computing Systems (New Orleans, LA, USA) 
+(CHI ’22). Association for Computing Machinery, New York, NY, USA, Article 
+260, 12 pages. https://doi.org/10.1145/3491102.3502099 
+[11] Tae Hwa Hong, Se-Hun Park, Ji-Hong Park, Nam-Jong Paik, and Yong-Lae Park. 
+2020. Design of pneumatic origami muscle actuators (POMAs) for a soft robotic 
+hand orthosis for grasping assistance. In 2020 3rd IEEE International Conference 
+on Soft Robotics (RoboSoft). IEEE, 627–632. 
+[12] 3D Hubs. 2022. 3D Printing Trend Report 2022. https://www.hubs.com/get/ 
+trends/. Last accessed: 2023-02-13. 
+[13] Hanqing Jiang. 2022. Cylindrical Origami: From Foldable Structures to Versatile 
+Robots. https://imechanica.org/node/25665 
+[14] Ozgun Kilic Afsar, Ali Shtarbanov, Hila Mor, Ken Nakagaki, Jack Forman, Karen 
+Modrei, Seung Hee Jeong, Klas Hjort, Kristina Höök, and Hiroshi Ishii. 2021. 
+OmniFiber: Integrated Fluidic Fiber Actuators for Weaving Movement Based 
+Interactions into the ‘Fabric of Everyday Life’. In The 34th Annual ACM Sym-
+posium on User Interface Software and Technology (Virtual Event, USA) (UIST 
+’21). Association for Computing Machinery, New York, NY, USA, 1010–1026. 
+https://doi.org/10.1145/3472749.3474802 
+[15] Hyunyoung Kim, Céline Coutrix, and Anne Roudaut. 2018. KnobSlider: Design 
+of a Shape-Changing UI for Parameter Control. In Proceedings of the 2018 CHI 
+Conference on Human Factors in Computing Systems (Montreal QC, Canada) 
+(CHI ’18). Association for Computing Machinery, New York, NY, USA, 1–13. 
+https://doi.org/10.1145/3173574.3173913 
+[16] Hyunyoung Kim, Aluna Everitt, Carlos Tejada, Mengyu Zhong, and Daniel Ash-
+brook. 2021. MorpheesPlug: A Toolkit for Prototyping Shape-Changing Interfaces. 
+In Proceedings of the 2021 CHI Conference on Human Factors in Computing Systems
+(Yokohama, Japan) (CHI ’21). Association for Computing Machinery, New York, 
+NY, USA, Article 101, 13 pages. https://doi.org/10.1145/3411764.3445786 
+[17] Hyunyoung Kim, Patrícia Deud Guimarães, Céline Coutrix, and Anne Roudaut. 
+2019. ExpanDial: Designing a Shape-Changing Dial. In Proceedings of the 2019 
+on Designing Interactive Systems Conference (San Diego, CA, USA) (DIS ’19). 
+Association for Computing Machinery, New York, NY, USA, 949–961. https: 
+//doi.org/10.1145/3322276.3322283 
+[18] Woongbae Kim, Junghwan Byun, Jae-Kyeong Kim, Woo-Young Choi, Kirsten 
+Jakobsen, Joachim Jakobsen, Dae-Young Lee, and Kyu-Jin Cho. 2019. Bioinspired 
+dual-morphing stretchable origami. Science robotics 4, 36 (2019), eaay3493. 
+[19] Christopher Kopic and Kristian Gohlke. 2016. InfatiBits: A Modular Soft Robotic 
+Construction Kit for Children. In Proceedings of the TEI ’16: Tenth International 
+Conference on Tangible, Embedded, and Embodied Interaction (Eindhoven, Nether-
+lands) (TEI ’16). Association for Computing Machinery, New York, NY, USA, 
+723–728. https://doi.org/10.1145/2839462.2872962 
+[20] Jun-Young Lee, Woong-Bae Kim, Woo-Young Choi, and Kyu-Jin Cho. 2016. Soft 
+Robotic Blocks: Introducing SoBL, a Fast-Build Modularized Design Block. IEEE 
+Robotics & Automation Magazine 23, 3 (2016), 30–41. https://doi.org/10.1109/ 
+MRA.2016.2580479 
+[21] Kiju Lee, Yanzhou Wang, and Chuanqi Zheng. 2020. Twister hand: Underactuated 
+robotic gripper inspired by origami twisted tower. IEEE Transactions on Robotics 
+36, 2 (2020), 488–500. 
+[22] lilgui. 2023. lilgui. https://lil-gui.georgealways.com/ 
+[23] Qiuyu Lu, Jifei Ou, João Wilbert, André Haben, Haipeng Mi, and Hiroshi 
+Ishii. 2019. MilliMorph – Fluid-Driven Thin Film Shape-Change Materials 
+for Interaction Design. In Proceedings of the 32nd Annual ACM Symposium 
+on User Interface Software and Technology (New Orleans, LA, USA) (UIST ’19). 
+Association for Computing Machinery, New York, NY, USA, 663–672. https: 
+//doi.org/10.1145/3332165.3347956 
+[24] Yiyue Luo, Kui Wu, Andrew Spielberg, Michael Foshey, Daniela Rus, Tomás 
+Palacios, and Wojciech Matusik. 2022. Digital Fabrication of Pneumatic Actuators 
+with Integrated Sensing by Machine Knitting. In Proceedings of the 2022 CHI 
+Conference on Human Factors in Computing Systems (New Orleans, LA, USA) 
+(CHI ’22). Association for Computing Machinery, New York, NY, USA, Article 
+175, 13 pages. https://doi.org/10.1145/3491102.3517577 
+[25] Jose Francisco Martinez Castro, Alice Buso, Jun Wu, and Elvin Karana. 2022. 
+TEX (alive): A TOOLKIT TO EXPLORE TEMPORAL EXPRESSIONS IN SHAPE-
+CHANGING TEXTILE INTERFACES. In Designing Interactive Systems Conference. 
+1162–1176. 
+[26] David Melancon, Benjamin Gorissen, Carlos J García-Mora, Chuck Hoberman, 
+and Katia Bertoldi. 2021. Multistable infatable origami structures at the metre 
+scale. Nature 592, 7855 (2021), 545–550. 
+[27] David Melancon, Benjamin Gorissen, Carlos J García-Mora, Chuck Hoberman, 
+and Katia Bertoldi. 2021. Multistable infatable origami structures at the metre 
+scale. Nature 592, 7855 (2021), 545–550. 
+[28] Takafumi Morita, Ziyuan Jiang, Kanon Aoyama, Ayato Minaminosono, Yu Kuwa-
+jima, Naoki Hosoya, Shingo Maeda, and Yasuaki Kakehi. 2023. InfatableMod: 
+Untethered and Reconfgurable Infatable Modules for Tabletop-sized Pneumatic 
+Physical Interfaces. In Proceedings of the 2023 CHI Conference on Human Factors 
+in Computing Systems. 1–15. 
+[29] Takafumi Morita, Yu Kuwajima, Ayato Minaminosono, Shingo Maeda, and Ya-
+suaki Kakehi. 2022. HydroMod: Constructive Modules for Prototyping Hy-
+draulic Physical Interfaces. In Proceedings of the 2022 CHI Conference on Hu-
+man Factors in Computing Systems (New Orleans, LA, USA) (CHI ’22). Asso-
+ciation for Computing Machinery, New York, NY, USA, Article 393, 14 pages. 
+https://doi.org/10.1145/3491102.3502096 
+[30] Sachith Muthukumarana, Moritz Alexander Messerschmidt, Denys J.C. Matthies, 
+Jürgen Steimle, Philipp M. Scholl, and Suranga Nanayakkara. 2021. ClothTiles: A 
+Prototyping Platform to Fabricate Customized Actuators on Clothing Using 3D 
+Printing and Shape-Memory Alloys. In Proceedings of the 2021 CHI Conference on 
+Human Factors in Computing Systems (Yokohama, Japan) (CHI ’21). Association 
+for Computing Machinery, New York, NY, USA, Article 510, 12 pages. https: 
+//doi.org/10.1145/3411764.3445613 
+[31] Ken Nakagaki, Sean Follmer, and Hiroshi Ishii. 2015. LineFORM: Actuated Curve 
+Interfaces for Display, Interaction, and Constraint. In Proceedings of the 28th 
+Annual ACM Symposium on User Interface Software & Technology (Charlotte, NC, 
+USA) (UIST ’15). Association for Computing Machinery, New York, NY, USA, 
+333–339. https://doi.org/10.1145/2807442.2807452 
+[32] Ken Nakagaki, Luke Vink, Jared Counts, Daniel Windham, Daniel Leithinger, 
+Sean Follmer, and Hiroshi Ishii. 2016. Materiable: Rendering Dynamic Material 
+Properties in Response to Direct Physical Touch with Shape Changing Interfaces. 
+In Proceedings of the 2016 CHI Conference on Human Factors in Computing Systems
+(San Jose, California, USA) (CHI ’16). Association for Computing Machinery, New 
+York, NY, USA, 2764–2772. https://doi.org/10.1145/2858036.2858104 
+[33] Kenichi Nakahara, Koya Narumi, Ryuma Niiyama, and Yoshihiro Kawahara. 
+2017. Electric phase-change actuator with inkjet printed fexible circuit for 
+printable and integrated robot prototyping. In 2017 IEEE International Conference 
+on Robotics and Automation (ICRA). IEEE, 1856–1863. 
+[34] Ryosuke Nakayama, Ryo Suzuki, Satoshi Nakamaru, Ryuma Niiyama, Yoshihiro 
+Kawahara, and Yasuaki Kakehi. 2019. MorphIO: Entirely Soft Sensing and Actua-
+tion Modules for Programming Shape Changes through Tangible Interaction. In 
+Proceedings of the 2019 on Designing Interactive Systems Conference (San Diego, 
+CA, USA) (DIS ’19). Association for Computing Machinery, New York, NY, USA, 
+975–986. https://doi.org/10.1145/3322276.3322337 
+[35] Ryuma Niiyama, Xu Sun, Lining Yao, Hiroshi Ishii, Daniela Rus, and Sangbae 
+Kim. 2015. Sticky Actuator: Free-Form Planar Actuators for Animated Objects. In 
+Proceedings of the Ninth International Conference on Tangible, Embedded, and Em-
+bodied Interaction (Stanford, California, USA) (TEI ’15). Association for Computing 
+Machinery, New York, NY, USA, 77–84. https://doi.org/10.1145/2677199.2680600 
+[36] Cagdas D Onal, Robert J Wood, and Daniela Rus. 2012. An origami-inspired 
+approach to worm robots. IEEE/ASME Transactions on Mechatronics 18, 2 (2012), 
+430–438. 
+[37] Jifei Ou, Felix Heibeck, and Hiroshi Ishii. 2016. TEI 2016 Studio: Infated Curiosity. 
+In Proceedings of the TEI ’16: Tenth International Conference on Tangible, Embedded, 
+and Embodied Interaction (Eindhoven, Netherlands) (TEI ’16). Association for 
+Computing Machinery, New York, NY, USA, 766–769. https://doi.org/10.1145/ 
+2839462.2854119 
+[38] Jifei Ou, Mélina Skouras, Nikolaos Vlavianos, Felix Heibeck, Chin-Yi Cheng, 
+Jannik Peters, and Hiroshi Ishii. 2016. AeroMorph - Heat-Sealing Infatable 
+Shape-Change Materials for Interaction Design. In Proceedings of the 29th Annual 
+Symposium on User Interface Software and Technology (Tokyo, Japan) (UIST ’16). 
+Association for Computing Machinery, New York, NY, USA, 121–132. https: 
+//doi.org/10.1145/2984511.2984520 
+[39] Johannes TB Overvelde, Twan A De Jong, Yanina Shevchenko, Sergio A Becerra, 
+George M Whitesides, James C Weaver, Chuck Hoberman, and Katia Bertoldi. 
+2016. A three-dimensional actuated origami-inspired transformable metamaterial 
+with multiple degrees of freedom. Nature communications 7, 1 (2016), 10929. 
+[40] Laura Paez, Gunjan Agarwal, and Jamie Paik. 2016. Design and analysis of a soft 
+pneumatic actuator with origami shell reinforcement. Soft Robotics 3, 3 (2016), 
+109–119. 
+[41] Purnendu, Sasha M Novack, Eric Acome, Christoph Keplinger, Mirela Alistar, 
+Mark D Gross, Carson Bruns, and Daniel Leithinger. 2021. Electrifow: Soft 
+Electrohydraulic Building Blocks for Prototyping Shape-Changing Interfaces. 
+In Designing Interactive Systems Conference 2021 (Virtual Event, USA) (DIS ’21). 
+Association for Computing Machinery, New York, NY, USA, 1280–1290. https: 
+//doi.org/10.1145/3461778.3462093 
+[42] Majken K. Rasmussen, Esben W. Pedersen, Marianne G. Petersen, and Kasper 
+Hornbæk. 2012. Shape-Changing Interfaces: A Review of the Design Space and 
+Open Research Questions. In Proceedings of the SIGCHI Conference on Human 
+Factors in Computing Systems (Austin, Texas, USA) (CHI ’12). Association for 
+Computing Machinery, New York, NY, USA, 735–744. https://doi.org/10.1145/ 
+2207676.2207781 
+[43] Matthew A. Robertson and Jamie Paik. 2017. New soft robots really 
+suck: Vacuum-powered systems empower diverse capabilities. Science Ro-
+botics 2, 9 (2017), eaan6357. https://doi.org/10.1126/scirobotics.aan6357 
+arXiv:https://www.science.org/doi/pdf/10.1126/scirobotics.aan6357 
+2077
+MiuraKit 
+[44] Philipp Rothemund, Nicholas Kellaris, Shane K Mitchell, Eric Acome, and 
+Christoph Keplinger. 2021. HASEL artifcial muscles for a new generation of 
+lifelike robots—recent progress and future opportunities. Advanced Materials 33, 
+19 (2021), 2003375. 
+[45] Harpreet Sareen, Udayan Umapathi, Patrick Shin, Yasuaki Kakehi, Jifei Ou, Hi-
+roshi Ishii, and Pattie Maes. 2017. Printfatables: Printing Human-Scale, Func-
+tional and Dynamic Infatable Objects. In Proceedings of the 2017 CHI Confer-
+ence on Human Factors in Computing Systems (Denver, Colorado, USA) (CHI 
+’17). Association for Computing Machinery, New York, NY, USA, 3669–3680. 
+https://doi.org/10.1145/3025453.3025898 
+[46] Mark Schenk, Andrew D Viquerat, Keith A Sefen, and Simon D Guest. 2014. Re-
+view of infatable booms for deployable space structures: packing and rigidization. 
+Journal of Spacecraft and Rockets 51, 3 (2014), 762–778. 
+[47] Ali Shtarbanov. 2021. FlowIO Development Platform – the Pneumatic “Raspberry 
+Pi” for Soft Robotics. In Extended Abstracts of the 2021 CHI Conference on Human 
+Factors in Computing Systems (Yokohama, Japan) (CHI EA ’21). Association for 
+Computing Machinery, New York, NY, USA, Article 479, 6 pages. https://doi. 
+org/10.1145/3411763.3451513 
+[48] Miriam Sturdee and Jason Alexander. 2018. Analysis and Classifcation of Shape-
+Changing Interfaces for Design and Application-Based Research. ACM Comput. 
+Surv. 51, 1, Article 2 (jan 2018), 32 pages. https://doi.org/10.1145/3143559 
+[49] Saiganesh Swaminathan, Michael Rivera, Runchang Kang, Zheng Luo, Kadri Bu-
+gra Ozutemiz, and Scott E. Hudson. 2019. Input, Output and Construction Meth-
+ods for Custom Fabrication of Room-Scale Deployable Pneumatic Structures. 
+Proc. ACM Interact. Mob. Wearable Ubiquitous Technol. 3, 2, Article 62 (jun 2019), 
+17 pages. https://doi.org/10.1145/3328933 
+[50] Yasaman Tahouni, Isabel P. S. Qamar, and Stefanie Mueller. 2020. NURBSforms: A 
+Modular Shape-Changing Interface for Prototyping Curved Surfaces. In Proceed-
+ings of the Fourteenth International Conference on Tangible, Embedded, and Embod-
+ied Interaction (Sydney NSW, Australia) (TEI ’20). Association for Computing Ma-
+chinery, New York, NY, USA, 403–409. https://doi.org/10.1145/3374920.3374927 
+[51] Three.js. 2023. Three.js. https://threejs.org/ 
+[52] Arnav Wagh. 2019. Flxo. https://arnavwagh.work/fxo. Last accessed: 2023-02-13. 
+[53] Guanyun Wang, Humphrey Yang, Zeyu Yan, Nurcan Gecer Ulu, Ye Tao, Jianzhe 
+Gu, Levent Burak Kara, and Lining Yao. 2018. 4DMesh: 4D Printing Morph-
+ing Non-Developable Mesh Surfaces. In Proceedings of the 31st Annual ACM 
+Symposium on User Interface Software and Technology (Berlin, Germany) (UIST 
+’18). Association for Computing Machinery, New York, NY, USA, 623–635. 
+https://doi.org/10.1145/3242587.3242625 
+DIS ’23, July 10–14, 2023, Pitsburgh, PA, USA 
+[54] Shuai Wu, Qiji Ze, Jize Dai, Nupur Udipi, Glaucio H Paulino, and Ruike Zhao. 
+2021. Stretchable origami robotic arm with omnidirectional bending and twisting. 
+Proceedings of the National Academy of Sciences 118, 36 (2021), e2110023118. 
+[55] Humphrey Yang, Tate Johnson, Ke Zhong, Dinesh Patel, Gina Olson, Carmel 
+Majidi, Mohammad Islam, and Lining Yao. 2022. ReCompFig: Designing Dy-
+namically Reconfgurable Kinematic Devices Using Compliant Mechanisms and 
+Tensioning Cables. In Proceedings of the 2022 CHI Conference on Human Factors 
+in Computing Systems. 1–14. 
+[56] Lining Yao, Ryuma Niiyama, Jifei Ou, Sean Follmer, Clark Della Silva, and Hiroshi 
+Ishii. 2013. PneUI: Pneumatically Actuated Soft Composite Materials for Shape 
+Changing Interfaces. In Proceedings of the 26th Annual ACM Symposium on 
+User Interface Software and Technology (St. Andrews, Scotland, United Kingdom) 
+(UIST ’13). Association for Computing Machinery, New York, NY, USA, 13–22. 
+https://doi.org/10.1145/2501988.2502037 
+[57] Lining Yao, Jifei Ou, Chin-Yi Cheng, Helene Steiner, Wen Wang, Guanyun 
+Wang, and Hiroshi Ishii. 2015. BioLogic: Natto Cells as Nanoactuators for 
+Shape Changing Interfaces. In Proceedings of the 33rd Annual ACM Confer-
+ence on Human Factors in Computing Systems (Seoul, Republic of Korea) (CHI 
+’15). Association for Computing Machinery, New York, NY, USA, 1–10. https: 
+//doi.org/10.1145/2702123.2702611 
+[58] Hye Jun Youn and Ali Shtarbanov. 2022. PneuBots: Modular Infatables for Playful 
+Exploration of Soft Robotics. In Extended Abstracts of the 2022 CHI Conference 
+on Human Factors in Computing Systems (New Orleans, LA, USA) (CHI EA ’22). 
+Association for Computing Machinery, New York, NY, USA, Article 490, 6 pages. 
+https://doi.org/10.1145/3491101.3514490 
+[59] Zirui Zhai, Yong Wang, and Hanqing Jiang. 2018. Origami-inspired, on-demand 
+deployable and collapsible mechanical metamaterials with tunable stifness. Pro-
+ceedings of the National Academy of Sciences 115, 9 (2018), 2032–2037. 
+[60] Xinlei Zhang, Ali Shtarbanov, Jiani Zeng, Valerie K. Chen, V. Michael Bove, 
+Pattie Maes, and Jun Rekimoto. 2019. Bubble: Wearable Assistive Grasping 
+Augmentation Based on Soft Infatables. In Extended Abstracts of the 2019 CHI 
+Conference on Human Factors in Computing Systems (Glasgow, Scotland Uk) 
+(CHI EA ’19). Association for Computing Machinery, New York, NY, USA, 1–6. 
+https://doi.org/10.1145/3290607.3312868 
+[61] Mengjia Zhu, Amirhossein H Memar, Aakar Gupta, Majed Samad, Priyanshu 
+Agarwal, Yon Visell, Sean J Keller, and Nicholas Colonnese. 2020. Pneusleeve: 
+In-fabric multimodal actuation and sensing in a soft, compact, and expressive 
+haptic sleeve. In Proceedings of the 2020 CHI Conference on Human Factors in 
+Computing Systems. 1–12. 
+2078

@@ -1,0 +1,532 @@
+MistMaker and Large Language Model MistMaker(LLMMM):
+LLM Operated Mist Making
+shuang cai
+Cornell University TEST
+Ithaca, New York, USA
+sc3549@cornell.edu
+David Yang
+Independent
+Brookly, New York, USA
+davidyangemail@gmail.com
+Sang-won Leigh
+Human Centered Design
+Cornell University
+Ithaca, New York, USA
+sang.leigh@cornell.edu
+Figure 1: Left: Earlier MistMaker build, v1.4, assembled; Right: V1.4 bare board
+Abstract
+Ultrasonic mist-making devices are commonly deployed as closed,
+appliance-level systems with limited programmability. At the same
+time, recent multimodal large language models (LLMs) have ex-
+panded interaction beyond text to visual and auditory modalities,
+while environmental and atmospheric outputs remain largely un-
+explored. This paper introduces MistMaker, an open-source, pro-
+grammable ultrasonic mist platform, and Large Language Model
+MistMaker (LLMMM), a system that connects LLMs to mist gen-
+eration through an API-mediated, interpretive control pipeline.
+Through two hardware pilots, we examine how mist is perceived,
+Authors’ Contact Information: shuang cai, Cornell University TEST, Ithaca, New
+York, USA, sc3549@cornell.edu; David Yang, Independent, Brookly, New York, USA,
+davidyangemail@gmail.com; Sang-won Leigh, Human Centered Design, Cornell Uni-
+versity, Ithaca, New York, USA, sang.leigh@cornell.edu.
+This work is licensed under a Creative Commons Attribution 4.0 International License.
+CHI EA ’26, Barcelona, Spain
+© 2026 Copyright held by the owner/author(s).
+ACM ISBN 979-8-4007-2281-3/26/04
+https://doi.org/10.1145/3772363.3798734
+interpreted, and appropriated in social and exploratory settings,
+informing LLMMM’s interaction framing and highlighting mist’s
+ambiguity as a nonverbal, non-symbolic medium. We contribute
+an open hardware infrastructure for programmable mist, a tech-
+nical architecture for LLM-guided environmental interaction, and
+an interaction framing that extends multimodal AI beyond repre-
+sentational media toward material, experiential, and atmospheric
+modulation. This work expands HCI discussions on AI agency,
+ambient interaction, and environmental media in LLM-mediated
+systems.
+CCS Concepts
+•Applied computing → Media arts; Interactive learning envi-
+ronments; • Hardware → PCB design and layout ; • Human-
+centered computing → Haptic devices; Interaction design the-
+ory, concepts and paradigms.
+Keywords
+open-source hardware, ultrasonic mist, environmental interfaces,
+human-AI interaction
+CHI EA ’26, April 13–17, 2026, Barcelona, Spain cai, Yang, and Leigh
+ACM Reference Format:
+shuang cai, David Yang, and Sang-won Leigh. 2026. MistMaker and Large
+Language Model MistMaker(LLMMM): LLM Operated Mist Making. In Ex-
+tended Abstracts of the 2026 CHI Conference on Human Factors in Computing
+Systems (CHI EA ’26), April 13–17, 2026, Barcelona, Spain. ACM, New York,
+NY, USA, Article 111, 6 pages. https://doi.org/10.1145/3772363.3798734
+1 Introduction
+Environmental outputs such as airflow, temperature changes, and
+mist have long served as sites of exploration for engineers, artists,
+makers, and creative practitioners. Prior work has examined how
+air and atmospheric forces can be harnessed as interaction media,
+ranging from perceptual interfaces that make invisible airflow legi-
+ble, to expressive systems that leverage environmental dynamics
+for embodied and affective experiences. For example, Suzuki et al.
+explore airflow as a tangible interaction material that can shape
+bodily perception and engagement [22]. Broscheit et al. and Min et
+al. investigate how environmental phenomena can be experienced
+as interfaces instead of ambient background conditions[2, 11]. More
+recent work such as AirCraft further demonstrates how air-based
+actuation can support creative and exploratory interaction in both
+technical and artistic contexts[24].
+Despite this sustained interest, mist occupies an uneasy position
+within this body of work. Unlike airflow or temperature, mist is most
+often encountered through closed, appliance-level systems—such
+as humidifiers or fog machines—that offer limited programmability
+and obscure their underlying control mechanisms. As a result, mist
+is frequently treated as a decorative or atmospheric effect instead of
+programmable interaction or prototyping materials. Practitioners
+who wish to work with mist in interactive or creative contexts of-
+ten rely on pre-existing commercial device and reverse-engineered
+circuits, or bespoke one-off implementations, which limits repro-
+ducibility, iteration, and broader participation.
+In parallel, recent work on multimodal large language models
+(LLMs) has primarily focused on extending language-based interac-
+tion through textual, visual, and auditory modalities. Survey work
+by Wang et al. characterizes the dominant trajectory of multimodal
+LLM research as the integration of text with images, video, and
+speech, emphasizing tasks such as visual question answering, im-
+age captioning, audio-visual reasoning, and multimodal content
+generation [23]. Within HCI contexts, this orientation has trans-
+lated into interactive systems where LLMs mediate user interaction
+through screen-based representations, spoken language, or struc-
+tured symbolic inputs and outputs.
+More recent creative and interactive applications further rein-
+force this focus. Sayel et al. explore multimodal LLM interfaces
+that combine visual perception and linguistic reasoning to support
+interactive control and interpretation in virtual environments [18].
+Sorokin et al. examine multimodal LLM interaction through voice
+and graphical interfaces.[21]. Across these works, multimodality is
+largely framed in terms of representational media that can be view,
+labeled, and rendered legible to both users and models.
+Phenomena such as mist, humidity, scents, and airflow are dif-
+fuse, transient, and difficult to discretize, resisting the representa-
+tional and vectorizing logic that underpins most multimodal LLM
+pipelines. This marginalization of environmental media stands in
+contrast to a long tradition of ambient and multisensory interaction
+research within HCI. Ambient feedback systems emerged as an
+alternative to interaction models centered on explicit commands,
+notifications, or task-driven interfaces, instead embedding infor-
+mation into the surrounding environment so that it is perceived
+peripherally and over time [5, 6, 9, 10]. This disconnect highlights
+a gap between how interaction has been conceptualized in ambi-
+ent HCI and how multimodality is currently operationalized in
+LLM-mediated systems.
+Overall, environmental outputs remain largely absent from LLM-
+mediated interaction systems. Part of the reason lies at the lack
+of programmable prototyping tools, while prevailing multimodal
+frameworks privilege symbolic and legible perception and genera-
+tion over material, experiential, and subtle modulation. MistMaker
+is designed with the gap in mind. Large Language Model MistMaker
+(LLMMM) is developed to explore how LLMs might participate in
+environmental interaction.
+2 System Overview
+2.1 MistMaker
+MistMaker is an Open Source Hardware–certified ultrasonic mist
+platform (OSHWA US002742)1. It is a microcontroller-controlled
+ultrasonic mist system where a network-capable programmable
+controller drives a piezoelectric disc at resonance to generate mist,
+while integrated battery charging, power regulation, and protection
+circuitry support portable and reusable deployments.
+A central design decision in MistMaker is the embedded pro-
+grammable microcontroller in the XIAO form factor, specifically
+the XIAO ESP32-C6[19]. The footprint selection is to maintain a
+small board size while ensure adaptivity for other micorcontroller
+model. The board layout is compatible with commonly used XIAO-
+format microcontrollers, including Seeed Studio’s XIAO series and
+Adafruit’s QT Py boards, allowing designers to swap controllers
+depending on application needs, supported protocols, or power
+constraints. The choice of choice XIAO ESP32-C6 specifically is to
+enable Wi-Fi connectivity and lightweight network communica-
+tion.
+To drive the ultrasonic transducer, MistMaker implements a
+high-voltage step-up circuit based on a tapped inductor configured
+as a resonant LC circuit. A dedicated driver IC feeds the inductor,
+stepping up the input voltage to approximately 130 Vpp to excite the
+ultrasonic disc. A MOSFET-based switching stage sets the operating
+frequency at 108.7 kHz, matching the resonant frequency of the
+selected commercial ultrasonic mist disc. We selected a perforated
+ultrasonic disc designed for efficient aerosolization, drawing on
+prior work that demonstrates how disc geometry and resonance
+characteristics influence mist generation efficiency and stability[4].
+To best support creative uses of mist, the board includes battery
+charging circuitry, support for multiple power input sources, and
+current sensing to monitor system load. Brownout detection is used
+to protect the system from unstable operating conditions, helping
+to ensure reliable mist generation and extend hardware longevity
+during prolonged or experimental use. These mechanisms allow the
+system to detect unstable operating conditions caused by battery
+voltage sag and fluctuating loads from inconsistent water draw. This
+1Click the footnote to see certification
+MistMaker: LLM-Mediated Environmental Interaction CHI EA ’26, April 13–17, 2026, Barcelona, Spain
+feature allow safer experimentation and more reliable operation in
+LLMMM development.
+Taken together, these design choices position MistMaker as a
+flexible hardware substrate for environmental interaction. By com-
+bining network-capable microcontroller, high-voltage ultrasonic
+actuation, and robust power management in an open and modular
+form, the system enables mist to be addressed programmatically
+and integrated into higher-level control pipelines, including API-
+mediated interaction with large language models.
+2.2 LLM Implementation
+LLMMM integrates large language models through an API-mediated
+listening and interpretation pipeline rather than continuous au-
+tonomous control. The system is designed to periodically listen
+to its surrounding context, capture spoken or ambient verbal in-
+put, and translate this input into text before engaging an LLM for
+interpretation.
+Audio input is first processed through a speech-to-text model
+(e.g., Whisper), which converts spoken language into textual de-
+scriptions suitable for downstream interpretation. This transcrip-
+tion step functions as a boundary between the physical environ-
+ment and the language model, allowing environmental context to
+be represented in a form that can be selectively filtered, summa-
+rized, or structured before being passed to the LLM via API calls.
+The transcribed text, along with additional system context such as
+recent mist behavior or temporal cues, is incorporated into prompts
+sent to the LLM. Prompt design emphasizes contextual reading
+command execution, guiding the model to interpret the situation
+and generate qualitative response intents.
+Different interaction behaviors (or system “personalities”) are
+achieved by varying prompt structure and instruction framing. Be-
+cause the underlying system architecture separates interpretation
+from mist events, the same MistMaker hardware can support mul-
+tiple behavioral configurations without changes to firmware or
+circuitry. In early iterations, LLMMM was configured to introduce
+mist in response to conversational contexts described as sparse
+or “dry, ” using mist as a way to enrich the ambient atmosphere.
+In later iterations, the system was instead designed to respond to
+conversational content indicating heightened tension or conflict
+by modulating mist output, introducing a physical atmospheric
+presence as a nonverbal response.
+3 Hardware Pilots
+3.1 Workshop at Open Hardware Summit
+The first pilot took place as a hands-on workshop at the Open
+Hardware Summit 2025 in Edinburgh, Uk[12], where participants
+assembled MistMaker devices and experimented with mist genera-
+tion in a short, guided session 2. This was the firs time MistMaker is
+presented to the public. The workshop specifically emphasized leg-
+ibility of the circuit, accessibility of the components, and hands-on
+understanding of how ultrasonic mist is generated and controlled.
+This deployment served two roles in relation to LLMMM. First,
+it validated MistMaker as a reusable and teachable hardware sub-
+strate, capable of supporting diverse experimental use without
+requiring bespoke engineering expertise. This infrastructural ro-
+bustness is a prerequisite for later LLM-mediated interaction, which
+Figure 2: MistMaker hands-on workshop at the Open Hard-
+ware Summit 2025. A1 and A2 showcasing the hardware for
+participants to learn about and assemble MistMaker
+relies on stable and predictable actuation. Second, participants’ ex-
+ploratory use of mist—treating it alternately as decoration, signal,
+atmosphere, or performative element—highlighted the ambiguity
+and interpretive openness of mist as a medium. These observations
+directly informed LLMMM’s design choice to treat LLM output not
+as explicit commands, but as qualitative intents that modulate mist
+behavior.
+3.2 Holiday Market at NYC Resistor
+The second pilot occurred in NYC Resistor’s public-facing holiday
+market on Dec 14, 2025 in Brooklyn New York. For the market, Mist-
+Maker was developed as a standalone ornament where the package
+serves as the water reservoir. The goal is to have MistMaker en-
+countered by a broader audience with or without technical framing.
+This deployment exposed how mist operates in socially shared en-
+vironments, where interpretation is distributed across observers
+but not a single user. Visitors often speculated about the meaning,
+cause, or intention behind the mist without explicit explanations.
+Many expressed interests in the novelty form of ornament as well
+as the MistMaker itself.
+One maker, Xiaotian Zhang, who encountered and acquired the
+MistMaker at the holiday market, designed a classical Diskobólos
+figure with MistMaker that would produce a brief puff of mist from
+behind2 and envisioned a version that can do so in response to
+specific conversational cues. The project illustrates a humorous,
+bodily metaphor for environmental interaction.
+For the MistMaker, these reactions and responses from the hol-
+iday market further underscores mist’s capacity to function as
+a nonverbal, non-instructional medium—an insight that directly
+shaped LLMMM’s interaction framing. We took the inspiration
+from the holiday market, and, as a result, we designed LLMMM
+as an interpretive mediator that produces atmospheric modulation
+suited to shared, ambiguous contexts.
+2The maker actually made the implementation with MistMaker. Documentation can
+be found on Instagram (@tian_tiantiantiantian).
+CHI EA ’26, April 13–17, 2026, Barcelona, Spain cai, Yang, and Leigh
+Figure 3: MistMaker sold at Resistor NYC as ornaments and
+basic kits
+4 Discussion
+4.1 MistMaker As Community-developed
+Hardware Infrastructure
+Unlike commercial mist modules that usually conceal mist-making
+mechanisms within sealed appliance architectures, open-sourcing
+MistMaker exposes all mechanisms at the board level with a sup-
+porting Arduino library. We do not claim that MistMaker has the
+most novel technical contribution but aim to close the gap of in
+fine-grained programmability and reproducibility in mist-making
+hardware across existing deployments that center creative commu-
+nities.
+Our work on MistMaker builds on a lineage of community-
+developed hardware toolkits that expose environmental phenom-
+ena as programmable interaction materials. Notable examples in-
+clude Programmable Air [13] and FlowIO [20], both of which have
+been widely adopted across HCI, design, and embodied interac-
+tion research. These toolkits have enabled a range of interactive
+and creative systems that employ airflow and pneumatic actuation
+as expressive media [15–17, 25]. Their impact lies in their ability
+to lower the technical and conceptual barriers to working with
+otherwise inaccessible physical phenomena.platform.
+We argue that such toolkits function not only as technical in-
+frastructure, but as epistemic infrastructure: they shape what kinds
+of interactions can be imagined, prototyped, and studied within
+the field. By making environmental actuation legible and reusable,
+Programmable Air and FlowIO have enabled air and pressure to
+become recognized interaction media in HCI. MistMaker occupies
+a parallel role for ultrasonic mist, a medium that has remained
+largely confined to appliance-level use despite its expressive po-
+tential. In doing so, MistMaker challenges the implicit boundary
+between functional environmental control and interaction design,
+positioning mist as a first-class material for inquiry rather than a
+background effect. This reframing is not only technical but con-
+ceptual: by stabilizing mist as an interaction medium, MistMaker
+creates the conditions under which computational systems (human
+or artificial) can participate in atmospheric modulation.
+4.2 LLMMM As Bridge for LLM and
+Environmental Interaction
+While simple rule-based mappings (e.g., keyword-to-mist triggers)
+could produce comparable low-resolution actuation, LLMMM in-
+tentionally explores interpretive indirection rather than determin-
+istic control. The contribution of the LLM is not about providing
+fine-grained precision in mist output, but AI’s agentic ability to in-
+terpret ambiguous, evolving, and socially contextual inputs without
+predefined symbolic mappings. LLMMM treats mist as an inter-
+pretive compression of high-dimensional language contexts into
+low-resolution atmospheric modulation. This asymmetry is inten-
+tional: it foregrounds ambiguity and shared interpretation rather
+than explicit semantic encoding.
+Prior work on abstract, ambient, and environmental interaction
+demonstrates how non-symbolic outputs can support interpreta-
+tion and experience without relying on discrete mappings or legible
+representations [2, 7, 14]. Building on MistMaker’s role as environ-
+mental infrastructure, LLMMM explores what it means for large
+language models to participate in atmospheric interaction. In do-
+ing so, LLMs in LLMMM operate as interpretive mediators that
+translate contextual inputs into high-level control intents that is ne-
+gotiated by more abstract and ambigous human intentions, such as
+tone, context, and emotions. This indirection positioning of LLMs as
+interpretive layers between ambiance sensing and physical changes
+is particularly appropriate for atmospheric media[1, 3, 8].
+By connecting LLMs to atmospheric outputs such as mist, our
+work moves multimodal interaction beyond representational modal-
+ities and into environmental and material domains that are diffuse,
+transient, and difficult to discretize. This shift challenges prevailing
+notions of multimodality that privilege legibility and symbolic map-
+ping, and instead foregrounds experiential modulation as a valid
+form of AI-mediated interaction. In this framing, the contribution
+of LLMs is not precision or autonomy, but their capacity to inter-
+pret ambiguous contexts and produce qualitative environmental
+responses.
+We argue that environmental media offer a productive site for
+rethinking AI agency in HCI precisely because they add interpretive
+layers to physical interaction. When control outcomes are atmo-
+spheric, questions of authorship, intent, and responsibility become
+more about how meaning is constructed through perception and in-
+terpretation. Here, MistMaker or any physical platform that provide
+access to LLM layer access to the physical world serves as a critical
+probe into how LLMs might participate in shared environments by
+introducing new interpretive modalities.
+5 Challenges and Limitations
+MistMaker face constraints directly relate to component sourcing
+and long-term reliability. Specifically, the current design leverages
+a three-legged tapped inductor with different coil counts3, while
+common, lacks unified code and global standards. Not only does
+the unique components choice creates problem for accessible and
+3Specification can be found at our GitHub documentation
+MistMaker: LLM-Mediated Environmental Interaction CHI EA ’26, April 13–17, 2026, Barcelona, Spain
+sustainable development, but the unstandardized hardware is un-
+stable for future developments and iterations. We are still actively
+seeking for solutions for this issue.
+From an interaction standpoint, LLM-guided environmental con-
+trol introduces ambiguity around system agency and intent. Be-
+cause mist output is atmospheric and non-symbolic, users may find
+it difficult to infer why particular behaviors occur or what contex-
+tual factors triggered them. While this ambiguity aligns with mist’s
+role as a peripheral and interpretive medium, it also challenges
+conventional expectations of legibility and feedback in interactive
+systems.
+Although the resolution difference in high-cost language models
+and low-cost mist output is intentional, the lack of alternative
+contextual information is a limitation that cannot be understated.
+LLMMM’s reliance on transcribed language as a the only input
+signal limits the language model’s capacity to respond to non-verbal,
+embodied, or purely environmental cues. This limit constrains how
+fully atmospheric context can be represented within the current
+pipeline.
+Additionally, reliance on API-based LLM services introduces la-
+tency, network dependency, and occasional unpredictability, which
+can disrupt timely environmental response. The latency occasion-
+ally may signify the asymmetry and indirectness of the mist output
+cued by AI agents in terms of user experience. Such delays limit
+the design feasibility of continuous or tightly coupled interaction
+and require the interaction to tolerate delays, partial failures, or
+inconsistent interpretation. One potential direction for mitigation
+is to pre-train and deploy a smaller onboard model capable of light-
+weight contextual interpretation. Although such a model would be
+more limited in expressive range and reasoning capacity, it could
+reduce latency and network dependence while preserving the in-
+terpretive framing central to LLMMM.
+Taken together, these challenges suggest that environmental
+modalities, such as mist, demand different designs, evaluations, and
+expectation-setting strategies than visual or auditory outputs when
+integrated into AI-driven systems.
+Our current presentation does not evaluate users’ responses to
+or interpretations of mist behavior, nor does it attempt to assess
+alignment between system intent and user perception. As an ex-
+ploratory system, LLMMM prioritizes design space investigation
+over user studies or systematic qualitative data gathering.
+6 Future Works
+LLMMM’s flexibility in AI agents’ personality design and prompt
+engineering enables further exploration in different physical form
+factor design to contrast or complement specific mist behavior.
+Meanwhile, the flexible small board with power solution will allow
+wide implementation in ranges of physical configurations, including
+tabletop objects, wearable or body-adjacent devices, and spatial or
+architectural installations. Exploring different form factors allows
+mist to take on distinct interaction roles—ranging from intimate and
+personal to shared and environmental—while maintaining the same
+underlying control architecture. The exploration in physical form
+may also help user interpret and understand personality design.
+The LLMMM system can be combined with more sensory input
+and output modules. Within the LLMMM system, MistMaker retains
+available microcontroller pins and an I2C Qwiic connector, enabling
+further extension through low-power sensors and output devices,
+such as lighting elements, temperature modules, capacitive sensing,
+etc. Our design in modularity allows multimodal LLM interaction
+to be enriched beyond audio input and mist output, supporting
+additional environmental sensing or actuation while preserving the
+system’s lightweight and portable design.
+Finally, future work should investigate methods for evaluating
+interpretive environmental interaction without relying on conven-
+tional notions of task performance or correctness. Under the frame-
+work of MistMaker and LLMMM, we are particularly interested in
+approaches that capture experiential qualities such as ambiguity,
+atmosphere, and peripheral awareness. This may involve qualita-
+tive studies, long-term deployments, or design-oriented evaluation
+frameworks better suited to environmental and atmospheric media.
+Acknowledgments
+We thank the minds in Open-source Hardware communities, NYC
+Resistor, and NYU ITP for their generosity in shared tools, knowl-
+edge, and space that supported the development of this work.
+References
+[1] Jessica Broscheit, Susanne Draheim, and Kai von Luck. 2019. IVORY: A Tangible
+Interface to Perceive Human-Environment Interrelationships. In Proceedings of
+the Thirteenth International Conference on Tangible, Embedded, and Embodied In-
+teraction (Tempe, Arizona, USA) (TEI ’19). Association for Computing Machinery,
+New York, NY, USA, 491–497. doi:10.1145/3294109.3301266
+[2] Jessica Broscheit, Qi Wang, Susanne Draheim, and Kai von Luck. 2021. Towards
+Atmospheric Interfaces. In Proceedings of the Fifteenth International Conference
+on Tangible, Embedded, and Embodied Interaction (Salzburg, Austria) (TEI ’21).
+Association for Computing Machinery, New York, NY, USA, Article 52, 7 pages.
+doi:10.1145/3430524.3442458
+[3] Yan Yan Cao and Naohito Okude. 2015. Scented Pebbles: Interactive Ambient
+Experience with Smell and Lighting. In Proceedings of the Ninth International
+Conference on Tangible, Embedded, and Embodied Interaction (Stanford, California,
+USA) (TEI ’15). Association for Computing Machinery, New York, NY, USA,
+409–410. doi:10.1145/2677199.2690873
+[4] Esteban Guerra-Bravo, Han-Joo Lee, Arturo Baltazar, and Kenneth J. Loh. 2021.
+Vibration Analysis of a Piezoelectric Ultrasonic Atomizer to Control Atomization
+Rate. Applied Sciences 11, 18 (2021). doi:10.3390/app11188350
+[5] James Hollan, Edwin Hutchins, and David Kirsh. 2000. Distributed Cognition:
+Toward a New Foundation for Human-Computer Interaction Research. ACM
+Transactions on Computer-Human Interaction 7, 2 (2000), 174–196. doi:10.1145/
+353485.353487
+[6] Edwin Hutchins. 1995. Cognition in the Wild . MIT Press, Cambridge, MA.
+[7] Shun Ichihashi, Kunal Bheda, and Noura Howell. 2025. Towards Designing for
+Everyday Thermal Experiences. In Proceedings of the Nineteenth International
+Conference on Tangible, Embedded, and Embodied Interaction (TEI ’25). Association
+for Computing Machinery, New York, NY, USA, 1–24. doi:10.1145/3689050.
+3704423
+[8] Hiroshi Ishii and Brygg Ullmer. 1997. Tangible bits: towards seamless in-
+terfaces between people, bits and atoms. In Proceedings of the ACM SIGCHI
+Conference on Human Factors in Computing Systems (Atlanta, Georgia, USA)
+(CHI ’97). Association for Computing Machinery, New York, NY, USA, 234–241.
+doi:10.1145/258549.258715
+[9] Jinmo Lee, Neska Elhaouij, and Rosalind Picard. 2021. AmbientBreath: Unobtru-
+sive Just-in-time Breathing Intervention Using Multi-sensory Stimulation and
+its Evaluation in a Car Simulator. Proc. ACM Interact. Mob. Wearable Ubiquitous
+Technol. 5, 2, Article 71 (June 2021), 30 pages. doi:10.1145/3463493
+[10] Markus Löchtefeld, Nadine Lautemann, Sven Gehring, and Antonio Krüger. 2014.
+ambiPad: enriching mobile digital media with ambient feedback. In Proceedings
+of the 16th International Conference on Human-Computer Interaction with Mobile
+Devices & Services (Toronto, ON, Canada) (MobileHCI ’14). Association for Com-
+puting Machinery, New York, NY, USA, 295–298. doi:10.1145/2628363.2628395
+[11] Tian Min, Chengshuo Xia, Takumi Yamamoto, and Yuta Sugiura. 2023. Seeing the
+Wind: An Interactive Mist Interface for Airflow Input. Proc. ACM Hum.-Comput.
+Interact. 7, ISS, Article 444 (Nov. 2023), 22 pages. doi:10.1145/3626480
+[12] Open Source Hardware Association. 2025. Workshops at Open Hardware Summit
+2025. https://2025.oshwa.org/workshops/. Workshops schedule at the 2025 Open
+CHI EA ’26, April 13–17, 2026, Barcelona, Spain cai, Yang, and Leigh
+Hardware Summit, hosted by OSHWA.
+[13] Programmable Air Project. 2019. Programmable Air. https://www.
+programmableair.com/. Accessed: 2026-01-20.
+[14] Christopher N. Reed, Paul Strohmeier, and Andrew P. McPherson. 2023. Negoti-
+ating Experience and Communicating Information Through Abstract Metaphor.
+In Proceedings of the 2023 CHI Conference on Human Factors in Computing Sys-
+tems (CHI ’23). Association for Computing Machinery, New York, NY, USA, 1–16.
+doi:10.1145/3544548.3580700
+[15] Mona Safari, Kate Hartman, and Nick Puckett. 2025. SOFT OBJECTS: Prototyp-
+ing for Tactile Interpersonal Communication. In Proceedings of the 2025 ACM
+Designing Interactive Systems Conference (DIS ’25). Association for Computing
+Machinery, New York, NY, USA, 331–346. doi:10.1145/3715336.3735440
+[16] A. Saini et al. 2024. PneuMa: Designing Pneumatic Bodily Extensions for Play.
+Proceedings of the ACM on Human-Computer Interaction 7, CHI PLAY (2024),
+Article No. XXX. doi:10.1145/3623509.3633349
+[17] Aryan Saini, Srihari Sridhar, Aarushi Raheja, Rakesh Patibanda, Nathalie Overde-
+vest, Po-Yao (Cosmos) Wang, Elise Van Den Hoven, and Florian Floyd Mueller.
+2023. Pneunocchio: A playful nose augmentation for facilitating embodied rep-
+resentation. In Adjunct Proceedings of the 36th Annual ACM Symposium on User
+Interface Software and Technology (San Francisco, CA, USA) (UIST ’23 Adjunct).
+Association for Computing Machinery, New York, NY, USA, Article 40, 3 pages.
+doi:10.1145/3586182.3616651
+[18] Ahmed Sayed and Kevin Pfeil. 2025. Large Language Models For Multimodal
+User Interaction in Virtual Environments. In Proceedings of the 27th International
+Conference on Multimodal Interaction (ICMI ’25) . Association for Computing
+Machinery, New York, NY, USA, 561–569. doi:10.1145/3716553.3750800
+[19] Seeed Studio. 2025. Seeed Studio XIAO ESP32C6 Getting Started. https://wiki.
+seeedstudio.com/xiao_esp32c6_getting_started/. Accessed: 2026-01-20.
+[20] Ali Shtarbanov. 2021. FlowIO Development Platform – the Pneumatic “Raspberry
+Pi” for Soft Robotics. In Extended Abstracts of the 2021 CHI Conference on Human
+Factors in Computing Systems (Yokohama, Japan) (CHI EA ’21). Association for
+Computing Machinery, New York, NY, USA, Article 479, 6 pages. doi:10.1145/
+3411763.3451513
+[21] Lenja Sorokin, Khanh Huynh, Malin Eiband, Lukas Stappen, and Jeremy Dill-
+mann. 2025. Collaborating with LLMs Through a Voice and Graphical User
+Interface. In Adjunct Proceedings of the 27th International Conference on Mobile
+Human-Computer Interaction (MobileHCI ’25 Adjunct). Association for Computing
+Machinery, New York, NY, USA, Article 3, 8 pages. doi:10.1145/3737821.3749555
+[22] Ippei Suzuki, Shuntarou Yoshimitsu, Keisuke Kawahara, Nobutaka Ito, Atushi
+Shinoda, Akira Ishii, Takatoshi Yoshida, and Yoichi Ochiai. 2017. Gushed Light
+Field: Video Showcase of Aerosol-Based Fog Display. In Proceedings of the 2017
+CHI Conference Extended Abstracts on Human Factors in Computing Systems
+(Denver, Colorado, USA) (CHI EA ’17). Association for Computing Machinery,
+New York, NY, USA, 453. doi:10.1145/3027063.3049774
+[23] Jiaqi Wang, Hanqi Jiang, Yiheng Liu, Chong Ma, Xu Zhang, Yi Pan, Mengyuan
+Liu, Peiran Gu, Sichen Xia, Wenjun Li, Yutong Zhang, Zihao Wu, Zhengliang
+Liu, Tianyang Zhong, Bao Ge, Tuo Zhang, Ning Qiang, Xintao Hu, Xi Jiang,
+Xin Zhang, Wei Zhang, Dinggang Shen, Tianming Liu, and Shu Zhang. 2024. A
+Comprehensive Review of Multimodal Large Language Models: Performance
+and Challenges Across Different Tasks. arXiv:2408.01319 [cs.AI] https://arxiv.
+org/abs/2408.01319 Preprint.
+[24] Semina Yi, Daragh Byrne, and Dina El-Zanfaly. 2025. AirCraft: Exploring Air as a
+Design Medium. In Proceedings of the Nineteenth International Conference on Tan-
+gible, Embedded, and Embodied Interaction (TEI ’25) . Association for Computing
+Machinery, New York, NY, USA, Article 10, 19 pages. doi:10.1145/3689050.3704932
+[25] Hye Jun Youn, Sailin Zhong, Ali Shtarbanov, and Patrick Chwalek. 2023. Nugi-
+Tex: An Interactive, Affective Wearable that Informs Users of a Plant’s “Com-
+fort” Level through Haptic Cues. In Companion Publication of the 2023 ACM
+Designing Interactive Systems Conference (Pittsburgh, PA, USA) (DIS ’23 Com-
+panion). Association for Computing Machinery, New York, NY, USA, 251–255.
+doi:10.1145/3563703.3596651

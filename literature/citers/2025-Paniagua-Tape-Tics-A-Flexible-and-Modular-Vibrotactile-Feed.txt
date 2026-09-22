@@ -1,0 +1,1227 @@
+Tape-Tics: A Flexible and Modular Vibrotactile Feedback System
+for Rapid Prototyping of Haptic Applications in Education
+Carlos Paniagua
+Cybernetics and Reality Engineering
+Laboratory
+Nara Institute of Science and
+Technology (NAIST)
+Ikoma, Takayama-cho, Nara, Japan
+paniagua.carlos.pe2@is.naist.jp
+Hiroki Ota
+Cybernetics and Reality Engineering
+Laboratory
+Nara Institute of Science and
+Technology (NAIST)
+Ikoma, Takayama-cho, Nara, Japan
+ota.hiroki.oc6@is.naist.jp
+Yutaro Hirao
+Cybernetics and Reality Engineering
+Laboratory
+Nara Institute of Science and
+Technology (NAIST)
+Ikoma, Takayama-cho, Nara, Japan
+yutaro.hirao@is.naist.jp
+Monica Perusquia-Hernandez
+Cybernetics and Reality Engineering
+Laboratory
+Nara Institute of Science and
+Technology (NAIST)
+Ikoma, Takayama-cho, Nara, Japan
+perusquia@ieee.org
+Hideaki Uchiyama
+Cybernetics and Reality Engineering
+Laboratory
+Nara Institute of Science and
+Technology (NAIST)
+Ikoma, Takayama-cho, Nara, Japan
+hideaki.uchiyama@is.naist.jp
+Kiyoshi Kiyokawa
+Cybernetics and Reality Engineering
+Laboratory
+Nara Institute of Science and
+Technology (NAIST)
+Ikoma, Takayama-cho, Nara, Japan
+kiyo@is.naist.jp
+A B
+C
+D
+E
+F
+G
+Figure 1: (A) Appearance of Tape-Tics; (B) Master Node and Tape Node; (C) Example of a haptic glove made by attaching
+Tape-Tics to a work glove; (D) Participants working on tasks during the workshop; (E) Tape-Tics wrapped around the arm; (F)
+Vibration alarm wristband created by a participant; (G) Hat that notifies through vibrations on the head, created by a participant
+Abstract
+Traditional vibration feedback technologies are limited in deliver-
+ing tactile sensations across multiple body regions. Additionally,
+designing devices with multiple vibrators involves complex wiring,
+making prototyping difficult.
+To address these limitations, we propose “Tape-Tics” a flexi-
+ble, modular vibrotactile feedback system integrating LEDs and
+vibration motors, allowing users to cut it freely and apply it to
+various applications. The inclusion of LEDs helps users identify
+This work is licensed under a Creative Commons Attribution International
+4.0 License.
+AHs 2025, Masdar City, Abu Dhabi, United Arab Emirates
+© 2025 Copyright held by the owner/author(s).
+ACM ISBN 979-8-4007-1566-2/25/03
+https://doi.org/10.1145/3745900.3746092
+which node is vibrating. The device is user-friendly, even for those
+without specialized knowledge, and can be easily controlled using
+a GUI controller that runs on a PC. Users can set vibration intensity
+and LED colors, transmit the configuration via Bluetooth Low En-
+ergy (BLE), and run the device based on predefined settings. Using
+flexible printed circuit (FPC) technology, Tape-Tics can be attached
+to various shapes and curved surfaces, making it highly versatile
+for use in education, research, and artistic fields.
+In the hands-on workshop, high school students who regularly
+engage in creative projects used Tape-Tics to deepen their under-
+standing of vibrotactile feedback technology through device assem-
+bly and operation. They created unique projects by configuring
+vibration patterns using a GUI controller. Survey results showed
+that participants’ understanding of haptics increased compared
+to before the workshop, and they rated Tape-Tics highly as an
+educational tool.
+92
+AHs 2025, March 16–20, 2025, Masdar City, Abu Dhabi, United Arab Emirates Paniagua et al.
+CCS Concepts
+• Hardware → PCB design and layout ; • Human-centered
+computing → Haptic devices; User interface toolkits; Virtual
+reality.
+Keywords
+Haptic interfaces, Flexible printed circuits, Rapid prototyping, Wear-
+able devices, Educational technology.
+ACM Reference Format:
+Carlos Paniagua, Hiroki Ota, Yutaro Hirao, Monica Perusquia-Hernandez,
+Hideaki Uchiyama, and Kiyoshi Kiyokawa. 2025. Tape-Tics: A Flexible and
+Modular Vibrotactile Feedback System for Rapid Prototyping of Haptic
+Applications in Education. In The Augmented Humans International Con-
+ference 2025 (AHs 2025), March 16–20, 2025, Masdar City, Abu Dhabi, United
+Arab Emirates. ACM, New York, NY, USA, 13 pages. https://doi.org/10.1145/
+3745900.3746092
+1 Introduction
+As Virtual Reality (VR) becomes more popular, research into “hap-
+tics” or tactile feedback is gaining attention as a vital part of VR
+experiences. With technology such as piezoelectric components,
+linear resonant actuators (LRA), and eccentric rotating mass (ERM)
+motors, vibration feedback has become commonplace in gaming
+consoles and mobile phones. However, these technologies are typi-
+cally limited to delivering tactile input to specific body parts, such
+as the hands. Moreover, the complex wiring in the design circuit
+poses challenges for prototyping, especially when using multiple
+vibrators in research and development.
+Educational institutions have recently started integrating hap-
+tic technology into STEM (Science, Technology, Engineering, and
+Mathematics) education. Open-source devices, such as the low-cost
+Hapkit [18], provide force feedback in classroom settings, enabling
+students to explore fundamental concepts of haptics. However,
+there is a notable gap in educational tools designed explicitly for
+vibrotactile feedback, which remains underrepresented in this field.
+Existing toolkits, such as the TECHTILE Toolkit [17], provide frame-
+works for implementing haptic feedback in artistic, educational, and
+research contexts. However, extending their functionality—such
+as adding new operational modes or configuring collaborative in-
+teractions between devices—often requires significant technical
+expertise and extensive customization, making them less accessi-
+ble to beginners and non-experts. Adding new operational modes
+or configuring collaborative interactions between devices—often
+requires significant technical expertise and extensive customiza-
+tion, making them less accessible to beginners and non-experts.
+Moreover, modular haptic devices like ChainFORM [19] and Sensor-
+Tape [3] offer flexibility by allowing users to reconfigure their size
+and shape to suit various applications. Nevertheless, these devices
+often demand intricate component assembly, posing challenges
+for users with limited experience designing and operating haptic
+systems.
+To address the limitations of existing haptic feedback technolo-
+gies, we developed “Tape-Tics”, a tape-like device inspired by the
+concept of LED strip light, featuring a series of small vibrators that
+can be cut to size. Each node of Tape-Tics consists of an LED control
+IC called NeoPixel, a small disc vibrator, and a full-color LED, all
+mounted on a flexible printed circuit (FPC) board. This allows users
+to cut the device to any desired length, attach it to any location, and
+receive visuo-tactile feedback. The inclusion of LEDs helps users
+identify which node is vibrating, facilitating mutual understanding
+of haptic sensations between the wearer and the observer [7]. The
+vibration intensity can be adjusted in 256 levels, providing users
+with precise control over the tactile feedback Additionally, each
+node’s vibrator can be independently controlled. The NeoPixel li-
+brary, used for controlling the LEDs, is publicly available and was
+adapted to create the control program. As a result, Tape-Tics is
+compatible with NeoPixel, which has extensive online resources,
+greatly enhancing its scalability. To ensure that even beginners
+without programming skills can use Tape-Tics, we have provided
+a GUI controller that runs on a PC. Using these tools reduces the
+difficulty of device development, eliminating the need to assemble
+components from scratch or advanced programming skills.
+We hosted a hands-on workshop for high school students, who
+frequently engage in creative projects, to test the device’s effective-
+ness. After a brief lecture on haptic technology and explaining how
+to use Tape-Tics, participants were encouraged to create projects
+using the device. As a result, all participants could easily use the
+device, enthusiastically modifying and attaching it to their bodies
+or other objects. The unique projects they created, such as a vibra-
+tion alarm wristband and a hat that notifies the wearer through
+vibrations, demonstrated their growing interest in vibrotactile tech-
+nology. Survey results indicated that Tape-Tics was perceived as an
+effective tool for incorporating vibrotactile feedback into education.
+The main contributions are summarized as follows:
+• Proposing a novel modular design for a haptic device that
+resembles a tape-like form, enabling users to attach it to
+various body parts and customize its length by cutting it
+to size. This design lowers the development difficulty and
+allows for flexible applications without requiring specialized
+technical knowledge.
+• Introducing a user-friendly GUI controller that runs on a PC,
+facilitating the intuitive operation of the device, especially
+for beginners in haptic technology.
+• Evaluating the device’s affordability and power consumption
+to ensure it meets the requirements for integration into edu-
+cational institutions, including determining the maximum
+effective length of the tape.
+• Demonstrating the versatility and effectiveness of the device
+through workshops, where participants attach the device to
+different body parts to explore its potential applications, and
+analyze the projects they create.
+2 Related Work
+2.1 Vibrotactile devices
+Modern smartphones and gaming devices are increasingly equipped
+with small vibrators to generate haptic feedback, enhancing the user
+experience. These are commonly referred to as “handheld” haptic
+devices. In recent years, notable examples include the PlayStation
+DualShock and the Nintendo Switch Joy-Con in the video game
+industry. In the smartphone sector, there are the iPhone’s Tap-
+tic Engine and Sony Xperia’s Dynamic Vibration System, among
+others.
+93
+Tape-Tics: A Flexible and Modular Vibrotactile Feedback System for Rapid Prototyping
+of Haptic Applications in Education AHs 2025, March 16–20, 2025, Masdar City, Abu Dhabi, United Arab Emirates
+In contrast, there are “wearable” haptic devices, which are di-
+rectly worn on the body, such as “glove-type” devices worn on
+the hands or “vest-type” devices worn on the torso. These types
+of devices have been the focus of active research in recent years.
+For instance, Tasbi [ 25] is a wristband-type haptic device worn
+around the wrist, where small vibration motors are evenly spaced
+to replicate a sense of tension, thereby improving interactions with
+virtual buttons. Additionally, Tanabe et al. [32] developed a glove
+with low-latency linear vibrators placed across the palm. This glove
+provides tactile feedback to convey stimuli and material sensations
+that correspond to the speed of motion when interacting with vir-
+tual objects. Miniaturization has progressed to the point where
+devices can fit on the fingertips, making them easy to wear and
+lightweight, which are advantages particularly suited for VR ap-
+plications with hand tracking [15, 26, 34]. Additionally, research
+has been conducted on suit-type haptic devices that provide tactile
+stimulation to the entire body. The Synesthesia Suit [5] is a wireless
+wearable suit offering full-body haptic feedback with customizable
+haptic module placement. Another method avoids delays in haptic
+feedback by using light from a projector as input to the haptic
+display device in the suit [33].
+However, despite these advancements, existing wearable haptic
+devices are typically designed to provide feedback to specific areas,
+such as the hands or chest. Delivering feedback to multiple body
+parts simultaneously requires developing and wearing devices tai-
+lored to each specific area, which introduces several challenges.
+These include increased complexity in device design, difficulty in
+achieving seamless integration across different body parts, and sig-
+nificant discomfort due to the bulkiness of multiple devices. As a
+result, such systems are often impractical for everyday use, costly
+to produce, and difficult to scale for widespread adoption.
+2.2 Haptics development support toolkit
+Various toolkits have been provided to support the development
+of haptic devices in research, education, and artistic design. These
+toolkits include source codes, circuit board data, and GUI-based
+development software, and are designed to be accessible even to
+non-experts. Individuals can use them without knowledge of cir-
+cuit design or coding. A representative toolkit is the TECHTILE
+Toolkit [17], which is a haptic device capable of recording and
+replaying tactile information, and has attracted the interest of “non-
+expert” users in haptic devices.
+Various haptic editors have been released for both research and
+commercial purposes. For example, there is “Meta Haptics Studio”
+which is compatible with the Meta Quest series controllers1. This
+desktop application allows users to design and test haptic feedback
+intuitively. Additionally, there is TactJam [37], a tool that allows
+designers to prototype vibrotactile feedback on the body, create,
+record, and share vibrotactile patterns online, and collaboratively
+design these patterns. The Stereohaptics Toolkit [ 9] features an
+audio-based hardware configuration that allows the creation of var-
+ious haptic interfaces and applications using commercially available
+audio hardware components and custom-developed software tools.
+They also provide graphical user interfaces that allow beginners to
+create complex vibrotactile patterns [1, 10, 22, 24, 31].
+1https://www.meta.com/experiences/meta-haptics-studio/6759764157450104/
+However, while these tools support intricate vibrotactile patterns
+and hardware configurations, they may require prior knowledge of
+haptic systems. Inspired by these advancements, the GUI controller
+for "Tape-Tics" is designed with simplicity as its core principle.
+This GUI minimizes operational complexity, allowing non-experts
+to operate the device through an intuitive, click-based interface.
+This approach bridges the gap between advanced haptic prototyp-
+ing tools and the needs of beginners and educators, ensuring that
+"Tape-Tics" remains an accessible and flexible system for various
+applications.
+2.3 Educational haptic tools
+The advent of platforms such as Arduino, M5Stack, and Microbit has
+significantly facilitated electronic DIY projects. Modular electronic
+platforms like Grove2 have also made working with sensors and
+other components easier. Additionally, visual-based programming
+development environments, such as Scratch, have been increas-
+ingly established for programming. These tools, both hardware
+and software, have been utilized in STEM education and adopted
+in numerous schools for research and hobbies and as educational
+tools3.
+However, when it comes to incorporating haptics into education,
+the devices are often expensive, and building them from scratch
+can be challenging. Researchers worldwide have developed haptic
+toolkits specifically designed for educational purposes to address
+this. The aforementioned TECHTILE Toolkit [17] has been used
+to conduct numerous workshops, promoting the significance of
+haptics through vibrotactile experiences [16]. Regarding kinesthetic
+haptic devices, Martinez and colleagues at Stanford University de-
+veloped a low-cost, one-degree-of-freedom haptic kit called Hapkit,
+which students can assemble and is actually used in classes [ 18].
+The design plans are available online as open-source, utilizing 3D-
+printed plastic structural materials that allow easy construction
+and customization with readily available tools. For spatial haptic in-
+terfaces, there is a module-based kit called WoodenHaptics [4] that
+even people with little electro-mechanical experience or beginners
+can easily manufacture and assemble.
+Moreover, when introducing such devices into educational insti-
+tutions, providing one for each student is essential, resulting in a
+need for mass production. This makes cost a critical factor in the
+design and implementation of the device.
+2.4 Reconfigurable modular haptic device
+Modular haptic devices have been developed to provide a flexible
+user interface that allows users to freely combine and configure the
+shape, size, and type of tactile stimulation. There are also detachable
+haptic modules that enable users to easily swap out different types
+of vibrators and attach the device to various parts of the body and
+any object [6, 8, 23, 27–29, 38, 39].
+Additionally, LineFORM [20] is a shape-changing interface equipped
+with small servo motors, and its improved version, ChainFORM [19]
+, incorporates LED light sources and touch sensors, allowing for the
+development of various applications, including prototyping tools.
+SensorTape [3] is a tape-like sensor module inspired by LED strip
+2https://wiki.seeedstudio.com/Grove_System/
+3https://www.arduino.cc/education/what-is-stem-education
+94
+AHs 2025, March 16–20, 2025, Masdar City, Abu Dhabi, United Arab Emirates Paniagua et al.
+light that can flexibly deform. Each node is equipped with proximity
+sensors and IMUs. Being tape-like, users can cut it to any desired
+length and attach it to curved surfaces, such as the human body.
+The Vibrotactile Haptics Platform [2] is a platform that can control
+up to 12 channels of haptic signals, and it has been open-sourced
+in both hardware and software, demonstrating applications in the
+form of bracelets, sleeves, and smartphone cases.
+For VR, a toolkit called SoftVibe [13] has been proposed, which
+enables rapid prototyping of body-based vibrotactile experiences.
+The vibrotactile actuators and control circuits can be attached to
+the skin like a patch at the desired location and connected using
+flexible wires. Vibrotactile feedback can be generated by adjusting
+parameters through the software interface in the VR environment.
+While these modular devices offer flexibility, they typically re-
+quire intricate component assembly, often involving delicate work
+such as soldering or cutting tools. In contrast, one of the objectives
+of this research is to develop a haptic device that eliminates the need
+for soldering or specialized tools. The device itself is pre-assembled
+and ready for use, connecting to a PC for control. This simplicity
+ensures that Tape-Tics is easy to operate and accessible to a wide
+range of users, from beginners to educators and researchers.
+2.5 Flexible devices
+“Rigid devices”, which use traditional circuit boards, as discussed in
+the previous section, typically require assembly and are not easy
+to start with. In contrast, “flexible devices” come with components
+pre-mounted on a flexible substrate. SensorTape and SoftVibe fall
+into this category; they allow the user to create the desired device
+simply by cutting to the required length or connecting the devices
+with a cable.
+Furthermore, research supporting prototyping directly on the
+body has been reported. SkinKit [ 14] and Wearable Bits [ 11] is
+a kit that enables rapid prototyping of on-body interfaces. It in-
+cludes modules composed of reusable Flexible Printed Circuit Board
+(FPCB) blocks, which can be easily attached and detached. iSkin [36]
+proposes a new type of skin-worn sensor that allows touch input
+on the body. It can be manufactured in various shapes and sizes to
+suit different body parts, such as the finger, forearm, or ear.
+The repurposing of flexible displays has also been explored in
+research. PrintScreen [21] proposed a technology for digitally fab-
+ricating customized, flexible displays using thin-film electrolumi-
+nescence (TFEL). This technology enables the production of highly
+customized displays in small quantities, quickly and at low cost.
+CoiLED Display [30]is a technology that can transform ordinary
+objects into displays simply by wrapping the device around them,
+exploring a new method for displaying information on objects.
+As seen in these studies, flexibility allows for attaching devices
+to the body or other objects. Tape-Tics follows this philosophy by
+using FPC technology, achieving simple usability, and making it
+easy for users to apply the device to various scenarios, whether on
+the body or other surfaces.
+3 Design and Implementations
+In designing Tape-Tics, we prioritized three key elements, each
+chosen to address specific challenges in creating an accessible and
+flexible haptic device. These elements were selected to address the
+Cut Connect Bend
+Paste
+ Attach LightVibration
+Program
+GUI Coding
+or
+Use case Function
+Figure 2: Functionalities of Tape-Tics
+gaps in existing haptic devices, which often lack flexibility, require
+complex technical skills, and are challenging to integrate into di-
+verse environments. Our goal with Tape-Tics was to overcome these
+limitations and create a device that balances simplicity, adaptability,
+and advanced functionality (Figure 2).
+• Flexibility: The tape-like structure was chosen to provide
+maximum flexibility in application, enabling the device to be
+easily attached to curved surfaces, objects, and body parts.
+This design allows users to adapt the length of the device to
+suit various environments, promoting versatility.
+• Usability: By offering adjustable vibration intensity and
+LED brightness control, we ensure that the user can cre-
+ate a range of tactile expressions that can be customized
+to suit different applications and feedback needs. Addition-
+ally, the device supports wireless communication, and a GUI
+controller is provided for easy operation.
+• Scalability: The design allows for easy addition of more vi-
+brators when needed. GPIO pins are also available, enabling
+the connection of additional sensors.
+• User-friendly: Our main goal was to make the device ac-
+cessible to users without specialized knowledge, especially
+in educational settings. Even those with minimal technical
+skills can quickly create haptic applications by providing
+user-friendly libraries and software.
+3.1 Hardware
+The hardware enables each node to control both vibration intensity
+and LED brightness independently. The control unit, which contains
+a microcontroller, can be easily integrated into various applications,
+offering users a customizable experience. The Tape-Tics device
+consists of a Master Node and a Tape Node (Figure 3). We ordered
+five PCBs from the Chinese PCB manufacturer JLCPCB4.
+3.1.1 Master Node. The configuration of the Master Node is shown
+in Figure 3 (A). It features a controller unit with dimensions of
+47 mm in height and 46 mm in width, equipped with an M5Stack
+Atom Matrix. Wireless communication with the computer is per-
+formed via Bluetooth Low Energy. The unit includes 7 GPIO pins
+that can be combined with other sensors. The drive unit is con-
+nected via an FFC connector for flexible PCB, and power is supplied
+4https://jlcpcb.com/
+95
+Tape-Tics: A Flexible and Modular Vibrotactile Feedback System for Rapid Prototyping
+of Haptic Applications in Education AHs 2025, March 16–20, 2025, Masdar City, Abu Dhabi, United Arab Emirates
+Pads
+Control 
+IC
+LED
+M5Stack
+ GPIO
+Connectors
+Vibrator
+Motor
+DC 
+Jack
+43.0mm
+25.0mm
+46.0mm
+47.0mm
+PCB: 0.11mm
+Thickest: 
+3.65mm
+(A)
+Master Node
+(B)
+Tape Node
+Figure 3: Tape-Tics Overview and Thickness
+PC
+M5Stack
+Sensors
+Battery 
+5V
+Master Node
+Tape Node
+GPIOs
+Vin
++5V
+WS2811LED
+Vibrator
+Motor
+Data
+GND
+Figure 4: System configuration
+from an external battery providing DC5V. The circuit diagram of the
+Master Node is shown in Appendix 1 of the Additional Materials.
+3.1.2 Tape Node. The configuration of the Tape Node is shown in
+Figure 3 (B). Considering the need to attach the device to curved
+surfaces, it was developed using flexible printed circuit (FPC) tech-
+nology. A 2-layer polyimide-based substrate was used, which incor-
+porates a thickness of 0.11 mm. Nodes are arranged with a 40 mm
+spacing, and the tape width is 25 mm to ensure compatibility with
+the FFC connector on the Master Node. Power is supplied from a
+5V source, with two voltage regulators providing 5V to the WS2811
+IC and LEDs, and 3.3V to the vibrator. Additionally, a signal is sent
+from the WS2811 to the vibrator, and a photocoupler is used to
+isolate the WS2811 circuit from the vibrator. To allow for flexibility,
+larger components were placed as centrally as possible. There are
+three solder pads on both sides of the tape: power, data, and ground
+lines, allowing for easy connections. The circuit diagram of the
+Tape Node is shown in Appendix 2 of the Additional Materials.
+3.1.3 Control IC. The flow of signals within Tape-Tics is shown in
+Figure 4. Each node has an RGB full-color LED driver IC WS2811
+(World Semi)5, compatible with NeoPixel. This IC features an anode-
+common type PWM dimming synced driver, allowing color values
+with 256 levels for each RGB component to be controlled by a
+5http://www.world-semi.com/ws2811-family/175.html
+microcontroller. Additionally, multiple ICs can be cascaded using a
+single serial communication line.
+3.1.4 Vibrators. The vibrator used is the LCM1027A2445F (LEADER)
+eccentric disc vibration motor6. The selection criteria were its good
+availability, small size (diameter of10 mm), low power consumption
+(drive current: 80 mA), and affordability (US$0.33 per unit).
+3.1.5 LED. Each node is equipped with the full-color LED WS2812B-
+V (World Semi) compatible with the NeoPixel library7. The bright-
+ness of the LED changes in 256 steps proportional to the intensity
+of the vibration. This allows Tape-Tics to provide visual feedback
+to both the user wearing it and third parties. During device devel-
+opment and debugging, it is also helpful for visually confirming
+which node is vibrating and to what extent.
+3.2 Software
+3.2.1 Communication. The WS2811 chips communicate with each
+other through serial data transmission. When sending data from a
+PC, the first LED chip receives its own RGB value data, shapes the
+remaining data, and then sends the color data to the next WS2811
+chip. This eliminates the need for complex wiring and the individual
+slave and address settings required in I2C (Inter-Integrated Circuit)
+communication. The communication speed between WS2811 chips
+is 800 Kbps, which is faster than the 100 Kbps to 400 Kbps speeds
+typically seen in I2C communication8.
+3.2.2 LED Control Library. NeoPixel is a brand by Adafruit for
+their WS2812 LEDs and compatible products9. NeoPixel (WS2812)
+color LEDs have an integrated IC that controls the LED’s color and
+brightness using a single data line. This setup allows for chaining
+multiple color LEDs together while still being controlled by a single
+signal line.
+High-speed and precise timing is required to generate the control
+signal for these LEDs. Programming for this can be complex, re-
+quiring knowledge of MCU assembly language. However, Adafruit
+offers an open-source NeoPixel library that simplifies the control
+of NeoPixel (WS2812) LEDs. The NeoPixel series operates with
+just three connections: power, signal line, and ground (GND). The
+NeoPixel library works with Arduino, ESP32, M5Stack, and Rasp-
+berry Pi platforms.
+In this research, we opted for FastLED, which is faster and more
+memory-efficient than NeoPixel and suitable for use within the
+limited memory of M5Stack.
+3.2.3 GUI Controller. The development of Tape-Tics can be con-
+trolled using a graphical user interface (GUI) running on a PC,
+created with Max8 (Cycling74) 10. The appearance of the GUI is
+shown in Figure 5. No keyboard input is required, as users can
+operate the interface entirely through drag-adjustable sliders and
+button clicks. At the top, there are sliders to set the drive time
+and maximum vibration intensity (Figure 5 (a)). Pressing the “Set”
+button transfers the configuration to a Python program, where it
+is formatted into a structure readable by Tape-Tics (Figure 5 (b)).
+6https://jlcpcb.com/partdetail/LEADER-LCM1027A2445F/C2759984
+7https://www.led-paradise.com/product/2575
+8https://www.nxp.com/docs/en/user-guide/UM10204.pdf
+9https://github.com/adafruit/Adafruit_NeoPixel
+10https://cycling74.com/
+96
+AHs 2025, March 16–20, 2025, Masdar City, Abu Dhabi, United Arab Emirates Paniagua et al.
+a b
+c
+d
+Figure 5: User Interface of the Tape-Tics GUI Controller: (a)
+Slider to control the time and the maximum vibration power;
+(b) buttons for executing the sequence; (c) Timeline to control
+the Vibration for each node; (d) radio button to select the
+color for each node
+Node1
+Node2
+Node3
+Result
+Figure 6: Exmaple of the GUI setting
+The “Send” button transmits the information to Tape-Tics via BLE
+communication, and pressing the “Run” button starts the operation
+based on the predefined settings. At the center, there is a timeline
+panel commonly seen in video editing software (Figure 5 (c)), with
+the horizontal axis representing time and the vertical axis represent-
+ing vibration intensity. By clicking directly on the timeline, users
+can set the timing and intensity of the vibrations. The node number
+can be adjusted using the up and down buttons on the left side,
+allowing configurations for each individual node. At the bottom,
+there are radio buttons for setting the LED color (Red, Green, or
+Blue) for each node (Figure 5 (d)). Additionally, settings can be saved
+to a text file and reloaded for future use, making it convenient for
+repeated sessions. This design allows non-programmers to easily
+control Tape-Tics without requiring any coding skills. An example
+of a configuration set using the GUI is demonstrated in Figure 6.
+4 Technical Evaluation
+We conducted a detailed evaluation of the device, covering its cost,
+power consumption, maximum length, and durability. These evalu-
+ations are critical in validating the practicality and effectiveness of
+Table 1: Componets list with quantities and cost of one Node
+Parts Model number Cost $ Qty Total $
+Chip Capacitor0.1µF CC0603KRX7R9BB104 0.022 3 0.066
+Chip Capacitor10µF CL10A106KP8NNNC 0.005 2 0.010
+Diode 1N4001W 0.001 1 0.001
+RGB-LED WS2812B-V5/W 0.076 1 0.076
+Neopixel IC WS2811 0.033 1 0.033
+Vibrating Motor LCM1027A2445F 0.33 1 0.330
+Chip Resistor33 Ω 0603WAF330JT5E 0.001 2 0.002
+Chip Resistor100 Ω 0603WAF1000T5E 0.001 1 0.001
+Photocoupler TLP627 (TP1, F) 0.354 1 0.354
+Voltage Regulator5 V SPX3819M5-L-5-0/TR 0.146 1 0.146
+Voltage Regulator3.3 V SPX3819M5-L-3-3/TR 0.083 1 0.083
+Total Cost $ 1.102
+Figure 7: Acceleration measurements
+Tape-Tics for educational and research applications. By assessing
+the affordability, scalability, and robustness of the device, we aim
+to demonstrate how Tape-Tics can be easily introduced to educa-
+tional institutions while maintaining performance and flexibility,
+as highlighted in the contributions.
+4.1 Cost
+A list of parts is shown in Table 1, with costs in USD. For the Tape
+Node, which consists of 15 pieces with 11 nodes per piece, the costs
+were as follows: the PCB manufacturing cost was $115.63, and the
+component assembly cost was $329.45. Therefore, the total cost
+for the Tape Node was $445.08, which breaks down to $29.672 per
+piece and $2.697 per node. For the Master Node, which consists of
+10 pieces, the costs were $19.50 for PCB manufacturing and $200
+for the component cost. As a result, the total cost of one Master
+Node PCB was $21.95.
+4.2 Power and maximum length
+During normal operation, the M5Stack consumes 80 mA (0.4 W).
+The vibrator operates at 3 V, drawing 50 mA in max operation, and
+the LED operates at5 V, consuming 48 mA when displaying white in
+max operation. Therefore, the total current consumption per node
+is about 100 mA, and the power consumption is 0.48 W. The PCB
+has a copper foil thickness of 35 𝜇m, and power is supplied through
+97
+Tape-Tics: A Flexible and Modular Vibrotactile Feedback System for Rapid Prototyping
+of Haptic Applications in Education AHs 2025, March 16–20, 2025, Masdar City, Abu Dhabi, United Arab Emirates
+a copper plane with a maximum current rating of 10 A. Hence, the
+maximum number of nodes that can be used is approximately 78.
+In the workshop, a mobile battery with a rated capacity of 3350
+mAh, an output voltage of 5 V, and a rated current of 2.4 A was
+used. Based on the output current of 2.4 A, the number of nodes
+that can be operated is approximately 18. The battery operation
+time can be estimated to be around 1.39 hours based on the total
+current consumption of the system.
+4.3 Vibration Specification
+The acceleration data were obtained using the IMU MPU6886 in-
+tegrated into the M5Stack Atom Matrix, with a vibration motor
+attached to the M5Stack. The PWM signal for the WS2811 was var-
+ied from 0 to 255 in increments of 10, and vibrations were recorded
+at each step. The vibration intensity for each axis (X, Y, Z) was
+calculated as the combined acceleration in terms of RMS values.
+During testing, the vibration unit operated for 5 seconds at each
+intensity level, and the average acceleration was recorded after 5
+repetitions. The results were plotted as a graph in m/s2, as shown
+in Figure 7. It was observed that the vibration motor began to acti-
+vate around PWM level 40, and the vibration intensity increased
+monotonically as the PWM level was raised.
+4.4 Comparisonwith previous studies
+Table 2 summarizes the comparison between Tape-Tics and pre-
+vious studies. Blank fields indicate unknown information due to
+limited details in the referenced studies. Tape-Tics demonstrates
+significant advantages, especially in terms of cost performance,
+flexibility, and sensor compatibility. One of the standout features of
+Tape-Tics is its low cost of $2 per node, making it one of the most
+economical options among flexible systems. Despite its affordability,
+it supports a maximum length of 78 nodes, which is relatively long
+compared to many other systems. Additionally, the use of GPIO
+pins enables the integration of arbitrary sensors, offering greater
+flexibility in adapting to various applications and requirements.
+Tape-Tics is also unique in providing a combination of vibrotactile
+feedback and visual feedback via LEDs. This combination enhances
+the user experience and simplifies debugging during development
+by allowing visual confirmation of the vibration intensity across
+nodes. Tape-Tics successfully balances cost-effectiveness, function-
+ality, and scalability, making it a strong candidate for applications
+requiring flexible, lightweight, and customizable haptic systems.
+5 User Evaluation
+To evaluate the usability of Tape-Tics for individuals without spe-
+cialized knowledge, we conducted a hands-on workshop. The aim
+was to observe whether participants understood how to use Tape-
+Tics and to explore the creative works they could produce. Ethical
+approval for this study was obtained from the Institutional Review
+Board of our organization.
+5.1 Method
+5.1.1 Apparatus. Each team was provided with three sets of Tape-
+Tics, each containing 11 nodes, along with a Windows PC equipped
+with a built-in GUI controller. To facilitate creativity and broaden
+the scope of craft projects, we also supplied scissors, soldering
+irons, cables, double-sided tape, Velcro, glue, rubber bands, and
+other materials.
+5.1.2 Participants. Ten participants took part in the study: two
+students from the Major of Mechanics and eight students from the
+Major of Electronics, all males, ages 15-18 (M = 16.3, SD = 0.9).
+They were high school students from the Computer Research Club
+at Miyakojima Technical High School in Osaka, Japan11. Table 3
+presents the backgrounds and demographics of the participants.
+According to the pre-workshop interviews, participants P1 and P4
+had a strong interest in crafts and regularly engaged in making
+things. The remaining eight participants were beginners in pro-
+gramming, with experience limited to club activities and regular
+classes. Participants were pre-arranged into pairs to work together
+during the workshop.
+5.1.3 Workshop Structure. The workshop was held in the computer
+lab at the high school. It lasted two days, each approximately six
+hours long, including pre-explanations and project development.
+The workshop proceeded as follows:
+(1) Introduction and consent (30 min): The session began with
+a clear explanation of the experiment. Participants were provided
+with the “Consent Form, ” “Withdrawal Form, ” and “Data Disclosure
+Consent Form, ” all of which were signed.
+(2) Introduction and lecture (40 min): The session started with
+participant self-introductions, followed by a lecture on haptic tech-
+nology. Since participants had limited prior exposure to haptic
+technology, the lecture provided foundational information. Topics
+covered included the history, technical aspects, and recent develop-
+ments in haptics, as well as related devices. The content was based
+on the book written by the creators of the TECHTILE Toolkit [16].
+(3) Tape-Tics overview and hands-on (2 hours): An overview
+of Tape-Tics, including its specifications and usage, was provided.
+Tape-Tics devices were distributed to each team, and participants
+practiced using their functions. They learned how to control, cut,
+and reassemble Tape-Tics using the provided GUI controller. Several
+exercises were assigned to help participants familiarize themselves
+with the GUI controller.
+(4) Idea generation (2 hours): Brainstorming session was held
+to generate ideas. Participants wrote their ideas on sticky notes
+and arranged them on a large sheet of paper to facilitate analysis
+during the experiment.
+(5) Project development (5 hours): Teams worked collabora-
+tively on developing their projects using Tape-Tics. Support was
+available for any questions or challenges encountered. Time was
+also allocated to prepare their presentation materials.
+(6) Presentations and reflection (1 hour): Each team presented
+their project for 10 minutes, which included the “project name, ”
+“application, ” “reasons for creation, ” “challenges and difficulties, ”
+and “desired additional features. ” A demonstration accompanied
+each presentation. After the presentations, teams exchanged their
+projects and participated in hands-on experiences with others’
+work.
+5.1.4 Analysis. The analysis included quantitative data from sur-
+veys and qualitative insights from interviews, sticky notes, presen-
+tation materials, recorded videos, audio recordings, and open-ended
+11https://www3.osaka-c.ed.jp/miyakojima-t/english/
+98
+AHs 2025, March 16–20, 2025, Masdar City, Abu Dhabi, United Arab Emirates Paniagua et al.
+Table 2: Comparison between Tape-Tics and previous studies
+Name Form
+Factor
+Feedback
+Type
+Visual
+Feedback Sensors Cost
+(per node)
+Max
+Length
+Control
+Software
+Tape-Tics (ours) Flexible Vibrotactile LED Any sensor from GPIO $2 78 ◦
+Skinkit[14] Flexible Vibrotactile LED Light, Proximity, Touch, etc. - - ×
+Wearable Bits[11] Flexible Vibrotactile LED Touch, slider, Pinch sensor - - ×
+Soft Vive[13] Flexible Vibrotactile N/A N/A - 26 ◦
+VHP[2] Flexible Vibrotactile N/A N/A $40 12 ×
+PrintScreen[21] Flexible N/A TFEL N/A - - ×
+CoiLED Display[30] Flexible N/A LED N/A - - ×
+Sensor Tape[3] Flexible N/A LED IMU, Proximity $7 66 ◦
+iSkin[36] Flexible N/A LED Touch, Pressure - - ×
+VibraForge[8] Modular Vibrotactile N/A N/A - 16 ×
+TactorBots[39] Modular Force Feedback N/A N/A $15 8 ◦
+SleeveIO[29] Modular Pneumatic LED N/A - - ◦
+ChainFORM[19] Serpentine Force Feedback LED Touch $50 32 ×
+survey responses. Additionally, key themes were identified during
+the analysis [35]. Evaluations were conducted using a 5-point Lik-
+ert scale, where 1 indicated “strongly disagree” and 5 indicated
+“strongly agree. ” The results of the pre- and post-workshop surveys
+are shown in Table 5. To ensure the effectiveness of the Tape-Tics
+workshop, multiple evaluation criteria combining qualitative and
+quantitative methods were employed, aiming for a comprehen-
+sive understanding of participants’ experiences and the system’s
+utility [12, 14].
+5.2 Findings
+5.2.1 Applications made using Tape-Tics. All teams created unique
+designs by utilizing Tape-Tics’ flexibility. Regarding the completion
+rate and smoothness of the implementation process (Q10 and Q11),
+the scores were 4.0. These scores indicate that participants gen-
+erally completed the project, though some teams faced technical
+challenges, as reflected in the qualitative feedback. Additionally,
+the overall satisfaction with the workshop was high, with Q6, “How
+much did you enjoy the workshop?”, receiving a score of 5.0. This
+indicates that most participants enjoyed the workshop, which aligns
+with qualitative feedback where participants mentioned they en-
+joyed the hands-on activities and collaboration within teams. Many
+participants enjoyed working in teams, sharing ideas, and creating
+projects, with the trial-and-error aspect of using Tape-Tics as a
+source of enjoyment.
+I had a lot of fun when programming and trying differ-
+ent things. - (P2, Male, 17 years)
+It was enjoyable to work together and come up with
+ideas, and to have fun as a group. - (P3, male, 15 years)
+Each team’s creation is briefly described, and their works are
+shown in Figure 8.
+Vibration Notifications. Team A (P1, P2) wrapped Tape-Tics
+around their wrist to create a system that provides vibration no-
+tifications at a specified time. This idea was inspired by popular
+smartwatches, as they thought vibration would be more suitable
+for notifications than sound, which could be disruptive. Team B
+(P3, P4) applied 13 Tape-Tics to a hat, arranged around the circum-
+ference, to create a system that vibrates at specific directions on
+the wearer’s head. This concept was inspired by hiking or moun-
+taineering, where the hat could alert users if they veered off the
+planned route.
+Massage, Relaxation. Team C (P5, P6) created a portable massager
+that can be attached to various objects, such as cushions or chairs,
+to offer a comfortable, adjustable massaging experience. They ap-
+plied Tape-Tics to a pencil case and considered its use on gaming
+chairs or office furniture. Team D (P7, P8) designed a massage belt
+intended to relieve muscle stiffness. The user wraps the belt around
+the sore area, such as the shoulders or waist, and activates it to start
+the vibration. Inspired by traditional massage machines, the team
+noticed that Tape-Tics vibrations were similar in sensation to those
+of a massager, leading them to develop the belt. Team E (P9, P10)
+developed a wearable device to warm the feet of people suffering
+from cold feet (such as those with poor circulation). The device
+uses vibrations to generate heat, and the user can wear it directly
+on their bare feet or over socks. The idea came to the team when
+they saw a sock combined with Tape-Tics, sparking the concept.
+5.2.2 Rapid Prototyping Using Tape-Tics. As shown in Figure 8,
+many teams cut Tape-Tics with scissors, attached them to hats or
+bags, and wrapped them around their arms to create prototypes.
+Team E, aiming to create a shoe-shaped device, soldered Tape-Tics
+and cables to accommodate the complex shape. Participants who
+enjoyed making things, such as P1 and P4, were particularly enthu-
+siastic, engaging in repeated trials and experiments. P1 from Team
+A wrote custom Python code using the Time library, while P4 from
+Team B adjusted the placement of the Tape-Tics and configured
+the vibration strength. Even participants with no prior knowledge
+of haptic technology were able to learn through hands-on experi-
+mentation. Experienced makers successfully completed advanced
+projects, while beginners managed to create functional prototypes
+within just a few hours. This demonstrates that Tape-Tics is an
+ideal device for rapid prototyping, whether in wearable or fixed
+applications.
+99
+Tape-Tics: A Flexible and Modular Vibrotactile Feedback System for Rapid Prototyping
+of Haptic Applications in Education AHs 2025, March 16–20, 2025, Masdar City, Abu Dhabi, United Arab Emirates
+A B C D E
+Figure 8: Experiencing the production of a work: (A) Portable Massager; (B) Notification Hat; (C) Massage Belt; (D) Vibrating
+Alarm Wristband; (E) Wearable Device to Warm Feet
+Furthermore, Tape-Tics proved to be effective as an educational
+tool. Q5 received a perfect score of 5.0, indicating its potential as a
+learning tool for high school students. Additionally, the workshop
+received high praise from teachers of engineering courses who
+participated, with several expressing interest in incorporating Tape-
+Tics into their classes.
+5.2.3 Exploring Haptics through Tape-Tics. The pre-workshop sur-
+vey indicated that participants had limited knowledge of haptic
+technology. For example, the mean score for Q1, “How much do
+you know about haptic technology?” was 2.0, suggesting that par-
+ticipants generally had low prior knowledge, though there was
+some variability. After the workshop, it was found that participants
+showed interest in future involvement in haptic design. The score
+for Q4 was 4.0, and the interquartile range (4.0-4.75) indicates a
+consistently positive response from participants.
+Many participants expressed that they made new discoveries
+about haptic technology and its applications through the workshop.
+In particular, they mentioned that they realized how vibration can
+serve various functions and help people perceive things they might
+not normally notice or interact with their bodies.
+I was surprised that vibration alone can create such
+convenient functions. - (P1, male, 16 years)
+I realized that haptics is one of the most primitive senses
+we possess... and that this technology will undoubtedly
+be necessary for the future. - (P9, Male, 16 years)
+5.2.4 Feedback-Driven Improvements for Tape-Tics. Participants
+provided various specific suggestions for improving both the GUI
+controller and the Tape-Tics device itself. Regarding the GUI con-
+troller, key requests included the ability to freely move control
+points, more detailed customization of vibration frequency and
+LED colors, and the addition of waveform import/export function-
+ality. For the Tape-Tics hardware, feedback focused on the size and
+weight of the device and controller. While some participants were
+satisfied with the current size, others noted that it felt slightly heavy
+and suggested specific dimensions for improvement. Additional
+suggestions included optimizing the direction of tape attachment,
+refining PCB dimensions, enhancing vibration strength, and ex-
+panding the color variations of the LEDs.
+I would like to have the ability to adjust the frequency
+and specify RGB colors for the LED, since it supports
+full color, along with brightness control. - (P4, Male, 15
+years)
+It would be great to have a waveform import and export
+function. - (P7, Male, 17 years)
+I think the current size is fine, but it feels a little heavy.
+- (P2, Male, 17 years)
+The Controller Node size should be about the size of a
+30 mm by 30 mm area. - (P1, Male, 16 years)
+The Tape Node should be smaller. - (P8, Male, 16 years)
+Based on this feedback, it is clear that further technical improve-
+ments will be necessary for future projects.
+6 Application Scenarios
+We have proposed two main categories of applications: those used
+in combination with sensors and those integrated with VR ap-
+plications. These applications are characterized by their ease of
+deployment for end users. Only cutting and joining operations
+were performed. The sensors used were compatible with the Grove
+connectors available on the M5Stack device, and their setup took
+approximately 10 minutes. The creation of the glove took around
+20 minutes. Regarding integration with VR, some knowledge of
+Unity-based VR application development is required; however, the
+hardware implementation was relatively simple.
+6.1 Combination with Sensors
+Infrared (IR) Remote Control: This system enhances the usabil-
+ity of the device by allowing users to intuitively adjust vibration
+intensity and LED colors through predefined remote commands 9.
+Each button on the IR remote corresponds to specific settings, mak-
+ing it accessible even for users with minimal technical knowledge.
+This configuration provides users with a seamless and efficient way
+to control the device remotely. Using an IR remote eliminates the
+100
+AHs 2025, March 16–20, 2025, Masdar City, Abu Dhabi, United Arab Emirates Paniagua et al.
+Table 3: Participants information
+Team No. Age Major Technical Skill
+A P1 16 Mechanics HTML, CSS, Javascript
+P2 17 Electronics C, Arduino
+B P3 15 Mechanics None
+P4 17 Electronics C++, NET, Arduino
+C P5 15 Electronics None
+P6 18 Electronics C
+D P7 17 Electronics C
+P8 16 Electronics C
+E P9 16 Electronics C
+P10 16 Electronics C
+Table 4: Workshop Schedule
+Start
+Time
+End
+Time Activity Durataion
+(Min)
+Day 1
+9:00 9:30 Experiment briefing 30
+9:30 9:50 Self-introduction 20
+9:50 10:10 Pre-survey 20
+10:10 10:50 Introduction and lecture 40
+10:50 11:00 Break 10
+11:00 12:00 Tape-Tics overview and hands-On 60
+12:00 13:00 Lunch 60
+13:00 14:00 Tape-Tics overview and hands-On 60
+14:00 14:10 Break 10
+14:10 16:00 Idea generation 110
+Day 2
+9:00 12:00 Project development 180
+12:00 13:00 Lunch 60
+13:00 14:00 Project development 60
+14:00 15:00 Presentations and reflection 60
+15:00 15:40 Post-survey 40
+15:40 - Receipt signing, data collection -
+need for direct physical interaction with the device, enabling its ap-
+plication in various scenarios such as tactile feedback experiments,
+user interface testing, and interactive demonstrations.
+6.2 Integrated with VR Applications
+A Simple Tactile Glove: A simple tactile glove can be created by
+attaching Tape-Tics to a glove. The glove can be positioned at any
+desired location through trial and error and works with software
+such as Unity. In this implementation, the PC and Tape-Tics were
+connected via OSC communication, and when touching virtual
+objects in VR, Tape-Tics vibrated and emitted a green light 10. This
+allows users to experience realistic haptic feedback within the VR
+space.
+Figure 9: Application using IR receiver: Notifying the oppo-
+nent using an IR remote controller
+Figure 10: Application for VR: Using a self-made haptic glove
+to touch a virtual object in Unity
+7 Disscusion and Future Work
+7.1 Device limitations
+While participants showed interest in expanding Tape-Tics’ func-
+tionality, doing so without additional technical knowledge was
+challenging. To address this, future models will include plug-and-
+play sensors compatible with the Grove system, which is supported
+by M5Stack. This will greatly reduce the difficulty of sensor inte-
+gration, allowing even novice users to easily expand the device’s
+capabilities.
+Some participants noted that the vibrations lacked sufficient
+strength for specific applications. Based on this feedback, future
+iterations of Tape-Tics may incorporate more powerful motors, such
+as linear resonant actuators (LRAs), to enhance vibration intensity
+where needed. We also plan to further evaluate vibration strength
+and develop customizable options to meet participants’ specific
+requirements. Additionally, the weight of the battery and the need
+to use a DC jack compromise the flexibility of Tape-Tics, which
+is one of its key features. To address this issue, future iterations
+will consider integrating a built-in battery and using a thin lithium-
+polymer battery to maintain the device’s flexibility.
+101
+Tape-Tics: A Flexible and Modular Vibrotactile Feedback System for Rapid Prototyping
+of Haptic Applications in Education AHs 2025, March 16–20, 2025, Masdar City, Abu Dhabi, United Arab Emirates
+Table 5: Results of the questionnaire
+Question No. Questionnaire Score
+Pre-workshop survey
+Q1 How much do you know about haptic technology? 2.0 (1.25-3.0)
+Q2 Are you aware of haptic technology in your daily life? 4.0 (3.0-4.0)
+Post-workshop survey
+Q3 Did you understand the tactile lecture? 4.5 (4.0-4.5)
+Q4 Would you like to pursue haptic design in the future? 4.0 (4.0-4.75)
+Q5 How effective was Tape-Tics as an educational tool? 5.0 (4.25-5.0)
+Q6 How much did you enjoy the workshop? 5.0 (5.0-5.0)
+Q7 Was the controller operation easy to understand? 4.5 (4.0-5.0)
+Q8 How easy was the device to flex, cut, and install? 4.0 (4.0-4.75)
+Q9 Was it easy to insert and remove the tape to and from the connector? 4.0 (3.0-4.0)
+Q10 How much of the work is complete? 4.0 (4.0-4.0)
+Q11 Did the implementation go smoothly? 4.0 (3.25-4.0)
+Median (Quartile)
+7.2 Usability
+While the current GUI enabled beginners to control the device
+effectively, there were requests for greater platform compatibility,
+particularly with smartphones. To improve accessibility, especially
+in educational settings where students may not have access to
+PC, the next version will include a mobile-friendly GUI for use on
+smartphones and tablets.
+Several participants mistakenly connected the device by insert-
+ing it into the connector in the wrong direction, a frequently ob-
+served issue. We plan to add visual guides such as arrows to address
+this in future models. These improvements aim to prevent incorrect
+connections and enhance usability.
+Additionally, challenges arose with attaching the Tape-Tics mod-
+ules to particular objects or body parts, especially ensuring a sta-
+ble connection during use. Future improvements could focus on
+refining the tape’s adhesive properties or developing specialized
+attachments for different applications, ensuring stability and ease
+of use.
+7.3 Future work
+Future workshops will target a broader audience, ranging from ele-
+mentary and junior high school students to graduate students and
+professional haptic researchers. This diverse range of participants
+will provide valuable feedback and help improve Tape-Tics as both
+an educational tool and a research device. Additional experiments
+will examine the extent of vibration propagation between modules,
+conduct comparative evaluations with existing haptic development
+tools, and verify detailed specifications of the substrate’s flexibility.
+Furthermore, circuit designs and software information are available
+on GitHub 12 , allowing users to customize Tape-Tics by adjusting
+its size or replacing components, such as the vibrator, according to
+their preferences.
+12https://github.com/carlos-paniagua/TapeTicsProject
+8 Conclusion
+This study introduces Tape-Tics, a modular vibrotactile feedback
+system inspired by the concept of tape LEDs. Tape-Tics allows users
+to intuitively create arrays of small vibration motors and LEDs,
+which can be cut to any desired length and easily reconfigured for
+various applications. Like traditional tape, Tape-Tics is made of a
+flexible, cuttable substrate. This feature allows users to easily cut
+it to the desired length with scissors, reconnect tapes, and attach
+them to curved surfaces, such as the human body, taking advantage
+of its flexibility. Tape-Tics can be easily controlled through a user-
+friendly GUI controller, enabling users to operate individual nodes
+and provide localized tactile feedback in wearable designs.
+In a hands-on workshop for high school students, all participants
+successfully used the GUI controller to achieve their desired vibra-
+tion effects. Additionally, they fully customized Tape-Tics, leading
+to the emergence of creative ideas. Survey and interview results
+revealed that most participants enjoyed the workshop, became
+more aware of vibrotactile feedback, and demonstrated that using
+Tape-Tics for understanding haptics in education was effective.
+References
+[1] Donald Degraen, Bruno Fruchard, Frederik Smolders, Emmanouil Potetsianakis,
+Seref Güngör, Antonio Krüger, and Jürgen Steimle. 2021. Weirding Haptics: In-
+Situ Prototyping of Vibrotactile Feedback in Virtual Reality through Vocalization.
+In The 34th Annual ACM Symposium on User Interface Software and Technology
+(Virtual Event, USA) (UIST ’21). Association for Computing Machinery, New York,
+NY, USA, 936–953. doi:10.1145/3472749.3474797
+[2] Artem Dementyev, Pascal Getreuer, Dimitri Kanevsky, Malcolm Slaney, and
+Richard F Lyon. 2021. VHP: Vibrotactile Haptics Platform for On-body Ap-
+plications. In The 34th Annual ACM Symposium on User Interface Software and
+Technology (Virtual Event, USA) (UIST ’21). Association for Computing Machin-
+ery, New York, NY, USA, 598–612. doi:10.1145/3472749.3474772
+[3] Artem Dementyev, Hsin-Liu (Cindy) Kao, and Joseph A. Paradiso. 2015. Sen-
+sorTape: Modular and Programmable 3D-Aware Dense Sensor Network on a
+Tape. In Proceedings of the 28th Annual ACM Symposium on User Interface Soft-
+ware & Technology (Charlotte, NC, USA) (UIST ’15). Association for Computing
+Machinery, New York, NY, USA, 649–658. doi:10.1145/2807442.2807507
+[4] Jonas Forsslund, Michael Yip, and Eva-Lotta Sallnäs. 2015. WoodenHaptics: A
+Starting Kit for Crafting Force-Reflecting Spatial Haptic Devices. InProceedings of
+the Ninth International Conference on Tangible, Embedded, and Embodied Interac-
+tion (Stanford, California, USA) (TEI ’15). Association for Computing Machinery,
+New York, NY, USA, 133–140. doi:10.1145/2677199.2680595
+102
+AHs 2025, March 16–20, 2025, Masdar City, Abu Dhabi, United Arab Emirates Paniagua et al.
+[5] Taichi Furukawa, Nobuhisa Hanamitsu, Yoichi Kamiyama, Hideaki Nii, Char-
+alampos Krekoukiotis, Kouta Minamizawa, Akihito Noda, Junko Yamada, Keiichi
+Kitamura, Daisuke Niwa, Yoshiaki Hirano, and Tetsuya Mizuguchi. 2019. Synes-
+thesia Wear: Full-body haptic clothing interface based on two-dimensional signal
+transmission. In SIGGRAPH Asia 2019 Emerging Technologies (Brisbane, QLD,
+Australia) (SA ’19). Association for Computing Machinery, New York, NY, USA,
+48–50. doi:10.1145/3355049.3360524
+[6] Ian Hattwick, Ivan Franco, and Marcelo M. Wanderley. 2017. The Vibropixels: A
+Scalable Wireless Tactile Display System. InHuman Interface and the Management
+of Information: Information, Knowledge and Interaction Design , Sakae Yamamoto
+(Ed.). Springer International Publishing, Cham, 517–528.
+[7] Arata Horie, Ryo Murata, Zendai Kashino, and Masahiko Inami. 2022. Seeing is
+Feeling: A Novel Haptic Display for Wearer-Observer Mutual Haptic Understand-
+ing. In SIGGRAPH Asia 2022 Emerging Technologies (Daegu, Republic of Korea)
+(SA ’22). Association for Computing Machinery, New York, NY, USA, Article 8,
+2 pages. doi:10.1145/3550471.3558400
+[8] Bingjian Huang, Hanfeng Cai, Siyi Ren, Yeqi Sang, Qilong Cheng, Paul H. Dietz,
+and Daniel Wigdor. 2024. Demonstrating VibraForge: An Open-source Vibrotac-
+tile Prototyping Toolkit with Scalable Modular Design. In Adjunct Proceedings
+of the 37th Annual ACM Symposium on User Interface Software and Technology
+(Pittsburgh, PA, USA) (UIST Adjunct ’24). Association for Computing Machinery,
+New York, NY, USA, Article 43, 5 pages. doi:10.1145/3672539.3686764
+[9] Ali Israr, Siyan Zhao, Kyna McIntosh, Zachary Schwemler, Adam Fritz, John
+Mars, Job Bedford, Christian Frisson, Ivan Huerta, Maggie Kosek, Babis Koniaris,
+and Kenny Mitchell. 2016. Stereohaptics: a haptic interaction toolkit for tangible
+virtual experiences. In ACM SIGGRAPH 2016 Studio (Anaheim, California) (SIG-
+GRAPH ’16). Association for Computing Machinery, New York, NY, USA, Article
+13, 57 pages. doi:10.1145/2929484.2970273
+[10] Martínez Jonatan, S. García Arturo, Oliver Miguel, P. Molina José, and
+González Pascual. 2014. VITAKI: A Vibrotactile Prototyping Toolkit
+for Virtual Reality and Video Games. International Journal of Hu-
+man–Computer Interaction 30, 11 (2014), 855–871. doi:10.1080/10447318.2014.
+941272 arXiv:https://doi.org/10.1080/10447318.2014.941272
+[11] Lee Jones, Sara Nabil, Amanda McLeod, and Audrey Girouard. 2020. Wearable
+Bits: Scaffolding Creativity with a Prototyping Toolkit for Wearable E-textiles. In
+Proceedings of the Fourteenth International Conference on Tangible, Embedded, and
+Embodied Interaction (Sydney NSW, Australia) (TEI ’20). Association for Comput-
+ing Machinery, New York, NY, USA, 165–177. doi:10.1145/3374920.3374954
+[12] Majeed Kazemitabaar, Jason McPeak, Alexander Jiao, Liang He, Thomas Out-
+ing, and Jon E. Froehlich. 2017. MakerWear: A Tangible Approach to Inter-
+active Wearable Creation for Children. In Proceedings of the 2017 CHI Confer-
+ence on Human Factors in Computing Systems (Denver, Colorado, USA) (CHI
+’17). Association for Computing Machinery, New York, NY, USA, 133–145.
+doi:10.1145/3025453.3025887
+[13] Pingchuan Ke, Xingyu Yang, and Kening Zhu. 2023. SoftVibe: Enhancing On-
+Body Haptic Feedback in VR using Rapid-Prototyping Toolkit with Modularized
+Flexible Vibrotactile Device. In SIGGRAPH Asia 2023 Emerging Technologies (Syd-
+ney, NSW, Australia)(SA ’23). Association for Computing Machinery, New York,
+NY, USA, Article 17, 2 pages. doi:10.1145/3610541.3614575
+[14] Pin-Sung Ku, Md. Tahmidul Islam Molla, Kunpeng Huang, Priya Kattappurath,
+Krithik Ranjan, and Hsin-Liu Cindy Kao. 2022. SkinKit: Construction Kit for
+On-Skin Interface Prototyping. Proc. ACM Interact. Mob. Wearable Ubiquitous
+Technol. 5, 4, Article 165 (dec 2022), 23 pages. doi:10.1145/3494989
+[15] Andualem Tadesse Maereg, Atulya Nagar, David Reid, and Emanuele L. Secco.
+2017. Wearable Vibrotactile Haptic Device for Stiffness Discrimination during
+Virtual Interactions. Frontiers in Robotics and AI 4 (2017), 9 pages. doi:10.3389/
+frobt.2017.00042
+[16] NAKATANI Masashi, KAKEHI Yasuaki, aMIHARA Soichiro, and MINAMIZAWA
+Kota. 2016. Introduction to Shokuraku – Rediscovering the world through touch .
+Asahi Press, JAPAN.
+[17] Kouta Minamizawa, Yasuaki Kakehi, Masashi Nakatani, Soichiro Mihara, and
+Susumu Tachi. 2012. TECHTILE toolkit: a prototyping tool for design and
+education of haptic media. In Proceedings of the 2012 Virtual Reality International
+Conference (Laval, France) (VRIC ’12). Association for Computing Machinery,
+New York, NY, USA, Article 26, 2 pages. doi:10.1145/2331714.2331745
+[18] Tania K. Morimoto, Paulo Blikstein, and Allison M. Okamura. 2014. [D81] Hapkit:
+An open-hardware haptic device for online education. In 2014 IEEE Haptics
+Symposium (HAPTICS). Institute of Electrical and Electronics Engineers, Houston,
+TX, USA, 1–1. doi:10.1109/HAPTICS.2014.6775560
+[19] Ken Nakagaki, Artem Dementyev, Sean Follmer, Joseph A. Paradiso, and Hiroshi
+Ishii. 2016. ChainFORM: A Linear Integrated Modular Hardware System for
+Shape Changing Interfaces. In Proceedings of the 29th Annual Symposium on
+User Interface Software and Technology (Tokyo, Japan) (UIST ’16). Association for
+Computing Machinery, New York, NY, USA, 87–96. doi:10.1145/2984511.2984587
+[20] Ken Nakagaki, Sean Follmer, and Hiroshi Ishii. 2015. LineFORM: Actuated Curve
+Interfaces for Display, Interaction, and Constraint. In Proceedings of the 28th
+Annual ACM Symposium on User Interface Software and Technology (Charlotte,
+NC, USA) (UIST ’15). Association for Computing Machinery, New York, NY, USA,
+333–339. doi:10.1145/2807442.2807452
+[21] Simon Olberding, Michael Wessely, and Jürgen Steimle. 2014. PrintScreen: fabri-
+cating highly customizable thin-film touch-displays. In Proceedings of the 27th
+Annual ACM Symposium on User Interface Software and Technology (Honolulu,
+Hawaii, USA) (UIST ’14). Association for Computing Machinery, New York, NY,
+USA, 281–290. doi:10.1145/2642918.2647413
+[22] Sabrina Panëels, Margarita Anastassova, and Lucie Brunet. 2013. TactiPEd: Easy
+Prototyping of Tactile Patterns. In Human-Computer Interaction – INTERACT
+2013, Paula Kotzé, Gary Marsden, Gitte Lindgaard, Janet Wesson, and Marco
+Winckler (Eds.). Springer Berlin Heidelberg, Berlin, Heidelberg, 228–245.
+[23] Gunhyuk Park, Hojun Cha, and Seungmoon Choi. 2019. Haptic Enchanters:
+Attachable and Detachable Vibrotactile Modules and Their Advantages. IEEE
+Transactions on Haptics 12, 1 (2019), 43–55. doi:10.1109/TOH.2018.2859955
+[24] Evan Pezent, Brandon Cambio, and Marcia K. O’Malley. 2021. Syntacts: Open-
+Source Software and Hardware for Audio-Controlled Haptics. IEEE Transactions
+on Haptics 14, 1 (2021), 225–233. doi:10.1109/TOH.2020.3002696
+[25] Evan Pezent, Ali Israr, Majed Samad, Shea Robinson, Priyanshu Agarwal, Hrvoje
+Benko, and Nick Colonnese. 2019. Tasbi: Multisensory Squeeze and Vibrotactile
+Wrist Haptics for Augmented and Virtual Reality. In 2019 IEEE World Haptics
+Conference (WHC). Institute of Electrical and Electronics Engineers, Tokyo, Japan,
+1–6. doi:10.1109/WHC.2019.8816098
+[26] Pornthep Preechayasomboon and Eric Rombokas. 2021. Haplets: Finger-Worn
+Wireless and Low-Encumbrance Vibrotactile Haptic Feedback for Virtual and
+Augmented Reality. Frontiers in Virtual Reality 2 (2021), 15 pages. doi:10.3389/
+frvir.2021.738613
+[27] Nihar Sabnis, Dennis Wittchen, Courtney N. Reed, Narjes Pourjafarian, Jürgen
+Steimle, and Paul Strohmeier. 2023. Haptic Servos: Self-Contained Vibrotactile
+Rendering System for Creating or Augmenting Material Experiences. In Pro-
+ceedings of the 2023 CHI Conference on Human Factors in Computing Systems
+(Hamburg, Germany) (CHI ’23). Association for Computing Machinery, New
+York, NY, USA, Article 522, 17 pages. doi:10.1145/3544548.3580716
+[28] Ali Shtarbanov. 2021. FlowIO Development Platform – the Pneumatic “Raspberry
+Pi” for Soft Robotics. In Extended Abstracts of the 2021 CHI Conference on Human
+Factors in Computing Systems (Yokohama, Japan) (CHI EA ’21). Association for
+Computing Machinery, New York, NY, USA, Article 479, 6 pages. doi:10.1145/
+3411763.3451513
+[29] Ali Shtarbanov, Mengjia Zhu, Nicholas Colonnese, and Amirhossein Haji-
+agha Memar. 2023. SleeveIO: Modular and Reconfigurable Platform for Multi-
+modal Wearable Haptic Feedback Interactions. In Proceedings of the 36th Annual
+ACM Symposium on User Interface Software and Technology (San Francisco, CA,
+USA) (UIST ’23). Association for Computing Machinery, New York, NY, USA,
+Article 70, 15 pages. doi:10.1145/3586183.3606739
+[30] Saya Suzunaga, Yuichi Itoh, Kazuyuki Fujita, Ryo Shirai, and Takao Onoye.
+2020. CoiLED Display: Make Everything Displayable. In SIGGRAPH Asia
+2020 Emerging Technologies (Virtual Event, Republic of Korea) (SA ’20). As-
+sociation for Computing Machinery, New York, NY, USA, Article 15, 2 pages.
+doi:10.1145/3415255.3422889
+[31] Colin Swindells, Seppo Pietarinen, and Arto Viitanen. 2014. Medium fidelity
+rapid prototyping of vibrotactile haptic, audio and video effects. In 2014 IEEE
+Haptics Symposium (HAPTICS). Institute of Electrical and Electronics Engineers,
+Houston, TX, USA, 515–521. doi:10.1109/HAPTICS.2014.6775509
+[32] Kenta Tanabe, Seiya Takei, and Hiroyuki Kajimoto. 2015. 2A1-B07 Development
+of the Whole Hand Haptic Feedback Glove Using Numerous Linear Resonant
+Actuators (II) : 3D shape discrimination with vibration feedback. The Proceedings
+of JSME annual Conference on Robotics and Mechatronics (Robomec) 2015, 0 (2015),
+_2A1–B07_1. doi:10.1299/jsmermd.2015._2A1-B07_1
+[33] Haruya Uematsu, Daichi Ogawa, Ryuta Okazaki, Taku Hachisu, and Hiroyuki
+Kajimoto. 2016. HALUX: projection-based interactive skin for digital sports. In
+ACM SIGGRAPH 2016 Emerging Technologies (Anaheim, California) (SIGGRAPH
+’16). Association for Computing Machinery, New York, NY, USA, Article 10,
+2 pages. doi:10.1145/2929464.2929479
+[34] Rodan Umehara, Harunobu Taguchi, Arata Horie, Yusuke Kamiyama, Shin
+Sakamoto, Hironori Ishikawa, and Kouta Minamizawa. 2024. FEELTECH Wear:
+Enhancing Mixed Reality Experience with Wrist to Finger Haptic Attribution. In
+ACM SIGGRAPH 2024 Emerging Technologies (Denver, CO, USA) (SIGGRAPH ’24).
+Association for Computing Machinery, New York, NY, USA, Article 8, 2 pages.
+doi:10.1145/3641517.3664395
+[35] Braun Virginia and Clarke Victoria. 2006. Using thematic analysis in psy-
+chology. Qualitative Research in Psychology 3, 2 (2006), 77–101. doi:10.1191/
+1478088706qp063oa
+[36] Martin Weigel, Tong Lu, Gilles Bailly, Antti Oulasvirta, Carmel Majidi, and Jürgen
+Steimle. 2015. iSkin: Flexible, Stretchable and Visually Customizable On-Body
+Touch Sensors for Mobile Computing. In Proceedings of the 33rd Annual ACM
+Conference on Human Factors in Computing Systems (Seoul, Republic of Korea)
+(CHI ’15). Association for Computing Machinery, New York, NY, USA, 2991–3000.
+doi:10.1145/2702123.2702391
+[37] Dennis Wittchen, Katta Spiel, Bruno Fruchard, Donald Degraen, Oliver Schneider,
+Georg Freitag, and Paul Strohmeier. 2022. TactJam: An End-to-End Prototyping
+103
+Tape-Tics: A Flexible and Modular Vibrotactile Feedback System for Rapid Prototyping
+of Haptic Applications in Education AHs 2025, March 16–20, 2025, Masdar City, Abu Dhabi, United Arab Emirates
+Suite for Collaborative Design of On-Body Vibrotactile Feedback. In Proceedings
+of the Sixteenth International Conference on Tangible, Embedded, and Embodied
+Interaction (Daejeon, Republic of Korea) (TEI ’22). Association for Computing
+Machinery, New York, NY, USA, Article 1, 13 pages. doi:10.1145/3490149.3501307
+[38] Bowen Zhang and Misha Sra. 2021. PneuMod: A Modular Haptic Device with
+Localized Pressure and Thermal Feedback. In Proceedings of the 27th ACM Sym-
+posium on Virtual Reality Software and Technology (Osaka, Japan) (VRST ’21).
+Association for Computing Machinery, New York, NY, USA, Article 30, 7 pages.
+doi:10.1145/3489849.3489857
+[39] Ran Zhou, Zachary Schwemler, Akshay Baweja, Harpreet Sareen, Casey Lee
+Hunt, and Daniel Leithinger. 2023. TactorBots: A Haptic Design Toolkit for
+Out-of-lab Exploration of Emotional Robotic Touch. In Proceedings of the 2023
+CHI Conference on Human Factors in Computing Systems (Hamburg, Germany)
+(CHI ’23). Association for Computing Machinery, New York, NY, USA, Article
+370, 19 pages. doi:10.1145/3544548.3580799
+104

@@ -1,0 +1,1343 @@
+CC-BY
+This work is licensed under a Creative Commons Attribution 
+International 4.0 License.
+C&C ‘26 July 13--16, 2026,London, United Kingdom
+© 2026 Copyright is held by the owner/author(s).
+ACM ISBN 979-8-4007-2583-8/2026/07
+https://doi.org/10.1145/3803784.3809294
+A Cabinet of Affective Touches:  
+Building Design Repository Linking Somatic Experience with Soft Robotic Systems
+Henrique Sambi 
+Kungliga T ekniska Högskolan 
+Stockholm, Sweden 
+hfreitas@kth.se
+Caroline Yan Zheng 
+University of Nottingham
+Nottingham, United Kingdom 
+caroline.zheng@nottingham.ac.uk
+Paul T ennent 
+University of Nottingham
+Nottingham, United Kingdom 
+paul.tennent@nottingham.ac.uk
+Yoav Luft 
+Kungliga T ekniska Högskolan
+Stockholm, Sweden 
+luft@kth.se
+Steven David Benford 
+University of Nottingham
+Nottingham, United Kingdom 
+steve.benford@nottingham.ac.uk
+Madeline Balaam 
+Kungliga T ekniska Högskolan 
+Stockholm, Sweden 
+balaam@kth.se
+Abstract
+A Cabinet of Affective Touches (ACAT) represents an approach to 
+generate tacit design knowledge and build a repository for creating, 
+experiencing and reflecting on designing affective touch with 
+soft robotic technology. Despite being increasingly recognised as 
+a somaesthetic material for affective touch interactions, knowledge 
+on technical parameters and the experiential quality of touch with soft 
+robotic technology is investigated fragmentally in separate disciplines. 
+Sixty four haptics design students used the ACAT platform and created 
+a repository of seventeen designs intended for all primary affective 
+dimensions, covering both positive and negative affective experience. We 
+illustrate how this process cultivated tacit design knowledge and fostered 
+critical reflection on novel design space, in particular, on how to facilitate 
+the creation and sharing the designs of uncomfortable touch.
+AUTHORS KEYWORDS
+affective touch, soft robotics, design repository, discomfort, uncomfortable 
+touch
+CSS CONCEPTS
+Human-centred computing ~ Interaction design ~ Interaction design 
+process and methods ~ Activity centred design
+Figure 1. A Cabinet of Affective Touches with actuation pads
+Creativity & Cognition 2026: July 13-16, London, UK
+Add Page Numbers Here
+497
+1. INTRODUCTION 
+The vital role of interpersonal touch in supporting 
+social communication and well-being [12], together 
+with ongoing advances in robotics and haptic 
+technologies, are leading to increasing opportunities 
+for technologies to be in physical contact with 
+humans. The affective qualities of technology-
+initiated touch thus play a critical role in shaping 
+our future relationship with embodied technology 
+and robots. Among a wide range of haptic actuating 
+technologies, soft robotics actuators have been 
+increasingly appreciated for their naturalistic sensory 
+quality in haptic interaction. Such quality, affording 
+a rich and nuanced experience, alludes to great 
+potential in supporting a wide range of applications 
+[2, 39, 50, 51]. Despite the promising potential, it has 
+been noted that this field is currently in crisis [20] – 
+reflected in the lack of sensorial-richness and social 
+meaning in current haptic devices. Two barriers were 
+identified: the first being that the knowledge on 
+technical configuration and felt experiential quality 
+is investigated fragmentarily in separate disciplines 
+[52]; the second being the lack of design repository 
+of different kinds of sensory feedback around 
+the body [20, 40]. This gap in knowledge calls for 
+an infrastructure that enables the exploration of 
+sensory affordance, the sharing and accumulation 
+of design knowledge, with a particular enabler being 
+the association of the technical configuration with 
+the felt experiential quality. Our work is a response 
+to this need.
+Drawing on lessons from Soma Design practice [17] 
+– a first-person design method focussed on felt 
+experience, we developed A Cabinet of Affective 
+Touches (ACAT) which includes tools for both 
+authoring and collecting feedback on soft robotic 
+touch design. It was developed with two objectives 
+in mind: the first is to link technical parameters with 
+felt qualities and second to enable the sharing and 
+registration of diversified sensory and social qualities 
+felt by different individuals, thus to facilitate the 
+accumulation of a design repository. The word 
+“cabinet” reflects the features of the platform 
+that transcend typical libraries or systems. Firstly, 
+our platform includes a physical cabinet (Figure 
+1) that contains a collection of design examples to 
+complement the digitised on-line repository. The 
+word touch is used here as a countable to refer 
+to each specific instance of design. Secondly, it 
+communicates the intention for the repository to 
+be eventually tourable. Thirdly it articulates an 
+epistemic stance toward knowledge of technological 
+touch—the notion of a cabinet foregrounds material 
+presence, situated encounter, and experiential 
+engagement. While digital libraries may document 
+sensory description and technical configurations of 
+a haptic design, the design knowledge on shaping 
+the sensory quality of haptic design cannot be fully 
+fostered by digital resources and instructions alone. 
+Research in design and HCI has consistently shown 
+that design knowledge is fundamentally experiential, 
+tacit, and developed through doing [14, 42, 49], and 
+designers train their sensitivity to subtle experiential 
+differences through hands-on exploration rather 
+than symbolic representation [17].
+Although touch can be used to communicate affective 
+experience spanning a full spectrum of sensations 
+covering negative, neutral, and positive valence, as 
+well as low (calm) to high (exciting) arousal [28], the 
+exploration of affective touch design within the field 
+of HCI has predominately focused on positive valence 
+[18, 33]. We were motivated for the ACAT platform 
+to support the authoring of touch intended for the 
+complete spectrum [36] including both positively 
+and negatively valenced affective experiences, 
+and covering low to high activation level. Our 
+work contributes to a design infrastructure for the 
+affective haptic design community, specifically, it 
+contributes: 1) a live platform that can be used by 
+designers to author touch and collect diversified 
+feedback on its experiential qualities. 2) a design 
+repository embodied in the physical collection of 
+customised soft robotic touch artefacts and its 
+associated documentation of the technical set-up 
+linking with the affective quality. 3) Reflection on 
+the considerations and scaffolding when facilitating 
+authoring and sharing of uncomfortable touch. 
+4) Subjective documentation of touch sensations 
+created using current soft robotics that may be of 
+value to the designers of future soft robotics.
+2. RELEVANT WORK
+2.1 The Challenges Towards an
+Experience-driven Paradigm
+Interpersonal affective touch supports social 
+communication and helps maintain physical 
+and emotional well-being [13, 31]. Novel haptic 
+technologies and a proliferation of robotics are 
+leading to an increasing number of contexts where 
+technologies and humans physically touch. This 
+has illuminated an immense design space for a new 
+generation of touch-oriented technologies that 
+enrich and support human life through physically 
+contacting humans. It has recently been suggested 
+that in some vulnerable situations, being touched 
+by a machine might be preferred over being 
+touched by an unknown person, such as when being 
+washed [10]. A collective body of work in HCI has 
+contributed towards opening up the design space 
+of soft robotic design by establishing the potential 
+of such materials to offer touch experiences as both 
+physically and social-emotionally valuable, that 
+might raise body awareness [23, 50], enable self-
+care [46], support healthcare aims [34, 53] or social 
+bonding [39], augment senses [1], and aid mobility 
+[2]. Despite the success of haptics as a field and its 
+recognised potential for social and affective touch, 
+it has been pointed out that the field itself is in 
+crisis [19]. This is reflected in that the promise of a 
+haptic revolution in HCI is yet to be fulfilled [40], 
+as current haptic devices are still very limited in the 
+range of sensations that they can deliver, and there 
+is still the bottleneck of developing richer and more 
+fine-grained sensations [33]. To address this, a more 
+designerly approach moving away from technology-
+dominance towards an experience-driven design 
+paradigm has been called for [20, 52]. Such a 
+paradigm takes experiential quality as the goal of 
+design, to engage the sensory and social aspects 
+Creativity & Cognition 2026: July 13-16, London, UK
+Add Page Numbers Here
+498
+of affective touch, and to strive for studying the 
+felt (somaesthetic) qualities, technical realisation, 
+and ethical dimensions of touch more holistically. 
+What contributes to this bottleneck is a two-fold 
+complexity. The first complexity comes from the 
+nature of human affective touch—the perception 
+of which is mediated by a mixture of our biological 
+set-up [29], context and personal preference that 
+is impacted by personal, social and cultural factors 
+[37]. The second complexity comes from the business 
+of designing technology-initiated affective touch 
+[52]. Authoring touch is a laborious process that 
+requires inter-disciplinary expertise and skills. In 
+this emergent design space, knowledge of material 
+design, experience evaluation, computational 
+algorithms, sensing/actuation mechanisms, and the 
+ethics of touch are often investigated separately and 
+within different disciplines.
+2.2 Towards Shared Repertoire for Designing 
+Soft Robotic Affective Touch
+Two barriers exist that hinder the advancement 
+of an experience-driven paradigm. First, when 
+authoring affective touch from technology, in order 
+to achieve desirable affective qualities, haptic 
+designers need knowledge of what affective quality 
+is associated with what kind of design parameter 
+[41]. Currently such knowledge is fragmentally 
+investigated in separate disciplines, which hinders 
+the reproducibility and comparability of the 
+artefacts and the intended quality [52]. The tacit 
+knowledge of designing and experiencing is rarely 
+passed on beyond the local design team. Second, 
+we point to the absence of a shared repository of 
+material, design samples, and sensations for touch 
+designers to draw on. Established design fields such 
+as fashion and textiles are grounded in extensive, 
+accumulated repositories of material knowledge, 
+where designers develop an understanding of 
+sensory and affective qualities through sustained 
+engagement with material samples, precedents, 
+and hands-on exploration [25]. This experiential 
+foundation enables them to anticipate and compose 
+creative designs by drawing on remembered tactile 
+and embodied sensations, using the “felt repertoire” 
+to imagine and shape future designs [35]. In contrast, 
+when designing affective touch using soft robotic 
+technologies, such repositories remain largely 
+undeveloped. Due to the dual novelty of actuating 
+soft robotics and its emergent sensory affordance 
+[51], designers lack established samples, conventions, 
+and shared experiential knowledge linking technical 
+configurations to felt qualities. As a result, the 
+affective dimensions of technological touch must 
+often be discovered anew through prototyping 
+from scratch. Advancing this emerging design field 
+crucially depends on enabling designers to share, 
+experience, critique and build on each other’s work.
+Jewitt et al. [20] and Schneider [40] call for an 
+infrastructure that enables designers to “creatively 
+play” with digital social touch concepts and foster 
+design. They further propose “sensory measurements” 
+to collect data on people’s touch sensations at scale” , 
+alongside “libraries of different kinds of sensory 
+feedback around the body” . Schneider et al. [40] 
+also advocate for the development of performance, 
+technical or scientific software libraries. Our effort to 
+build a repository for affective touch design responds 
+directly to these calls, and specifically addresses the 
+two barriers outlined above.
+Two main approaches support the design of soft 
+robotic haptics. First, open-access toolkits provide 
+practical resources. For instances, the Soft Robotics 
+Toolkit [16] provides detailed guidance on design, 
+fabrication, and characterisation, while FlowIO [44] 
+offers modular hardware for controlling inflation and 
+deflation. Similarly, the Compressables Prototyping 
+Toolkit (CPT) [11] enables compression-based haptic 
+interaction design. However, these resources do 
+not link affective qualities to manipulatable design 
+parameters. In parallel, HCI designers who engage 
+with the felt affective qualities of soft haptic 
+stimulations explore through a soma design approach 
+[2, 46], often employ low-fidelity prototypes or static 
+materials (e.g., fabrics) to capture the qualitative 
+richness of touch. Yet, the rich experiences felt by 
+these researchers, communicated through literature, 
+are difficult to access by designers beyond the original 
+researchers. Moreover, low-fidelity prototyping 
+through manual actuation limits reproducibility of 
+dynamic touch pattern. These limitation hinders the 
+sharing of physical sensations, the tacit knowledge 
+and potential to build on each other’s work, which is 
+essential to advance a design field [20].
+Libraries can form a way to share and reuse haptic 
+design ideas between designers and collaborate 
+in a timely but asynchronous manner. Focusing 
+more directly on the evaluation within haptic 
+designs, Schneider et al. proposed crowdsourcing 
+affective ratings for vibrotactile haptic designs [41]. 
+Collaborative platforms have also been explored for 
+both vibrotactile and shape-memory alloy (SMA) 
+actuators; for example, CoTacs [30] supports the 
+joint design, evaluation and refinement of haptic 
+feedback using SMA actuation. Related systems 
+have explored different facets of this space, yet 
+each foregrounds a specific layer—tooling, signals, 
+or prototyping—rather than the accumulation of 
+embodied, shareable touch experiences. CuddleBits 
+[22] supports expressive actuation through 
+material and software exploration, but remains 
+oriented toward individual prototyping rather 
+than reusable artefacts. TactJam [43] enables the 
+storage and exchange of vibrotactile patterns, yet 
+these remain abstract signal representations rather 
+than physically enacted touch. Feel-Play-Imagine 
+[21] foregrounds lived tactile experience through a 
+hardware toolkit, but does not support archiving or 
+cross-designer accumulation of such experiences. 
+Earlier methodological work such as Haptic Sketching 
+by Camille Moussette [32] similarly emphasises 
+embodied ideation without enabling systematic 
+sharing or accumulation. Complementary work on 
+documenting the diversity of social touch, such as 
+the CoST (Corpus of Social Touch) [24], highlights the 
+richness of touch modalities, though it is primarily 
+oriented toward observation and annotation rather 
+than design reuse.
+Against this backdrop, our work explores soft 
+robotic affective touch as a shareable experiential 
+material. We foreground a repository of physical 
+touch samples that can be revisited, compared, 
+Creativity & Cognition 2026: July 13-16, London, UK
+Add Page Numbers Here
+499
+and reflected upon, and critically include those 
+reflections in the repository, enabling haptic design 
+to move from isolated prototyping toward the 
+accumulation of situated, embodied knowledge—
+including ambiguous and uncomfortable affective 
+qualities.
+2.3Towards Full Spectrum of Affective 
+Dimensions
+Touch can be used to communicate affective 
+experience spanning a full spectrum of primary 
+affective dimensions [38]. It evokes a full spectrum 
+of emotions, from care, to alert, to threat to harm. 
+These sensations cover negative, neutral, and positive 
+valence, as well as low (calm) to high (exciting) arousal 
+[28]. For example, Lee Masson and Op de Beeck [28] 
+have profiled 13 socio-affective touch expressions 
+that cover all four quadrants of the Russell Circumplex 
+[36]. While much touch-oriented design focuses 
+on positive valence interactions, Benford et al. [3] 
+identified that uncomfortable interaction designs 
+underpinned by positive cultural values can enable 
+powerful experiences with benefits to participants 
+of entertainment, enlightenment, and sociality.
+Encouraged by this recognition of the potential 
+value of the entirety of emotional response to 
+touch, in our study, we deliberately included the 
+exploration of designing for unpleasant touch 
+experiences, as a conduit to reflect on the value 
+and ethics of such activity. The ACAT platform thus 
+supports creating touch that is intended for the full 
+spectrum (both negative and positive, calm and 
+exciting) of emotions. Soft robotics, being a machine 
+which is inhuman, juxtaposed with organicness in its 
+sensory experience, can at times provoke alienness 
+and naturalness in contrast [26]. Exploring this 
+ambiguous space may yield findings that define 
+previously unknown experience that have value in 
+the right context.
+The ACAT platform is intended to be used for both 
+prototyping and experiencing touch from soft robotic 
+technology. It includes a pneumatic control kit (Figure 
+2-A), an inflatable pad (Figure 2-B) a textile retention 
+band (Figure 2-C) and a webApp (Figure 2-D) at the 
+address: https://www.touchlibrary.com. A central 
+objective for this platform is to enable the archival 
+of both digital and material elements of touch design 
+and to enable the sharing and comparing of design 
+parameters associated to different affective affordance. 
+The design of the platform has gone through two 
+iterations. The pilot version had been introduced to two 
+groups of HCI designers, practitioner and researchers. 
+The current version is modified based on their feedback 
+and our reflection.
+Touch is nuanced, and touch design is highly sensitive. 
+As identified in [50] and [53] the small variation in 
+actuator properties (e.g. the sizes of the actuator, 
+elasticity of the actuator, surface texture), location 
+on the body, temporal behaviour of inflation and 
+deflation can result in possibly completely different 
+experiences. Prototyping these at the same time 
+can be overwhelming. To ensure consistency, the kit 
+provides standard actuator with fixed dimension (9cm 
+in diameter) made from Smooth-On Dragon Skin™ 10 
+Fast silicone. Although orchestrating multiple actuators 
+affords more sophisticated experience such as in 
+[50, 53], it involves moderating individual actuators 
+separately before combining them into a symphony. 
+We therefore treat a single actuator as a foundational 
+unit [11] for building knowledge to compose experiences 
+with multiple actuators.
+3.  ACAT PLATFORM
+B.Inf atable Pad
+Potentiometer and buttons
+Pressure sensor
+D. Actuation can also be operated 
+through virtual buttons
+Figure 2. ACAT Plataform
+A. Actuation Kit
+C. Adjustable retention band
+Creativity & Cognition 2026: July 13-16, London, UK
+Add Page Numbers Here
+500
+4. WORKSHOP FOR AUTHORING 
+AND EXPERIENCING TOUCH
+We deployed the CAT platform v.2 in two design 
+workshops in May 2025, as part of the educational 
+programme for a Masters HCI course on haptics 
+interaction design. Two weeks prior to the workshop, 
+a lecture was given on affective haptic design in the 
+field of HCI, in order to introduce the students to the 
+design space of affective haptics and soft robotics 
+technologies. 64 students participated. 7 physical 
+prototyping kits were produced to facilitate up to 
+7 design groups per workshop. The students were 
+assigned to two workshops, and both workshops 
+had identical procedures. The students formed their 
+own groups of 3–5 people with a total of 10 design 
+groups. Each workshop lasted 2 hours. Each group 
+was provided with one physical design kit which 
+included two plain actuator pads (Figure 3). We 
+arranged for the workshop to take place in a maker 
+space of the university, so that the students could 
+access to a wide variety of materials for customising 
+their actuators. The range of materials available to 
+them included textiles, haberdashery, paper, foam 
+and packaging materials, metal, wood, and other 
+quick-prototyping materials. At the beginning of each 
+session, participants were given a brief introduction 
+and demonstration on how to use the platform. We 
+also introduced the tool of the circumplex model of 
+affect [36], for which we adapted the word ‘arousal’ 
+to ‘activation’ following precedence [6, 53]. Valence 
+was explained as how pleasant or unpleasant it 
+feels, and activation was explained as how energised 
+or calm it feels. Each group was given three tasks: 
+to design at least two touch patterns (at least one 
+for negative valence) and upload these to the ACAT 
+website repository (Figure 4.); to experience and give 
+feedback on at least one touch pattern from another 
+group; and to reflect on a set of questions regarding 
+the design process through written submission. Each 
+workshop was facilitated by two members of the 
+research team, one as moderator and one as technical 
+support for using the ACAT platform..
+Figure 3. Students using pneumatic control kit to customise inflation and deflation patterns
+4.1 Ethics
+Within the country where this work was conducted 
+a formal ethics review was not required. However, 
+the research team followed best practice in terms 
+of providing clear information to participants on 
+the nature of the study and the ways in which data 
+would be processed and stored, and written consent 
+was collected. As part of the course, participation 
+in the workshop and submitting design reflection 
+was mandatory. Students who were willing for their 
+design and design reflection to be included in the 
+analysis of this research gave their informed consent. 
+It was made clear that the students’ participation was 
+entirely voluntary and that there was no connection 
+to their grades if they choose not to consent. All 10 
+design groups gave their consent for their designs 
+and reflections to be included in this research.
+As part of our design activity was experimenting 
+with unpleasant touch experiences, we carefully 
+considered the aspects of consent, withdrawal, 
+privacy and risk [3]. We mitigated any risk of real 
+physical harm or negative psychological impact 
+through transparency, supervision, group work 
+and free withdrawal. We fully briefed the student 
+designers about the intended design activity, 
+reminding them about choosing and creating 
+materials that do not cause physical injury, and 
+working in groups to provide an open space for 
+discussion, reflection and for any concerns to be 
+raised. Two workshop facilitators were present at all 
+time providing additional safeguarding.
+4.2 Data Analysis
+Our data included the physical customised actuators, 
+images and video clips of these actuators in motion 
+on the targeted location of the body, intended 
+quality description from the design team, feedback 
+sheets from touch recipients; brief collective 
+verbal reflections at the end of the workshop with 
+reflections documented in notes, and finally the 
+written reflections. The textual data were analysed 
+applying a reflexive thematic analysis approach to 
+code and develop patterns across the data [7].
+Creativity & Cognition 2026: July 13-16, London, UK
+Add Page Numbers Here
+501
+Figure 4. Workshop procedure
+EXPERIENCING TOUCH
+ AUTHORING TOUCH
+5.Choose a touch 
+Chooses to experience a touch 
+from the library collection, and 
+find the pad from the cabinet
+6.Connect and experience it
+plug it, and use as described 
+into the website. 
+7.Give feedback
+Finally, they could fill the felt 
+sensation into the report file.
+1.Costumise actuator
+using material to embody  
+the intended affective quality. 
+3.Feel it on th body
+Designers can adjust the 
+customisation of the actuator, 
+and the inflation and deflation 
+patterns, till they are happy 
+with the felt quality.
+4.Save it to the library
+Designers can save touch 
+information using a two screen 
+flow, one where they can 
+review the profile, another one 
+to add information.
+Data provided by system:
+Pressure change over time 
+inside the pad; Inflation and 
+deflation actions
+Data provided by the designer:
+intended affective position on the 
+circumplex model of emotions; 
+Description of intended experiential 
+quality; Image and video;
+2.Play with pattern
+Use the pneumatic control 
+hardware to experiment 
+with inflation and deflation 
+patterns. They can customise 
+pressure level by adjusting the 
+speed of pump. 
+To see the whole 
+library,scan the  
+QR code, or visit:  
+www.touchlibrary.com
+2
+1
+3
+4
+6
+5
+7
+Creativity & Cognition 2026: July 13-16, London, UK
+Add Page Numbers Here
+502
+Figure 5. All pads collected with their respective body positions inside the affective coordinate. 
+Positions are not in scale, only on the right coordinate. 
+5. THE CABINET OF AFFECTIVE 
+TOUCHES
+As a result of the workshop sessions, a total of 17 
+affective touch designs have been designed and 
+archived (Figure 5). Among these, 3 are intended 
+for the high activation – positive valence zone, 8 
+for the high activation – negative valence zone, 
+3 for the low activation – positive valence zone 
+and 2 for the low activation – negative valence 
+zone.
+Feedback on 11 touch designs were recorded, 
+some touches received more than one instance 
+of feedback. Figure 6 shows how some of the 
+feedback is mapped in relation to the intended 
+quality of the designed touches within the 
+circumplex domains. Other instances of feedback 
+can be found on the ACAT website.
+6. Cat Fight 7. Blood Pressure 
+Simulator
+8. Rage / The Hedgehog
+1. In the hell 2. Neck-Constraining 
+Aparatus
+12. Sleeping Kitten
+14. Dead Man Hand
+16 .Blobby the Muppet15. Cloud11. Iron Under the Sea10. Lego of the Pain9. Spikey-ish Fence 17. Cat Breath
+4.  Spiky Pufferfish 1.0 13. Breathing flower3. Blood Pressure Monitor 5. Lego Pain Simulator 
+High ActivationLow Activation
+Negative valence Positive valence
+Creativity & Cognition 2026: July 13-16, London, UK
+Add Page Numbers Here
+503
+Positive valence
+High ActivationLow Activation
+How to read this chart
+Figure 6. Mapping the intended and felt experience of design samples in the affective circumplex. Here showing some details due to space, 
+more details of description of each design sample can be viewed on the webiste: https://www.touchlibrary.com/
+Creativity & Cognition 2026: July 13-16, London, UK
+Add Page Numbers Here
+Blobby the muppet
+The fluffy muppet 
+breathes as you hug it next 
+to your neck.
+Rage / The Hedgehog
+Cat fight
+cat having a disagreement. 
+put your wrist on it using 
+the whole weight of your 
+forearm
+Breathing Flower
+Feel the breathe of the 
+flower
+Uncomfortable, 
+Felt like removing it“ “
+Cool“
+“
+Interesting. 
+Like the cat is hurting me
+“ “
+Relaxed, calm, happy“ “
+Happy, calm  
+“awwww”-feelling“ “
+Negative valence
+2
+5
+8
+3
+12
+14
+4
+1
+10
+17
+9
+15
+11
+7
+6
+16
+13
+Touch receiver  
+feedback“ “
+X
+Intended sensation
+Felt sensation
+touch number
+The actuator is placed underneath the wrist. When 
+inflated and deflated the wrist feels the stimulation.
+a “hat”like artefact with spikes in the middle, intended to address the head. The 
+actuator was underneath the spikes so that when inflated the spikes stimulate  
+the wearer’s head. The spikes are metal but easily bendable for safety.
+The muppet is with cute eyes and ears with the actuator wrapped within the purple textiles. 
+Using two hands to place it around the neck, and feel the inflation and deflation rhythm.
+The actuator is placed in the middle of the foam. When held by both hand, the 
+inflation and deflation convey a breathing rhythm is accompanied by the soft 
+texture of foam and visual of the fresh flower.
+504
+Figure 8.  Prototyping for sensations around the neck
+6. DISCUSSION
+6.1 Experience-led Design Process
+Groups were able to explore ideas in a process led 
+by the imagined experiential qualities of the touches 
+they and their peers were designing. Although in the 
+beginning, students found it challenging in “[...] just 
+figuring out how to express something as abstract 
+as “affect” through a very physical medium” , and 
+they found the material of soft robotics rather novel 
+experience: “translating emotion into inflation is 
+a weird design process”  (Group 2), they found that 
+prototyping with the physical design kit was enabling: 
+“the hands-on process allowed us to witness the 
+formation of the work. ”  (Group 6). While exploring 
+the relationship between their idea and realising it 
+the physical medium, groups found themselves deeply 
+engaging with the materials in a somatic way: “we 
+talked a lot about what different kinds of negative 
+feelings feel like in the body, not just emotionally, but 
+somatically, and tried to turn those conversations 
+into mechanical designs. ”  (Group 2)
+Students were able to probe subtle differences in 
+nuance, even within the same affective quadrants. For 
+example, Group 2 documented their probing into the 
+quadrants of negative valence and high activation. In 
+exploring a kind of unpleasant touch experience, Group 
+2 documented two nuances of experience:
+(Referring to Figure 8). (T)the affective quality 
+we were aiming for was something that lives in 
+the “panic, stress, anxiety” zone of the affective 
+space. High arousal and negative valence. It’s 
+a band around your neck that tightens when 
+inflated, and while we were obviously careful 
+not to actually hurt anyone, the physical 
+sensation is meant to mimic the discomfort 
+and tension that comes with stress or fear. That 
+pressure around your neck immediately makes 
+you hyper-aware of your body, breathing, 
+and the lack of space, all of which match that 
+upper-left quadrant (high activation, negative 
+emotion). [...] this experience was very carefully 
+designed not to be able to cause actual harm to 
+its wearer.
+“The Spikey-ish Fence (figure 7) lives in a similar 
+zone but with a different quality. It’s worn 
+on the palm, where [...] metal nails (blunted 
+for safety) poke out from foam and inflate 
+into your hand. This design leans more toward 
+discomfort than pain, like a nagging, creeping 
+feeling. It’s still negative valence and moderate 
+to high activation, but perhaps less of a “fight or 
+flight” and more of a “ugh, get this away from 
+me” vibe. A bit more emotionally ambiguous 
+than the neck wrap, which felt more direct. “
+Reflecting on these processes, we see how important 
+it is when designing touch interactions to have that 
+first-person understanding of the holistic experience 
+and to take time to deeply reflect on how it feels 
+when you tweak it, vary it, change the materials or the 
+behaviours. As noted in the soma design methodology 
+[17], fundamental to understanding what you are 
+designing. Without access to these sensations, design is 
+not only limiting but potentially unsafe – particularly 
+when designing negatively-valenced touch, where 
+firsthand experience is necessary for controlling risk, 
+and for identifying the balance and the edges of what 
+is comfortable, desirable or acceptable. And of course, 
+it’s equally necessary to hear others’ reflections on 
+experiences you have designed – what may be on the 
+edge for you, may be far over the edge for somebody 
+else. It is for this reason that the inclusion of both the 
+ability to replicate experiences, and a collection of 
+different people’s reflections is critical to the value of 
+ACAT.
+Figure 7 .  Prototyping for Spikey-ish Fence
+Creativity & Cognition 2026: July 13-16, London, UK
+Add Page Numbers Here
+505
+Non-verbal language of affective  touch. While we 
+were impressed by the rich imagination felt through 
+the poetic names of the touches designed, we also 
+noticed a lack of words for describing touch from the 
+touch recipients. For example, it is not uncommon 
+for the touch recipients to describe the felt sensation 
+using a close word in quotation marks to refer to the 
+indicated feeling: “’aww--’ feeling” , “inflating and 
+deflating ‘slowly’  ” . In contrast, there was a richness in 
+body language: “strong responses - nervous laughter, 
+tensed shoulders, immediate pulling away. ”  (Group 2). 
+This invites us to consider that describing touch is rarely 
+exclusively verbal – and thus ACAT needs to be able 
+to represent this, both by presenting video recordings 
+of descriptions (to capture the body language people 
+use to describe touches) and even more critically 
+by including the ability to replicate those touches – 
+after all “you had to be there” . Somatic experience is 
+notoriously hard to articulate [45], so arguably the best 
+articulation is first person experience.
+Subjectivity . The individually different feedback from 
+touch recipients is to be expected, given, as noted 
+earlier, the personal, social and cultural individualities 
+that impact touch experiences, however, what we 
+found interesting was that the groups themselves were 
+surprised by the fact that designers within the same 
+team could have different ideas regarding the affective 
+affordance of the same material: “When we discussed 
+creating low [sic] affection and low valence, we noticed 
+that everyone had different standards for these two 
+dimensions. For example, we thought of using water 
+to create a sense of coldness and indifference, which 
+we associated with low [sic] affection. However, 
+some people believed that the fluidity of water could 
+actually feel quite affective. We found this clash of 
+ideas to be very interesting. ”  (Group 6) (Figure 10). This 
+suggests that designers may not inherently recognise 
+the subjectivity of touch experiences. By actually 
+experiencing these touches themselves, and comparing 
+their own sensation to those reported by others, ACAT 
+helps to foster an understanding of the subjectivity of 
+touch experiences.
+Temporality . It has been recognised that temporality 
+of interactive materials [47] has a critical impact on the 
+experiential quality of touch [53]. This has also been 
+tacit knowledge that our design students acquired: 
+“by watching these variations, we learn how subtle 
+changes in timing, texture, and pressure can result in 
+completely different emotional impressions. ”  What is 
+more interesting and rather novel, is that some students 
+discovered that there is a temporality in the felt quality 
+too, that is, the felt quality, is not always consistent. 
+Some particular sensations shift over time: “I found it 
+interesting that the soft and pleasant feeling faded 
+over time as my hand got used to it (Figure 11), so it 
+became less noticeable. But with the metal thorns, 
+it was kind of the opposite. The longer my hand 
+stayed there, the more uncomfortable and tense 
+it felt. The discomfort built up instead of fading”  
+(Group 5) (Figure 12). This suggests that designers would 
+benefit from recognising the specific temporality of 
+individual touch experiences, and that ecologically 
+valid experience durations are necessary to properly 
+understand the sensation. In its descriptions and 
+reflections, ACAT encourages designers to experience 
+touches ‘as intended’ .
+Students found that prototyping with the physical design kit enabled “the hands-on process (which) allowed us to witness the formation of the work. ”  They were 
+able to experience tacitly that the materiality of the physical elements and the temporality of the dynamic behaviour of inflation and deflation are entangled with the 
+subtlety and nuances of the felt qualities: “by watching these variations, we learn how subtle changes in timing, texture, and pressure can result in completely 
+different emotional impressions”; “Just the smallest inflation at the right spot can trigger a whole-body response. ”  In addition, the process is infilled with 
+negotiation around the non-verbal language of affective touch, subjectivity of experience, and the temporality of touch. We describe these separately in this page.
+6.2 Cultivating Tacit Knowledge through Physical Engagement
+Figure 10.  Group 6 exploring affective affordance of cold water Figure 11.  In the Paradise                                  Figure 12.  In the HellFigure 9. Physical prototyping during workshop
+Creativity & Cognition 2026: July 13-16, London, UK
+Add Page Numbers Here
+506
+6.3 Universality Vs. Creativity
+Some of our students assumed that “touch is such 
+a universal experience that most people tend 
+to approach it in similar ways. ”  and found it 
+“challenging to come up with a unique idea” .  (Group 
+5). Most other groups expected that if their design is 
+successful, the affective response from people should 
+be close to the intended affective qualities, yet 
+encountered diverse interpretations from the touch 
+recipients. Soma design, the HCI method we take as 
+a key inspiration for our approach, explicitly rejects 
+homogeneity of experience, instead recognising the 
+plurality of individuals [17], which is why it is an 
+inherently first-person method. Individual, social, 
+cultural and even daily sensations such as mood can 
+change the way we ‘feel’ an experience. Students’ 
+surprise reflects the legacy of design approaches 
+such as user personas or “representative users, ” 
+which overlook this complexity.
+Some groups in our workshop considered this 
+discrepancy as indicating that their design needed 
+improving. Some other groups found the opposing 
+felt quality of their touch to be an “interesting 
+learning” .  It is interesting to us that over half of 
+groups considered the deviation of feedback from 
+touch recipients as a limitation, as if this framed 
+their design as flawed, and that misunderstanding is 
+something that ACAT needs to address. This exposes 
+a prevailing mode of thinking in the technology-
+driven approach to haptic design which considers 
+consistency in perceived quality across different 
+people as a sign of successful design. An associated 
+assumption is that this can also be mitigated by a 
+scientific approach to affective touch – that the 
+experiment set up needs to be managed to avoid 
+variation. We certainly don’t disagree with this 
+call for scientific rigour, but we don’t believe that 
+managing experimental context could ever resolve 
+these differences between individuals’ experience. 
+We argue that there is much more to the sensation 
+of touch than the environmental context, and that 
+this assumption of consistency=correctness is a 
+fundamental misconception. We suggest instead 
+that the field would benefit from embracing the 
+subjective nature of affective touch. We propose 
+to flip this anxiety around managing difference, to 
+celebrating the diversity and ambiguity in people’s 
+interpretation: “we could know really diverse and 
+interesting interpretations of what an “affective 
+touch” could be. ”  (Group 6)
+We suggest there may be value in ACAT for more 
+engineering focussed soft robotics designers, who 
+may be abstracted from the experiential qualities of 
+their work – seeing a depth of subjective reflections 
+on an experience created with the same materials 
+may encourage deeper reflection on the soft robotics 
+systems themselves. Engineers, designers and users 
+make up a complex ecosystem which requires 
+embodied communication to reflect on both enabling 
+technologies and designed experiences.
+Technology-initiated touch is such a new phenomenon 
+and we are still in the early stages of exploring its 
+affective affordances. As one group commented: 
+“Just like how music or art hits people differently, 
+haptic feedback can’t guarantee a universal 
+response. ”  Technology-initiated touch is still a novel 
+material for creativity. This echoes with [16] which 
+advocates the playful engagement from the creative 
+arts, for open-ended exploration towards novel 
+qualities of experiences. To support this exploration, 
+it is not enough to document designs; a pluralistic, 
+subjective collection of reflections on felt experience 
+must also be captured and shared as a resource 
+for future designers. ACAT does exactly this. This 
+infrastructure, enabled by ACAT, could additionally 
+serve as a valuable database for reflection across 
+disciplines such as social science and health research.
+6.4 Designing  Uncomfortable Touch 
+Experience 
+The greatest number of designs (8 out of 17) created 
+by our students were intended for the high activation 
+– negative valence quadrant (Figure 5). This suggests 
+an interest in this space – perhaps because it might 
+be considered a design taboo. In [27], Marshall 
+et al. provocatively reframes calculated ‘risk’ as 
+adventure and empowerment. Giving our students 
+the opportunity to risk sensing the unpleasant or 
+uncomfortable, albeit in a safe and monitored context, 
+speaks to the potential playfulness to be found in 
+this quadrant. This may not be of great surprise 
+given that one of the few forms of play often carried 
+on into adulthood, as Callois notes in [9], is vertigo 
+play – characterised by our predilection for terrifying 
+ourselves on rollercoasters and the like. Sometimes 
+negative and positive emotions can be intrinsically 
+linked, for example fear and thrill, as noted by Ralf 
+Buckley in [8] – the risk of the negative (fear) or 
+indeed the overcoming of it, leads to the positive 
+(thrill). Someathetics theory at the heart of soma 
+design recognises that experiences are nuanced and 
+inherently non-dualistic [17] – so to assume that the 
+negative valence zone 1) does not have a fuzzy edge, 
+and 2) should be some kind of design “restricted 
+zone” , would be a failure to recognise its potential. 
+By explicitly including and encouraging reflection on 
+the full spectrum of experiences, ACAT empowers 
+designers to engage with this under-explored space 
+from a position of knowledge, safety and, since they 
+can actually choose to try those designs, first person 
+experience.
+The students started from trying to simulate a 
+stereotypical uncomfortable physical experience, 
+what Benford et al. [3] calls “visceral discomfort” , 
+without knowing what meaningful interaction 
+could be elicited  from it, and through the process 
+discovered nuances of discomfort and subsequently, 
+through feedback towards such touches, some found 
+that safe, nuanced discomfort can afford a rather 
+poetic experience. As the teams articulated materials 
+to evoke unpleasant experience such as discomfort, 
+tension, stress and fear, within safety measures to 
+avoid causing real harm, they found challenge in 
+balancing safety and the physical intensity of the 
+sensation, “We had to tinker a lot with materials 
+and inflation levels to get something that felt 
+affective without crossing a line… ”  (Group 2). This 
+prompted the students to reflect more on the ethics 
+Creativity & Cognition 2026: July 13-16, London, UK
+Add Page Numbers Here
+507
+of designing for unpleasant touch: “as they may 
+bring up traumatic memories or be interpreted 
+differently due to cultural differences between the 
+tester (touch recipient) and the designer. ”  (Group 
+2). Group 2 eventually came up with a potential 
+use-case for the experience of uncomfortable touch 
+- which tallies with the above reflection on negative 
+becoming positive experiences: 
+“Interestingly, the thorn-like texture also 
+elicited a form of satisfaction, though 
+in a more complex and less immediately 
+intuitive way. When touched lightly and 
+repeatedly with the forearm, the sharp 
+sensation transitioned from discomfort 
+to a kind of controlled stimulation. This 
+repeated interaction appeared to produce a 
+heightened sensory awareness that, for some 
+users, could be experienced as pleasurable or 
+engaging. ” This group reflected that to alert 
+or bring a user to engagement through this is 
+“really cool” as it “presses your buttons in a 
+more poetic way” . 
+Returning then to the value of ACAT for soft roboticists, 
+we invite the community to reflect on discomfort 
+and safety in a somatic way. In [5], Benford et al. 
+argue that people develop somatic understandings 
+of how to interact safely with robots, and that 
+some of the hard lines of how to manage risk might 
+break down opportunity. Assuming that any pain/
+discomfort is undesirable, neglects the possibility of 
+some potentially powerful or interesting experiences
+ – and ACAT includes examples of where pain/
+discomfort are aesthetically interesting, suggesting 
+they need (careful) enabling. This isn’t a call to make 
+unsafe soft robotics – but simply to recognise that 
+safety ≠ comfort.
+Although this student design journey attests to 
+how our toolkit contributes by enabling physical 
+engagement and cultivating tacit knowledge. This 
+process also helped surface a series of important 
+questions regarding deploying the cabinet. 
+Because the design was undertaken by students, 
+whose professional and ethical judgement is still 
+developing, they tended to pursue ideas intuitively 
+and without restraint. In some instances, this 
+resulted in concepts—such as a prototype termed 
+“asphyxiation”—that, while exploratory in intent, 
+could be perceived as suggesting self-harming 
+actions if disseminated without appropriate framing. 
+To mitigate such risk, the research team has modified 
+the name with a more neutral sounding one. This 
+may suggest the explanation of the full context 
+or necessary curation of the design samples when 
+introducing them to audience beyond the original 
+design group.
+7. Limitations and Future Work
+The work presented here on ACAT represents a first 
+foray into recording and articulating tacit design 
+knowledge about affective touch experiences. It 
+represents only a scratch of the surface – with a few 
+hours worth of a small sample of students’ designs. 
+To truly fulfil its potential, ACAT needs to collect 
+far more feedback in order to map the emotional 
+footprint of each design [4]. And with rigorous 
+analysis, it may surface the association between 
+actuation and material elements and affective 
+affordance. Such will be a real potential of ACAT, 
+which contributes to a valuable infrastructure for 
+technological touch design. However, this prompts 
+the reflection on the curation of the cabinet 
+collection, as the database of designs and reflections 
+may be more or less infinitely expandable. One key 
+limitation of a physical cabinet is that it will reach 
+far fewer designers than a digital repository. Clear 
+documentation can make it possible to replicate the 
+touches, but that lacks the rapid exploration that is 
+possible when the prototype is in a box in front of 
+you. Earlier in the paper, we criticised the manual 
+activation methods often used in Soma Design 
+workshops for being hard to replicate outside the 
+initial group, and while ACAT has a standard set of 
+equipment by which many of the touches can indeed 
+be replicated, there is the limitation that the form 
+of actuators has to remain the same, which could 
+not compare to more refined and unique prototypes 
+such as the pelvic chair [50]. And finally, given the 
+important questions raised regarding deploying and 
+sharing the designs, especially on uncomfortable 
+touches, the design team will have to research into 
+appropriate guidance for deploying and sharing the 
+physical design examples, before the ACAT can be 
+made tourable, either in the form of accompanying 
+researchers or clearly printed guidance.
+8. Conclusion
+In this paper we have introduced A Cabinet of 
+Affective Touches (ACAT), a collection of materials 
+for creating affective touch experiences, with 
+an embedded process of recording subjective 
+reflections on the felt experience of those touches. 
+We have demonstrated how this can be used by 
+designers through a series of workshops with design 
+students, eliciting reflections on the language used 
+to articulate touch, the complexities of temporality 
+in affective touch, and the plurality of individual 
+experiences. These factors validate the need for 
+reflections on affective touches to be bundled 
+with the touches themselves, so that designers and 
+engineers can build the tacit knowledge necessary to 
+be effective at creating new touches – building on 
+past experience, both of others and of themselves, 
+rather than creating every new touch in isolation.
+Figure 13. Dragon Touch I
+Creativity & Cognition 2026: July 13-16, London, UK
+Add Page Numbers Here
+508
+ACKNOWLEDGEMENT 
+This work was supported in part by the Digital Futures 
+Research Centres in Sweden through its Postdoctoral 
+Fellowship Programme and Summer Research 
+Internship Programme (SRI); the European Research 
+Council (ERC) under the Intimate Touch project (Grant 
+No. 101043637); and the UK Engineering and Physical 
+Sciences Research Council (EPSRC) through the Turing 
+AI World-Leading Researcher Fellowship, Somabotics: 
+Creatively Embodying Artificial Intelligence (Grant 
+No. EP/Z534808/1).
+REFERENCES
+[1]  Ozgun Kilic Afsar, Yoav Luft, Kelsey Cotton, Ekaterina 
+R. Stepanova, Claudia Núñez-Pacheco, Rebecca 
+Kleinberger, Fehmi Ben Abdesslem, Hiroshi Ishii, and 
+Kristina Höök. 2023. Corsetto: A Kinesthetic Garment 
+for Designing, Composing for, and Experiencing an 
+Intersubjective Haptic Voice.  In Proceedings of the 2023 
+CHI Conference on Human Factors in Computing Systems 
+(CHI ’23). ACM, 1–23. doi:10.1145/3544548.3581294
+[2] Madeline Balaam, Anna Ståhl, Guðrún Margrét 
+Ívansdóttir, Hallbjörg Embla Sigtryggsdóttir, Kristina 
+Höök, and Caroline Yan Zheng. 2024. Exploring the 
+Somatic Possibilities of Shape Changing Car Seats.  In 
+Proceedings of the 2024 ACM Designing Interactive 
+Systems Conference (DIS ’24). ACM, 3354–3371. 
+doi:10.1145/3643834.3661518
+[3] Steve Benford, Chris Greenhalgh, Gabriella Giannachi, 
+Brendan Walker, Joe Marshall, and Tom Rodden. 
+2012. Uncomfortable interactions.  In Proceedings 
+of the SIGCHI Conference on Human Factors in 
+Computing Systems (CHI ’12). ACM, 2005–2014. 
+doi:10.1145/2207676.2208347
+[4] Steve Benford, Anders Sundnes Løvlie, Karin Ryding, 
+Paulina Rajkowska, Edgar Bodiaj, Dimitrios Paris 
+Darzentas, Harriet Cameron, Jocelyn Spence, Joy 
+Egede, and Bogdan Spanjevic. 2022. Sensitive Pictures: 
+Emotional Interpretation in the Museum.  In Proceedings 
+of the 2022 CHI Conference on Human Factors in 
+Computing Systems (CHI ’22). ACM, Article 455, 1–16. 
+doi:10.1145/3491102.3502080
+[5] Steve Benford, Eike Schneiders, Juan Pablo Martinez 
+Avila, Praminda Caleb-Solly, Patrick Robert Brundell, 
+Simon Castle-Green, Feng Zhou, Rachael Garrett, 
+Kristina Höök, Sarah Whatley, Kate Marsh, and Paul 
+Tennent. 2025. Somatic Safety: An Embodied Approach 
+Towards Safe Human-Robot Interaction. In Proceedings 
+of the 2025 ACM/IEEE International Conference on 
+Human-Robot Interaction (HRI ’25). IEEE Press, 429–
+438.
+[6] Alberto Betella and Paul F. M. J. Verschure. 2016. The 
+Affective Slider: A Digital Self-Assessment Scale for 
+the Measurement of Human Emotions. PLOS ONE 11, 2 
+(2016), e0148037. doi:10.1371/journal.pone.0148037
+[7] Virginia Braun and Victoria Clarke. 2022. Thematic 
+Analysis: A Practical Guide.  SAGE, Los Angeles.
+[8] Ralf C. Buckley. 2016. Qualitative Analysis of Emotions: 
+Fear and Thrill. Frontiers in Psychology 7 (2016) . 
+doi:10.3389/fpsyg.2016.01187
+[9] Roger Caillois. 2001. Man, Play, and Games. University 
+of Illinois Press.
+[10] Monika Eckstein, Ilshat Mamaev, Beate Ditzen, and 
+Uta Sailer. 2020. Calming Effects of Touch in Human, 
+Animal, and Robotic Interaction—Scientific State-of-
+the-Art and Technical Advances.  Frontiers in Psychiatry 
+11 (2020), 555058. doi:10.3389/fpsyt.2020.555058
+[11] Shreyosi Endow, Hedieh Moradi, Anvay Srivastava, Esau 
+G Noya, and Cesar Torres. 2021. Compressables: A Haptic 
+Prototyping Toolkit for Wearable Compression-based 
+Interfaces.  In Designing Interactive Systems Conference 
+2021. ACM, 1101–1114. doi:10.1145/3461778.3462057
+[12] Tiffany Field. 2014. Touch (2nd ed.).  MIT Press, 
+Cambridge, MA.
+[13] Tiffany M. Field. 1998. Touch Therapy Effects 
+on Development.  International Journal of 
+Behavioral Development 22, 4 (1998), 779–797. 
+doi:10.1080/016502598384162
+[14] Bill Gaver and John Bowers. 2012. Annotated 
+portfolios. Interactions 19 , 4 (2012), 40–49. 
+doi:10.1145/2212877.2212889
+[15] William Gaver. 2012. What Should We Expect from 
+Research through Design? . In Proceedings of the SIGCHI 
+Conference on Human Factors in Computing Systems 
+(CHI ’12). ACM, 937–946. doi:10.1145/2207676.2208538
+[16] Donal Padraic Holland, Colette Abah, Marielena 
+Velasco-Enriquez, Maxwell Herman, Gareth J. Bennett, 
+Emir Augusto Vela, and Conor James Walsh. 2017. 
+The Soft Robotics Toolkit: Strategies for Overcoming 
+Obstacles to the Wide Dissemination of Soft-Robotic 
+Hardware.  IEEE Robotics & Automation Magazine 24, 1 
+(2017), 57–64. doi:10.1109/MRA.2016.2639067
+[17] Kristina Höök. 2018. Designing with the Body: A 
+Somaesthetic Design Approach.  MIT Press, Cambridge, 
+MA.
+[18] G. Huisman. 2017. Social Touch Technology: 
+A Survey of Haptic Technology for Social 
+Touch. IEEE Transactions on Haptics 10,  3 
+(2017), 391–408. doi:10.1109/TOH.2017.2650221  
+[19] C. Jewitt, S. Price, K. L. Mackley, N. Yiannoutsou, 
+and Douglas Atkinson. 2020. Digital Touch Ethics and 
+Values. In Interdisciplinary insights for digital touch 
+communication.  Springer, Cham, 107–122.
+[20] Carey Jewitt, Sara Price, Jürgen Steimle, Gijs Huisman, 
+Lili Golmohammadi, Narges Pourjafarian, William Frier, 
+Thomas Howard, Sima Ipakchian Askari, Michela Ornati, 
+Sabrina Panëels, and Judith Weda. 2021. Manifesto for 
+Digital Social Touch in Crisis.  Frontiers in Computer 
+Science 3 (2021). doi:10.3389/fcomp.2021.754050
+[21] Bibhushan Raj Joshi, Ana Lucia Diaz de Leon Derby, 
+Jennifer J. Llewellyn, Kristina Llewellyn, Jennifer 
+Roberts-Smith, and Oliver Schneider. 2026. Feel–Play–
+Imagine: Structured introduction and imagination 
+of haptics with storytellers.  International journal of 
+human-computer studies 208 (2026), 103631.
+[22] Imanol Juárez Ruiz de Zuazu and Karon E. MacLean. 
+2017. CuddleBits: Effortful Expression with a Simple 
+Robotic Creature. In Proceedings of the 2017 CHI 
+Conference on Human Factors in Computing Systems 
+(CHI ’17). ACM. doi:10.1145/3025453.3025774
+[23] Annkatrin Jung, Miquel Alfaras, Pavel Karpashevich, 
+William Primett, and Kristina Höök. 2021. Exploring 
+Awareness of Breathing through Deep Touch Pressure. 
+In Proceedings of the 2021 CHI Conference on Human 
+Factors in Computing Systems (CHI ’21). ACM, 1–15. 
+doi:10.1145/3411764.3445533
+[24] M. M. Jung, R. Poppe, M. Poel, and D. K. Heylen. 
+2014. Touching the void—introducing CoST: corpus of 
+social touch.  In Proceedings of the 16th International 
+Conference on Multimodal Interaction. 120–127.
+[25] Elvin Karana, Bahareh Barati, and Valentina 
+Rognoli. 2015. Material Driven Design 
+(MDD). Journal of Design 9,  2 (2015), 35–54.  
+[26] Pavel Karpashevich. 2023. Designing Monstrous 
+Experiences Through Soma Design. Ph. D. Dissertation. 
+KTH Royal Institute of Technology, Stockholm, Sweden.
+Creativity & Cognition 2026: July 13-16, London, UK
+Add Page Numbers Here
+509
+[27] Joe Marshall, Paul Tennent, Christine Li, Claudia 
+Núñez Pacheco, Rachael Garrett, Vasiliki Tsaknaki, 
+Kristina Höök, Praminda Caleb-Solly, and Steven 
+David Benford. 2023. Collision Design.  In Extended 
+Abstracts of the 2023 CHI Conference on Human 
+Factors in Computing Systems (CHI EA ’23). ACM, 1–9. 
+doi:10.1145/3544549.3582734
+[28] Haemy Lee Masson and Hans Op de Beeck. 2018. 
+Socio-affective touch expression database.  PLOS ONE 
+13, 1 (2018), e0190921. doi:10.1371/journal.pone.0190921
+[29] Francis McGlone, Ake B. Vallbo, Hakan Olausson, Line 
+Loken, and Johan Wessberg. 2007. Discriminative touch 
+and emotional touch. Canadian Journal of Experimental 
+Psychology 61 , 3 (2007), 173–183.
+[30] Moritz Alexander Messerschmidt, Juan Pablo Forero 
+Cortes, and Suranga Nanayakkara. 2025. CoTacs: A 
+Haptic Toolkit to Explore Effective On-Body Haptic 
+Feedback by Ideating, Designing, Evaluating and 
+Refining Haptic Designs Using Group Collaboration. 
+International Journal of Human–Computer Interaction 
+41, 9 (2025), 5178–5198. doi:10.1080/10447318.2024.235
+8460
+[31] Ashley Montagu. 1971. Touching: the Human 
+Significance of the Skin.  Columbia University Press, 
+New York.
+[32] Camille Moussette. [n. d.]. Haptic Sketching and 
+related work.  https://simplehaptics.se
+[33] Temitayo Olugbade, Liang He, Perla Maiolino, Dirk 
+Heylen, and Nadia Bianchi-Berthouze. 2023. Touch 
+Technology in Affective Human-, Robot-, and Virtual-
+Human Interactions: A Survey. Proc. IEEE 111, 10 (2023), 
+1333–1354. doi:10.1109/JPROC.2023.3272780
+[34] Joo Young Park. 2024. Designing with Discomfort: A 
+Feminist Approach towards Intimate Care Technologies. 
+In Companion Publication of the 2024 ACM Designing 
+Interactive Systems Conference (DIS ’24 Companion). 
+ACM, 30–36. doi:10.1145/3656156.3665134
+[35] B. Petreca, S. Baurley, and N. Bianchi-Berthouze. 
+2015. How Do Designers Feel Textiles?. In 2015 
+International Conference on Affective Computing and 
+Intelligent Interaction (ACII) . 982–987. doi:10.1109/
+ACII.2015.7344695
+[36] Jonathan Posner, James A. Russell, and Bradley S. 
+Peterson. 2005. The circumplex model of affect: An 
+integrative approach to affective neuroscience, cognitive 
+development, and psychopathology. Development and 
+Psychopathology 17 , 3 (2005), 715–734. doi:10.1017/
+S0954579405050340
+[37] Sara Price, Nadia Bianchi-Berthouze, Carey Jewitt, 
+Nikoleta Yiannoutsou, Katerina Fotopoulou, 
+Svetlana Dajic, Juspreet Virdee, Yixin Zhao, Douglas 
+Atkinson, and Frederik Brudy. 2022. The Making of 
+Meaning through Dyadic Haptic Affective Touch.  ACM 
+Transactions on Computer-Human Interaction 29, 3 
+(2022), 21:1–21:42. doi:10.1145/3490494
+[38] Pirkko Routasalo. 1999. Physical touch in nursing 
+studies: a literature review.  Journal of Advanced 
+Nursing 30, 4 (1999), 843–850. doi:10.1046/j.1365-
+2648.1999.01156.x
+[39] Alkistis Saramandi, Yee Ki Au, Athanasios 
+Koukoutsakis, Caroline Yan Zheng, Adrian Godwin, 
+Nadia Bianchi-Berthouze, Carey Jewitt, Paul M. 
+Jenkinson, and Aikaterini Fotopoulou. 2024. Tactile 
+emoticons: Conveying social emotions and intentions 
+with manual and robotic tactile feedback during social 
+media communications. PLOS ONE 19, 6, e0304417. 
+doi:10.1371/journal.pone.0304417
+[40] Oliver Schneider, Karon MacLean, Colin Swindells, and 
+Kellogg Booth. 2017. Haptic experience design: What 
+hapticians do and where they need help. International 
+Journal of Human-Computer Studies 107 (2017), 5–21. 
+doi:10.1016/j.ijhcs.2017.04.004
+[41] Oliver S. Schneider, Hasti Seifi, Salma Kashani, 
+Matthew Chun, and Karon E. MacLean. 2016.  HapTurk: 
+Crowdsourcing Affective Ratings of Vibrotactile Icons.  
+In Proceedings of the 2016 CHI Conference on Human 
+Factors in Computing Systems (CHI ’16). ACM, 3248–
+3260. doi:10.1145/2858036.2858279
+[42] Donald Schön. 1984. The Reflective Practitioner: How 
+Professionals Think In Action (1st ed.) . Basic Books, New 
+York.
+[43] Hasti Seifi, Cagatay Basdogan, and Karon MacLean. 
+2021. TactJam: A Tool for Collaborative Composing 
+of Spatial Haptic Effects.  In Proceedings of the 2021 
+ACM International Conference on Interactive Media 
+Experiences. ACM. doi:10.1145/3490149.3501307
+[44] Ali Shtarbanov. 2021. FlowIO Development Platform 
+– the Pneumatic “Raspberry Pi” for Soft Robotics.  
+In Extended Abstracts of the 2021 CHI Conference 
+on Human Factors in Computing Systems (CHI 
+EA ’21). ACM, 1–6. doi:10.1145/3411763.3451513  
+[45] Paul Tennent, Kristina Höök, Steve Benford, Vasiliki 
+Tsaknaki, Anna Ståhl, Claudia Dauden Roquet, Charles 
+Windlin, Pedro Sanches, Joe Marshall, Christine 
+Li, Juan Pablo Martinez Avila, Miquel Alfaras, 
+Muhammad Umair, and Feng Zhou. 2021.  Articulating 
+Soma Experiences using Trajectories.  In Proceedings 
+of the 2021 CHI Conference on Human Factors in 
+Computing Systems (CHI ’21). ACM, Article 268, 1–16. 
+doi:10.1145/3411764.3445482
+[46] Vasiliki Tsaknaki. 2021. The Breathing Wings: An 
+Autobiographical Soma Design Exploration of Touch 
+Qualities through Shape-Change Materials.  In 
+Designing Interactive Systems Conference 2021 (DIS 
+’21). ACM, 1266–1279. doi:10.1145/3461778.3462054  
+[47] Anna Vallgårda. 2014. Giving form to computational 
+things: developing a practice of interaction design. 
+Personal and Ubiquitous Computing 18, 3 (2014), 577–
+592. doi:10.1007/s00779-013-0685-8
+[48] Charles Windlin, Anna Ståhl, Pedro Sanches, Vasiliki 
+Tsaknaki, Pavel Karpashevich, Madeline Balaam, and 
+Kristina Höök. 2019. Soma Bits - Mediating Technology 
+to Orchestrate Bodily Experiences . In Proceedings of 
+the 4th Biennial Research Through Design Conference.
+[49] Nicola Wood, Chris Rust, and Grace Horne. 2009. A 
+Tacit Understanding: The Designer’s Role in Capturing 
+and Passing on the Skilled Knowledge of Master 
+Craftsmen.  International Journal of Design 3, 3 (2009), 
+65–78.
+[50] Deepika Yadav, Caroline Yan Zheng, Anna Ståhl, and 
+Madeline Balaam. 2025. A Route to Somatic Literacy 
+of the Pelvic Floor through Technology-Initiated Touch. 
+In Proceedings of the 2025 CHI Conference on Human 
+Factors in Computing Systems (CHI ’25). ACM, 1–17. 
+doi:10.1145/3706598.3713223
+[51] Caroline Yan Zheng. 2024. Creating affective touch with 
+soft robotics: Designing affect-enabling interactive 
+artefacts using an affect-, material-, and interaction-
+led (AMI-led) design framework.  Ph. D. Dissertation. 
+Royal College of Art. https://researchonline.rca.
+ac.uk/5854/
+[52] Caroline Yan Zheng, Georgios Andrikopoulos, Mark 
+Paterson, Nadia Berthouze, Minna Orvokki Nygren, 
+Yoav Luft, and Madeline Balaam. 2024. Towards 
+Robot and Technologies that Touch Well – Shaping 
+an Experience-driven Design Paradigm.  In DIS 2024 
+Workshop. Copenhagen. https://sites.google.com/
+view/touch-well-dis-2024/home
+[53] Caroline Y. Zheng, Ker-Jiun Wang, Maitreyee Wairagkar, 
+Mariana von Mohr, Erik Lintunen, and Aikaterini 
+Fotopoulou. 2024. Simulating the psychological and 
+neural effects of affective touch with soft robotics: 
+Creativity & Cognition 2026: July 13-16, London, UK
+Add Page Numbers Here
+510
+an experimental study.  Frontiers in Robotics and AI 11 
+(2024), 1419262. doi:10.3389/frobt.2024.1419262
+[54] Ran Zhou, Jianru Ding, Chenfeng Gao, Wanli 
+Qian, Benjamin Erickson, Madeline Balaam, Daniel 
+Leithinger, and Ken Nakagaki. 2025. Shape-Kit: A 
+Design Toolkit for Crafting On-Body Expressive Haptics . 
+In Proceedings of the 2025 CHI Conference on Human 
+Factors in Computing Systems (CHI ’25). ACM, 1–26. 
+doi:10.1145/3706598.3713981
+Creativity & Cognition 2026: July 13-16, London, UK
+Add Page Numbers Here
+511

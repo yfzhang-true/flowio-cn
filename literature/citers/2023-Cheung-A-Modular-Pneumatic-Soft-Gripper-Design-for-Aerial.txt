@@ -1,0 +1,629 @@
+A Modular Pneumatic Soft Gripper Design for Aerial Grasping and
+Landing*
+Hiu Ching Cheung 1, Ching-Wei Chang 2, Bailun Jiang 1, Chih-Yung Wen1 and Henry K. Chu 3
+Abstract— Aerial robots have garnered significant attention
+due to their potential applications in various industries, such
+as inspection, search and rescue, and drone delivery. Successful
+missions often depend on the ability of these robots to grasp
+and land effectively. This paper presents a novel modular soft
+gripper design tailored explicitly for aerial grasping and landing
+operations. The proposed modular pneumatic soft gripper
+incorporates a feed-forward proportional controller to regulate
+pressure, enabling compliant gripping capabilities. The modular
+connectors of the soft fingers offer two configurations for the
+4-tip soft gripper, H-base (cylindrical) and X-base (spherical),
+allowing adaptability to different target objects. Additionally,
+the gripper can serve as a soft landing gear when deflated,
+eliminating the need for an extra landing gear. This design
+reduces weight, simplifies aerial manipulation control, and
+enhances flight efficiency. We demonstrate the efficacy of indoor
+aerial grasping and achieve a maximum payload of 217 g using
+the proposed soft aerial vehicle and its H-base pneumatic soft
+gripper (808 g).
+I. INTRODUCTION
+A. Motivation
+Aerial grasping [1] is a rapidly growing research field, par-
+ticularly in the context of unmanned aerial vehicles (UA Vs)
+used for drone delivery such as food delivery [2], search
+and rescue [3], environmental cleaning [4], and medical
+goods delivery [5]. Ensuring the safety and efficiency of
+goods during drone delivery is critical. Hence, we aim to
+address these concerns by proposing a novel solution: a soft
+aerial vehicle (SA V) equipped with a modular soft pneumatic
+gripper, which has received limited attention in previous
+studies. Soft grippers offer a promising alternative to rigid
+grippers due to their simplified control systems, reduced
+complexity, and excellent force absorption capabilities. To
+leverage the principles of soft robotics, these lightweight and
+controllable mechanisms provide stability during grasping
+by dampening impact forces. Their flexibility allows for
+a broader range of object dimensions, increasing grasping
+tolerance. Positioned beneath the center of gravity of the
+*This work was supported by the Research Centre of Unmanned Au-
+tonomous Systems (RCUAS) [P0046487], The Hong Kong Polytechnic
+University
+1Hiu Ching Cheung, Bailun Jiang, and Chih-Yung Wen are with
+Department of Aeronautical and Aviation Engineering, The Hong
+Kong Polytechnic University, Hung Hom, Kowloon, Hong Kong
+athena-hiu-ching.cheung@connect.polyu.hk,
+bailun-robin.jiang@connect.polyu.hk,
+chihyung.wen@polyu.edu.hk
+2Ching-Wei Chang is with Hong Kong Center for Construction Robotics,
+, Hong Kong ccw@ust.hk
+3Henry K. Chu is with Department of Mechanical Engineering, The
+Hong Kong Polytechnic University, Hung Hom, Kowloon, Hong Kong
+henry.chu@polyu.edu.hk
+Fig. 1: Illustration of the proposed modular pneumatic soft
+gripper with a conventional drone.
+SA V , the soft gripper can inflate and deflate to securely grasp
+objects, improving grasping efficiency and reducing mission
+time. Moreover, replacing the rigid landing gear with the
+proposed soft gripper as the landing mechanism enhances
+the capability of aerial manipulation for the SA V [6]. It
+eliminates the need for additional actuators and simplifies
+the control system by eliminating the complicated operations
+of the landing gear adjustment during takeoff, landing, and
+grasping. Furthermore, the modular design of the gripper en-
+ables configuration changes to accommodate various object
+sizes and shapes, for instance, considering the diverse shapes
+of food packages prevalent in food delivery scenarios.
+B. Related Work
+Inspired by biological systems like birds [7], soft grippers
+have demonstrated the ability to mitigate contact forces and
+compensate for grasping inaccuracies, exemplifying the con-
+cept of morphological computation, which combines passive
+mechanical components with explicit control [8]. To leverage
+these advantages, some researchers have developed a bio-
+inspired tendon-actuated soft gripper, as the bending capa-
+bility of the gripper can be easily controlled by manipulating
+the attached tendon [9], [10], [11]. In the context of perching,
+Ramon et al. [12] have designed a soft landing gear system
+that allows an aerial drone to autonomously perch on pipes in
+industrial environments, providing robust attachment using
+nylon strands and offering a modular design for gripper
+replacement. This soft gripper has demonstrated successful
+closure around pipes in outdoor experiments, enabling the
+quadrotor to perform well even in uncertain and windy con-
+ditions despite imperfect centering or fastening. Furthermore,
+Fishman et al. [13], [6] have developed a tendon-actuated soft
+gripper for a soft drone inspired by the dexterity of human
+fingers. Their approach eliminates the need for gripper state
+measurement, operating the soft gripper in an open-loop
+manner to grasp objects of unknown shape on unknown
+surfaces, relying on the centroid of the objects.
+arXiv:2311.00390v3  [cs.RO]  25 Mar 2024
+The fabrication process for the tendon-actuated soft grip-
+per involves the insertion of tubes inside the soft fingers to
+accommodate the passage of tendons [14], [15]. In contrast, a
+pneumatic soft gripper requires only a sufficient air chamber
+in each soft finger for bending [16]. Moreover, the location of
+the tendon-actuated gripper is constrained by the position of
+the driven motor. Nevertheless, soft pneumatic grippers offer
+greater configurational flexibility due to the flexibility of the
+air tube. The air tube can quickly connect the pneumatic
+soft gripper with the pumps and valves. Related work also
+explores the potential of pneumatic soft systems in aerial
+grasping. Shtarbanov [17] developed FlowIO, a wearable
+and modular pneumatic platform for soft robotics, which
+showcased the viability of pneumatic systems in miniaturized
+applications that are cost-effective for UA Vs engaged in
+aerial grasping. Ping et al. [18] integrated a soft pneumatic
+gripper beneath a conventional drone, similar to our design.
+However, their focus does not explicitly revolve around
+autonomous aerial grasping tasks or alleviating the need for
+additional rigid landing gear. The soft gripper in their work is
+controlled by a single command: pneumatic pressure. They
+claim that the installation of the entire Grasping Unit has
+minimal impact on the dynamics of the quadrotor. Since their
+proposed soft gripper does not stick out by adding extra
+degrees of freedom (DOF) to facilitate grasping, the rigid
+landing gear of their UA V limits the grasping altitude. A 2
+DOF robot arm with a pneumatic soft gripper is installed
+under a traditional UA V with the rigid landing gear in
+[19]. Compared to our proposed SA V , extra mechanisms
+and control algorithms in the work of Sarkar et al. [19] are
+needed to ensure the manipulator can reach its home and
+pick positions. Also, their fixed, rigid landing gear increases
+the net weight of the UA V , which is over 3 kg in total.
+C. Contribution
+The proposed SA V represents a significant advancement,
+capable of aerial grasping and landing using a lightweight
+modular soft pneumatic gripper. The pneumatic soft grip-
+per, incorporating a feed-forward proportional controller for
+precise pressure regulation, also serves the dual purpose
+of functioning as a soft landing gear for the SA V during
+deflation. This innovative design eliminates the need for
+additional landing gear and allows the gripper to grasp
+various objects by its two configurations, resulting in a
+more streamlined and efficient aerial grasping system. Our
+contributions are summarized as follows.
+• Integrating modular connectors reduces the configura-
+tion and fabrication time for the soft gripper fingers.
+With just four fingers, the gripper can be arranged
+into two configurations, providing a versatile range of
+options for grasping target objects based on their shapes.
+This modularity enhances the adaptability of the gripper
+to grasp various objects during aerial operations.
+• The dual capability of the soft gripper to serve as both
+a grasping mechanism and a landing gear. The deflation
+of the soft gripper enables it to function as a soft landing
+gear, obviating the need for an additional rigid landing
+Fig. 2: Dimensions of the X-base (spherical) soft gripper
+when it is (a) initially opened, (b) fully opened, and (c) fully
+closed. And the dimensions of the H-base (cylindrical) soft
+gripper when it is (d) initially opened, (e) fully opened, and
+(f) fully closed.
+gear to reduce the weight of the SA V . This weight
+reduction enhances flight efficiency and simplifies the
+complexity associated with aerial operation control.
+• The proposed lightweight, soft gripper with a traditional
+quadrotor, which weighs merely 808 g (with its H-base
+gripper), successfully grasps a cylindrical plastic con-
+tainer weighing 217 g while in mid-air. This payload-
+to-weight ratio surpasses those observed in previous
+investigations [6], [18], [19].
+II. MODULAR SOFT GRIPPER DESIGN
+A. Mechanical Design
+The proposed soft fingers exhibit dimensions of 100 mm
+in length and 15 mm in width. These fingers can be affixed to
+multiple bases at a 25 ◦ inclination angle, giving the gripper
+increased grasping tolerance and diverse options for target
+objects. Grasping tolerance refers to the available dimension
+for grasping when the gripper is deflated, precisely the
+distance between the fingertips when the gripper is fully
+opened in Fig. 2(b) and Fig. 2(e), respectively. The diagonal
+distance of the fully opened X-base (spherical) soft gripper
+is 180 mm, while the tip-to-tip distance of the fully opened
+H-base (cylindrical) soft gripper is 145 mm. The dimensions
+of the 2 bases are shown in Fig. 2(a) and Fig. 2(d). When
+the complete closing of the soft gripper is undergoing, all
+tips of the soft fingers of the X-base soft gripper touch each
+other, while the tips of the two pairs of the 2-tip soft fingers
+of the H-base counterpart touch each other too (see Fig. 2(c)
+and Fig. 2(f)).
+The X-base and H-base configurations necessitate using
+four soft fingers to grasp target objects, as discussed in
+prior works [18], [20]. Each finger of the soft gripper is
+equipped with a single air chamber. These air chambers are
+interconnected and equipped with one micro-pump and two
+solenoid valves. The weights of the H-base and X-base soft
+grippers are 106 g and 110 g (excluding the electronics),
+respectively. The modular connectors of the soft fingers have
+been designed to simplify the attachment of the soft fingers
+to various bases. Sliding the connector and securing it with
+Fig. 3: The exploded view (a) and assembly (b) of the mold
+of the soft finger’s main body. The exploded view (c) and
+assembly (d) of the mold of the soft finger’s cover. (e) The
+side view of a soft gripper.
+a screw allows each soft finger to connect to different bases
+to grasp different objects quickly. This approach reduces
+the required number of soft fingers to a maximum of four,
+significantly reducing assembly time.
+B. Fabrication
+The soft fingers are molded using silicone rubber with
+a proposed shore hardness of 30 A. For manufacturing
+convenience, all the molds, soft finger connectors, and bases
+are 3D-printed using Polylactic Acid (PLA). Fig. 3 illustrates
+the mold design for a soft finger, which consists of two parts.
+One part forms the main body of the soft finger, including
+its air chamber, while the other part produces the cover of
+the soft finger. This approach allows for efficient production
+and assembly of the soft fingers.
+Referring to [21], the main steps of the soft finger fabri-
+cation include assembling the molds, applying mold release
+spray, pouring liquid silicone rubber, cutting holes in the
+covers, inserting and securing silicone tubes, and joining the
+main body and covers using silicone gel. The silicone tubes
+are not sealed by silicone gel, and they are only connected
+with the tubing connector by friction to enable the quick
+interchange between H-base and X-base.
+Only the mold for making the air chamber is disposable
+because it will be twisted and bent during removal from the
+soft finger. The remaining parts of the mold can be reused
+for future fabrication processes.
+C. Electronics
+The main electronic components of the soft gripper include
+the microcontroller, air pump, solenoid valves, and pressure
+sensor. Control of the gripper is managed by an ESP32-S3
+microcontroller, which receives a Pulse-width Modulation
+(PWM) signal from the flight controller for regulating the air
+pump and valve operations. The soft gripper is equipped with
+a single air pump that facilitates both inflation and deflation,
+while two valves serve as switches to control the airflow
+for inflation or deflation simultaneously. The air pump has
+a pressure range of [-60, 120] kPa, and a pressure sensor
+Fig. 4: The exploded CAD view of the soft gripper (including
+weight information).
+Fig. 5: Airflow system of the soft gripper when (a) the valve
+operation for inflation turns on; (b) the valve operation for
+deflation turns on.
+with a range of [-100, 300] kPa is incorporated to detect
+the internal airflow pressure within the gripper and provide
+feedback to the microcontroller. To meet all the requirements
+of the proposed soft gripper, except for the air pump and the
+valves, all the electronic components are integrated onto a
+customized Printed Circuit Board (PCB), as shown in Fig.
+4. The total weight of the electronic components is 146 g.
+In order to enhance the efficiency of the SA V by reducing
+its overall weight, the soft gripper does not require an
+additional power source when installed beneath a traditional
+quadrotor. This minimizes energy requirements, enabling the
+soft gripper to operate efficiently with the existing quadrotor
+power system. Hence, the payload capacity of the SA V can
+be maximized.
+III. MODULAR SOFT GRIPPER CONTROL
+A. Airflow Control System
+As the soft drone approaches the target object, a deflation
+command is transmitted from the ground control station
+to the flight controller and subsequently to the ESP32-S3
+microcontroller. This command activates the deflation airflow
+through the valves and initiates vacuuming with the air pump.
+Fig. 6: Block diagram of feed-forward proportional control
+for the soft gripper.
+The deflation process allows the soft gripper to open, release,
+and land, while the inflation process activates the grasping of
+the gripper by complete closing. During grasping, deflation
+continues until an inflation command is received, triggering
+the gripper to close. Inflation follows a similar procedure to
+deflation. The microcontroller receives three ranges of PWM
+inputs to control the behavior of the soft gripper: staying
+at rest, inflation, and deflation. The airflow patterns during
+inflation and deflation are depicted in Fig. 5. Both valves
+are turned off to prevent airflow when the gripper is initially
+opened. Only the relevant valve is activated during inflation
+or deflation, while the other valve remains off to ensure
+proper airflow direction. In Fig. 5, the blue solid block and
+the red solid block of the air pump represent the inflation
+and deflation function of the pump that is mainly used in
+the relevant airflow, respectively. Also, the blue and the red
+airflows indicate the inflation and the deflation airflows of
+the gripper, respectively.
+B. Pressure Regulation
+The pressure regulation of the soft gripper employs a feed-
+forward proportional control strategy, as presented in Fig.
+6. This approach combines feed-forward and proportional
+control techniques to enhance performance by anticipating
+the impact of input pressure changes on the output pressure.
+Due to the limited performance of the lightweight air pump
+and the unseal soft gripper system, which enables easy
+swapping between two configurations, a slight air leakage
+can be predicted as a disturbance of the pressure regulation.
+By integrating these control strategies, the gripper achieves
+faster response times and improved stability in regulating
+the air pump. Notably, the feed-forward proportional control
+only sets the PWM signal for the air pump. At the same
+time, the PWM command of the flight controller directly
+determines the digital signals for activating the valves. This
+valve control strategy prevents excessive vibration caused by
+rapid changes in airflow direction.
+The feed-forward proportional controller in Fig. 6 can be
+computed by solving the following equations:
+e(t) = r(t) − y(t) (1)
+u(t) = Kp × e(t) + pmin (2)
+Kp = pmax − pmin
+r(t) (3)
+fin = 0.8 (4)
+fde = 1
+r(t) (5)
+TABLE I: Parameters in air pump regulation.
+Variables Definitions
+e(t) Pressure error in kPa
+r(t) Set (desired) pressure
+y(t) Current pressure
+u(t) Output by Proportional controller
+K p Proportional gain
+pmax Max. PWM duty cycle of air pump (100%)
+pmin Min. PWM duty cycle of air pump
+(
+86% if inflation
+63% if deflation
+fin Feed-forward component for inflation
+fde Feed-forward component for deflation
+g(t) Output by Feed-forward proportional controller
+Fig. 7: Comparison between feed-forward proportional con-
+troller and proportional controller of the soft gripper.
+g(t) =
+(
+u(t) + fin × y(t) if inflation
+u(t) + fde × y(t) if deflation (6)
+where the minimum PWM duty cycle of the air pump,
+pmin, is an adjustable parameter to optimize the performance
+according to the desired pressure. If pmin is too low, the
+response time of the system will be longer. The maximum
+PWM duty cycle of the air pump, pmax, is fixed at the 8-bit
+capacity of the microcontroller of the gripper. Referring to
+the experimental results, we also observe the optimal feed-
+forward component for inflation, fin, and deflation fde to
+speed up the inflation and deflation time of the soft grip-
+per. Further details and explanations of the abovementioned
+variables can be found in Table I.
+The soft gripper focuses on achieving maximum openness
+and a secure grasp by pressure regulation. After considering
+factors such as the air chamber capacity, inflation time,
+performance of the lightweight air pump, and the results of
+the feed-forward proportional controller, an inflation pressure
+of 85 kPa was determined as optimal for achieving the
+desired level of openness. Also, a deflation pressure of -25
+kPa was chosen to ensure rapid and effective closure. We also
+observe the optimal fin and fde to speed up the inflation and
+deflation time of the soft gripper. The step response graph
+in Fig. 7 illustrates the pressure regulation performance with
+a set pressure signal (set pressure in 0 kPa, -25 kPa, and
++85 kPa) by the feed-forward proportional controller and the
+proportional controller. Although the deflation performance
+for both controllers is similar, the inflation time of the
+feed-forward proportional controller is much faster than that
+of the proportional controller. These results show that the
+feed-forward component anticipates set pressure changes,
+facilitating stable current pressure and reduced steady-state
+error. Also, in the feed-forward proportional control, the
+desired inflation pressure can be reached faster, compared
+with the proportional control only, but the desired deflation
+performance of both control methods differs insignificantly.
+Note that the soft gripper starts closing at 58 kPa and takes
+approximately 5 seconds to reach the proposed inflation
+pressure from deflation.
+IV. EXPERIMENTAL RESULTS AND DISCUSSION
+A. Experiment Implementation
+1) Aerial Grasping Test: During the indoor autonomous
+grasping tests performed with the proposed soft gripper
+installed under a conventional drone (with an F330 airframe),
+it is observed that the mass of the object being grasped
+significantly influences the grasping process. Objects that
+are too light (less than approximately 70 g) are susceptible
+to being blown away by the airflow generated by the SA V
+before aerial grasping. Therefore, using objects with a mass
+greater than 70 g is recommended. In the aerial grasping
+task, the target object was a water bottle (including loads)
+weighing 75 g, while the proposed SA V weighed 808 g. The
+water bottle was intentionally emptied to eliminate any non-
+static mass caused by liquid flow during grasping. To prevent
+the water bottle from being blown away by the airflow of the
+SA V , additional loads were added to increase its weight.
+The flight tests were conducted under a VICON mo-
+tion capture system, which provided real-time ground truth
+data to the ground station computer to assist the flight
+controller in tracking the target item. The proposed SA V
+uses a nonlinear model predictive controller (NMPC) [22],
+[23] for minimizing tracking error and conducting aerial
+grasping. Despite slight tracking errors during grasping, the
+softness of the soft gripper compensated for them, offering
+sufficient grasping tolerance. Thus, the water bottle was
+securely grasped without being damaged. The flight test aims
+to demonstrate the aerial grasping ability of the proposed
+modular pneumatic soft gripper, so the tracking error due to
+the change in the dynamic model of the SA V after grasping
+is beyond the scope of this paper and neglected. This paper
+does not include the details of the NMPC for the SA V , as
+our focus is on highlighting the contributions of the modular
+pneumatic soft gripper in aerial grasping.
+2) Static Grasping Test: To further evaluate the grasping
+performance of the SA V , a static grasping test aimed to assess
+both the maximum load capacity of the soft gripper and its
+ability to grasp objects with various base shapes. The test
+involved evaluating the performance of the gripper under
+different load conditions and its ability to grasp objects with
+diverse base configurations securely.
+Fig. 8: Tested Object Set: (a) Pen Holder with Loads, (b)
+Computer Mouse, (c) Double-sided Tape, (d) Pen, (e) Spray
+Paint, (f) Syringe, (g) Membership Card, (h) Pocket Tissue
+Paper, (i) Spherical Container with Loads, (j) Plastic Box.
+In this experiment, the SA V was put on an aluminum rack,
+and the servo tester provided the inflation or deflation PWM
+input signal to the microcontroller of the gripper, making
+it independent of the drone system without receiving inputs
+from the flight controller or ground control station. Target
+objects were manually placed under the center of the gripper
+by human hands. To test the grasping tolerance of the gripper,
+the positions of the centroid of the objects did not require
+a precise alignment of the centroid of the gripper before
+grasping. 10 graspings were conducted for each specimen.
+The 10 objects in the grasping test are shown in Fig. 8.
+Successful grasping trials required the gripper to hold the
+target object for at least 30 seconds. To ensure a reliable
+grip, human hands intentionally moved and gently shook the
+SA V during the test.
+3) Soft Landing Test: The soft gripper establishes its
+landing ability by keeping a full opening as a soft landing
+gear to stabilize the pose of the SA V and dampen the impact
+forces during landing. The proposed soft gripper replacing
+the rigid landing gear can increase the efficiency of the
+aerial manipulation of the SA V without burdening its payload
+capability. To assess the landing ability of the SA V , the SA V
+first conducted a simple landing test, which requested the
+SA V to land on the ground. Then, the tilt landing test of
+the SA V was also handled by landing it on a slope with 10 ◦
+inclined angles.
+4) Payload Test of the SAV: The maximum payload of
+the SA V with two configurations of its soft gripper was
+discovered by grasping different objects while hovering. To
+focus on the payload capability, the aerial grasping ability
+of the SA V was ignored in this test by grasping the target
+items before taking off.
+B. Results and Discussion
+1) Soft Grasping Performance: Figure 9 illustrates a
+successful aerial grasping demonstration performed by the
+proposed H-base soft gripper. Despite minor tracking errors
+causing the SA V to miss the desired grasping position of the
+empty water bottle, the inherent softness of the soft gripper
+allows it to compensate for such errors and provide ample
+grasping tolerance. As a result, the bottle could be securely
+grasped without sustaining any damage.
+Fig. 9: Aerial grasping process with the H-base soft gripper:
+(a) Approaching the target, (b) Starting grasping, (c) Picking
+up the object.
+Fig. 10: Grasping success rate results of 2 configurations.
+*The X-base gripper can hang and wrap the tape, while the
+H-base gripper always wraps the tape.
+From Fig. 10, the soft gripper with both two configurations
+can grasp the pen holder and the pocket tissue paper with a
+100% success rate. The 4-tip soft gripper with an H-base is
+designed for grasping cylindrical objects and offers increased
+gripping force through the wrapping motion of its two pairs
+of 2-tip fingers. The H-base gripper can grasp cylindrical
+objects up to 200 g with a 100% success rate, but it has
+an 80% success rate for grasping a can of spray paint due
+to the non-static center of gravity. It cannot handle items
+more miniature than the distance between its finger pairs,
+so it is less effective with spherical objects. To address these
+limitations, a proposed X-base allows all four fingers to align
+with the centroid of objects to grasp spherical items. It can
+also grasp the pen holder with loads up to 330 g because one
+of the soft fingers can hang the pen holder with the support of
+the other three soft fingers. Nonetheless, the X-base does not
+provide the same wrapping force for cylindrical objects as
+the H-base. Thus, X-base and H-base serve distinct purposes.
+Some examples of this static grasping test are illustrated in
+Fig. 11.
+2) Soft Landing Performance: In Fig. 12(a) and Fig.
+12(b), with the modular soft gripper, this novel SA V can take
+off and land on the ground without the need for traditional
+rigid landing gear. Since the landing pressure is equivalent to
+the deflation pressure used during grasping, the soft gripper
+can remain fully opened, serving as a landing gear to stabilize
+the pose of the SA V during takeoff and effectively dampen
+impact forces upon landing. Besides, Fig. 12(c) and Fig.
+Fig. 11: Examples of grasping tests: Grasping (a) a pen
+holder with 270 g loads and (b) a spherical container with
+160 g loads by an X-base gripper; Grasping (c) a computer
+mouse and (d) a can of spray paint with an H-base gripper.
+Fig. 12: Simple landing test with (a) the H-base soft gripper
+and (b) the X-base soft gripper, and tilt landing test with the
+(c) X-base and (d) H-base soft gripper.
+12(d) present the successful tilt landing of the SA V (with
+its two configurations of the soft gripper) on a 10 ◦ inclined
+platform. According to Table II, the H-base soft gripper
+performs better for the tilt landing as it can always be
+flattened, while the X-base soft gripper sometimes may only
+have three fingers to be flattened and even jump out from the
+platform due to the impact forces. These tilt landing results
+show that the H-base soft gripper can dampen the impact
+forces of the soft fingers more since the fingers have more
+contact areas with the tilt platform. Thus, the modular soft
+gripper can successfully replace conventional rigid landing
+gear, even for tilt landing.
+3) Payload Ability Performance: In Fig. 13, the SA V
+demonstrates its successful grasping of a 217 g double-
+sided tape using the X-base soft gripper and a 217 g
+plastic cylindrical container using the H-base soft gripper.
+Both payload tests were conducted for over 30 seconds.
+This payload ability is higher than those in some previous
+research, such as 106 g foam target in [6], 100 g payload in
+TABLE II: Comparison of SA V landing performance on
+ground and tilt platform.
+Configurations Successes (ground) Successes (tilt)
+X-base 10/10(100%) 6/10(60%)
+H-base 10/10(100%) 10/10(100%)
+Fig. 13: Payload test of the SA V with the X-base (a) and (b)
+H-base soft gripper.
+[18], and 150 g packet in [19]. The focus of this test was
+to evaluate the payload capacity of the SA V , with the aerial
+grasping capability intentionally excluded.
+V. CONCLUSION
+We have presented the design and control of a modular
+pneumatic soft gripper equipped under a traditional quadrotor
+(556 g) as a novel SA V for autonomous aerial grasping tasks
+and landing. The main objective of this soft gripper design
+is to maintain a lightweight structure, thereby minimizing
+the impact on the flight capabilities of the SA V . Therefore,
+the proposed modular pneumatic soft gripper weighs less
+than 260 g. Pressure control for the modular gripper utilizes
+a feed-forward proportional controller to improve pressure
+regulation. Experimental results from grasping tests reveal
+that the total contact areas of the gripper on the target object
+influence the grasping force. To accommodate objects of
+different shapes, we have explored two base configurations
+for the modular soft gripper. The H-base 4-tip gripper is
+suitable for cylindrical or rectangular objects, while the
+X-base 4-tip gripper is more appropriate for spherical or
+rounded objects.
+This paper also demonstrates a successful indoor au-
+tonomous aerial grasping task. The SA V can grasp a 217 g
+payload in mid-air, which signifies a satisfactory payload-
+to-weight ratio. Furthermore, the soft gripper efficiently
+replaces rigid landing gear, facilitating competent landings
+on both the ground and a 10 ◦ inclined platform. These
+findings contribute to developing autonomous aerial grasping
+capabilities in soft robotic systems. We also discover two
+future challenges, including adapting to the dynamic model
+changes after grasping and enhancing the grasping ability on
+thin and small objects.
+REFERENCES
+[1] J. Meng, J. Buzzatto, Y . Liu, and M. Liarokapis, “On aerial robots
+with grasping and perching capabilities: A comprehensive review,”
+Frontiers in Robotics and AI , vol. 8, p. 739173, 2022.
+[2] G. Muchiri and S. Kimathi, “A review of applications and potential
+applications of uav,” in Proceedings of the Sustainable Research and
+Innovation Conference, 2022, pp. 280–283.
+[3] S. Yeong, L. King, and S. Dol, “A review on marine search and rescue
+operations using unmanned aerial vehicles,” International Journal of
+Marine and Environmental Sciences, vol. 9, no. 2, pp. 396–399, 2015.
+[4] J. Qi, J. Kang, and X. Lu, “Design and research of uav autonomous
+grasping system,” in 2017 IEEE International Conference on Un-
+manned Systems (ICUS) . IEEE, 2017, pp. 126–131.
+[5] C. A. Thiels, J. M. Aho, S. P. Zietlow, and D. H. Jenkins, “Use of
+unmanned aerial vehicles for medical product transport,” Air medical
+journal, vol. 34, no. 2, pp. 104–108, 2015.
+[6] J. Fishman, S. Ubellacker, N. Hughes, and L. Carlone, “Dynamic
+grasping with a” soft” drone: From theory to practice,” in 2021
+IEEE/RSJ International Conference on Intelligent Robots and Systems
+(IROS). IEEE, 2021, pp. 4214–4221.
+[7] Y . Zhu, X. He, P. Zhang, G. Guo, and X. Zhang, “Perching and
+grasping mechanism inspired by a bird’s claw,” Machines, vol. 10,
+no. 8, p. 656, 2022.
+[8] D. Rus and M. T. Tolley, “Design, fabrication and control of soft
+robots,” Nature, vol. 521, no. 7553, pp. 467–475, 2015.
+[9] J. P. King, D. Bauer, C. Schlagenhauf, K.-H. Chang, D. Moro,
+N. Pollard, and S. Coros, “Design. fabrication, and evaluation of
+tendon-driven multi-fingered foam hands,” in 2018 IEEE-RAS 18th
+International Conference on Humanoid Robots (Humanoids) . IEEE,
+2018, pp. 1–9.
+[10] M. Manti, T. Hassan, G. Passetti, N. D’Elia, C. Laschi, and
+M. Cianchetti, “A bioinspired soft robotic gripper for adaptable and
+effective grasping,” Soft Robotics, vol. 2, no. 3, pp. 107–116, 2015.
+[11] T. Hassan, M. Manti, G. Passetti, N. d’Elia, M. Cianchetti, and
+C. Laschi, “Design and development of a bio-inspired, under-actuated
+soft gripper,” in 2015 37th Annual International Conference of the
+IEEE Engineering in Medicine and Biology Society (EMBC) . IEEE,
+2015, pp. 3619–3622.
+[12] P. Ramon-Soria, A. E. Gomez-Tamm, F. J. Garcia-Rubiales, B. C.
+Arrue, and A. Ollero, “Autonomous landing on pipes using soft gripper
+for inspection and maintenance in outdoor environments,” in 2019
+IEEE/RSJ International Conference on Intelligent Robots and Systems
+(IROS). IEEE, 2019, pp. 5832–5839.
+[13] J. Fishman and L. Carlone, “Control and trajectory optimization
+for soft aerial manipulation,” in 2021 IEEE Aerospace Conference
+(50100). IEEE, 2021, pp. 1–17.
+[14] R. Peng, Z. Wang, and P. Lu, “Aecom: An aerial continuum manipula-
+tor with precise kinematic modeling for variable loading and tendon-
+slacking prevention,” arXiv preprint arXiv:2110.14180 , 2021.
+[15] J. L. Chien, C. Leong, J. Liu, and S. Foong, “Design and control of
+an aerial-ground tethered tendon-driven continuum robot with hybrid
+routing,” Robotics and Autonomous Systems , vol. 161, p. 104344,
+2023.
+[16] T. S. Y . Min, L. Y . Lee, and S. G. Nurzaman, “Bayesian optimization
+of pneumatic soft grippers via reconfigurable modular molds,” in 2023
+IEEE International Conference on Soft Robotics (RoboSoft) . IEEE,
+2023, pp. 1–6.
+[17] A. Shtarbanov, “Flowio development platform–the pneumatic “rasp-
+berry pi” for soft robotics,” in Extended abstracts of the 2021 CHI
+conference on human factors in computing systems , 2021, pp. 1–6.
+[18] J. T. Ping, B. H. Khoo, O. A. Syadiqeen, N. Khoo, C. P. Tan, and S. G.
+Nurzaman, “Aerial grasping by a quadrotor uav with a soft material
+gripper.”
+[19] D. Sarkar, A. Arora, S. Sen, S. S. Katta, D. Shashank, M. Rohan,
+and S. Saha, “Development of an autonomous uav integrated with
+a manipulator and a soft gripper,” in 2022 13th Asian Control
+Conference (ASCC). IEEE, 2022, pp. 2212–2217.
+[20] C. Tawk, R. Mutlu, and G. Alici, “A 3d printed modular soft gripper
+integrated with metamaterials for conformal grasping,” Frontiers in
+Robotics and AI , vol. 8, p. 799230, 2022.
+[21] J. Zhang, A. Jackson, N. Mentzer, and R. Kramer, “A modular, recon-
+figurable mold for a soft robotic gripper design activity,” Frontiers in
+Robotics and AI , vol. 4, p. 46, 2017.
+[22] B. Jiang, B. Li, W. Zhou, L.-Y . Lo, C.-K. Chen, and C.-Y . Wen,
+“Neural network based model predictive control for a quadrotor uav,”
+Aerospace, vol. 9, no. 8, p. 460, 2022.
+[23] B. Li, W. Zhou, J. Sun, C.-Y . Wen, and C.-K. Chen, “Development of
+model predictive controller for a tail-sitter vtol uav in hover flight,”
+Sensors, vol. 18, no. 9, p. 2859, 2018.

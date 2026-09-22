@@ -1,0 +1,1080 @@
+Smart Materials and
+Structures
+       
+TECHNICAL NOTE
+Automatic enclosure system with tunable strapping
+pressure for active physical interface using soft
+actuated straps: a proof of concept
+To cite this article: Christopher van Vlerken et al 2025 Smart Mater. Struct. 34 127001
+ 
+View the article online for updates and enhancements.
+You may also like
+A metamaterial-enhanced pneumatic soft
+actuator: design, modeling and validation
+Shucheng Li, Huaze Li and Zhaobing Liu
+-
+A review of woven textile circuit boards:
+fundamentals, development strategies,
+and joining techniques
+Faisal Ahmed, James Reynolds, Amanda
+C Mills et al.
+-
+Modeling and simulating the
+magnetoelectric effect of multi-coated
+fibrous composites containing thin
+transition layers
+Jiantao Liu, Zehui Xu, Minyang Yan et al.
+-
+This content was downloaded from IP address 23.141.4.162 on 22/09/2026 at 02:08
+Smart Materials and Structures
+Smart Mater. Struct. 34 (2025) 127001 (14pp) https://doi.org/10.1088/1361 -665X/ae2555
+Technical Note
+Automatic enclosure system with
+tunable strapping pressure for active
+physical interface using soft actuated
+straps: a proof of concept
+Christopher van Vlerken1,3,∗, Kevin Langlois 1,2, Mengnan Wu 1,3,
+Bram Vanderborght1,2 and Tom Verstraten1,3
+1 Robotics & Multibody Mechanics (R&MM) Research Group, Vrije Universiteit Brussel, 1050 Brussels,
+Belgium
+2 IMEC, Kapeldreef 75, Leuven 3001, Belgium
+3 Flanders Make, 1050 Brussels, Belgium
+E-mail: Christopher.Konstantin.V an.Vlerken@vub.be
+Received 2 September 2025, revised 11 November 2025
+Accepted for publication 27 November 2025
+Published 9 December 2025
+Abstract
+Autonomous donning/doffing of physical attachments is critical for independent, efficient usage
+and acceptance of wearable robots. However, existing physical attachments consist of passive
+sleeves and straps that require user dexterity for donning, which limits independent usage by
+impaired populations. Thus, we introduce the first automatic limb attachment system consisting
+of soft actuated straps that wrap around the limb and lock using a magnet-and-hook latch. Our
+novel system achieves an average donning time of 27.7 ± 1.0 s reliably over ten consecutive
+cycles, accommodates different range of arm circumferences (220–294 mm), maintains closure
+for clinical-level mechanical loads (up to 80 N normal and 32 N shear), and precisely controls
+strapping pressure within the 15 kPa human comfort threshold over time. The system secures
+the limb while consistently regulating attachment. This work provides proof-of-concept for a
+practical, versatile solution towards universally applicable self-securing attachments limb for
+rehabilitation, occupational, and home-based robotic exoskeletons.
+Supplementary material for this article is available online
+Keywords: soft actuators , smart materials, pneumatic systems, wearable devices,
+strapping pressure control , physical attachments
+1 . Introduction
+The long-term goal for wearable robotic devices across
+clinical, home-based, and occupational applications is to
+∗
+Author to whom any correspondence should be addressed.
+enable user independence. Critical to self-directed use of
+such devices is ease of donning and doffing without assist-
+ance. However, conventional wearable robotic devices feature
+physical attachments—also referred to as ‘physical interfaces’
+- that require high dexterity and/or strength for donning/-
+doffing. Many older adults and patients with motor impair-
+ments lack these abilities, so assistance from another person
+1
+© 2025 IOP Publishing Ltd. All rights, including for text and
+data mining, AI training, and similar technologies, are reserved.
+Smart Mater. Struct. 34 (2025) 127001 C van Vlerken et al
+is frequently required for setup and removal [ 1]. Similarly,
+industrial workers may also require an assistant to help don/-
+doff an exoskeleton and adjust it to their size if the device
+is shared between multiple users [ 2]. This dependence on
+assistance for donning/doffing and sizing increases clinician,
+caregiver, and technician workload, adding time and cost to
+exoskeleton usage [ 3–5]. Furthermore, devices that can be
+donned quickly and independently may reduce the perception
+of social burden or stigma and are more likely to be adop-
+ted and used consistently by patients and workers in pub-
+lic settings [ 2, 6, 7]. Having a physical attachment system
+that allows hands free-donning, repeatably over usages and
+enabling wearer autonomy for a range of user anthropomet-
+rics is therefore a critical step towards widespread adoption of
+wearable robotic devices.
+User acceptance of wearable devices depends heavily on
+physical comfort and safety, which are primarily influenced
+by the physical attachments between the device and the human
+body [ 8–10]. User discomfort and tissue injury can occur
+when strapping pressure exceeds safe thresholds or when the
+attachment creates unstable attachment conditions [ 11]; thus,
+physical attachments must strike a balance between com-
+peting demands for ensuring both skin/tissue comfort and a
+secure connection with the robot. Unstable attachment res-
+ults from uncontrolled interaction forces at the attachment
+point, which can lead to relative movement between the
+device and limb. Akiyama et al found that thigh-level move-
+ment during sit-to-stand tasks can reach up to 40 mm for
+applied forces and moments of 10 N and 0.2 N·m, respectively,
+demonstrating the potential for attachment instability [ 12].
+Regarding pressure-related concerns, since soft tissue com-
+pliance contrasts sharply with the high stiffness of rigid exo-
+skeleton frames, designers often overtighten attachment straps
+to increase attachment stability. However, this approach has
+inherent limitations, as attachment pressures above approxim-
+ately 15 kPa provoke discomfort and, in hyposensitive users,
+can cause skin breakdown [ 13, 14]. An ideal attachment must
+therefore anchor the attached limb by sustaining the right
+amount of holding forces applied to the attachment and act-
+ively regulate pressure within a physiologically safe and com-
+fortable range while maintaining stable attachment conditions.
+Recent soft-robotic cuffs have demonstrated important
+advancements in attachment comfort and stiffness by dynam-
+ically regulating pressure around the limb, but almost all
+designs feature a closed sleeve-type architecture (figure 1,
+A. Closed architecture) that hinders autonomous donning.
+Inflatable sleeves such as Diteesawat et al ’s shrink-to-fit
+garment [ 15] and Schäffer et al ’s textile-muscle sleeve [ 16]
+adapt to different body fits during pressurization and task-
+based actuation. Pressure-managed cuffs [ 17, 18] and shape-
+memory-alloy inserts [ 19] also improve in-use fit and mod-
+ulate strapping pressure over time. However, all of these
+designs still require users to insert the arm through a con-
+fined space for attachment, which poses significant challenges
+for individuals with motor impairments. Indeed, fine motor
+skills required for everyday tasks such as clothing-related
+activities are among the main challenges for people with dis-
+abilities, creating barriers to community participation and con-
+tributing to environmental barriers [ 20, 21]. Moreover, few
+of them have low pressure capability, which reduces pneu-
+matic efficiency. Only Diteesawat et al and Langlois et al
+achieved an efficient anchoring point at low pressure (25 kPa
+and 13 kPa respectively), while most other systems require
+significantly higher operating pressures that increase energy
+consumption and reduce compatibility with portable pneu-
+matic platforms. While some of these devices report a relat-
+ively quick donning time—e.g. 6.8 s in [15], the reported don-
+ning times may not fully capture the complete donning pro-
+cess, as they primarily measure the garment’s actuation phase
+rather than including the initial limb insertion step into the
+sleeve. Furthermore, to facilitate morphological adaptation,
+most of these pneumatic cuffs employ multiple chambers to
+apply pressure at different skin sites [ 22], but the use of mul-
+tiple chambers is often unreliable for pressure control since it
+requires a more complex control scheme than a single cham-
+ber and introduces vulnerabilities such as cross-talk between
+chambers.
+In contrast to closed architectures, open architecture
+designs offer many advantages but are not fully autonomous
+due to their mostly passive nature. Open architecture attach-
+ments consist of strap-based designs where the user places the
+arm on top of an open shell (figure 1, B. Opened architecture),
+which is much easier than navigating the arm through a closed
+sleeve. Indeed, strap mechanisms deliver superior security
+and configurability from their inherent simplicity, reliabil-
+ity, and easy use [ 23]. However, existing strap-based sys-
+tems are passive, consisting of hook-and-loop or buckle straps
+and demand bilateral dexterity for donning/doffing that many
+older adults and patients with motor impairments lack. Thus,
+assistance is frequently required tightening and closing the
+straps [1]. The only attempt towards autonomous donning con-
+sisted of open-architecture, pneumatically-actuated ‘fingers’
+that achieve automatic upper limb enclosure through con-
+trolled compressed air deformation, with magnetic elements at
+the ends of the fingers providing the locking mechanism [ 24].
+The total donning time was estimated to be 3.45 s, including
+limb insertion and fixation, compared to 5.79 s with a pass-
+ive cuff. Although this study established important ground-
+work for actuated physical attachment technology, the authors
+stated that the device design did not fully address the need
+for autonomous donning since an operator was still required
+to assist participants in donning and doffing the wearable
+robot.
+Our earlier research explored inflatable strap techno-
+logy using Pneunets architecture for open-shell mech-
+anisms, but our design suffered from several technical
+limitations and failed to provide truly autonomous don-
+ning. Our previous approach used dual large-volume blad-
+ders and inflation-dependent closure systems, leading to
+excessive pneumatic consumption and delayed release
+performance [ 25]. Also, the polylactic acid (PLA) strips
+in this design had a tendency to tear the silicone after
+2
+Smart Mater. Struct. 34 (2025) 127001 C van Vlerken et al
+Figure 1 . Comparison of closed versus open architecture attachment systems. Top: Closed sleeve design requires precise limb insertion into
+confined space, creating barriers for users with motor impairments. Bottom: open architecture using pneumatically actuated soft straps
+system eliminates insertion constraints through autonomous donning sequence. The soft strap is normally-closed at the beginning without
+any actuation. When air is supplied to the actuated strap, the strap inflates and unwinds to open the attachment, making it ready to accept the
+upper arm. Once the limb is positioned, air inside the strap is released, causing the actuated strap to close and wrap around the upper arm.
+The locking mechanism at the tip of the strap then engages with the underside of the shell attachment to secure the upper arm in place.
+Finally, the strap is re-inflated to apply controlled strapping pressure, efficiently anchoring the wearer to the attachment. The participant is
+then ready to move.
+several inflation-deflation cycles, showing significant durab-
+ility limitations for extended use. Additionally, the Pneunets
+design consists of an interconnected channel network, which
+inherently suffers from high system vulnerability, as fail-
+ure in any single channel can result in complete system
+malfunction.
+Building upon lessons learned from our earlier design,
+our current work presents the first fully automatic donning
+strap attachment system for wearable robots that ensures user
+comfort and secure fit with real-time tunable strap pressure
+control. Our novel design consists of a pneumatically actu-
+ated single-chamber soft strap that operates through a five-
+stage sequence: it remains normally-closed without actuation,
+fully opens upon pneumatic activation, automatically wraps
+around the positioned limb, locks via a magnetic hook and
+latch mechanism, and finally provides controlled strapping
+pressure to the wearer through re-inflation. Our new design
+features several technical improvements in pneumatic actu-
+ation over our previous design, leading to reduced air volume
+and minimized leakage risk. Finally, the design features
+a silicone/PLA hybrid architecture that drastically reduces
+complexity.
+2. Concept
+2.1 . Design criteria
+We introduce a soft pneumatically actuated strap system
+that tackles four persistent challenges simultaneously intro-
+duced in section 1: (i) hands-free donning enabling wearer
+autonomy through automatic enclosure in an open-shell set-
+ting and accommodating a range of upper-arm morphologies,
+(ii) repeatability of the closing system, (iii) strong enough
+holding force to well secure the attachment, and (iv) avoiding
+pressure-induced injury by controlling the amount of strap-
+ping pressure created by the soft actuated strap. Leveraging
+a silicone bending actuated strap moulded with a dissolv-
+able PV A core, 3D printed reinforcement, pneumatic con-
+trol, and a magnet-based latch, the proposed strap dynam-
+ically conforms to the limb, secures itself without external
+assistance and actively regulates pressure. The design thus tar-
+gets enhanced independence, efficacy, and versatility in robot-
+assisted applications.
+To address these four objectives, the strap must meet
+three design requirements. These criteria are intrinsic to the
+3
+Smart Mater. Struct. 34 (2025) 127001 C van Vlerken et al
+strap’s mechanical and control architecture and are defined
+independently of the experimental methods used to evaluate
+them.
+(i) Fast and reliable automatic enclosure for a range
+of upper-arm anthropometrics. The attachment accommod-
+ates upper-arm circumferences ranging from 220 mm to
+295 mm, representing the test range validated in this proof-of-
+concept study. This range reflects the anatomical variability
+encountered at different attachment positions along the upper
+arm length, where circumferences vary significantly from the
+distal humerus near the elbow ( 220–250 mm) to the proximal
+regions near the deltoid insertion [ 26]. Exoskeleton attach-
+ments are commonly positioned at these locations to avoid
+interference with joint motion and muscle bellies, where smal-
+ler circumferences are typical compared to mid-upper arm
+measurements.
+The system must achieve this adaptability through
+adjustable strap length mechanisms, allowing one-time calib-
+ration for different users without requiring hardware reconfig-
+uration or remanufacturing. The key achievement is demon-
+strating that a single strap design can adapt to different circum-
+ferences through length adjustment, establishing the founda-
+tion for future clinical or occupational implementations that
+would accommodate the full spectrum of adult anthropomet-
+rics with appropriately sized strap lengths. Moreover, the strap
+must transition from a fully open configuration to a latched and
+pressurized state creating secure and consistent strapping pres-
+sure substantially faster than the typical 40–60 s required for
+manually tensioned open cuffs [ 23], preventing setup delays
+from reducing therapy time, particularly in home-based or
+unsupervised use and reducing donning and adjustability time
+in occupational settings. Finally, the automatic-closing mech-
+anism must demonstrate consistent donning time and strap-
+ping pressure over the course of at least a single wearing
+session, where the user may open, adjust, and re-secure the
+cuff several times in quick succession. For this evaluation,
+we therefore focus on immediate repeatability by testing ten
+consecutive open-don-close cycles to measure variability in
+donning time and pressure regulation. This repeatability is
+important in clinical and home-based rehabilitation settings,
+as well as occupational environments where multiple donning
+and doffing cycles may occur during shift work or with shared
+device usage.
+(ii) Holding force and mechanical stability. When latched,
+the strap must resist forces generated by the exoskeleton
+during both assistive and resistive phases of movement (for
+instance when used in clinical settings). In industrial upper-
+limb exoskeletons, shoulder-assist devices commonly deliver
+torques of 6–10 N ·m about the shoulder joint [ 27–29]. If the
+strap is positioned midway along the humerus, approximately
+17–19 cm from the joint center [ 30], this torque translates to
+reaction forces of roughly 50 N acting radially, tangentially,
+or in combination on the cuff. Furthermore, shrink-to-fit gar-
+ments have demonstrated the ability to apply holding forces of
+98 N maximum with a pressurized state of 25 kPa [ 15] using
+ten pouch motors with 10 mm of radial length, while the pneu-
+matic mechanical modules of Hasegawa et al [24] achieved a
+maximum holding force of 60.9 N with a pressure of 0.4 MPa.
+Consequently, the locking mechanism should be specified
+to withstand at least 50 N of combined radial and shear force
+without slip while minimizing air pressure, providing a com-
+fortable safety margin for the highest in-use loads and optimal
+energy efficiency.
+(iii) Safe and actively regulated attachment pressure. The
+strap applies circumferential pressure in the range of 5–15 kPa,
+which is sufficient for stable fixation while remaining below
+the discomfort and tissue injury thresholds reported in the
+literature [13, 14, 31].
+2.2. Design of the soft pneumatic actuated strap
+A soft pneumatic actuated strap was designed to wrap around
+a human arm in a comfortable and secure manner. The strap’s
+architecture, including the silicone bending actuator, 3D-
+printed reinforcement ribs, embedded pneumatic control, and
+magnet-based locking mechanism were developed through
+iterative prototyping to meet our design criteria.
+A key improvement of our current approach over previ-
+ous attachment designs is twofold: first, it enables an open
+architecture compared to closed restrictive architectures, and
+second, the actuated straps maintain a natural, idle bending
+state without external pneumatic actuation when the system is
+in its normally-closed configuration (see figure1). Unlike con-
+ventional bending actuators, our actuated strap unwinds upon
+actuation. Thus, when a user wishes to don the attachment,
+the soft pneumatic-actuated straps are activated and unwind,
+allowing the user to place their arm on the rigid shell. Once
+the arm is in place, the actuated straps revert to their initial
+bending state due to the rigid PLA band placed at the top of
+the actuated strap to add rigidity to the inherently elastic prop-
+erties of the silicone based actuated strap, effectively behaving
+like a spring. This complete operating cycle is illustrated at the
+bottom of figure 1 and supplemental material video.
+The material selected for the bending and unwinding
+action is a silicone elastomer (AS40, Consist BV , Oudenaarde,
+Flanders, Belgium) with a shore hardness rating of 40A and
+curing time of 6 h. This medium-soft material offers excellent
+compliance while maintaining sufficient stiffness to return to
+the idle, bent state. Our actuated strap design is inspired by
+Zhang et al [32], who proposed a spiral soft pneumatic actu-
+ator capable of performing unwinding motions. V arious design
+parameters are depicted in figure2, with their respective values
+summarized in table 1. These parameters were found by simu-
+lation and validation, using the same pipeline as our previous
+work to satisfy these specific requirements [ 25]:
+• The total length (C) and wrap angle (R) of the actuated strap
+should accommodate various arm sizes and morphologies
+(ranging from lean to bigger builds).
+• The internal thickness ( T2 − T1) should be smaller than the
+external thickness ( D + H − T2) to optimize the unwinding
+behavior. Additionally, the reduced internal thickness facil-
+itates the actuated strap’s bulging against soft tissue, thus
+establishing a baseline strapping pressure.
+• The actuated strap’s width ( W) was chosen to allow the
+integration of two straps into the attachment design but
+4
+Smart Mater. Struct. 34 (2025) 127001 C van Vlerken et al
+Figure 2. Key design parameters of the soft strap actuator. The top view on the left-hand side shows the actuated strap with its internal and
+external radii, while the side view on the right-hand side illustrates the overall width and thickness of the silicone body. The actuated strap is
+designed to wrap around the upper arm, with a spiral structure that allows it to unwind when inflated.
+Table 1 . Soft pneumatic actuated strap parameters values.
+Parameters V alue
+Total length ; C [mm] 294
+Wrap angle ; 360 - R [degree]
+Overall silicone width ; W [mm] 61.5
+Top silicone width ; W 1 [mm] 7
+Bottom silicone width ; W 2 [mm] 7
+Overall chamber width ; W − W2 − W1 [mm] 47.5
+Internal actuated strap radius ; D [mm] 52
+Internal chamber radius ; T 1 [mm] 53.5
+External chamber radius ; T 2 [mm] 55.5
+Overall silicone thickness ; H [mm] 6
+Thickness outside wall ; D + H − T2 [mm] 4.3
+Thickness inside wall ; T1 − D [mm] 1.5
+Thickness air chamber ; T2 − T1 [mm] 0.2
+can be easily adjusted to incorporate additional straps if
+necessary.
+• The overall actuated strap thickness ( H) was minimized to
+reduce bulkiness. Moreover, smaller internal cavities require
+less pneumatic pressure for actuation, thus enhancing energy
+efficiency.
+2.3. Features for connecting strap to a physical interface
+shell
+The physical interface was fabricated using the same fused
+deposition modeling (FDM) 3D printing method as described
+above. The physical interface was designed as a shell-
+shaped structure that accommodates the user’s upper arm.
+Its geometry was determined based on the average upper-
+arm circumference for the 95th percentile of the adult
+population.
+Two specific features were integrated into this physical
+interface: a locking mechanism to securely maintain the actu-
+ated strap attachment to the participant’s limb, and a length
+adjustment mechanism to fit the attachment precisely to the
+participant’s arm circumference.
+2.3.1 . Magnetic locking mechanism. The locking mechan-
+ism employed in this design is essential for securely hold-
+ing the participant’s arm in the interface during task execu-
+tion. To achieve this, a rail of cylindrical neodymium mag-
+nets (Supermagnete, S-05-05-N, Germany) with dimensions
+of 5 mm height and 5 mm diameter and a holding force of 940 g
+per magnet pair was embedded along one side of the interface
+shell. These magnets exert normal forces at the actuated strap’s
+tip, counteracting the bending forces created during strap infla-
+tion to create the needed strapping pressure (see green arrows
+near the tip of the actuated strap depicted in figure 3). Thus,
+inflation pressure is directed primarily toward the soft tissue
+rather than inducing undesired unwinding motion.
+To resist multidirectional forces and torques exerted by
+users during movement, a mechanical hook was integrated at
+the same location as the magnetic rail. When magnets in the
+interface and actuated strap attract, the hook engages beneath
+a complementary component on the interface shell, effectively
+counteracting normal forces. Additionally, the combination of
+strapping pressure and magnetic shear adhesion compensates
+for shear forces (see yellow arrows in figure 3).
+2.3.2. Initial strap length adjustment mechanism. To ensure
+optimal strap length based on individual arm circumference,
+thin slots and M3 wingnut slots were designed into the phys-
+ical interface, allowing adjustment of strap length. Once the
+ideal length is identified, the strap’s end is securely fixed
+within the slot by tightening the wingnuts to the compression
+block (see blue part in figure 3). Users who lack hand dexter-
+ity may require the assistance of another person to perform this
+adjustment, but it only needs to be done once for each user.
+3. Methods
+3.1 . Manufacturing process
+The soft pneumatic actuators were fabricated using a two-
+step molding and pouring process. Initially, a flat rectangular
+mold featuring two protruding circular beams was 3D prin-
+ted using (FDM; Ultimaker S5, Ultimaker, The Netherlands).
+5
+Smart Mater. Struct. 34 (2025) 127001 C van Vlerken et al
+Figure 3. Generic physical interface with pneumatic active straps and different features such as length adjustment, compression, and
+locking mechanisms. Magnetic targets are attached to the interface to attract one extremity of the pneumatic strap with a hook feature,
+resulting in the locking mechanism. Additionally, a compression system with wingnut features allows adjustment of the strap length as
+indicated by the blue double arrow. The green and yellow arrows indicate the direction of the normal and shear forces respectively generated
+during strap inflation and natural motion of the wearer, which are counteracted by the magnetic and hook locking mechanism.
+These beams serve as attachment points for subsequent mech-
+anical components described in section 2.3.1.
+Next, silicone base and catalyst components were mixed
+and subsequently degassed in a vacuum chamber to remove
+air bubbles. A first layer of the degassed silicone mixture was
+poured into the mold, forming the external wall thickness. This
+thickness (parameter T1-D in table 1) was precisely controlled
+by a reference mark incorporated in the 3D mold design.
+After approximately 90 min of the curing period elapsed,
+a thin (0.2 mm) layer of polyvinyl alcohol (PV A; Ultimaker,
+Utrecht, The Netherlands) film was manually placed into the
+mold to form the internal cavity. This printed cavity geo-
+metry also enabled external tubing connections. Due to PV A ’s
+water-soluble property, this internal film could be conveni-
+ently removed after the silicone had fully cured. Subsequently,
+a second silicone layer was poured over the PV A film, sealing
+the actuated strap (see figure 4).
+After complete curing, the actuated strap was removed from
+the mold, and water was flushed through the internal cavity
+using a needle and syringe to dissolve and remove the PV A
+material. The actuated strap was then subjected to post-curing
+in an oven at 60 ◦C for 30 min, optimizing the mechanical
+properties of the silicone. The total fabrication time for each
+actuated strap is approximately seven hours, with the possibil-
+ity of multiple actuated straps to be produced simultaneously.
+As noted earlier, the actuated strap was reinforced with a
+stiffer material to optimize its unwinding motion and minimize
+axial elongation. A 2 mm-thick strip of rigid PLA was bonded
+to the back of the silicone body with Sil-Poxy (Smooth-On,
+USA). The PLA strip was then thermoformed to match the tar-
+get curvature specified in table 1. This reinforcement helps the
+actuated strap tip, where the magnets and hook mechanism are
+located, to align precisely with the corresponding magnets on
+the interface, ensuring reliable automatic closure at the correct
+angle.
+3.2. Validation experiments
+Each of our design criteria was validated through quantit-
+ative evaluation of the active strap performance in a series
+of experiments. To perform all experiments, two designed
+soft pneumatic straps were integrated into a custom pneu-
+matic test bench, adapted from Ferrentino et al [33], that regu-
+lated actuated strap pressure. The bench employs a three-way
+proportional pressure regulator (VEAB-L26-D7-Q4-A4-1R1,
+Festo, Germany) whose inlet is connected to the laboratory
+compressed-air line and whose outlet is routed to the actu-
+ated straps through a dedicated printed-circuit board (PCB)
+and pneumatic manifold (Festo QSY Series Y Tube-to-Tube
+Adaptor, Festo, Germany) to split the regulated pressure
+between the two straps. The PCB drives the valve and monitors
+an on-board pressure sensor, allowing it to impose any desired
+pressure–time profile on the actuated straps. Finally, the two
+straps were integrated into the physical interface described
+in section 2.3 that is fixed into an aluminum frame with
+the sole purpose of providing stability. All post–processing
+and figure generation were performed in MA TLAB R2021b
+(MathWorks, Natick, MA).
+3.2.1 . Adaptability to a range of anthropometrics, donning
+time, and closure repeatability . These three features
+were assessed in one set of experiments testing consecut-
+ive closure for arm mock-ups and human arm. Strap length
+was first adjusted via the wing-nut compression system in
+a one-time calibration to secure each test circumference.
+6
+Smart Mater. Struct. 34 (2025) 127001 C van Vlerken et al
+Figure 4. Manufacturing process of the soft pneumatic actuators. Silicone rubber is poured into a 3D-printed mold featuring protruding
+beams that serve as insertion points for screws in the subsequent locking mechanism assembly. After approximately 90 min of curing, a
+dissolvable PV A film is carefully positioned to define the internal air cavity geometry. Subsequently, the remaining silicone mixture is
+poured to encapsulate the PV A film and complete the actuator fabrication.
+Cylindrical arm mock-ups of 220 mm and 282 mm circumfer-
+ences were 3D printed, and a human participant with a 294 mm
+arm circumference (male, 26 years, 1.68 m, 63 kg) was also
+recruited. The study was approved by the Human Sciences
+Ethics Committee at the Vrije Universiteit Brussel (Reference
+Number: ECHW600), complied with the principles of the
+declaration of Helsinki and written informed consent was
+obtained.
+Each arm mock-up was tested using the following proced-
+ure: the two straps were opened through pressurization, then
+the arm mock-up or human arm was placed into the inter-
+face. Once positioned, the air inside the straps was released
+and the straps wrapped around the arm mock-up or human
+arm with the securing/holding function provided by magnets
+and hooks to make sure the straps are well secured. Finally,
+a strapping pressure of 13 kPa measured at the output of the
+regulator valve was applied to the straps to secure the entire
+system. This pressure was chosen based on pilot testing with
+the participant’s upper-arm to ensure comfortable and secure
+attachment. This cycle was performed ten times sequentially
+for each arm mock-up, and five times sequentially for the par-
+ticipant’s arm using the pneumatic setup, to evaluate repeatab-
+ility. Metrics recorded were success rate of closure and don-
+ning time, defined as the interval from the start of actuated
+strap inflation to open the interface until the target strapping
+pressure was reached on the arm mock-up or the participant’s
+upper arm (figure 5).
+3.2.2. Holding force and mechanical stability . Holding
+force and mechanical stability were evaluated by testing
+whether the straps can sustain user-applied loads without
+detachment. Loads of 3 kg, 5 kg and 8 kg (30, 50 and 80 N)
+were applied sequentially to the active interface, mounted
+on an upper-arm mock-up of representative circumference.
+Knowing the test frame in which the active interface was
+mounted has a weight of 3 kg, by adding 2 kg and 5 kg
+masses, normal forces of approximately 30 N, 50 N, and 80 N
+were applied to the straps for a duration of 20 s. The largest
+load (80 N) exceeds the reaction force of approximately 50 N
+expected from typical shoulder-assist exoskeleton torques (6–
+10 N·m) at the mid-humerus position. Testing beyond the
+expected load provides a safety margin for dynamic move-
+ments and varying user strength levels. Holding forces were
+assessed in both the normal and tangential directions. For the
+axial (shear) test, the participant positioned the arm as close
+as possible to the torso, and the straps were tightened to a set-
+point of 13 kPa thanks to the pneumatic test bench (figure 6).
+3.2.3. Regulated strapping pressure. We evaluated how
+well the system regulated strapping pressure once the arm is
+fully enclosed and latched. The experiment setup consisted
+of a custom limb mock-up, commercial pressure sensors, and
+the pneumatic test bench. A mock-up upper-arm was 3D prin-
+ted with recessed slots that accept pressure sensors (MPRLS,
+7
+Smart Mater. Struct. 34 (2025) 127001 C van Vlerken et al
+Figure 5. Different circumferences assessed for automatic donning: two mock-up arms with constant circumferences of 220 mm and
+282 mm, and an upper arm with a maximum of 294 mm at the belly of the biceps brachii muscle. Two straps are used as dual units to
+enclose the arm in the physical interface.
+Figure 6. Holding force in the normal direction (left) and holding force in the shear direction (right). The main frame where the shell is
+mounted has a mass of 3 kg, and additional weights of 2 kg and 5 kg have been attached to make 5 kg and 8 kg total for the normal direction
+(blue). For the shear direction, the arm is maintained as vertical as possible to assess how the straps hold a load in the shear direction (red).
+8
+Smart Mater. Struct. 34 (2025) 127001 C van Vlerken et al
+Figure 7 . Left: Embedded barometric pressure sensors inserted into a 3D-printed mock-up upper-arm to assess the pressure applied by the
+actuated strap. The sensors are sealed with silicone to ensure airtightness and are placed in the mock-up upper-arm’s cavities. The sensors
+simulate and measure the pressure that would be applied to the soft tissue by the actuated strap during inflation. Right: Indenter used for
+applying known forces to the sensors during calibration.
+Adafruit; see figure 7). The MPRLS units are absolute baro-
+metric sensors housed in small airtight cavities within a silic-
+one matrix. We positioned the barometric sensors at locations
+where maximum strap-limb contact occurs, specifically at the
+superior aspect of the upper arm where the cylindrical approx-
+imation is most valid and where attachment pressures are typ-
+ically applied. They were fabricated using a two-step molding
+process. The first step involved inserting the sensor’s tube into
+a predefined hole in the 3D-printed rectangular mold, which
+features a rectangular prominence that creates the sensor cav-
+ity. We refer to this as the top part of the mold. The second
+step involves sealing the top part with a bottom mold piece.
+When an external force compresses the cavity wall, the trapped
+air becomes pressurized, and the sensor reports the resulting
+pressure increase. By monitoring these sensors while vary-
+ing the internal air pressure, we quantified the relationship
+between actuated strap inflation and the supposed pressure
+applied to soft tissue. Pressure data from the MPRLS sensors
+are acquired by a Teensy 4.1 microcontroller (PJRC, USA)
+over the I2C bus and logged to CSV files.
+The first experiment determined how mechanical pressure
+translates into barometric pressure and the reliability of this
+relationship. Consequently, each sensor first had to be calib-
+rated so that a measured pressure change could be conver-
+ted to an equivalent mechanical load. To apply known nor-
+mal forces, a compression rig based on [ 34] and consisting of
+a platform frame and a modular indenter was used (figure 7
+— Right). The frame is built from 15 mm aluminum plates
+and 40 × 40 profiles. A grid of threaded holes on the top
+plate aligns with the indenter’s compression bolt to load the
+target pressure sensor. Rotating the bolt moves the indenter
+head downward via internal transmission components such
+as two sliders and a buffer spring, compressing the sensor.
+The indenter has its own load-cell (FX293X-040B0100-L, TE
+Connectivity, China), and an Arduino Uno acquires the load-
+cell data. The resulting relationship was then used to allow the
+mechanical load exerted by the actuated strap to be inferred
+directly from the pressure data during the strapping experi-
+ments. We performed a linear regression using the equation
+Pbarometric = a · Pmechanical and evaluated quality of fit with the
+coefficient of determination (R2), where Pbarometric is the pres-
+sure measured by the barometric sensor (kPa), Pmechanical is
+the externally applied mechanical pressure (kPa), and a is
+the calibration slope coefficient. We assumed that the rela-
+tionship between mechanical pressure and barometric pres-
+sure is linear, disregarding membrane effects of the baromet-
+ric sensor embedded in silicone. We consider this effect to be
+negligible compared to the mechanical pressure applied to the
+embedded silicone pressure sensor. This part of the experiment
+aims to establish a first-order approximation of the relationship
+between mechanical pressure and the pressure applied to the
+soft tissue of the user using barometric pressure sensors.
+Furthermore, we performed a series of experiments to eval-
+uate control of strapping pressure. This required validation of
+the repeatability of the combined pneumatic test bench, pres-
+sure sensor, and actuated straps system and establishment of
+the mathematical relationship between mechanical pressure
+applied normal to a sensor/limb and the air pressure inside the
+actuated strap. We evaluated the repeatability of the air pres-
+sure regulation by calculating the standard deviation of baro-
+metric pressure over ten consecutive inflation-deflation cycles.
+Then, the final experiment linked the pneumatic pressure com-
+manded to the straps with the circumferential pressure meas-
+ured on the mock-up arm with embedded sensors. When the
+straps are in their closed configuration, they make direct con-
+tact with the exposed pressure sensors. The recessed slots of
+the mock-up arm have a depth that is less than the height of the
+MPRLS units embedded in silicone, ensuring the sensor faces
+9
+Smart Mater. Struct. 34 (2025) 127001 C van Vlerken et al
+remain exposed and accessible to direct strap contact. Upon
+inflation, the straps provide circumferential pressure directly
+to the cylinder surface and the sensors beneath. We assume
+uniform circumferential pressure distribution along the strap
+length, and the sensor membrane width matches the strap
+width to capture representative pressure measurements. Strap
+pressure was ramped in discrete steps while the two embed-
+ded sensors recorded the load on the cylinder with embedded
+barometric pressure sensors on its surface. We performed a
+linear regression between the strap pressure measured by the
+pneumatic test bench and the sensor pressure Pbarometric. The
+final relationship between mechanical pressure (normal to the
+limb) and strap air pressure can be expressed as Pmechanical =
+c
+a · Pstraps and evaluated quality of fit with the Pearson correl-
+ation coefficient r and p-value p, where Pmechanical is the cir-
+cumferential pressure applied to the mock-up arm (kPa),Pstraps
+is the internal air pressure within the pneumatic straps (kPa),
+c and a are calibration coefficients derived from the experi-
+mental relationships, r is the Pearson correlation coefficient
+indicating the strength of the linear relationship, and p is the
+statistical significance p-value.
+4. Results
+4.1 . Adaptability , donning time, and repeatability
+All iterations for every limb circumference achieved com-
+plete closure (see video in the supplemental materials), and
+the corresponding donning times are 27.68 ± 1.24 s for the
+220 mm cylinder circumference arm mock-up, 27.84 ± 0.77
+s for the 282 mm cylinder circumference arm mock-up and
+29.01 ± 0.41 s for the 294 mm human upper-arm.
+4.2. Holding force
+The straps held normal loads up to∼80 N and shear loads up to
+∼32.5 N (as depicted in figure 6) without detachment or slip-
+page for the full test duration of 20 s. An example of hold-
+ing force in the normal direction is shown in the supplemental
+material video.
+4.3. Control of strapping pressure
+The combined pneumatic test bench, pressure sensor, and
+actuated straps system maintained consistent air pressures over
+consecutive iterations.
+A consistent linear relationship was found between the
+mechanical load applied to the silicone-embedded baromet-
+ric pressure sensor and the pressure that it records. Figure 8
+on the left presents three independent trials in which a calib-
+rated indenter exerted progressively larger normal forces on
+the sensor. The data reveal high trial-to-trial repeatability and
+an approximately linear correlation between mechanical pres-
+sure and barometric pressure. Given the equation Pbarometric =
+a · Pmechanical, the mean slope of the linear fits corresponds to an
+average value of a = 0.75 with the coefficient of determination
+R2 of 98%. Thus, a 1 kPa increase in externally applied mech-
+anical pressure corresponds to a 0.75 kPa increase in the pres-
+sure reported by the embedded sensor. Furthermore, figure 8
+on the right overlays the raw traces from the two sensors as
+the straps were inflated for 20 s and then vented. Across all
+ten iterations, the two sensors track the strap pressure almost
+identically, and the standard-deviation bands remain narrow,
+measured at 0.02 kPa for both straps.
+Finally, figure 9 on the left shows the response of the
+sensors from a stair-like increasing pressure over time.
+Alongside figure 9 on the right, we also found a consistent
+linear relationship between the increasing pneumatic pressure
+commanded to the straps and the embedded sensor pressure.
+The final relationship between strap pressure and mechanical
+pressure is Pmechanical = 0.76
+0.75 · Pstraps. Thus, 1 kPa of internal air
+pressure in the active strap produces around 1.01 kPa of cir-
+cumferential (mechanical) pressure on the upper arm.
+5. Discussion
+Our novel active straps show proof-of-concept for the first
+fully automatic self-donning attachment system for wearable
+robots. First of all, repeatability and adaptability were con-
+firmed by validating effective closure in 10 consecutive trials
+for arm circumferences of 220–294 mm with an average don-
+ning time of 27.7 ± 1.0 s showing improvements over pass-
+ive attachments methods. Adaptation to different arm sizes
+was achieved using the same compression-slot and wing-nut
+adjustment hardware. Larger arm circumferences than the
+ones tested can also be accommodated with a longer strap
+body, leaving the pneumatic geometry unchanged. However,
+reliable automatic opening and closing are achieved only when
+the attachment is in a horizontal configuration. In a vertical
+orientation, the straps sag under their own weight and do not
+align with the magnets for closure. Future work will explore
+adding stiffer or variable-stiffness elements so the straps can
+support their own weight during closure and remain compliant
+once latched. These design changes should improve donning
+for a variety of configurations, which is especially important
+for lower limb attachments.
+Our design achieved similar holding forces as previ-
+ous work with superior strapping pressure efficiency. While
+Diteesawat et al achieved 98 N maximum holding force at
+25 kPa [15] and Hasegawa et al achieved 60.9 N at 0.4 MPa
+[24], our design achieves 80 N normal force and 32.5 N shear
+force at significantly lower pressure applied to the straps
+(13 kPa). Normal-direction strength comes chiefly from the
+hook mechanism, while the magnets contribute to the shear
+adhesion ( ≈190 g per magnet according to the manufacturer
+datasheet (Supermagnete, S-05-05-N, Germany)) along with
+the friction provided by the strapping pressure. While our
+study tested a limited number or repetitions due to practical
+constraints, future work should test many more inflation and
+deflation cycles to verify long-term life-cycle performance.
+Regarding our pressure measurement methodology, we
+acknowledge that our barometric sensor calibration represents
+a simplified approach with known limitations including small
+10
+Smart Mater. Struct. 34 (2025) 127001 C van Vlerken et al
+Figure 8. Left: Mechanical pressure applied to the sensor over three individual trials shows a linear relationship ( R2 = 98%) with a slope of
+0.75, meaning each 1 kPa increase in pneumatic pressure yields a 0.75 kPa increase in sensor output. Right: Overlay of 10 consecutive
+inflation-deflation cycles showing repeatability of the barometric pressure sensors. Both sensors demonstrate repeatable and consistent
+pressure profiles over time.
+Figure 9. Left: Air pressure inside the respective straps linearly increasing, monitored by both pressure sensors. The pink solid line shows
+the measured pneumatic test bench pressure applied to both straps, while the blue and red lines are the barometric data for each pressure
+sensor. Right: Sensor data versus strap pressure shows a strong linear relationship ( r = 99%, p = 10−9); a slope of 0.76 means each 1 kPa
+increase in air pressure yields a 0.76 kPa rise in circumferential pressure.
+edge effects, and boundary condition differences between cal-
+ibration and application scenarios. However, this first-order
+approximation is appropriate and sufficient for our proof-of-
+concept objectives. The key achievement is not precise bio-
+mechanical quantification, but demonstration of the linear,
+predictable relationship between commanded air pressure and
+applied mechanical load ( r = 99%, p = 10−9). This linearity
+enables the core functionality we sought to prove: controllable,
+repeatable pressure modulation for autonomous attachment
+systems. Our approach successfully validates the feasibility of
+real-time pressure control in soft pneumatic straps, which is
+the primary innovation of this work. While more sophisticated
+pressure measurement techniques would be valuable for clin-
+ical implementation such as a range of FSRs distributed across
+the cirfumference, our simplified method adequately demon-
+strates the proof-of-concept for pressure-controlled autonom-
+ous donning systems.
+Our attachment system’s precise dynamic control of phys-
+ical interface pressure demonstrates feasibility for real-time
+control strategies to improve both energy efficiency and user
+comfort. Previous work suggests a trade-off between energy
+transmission efficiency and human comfort with interface
+pressure: energy transmission between the human body and
+exoskeleton attachment increases with interface pressure, but
+there is a human tolerance limit for interface pressure. Such
+a trade-off may be overcome by dynamic control of physical
+interface pressure, which our system enables via precise, lin-
+ear control of internal strap air pressure. Thus, we envision
+an attachment system that increases interface pressure only
+when needed for energy transmission and decreases pressure
+otherwise to reduce human discomfort. Adaptive control of
+pressure is critical for physical attachments around human
+limbs, because continuous circumferential pressure, even at
+low levels, can diminish comfort and pain tolerance over time
+1 1
+Smart Mater. Struct. 34 (2025) 127001 C van Vlerken et al
+[13]. While this study validates the pneumatic actuation prin-
+ciples using laboratory air supply, practical deployment would
+require integration with portable pneumatic systems. Our sys-
+tem’s relatively low operating pressure (13 kPa) represents a
+significant advantage over existing solutions, requiring sub-
+stantially lower pressure input than comparable pneumatic
+attachment systems. For comparison, Diteesawatet al required
+25 kPa and Hasegawa et al required 400 kPa to achieve sim-
+ilar holding forces as pointed out before, making our sys-
+tem 2–30x more pressure-efficient than existing designs. This
+reduced pressure demand, combined with our single-chamber
+architecture, makes the system highly compatible with exist-
+ing portable pneumatic platforms that have limited pressure
+output capabilities. The measured pressure translation ratio
+of 1.01 kPa mechanical pressure per 1 kPa internal air pres-
+sure demonstrates near-optimal pressure transmission, mean-
+ing portable pneumatic controllers can operate at their lower
+pressure ranges while still achieving target strapping forces.
+Wearable pneumatic controllers such as FlowIO and others can
+deliver the required pressure range (up to 30 psi) with compact
+form factors suitable for integration into exoskeleton systems
+[35, 36]. The low pressure requirements of our system ensure
+these portable controllers can operate efficiently without being
+pushed to their maximum output limits, extending battery life
+and reducing system weight for practical field deployment.
+While our study demonstrates proof-of-concept, we envi-
+sion improvements to our current design to make fully
+autonomous user donning and doffing more practical. For
+example, the system could detect limb insertion and auto-
+matically initiate strap closure, enabling complete hands-
+free transitions for each step of the donning process (i.e.
+open-don-close-secure) instead of relying on a predetermined
+timer to transition between states. Indeed, future work should
+address this limitation through integrated sensing approaches.
+Autonomous donning could be triggered by limb-detection
+using integrated force/pressure sensors within the interface
+to detect when the arm is properly positioned, defining a
+threshold in the normal direction and allowing signal stabil-
+ization time. This approach would provide additional insights
+about limb-interface interactions under different strapping
+pressures during activities, which we are currently investig-
+ating for future studies.
+Besides automatic donning, a key technical challenge for
+smooth usage of exoskeletons would be adding autonom-
+ous doffing capability, which is not possible with the current
+magnetic-hook latch mechanism. The strong magnetic force
+that enables secure fastening also prevents easy release, cre-
+ating a design trade-off between holding strength and user
+independence. Two promising approaches could address this
+challenge: First, inspired by Hasegawa et al ’s design, local-
+ized silicone bladders could be positioned between oppos-
+ing magnet poles and actuated pneumatically to separate
+them when release is needed [ 24]. This approach could util-
+ize hardware sequencing techniques for independent pneu-
+matic control from the same air source used for inflating-
+deflating the straps and activating strapping pressure, allow-
+ing the system to separate magnets from their attraction field
+using existing pneumatic infrastructure [ 37]. Alternatively,
+electro-permanent magnets (EPMs) could replace conven-
+tional magnets, allowing magnetic attraction to be switched
+on/off through brief current pulses that reverse pole direc-
+tion. EPMs offer energy-efficient operation since power is only
+required during switching transitions (milliseconds), not for
+maintaining attachment states as traditional electromagnets
+would require [38, 39].
+6. Conclusions
+We developed the first autonomously-donned limb attachment
+for wearable robots and validated its closure reliability, adapt-
+ability to user anthropometrics, holding security, and inter-
+face pressure regulation capabilities. Our open-architecture
+design combines pneumatically-actuated, single-chamber soft
+straps for wrapping around the limb with a magnet–hook latch
+for securing closure. We developed quantitative design cri-
+teria based on published requirements for upper-limb exo-
+skeleton attachments and presented a reproducible fabrica-
+tion method combining silicone elastomers with 3D-printed
+reinforcements. We experimentally validated all design cri-
+teria: reliable automatic closure for ten consecutive cycles;
+anthropometric adaptability to arm circumferences of 220–
+294 mm without hardware modification; autonomous donning
+in under 30 s; holding forces surpassing the clinical reac-
+tion load requirement of 50 N (generated by 8 N ·m torque at
+mid-humerus); and safe interface pressure consistently limited
+below 15 kPa. Future work will improve donning versatility
+through variable-stiffness materials. By demonstrating feasib-
+ility for fully autonomous donning, we address a key require-
+ment for self-directed use of wearable robots. Our technology
+could allow more time for therapy in rehabilitation settings,
+independent use at home, and improve efficiency and user
+adoption in industrial environments
+Data availability statement
+The data that support the findings of this study are openly
+available at the following URL/DOI: https://youtube.com/
+shorts/RCwds0hIdH4.
+Supplementary Data Video available at https://doi.org/10.
+1088/1361-665X/ae2555/data1.
+Acknowledgments
+This work was partially supported by the FWO Strategic Basic
+Research project Revalexo (Grant No. S001024N). Kevin
+Langlois is a postdoctoral fellow of the Research Foundation
+Flanders (FWO) with FWO Grant 1258523 N.
+Conflict of interest
+The authors declare no competing interests.
+12
+Smart Mater. Struct. 34 (2025) 127001 C van Vlerken et al
+Author contributions
+Christopher van Vlerken  0000-0001-9996-6953
+Conceptualization (lead), Data curation (lead), Formal
+analysis (lead), Investigation (lead), Methodology (lead),
+Resources (equal), Software (lead), V alidation (lead),
+Visualization (lead), Writing – original draft (lead), Writing –
+review & editing (lead)
+Kevin Langlois  0000-0002-7991-0976
+Conceptualization (supporting), Methodology (supporting),
+Writing – review & editing (supporting)
+Mengnan Wu  0000-0002-0341-4909
+Methodology (supporting), Writing – review &
+editing (supporting)
+Bram V anderborght 0000-0003-4881-9341
+Funding acquisition (lead), Writing – review &
+editing (supporting)
+Tom V erstraten 0000-0001-7398-5398
+Conceptualization (supporting), Funding acquisition (lead),
+Project administration (lead), Writing – review &
+editing (supporting)
+References
+[1] Ashraf S G 2018 Robotic exoskeletons: the current pros and
+cons World J. Orthopedics 9 112–9
+[2] Elprama S A, V anderborght B and Jacobs A 2022 An
+industrial exoskeleton user acceptance framework based on
+a literature review of empirical studies Appl. Ergon.
+100 103615
+[3] Heslin M, Forster A, Healey A and Patel A 2015 A systematic
+review of the economic evidence for interventions for
+family carers of stroke patients Clin. Rehabil. 30 119–33
+[4] Parker E, Swint J, Godwin K and Ostwald S 2012 Examining
+the cost per caregiver of an intervention designed to
+improve the quality of life of spousal caregivers of stroke
+survivors Rehabil. Nurs. 37 244–51
+[5] Wright M et al 2023 Multicentric investigation on the safety,
+feasibility and usability of the able lower-limb robotic
+exoskeleton for individuals with spinal cord injury: a
+framework towards the standardisation of clinical
+evaluations J. NeuroEng. Rehabil. 20 45
+[6] Siedl S M and Mara M 2021 Exoskeleton acceptance and its
+relationship to self-efficacy enhancement, perceived
+usefulness and physical relief: a field study among logistics
+workers Wear . Technol.2 e10
+[7] Shore L, Power V , De Eyto A and O’Sullivan L W 2018
+Technology acceptance and user-centred design of assistive
+exoskeletons for older adults: a commentary Robotics 7 3
+[8] José L P 2008 Wearable Robots: Biomechatronic Exoskeletons
+(Wiley)
+[9] Y andell M B 2019 Understanding human-exosuit interaction
+via physical interfaces
+[10] Schiele A and van der Helm F C T 2009 Influence of
+attachment pressure and kinematic configuration on phri
+with wearable robots Appl. Bionics Biomech. 6 157–73
+[11] Bessler J, Prange-Lasonder G B, Schaake L, Saenz J F,
+Bidard C, Fassi I, V alori M, Lassen A B and Buurke J H
+2021 Safety assessment of rehabilitation robots: a review
+identifying safety skills and current knowledge gaps Front.
+Robot. AI 8 33
+[12] Akiyama Y , Okamoto S, Y amada Y and Ishiguro K 2016
+Measurement of contact behavior including slippage of cuff
+when using wearable physical assistant robot IEEE Trans.
+Neural Syst. Rehabil. Eng. A 24 784–93
+[13] Kermavnar T, O’Sullivan K J, de Eyto A and O’Sullivan L W
+2020 Discomfort/pain and tissue oxygenation at the lower
+limb during circumferential compression: application to
+soft exoskeleton design Hum. Factors 62 475–88
+[14] Kozinc ˇZiga, Babic ˇ J andˇSarabon N 2021 Human pressure
+tolerance and effects of different padding materials with
+implications for development of exoskeletons and similar
+devices Appl. Ergon. 93 103379
+[15] Diteesawat R S, Hoh S, Pulvirenti E, Rahman N, Morris L,
+Turton A, Cramp M and Rossiter J 2022 A soft fabric-based
+shrink-to-fit pneumatic sleeve for comfortable limb
+assistance 2022 IEEE/RSJ Int. Conf. on Intelligent Robots
+and Systems (IROS) pp 9766–73
+[16] Schäffer K, Fallon U and Coad M M 2024 Stretchable
+pneumatic sleeve for adaptable, low-displacement
+anchoring in exosuits 2024 IEEE 7th Int. Conf. on Soft
+Robotics (RoboSoft) pp 912–8
+[17] Langlois K, Rodriguez-Cianca D, Serrien B, De Winter J,
+V erstraten T, Rodriguez-Guerrero C, V anderborght B and
+Lefeber D 2021 Investigating the effects of strapping
+pressure on human-robot interface dynamics using a soft
+robotic cuff IEEE Trans. Med. Robot. Bionics 3 146–55
+[18] Hasegawa Y , Tayama M, Saito T and Sankai Y 2011 Active air
+mat for comfortable and easy to wear a forearm support
+system 2011 IEEE/RSJ Int. Conf. on Intelligent Robots and
+Systems pp 4899–904
+[19] Fischer N, Alagi H, Beigl M, Hein B and Mathis-Ullrich F
+2023 A compliant actuator-sensor unit using a shape
+memory alloy and capacitive force sensing for active
+exoskeleton interfaces 2023 IEEE-RAS 22nd Int. Conf. on
+Humanoid Robots (Humanoids) pp 1–7
+[20] Kabel A, McBee-Black K and Dimka J 2016 Apparel-related
+participation barriers: ability, adaptation and engagement
+Disabil. Rehabil. 38 2184–92
+[21] Kabel A, Dimka J and McBee-Black K 2017 Clothing-related
+barriers experienced by people with mobility disabilities
+and impairments Appl. Ergon. 59 165–9
+[22] Shi Y , Dong W, Lin W and Gao Y 2022 Soft wearable robots:
+development status and technical challenges Sensors
+22 7584
+[23] Zimmermann Y , Song J, Deguelle C, Läderach J, Zhou L,
+Hutter M, Riener R and Wolf P 2023 Human-robot
+attachment system for exoskeletons: design and
+performance analysis IEEE Trans. Robot. 39 3087–105
+[24] Hasegawa Y , Hasegawa T and Eguchi K 2014 Pneumatic
+tubular body fixture for wearable assistive device – Analysis
+and design of active cuff to hold upper limb – 2014
+IEEE/RSJ Int. Conf. on Intelligent Robots and Systems pp
+2140–5
+[25] van Vlerken C, Ballen-Moreno F, Roels E, Ferrentino P ,
+Langlois K, V anderborght B and V erstraten T 2023
+Development of an active physical interface for physical
+human-robot interaction: investigation of soft pneumatic
+actuator straps for automatic enclosure system Actuators
+12 241
+[26] Bonso E, Saladini F, Zanier A, Benetti E, Dorigatti F and
+Palatini P 2010 Accuracy of a single rigid conical cuff with
+standard-size bladder coupled to an automatic oscillometric
+device over a wide range of arm circumferences Hypertens.
+Res. 33 1186–91
+[27] Rossini M, De Bock S, Ducastel V , V an De V elde G, De
+Pauw K, V erstraten T, Lefeber D, Geeroms J and
+Rodriguez-Guerrero C 2025 Design and evaluation of
+AE4W: an active and flexible shaft-driven shoulder
+exoskeleton for workers Wear . Technol.6 e12
+13
+Smart Mater. Struct. 34 (2025) 127001 C van Vlerken et al
+[28] Sänger J, Y ao Z, Schubert T, Wolf A, Molz C, Miehling J,
+Wartzack S, Gwosch T, Matthiesen S and Weidner R 2022
+Evaluation of active shoulder exoskeleton support to deduce
+application-oriented optimization potentials for overhead
+work Appl. Sci. 12 10805
+[29] van Sluijs R, Scholtysik T, Brunner A, Kuoni L, Bee D,
+Kos M, Bartenbach V and Lambercy O 2024 Design and
+evaluation of the OmniSuit: a passive occupational
+exoskeleton for back and shoulder support Appl. Ergon.
+120 104332
+[30] Bishop C W, Bowen P E and Ritchey S J 1981 Norms for
+nutritional assessment of American adults by upper arm
+anthropometry Am. J. Clin. Nutrition 34 2530–9
+[31] Bessler-Etten J, Schaake L, Buurke J H and
+Prange-Lasonder G B 2024 Investigating change of
+discomfort during repetitive force exertion though an
+exoskeleton cuff Appl. Ergon. 115 104055
+[32] Zhang Z, Wang X, Meng D and Liang B 2021 Bioinspired
+spiral soft pneumatic actuator and its characterization J.
+Bionic Eng. 18 1101–16
+[33] Ferrentino P , López-Díaz A, Terryn S, Legrand J, Brancart J,
+V an Assche G, V ázquez E, V ázquez A and V anderborght B
+2022 Quasi-Static FEA model for a multi-material soft
+pneumatic actuator in SOFA IEEE Robot. Autom. Lett.
+7 7391–8
+[34] Chen H, Wang Z, Langlois K, V erstraten T and
+V anderborght B 2024 A structure modality enhanced
+multimodal imaging method for electrical impedance
+tomography pressure distribution measurement IEEE Trans.
+Instrum. Meas. 73 1–13
+[35] Shtarbanov A 2021 FlowIO development platform — the
+pneumatic ‘Raspberry Pi’ for soft robotics Extended
+Abstracts of the 2021 CHI Conf. on Human Factors in
+Computing Systems, CHI EA’21 (Association for
+Computing Machinery) pp 1–6
+[36] Zhou Y M et al 2024 A portable inflatable soft wearable robot
+to assist the shoulder during industrial work Sci. Robot.
+9 eadi2377
+[37] Gorissen B, Milana E, Baeyens A, Broeders E, Christiaens J,
+Collin K, Reynaerts D and De V older M 2018 Hardware
+sequencing of inflatable nonlinear actuators for autonomous
+soft robots Adv. Mater .31 1804598
+[38] Ochoa-Cardenas F and Dodd T J 2015 Design of an active
+magnetic wheel with a varying electro-permanent magnet
+adhesion mechanism 2015 IEEE/RSJ Int. Conf. on
+Intelligent Robots and Systems (IROS) pp 3340–5
+[39] Gholizadeh A, Abbaslou S, Xie P , Knaian A and Javanmard M
+2019 Electronically actuated microfluidic valves with zero
+static-power consumption using electropermanent magnets
+Sens. Actuators A 296 316–23
+14

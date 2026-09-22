@@ -1,0 +1,765 @@
+IEEE ROBOTICS AND AUTOMATION LETTERS, VOL. 10, NO. 3, MARCH 2025 2399
+Single Pump-V alve Pneumatic Actuation With
+Continuous Flow Rate Control for Soft Robots
+Sicong Liu , Member , IEEE, Lin Wang, Zhongfeng Qian, Dihan Liu, Wenpei Zhu ,
+Shaowu Tang , Graduate Student Member , IEEE, Xuda Zhao, Wenjian Y ang , Ying Lu, Juan Yi , Member , IEEE,
+Jian S. Dai , Fellow, IEEE, and Zheng Wang , Senior Member , IEEE
+Abstract—Pneumatic actuated soft robots attract increasing in-
+terest of the researchers due to the availability and simplicity
+in actuation. The soft robots driven by soft pneumatic actuators
+(SPAs) of various active volumes demand pneumatic systems with
+various range of ﬂow rate. However, the usually bulky and hard-
+to-carry pneumatic actuation systems restrict the portability, and
+the air pumps provide constant ﬂow rate which constrained the
+applications such as soft wearable devices and scenarios require
+ﬁne ﬂow rate control. In this work, aiming for simplicity, high
+portability, continuous and small ﬂow rate regulation, the pneu-
+matic actuation system consists of identical integrated soft robotic
+drivers (iSoRD) modules is proposed, obtaining positive and neg-
+ative pressure output ( −53∼83 kPa) in each module using one-
+pump-one-valve (4-way/2-position solenoid) design. With the check
+valves installed and the modular design, pressure holding and ﬂow
+independence are achieved in each pneumatic branch. The heat
+generation (37.7 °C) and power consumption (2.95 W per-channel)
+are measure to verify usability. The continuous and ﬁne ﬂow rate
+regulation (15 mL/s) is achieved by applying the PID controller
+on the pump motor, which shows superior performance in signal
+tracking in comparison with the non-continuous Bang-Bang and
+Varia-speed Bang-Bang algorithms. With the same control, the
+iSoRD system reduces the error by 37.5% in comparison to our
+previous two-pump system. The portability, versatility in wearing,
+practicality and adaptivity of the system are validated by driving
+Received 2 August 2024; accepted 8 January 2025. Date of publication
+17 January 2025; date of current version 29 January 2025. This article was
+recommended for publication by Associate Editor R. Diteesawat and Editor C.
+Laschi upon evaluation of the reviewers’ comments. This work was supported
+in part by the NSFC under Grant 52475302, in part by the National Key
+R&D Program of China under Grant 2022YFB4701200, in part by Shenzhen
+Science and Technology Program under Grant JCYJ20220530114615034 and
+Grant JCYJ20220818100417038, and in part by the Guangdong Provincial Key
+Laboratory of Intelligent Morphing Mechanisms and Adaptive Robotics under
+Grant 2023B1212010005. (Sicong Liu, Lin Wang, and Zhongfeng Qian are
+co-ﬁrst authors.) (Corresponding authors: Jian S. Dai; Zheng Wang.)
+Sicong Liu is with the Sino-German College of Intelligent Manufacturing,
+Shenzhen Technology University, Pingshan 518118, China (e-mail: liusicong
+@sztu.edu.cn).
+Lin Wang, Zhongfeng Qian, Juan Yi, and Zheng Wang are with Wis-
+son Robotics, Shenzhen 518001, China (e-mail: wanglin@wissonrobotics.
+com; qianzf@wissonrobotics.com; yijuan2603@outlook.com; zheng.wang@
+ieee.org).
+Dihan Liu, Wenpei Zhu, Shaowu Tang, Xuda Zhao, Wenjian Y ang, Ying Lu,
+and Jian S. Dai are with the Department of Mechanical and Energy Engineering,
+Southern University of Science and Technology, Shenzhen 518000, China
+(e-mail: 11912532@mail.sustech.edu.cn; 11930368@mail.sustech.edu.cn;
+12232306@mail.sustech.edu.cn; 12010325@mail.sustech.edu.cn; 12232351@
+mail.sustech.edu.cn; 11910835@mail.sustech.edu.cn; daijs@sustech.edu.cn).
+This letter has supplementary downloadable material available at
+https://doi.org/10.1109/LRA.2025.3531147, provided by the authors.
+Digital Object Identiﬁer 10.1109/LRA.2025.3531147
+three wearable soft robots, a small gripper and a pollination device.
+Comparing with the existing, the iSoRD is capable of ﬁne ﬂow rate
+regulation in both negative and positive pressure range with low
+power consumption, portability and versatility, which will beneﬁt
+the pneumatic soft robotic systems with broadened application
+potential.
+Index Terms —Soft robotic actuation, pneumatic actuation,
+continuous ﬂow regulation.
+I. I NTRODUCTION
+S
+OFT robotics emerges as one of the prosperous robotic
+ﬁelds, bringing enlightenment in aspects of robotic re-
+searches covering from design, fabrication to control. Beneﬁting
+from the properties of soft material, soft robots have dived
+into a wide range of application areas like deep-sea explo-
+ration [1], [2], [3], rehabilitation [4], [5], [6], robotic-assisted
+surgery [7], [8], [9], dexterous manipulation [10], [11], [12] and
+etc.
+Pneumatic actuated soft robots attract interest of the re-
+searchers due to the availability and simplicity in actuation [13],
+[14]. Beneﬁting from the inherent compliance, soft robots driven
+by soft pneumatic actuators (SPAs) can interact with the external
+environment through safe and adaptive contacts[15], [16].S P A s
+are much lighter than conventional actuators like electric motors
+and air pumps. Based on such merits, SPAs are suitable for
+constituting portable and wearable soft robotic systems which
+demand safe human-robot interaction, such as the exoskeletons
+that are lightweight and non-restrictive to the wearer [5], [6],
+[17], rehabilitation devices that provide convenient at-home use
+[4], [18], and supernumerary limbs [19], [20] that adaptively
+perform tasks interacting with objects of various rigidity and
+shape. While the typical functional end-effector such as the
+soft robotic glove are complaint and light weight in general,
+the restriction of the portability lies on the actuation systems,
+which are usually bulky and hard to be carried around due to the
+size, weight and complexity of the assembly. Also, the actuation
+system with constant air ﬂow from the pump constrained the
+low-level control performance, which obstacles the soft devices
+to output smooth motions and the application on devices in need
+of small ﬂow rate.
+Pioneering research works were conducted on pneumatic
+actuation systems for soft robots, which can be categorized
+into two types according to the pressure generation mechanism:
+using syringe and using pump. Linear motor is used to push and
+pull syringe to regulate the pressure smoothly by continuous
+and high-bandwidth motion [21]. Sridar et al. [22] proposes
+2377-3766 © 2025 IEEE. All rights reserved, including rights for text and data mining, and training of artiﬁcial intelligence and similar technologi es.
+Personal use is permitted, but republication/redistribution requires IEEE permission. See https://www.ieee.org/publications/rights/index. html for more information.
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 02:01:43 UTC from IEEE Xplore.  Restrictions apply. 
+2400 IEEE ROBOTICS AND AUTOMATION LETTERS, VOL. 10, NO. 3, MARCH 2025
+a portable pressure source in need of backpack-size space to
+accommodate the syringe and linear motor. Due to the com-
+pressibility of air, large cylinders and long-stroke linear motors
+are required to generate high pressure, which makes the system
+bulkier than solutions with pumps and valves. In contrast, the
+pump-valve system obtains portability, such as the ﬂuid control
+board in [23] uses pumps as the pneumatic pressure source
+and solenoid valves to regulate the pressure. The pump-valve
+solution is shown to be effective and easy implementable for the
+soft robotic applications.
+Much recent researches have achieved continuous ﬂow rate
+regulation using dedicated valves in the pump and valve systems,
+such as the proportional valves in [20], [24] and the high-speed
+solenoid valves in [25]. But challenges remain, namely, the
+proportional valves request the minimum supply pressure higher
+than 200 kPa which is beyond the maximum pressure of the
+portable-sized pump at about 200 kPa, and using the high-speed
+switching of the solenoid valves (1000 Hz) to regulate the
+ﬂow requires high power consumption about 40W. Thus, these
+solutions are yet to satisfy the requirements for simplicity and
+high portability. Recently, a novel actuation system is proposed
+in [26], which provides both positive and negative pressures
+using one pump and three solenoid valves to drive one actuator,
+regulates ﬂow rate by two level of pump speed instead of using
+valve, showing the potential of using pump for ﬂow rate control.
+Pneumatic actuation systems cater to different gas volume
+or ﬂow rate needs of a variety of applications, ranging from
+wearable robots [4], [5], [19], soft grippers, soft actuator, to
+pollen pollination with volume about 65 ml, 22 ml, 8 ml, and
+0.33 ml, respectively, as illustrated in Fig. 1(a). To control
+airﬂow, micro-actuators often utilize a syringe pump or manual
+injection control [27]. Pollination devices for different ﬂowers
+are required to apply varying amounts of pollen proprel and
+regulate by the ﬂow rate of the pneumatic source, and the
+conventional devices often rely on the large-scale spraying to
+ensure success-rate, which leads to wastage [28], [29], [30].
+Therefore, a ﬂow rate controllable pneumatic source with a
+extend range is needed for adaptivity and efﬁciency.
+In this work, we propose a pneumatic actuation system with
+one pump and one valve in each channel providing continuous
+positive and negative pressures, with simple control logic and
+higher tracking accuracy to dynamic signals using continuous
+PID control. Such a system can be integrated into a ﬂat and soft
+strip for versatile on-body wearing positions, driving soft robotic
+systems and a pollination device. The contribution of this paper
+can be summarized as follow:
+1) A pneumatic actuation system consists of identical inte-
+grated soft robotic drivers (iSoRD) is proposed. With a
+simple one-pump-one-valve modular design, the iSoRD
+innovatively achieve ﬁne ﬂow rate regulation with low
+power consumption in both negative and positive pressure
+output when compared to the relevant actuation systems.
+2) The continuous ﬂow rate regulation is achieved by apply-
+ing PID control on the pump of iSoRD, which achieves
+superior performance in pressure signal tracking when
+compared with the non-continuous control methods.
+3) The iSoRD system show portability and adaptivity in
+demonstrations of driving a series of soft robotic devices
+and a pollination device. The excellence in delivering sta-
+ble control over small ﬂow rate is veriﬁed by experiments.
+The paper is organized as follows. Section II proposes the
+pneumatic design, implementation and control of the iSoRD
+Fig. 1. Concept and design of the iSoRD pneumatic actuation. (a) The pneu-
+matic system with identical integrated soft robotic drivers (iSoRD) is aimed
+to meet the requirement of soft robots and pneumatic devices with a range of
+chamber volumes and ﬂow rates. (b) The structure, working modes and logic
+scheme of iSoRD. (c) The components and size measurement of an iSoRD
+unit. (d) The front view and back view of the control board integrated with
+microprocessors, connectors, etc. (e) The wiring and signal transmission logic
+on the control board.
+system. Section III validates the performance and control of
+the pneumatic system in experiments. Section IV demonstrates
+the application on devices that demand different ﬂow rates. A
+conclusion is drawn in Section V with future work presented.
+II. D ESIGN AND IMPLEMENTA TION OF ISORD
+A. Pneumatic Design
+An integrated unit that provides positive or negative pneu-
+matic pressure for SPA and adjusts the rate of pressure change
+use only one small-sized pumps is in favor as shown in Fig.1(b).
+While compact in dimensions, having the potential to realize
+pressure holding and ﬂow rate control as the peristaltic pump in
+[42], the ﬂow rate of diaphragm pump is about 5-6 times higher
+than that of the similar-sized peristaltic pump (about 200 ∼
+300 ml/min), which provides sufﬁcient performance to support
+the SPA for dynamic motions. Hence, diaphragm pump is chosen
+as the air source as shown in Fig.1(c). Since the diaphragm pump
+use one-way valve to generate stable directional pneumatic ﬂow,
+the ﬂow direction of each port is ﬁxed, i.e., the direction of ﬂow
+cannot be regulated by changing the rotation direction of the
+motor in the pump. Thus, a 4-way/2-position (4W2P) solenoid
+valve is used to control the direction of ﬂow.
+As shown in the working logic of the pneumatic design in
+Fig. 1(b), when the actuator is connected to the outlet of the pump
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 02:01:43 UTC from IEEE Xplore.  Restrictions apply. 
+LIU et al.: SINGLE PUMP-V AL VE PNEUMA TIC ACTUA TION WITH CONTINUOUS FLOW RA TE CONTROL FOR SOFT ROBOTS 2401
+Fig. 2. The computing logic of the PID controller.
+through the 4W2P valve and the inlet of the pump is connected
+to atmosphere, the actuator is in inﬂation state subjected to
+positive pressure. To change the direction of the ﬂow, the actuator
+is switched to the inlet of the pump by the 4W2P valve and
+enter the deﬂation state under negative pressure. The ﬂow rate
+is controlled by regulating the speed of the pump motor. To
+achieve pressure holding, two one-way check valves are installed
+between the pump and the 4W2P valve to prevent leakage. The
+check valve at the outlet port of pump prevents air to ﬂow from
+the 4W2P valve back to the pump, and vice versa at the inlet
+port.
+B. System Implementation
+The implementation of an iSoRD unit is shown in Fig. 1(c),
+including a diaphragm pump (YW11-BLDC, Y uanwang Fluid
+Technology), a 4W2P solenoid valves (VQD1121-5L-M5,
+SMC), and a pneumatic pressure sensor (XGZP6857A, ±100
+kPa, 1%, CFSensor Inc.). Both ports of the diaphragm pump
+are connected to the two 4W2P valves, and each branch has a
+one-way check valve to ensure airtightness. The resultant size
+of the iSoRD unit is measured 111.6 mm in length, 17.5 mm in
+width and 55.25 mm in height, with the proﬁle approximately
+the size of the palm.
+The integrated physical control hardware is shown in
+Fig. 1(d), with the wiring and signal transmission shown in
+Fig. 1(e). The optocoupler isolation module (BG0B-04N, Shen-
+zhen Biaokong Co., Ltd.) is used to control the valve. The
+diaphragm pump is driven by a DC motor with a built-in
+driver board. The pump receives the control of Pulse-Width
+Modulation (PWM) signal from the MCU (STM32F767IGT6,
+STMicroelectronics) to regulate the motor speed continuously.
+The Analog-to-Digital Converter ADC (AD7606, Analog De-
+vices, Inc.) transfers data with MCU through Serial Peripheral
+Interface (SPI). The size of the overall control board is 90 mm
+by 60 mm.
+C. Control of iSoRD
+The pump ﬂow can be continuously adjusted by the motor,
+therefore, a continuous controller is needed to improve the accu-
+racy and speed of the system. The complex and high dynamics
+of the pumps and valves, and the compressibility of air make
+it difﬁcult to establish a stable control model for the iSoRD
+system, so a model-free control method is selected in this paper.
+The PID controller with saturation output was chosen due to its
+simplicity and efﬁciency. The block diagram of the controller
+is shown in Fig. 2. The PID controller takes the error between
+the target and feedback pressure as input. The PID controller
+formula is expressed as follows [31]:
+u (t)= Kp e (t)+ Ki ∫e (t)dt +Kd
+de (t)
+dt , (1)
+where e(t)= PrT −PrF is the difference between the target
+pressure signal PrT and the feedback signal PrF . Kp, Ki and
+Kd are the proportional, integral, and derivative gains of the PID
+controller.
+Due to the limitation of the pump speed, the integral term
+increases rapidly when tracking fast signals. When the error
+decreases, the residential integral value will keep the output of
+the system to be excessively large for a long period. Therefore,
+the integral of the error is processed as the saturation, which can
+be expressed as:
+Ki
+∫ ts
+t0
+e (τ)dτ=
+{
+IMA X,K i
+∫ ts
+t0
+e (τ)dτ > IMA X
+−IMA X,K i
+∫ ts
+t0
+e (τ)dτ <−IMA X
+,
+(2)
+where IMA X is the maximum allowed integral term. Since the
+output of PID controller is in the form of duty cycle, and the duty
+cycle value range is [0, 100], a saturation processing is added
+after the output of PID controller and is expressed as:
+u (t)
+{100,u (t) > 100;
+−100,u (t) < −100. (3)
+The ﬁnal output will be decomposed into two values, one
+value is the absolute value of the output, used to control the
+pump duty ratio, the other value is the symbol of the output to
+control the on/off of the valve.
+III. E XPERIMENTAL VALIDA TION
+A. Airtightness and Flow Independence
+To validate the pressure holding of iSoRD with check valves,
+two types of pneumatic circuits are conﬁgured with and without
+the check valves between the pump and 4W2P valve as shown
+in Fig. 3(a). Step signal is given as system input to switch the
+pressure of the actuator between positive and negative for the
+inﬂation and deﬂation, respectively. After reaching the given
+pressure, the system is controlled to stay in the holding stage.
+The airtight effect of the system is determined by observing the
+pressure change.
+The experimental results are plotted in Fig. 3(b) and (c).I n
+the deﬂation tests, the systems are given target pressure 80kPa,
+and in the inﬂation test 120 kPa. After reaching the target
+values, pressure in the system without the check valves start
+to change immediately after the system switched to the holding
+stage and eventually reached atmospheric pressure, indicating a
+constant leakage of air. In contrast, the pressures in the proposed
+system with check valves changes slightly at ﬁrst. After a short
+period, the pressures reached to the constant values in both cases,
+validating the airtightness in the iSoRD.
+The two-pump pneumatic actuation system developed in our
+previous works[32] is used to compare with the iSoRD as shown
+in Fig. 3(d). In the two-pump system, the positive and negative
+pressures are generated by the respectively assigned pumps,
+which provide pneumatic source for multiple channels. Each
+channel connects to an actuator through a valve. The pressure
+in each channel is regulated by the on and off of the valve.
+Since the total ﬂows of the pumps are limited, when multiple
+actuators are driven simultaneous with the valves functioning,
+the ﬂows in activated channels will interfere with each other
+due to pressure differences, causing unstable behaviors of the
+actuators. In contrast, each actuator is driven by an independent
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 02:01:43 UTC from IEEE Xplore.  Restrictions apply. 
+2402 IEEE ROBOTICS AND AUTOMATION LETTERS, VOL. 10, NO. 3, MARCH 2025
+Fig. 3. Experimental validation on pressure holding and ﬂow independence.
+(a) Experiment setup of the airtightness test. (b) Performance comparison of
+with and without check valve when holding negative pressure and (c) positive
+pressure. (d) Experiment setup of the ﬂow independence performance on the
+two-pump system and the iSoRD system. (e) The sudden drops in the curves
+indicate the interference in the two-pump system. Single stands for only one
+channel are working in the system as the reference. Dual stands for both of the
+channels working simultaneously. (f) Flow independence performance of the
+iSoRDs system show no interference. (g) Thermal radiation of the pump.
+unit in the proposed system, the ﬂow paths of actuators are not
+connected which will avoid the interference.
+The experiments are carried out in the iSoRD and two-
+pump systems with two channels connected with two bellows
+respectively. During the disturbance test, the two channels work
+simultaneously. In the two-pump system, two channels are
+connected when the valves are activated and the air pressure
+are neutralized to the same as shown in Fig. 3(e). Both of the
+curves show sudden drop behaviors, corresponding to the axial
+jitters of the actuators. While in the iSoRD system, there is no
+obvious change of the behavior in the actuators, indicating no
+interference in ﬂow rate or pressure when two actuators are
+pressurized simultaneously as shown in Fig. 3(f). Thus, the
+iSoRD system drives the actuators without ﬂow interference.
+B. Power Consumption and Heat Generation
+The power consumption of the iSoRD system is investigated
+in a free-load test, in which the pumps and valves are program
+to continuously run without load. The power consumption is
+recorded by the power supply instrument (UTi120S, Uni-Trend
+Co., Ltd.) as 11.8 W, and listed in Table I. Comparing with
+the existing systems, the proposed shows the lowest power
+consumption per-channel 2.95 W among the ones capable of
+the ﬂow-rate regulation in both negative and positive pressure
+range.
+Fig. 4. Parameter tuning of PID controller and step signal tracking. (a)
+Performance of parameter set P = 25, I = 0.01, D = 0, as a typical example.
+(b) Absolute error distribution of tested parameter in PID parameter tuning, and
+the horizontal axis is the PID parameter sets. (c) Accumulated valve switching
+times and standard deviation of absolute error in PID parameter tuning, and the
+horizontal axis is the PID parameter sets. (d) Performance of non-continuous
+Bang-Bang control with dead zone of 1 kPa, and (e) PID control in step signal
+tracking are compared.
+The heat generation of the iSoRD is measured in a test, where
+the pump was set to run full power for 10 mins. During the test,
+the maximum surface temperature is measured as 37.7 °Celsius
+(UTi120S, Uni-Trend Co., Ltd.) as shown in the recorded in-
+frared image in Fig. 3(g). The heat generation is lower than that
+of the soft robotic wearable system’s 41 °Celsius in[36] as listed
+in TableI, validating the acceptable heat generation and usability
+of iSoRD.
+C. PID Continuous Control
+To investigate the inﬂuence of the PID parameters on the
+performance of the iSoRD system (see Fig. 4(a)), three statistics
+are used: the mean absolute error (see Fig. 4(b)), which directly
+reﬂects the accuracy of controller, the standard deviation of abso-
+lute error and accumulated valve switching times (see Fig.4(c)),
+which reﬂect the volatility of the control. The experiment is setup
+using a single iSoRD unit, Sine wave is chosen as the test signal
+with cycle time of T = 10 s and amplitude of 20 kPa.
+PID parameters are regulated similar to the Ziegler-Nichols
+tuning method [33]. By regulating P term, the error reduces for
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 02:01:43 UTC from IEEE Xplore.  Restrictions apply. 
+LIU et al.: SINGLE PUMP-V AL VE PNEUMA TIC ACTUA TION WITH CONTINUOUS FLOW RA TE CONTROL FOR SOFT ROBOTS 2403
+TABLE I
+COMPARISON OF PNEUMA TICACTUA TIONSYSTEMS FOR SOFT ROBOTICS
+58% from point A (P = 10) to B (P = 30), the standard deviation
+reduces for 72% from point C (P = 10) to D (P = 25). Aim for
+fewer switching times of the motor direction, aside from low
+mean error and standard deviation, P = 25 is chosen. A small
+number of increments of the I term reduces mean error and
+standard deviation without increasing the switching times. The
+error is reduced for 50% from point E (I = 0 )t oF( I = 0.01),
+the standard deviation reduced for 48% from point G (I = 0)
+to H (I = 0.01). The D term brings limited beneﬁt to system
+performance. Thus, the PI controller with P = 25 and I = 0.01
+is suitable for the iSoRD system.
+D. Comparison With Non-Continuous Control
+To further validate the advantage of the PID continuous con-
+trol in the iSoRD system against the non-continuous control, the
+Bang-Bang control and the V aria-speed Bang-Bang close loop
+control [34] are adopted and compared in the experiments. The
+Bang-Bang algorithm is described as,
+⎧
+⎪⎨
+⎪⎩
+u = 100 , when PrF >P r +PrD ;
+u =0 , when Pr +PrD >P rF >P r −PrD ;
+u = −100, when PrF <P r −PrD,
+where u is motor rotation rate, Pr is the pneumatic pressure,
+PrF is the feedback pressure, PrD is the pressure of dead-zone.
+And the V aria-speed close loop control is described as,
+⎧
+⎪⎪⎪⎪⎪⎨
+⎪⎪⎪⎪⎪⎩
+u = 100 , when PrF >P r +PrD,P ′rF >P ′r +PrD ;
+u =7 0 , whenPrF >P r +PrD,P rF ≤P′r +PrD ;
+u =0 , when Pr +PrD >P rF >P r −PrD ;
+u = −70, whenPrF <P r −PrD,P rF ≥P′r +PrD ;
+u = −100, when PrF <P r −PrD,P rF <P ′r +PrD,
+where P′r and P′rF are the differentiation of Pr and PrF ,
+respectively.
+The PID control and Bang-Bang with dead-zone pressurePrD
+are tested on the iSoRD system to study the effect on the step
+signal tracking. We found in previous work [32] that lowering
+PrD increases the oscillation of the soft robots’ motions when
+controlled by Bang-Bang, due to the compressible nature of
+the gas and the compliance of the actuators and the structure.
+In addition, the pneumatic pressure sensor with accuracy of 1
+kPa are used. Considering the sensor precision and oscillation
+reduction, we set PrD = 1 kPa, which result in a mean absolute
+e r r o ro f0 . 8 9k P aa ss h o w ni nF i g .4(d). When applying PID
+control on the iSoRD system, the step response is smoothened
+with less visible oscillation as shown in Fig. 4(e). The mean
+absolute error is 0.32 kPa, which is a 64% drop compared to the
+Bang-Bang control.
+The sinusoidal signals with different periods are tested to
+verify the effectiveness of the continuous control. The variation
+range of the period is 2–16 s. The amplitude of the signal is
+20 kPa with median of 100 kPa. The experiment setup is shown
+as Fig. 5(a) with a single port of the iSoRD and the two-pump
+system connecting to a soft bellow actuator in each system.
+The inﬂuence on the mean error of the pressure and standard
+deviation are recorded and plotted in Fig. 5(b). The results
+show that the continuous control on the iSoRD system has
+better tracking effect and less ﬂuctuation under all sinusoidal
+signals. With the same Bang-Bang control, the iSoRD system
+improve the performance, namely, there is a 37.5% drop in error
+in comparison to the two-pump system. When the period is
+shortened, the PID control performs stably with smaller error
+and standard derivation than Bang-Bang.
+The performance of different control methods on the iSoRD
+system is further studied with T = 10 s. The result in Fig. 5(c)
+shows that Bang-Bang control can follow the trajectory, but with
+obvious oscillation around target pressure. The mean absolute
+deviation is about 0.81 kPa, and the standard deviation is 0.57
+kPa. There is obvious static difference of tracking performance
+when V aria-speed Bang-Bang control is implemented, and the
+ﬂuctuation value raises substantially as shown in Fig.5(d), while
+the PID controller effectively constrains the ﬂuctuation of pres-
+sure as shown in Fig. 4(a). When comparing with Bang-Bang
+control, the PID control obtains a 58.2% drop in error, a 44.1%
+drop in variance and a 78.6% drop in number of ﬂuctuations.
+Comparing with V aria-speed Bang-Bang, PID controller reduces
+the error by 91.6%, and reduces the variance by 72.8%. The
+results are shown in Fig. 5(e) and (f).
+E. Flow Rate Controllability
+In order to measure the airﬂow output of the system, the
+experiment shown in Fig. 6(a) is established. The iSoRD system
+is connected to a pressure regulator and a syringe. By setting a
+push-rod into the syringe and adding weights on top of it, the
+airﬂow output of the system with loads can be measured, while
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 02:01:43 UTC from IEEE Xplore.  Restrictions apply. 
+2404 IEEE ROBOTICS AND AUTOMATION LETTERS, VOL. 10, NO. 3, MARCH 2025
+Fig. 5. Comparison with non-continuous control in Sine signal tracking. (a) Experiment setup. (b) Performance with different systems and controlle rs. (c)
+Performance of Bang-Bang control with iSoRD system. (d) Performance of V aria-speed Bang-Bang control with iSoRD system. (e) Absolute error distrib ution
+and (f) accumulated valve switching times and standard deviation of absolute error.
+Fig. 6. (a) Experiment set up of airﬂow provided by the iSoRD system. (b)
+Output ﬂow rate of the iSoRD system related to voltage of the pump and loads.
+(c) Experiment set up of airﬂow controllability. (d) Performance of airﬂow
+controllability. PWM 100-100 ms, 0-200 ms stands for the control mode which
+cycles between inﬂation with the duty cycle of 100% for 100 ms and the duty
+cycle of 0 (pause) for 200 ms.
+the performance without the push-rod or load is recorded as
+comparison. Fig. 6(b) shows the relationship between ﬂow rate
+and pump voltage. The operational voltage range of the pump,
+from 0 to 12 V , linearly corresponds to the PWM duty cycle,
+ranging from 0 to 100%. Without a proportional valve, the pump
+in the iSoRD system can operate at a minimum duty cycle of
+30%, resulting in a small airﬂow of 2.8 ml/s. When the pump
+operates at 100% duty cycle, it achieves the maximum airﬂow
+of 15 ml/s.
+As shown in Fig. 6(c), the iSoRD system is connected to the
+lightweight small soft origami actuator (SOA, 8 ml) [19] to vali-
+date the controllability of the output airﬂow. The iSoRD system
+operates in the open-loop control modes, cycling between duty
+cycles of 100% (inﬂation) and 0% (pause). 4 control modes
+regulate the elongation speed of the SOA and the displacement
+is measured by a laser sensor, as shown in Fig. 6(d). The SOA
+elongates continuously with a 100% duty cycle, while in other
+modes, the elongation of the SOA exhibits a stepwise trend
+with a consistent step height respective to the inﬂation ﬂow
+rate. This indicates that the iSoRD system produces a stable
+and controllable air volume by the use of the motor duty cycles.
+The state-of-the-art pneumatic actuation systems for soft
+robotics are compared in Table I, where the iSoRD system is
+able to continuously regulate the ﬂow using the pump motor
+without additional components, consists of only one pump and
+one solenoid valve in each pneumatic branch, provides positive
+and negative pressure states, continuous ﬂow rate regulation and
+stable output of low ﬂow rate.
+IV . APPLICA TIONS ON PNEUMA TICDEVICES
+A. Soft Wearable Devices
+In order to achieve the portability and enable versatile wearing
+on human body, the components of the pneumatic system need to
+be ﬂexibly arranged to form a ﬂat and narrow proﬁle conforming
+to human body. Thus, the prototype of the system is designed
+in the form of a soft strap. Since the dimensions of body parts
+vary, such as arm, wrist, shank, thigh, and etc., the positions of
+components need to be adjustable to cater to different operating
+conditions. The hook and loop fasteners were used to ﬁx the
+components for the easy assembly and adjustability as shown
+in Fig. 7(a). An elastic strap with hook surface is used to
+wrap around the upper surfaces of the components to restrict
+movements and ensure stability. In this way, it is easy for the
+user to wear and fasten the actuation strap on the desired part of
+the body as shown in Fig. 7(b), (c) and (d).
+The iSoRD system of 4 independent modules is then used to
+drive a series of soft devices to verify practicality, including the
+rehabilitation glove, supernumerary limbs [19] and rehabilita-
+tion wrist embrace [5] as shown in Fig. 7(e)–(h). The devices
+are worn on the user and driven by the iSoRD system to move ac-
+cording to the predetermined functions. The rehabilitation glove
+straightens the index ﬁnger to 179° and bends to 148° within 10
+seconds as shown in Fig. 7(e), and this ﬁnger is actuated by
+only a single iSoRD. The wrist rehabilitation brace (actuated by
+two iSoRDs) turns the wrist left and right and reaches about 20°
+within 7.5 seconds in each direction as shown in Fig. 7(f).T h e
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 02:01:43 UTC from IEEE Xplore.  Restrictions apply. 
+LIU et al.: SINGLE PUMP-V AL VE PNEUMA TIC ACTUA TION WITH CONTINUOUS FLOW RA TE CONTROL FOR SOFT ROBOTS 2405
+Fig. 7. iSoRD system application on soft robotic wearable devices and gripper.
+(a) The design that is soft, ﬂat and adjustable, which can be worn on (b) wrist,
+(c) shank and (d) waist. (e) The rehabilitation gloves. (f) The wrist rehabilitation
+embrace. (g) The side view and (h) front view of supernumerary limbs. (i) A
+small gripper is driven by the iSoRD. (j) The slow and fast gripping are compared
+with the ﬂow rate control of iSoRD. (k) The gripper can grasp a foam cube under
+slow gripping mode and successfully grip a weight of 200 g under both modes.
+supernumerary limbs move in two directions and are actuated by
+two iSoRDs. The limb bends forward 26° and back 29° within
+14 seconds on the side view as shown in Fig. 7(g). On the front
+view the left limb bends to 83° and straightens to 129°, and the
+right limb wraps outside of the left limb to 104° and straightens
+to 139° within 10 seconds as shown in Fig. 7(h). These devices
+perform the desired movements under the actuation of iSoRD
+system, proving the practicality in driving soft robotic wearable
+devices.
+B. Small-Scale Pneumatic Gripper
+An iSoRD module is further used to actuate the small-scale
+pneumatic gripper with the chamber volume of 22 ml (11 ml each
+actuator) as shown in Fig. 7(i)–(k). The system operates in two
+modes: fast gripping and slow gripping. Fast gripping employs
+open-loop control with a duty cycle of 100% of the motor. Slow
+gripping adopts a control which cycles between a 50 ms inﬂation
+with a duty cycle of 100% and a 300 ms pause with a duty cycle of
+0. The opening and closing of the small-scale pneumatic gripper
+are shown in Fig. 7(i). In fast gripping mode (see Fig. 7(j)),
+the small-scale gripper completes the opening action within 2
+seconds when the iSoRD system provides a high ﬂow rate. In
+slow gripping mode, the pressure in the small gripper exhibits
+a stepwise pattern, resulting in minimal motion feed, making it
+suitable for grasping fragile objects. As shown in Fig. 7(k),t h e
+gripper can grasp a foam cube under slow gripping mode when
+the deformation of the foam is minimal. Under both gripping
+modes, the small-scale gripper can successfully grip a weight
+Fig. 8. iSoRD system actuates (a) the artiﬁcial pollination device. (b) The
+distance and quantity of ejected pollen are controlled by the iSoRD. (c) The
+pollination experiment on ﬂowers of different sizes.
+of 200 g. The tests demonstrate the iSoRD system is capable
+of providing ﬁne control for minute movements and delivering
+sufﬁcient force when required.
+C. Flower Pollination
+An artiﬁcial pollination device with the needle volume of 0.33
+ml (diameter 1.85 mm, length 121 mm), is loaded with pollen
+and connected with one iSoRD module is shown in Fig. 8(a).
+The ejection distance of the pollen is measured with a ruler and
+recorded by videos. The ejection distance and quantity of the
+pollen are controlled by adjusting the duty cycle of the motor
+and ejection time t. With duty cycles of 40%, 53%, and 84%, the
+maximum ejection distances are 3.5 mm, 14.2 mm, and 27.2 mm,
+respectively, as shown in Fig. 8(b). The pollination experiments
+are further conducted on the artiﬁcial ﬂowers of different sizes
+a ss h o w ni nF i g .8(c), where the ejected pollens successfully
+cover the pistils with concentrated and purposeful pollination
+effect, showing the application potential of the iSoRD system
+for scenarios in need of delicate control of airﬂow.
+V. C ONCLUSION
+The iSoRD pneumatic actuation system consists of identical
+modules is proposed, obtaining ﬂow rate control in positive
+and negative pressure output ( −53∼83 kPa) in each module
+using one-pump-one-valve (4-way/2-position solenoid) design
+and PID control. With the check valves installed, pressure
+holding and ﬂow independence are achieved in each pneumatic
+branch. With ﬂow rate capability (2.8∼15 ml/s), heat generation
+(37.7 °C) and power consumption (2.95 W per-channel) inves-
+tigated by experiments, the usability is veriﬁed.
+The continuous ﬂow rate regulation is achieved using the PID
+controller on the pump motor of the iSoRD. When compared
+to the non-continuous Bang-Bang control, the PID controller
+obtains 64% drop in mean absolute error in the step signal
+tracking; constrains the ﬂuctuation of pressure with 58.2% drop
+in error, 44.1% drop in variance and 78.6% drop in number
+of ﬂuctuations in the Sine signal tracking. Comparing with the
+non-continuous V aria-speed Bang-Bang, the controller reduces
+the error by 91.6%, and reduces the variance by 72.8%.
+When tracking the Sine signal with the same Bang-Bang
+control, the iSoRD reduces the error by 37.5% in comparison to
+the two-pump system, proving the advantage of the simple pneu-
+matic design. Comparing with the state-of-the-art pneumatic
+actuation systems for soft robots, the simple-structured modular
+system is capable of ﬁne ﬂow rate regulation in both negative
+and positive pressure range with low power consumption.
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 02:01:43 UTC from IEEE Xplore.  Restrictions apply. 
+2406 IEEE ROBOTICS AND AUTOMATION LETTERS, VOL. 10, NO. 3, MARCH 2025
+The portability and versatility of the system are shown in
+the 4-module system that is integrated into a ﬂat and low-proﬁle
+adjustable soft strip. The practicality of the system is validated by
+driving three soft wearable robots to output desired movements.
+The applications of driving a small-scale pneumatic gripper and
+a pollination device show the adaptivity of this system due to
+the range, the continuous and ﬁne control of ﬂow rate. The
+simplicity, portability, versatility, practicality and the continu-
+ous regulation of ﬂow of the iSoRD system will beneﬁt the
+pneumatic soft robotic systems with wider application potential.
+Future work includes further investigations on the accuracy,
+controllable range and applications of this system.
+REFERENCES
+[1] G. Li et al., “Self-powered soft robot in the Mariana Trench,” Nature,
+vol. 591, no. 7848, pp. 66–71, 2021.
+[2] K. C. Galloway et al., “Soft robotic grippers for biological sampling on
+deep reefs,” Soft Robot., vol. 3, no. 1, pp. 23–33, 2016.
+[3] Z. Shen et al., “Soft origami optical-sensing actuator for underwater
+manipulation,” Front. Robot. AI, vol. 7, 2021, Art. no. 616128.
+[4] P . Polygerinos, Z. Wang, K. C. Galloway, R. J. Wood, and C. J. Walsh,
+“Soft robotic glove for combined assistance and at-home rehabilitation,”
+Robot. Auton. Syst., vol. 73, pp. 135–143, 2015.
+[5] S. Liu et al., “A compact soft robotic wrist brace with origami actuators,”
+Front. Robot. AI, vol. 8, 2021, Art. no. 614623.
+[6] T. Proietti et al., “Sensing and control of a multi-joint soft wearable robot
+for upper-limb assistance and rehabilitation,” IEEE Robot. Automat. Lett.,
+vol. 6, no. 2, pp. 2381–2388, Apr. 2021.
+[7] Z. Wang, S. Liu, J. Peng, and M. Z. Chen, “The next-generation surgical
+robots,” Surg. Robot., pp. 3–20, Jan. 2018.
+[8] G. Fang et al., “Soft robotic manipulator for intraoperative MRI-
+guided transoral laser microsurgery,” Sci. Robot. , vol. 6, no. 57, 2021,
+Art. no. eabg5575.
+[9] J. Lai, K. Huang, B. Lu, Q. Zhao, and H. K. Chu, “V erticalized-tip trajec-
+tory tracking of a 3D-printable soft continuum robot: Enabling surgical
+blood suction automation,” IEEE/ASME Trans. Mechatron., vol. 27, no. 3,
+pp. 1545–1556, Jun. 2022.
+[10] S. Abondance, C. B. Teeple, and R. J. Wood, “A dexterous soft robotic hand
+for delicate in-hand manipulation,” IEEE Robot. Automat. Lett. ,v o l .5 ,
+no. 4, pp. 5502–5509, Oct. 2020.
+[11] W. Zhu et al., “A soft-rigid hybrid gripper with lateral compliance and
+dexterous in-hand manipulation,”IEEE/ASME Trans. Mechatron., vol. 28,
+no. 1, pp. 104–115, Feb. 2023.
+[12] J. Zhou, J. Yi, X. Chen, Z. Liu, and Z. Wang, “BCL-13: A 13-DOF soft
+robotic hand for dexterous grasping and in-hand manipulation,” IEEE
+Robot. Automat. Lett., vol. 3, no. 4, pp. 3379–3386, Oct. 2018.
+[13] R. Kang, Y . Guo, L. Chen, D. T. Branson, and J. S. Dai, “Design of
+a pneumatic muscle based continuum robot with embedded tendons,”
+IEEE/ASME Trans. Mechatron., vol. 22, no. 2, pp. 751–761, Apr. 2017.
+[14] J. Shintake, V . Cacucciolo, D. Floreano, and H. Shea, “Soft robotic
+grippers,” Adv. Mater ., vol. 30, no. 29, 2018, Art. no. 1707035.
+[15] S. Y ang et al., “Dynamic capture using a traplike soft gripper with
+stiffness anisotropy,” IEEE/ASME Trans. Mechatron. , vol. 28, no. 3,
+pp. 1337–1346, Jun. 2023.
+[16] A. Ghafoor, J. S. Dai, and J. Duffy, “Stiffness modeling of the soft-ﬁnger
+contact in robotic grasping,” J. Mech. Des., vol. 126, no. 4, pp. 646–656,
+2004.
+[17] Y . M. Zhou, C. Hohimer, T. Proietti, C. T. O’Neill, and C. J. Walsh,
+“Kinematics-based control of an inﬂatable soft wearable robot for assisting
+the shoulder of industrial workers,” IEEE Robot. Automat. Lett. ,v o l .6 ,
+no. 2, pp. 2155–2162, Apr. 2021.
+[18] P . Polygerinos et al., “Towards a soft pneumatic glove for hand re-
+habilitation,” in Proc. IEEE/RSJ Int. Conf. Intell. Robots Syst. , 2013,
+pp. 1512–1517.
+[19] S. Liu et al., “Otariidae-inspired soft-robotic supernumerary ﬂippers by
+fabric kirigami and origami,” IEEE/ASME Trans. Mechatron. , vol. 26,
+no. 5, pp. 2747–2757, Oct. 2021.
+[20] P . H. Nguyen, C. Sparks, S. G. Nuthi, N. M. V ale, and P . Polygeri-
+nos, “Soft poly-limbs: Toward a new paradigm of mobile manipu-
+lation for daily living tasks,” Soft Robot. , vol. 6, no. 1, pp. 38–53,
+2019.
+[21] A. D. Marchese, K. Komorowski, C. D. Onal, and D. Rus, “Design
+and control of a soft and continuously deformable 2D robotic ma-
+nipulation system,” in Proc. IEEE Int. Conf. Robot. Automat. , 2014,
+pp. 2189–2196.
+[22] S. Sridar, S. Poddar, Y . Tong, P . Polygerinos, and W. Zhang, “Towards
+untethered soft pneumatic exosuits using low-volume inﬂatable actuator
+composites and a portable pneumatic source,”IEEE Robot. Automat. Lett.,
+vol. 5, no. 3, pp. 4062–4069, Jul. 2020.
+[23] D. P . Holland et al., “The soft robotics toolkit: Strategies for overcoming
+obstacles to the wide dissemination of soft-robotic hardware,”IEEE Robot.
+Automat. Mag., vol. 24, no. 1, pp. 57–64, Mar. 2017.
+[24] P . Abbasi, M. A. Nekoui, M. Zareinejad, P . Abbasi, and Z. Azhang,
+“Position and force control of a soft pneumatic actuator,” Soft Robot. ,
+vol. 7, no. 5, pp. 550–563, 2020.
+[25] M. Hofer and R. D’Andrea, “Design, modeling and control of a soft
+robotic arm,” in Proc. IEEE/RSJ Int. Conf. Intell. Robots Syst. , 2018,
+pp. 1456–1463.
+[26] B. Zhang, J. Chen, X. Ma, Y . Wu, X. Zhang, and H. Liao, “Pneumatic
+system capable of supplying programmable pressure states for soft robots,”
+Soft Robot., vol. 9, no. 5, pp. 1001–1013, 2022.
+[27] S. Konishi and H. Kosawa, “High-output bending motion of a soft inﬂatable
+microactuator with an actuation conversion mechanism,” Sci. Reports ,
+vol. 10, no. 1, 2020, Art. no. 12038.
+[28] M. A. Aizen and L. D. Harder, “Expanding the limits of the pollen-
+limitation concept: Effects of pollen quantity and quality,”Ecology, vol. 88,
+no. 2, pp. 271–281, Feb. 2007.
+[29] K. Li, Y . Huo, Y . Liu, Y . Shi, Z. He, and Y . Cui, “Design of a lightweight
+robotic arm for Kiwifruit pollination,” Comput. Electron. Agriculture ,
+vol. 198, 2022, Art. no. 107114.
+[30] P . Pandey, J. J. Acosta, K. G. Payn, and S. N. Y oung, “Towards aerial
+robotic pollination for controlled crosses in Pinus taeda,” in Proc. ASABE
+Annu. Int. Meeting, 2022, pp. 1–9.
+[31] R. C. Panda, Introduction to PID Controllers: Theory, Tuning and Appli-
+cation to Frontier Areas. Rijeka, Croatia: InTech, 2012.
+[32] Z. Fang et al., “Omnidirectional compliance on cross-linked actuator co-
+ordination enables simultaneous multi-functions of soft modular robots,”
+Sci. Reports, vol. 13, 2023, Art. no. 12116.
+[33] V . V . Patel, “Ziegler-Nichols tuning method,” Resonance, vol. 25, no. 10,
+pp. 1385–1397, 2020, doi: 10.1007/s12045-020-1058-z.
+[34] C. Della Santina, C. Duriez, and D. Rus, “Model-based control of soft
+robots: A survey of the state of the art and open challenges,” IEEE Control
+Syst. Mag., vol. 43, no. 3, pp. 30–65, Jun. 2023.
+[35] T. Proietti et al., “Restoring arm function with a soft robotic wearable for
+individuals with amyotrophic lateral sclerosis,” Sci. Transl. Med., vol. 15,
+no. 681, 2023, Art. no. eadd1504.
+[36] A. Shtarbanov, “FlowIO development platform–The pneumatic ‘Rasp-
+berry Pi’ for soft robotics,” in Proc. Extended Abstr . CHI Conf. Hum.
+Factors Comput. Syst., 2021, pp. 1–6.
+[37] Y . Tian, R. Su, X. Wang, N. B. Altin, G. Fang, and C. C. L. Wang,
+“OpenPneu: Compact platform for pneumatic actuation with multi-
+channels,” in Proc. IEEE/ASME Int. Conf. Adv. Intell. Mechatron. , 2023,
+pp. 765–770.
+[38] M. Ahlquist, R. Jitosho, J. Bao, and A. M. Okamura, “phloSAR: A
+portable, high-ﬂow pressure supply and regulator enabling untethered
+operation of large pneumatic soft robots,” in Proc. IEEE 7th Int. Conf.
+Soft Robot., 2024, pp. 28–33.
+[39] J. Lai et al., “A novel soft glove utilizing honeycomb pneumatic actuators
+(HPAs) for assisting activities of daily living,” IEEE Trans. Neural Syst.
+Rehabil. Eng., vol. 31, pp. 3223–3233, 2023.
+[40] J. Qi et al., “HaptGlove—Untethered pneumatic glove for multimode
+haptic feedback in reality–virtuality continuum,” Adv. Sci., vol. 10, no. 25,
+2023, Art. no. 301044.
+[41] B. P . Banyarani, T. Bahram, and H. Alireza, “Design and fabrication of a
+soft wearable robot using a novel pleated fabric pneumatic artiﬁcial muscle
+(pfPAM) to assist walking,” Sensors Actuators A, Phys. , vol. 370, 2024,
+Art. no. 115278.
+[42] S. Wu et al., “High-performance hydraulic soft robotic control using
+continuous ﬂow regulation and partial feedback,” IEEE Robot. Automat.
+Lett., vol. 9, no. 8, pp. 6967–6974, Aug. 2024.
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 02:01:43 UTC from IEEE Xplore.  Restrictions apply. 

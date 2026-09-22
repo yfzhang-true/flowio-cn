@@ -1,0 +1,286 @@
+Designing and Fabricating Pneumatic Textures for Human-Robot
+Interaction
+Yuhan Hu
+Cornell University
+Ithaca, US
+yh758@cornell.edu
+Guy Hoffman
+Cornell University
+Ithaca, US
+hoffman@cornell.edu
+Figure 1: A collection of skin texture modules, including wrinkles (b), pores (c), tentacles (d), suction cups (e), scales (f),
+goosebumps and spikes (g), and circular wrinkles (h).
+ABSTRACT
+Inspired by biological systems that use skin textures to display emo-
+tions, we designed soft pneumatic textures for interactive robots to
+communicate their internal states visually and haptically. In this
+paper, we present our developmental process of creating new forms
+and behaviors of soft surface textures. A bio-inspired approach
+was used in ideating and prototyping texture patterns for natu-
+ral communication. We discuss challenges we encountered when
+fabricating and actuating the textures, present potential solutions
+and compare different alternatives. We hope the documentation
+of our design and fabrication process can make the technology
+more accessible to researchers in human-robot interaction field,
+and serve as an inspiration for further research and development
+of pneumatic and expressive skin textures.
+KEYWORDS
+soft robot, skin, textures, human-robot interaction, haptics, bio-
+inspired design, pneumatics
+Permission to make digital or hard copies of all or part of this work for personal or
+classroom use is granted without fee provided that copies are not made or distributed
+for profit or commercial advantage and that copies bear this notice and the full citation
+on the first page. Copyrights for components of this work owned by others than ACM
+must be honored. Abstracting with credit is permitted. To copy otherwise, or republish,
+to post on servers or to redistribute to lists, requires prior specific permission and/or a
+fee. Request permissions from permissions@acm.org.
+CHI ’22, April 30– May 05, 2022, New Orleans, LA
+© 2018 Association for Computing Machinery.
+ACM ISBN 978-x-xxxx-xxxx-x/YY/MM. . . $15.00
+https://doi.org/XXXXXXX.XXXXXXX
+ACM Reference Format:
+Yuhan Hu and Guy Hoffman. 2018. Designing and Fabricating Pneumatic
+Textures for Human-Robot Interaction. In CHI ’22: ACM CHI workshop: Ac-
+tuated Materials and Soft Robotics Strategies for Human-Computer Interaction
+Design, April 30– May 05, 2022, New Orleans, LA. ACM, New York, NY, USA,
+4 pages. https://doi.org/XXXXXXX.XXXXXXX
+1 INTRODUCTION
+In this paper, we discuss challenges and solutions of designing
+and integrating soft robotic skin with pneumatic textures. Inspired
+by biological systems displaying changes to their skin textures to
+reflect internal states, such as human goosebumps and cats’ back fur
+raising, we developed an expressive channel for interactive robots
+in the form of texture change on a soft skin [7]. Our preliminary user
+study indicated that a robot’s texture changes can be a promising
+channel for communicating specific emotions, such as excitement,
+anger, sleepiness and sadness, while users observe or touch the
+textures [5].
+To integrate skin changes, we designed pneumatically actuated
+shape changing texture arrays, that deform in response to pres-
+sure changes inside fluidic chambers. We explored realistic and
+meaningful structures of such shape-changing texture units, and
+presented a texture vocabulary in [6] that generates different visual
+and haptic experiences.
+This material is based upon work supported by the National Science Foundation under
+Grant No.1830471.
+CHI ’22, April 30– May 05, 2022, New Orleans, LA Hu and Hoffman.
+In this paper, we share our design approaches and some chal-
+lenges we faced during the developmental process of soft textures.
+A bio-inspired approach is used to ideate new forms and behav-
+iors of texture change, which are then modeled into mechanical
+design with different options of design parameters. To manufacture
+such textures, we discuss the challenges of fabricating surfaces
+with unique structures and present our solution of molding both
+internal chambers and external structures. Several limitations are
+discussed with potential alternatives mentioned. To actuate and
+control the textures, we compare two actuation systems, one with
+pneumatic pumps and one with powered syringes for their use in
+human-robot interaction contexts. Finally, we discuss additional
+challenges of integrating such soft textures on a social robot and
+generate communicative signals in different interaction scenarios.
+We hope the documentation of our process and discussion of chal-
+lenges can make the technology more accessible to researches in
+human-robot interaction field for the exploration of future design
+of soft robot skin.
+2 DESIGNING AND MODELING SOFT
+TEXTURES
+Since skin texture change is still an under-explored area in soft
+robotics and human-robot interaction (HRI) research, the main
+challenge is to identify the design primitives and generate texture
+patterns that are meaningful and realizable for HRI scenarios.
+We approach this with a bio-inspired design method, explore
+forms and shape-changing patterns of skin textures in biological
+systems. For example, a human furrowing the eyebrows generates
+dynamic wrinkle-like textures on his forehead, expressing states
+like confused and concentrated (fig. 2 a). To translate such behav-
+ior to robot skin design, we simulate the pattern to develop soft
+structures that can change between a flat surface to a furrow when
+adding a negative pressure (fig. 2 c). The strip-like air cavity forms
+a valley when being vacuumed, with several design parameters
+being iterated throughout the model generation process, including
+the width (𝑤) and length (𝑙) of the cavity, distance between two
+cavities (𝑑), thickness of the top film (𝑡) and the height of the cavity
+(ℎ) (fig. 2 b). Such parameters were hand-tuned by iterative proto-
+typing and testing to closely mimic wrinkle-like visual effect and
+haptic tension.
+Parameters were experimented and intuitively decided following
+empirical experience on soft material mechanics. For example, a
+thinner top wall usually results in a higher deformation, thus a
+deeper valley when sucking out the air. However, this process has a
+slow iteration cycle and includes many arbitrary choices based on
+researchers’ experience. Some software tools allow us to quickly
+test and predict with different design parameters and come up
+with an optimal solution before physically building the module.
+For example, Finite Element Analysis (FEA) can simulate motions
+of soft actuators such as bending and linear elongation, predict
+motion-force profile for a more efficient system [ 1, 9]. However,
+instead of optimizing efficiency or forces as most actuators do,
+our research focus on the users’ haptic and visual experience with
+textured modules, which are hard to come with the simulation tools
+alone. Thus, we iterate our design through physical prototyping
+and user testing to get feedback on touch and visual effects, such
+as by feeling the tension or roughness of the skin with hand.
+After design parameters are fixed for a specific texture pattern,
+we integrate them on a skin module. Texture distribution is de-
+fined by the shape of the robot surface, degree of freedom (DOF)
+for actuation, and the ideal function of the skin. In this example,
+the wrinkle textures can be arranged as a double-column parallel
+wrinkles on a rectangular module (fig. 2 c) or on a circular module
+with radial wrinkles (fig. 2 d) which was designed to fit under a
+mushroom robot’s umbrella, simulating mushroom wrinkles. Air
+chambers connect all texture elements for uniform deformation. For
+skin modules with multiple control DOFs, networks of chambers
+can activate groups of textures separately.
+3 FABRICATION
+Aside from designing texture patterns and iterating design parame-
+ters for expressive skin structures, the mechanical realization of the
+skin is challenged by some limitations in the fabrication process.
+This section presents our fabrication approach and discusses some
+challenges we encountered during fabrication.
+We use silicone elastomer (Ecoflex 00-30, Smooth-on, Inc) and
+an open-faced molding and casting process to fabricate the soft
+textures. Molding technique is commonly utilized in the fabrication
+of pneumatic soft robots [4, 8, 11]. However, none of them specif-
+ically present the molding process of skin textures with unique
+and non-flat surface shapes such as spikes and tentacles (see fig. 1
+d, g). Our approach uses an assembled molding box to mold such
+texture modules. The mold box is composed of two elements, one
+for casting the inner air cavity and chambers (fig. 3 a, top), the other
+to mold the external structure of the skin surface (fig. 3 a, bottom).
+To enhance haptic experience, we embed rigid elements for some
+textures, such as embedding sharp, plastic tips when casting spike
+textures.
+To elaborate the fabrication process, we capture the steps of
+fabricating a scale-like texture module in figure 3. Plastic mold
+components are 3D-printed using PLA and assembled to form a
+mold box (a). Haptic elements could be 3D-printed as well and
+embedded within the mold prior to casting (b). Then, we pour the
+mixed liquid silicone into the mold to cast the upper part of the
+skin (c). After the silicone is cured, we disassemble the mold box
+to take out the silicone (d). The bottom layer is fabricated with an
+inextensible film (paper) embedded (e). Finally the cured upper part
+is attached to the bottom layer to form a closed cavity (f), an air tube
+is added and sealed with silicone adhesive (Sil-Poxy, Smooth-on).
+We encountered several challenges during the fabrication pro-
+cess. First, randomness is introduced in the manual fabrication
+steps. Tilted surfaces could be caused by uneven or tilted operation
+platform. Skin modules may have a variance of thickness due to
+the experimenter’s error in eyeballing the filling level of silicone.
+Bubbles could be generated when pouring the liquid elastomer, and
+result in leakage and non-uniform deformation. Second, small and
+fine textures are hard to achieve. Liquid silicone may not fill in thin
+gaps (less than 1mm) due to surface tension and friction with the
+mold. Alternatively, a digital light processing 3D printer may allow
+for directly printing elastic materials [3], fabricate soft pneumatic
+textures of high precision, less randomness and with faster speed.
+Designing and Fabricating Pneumatic Textures for Human-Robot Interaction CHI ’22, April 30– May 05, 2022, New Orleans, LA
+Figure 2: Inspired by dynamic wrinkles on human forehead expressing states like confusion or concentration (a), we model the
+mechanical design of wrinkle-like textures to generate similar expression. (b) depicts a top view (top) and a side view (bottom)
+of air cavities (gray) and elastomer body (white) with different design parameters. The mechanical patterns are adapted to form
+skin modules of different shapes, such as a rectangular skin with parallel wrinkles (c), or a circular mushroom-like skin with
+radial wrinkles (d).
+Figure 3: Fabrication process of a scale-like texture module:
+(a) 3D print mold components; (b) embed haptic elements; (c)
+pour liquid silicone into the box to cast the upper part of the
+skin; (d) detach the cured silicone from the mold, (e) cast the
+bottom part with an inextensible film, and finally (f) bond
+the two parts together with additional Ecoflex.
+In addition, Ecoflex silicone does not form a tight bonding when
+gluing pieces of different materials, such as attaching the haptic
+component. Extra adhesive materials need to be applied in order to
+confine the elements to withstand users’ touch.
+4 CONTROLLING TEXTURE MODULES
+To actuate and control the texture modules for use in human-robot
+interaction context, the system needs to have a fast response, low
+noise profile, and a self-contained size. We compared two powering
+systems for potential use: One method uses an air pump controlled
+with an array of solenoid valves and a pressure sensor for feed-
+back [2]. We came across several challenges with this method: (1)
+The rotary pump and solenoid switches are noisy and distracting;
+(2) It is difficult to control the position precisely, and it is determined
+by the precision of the pressure sensor; (3) The system is inefficient
+because of the leakage and exhaust. (4) The skin may burst due
+to the failure of control or malfunction of sensors, such as when
+inflating too much air into the chamber. [7]
+To overcome the above issues, we designed a second system, a
+power syringe actuated by a linear stepper motor [7]. This system
+has lower noise level, lower risk of burst by applying mechani-
+cal constraints, and precisely controlled deformation with prior
+calibration of skin and negligible leakage. However, the size of
+the powering system is proportionally scaled up by the volume of
+air chambers, and the control DOFs. It is difficult to achieve high
+frequency responses due to the limited speed of a stepper motor.
+Future work will look into more compact and easily controllable
+solutions, such as FlowIO [12]
+5 INTEGRATING TEXTURE MODULES ON
+SOCIAL ROBOTS
+Our goal is to integrate skin modules on social robots to enhance
+their communication capacity and expression effectiveness. Imple-
+menting skin textures on robot surfaces introduce several chal-
+lenges and design considerations. First, our method only allows
+for the fabrication of a flat skin. Even though the skin module is
+bendable, it may not fit well with a robot surface of curvature and
+complex geometry. New fabrication methods need to be investi-
+gated for realizing curved skin modules. Second, the type of skin
+textures and placement needs to match a robot’s form and character.
+For example, hair-like textures may only be placed on the back of
+a robot’s head instead of on a face. It may not be appropriate to
+integrate suction cups on a humanoid robot skin, which may cause
+uncanny feelings [10].
+Skin texture expression needs to be consistent with other commu-
+nicative modalities of a robot to reduce confusion. Texture change
+serving as a form of involuntary expression in nature, usually com-
+municate in a less noticeable and ambiguous fashion compared to
+other expressive channels such as facial expression, speech, and
+gestures. Thus, when designing a texture expression for an HRI
+application, designers and researchers should set reasonable expec-
+tation and consider use cases accordingly. For example, commu-
+nication that requires accurate messages with low error tolerance
+may not be ideal. The ambiguity may lead to an open interpretation
+that varies for different people and interaction scenarios. Future
+research will compare and combine texture expression with other
+communicative modalities in human-robot interaction studies.
+REFERENCES
+[1] Gunjan Agarwal, Nicolas Besuchet, Basile Audergon, and Jamie Paik. 2016.
+Stretchable materials for robust soft actuators towards assistive wearable devices.
+CHI ’22, April 30– May 05, 2022, New Orleans, LA Hu and Hoffman.
+Scientific reports 6, 1 (2016), 1–8.
+[2] Ariel A Calderón, Joakin C Ugalde, Juan Cristóbal Zagal, and Néstor O Pérez-
+Arancibia. 2016. Design, fabrication and control of a multi-material-multi-
+actuator soft robot inspired by burrowing worms. In 2016 IEEE international
+conference on robotics and biomimetics (ROBIO) . IEEE, 31–38.
+[3] Lisen Ge, Longteng Dong, Dong Wang, Qi Ge, and Guoying Gu. 2018. A dig-
+ital light processing 3D printer for fast and high-precision fabrication of soft
+pneumatic actuators. Sensors and Actuators A: Physical 273 (2018), 285–292.
+[4] Benjamin Gorissen, Wannes Vincentie, Farid Al-Bender, Dominiek Reynaerts,
+and Michaël De Volder. 2013. Modeling and bonding-free fabrication of flexible
+fluidic microactuators with a bending motion. Journal of Micromechanics and
+Microengineering 23, 4 (2013), 045012.
+[5] Yuhan Hu and Guy Hoffman. 2019. Using skin texture change to design emotion
+expression in social robots. In 2019 14th ACM/IEEE International Conference on
+Human-Robot Interaction (HRI). IEEE, 2–10.
+[6] Yuhan Hu and Guy Hoffman. 2022. What Can a Robot’s "Skin" Be? Designing
+Texture-Changing Skin for Human-Robot Social Interaction. In Transactions on
+Human-Robot Interaction (THRI), Special Issue on Designing the Robot Body: Critical
+Perspectives on Affective Embodied Interaction . ACM (Manuscript accepted, to
+appear).
+[7] Yuhan Hu, Zhengnan Zhao, Abheek Vimal, and Guy Hoffman. 2018. Soft skin
+texture modulation for social robotics. In 2018 IEEE International Conference on
+Soft Robotics (RoboSoft). IEEE, 182–187.
+[8] Chiwon Lee, Myungjoon Kim, Yoon Jae Kim, Nhayoung Hong, Seungwan Ryu,
+H Jin Kim, and Sungwan Kim. 2017. Soft robot review. International Journal of
+Control, Automation and Systems 15, 1 (2017), 3–15.
+[9] Philip Moseley, Juan Manuel Florez, Harshal Arun Sonar, Gunjan Agarwal,
+William Curtin, and Jamie Paik. 2016. Modeling, design, and development of soft
+pneumatic actuators with finite element method. Advanced engineering materials
+18, 6 (2016), 978–988.
+[10] Maike Paetzel-Prüsmann, Giulia Perugia, and Ginevra Castellano. 2021. The
+influence of robot personality on the development of uncanny feelings.Computers
+in Human Behavior 120 (2021), 106756.
+[11] Robert F Shepherd, Filip Ilievski, Wonjae Choi, Stephen A Morin, Adam A Stokes,
+Aaron D Mazzeo, Xin Chen, Michael Wang, and George M Whitesides. 2011.
+Multigait soft robot. Proceedings of the national academy of sciences 108, 51 (2011),
+20400–20403.
+[12] Ali Shtarbanov. 2021. FlowIO Development Platform–the Pneumatic “Raspberry
+Pi” for Soft Robotics. In Extended Abstracts of the 2021 CHI Conference on Human
+Factors in Computing Systems . 1–6.

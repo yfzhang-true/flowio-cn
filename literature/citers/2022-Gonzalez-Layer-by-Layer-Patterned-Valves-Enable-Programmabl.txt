@@ -1,0 +1,798 @@
+12
+Layer by Layer, Patterned Valves Enable Programmable Soft Surfaces
+JESSE T. GONZALEZ and SCOTT E. HUDSON, Carnegie Mellon University, USA
+Fig. 1. Through a combination of bulk fabrication processes and layered assembly, we arrive at a composite material 
+that contains both computational elements (a) and embedded, mechanical mesostructures. One such mesostructure is 
+an electrostatic valve (b), which enables pneumatic control of soft surfaces (c). We refer to this particular composite (the 
+electrostatic valve array) as Stoma-Board, an allusion to the pores in plant leaves (stomata) that regulate air exchange.
+Programmable surfaces, which can be instructed to alter their shape or texture, may one day serve as a platform for tangible 
+interfaces and adaptive environments. But so far, these structures have been constrained in scale by a challenging fabrication 
+process, as the numerous constituent actuators must be built and assembled individually. We look towards emerging trends 
+in mechanical engineering and consider an alternate framework — layer-driven design, which enables the production of 
+dynamic, discretely-actuated surfaces at multiple scales. By centering the construction around patterning and stacking, 
+forgoing individual assembly in favor of bulk processes such as photo-etching and laser cutting, we avoid the need for 
+multiple manufacturing steps that are repeated for each of the many actuators that compose the surface. As an instance 
+of this layer-driven model, we build an array of electrostatic valves, and use this composite material (which we refer to as 
+Stoma-Board) to drive four types of pneumatic transducers. We also show how this technique may be readily industrialized, 
+through integration with the highly mature and automated manufacturing processes of modern electronics.
+CCS Concepts: • Hardware → PCB design and layout; • Human-centered computing → Haptic devices; Interface design 
+prototyping; • Computer systems organization → Robotics.
+Additional Key Words and Phrases: programmable materials, metamaterials, tangible interfaces, soft robotics
+ACM Reference Format:
+Jesse T. Gonzalez and Scott E. Hudson. 2022. Layer by Layer, Patterned Valves Enable Programmable Soft Surfaces. Proc. ACM 
+Interact. Mob. Wearable Ubiquitous Technol. 6, 1, Article 12 (March 2022), 25 pages. https://doi.org/10.1145/3517251
+1 INTRODUCTION
+Every day, we interact with dozens of physical surfaces that are largely static. Forward-looking designers have 
+perceived an opportunity in this space — anticipating a suite of tangible, shape-changing interfaces that are as 
+mutable as their digital relatives [57]. But such surfaces, clearly, are far from commonplace today.
+Authors’ address: Jesse T. Gonzalez, jtgonzal@cs.cmu.edu; Scott E. Hudson, scott.hudson@cs.cmu.edu, Carnegie Mellon University, Pittsburgh, 
+Pennsylvania, USA, 15213.
+© 2022 Copyright held by the owner/author(s).
+2474-9567/2022/3-ART12
+https://doi.org/10.1145/3517251
+Proc. ACM Interact. Mob. Wearable Ubiquitous Technol., Vol. 6, No. 1, Article 12. Publication date: March 2022.
+This work is licensed under a Creative Commons Attribution International 4.0 License.
+
+12:2 • Gonzalez and Hudson
+Fig. 2. A module-driven design (a), in the form of a solenoid array, is contrasted with a layer-driven design (b), in the form
+of an electrostatic valve array. Actuators in (a) are distinct mechanisms; actuators in (b) are cells in a common substrate.
+Communication in (a) is centralized (one-to-many); communication in (b) is distributed (neighbor-to-neighbor). Energy in (a)
+is transmitted via independent branches; energy in (b) is accessible through a global, unified reservoir.
+The few existing objects that do adapt to our inputs (tactile displays1, for instance) are specialized devices,
+only able to achieve a physical state change through the complex manipulation of multiple independent elements
+[13, 21]. This modular design, while workable in cost-agnostic settings, is limited in practice by a labor-intensive
+construction process [1]. If we are interested in making shape-shifting surfaces pervasive within our world, then
+this discretely-assembled machinery must be replaced with a more fabrication-friendly alternative.
+Layered construction provides a solution. Among some mechanical engineers, there is an emerging migration
+from multi-piece mechanisms to cleverly-designed composites — soft and flexible structures that arise from
+the stacking of patterned films [40, 47]. In this paper, we adopt layer-driven design as a method for building
+programmable pneumatic surfaces that are inherently scalable. We introduce an electrostatic valve array (Figure
+1), which we refer to as Stoma-Board — an allusion to the micro-scale pores (stomata) that regulate air intake
+from the surface of plant leaves.
+By orienting our fabrication process around bulk procedures — actions that can be performed in one or more
+"sweeps", such as casting, photo-etching, and laser cutting — we eliminate the many individual manufacturing
+steps that are common in more module-driven designs. These modular pneumatic surfaces consist of separate
+cells that are each tied to independent solenoid valves [11, 35]; in contrast, our approach allows for the creation
+of variable-sized arrays within a fixed number of fabrication steps.
+This layer-driven design integrates well with the type of composite transducers that have taken hold within
+the soft robotics community [2], providing a scalable bed of actuators that can replace networks of individually
+connected tubes. Such a system may be well-suited for the production of room-scale pneumatic surfaces [59, 61],
+which, like current toolkits [22, 37, 53], have so far relied on a modular approach. Composite arrays such as
+Stoma-Board, which simplify manufacturing through the use of bulk-fabricated layers, may bring large-scale
+structures and high-resolution surfaces within reach.
+2 LAYER-DRIVEN DESIGN
+In Figure 2, we illustrate the driving principle of our design process: functionality arises from a stacked configu-
+ration of bulk-fabricated layers, rather than the assembly of many individual parts. (We observe that sufficiently
+mature robotic processes, such as “pick-and-place” or 3D-printing, may also be considered bulk procedures.)
+Though this imposes an additional engineering challenge during the development of the primary actuation
+mechanism, the resulting material cell will necessarily be scalable under this framework. Such designs are
+distinguished by four characteristics:
+1https://en.wikipedia.org/wiki/BrailleNote
+Proc. ACM Interact. Mob. Wearable Ubiquitous Technol., Vol. 6, No. 1, Article 12. Publication date: March 2022.
+Layer by Layer, Patterned Valves Enable Programmable Soft Surfaces • 12:3
+(1) Constituent actuators are not distinct components, but instead cells within a common substrate. In our imple-
+mentation, this substrate is a patterned electrode array, with each node able to exert an attractive force on
+one section of a shared diaphragm.
+(2) Communication, and in some cases computation, is not centralized, but instead distributed throughout the
+surface. Neighboring cells exchange messages with each other, which our system exhibits by means of a
+daisy-chained control scheme.
+(3) Energy is not delivered through individual connections, but instead made available through a globally accessible
+reservoir. Analogous to the power and ground planes that have long been a staple of multi-layer circuit
+boards, the base layer of our system is a vacuum-connected cavity that acts as a global pneumatic sink.
+(4) Pattern generation precedes fabrication and assembly. In a module-driven design, actuators may be built
+independently, and then placed in positions across a surface. In our system, patterning must take place
+earlier in the design process, as all actuators are built concurrently during the layer-stacking assembly
+procedure. We implement a simple computational tool to generate these layouts.
+We demonstrate the validity of this approach through the fabrication of a programmable surface, which serves
+as a "raw" base layer for mounting multiple types of pneumatic transducers.
+3 BACKGROUND AND RELATED WORK
+3.1 Shape-Changing Surfaces and Tactile Displays
+Programmable surfaces can be broadly separated into two categories — dynamic matter (collections of actuators)
+that can be arbitrarily reconfigured [25, 32, 50, 69], and “morphing” materials, for which certain shape-changing
+capabilities are encoded as part of the fabrication process [12, 43, 64]. Our system is an instance of the former,
+but we leverage the composite material fabrication techniques that are common in the latter.
+A popular instance of the first type of material is the “pin display” [27]. This is a two-dimensional surface,
+composed of linear actuators (pins) that can independently extend out-of-plane. Pins can be rigid, driven by
+miniature lead screw assemblies [ 54, 68], as well as soft, driven pneumatically [ 44]. This type of modular
+construction trades scalability for precise actuation — pins move independently, but the discrete assembly process
+imposes a practical limit on the number that can be fabricated.
+Work by Zárate et al. [69, 70] hints at a solution. Their variant of a tactile display, while still consisting of
+individual (magnetic) pins, is driven by coils that are patterned on a printed circuit board. Since these multiple coils
+are all formed as part of a single fabrication step (photo-etching, during the printed circuit board manufacturing
+process), this act of patterning reduces the ultimate assembly time for the device. These copper traces can similarly
+be used for within-plane steering of magnetic markers [39, 58], and stand in contrast to prior approaches that
+employed beds of individually packaged solenoids[38, 65]. Notably, there is a trade-off here — while these layered
+coils can be replicated across large surfaces with relative ease, they are generally less powerful than their discrete
+counterparts (owing to the reduced number of turns).
+One way to circumvent this dilemma is by using patterned elements as a means of "tapping in" to a larger
+energy source. Under this paradigm, power and control are fully decoupled, and the actuators serve as gateways
+to a global reservoir. Qiu et al. [ 42] employ this approach, spray-coating an array of resistive traces onto an
+electroactive polymer film, which is suspended above a pressurized pneumatic chamber. Through targeted
+Joule-heating of the film (via the resistive traces), they force heat-softened sections of the membrane to deflect
+outward and raise a layer of pins. Previously, Besse et al. [6, 7] demonstrated a similar design, fabricating a
+shape-memory polymer membrane with integrated heating elements. This membrane was mounted over an
+alternating pressure source — positive pressure pushes the selected areas upward, and negative pressure pulls
+them back down.
+Proc. ACM Interact. Mob. Wearable Ubiquitous Technol., Vol. 6, No. 1, Article 12. Publication date: March 2022.
+12:4 • Gonzalez and Hudson
+Our Stoma-Board system makes use of this "patterned gates" strategy as well, with an array of layered, miniature
+valves that connect an upper transducer layer to a pneumatic sink. In contrast to related approaches, which
+use an external bank of solenoid valves to inflate sections of a membrane [36, 49], our actuators are directly
+integrated into the surface, and do not need to be discretely assembled. Layered composites, then, may be key in
+creating programmable surfaces that can scale in size and density.
+3.2 Soft and Foldable Robots
+Roboticists, in recent years, have been drawn to composites as well — with some eschewing traditional linkages
+in favor of flat materials that fold or stretch [40, 47]. By stacking layers with dissimilar mechanical properties, or
+by cutting patterns into overlapping sheets [56], sections of the resultant material can be constrained to move
+along predefined paths when actuated. In a soft robot, for example, a bending motion might be achieved by
+depositing a compliant silicone layer on top of a more rigid, strain-resisting substrate. When subjected to an
+axial force, either via piezoelectric [66], electrostatic [5], or pneumatic actuation [29], the material curves in the
+direction of the less-stiff layer.
+By micro-machining these individual layers (selectively removing material), bending behaviors can be further
+restricted to specific regions of the composite. This enables "pop-up" mechanisms, such as the origami-inspired
+joystick by Mintchev et al. [33], or the millimeter-scale delta robot by McClintock et al. [31]. In each of these
+systems, the composites consist of a flexible layer (polyimide), sandwiched between two rigid layers (fiberglass,
+or carbon-fiber). Strategic cuts in these layers give rise to Sarrus linkages, which lift sections of the composite
+out-of-plane. (These particular mechanisms are both driven by external base-stations, though other researchers
+have begun to explore foldable composites with self-actuating inner layers [60].)
+Further embracing deformation, roboticists such as Kellaris et al. [20] achieve out-of-plane motion through the
+manipulation of flexible, fluid-filled membranes. These sandwich-style actuators are characterized by "zippering"
+motions — as portions of the outer membranes are squeezed together, an inner layer of fluid flows into a predefined
+pocket, causing the membranes to bulge outward. This squeezing is initiated by an applied electrostatic force,
+similar to the operation of dielectric elastomer actuators. Artificial muscles such as these can be fabricated
+from stacked thermoplastic sheets, which are then heat-sealed, filled with fluid, and patterned with compliant
+electrodes [34]. Other researchers have used similar constructions for the production of wearable haptic interfaces
+[28], indicating that this may be a viable technique for the creation of programmable surfaces.
+For these devices, electrostatic actuation is a reasonable choice. It is a low-power method, only drawing current
+during transient periods; and at small distances, these actuators can provide a significant amount of force. We
+discuss this further in the next section.
+3.3 Electrostatic Actuators
+Two charged objects of opposite polarity, when placed in close enough proximity, will begin to move towards
+each other as they experience an attractive electrostatic force. This seemingly straightforward transformation of
+electrical energy into mechanical work has seeded a significant body of research relating to electrostatic actuators
+— perhaps most widely in the MEMS community. Here, investigators have leveraged this principle to develop
+micro-scale (sub-millimeter) sensors, switches, pumps, and valves [72]. Many of these devices incorporate some
+displacement mechanism, consisting of an anchored electrode that pushes or pulls a moveable plate.
+At the meso-scale (centimeter) and larger, this attractive electrostatic force has been harnessed for braking
+and locking — modulating the frictional force between two electrodes that slide against one another. Diller et
+al. explored this through the construction of an electrostatic clutch, engaging and disengaging spring elements
+in a leg exoskeleton [9]. Hinchet et al. developed a similar concept, for grasping in virtual reality [ 14]. Their
+slimmer strips were worn on the fingers, constraining hand movement when a voltage was applied. Recent work
+Proc. ACM Interact. Mob. Wearable Ubiquitous Technol., Vol. 6, No. 1, Article 12. Publication date: March 2022.
+Layer by Layer, Patterned Valves Enable Programmable Soft Surfaces • 12:5
+by Zhang et al. [71] has adapted this technique for use in for shape-changing pin displays — individual braking
+mechanisms will lock brass pins in place as a global upward force is applied, resulting in a reconfigurable height
+field.
+An advantage of this friction-based mechanism is that during operation, the components are always in close
+proximity, where electrostatic forces are strongest. (Theses forces fall off with the square of the distance between
+charged elements.) Consequently, such systems have been able to bear human-scale forces (up to 100 N for the 10
+cm wide electrode pairs in [9]). A key consideration is that the direction of actuation is normal to the applied
+electrostatic force (i.e. attraction up and down prevents sliding from left to right).
+This has not typically been the case with regard to valves, for which electrostatic forces must resist an applied
+pressure directly. In the most basic construction [41], a flexible conductive diaphragm sits on top of an insulated
+electrode, covering a hole in the center of that electrode. When a voltage is applied, the attractive electrostatic
+force creates a seal over the hole, restricting air flow (Figure 6).
+The difficulty here is that as soon as a small gap emerges, a peeling effect rapidly dislodges the diaphragm. As
+a result, valves with this construction are often constrained to operate within low pressure conditions (1 kPa) [8],
+or to be driven with high voltages (>600 V) [3].
+To address this limitation, researchers have used additional pneumatic ports, which serve to balance the applied
+pressure and hold the diaphragm in place [4, 62, 67]. This, however, requires a second pneumatic source (one that
+sits just below the input pressure), which increases the overall fabrication complexity. In the next section, we
+introduce a novel valve design that overcomes this problem without the addition of extra pneumatic channels. By
+inverting the diaphragm actuation mechanism, such that it acts as a check valve rather than a lid or a cap, we
+are able to regulate pressures 80 times larger than comparable implementations [8] — a necessary performance
+increase for working with human-scale forces.
+4 PATTERNED VALVES FOR PROGRAMMABLE SURFACES
+In the remainder of this paper, we describe the design and fabrication of a material that emerges from our
+layer-driven framework: Stoma-Board. This is an array of patterned, electrostatic valves, situated on top of a
+global cavity (Figure 3a, 3b). By switching individual valves on and off, we are able to control the flow of air into
+a transducer layer on top of the board. For instance, as shown in Figure 3d, we can regulate airflow into discrete
+pockets of an elastic substrate (causing these cells to inflate, buckle, or bend, depending on the geometry).
+Many programmable surfaces, if they are discretely actuated, more often resemble collections of machines
+than they do continuous matter. This is due in part to the limitations of a module-driven design — if actuators are
+assembled as independent components, increased resolution comes at a high manufacturing cost. Our aim at the
+outset of this work was to solve this by identifying a fabrication process for which assembly time is proportional
+to the number of layers, rather than the number of actuators. This decoupling allows us to pack more actuators
+into the same area with little or no additional time loss.
+Researchers in MEMS have long embraced lithography as a means of achieving this type of feature density
+[63]. However, industrial processes in the this area are usually optimized for the production of singular devices
+at the micro-scale (accelerometers, gyroscopes, etc.), as opposed to networks of actuators that extend over a
+centimeter-scale surface area or larger. For this more expansive application, we looked towards the already-mature
+process of printed circuit board (PCB) manufacturing, and focused on integration into that pipeline.
+PCB manufacturing is characterized by patterning, etching, and layup (stacking and bonding layers) [16]. Most
+fabricators start with a copper-clad fiberglass sheet, and begin production by applying a photosensitive coating
+and printed mask. They follow these steps with a chemical procedure that selectively removes exposed copper
+from the substrate. For boards with more than two layers, additional material is then stacked around the core and
+laminated together — usually with an insulating dielectric on both sides of the sheet, and copper foil on the outer
+Proc. ACM Interact. Mob. Wearable Ubiquitous Technol., Vol. 6, No. 1, Article 12. Publication date: March 2022.
+12:6 • Gonzalez and Hudson
+Fig. 3. One of our 19-cell Stoma-Boards (a). Directly below the top circuit board is a conductive diaphragm (b), which
+regulates air flow into a global reservoir. Cells are individually addressable. We treat Stoma-Board as a "raw material", using it
+with different transducer layers to build a variety of devices. Example transducers include: (c,d) Bistable dome, part of a larger
+cast membrane. (e,f) 3D-printed bellows-style transducer, which contracts under negative pressure. (g,h) Rigid Luer-lock
+attachment, connected to a syringe for linear actuation.
+layers. This new material can be etched again, and the process may be repeated as more layers are added (such
+that a multi-layer board is effectively a sandwich of smaller sub-boards). Some complex PCBs, particularly those
+with embedded electronic components, are actually composites of other fully drilled, plated, and soldered circuit
+boards [55].
+From this standpoint, the Stoma-Board layers that we introduce can be seen as an extension of this manufac-
+turing process – a few extra steps during the layup and bonding stage. The result of our procedure is a composite
+material with integrated electronic and pneumatic components (Figure 4). From top to bottom, these layers are:
+(1) An application-dependent transducer. (For example, an elastic surface, with air-filled pockets that buckle
+or bend when actuated.)
+(2) A printed circuit board, with control circuitry on top, and patterned electrodes on the underside.
+(3) A metallized polyester diaphragm (Mylar, 25 µm), which regulates air flow.
+(4) A natural rubber spacer (150 µm), through which the diaphragm travels.
+(5) A second printed circuit board, with patterned electrodes on top.
+(6) An SLA 3D-printed cavity, which serves as a global pneumatic sink.
+Note that although each layer is manufactured by a bulk process (casting, etching, laser-cutting, or machine
+placement), we still retain the ability to dynamically actuate discrete subsections of the finished surface.
+4.1 Working Principle
+Air flow through each valve is regulated by a metallized polyester diaphragm, which rests underneath an insulated
+copper electrode (Figure 4). This diaphragm cell is connected to the greater membrane layer by three hinges
+(Figure 4i), which allow it to flex out of plane.
+Proc. ACM Interact. Mob. Wearable Ubiquitous Technol., Vol. 6, No. 1, Article 12. Publication date: March 2022.
+Layer by Layer, Patterned Valves Enable Programmable Soft Surfaces • 12:7
+Fig. 4. Exploded view of the Stoma-Board structure. The transducer layer (a), in this case, is an elastic surface, composed of
+multiple pockets that can inflate, buckle, or bend independently. Air flow into this layer is regulated by a flexible, conductive
+diaphragm (c, i). When a vacuum is applied, this diaphragm deflects downward though a rubber spacer layer (d, j), and is
+pulled flat against an outlet (e, k). This closes the valve and (in this example) traps air inside the pockets of (a). To open the
+valve and allow air to flow, a electric charge is applied to an electrode (h) on the underside of a printed circuit board (b).
+Electrostatic forces retract the diaphragm from the valve outlet, allowing air to move from the transducer layer (a) to a global
+sink (f). Cells are hexagonally packed, with an 18mm pitch.
+In the active state (when a voltage is applied), electrostatic forces hold the diaphragm in place, and air passes
+freely from inlet to outlet (Figure 5a). In the non-active state, negative pressure at the valve outlet instead pulls
+the diaphragm downstream, blocking the outlet and impeding further flow (Figure 5b). To mitigate leakage in the
+non-active state, an optional secondary electrode at the outlet can be activated and used to further seal the valve
+(Figure 5c). Throughout this paper, we will refer to the first electrode as the valve-opening electrode, and the
+second electrode as the valve-sealing electrode.
+The attractive force between (either) electrode and the valve diaphragm is expressed by the relationship:
+𝐹 ∝ 𝑉 2𝐴
+𝑑 2
+where 𝐹 is the electrostatic force,𝐴 is the overlapping electrode area,𝑉 is the applied voltage, and𝑑 is the distance
+Proc. ACM Interact. Mob. Wearable Ubiquitous Technol., Vol. 6, No. 1, Article 12. Publication date: March 2022.
+12:8 • Gonzalez and Hudson
+Fig. 5. The three states of operation. (a) Active state: A voltage is applied between the valve-opening electrode and the
+conductive diaphragm. The resulting electrostatic force causes the diaphragm to adhere to this electrode, allowing air to pass
+underneath. (b) Non-active state: If no voltage is applied, a pressure differential will pull the diaphragm flat against the valve
+outlet, restricting air flow. (c) Sealed state: A voltage is applied between the conductive diaphragm and the valve-sealing
+electrode. Electrostatic forces pull the diaphragm tight against the outlet, mitigating leakage. (d,e) Diaphragm and valve-
+opening electrode in active (open) and non-active (blocking flow) states. To show actuation in these photographs, a clear
+acrylic plate is used in place of the opaque valve-sealing electrode. (f) An image of the valve-sealing electrode, by itself.
+between the electrode and the diaphragm [3]. For an electrostatic valve, the parameter of greatest concern is
+the distance 𝑑 (the other two right-side variables can be readily controlled, but this distance will vary during
+operation). Since the attractive force decreases with the square of this value, small fluctuations in distance have
+large consequences for valve behavior.
+In particular, electrostatic latching mechanisms such as these are often susceptible to “peeling” [18]; and some
+valve geometries are more vulnerable than others. One of these configurations is shown in Figure 6, in which
+the diaphragm is positioned to block incoming flow from below, as opposed to sealing outgoing leakage from
+above. As soon as a minor gap emerges under the diaphragm (due to pressure fluctuations, surface roughness,
+or other environmental factors), the electrostatic force at that interface is greatly diminished. This reduction in
+force means that a section of the diaphragm may begin to balloon or lift away, propagating until the seal is fully
+broken. Our earliest prototypes were built in this style, and (just as in similar implementations [8]), they were
+unable to regulate pressures above several kilopascals.
+It is possible to address this limitation by adding additional pneumatic sources and channels, in order to
+keep the pressure differential around the diaphragm within a small threshold [4, 62, 67]. But seeking a simpler
+construction, we took an alternate approach — by inverting the diaphragm configuration as described earlier
+(Figure 5a-c), we were able to take advantage of a “zippering” effect [52] to actuate the valve.
+Proc. ACM Interact. Mob. Wearable Ubiquitous Technol., Vol. 6, No. 1, Article 12. Publication date: March 2022.
+Layer by Layer, Patterned Valves Enable Programmable Soft Surfaces • 12:9
+Fig. 6. Early Stoma-Board prototypes used an alternate valve configuration, inspired by common MEMS implementations
+[41]. The diaphragm rests above the valve inlet, and when actuated, blocks air flow from below (b). At pressures beyond 1
+kPa, small gaps begin to emerge at the valve inlet, which propagate across the surface and eventually dislodge the diaphragm
+[8]. When no voltage is applied, air passes through the valve unimpeded (a).
+“Zippering” motions, in our system, start at the hinges of the diaphragm and move inward. Consider the valve
+in the non-active state (Figure 5b): negative pressure has pulled the diaphragm flat against the outlet. This is
+150 µm below the valve-opening electrode — small on a human scale, but large enough for electrostatic forces
+to be noticeably weakened. The diaphragm hinges, by contrast, are ten times closer — separated only by a thin
+dielectric layer, just 15 µm thick. When we switch to the active state, strong electrostatic forces near the hinges
+allow us to retract a diaphragm that would otherwise be out of reach at high negative pressures (> 80 kPa).
+4.2 Insulating Dielectric and Driving Voltage
+When we apply a voltage between an electrode and the valve diaphragm, an insulating layer is needed in the
+middle to prevent electrical shorts. In early prototypes, we used 25 µm polyimide sheets, hand-laminated onto
+bare copper electrodes. (This technique is similar to [ 14], though we did not use any adhesive.) Polyimide is
+a natural choice for this layer — with a breakdown voltage in excess of 250 V/ µm, we can administer several
+kilovolts before the insulating layer fails and conducts.
+Our system, however, operates between 150V and 300V (drawing a low and safe 50 µA). At these levels, a thin
+layer of solder mask (breakdown voltage around 25-30 V/µm) is sufficient insulation, with the additional benefit
+of a smaller minimum distance 𝑑 between conductors. Consequently, we use only solder mask to separate the
+valve-opening electrode from the metallized side of the diaphragm.
+The valve-sealing electrode is left exposed (bare copper). It does not contact the metallized side of the diaphragm
+— the 25 µm Mylar sheet itself provides adequate insulation.
+4.3 Daisy-Chained Electronic Communication
+Fully distributed computation is a target that arises from the layer-driven model (and is addressed briefly in
+Section 7). This is desirable not only from a fabrication perspective (eliminating multiple physical connections to
+a central hub), but also important for making robust programmable materials that scale without regard to the
+processing power of a master controller.
+Proc. ACM Interact. Mob. Wearable Ubiquitous Technol., Vol. 6, No. 1, Article 12. Publication date: March 2022.
+12:10 • Gonzalez and Hudson
+A first step towards this objective is casting each material subsection as a distinct computational node, capable
+of communication with its immediate neighbors. We implement this (somewhat simply) in our system by means
+of a daisy-chained control scheme.
+Physically, this communication takes place in the layer above the valve diaphragm (Figure 4b). Each material
+cell contains several discrete electronic components, as well as the patterned copper circuitry that connects them,
+which includes the valve-opening electrode. A shared clock line and global power sources (high-voltage rails for
+actuation and low-voltage rails for signaling) run across the surface and are accessible by each cell.
+Fig. 7. Electronic components within a Stoma-Board cell. Cells are daisy-chained, and change state in response to a global
+clock signal.
+A simplified schematic is shown in Figure 7. An electrode may be connected to either of the high voltage rails
+through a pair of opto-isolated solid-state relays2. A discrete flip-flop3 drives the LEDs of the opto-isolater, and
+also serves as the main communication element. On every clock pulse, the cell as a whole follows two rules:
+(1) Pass the current cell state to the right-side neighbor.
+(2) Receive a new cell state from the left-side neighbor.
+With this configuration, an external microcontroller upstream can quickly send data to all nodes in the chain.
+This operation is similar to that of the addressable LED strings (such as the APA102 or WS2812) that in recent
+years have served a material-like role in maker and DIY communities [ 30]. Our clock signal runs at 300 kHz,
+which allows us to set the state of 300 valves per millisecond. This rapid switching means that in practice, the
+overall refresh rate of the surface is generally independent from the number of valves, and instead a function of
+the pneumatic control scheme (see Section 4.4).
+Opto-isolated relays are not the only driver option. In earlier prototypes, we used resistor-transistor logic to
+control the valve array — electrodes were either actively switched low or passively pulled high. Though smaller
+in footprint, which is desirable, this design wastes power on the actuation side, continuously sending current
+through the resistor when the electrode is held low. A more efficient half-bridge topology was also considered,
+but ultimately discarded due to the need for additional high-voltage bias supplies. While the package size of the
+solid-state relays did limit our electrode density, we decided that the reduced complexity, low-power actuation,
+and isolation benefits made them a reasonable choice for this implementation.
+2Cosmo Electronics KAQY214S
+3Texas Instruments SN74LCV1G74
+Proc. ACM Interact. Mob. Wearable Ubiquitous Technol., Vol. 6, No. 1, Article 12. Publication date: March 2022.
+Layer by Layer, Patterned Valves Enable Programmable Soft Surfaces • 12:11
+Fig. 8. The "push-pull" actuation sequence for driving Stoma-Board prototypes using bi-stable silicone domes. (The alternating
+pressure source is represented by a moving piston, in gray.) Initially, the system is at rest (a). When positive pressure is
+created in the global reservoir, all diaphragm cells are pushed upward towards the top electrodes (b). At this stage, we may
+apply a voltage to latch one or more diaphragm cells in place (c, left). When negative pressure is created in the global reservoir,
+air exits the latched cells, and the elastic structures buckle (d, left). Note that in the unlatched cells, the elastic structures
+remains upright, as the diaphragm prevents air from escaping (d, right). If we remove the applied voltage, the valves may
+close, but the buckled cells remain unchanged (e, left). To restore these cells, we can again create a positive pressure (f), at
+which point we may choose to actuate another group of cells by the same process (f-h). The global pressure oscillations
+effectively determine the "refresh rate" of the Stoma-Board.
+4.4 Pneumatic Push-Pull Control Scheme
+The bottom layer of our Stoma-Board (Figure 4f) is a global reservoir, which typically acts as a pneumatic sink
+(negative pressure, pulling air down through the material). The presence of this common driver has implications
+for the design of the transducer layer, as well as for the actuation control scheme.
+Consider the following example, relating to the silicone domes in Figure 3c. An open valve allows air to flow
+from a pocket in the top layer to the global sink, deflating or depressurizing that top pocket in the process. Closing
+the valve will restrict that air flow, preventing further deflation — but this stoppage alone can not put the top
+pocket back in the inflated or neutral position.
+In order for this layer to “rebound”, spring forces in the elastomer must overcome the negative air pressure
+within the cell. One way to address this is by strategically adding drain holes in the top layer, allowing outside
+air to leak into the cell so that the pressure can begin to equalize. However, for more predictable behavior, we
+can instead use the "push-pull" actuation scheme outlined in Figure 8. Under this scheme, a global reservoir is
+connected to an alternating pressure source (such as the syringe pump in Figure 9). During the "pull" stroke, air
+flows out of the Stoma-Board, and actuated cells buckle under the negative pressure. During the "push" stroke,
+positive pressure restores all cells to their upright positions.
+For this procedure, the global reservoir is connected to a variable source, which alternates between positive
+and negative pressure. To generate this behavior, we use a custom syringe pump (Figure 9). In the “push” stage,
+Proc. ACM Interact. Mob. Wearable Ubiquitous Technol., Vol. 6, No. 1, Article 12. Publication date: March 2022.
+12:12 • Gonzalez and Hudson
+Fig. 9. The linear-actuator syringe pump used to pneumatically drive our Stoma-Board surfaces.
+air is forced upward through the valves, into every cell of the top layer. In the “pull” stage, air is drawn out of the
+system — but only through valves that are in the active state.
+Note that since every cell is affected by the "push" stroke, the transducer layer is fully inflated between refreshes.
+For some applications, such as refreshable Braille displays, this is sufficient [ 48]. However, if more dynamic
+control is desired, then a secondary valve layer is necessary to block the positive pressure from the "push" stroke.
+(We describe such a construction in Section 8.4.)
+While we use a syringe pump in our applications, any alternating pneumatic source will suffice. Ultimately, it
+is the frequency of this source that determines the refresh rate of a Stoma-Board surface. If fast refreshes are
+necessary, then the flow rate of the pump must large enough to quickly pressurize and depressurize the global
+cavity.
+5 FABRICATION PROCESS
+5.1 Cutting: Diaphragm and Spacer
+The Stoma-Board diaphragm is laser-cut from a 25µm thick Mylar film, metallized on one side (CS Hyde 48-1F-1M).
+It is important that this film is held flat during the cutting process – if manufactured imprecisely, it may kink or
+buckle out-of-plane when aligned with the electrode array. We solve this by first laminating the uncut Mylar film
+onto a sacrificial acrylic sheet (using isopropyl alcohol and a rubber squeegee), which lies flat on the laser bed.
+After the cut, we peel the finished diaphragm off of the acrylic substrate in a single step, with no weeding or
+deburring necessary.
+Notice that our diaphragm is cut with a small tab near the bottom edge (Figure 10c). Later, in the layup process,
+we use silver epoxy (MG Chemicals 8331) to adhere this tab to an exposed copper pad on our circuit board.
+The spacer (Figure 4d) that separates the diaphragm from the valve outlet is cut from a sheet of natural gum
+rubber, 150 µm thick (McMaster-Carr 8611K11). The fabrication process is similar to the one described above —
+the rubber is laid flat on an acrylic sheet prior to the cut, and peeled away afterwards in a single motion. We first
+experimented with rigid spacers (polyester sheets ranging from 50 to 250 µm), but ultimately found that a more
+compliant material led to better valve performance, perhaps due to a tighter pneumatic seal.
+For some prototypes, we used this same rubber material as a bottom gasket layer, which sits between the
+valve-sealing electrodes (Figure 4e) and the common cavity or printed piping structure (Figure 4f). These gaskets
+were cut in the same manner as the spacer.
+Proc. ACM Interact. Mob. Wearable Ubiquitous Technol., Vol. 6, No. 1, Article 12. Publication date: March 2022.
+Layer by Layer, Patterned Valves Enable Programmable Soft Surfaces • 12:13
+Fig. 10. To fabricate the diaphragm, we first use isopropyl alcohol and a rubber squeegee to laminate a metallized Mylar film
+onto an acrylic sheet (a). The diaphragm pattern is then laser cut (b), and the finished diaphragm is removed (c).
+5.2 Casting: Upper Gasket and Soft Transducers
+For the top layer of our system, we tested a variety of custom-made transducers. Some of these were 3D-printed
+(Formlabs Elastic Resin 50A), and some of them were cast (Smooth-On Dragon Skin 30 and Mold Star 30).
+Additionally, some experiments required a rigid manifold, which sat on top of a cast gasket layer.
+To begin the casting process, we first spray a release agent (Mann Ease Release 200) onto a two-piece 3D-printed
+mold (Figure 11). This mold is left to sit for ten minutes. In that interval, the uncured silicone is mixed and
+degassed at -27 inHg, in order to remove any large air pockets. The silicone is then poured into the mold, and left
+to cure at room temperature for 16 hours.
+Fig. 11. A 3D-printed mold used to cast one of our soft transducer layers (the bistable dome array).
+5.3 Printing: Global Reservoir and Upper Manifold
+Our Stoma-Board valves rest on common reservoir, used as a global pneumatic sink (Figure 12). While this could
+be a single, open cavity (CNC-milled, for example), we chose to 3D-print a connected pipe structure, in order to
+minimize the reservoir volume and allow for quicker pressure changes.
+We also printed rigid manifold layers (Figure 19a) for mounting some of our elastic transducers. While these
+transducers could be fixed to the upper PCB directly, we found that the manifold helped to ease prototyping, as
+transducers of different geometries could be more easily swapped and tested.
+Proc. ACM Interact. Mob. Wearable Ubiquitous Technol., Vol. 6, No. 1, Article 12. Publication date: March 2022.
+12:14 • Gonzalez and Hudson
+Fig. 12. (a) 3D-printed reservoir that serves as a global pneumatic sink. (b) Cross section.
+Fig. 13. Our command-line interface auto-generates KiCad-compatible design files, for hexagonal Stoma-Board patterns at
+multiple scales. (a) A single cell, with valve-opening electrode in green, pads for surface-mount components in red, valve
+inlets in yellow (small), and transducer mounting holes in yellow (large). (b,c) Patterns of 7 and 127 cells. (d,e) Fabricated
+circuit board, with electronic components on top (d) and patterned electrodes on bottom (e). Note that while our design
+software can produce Stoma-Board patterns at various scales, all actuation characteristics are measured from a 19-valve test
+rig, not the 127-valve board.
+Proc. ACM Interact. Mob. Wearable Ubiquitous Technol., Vol. 6, No. 1, Article 12. Publication date: March 2022.
+Layer by Layer, Patterned Valves Enable Programmable Soft Surfaces • 12:15
+6 ACTUATION CHARACTERISTICS
+There are two ways we might wish to actuate a cell of our Stoma-Board. We can either start with the global
+vacuum active and try to lift the valve diaphragm upwards; or we can firstlatch the valve diaphragm in the raised
+state, and apply a vacuum only after the valve is already open.
+We make the distinction because Stoma-Board valves exhibit a degree of hysteresis (Figure 14). Once the
+diaphragm has been pulled close to the valve-opening electrode, the newly strengthened electrostatic forces tend
+to hold it in place, even if the voltage drops. (Recall that the electrostatic force between two objects is inversely
+proportional to the squared distance.)
+Fig. 14. Average flow rate through a single Stoma-Board valve ( Δ𝑃 = 30 kPa, n = 3) over a range of applied voltages.
+The behavior differs in lifting (vacuum-first) and latching (voltage-first) modes. (a) Lifting: Below 200V, negative pressure
+dominates this interaction and keeps the valve diaphragm closed. Beyond this point, air flow grows linearly as electrostatic
+forces lift the diaphragm away from the valve outlet. (b) Latching: If a valve is latched open before negative pressure is
+applied, electrostatic forces are stronger due to the reduced diaphragm distance. Above 200V, the valve remains fully open.
+Below this value, the diaphragm is pulled away from the valve-opening electrode, and behavior is similar to the lifting mode.
+While the lifting mode is arguably more dynamic, the latching mode allows us drive the board at lower voltages,
+and circumvents some of the dielectric charging issues that we discuss in Section 7. This is also the mode used in
+our push-pull control scheme (Figure 8). However, for completeness, we report the actuation characteristics for
+both lifting and latching modes.
+To facilitate our measurements, we attached a rigid manifold to the top of a 19-cell Stoma-Board (in place of
+the transducer layer). With Luer lock fittings for each cell, we were able to quickly add and remove mass flow
+sensors for evaluating actuator performance (Figure 15).
+6.1 Opening Voltage
+The opening voltage is associated with the lifting mode – it is the point at which electrostatic forces upward
+surpass pneumatic forces downward, and air begins to pass through the cell.
+To measure the opening voltage for a given valve, we first applied a global negative pressure, which pulled the
+valve diaphragm closed. We then increased the voltage between the diaphragm and valve-opening electrode, in
+increments of 10V, until the diaphragm was attracted upwards and significant air flow through the valve was
+observed (25 mL/min).
+Figure 16a charts the Stoma-Board opening voltage as a function of pressure (the differential between valve
+inlets and the global reservoir). At higher pressures (80 kPa), this approaches 300V, which we chose as the limit
+of our system. Beyond this point, we noticed an increase in parasitic effects.
+Proc. ACM Interact. Mob. Wearable Ubiquitous Technol., Vol. 6, No. 1, Article 12. Publication date: March 2022.
+12:16 • Gonzalez and Hudson
+Fig. 15. Test rig for measuring the flow characteristics of a 19-cell Stoma-Board. A 3D-printed manifold with Luer-lock
+fittings allows for individual connections to flow sensors. A vacuum pump acts as a global negative pressure source, which
+can be manually adjusted with a breaker valve. Valve inlets are left at atmospheric pressure.
+Fig. 16. Average opening voltage (lifting mode) and holding voltage (latching mode) across a range of pressure differentials.
+Valves were sampled uniformly from the 19-cell test rig in Figure 15. Error bars represent 25th and 75th percentiles (n=7).
+Though the valves in our application examples all occupy discrete “on” and “off” states, we can achieve variable
+flow rates (between “fully on” and “fully off”) by driving the system at higher or lower voltages respectively.
+Figure 17 shows this relationship for six valves at several operating pressures (sampled randomly from our test
+rig). Below 150 to 200 volts, the applied vacuum dominates this interaction. As the voltage increases beyond this
+point, air flow through the valve increases as electrostatic forces lift the diaphragm away from the valve outlet.
+We did not observe any pneumatic crosstalk during these tests — flow rates through neighboring valves stood
+unchanged.
+Stoma-Board cells remain robust throughout repeated actuations. In Figure 18, we plot the average opening
+times for an additional six valves, over the course of one hundred trials. Operating at 300 volts, and subject to 80
+kPa, the average valve opens in less than 40 milliseconds. Notice that there is no degradation over repeated trials
+— the average opening time for the final 25 actuations (36 ms) is comparable to the average opening time for the
+first 25 actuations (38 ms). We discuss reliability further in Section 8.
+Proc. ACM Interact. Mob. Wearable Ubiquitous Technol., Vol. 6, No. 1, Article 12. Publication date: March 2022.
+Layer by Layer, Patterned Valves Enable Programmable Soft Surfaces • 12:17
+Fig. 17. Flow rates for six randomly sampled Stoma-Board valves, as a function of opening voltage. Note that for one valve
+(middle, bottom) there was a flow rate spike at 30 kPa and 240 V. This anomaly did not reoccur during a second test of the
+same valve, but we include it here for transparency.
+Fig. 18. Average opening times for six randomly sampled Stoma-Board valves, over 100 trials. (Opening times are averaged
+on a per-valve basis, and then these values are averaged to produce the green data points.) Note that opening times remain
+consistent throughout the experiment. Operating conditions: 80 kPa, 300 V. Error bars represent 25th and 75th percentiles.
+6.2 Holding Voltage
+Since our applications use an alternating pressure source, we are able to take advantage of the latching mode,
+and activate valves before a negative pressure is applied. In this context, the quantity of interest is the holding
+voltage – the minimum voltage required to keep the valve from closing (once the pressure in the global reservoir
+drops). This value is smaller than the opening voltage, due to the reduced distance between the diaphragm and
+the valve-opening electrode in the initial state.
+To measure the holding voltage (Figure 16b), we first applied 300 volts to the valve of interest. We then applied
+a negative pressure, and recorded the steady-state flow rate. Finally, we progressively lowered the valve voltage
+(in increments of 10 volts), until the flow rate dropped below ten percent of the steady-state value. This drop-off
+does not happen gradually – as show in Figure 14, there is a "cliff" at which point the valve transitions from
+fully-open to nearly-closed.
+Proc. ACM Interact. Mob. Wearable Ubiquitous Technol., Vol. 6, No. 1, Article 12. Publication date: March 2022.
+12:18 • Gonzalez and Hudson
+7 PROGRAMMABLE STOMA-BOARD SURFACES
+From a stock piece of wood or plastic, a craftsperson can construct a multitude of objects, each with mechanical
+properties that are (in part) a function of the original workpiece. Porous sheets of fiberboard, for instance, can be
+shaped into a vacuum table; and compliant strips of bamboo can be woven into a flexible basket. Similarly, we
+envision a process in which a fabricator may start with a sheet of “raw” Stoma-Board, and through the addition
+of custom transducers, arrive at a variety of programmable surfaces and mechanisms. Importantly, the scalable
+production of this base material (i.e. patterned valves) is only made possible by the layer-driven manufacturing
+techniques that we employ.
+In this section, we showcase four surfaces (using three types of transducers) that are built upon our “raw”
+Stoma-Board surface.
+7.1 Tactile Patterns from a Bistable Membrane
+7.1.1 Standard Pitch. Bistable mechanisms do not require an external energy source in order to maintain their
+state, which makes them an attractive transducer option in low-power applications [46]. For our first demo, we
+cast an elastic silicone membrane (Smooth-On Dragon Skin 30), composed of bistable, hemispherical cells (Figure
+19). While it’s possible to attach to this membrane to the raw Stoma-Board directly, we opted to use a 3D-printed
+manifold as an intermediate layer for ease of mounting.
+Initially, all cells are in the raised state. To render a tactile pattern, we latch open the relevant valves, and apply
+a global negative pressure — this causes the selected cells to buckle into the collapsed state. To return the cells to
+the raised state, we apply a global positive pressure.
+Fig. 19. We mount a cast array of bistable domes (b) on a 3D-printed manifold (a). By activating specific valves, we can
+render tactile patterns (c,d). Domes are 14 mm in diameter.
+7.1.2 Compact Pitch. By altering the channel structure of the upper manifold, we can modify the apparent
+density of the Stoma-Board surface. In our second demo (Figure 20), a set of converging pipes decreases the cell
+pitch to 2.5 mm (Braille spacing), such that six transducers can fit within the area of a human fingertip. At this
+scale, the raised domes are more readily perceived as a texture, as opposed to a group of distinguishable objects
+Proc. ACM Interact. Mob. Wearable Ubiquitous Technol., Vol. 6, No. 1, Article 12. Publication date: March 2022.
+Layer by Layer, Patterned Valves Enable Programmable Soft Surfaces • 12:19
+[26]. While the perimeter of the Stoma-Board is still determined by the electrode and membrane layers, this
+flexibility in piping can hasten the prototyping of fine-grained (and variable-pitch) tactile interactions.
+Fig. 20. A set of converging pipes, as seen in the manifold cross-section (a), shrink the transducer pitch to 2.5 mm (b). The
+Braille transducer (c,d) is cast silicone (Smooth-On Mold Star 30), and individual dots can be lowered when the corresponding
+Stoma-Board valves are opened.
+7.2 Bellows-Style Robotic Actuators
+Among soft roboticists, the bellows-style actuator (Figure 3e, 3f) is well-established as a means of converting
+pneumatic energy into linear motion [10]. When pressurized, it expands along a single axis. When de-pressurized,
+it contracts. If two or more are connected in parallel, an applied pressure differential will result in a bending
+motion, which forms the basis for many soft robotic joints [17].
+Pneumatic routing is often a challenge when integrating these types of soft actuators. Since every bellows
+structure needs to be pressurized independently, many research prototypes rely on bundles of tubes, which tether
+the individual actuators to an external bank of valves.
+With Stoma-Board as a base material, these valves can instead be embedded in the robot structure directly. In
+our third demo (Figure 21), three bellows-style transducers (SLA 3D-printed with Formlabs Elastic Resin 50A)
+are fixed to a raw Stoma-Board and used to drive a 2-DOF joint. By selectively opening valves and contracting
+individual transducers, we can determine the roll and pitch of an attached platform. These embedded valves may
+enable modular stacking, in a manner similar to the continuum robots by Robertson and Paik [45].
+Fig. 21. 3D-printed bellows-style actuators control the orientation of an attached platform.
+Proc. ACM Interact. Mob. Wearable Ubiquitous Technol., Vol. 6, No. 1, Article 12. Publication date: March 2022.
+12:20 • Gonzalez and Hudson
+7.3 Spoke-Propelled Rimless Wheel
+The "rimless wheel" is a rudimentary legged robot, suitable for traversing rough and uneven terrain [19]. In a
+typical implementation, the spokes of the wheel are passive elements, and a hub-mounted motor is used to drive
+the structure forward or backward [51]. To enable additional modes of locomotion, variants of this design have
+incorporated spokes that are independently actuated, which propel the robot by extending and contracting on
+command [15, 24]. This modification eliminates the heavy, motorized hub, but requires a separate mechanism for
+each leg of the robot. Building such an assembly can be cumbersome.
+With a raw base of patterned valves, constructing this prototype becomes as simple as adding a custom
+transducer layer. In our fourth demo, we showcase a spoke-propelled rimless wheel (Figure 22), which can "walk"
+forward via a sequential extension of pneumatically-actuated legs. Note that in this example, the transducer layer
+and common cavity are swapped – we use a global pressure source instead of a pressure sink.
+Fig. 22. An actuated rimless wheel, with spokes (syringes) that can extend independently. The syringe manifold is attached
+to a hexagonal Stoma-Board, which is connected to a single pressure source. In the stable position (a), two spokes maintain
+contact with the ground. When the left spoke is extended (by opening the appropriate Stoma-Board valve) the wheel tilts to
+the right (b). The wheel falls to a new stable position (c), and the extended spoke is retracted (d).
+Proc. ACM Interact. Mob. Wearable Ubiquitous Technol., Vol. 6, No. 1, Article 12. Publication date: March 2022.
+Layer by Layer, Patterned Valves Enable Programmable Soft Surfaces • 12:21
+8 DISCUSSION, LIMITATIONS, AND FUTURE WORK
+8.1 Long-Term Use
+From a distance, electrostatic actuation appears deceptively simple — a straightforward mapping of an applied
+voltage to a resultant force. In reality, there are parasitic effects which can reduce the long-term reliability of
+such systems. The most significant of these, well-recognized by the MEMS community, is dielectric charging [23].
+This is a molecular-scale phenomenon, which results from a displacement of polarized components within the
+material. If unaccounted for, this can lead to “sticky” switches (or in this context, valves).
+In our Stoma-Board actuators, the dielectric layer is a thin coating of solder mask, which separates the
+conductive diaphragm from the valve-opening electrode. If a permanent charge develops in this dielectric layer,
+the diaphragm will always cling to the solder mask, and the valve will be unable to close. This parasitic charging
+often occurs after an extended period of exposure to a constant, applied voltage [14].
+We were able to mitigate this effect by driving our actuators with a bipolar square wave (as opposed to a DC
+source), and reducing the peak voltage (no higher than 300 V). While this balancing of polarity over time was
+sufficient for our applications, it is possible that such adjustments may only reduce or delay this effect. Further
+reliability testing is needed in order to assess valve performance beyond the 100 trials described in Section 6.1.
+8.2 Towards Larger Surfaces
+A second concern relates to pneumatic actuation, and arises when working with large transducer membranes.
+Since these membranes are cast from 3D-printed molds, the printer’s working area determines the maximum size
+of a cast membrane. Larger membranes can be assembled from these smaller sections, but discontinuities at the
+section boundaries can lead to air leakage, and unpredictable actuation behavior. Future revisions may benefit
+from a less-dense actuator packing (allowing for a thicker, more robust section boundary) or flexures between
+cells to mitigate PCB bowing (which can become significant at larger scales, such as our 127 valve array).
+In addition, the global cavity, instead of being 3D-printed, could itself be fabricated via a layer-driven approach.
+(Indeed, commercial manifolds4 exist that utilize this technique.) Stacking and bonding milled sheets may scale
+more easily than a purely additive procedure.
+8.3 Towards Denser Surfaces
+The electronic components that we use — in particular, the opto-isolated solid state relays — determine the
+minimum pitch of the raw Stoma-Board surface (18 mm). It is worth noting that these particular components are
+overpowered for our application, capable of switching currents that are orders of magnitude larger than necessary.
+With more refined electrical engineering, it is conceivable that this pitch could be reduced. However, as the size
+of the electrostatic actuators decrease, so too does the force. The tradeoffs in this area should be evaluated.
+8.4 Bidirectional Valves
+As noted in Section 4.4, valves in our system are designed to withstand pressure in only one direction. For many
+applications, such as those demonstrated in Section 7, this is sufficient. However, if bidirectional switching is
+necessary, a variation of this construction can be used. By adding an additional membrane (Figure 23), effectively
+placing two flap valves "back-to-back", we can block (and switch) pressure in both directions. Though we have
+built some early prototypes with this construction, these new valves have yet to be fully characterized — this is
+an area of future work.
+4https://www.theleeco.com/products/electro-fluidic-systems/manifold-technology/
+Proc. ACM Interact. Mob. Wearable Ubiquitous Technol., Vol. 6, No. 1, Article 12. Publication date: March 2022.
+12:22 • Gonzalez and Hudson
+Fig. 23. Concept for a bidirectional Stoma-Board valve, consisting of an upper and lower membrane (two switchable flap
+valves, back to back). Such a construction resists both positive and negative pressures.
+8.5 Stoma-Board as a Raw Material
+Ultimately, we envision programmable surfaces that can function as "raw materials" (i.e. available for broad
+use by designers, not necessarily engineered for one particular application). An LED strip, for example, can be
+purchased, cut, and applied to an object — in the hands of a user, it is closer to a roll of decorative tape than a
+flexible circuit board. Such a future may be possible for tactile programmable materials as well, but not within
+the constraints of a module-driven design.
+We see the four characteristics of these layer-driven programmable surfaces (outlined in Section 1) as branching
+points for subsequent research. For instance, while cell communication within Stoma-Board is neighbor-to-
+neighbor, the original messages are still generated upstream — a truly information-responsive material could
+perform this act internally. Future implementations might benefit from a transition towards fully distributed
+computation. Onboard pressure sources, such as electrostatic or piezoelectric micropumps, can also bring this
+closer to becoming a fully untethered programmable material.
+9 CONCLUSION
+We observe that a layer-driven fabrication process, characterized by patterning and stacking, can give rise to
+programmable surfaces that may scale more readily than their module-driven counterparts. Instead of building
+and assembling actuators individually, actuators in our framework are formed all at once, during the layup
+process. The resulting cells are composite mesostructures, cross-sections of which are distributed across the
+functional layers of our material.
+We introduce Stoma-Board as a programmable surface that exemplifies this model. In this particular implemen-
+tation, the actuator cells are electrostatic valves, which communicate digitally with their neighbors, and regulate
+the flow of air between a pneumatic transducer layer and a global reservoir. The valves themselves are a novel
+structure that can resist human-scale pressures of 80 kPa (an order of magnitude larger than earlier variants). As
+the cells are ultimately responsive to information sources upstream, we are able to use Stoma-Board as a "raw
+material" to construct several dynamic, pneumatically-powered devices.
+Moving forward, research in discretely-actuated programmable surfaces may benefit from this layer-driven
+lens, adopting composite fabrication techniques and distributed computation paradigms from materials science
+and robotics.
+ACKNOWLEDGMENTS
+The authors thank Alexandra Ion, whose comments and feedback improved this work.
+Proc. ACM Interact. Mob. Wearable Ubiquitous Technol., Vol. 6, No. 1, Article 12. Publication date: March 2022.
+Layer by Layer, Patterned Valves Enable Programmable Soft Surfaces • 12:23
+REFERENCES
+[1] Jason Alexander, Anne Roudaut, Jürgen Steimle, Kasper Hornbæk, Miguel Bruns Alonso, Sean Follmer, and Timothy Merritt. 2018.
+Grand challenges in shape-changing interface research. In Proceedings of the 2018 CHI Conference on Human Factors in Computing
+Systems. 1–14.
+[2] Amir Ali Amiri Moghadam, Seyedhamidreza Alaie, Suborna Deb Nath, Mahdie Aghasizade Shaarbaf, James K Min, Simon Dunham, and
+Bobak Mosadegh. 2018. Laser cutting as a rapid method for fabricating thin soft pneumatic actuators and robots. Soft robotics 5, 4 (2018),
+443–451.
+[3] Douglas Anjewierden, Gregory A Liddiard, and Bruce K Gale. 2012. An electrostatic microvalve for pneumatic control of microfluidic
+systems. Journal of Micromechanics and Microengineering 22, 2 (2012), 025019.
+[4] Byunghoon Bae, Jeahyeong Han, Richard I Masel, and Mark A Shannon. 2007. A bidirectional electrostatic microvalve with microsecond
+switching performance. Journal of Microelectromechanical Systems 16, 6 (2007), 1461–1471.
+[5] Bavani Balakrisnan, Alek Nacev, and Elisabeth Smela. 2015. Design of bending multi-layer electroactive polymer actuators. Smart
+Materials and Structures 24, 4 (2015), 045032.
+[6] Nadine Besse, Samuel Rosset, Juan Jose Zarate, Elisabetta Ferrari, Luca Brayda, and Herbert Shea. 2017. Understanding graphics on a
+scalable latching assistive haptic display using a shape memory polymer membrane. IEEE transactions on haptics 11, 1 (2017), 30–38.
+[7] Nadine Besse, Samuel Rosset, Juan Jose Zarate, and Herbert Shea. 2017. Flexible active skin: large reconfigurable arrays of individually
+addressed shape memory polymer actuators. Advanced Materials Technologies 2, 10 (2017), 1700102.
+[8] David K Biegelsen, Andrew A Berlin, Patrick Cheung, Markus PJ Fromherz, David Goldberg, Warren B Jackson, Bryan Preas, James
+Reich, and Lars E Swartz. 2000. AirJet paper mover: An example of mesoscale MEMS. In Micromachined Devices and Components VI ,
+Vol. 4176. International Society for Optics and Photonics, 122–129.
+[9] Stuart Diller, Carmel Majidi, and Steven H Collins. 2016. A lightweight, low-power electroadhesive clutch and spring for exoskeleton
+actuation. In 2016 IEEE International Conference on Robotics and Automation (ICRA) . IEEE, 682–689.
+[10] Dylan Drotman, Michael Ishida, Saurabh Jadhav, and Michael T Tolley. 2018. Application-driven design of soft, 3-D printed, pneumatic
+actuators with bellows. IEEE/ASME Transactions on Mechatronics 24, 1 (2018), 78–87.
+[11] Juri Fujii, Takuya Matsunobu, and Yasuaki Kakehi. 2018. Colorise: Shape-and color-changing pixels with inflatable elastomers and
+interactions. In Proceedings of the Twelfth International Conference on Tangible, Embedded, and Embodied Interaction . 199–204.
+[12] Jianzhe Gu, David E Breen, Jenny Hu, Lifeng Zhu, Ye Tao, Tyson Van de Zande, Guanyun Wang, Yongjie Jessica Zhang, and Lining Yao.
+2019. Geodesy: Self-rising 2.5 D Tiles by Printing along 2D Geodesic Closed Path. In Proceedings of the 2019 CHI Conference on Human
+Factors in Computing Systems . 1–10.
+[13] Hermes Hernandez, Enrique Preza, and Ramiro Velazquez. 2009. Characterization of a Piezoelectric Ultrasonic Linear Motor for Braille
+Displays. In 2009 Electronics, Robotics and Automotive Mechanics Conference (CERMA) . 402–407. https://doi.org/10.1109/CERMA.2009.82
+[14] Ronan Hinchet, Velko Vechev, Herbert Shea, and Otmar Hilliges. 2018. Dextres: Wearable haptic feedback for grasping in vr via a thin
+form-factor electrostatic brake. In Proceedings of the 31st Annual ACM Symposium on User Interface Software and Technology . 901–912.
+[15] J Blake Jeans and Dennis Hong. 2009. IMPASS: Intelligent mobility platform with active spoke system. In 2009 IEEE International
+Conference on Robotics and Automation . IEEE, 1605–1606.
+[16] Clyde F. Coombs Jr. and Happy T. Holden. 2016. Printed Circuits Handbook, Seventh Edition . McGraw-Hill Professional.
+[17] T. Kalisky, Y. Wang, B. Shih, D. Drotman, S. Jadhav, E. Aronoff-Spencer, and M. T. Tolley. 2017. Differential pressure control of 3D
+printed soft fluidic actuators. In 2017 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS) . 6207–6213. https:
+//doi.org/10.1109/IROS.2017.8206523
+[18] Mustafa Emre Karagozler, Jason D Campbell, Gary K Fedder, Seth Copen Goldstein, Michael Philetus Weller, and Byung Woo Yoon. 2007.
+Electrostatic latching for inter-module adhesion, power transfer, and communication in modular robots. In 2007 IEEE/RSJ International
+Conference on Intelligent Robots and Systems . IEEE, 2779–2786.
+[19] Junji Kawamoto and Fumihiko Asano. 2012. Active viscoelastic-legged rimless wheel with upper body and its adaptability to irregular
+terrain. In 2012 IEEE/RSJ International Conference on Intelligent Robots and Systems . IEEE, 157–162.
+[20] Nicholas Kellaris, Vidyacharan Gopaluni Venkata, Garrett M Smith, Shane K Mitchell, and Christoph Keplinger. 2018. Peano-HASEL
+actuators: Muscle-mimetic, electrohydraulic transducers that linearly contract on activation. Science Robotics 3, 14 (2018), eaar3276.
+[21] Joonyeong Kim, Byung-Kil Han, Dongbum Pyo, Semin Ryu, Hanbyeol Kim, and Dong-Soo Kwon. 2020. Braille display for portable
+device using flip-latch structured electromagnetic actuator. IEEE transactions on haptics 13, 1 (2020), 59–65.
+[22] Christopher Kopic and Kristian Gohlke. 2016. InflatiBits: A Modular Soft Robotic Construction Kit for Children. In Proceedings of the
+TEI’16: Tenth International Conference on Tangible, Embedded, and Embodied Interaction . 723–728.
+[23] M Koutsoureli, L Michalas, and G Papaioannou. 2012. Advanced dielectric charging characterization in capacitive MEMS. In 2012 IEEE
+International Conference on Industrial Technology . IEEE, 545–550.
+[24] Doug Laney and Dennis Hong. 2005. Kinematic analysis of a novel rimless wheel with independently actuated spokes. In International
+Design Engineering Technical Conferences and Computers and Information in Engineering Conference , Vol. 47446. 609–614.
+Proc. ACM Interact. Mob. Wearable Ubiquitous Technol., Vol. 6, No. 1, Article 12. Publication date: March 2022.
+12:24 • Gonzalez and Hudson
+[25] Christina Larson, B Peele, S Li, S Robinson, M Totaro, L Beccai, B Mazzolai, and R Shepherd. 2016. Highly stretchable electroluminescent
+skin for optical signaling and tactile sensing. science 351, 6277 (2016), 1071–1074.
+[26] Susan J Lederman and Roberta L Klatzky. 2009. Haptic perception: A tutorial. Attention, Perception, & Psychophysics 71, 7 (2009),
+1439–1459.
+[27] Daniel Leithinger, Sean Follmer, Alex Olwal, and Hiroshi Ishii. 2015. Shape displays: Spatial interaction with dynamic physical form.
+IEEE computer graphics and applications 35, 5 (2015), 5–11.
+[28] Edouard Leroy, Ronan Hinchet, and Herbert Shea. 2020. Multimode hydraulically amplified electrostatic actuators for wearable haptics.
+Advanced Materials 32, 36 (2020), 2002564.
+[29] Andrew D Marchese, Robert K Katzschmann, and Daniela Rus. 2015. A recipe for soft fluidic elastomer robots. Soft robotics 2, 1 (2015),
+7–25.
+[30] Elena Márquez Segura, James Fey, Ella Dagan, Samvid Niravbhai Jhaveri, Jared Pettitt, Miguel Flores, and Katherine Isbister. 2018.
+Designing Future Social Wearables with Live Action Role Play (Larp) Designers. In Proceedings of the 2018 CHI Conference on Human
+Factors in Computing Systems . 1–14.
+[31] Hayley McClintock, Fatma Zeynep Temel, Neel Doshi, Je-sung Koh, and Robert J Wood. 2018. The milliDelta: A high-bandwidth,
+high-precision, millimeter-scale Delta robot. Science Robotics 3, 14 (2018).
+[32] Michael Andy McEvoy and Nikolaus Correll. 2018. Shape-changing materials using variable stiffness and distributed control. Soft
+robotics 5, 6 (2018), 737–747.
+[33] Stefano Mintchev, Marco Salerno, Alexandre Cherpillod, Simone Scaduto, and Jamie Paik. 2019. A portable three-degrees-of-freedom
+force feedback origami robot for human–robot interactions. Nature Machine Intelligence 1, 12 (2019), 584–593.
+[34] Shane K Mitchell, Xingrui Wang, Eric Acome, Trent Martin, Khoi Ly, Nicholas Kellaris, Vidyacharan Gopaluni Venkata, and Christoph
+Keplinger. 2019. An Easy-to-Implement Toolkit to Create Versatile and High-Performance HASEL Actuators for Untethered Soft Robots.
+Advanced Science 6, 14 (2019), 1900178.
+[35] Fuka Nojiri and Yasuaki Kakehi. 2014. BelliesWave: color and shape changing pixels using bilayer rubber membranes. InACM SIGGRAPH
+2014 Posters. 1–1.
+[36] Sile O’Modhrain. 2014. Rekindling the search for the Holy Braille. In 2014 IEEE Haptics Symposium (HAPTICS) . IEEE, xviii–xviii.
+[37] Jifei Ou, Felix Heibeck, and Hiroshi Ishii. 2016. TEI 2016 Studio: Inflated Curiosity. In Proceedings of the TEI’16: Tenth International
+Conference on Tangible, Embedded, and Embodied Interaction . 766–769.
+[38] James Patten and Hiroshi Ishii. 2007. Mechanical constraints as computational constraints in tabletop tangible interfaces. In Proceedings
+of the SIGCHI conference on Human factors in computing systems . 809–818.
+[39] Ron Pelrine, Annjoe Wong-Foy, Brian McCoy, Dennis Holeman, Rich Mahoney, Greg Myers, Jim Herson, and Tom Low. 2012. Diamag-
+netically levitated robots: An approach to massively parallel robotic systems with unusual motion properties. In 2012 IEEE International
+Conference on Robotics and Automation . IEEE, 739–744.
+[40] Panagiotis Polygerinos, Nikolaus Correll, Stephen A Morin, Bobak Mosadegh, Cagdas D Onal, Kirstin Petersen, Matteo Cianchetti,
+Michael T Tolley, and Robert F Shepherd. 2017. Soft robotics: Review of fluid-driven intrinsically soft devices; manufacturing, sensing,
+control, and applications in human-robot interaction. Advanced Engineering Materials 19, 12 (2017), 1700016.
+[41] Jin-Yuan Qian, Cong-Wei Hou, Xiao-Juan Li, and Zhi-Jiang Jin. 2020. Actuation Mechanism of Microvalves: A Review. Micromachines
+11, 2 (2020), 172.
+[42] Yu Qiu, Zhiyun Lu, and Qibing Pei. 2018. Refreshable tactile display based on a bistable electroactive polymer and a stretchable
+serpentine Joule heating electrode. ACS applied materials & interfaces 10, 29 (2018), 24807–24815.
+[43] Dan Raviv, Wei Zhao, Carrie McKnelly, Athina Papadopoulou, Achuta Kadambi, Boxin Shi, Shai Hirsch, Daniel Dikovsky, Michael
+Zyracki, Carlos Olguin, et al. 2014. Active printed materials for complex self-evolving deformations. Scientific reports 4 (2014), 7422.
+[44] Matthew A Robertson, Masato Murakami, Wyatt Felt, and Jamie Paik. 2018. A Compact Modular Soft Surface With Reconfigurable
+Shape and Stiffness. IEEE/ASME Transactions on Mechatronics 24, 1 (2018), 16–24.
+[45] Matthew A Robertson and Jamie Paik. 2017. New soft robots really suck: Vacuum-powered systems empower diverse capabilities.
+Science Robotics 2, 9 (2017).
+[46] Philipp Rothemund, Alar Ainla, Lee Belding, Daniel J Preston, Sarah Kurihara, Zhigang Suo, and George M Whitesides. 2018. A soft,
+bistable valve for autonomous control of soft actuators. Science Robotics 3, 16 (2018).
+[47] Daniela Rus and Michael T Tolley. 2018. Design, fabrication and control of origami robots.Nature Reviews Materials 3, 6 (2018), 101–112.
+[48] Alexander Russomanno, Sile O’Modhrain, R Brent Gillespie, and Matthew WM Rodger. 2015. Refreshing refreshable braille displays.
+IEEE transactions on haptics 8, 3 (2015), 287–297.
+[49] Alex Russomanno, Zhentao Xu, Sile O’Modhrain, and Brent Gillespie. 2017. A pneu shape display: Physical buttons with programmable
+touch response. In 2017 IEEE World Haptics Conference (WHC) . IEEE, 641–646.
+[50] Deepak Ranjan Sahoo, Timothy Neate, Yutaka Tokuda, Jennifer Pearson, Simon Robinson, Sriram Subramanian, and Matt Jones. 2018.
+Tangible drops: a visio-tactile display using actuated liquid-metal droplets. In Proceedings of the 2018 CHI Conference on Human Factors
+in Computing Systems. 1–14.
+Proc. ACM Interact. Mob. Wearable Ubiquitous Technol., Vol. 6, No. 1, Article 12. Publication date: March 2022.
+Layer by Layer, Patterned Valves Enable Programmable Soft Surfaces • 12:25
+[51] Sebastian Sanchez and Pranav A Bhounsule. 2021. Design, Modeling, and Control of a Differential Drive Rimless Wheel That Can Move
+Straight and Turn. Automation 2, 3 (2021), 98–115.
+[52] Kazuo Sato and Mitsuhiro Shikida. 1994. An electrostatically actuated gas valve with an S-shaped film element.Journal of micromechanics
+and microengineering 4, 4 (1994), 205.
+[53] Ali Shtarbanov. 2021. FlowIO Development Platform–the Pneumatic “Raspberry Pi” for Soft Robotics. In Extended Abstracts of the 2021
+CHI Conference on Human Factors in Computing Systems . 1–6.
+[54] Alexa F Siu, Eric J Gonzalez, Shenli Yuan, Jason B Ginsberg, and Sean Follmer. 2018. Shapeshift: 2D spatial manipulation and self-actuation
+of tabletop shape displays for tangible and haptic interaction. In Proceedings of the 2018 CHI Conference on Human Factors in Computing
+Systems. 1–13.
+[55] Vern Solberg. 2015. Embedding passive and active components: PCB design and fabrication process variations. IPC APEX EXPO (2015).
+[56] Pratheev S Sreetharan, John P Whitney, Mark D Strauss, and Robert J Wood. 2012. Monolithic fabrication of millimeter-scale machines.
+Journal of Micromechanics and Microengineering 22, 5 (2012), 055027.
+[57] Miriam Sturdee. 2018. Sketching as a support mechanism for the design and development of shape-changing interfaces . Lancaster University
+(United Kingdom).
+[58] Ryo Suzuki, Jun Kato, Mark D Gross, and Tom Yeh. 2018. Reactile: Programming swarm user interfaces through direct physical
+manipulation. In Proceedings of the 2018 CHI Conference on Human Factors in Computing Systems . 1–13.
+[59] Ryo Suzuki, Ryosuke Nakayama, Dan Liu, Yasuaki Kakehi, Mark D Gross, and Daniel Leithinger. 2020. LiftTiles: constructive building
+blocks for prototyping room-scale shape-changing interfaces. In Proceedings of the Fourteenth International Conference on Tangible,
+Embedded, and Embodied Interaction . 143–151.
+[60] Yichao Tang, Yanbin Li, Yaoye Hong, Shu Yang, and Jie Yin. 2019. Programmable active kirigami metasheets with more freedom of
+actuation. Proceedings of the National Academy of Sciences 116, 52 (2019), 26407–26413.
+[61] Shan-Yuan Teng, Cheng-Lung Lin, Chi-huan Chiang, Tzu-Sheng Kuo, Liwei Chan, Da-Yuan Huang, and Bing-Yu Chen. 2019. Tilepop:
+Tile-type pop-up prop for virtual reality. In Proceedings of the 32nd Annual ACM Symposium on User Interface Software and Technology .
+639–649.
+[62] Joshua D Tice, Amit V Desai, Thomas A Bassett, Christopher A Apblett, and Paul JA Kenis. 2014. Control of pressure-driven components
+in integrated microfluidic devices using an on-chip electrostatic microvalve. RSC Advances 4, 93 (2014), 51593–51602.
+[63] Markku Tilli et al. 2015. Handbook of Silicon Based MEMS Materials and Technologies (second ed.). William Andrew Publishing, Boston.
+https://doi.org/10.1016/B978-0-323-29965-7.00046-4
+[64] Guanyun Wang, Humphrey Yang, Zeyu Yan, Nurcan Gecer Ulu, Ye Tao, Jianzhe Gu, Levent Burak Kara, and Lining Yao. 2018. 4DMesh:
+4D printing morphing non-developable mesh surfaces. In Proceedings of the 31st Annual ACM Symposium on User Interface Software and
+Technology. 623–635.
+[65] Malte Weiss, Florian Schwarz, Simon Jakubowski, and Jan Borchers. 2010. Madgets: actuating widgets on interactive tabletops. In
+Proceedings of the 23nd annual ACM symposium on User interface software and technology . 293–302.
+[66] Yichuan Wu, Justin K Yim, Jiaming Liang, Zhichun Shao, Mingjing Qi, Junwen Zhong, Zihao Luo, Xiaojun Yan, Min Zhang, Xiaohao
+Wang, et al. 2019. Insect-scale fast moving and ultrarobust soft robot. Science Robotics 4, 32 (2019).
+[67] Kazushi Yoshida, Shuji Tanaka, Yosuke Hagihara, Shigeaki Tomonari, and Masayoshi Esashi. 2010. Normally closed electrostatic
+microvalve with pressure balance mechanism for portable fuel cell application. Sensors and Actuators A: Physical 157, 2 (2010), 290–298.
+[68] Shigeo Yoshida, Yuqian Sun, and Hideaki Kuzuoka. 2020. PoCoPo: Handheld pin-based shape display for haptic rendering in virtual
+reality. In Proceedings of the 2020 CHI Conference on Human Factors in Computing Systems . 1–13.
+[69] Juan Jose Zarate, Olexandr Gudozhnik, Anthony Sébastien Ruch, and Herbert Shea. 2017. Keep in touch: portable haptic display with
+192 high speed taxels. In Proceedings of the 2017 CHI Conference Extended Abstracts on Human Factors in Computing Systems . 349–352.
+[70] Juan José Zárate and Herbert Shea. 2016. Using pot-magnets to enable stable and scalable electromagnetic tactile displays. IEEE
+transactions on haptics 10, 1 (2016), 106–112.
+[71] Kai Zhang, Eric J Gonzalez, Jianglong Guo, and Sean Follmer. 2019. Design and Analysis of High-Resolution Electrostatic Adhesive
+Brakes Towards Static Refreshable 2.5 D Tactile Shape Display. IEEE Transactions on Haptics 12, 4 (2019), 470–482.
+[72] Wen-Ming Zhang, Han Yan, Zhi-Ke Peng, and Guang Meng. 2014. Electrostatic pull-in instability in MEMS/NEMS: A review. Sensors
+and Actuators A: Physical 214 (2014), 187–218.
+Proc. ACM Interact. Mob. Wearable Ubiquitous Technol., Vol. 6, No. 1, Article 12. Publication date: March 2022.

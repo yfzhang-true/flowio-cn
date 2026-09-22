@@ -1,0 +1,1628 @@
+MorphingSkin: A Skin-like Platform that Integrates Multimodal 
+Hydraulic Actuators Based on Flexible Electroosmotic Pumps 
+Tianyu Yu 
+Morphing Matter Lab 
+University of California, Berkeley 
+Berkeley, California, USA 
+tianyuyu@berkeley.edu 
+Peisheng He 
+University of California, Berkeley 
+Berkeley, California, USA 
+hopsonhe@berkeley.edu 
+Bob Tianqi Wei 
+College of Engineering 
+University of California, Berkeley 
+Berkeley, California, USA 
+bobtianqiwei@berkeley.edu 
+Chenyuheng Wang 
+Tsinghua University 
+Beijing, China 
+wcyh23@mails.tsinghua.edu.cn 
+Xueqing Li 
+Tsinghua university 
+Beijing, Beijing, China 
+li-xq23@mails.tsinghua.edu.cn 
+Xuezhu Wang 
+Tsinghua University 
+Beijing, China 
+15626222995@163.com 
+Yao Lu 
+Tsinghua University 
+Beijing, China 
+lainaluyao@gmail.com 
+Wei Yue 
+University of California, Berkeley 
+Berkeley, California, USA 
+wei_yue@berkeley.edu 
+Megan Teng 
+University of California, Berkeley 
+Berkeley, California, USA 
+meganteng@berkeley.edu 
+Zihan Wang 
+Department of Mechanical 
+Engineering 
+University of California, Berkeley 
+Berkeley, California, USA 
+zihan.wang@berkeley.edu 
+Liwei Lin 
+Mechanical Engineering 
+University of California, Berkeley 
+Berkeley, California, USA 
+lwlin@berkeley.edu 
+Haipeng Mi 
+Tsinghua University 
+Beijing, China 
+mhp@tsinghua.edu.cn 
+Qi Lu 
+The Future Laboratory 
+Tsinghua University 
+Beijing, China 
+luq@mail.tsinghua.edu.cn 
+Lining Yao∗ 
+Mechanical Engineering, Morphing 
+Matter Lab 
+University of California, Berkeley 
+Berkeley, California, USA 
+liningy@berkeley.edu 
+Abstract 
+Interactive surfaces have garnered significant attention in Human-
+Computer Interaction, with fluid-driven actuators being a promis-
+ing actuation technology due to their flexible form factors and 
+multimodal interactivities. However, traditional fluid-driven sys-
+tems typically rely on bulky and noisy electromechanical hardware, 
+limiting their portability and practicality. While recent work has 
+introduced compact hydraulic actuators like electroosmotic pumps 
+(EOPs) in haptic devices, their potential for building multifunctional 
+interactive surfaces remains largely unexplored. 
+In this work, we present MorphingSkin, a skin-like platform that 
+integrates multiple, multimodal hydraulic actuators using flexible 
+∗Corresponding author. 
+This work is licensed under a Creative Commons Attribution 4.0 International License. 
+UIST ’25, Busan, Republic of Korea 
+© 2025 Copyright held by the owner/author(s). 
+ACM ISBN 979-8-4007-2037-6/25/09 
+https://doi.org/10.1145/3746059.3747685 
+EOPs as lightweight and self-contained fluidic actuators. We in-
+troduce the architecture of MorphingSkin and its versatile design 
+space for multimodal actuation in force, shape, optical, and weight 
+domains. We demonstrate interactive and robotic applications that 
+integrate multiple actuators working collectively within a single 
+MorphingSkin device. Through this work, we envision the future 
+of using MorphingSkin technology for interactive surfaces that in-
+tegrate flexible form factors and multimodal actuation capabilities. 
+CCS Concepts 
+• Human-centered computing → Interaction devices; Inter-
+active systems and tools; • Hardware → Sensors and actuators; 
+Electro-mechanical devices; Emerging technologies. 
+Keywords 
+Interactive surface, Multimodal actuators, Fluid-driven interfaces, 
+Electroosmotic pumps, Smart wearables, Robotics, Tangible display 
+ACM Reference Format: 
+Tianyu Yu, Peisheng He, Bob Tianqi Wei, Chenyuheng Wang, Xueqing 
+Li, Xuezhu Wang, Yao Lu, Wei Yue, Megan Teng, Zihan Wang, Liwei Lin, 
+UIST ’25, September 28–October 01, 2025, Busan, Republic of Korea Yu et al. 
+Haipeng Mi, Qi Lu, and Lining Yao. 2025. MorphingSkin: A Skin-like Plat-
+form that Integrates Multimodal Hydraulic Actuators Based on Flexible 
+Electroosmotic Pumps. In The 38th Annual ACM Symposium on User In-
+terface Software and Technology (UIST ’25), September 28–October 01, 2025, 
+Busan, Republic of Korea. ACM, New York, NY, USA, 21 pages. https://doi. 
+org/10.1145/3746059.3747685 
+1 Introduction 
+Interactive surfaces have garnered significant attention within the 
+field of Human-Computer Interaction (HCI), which are capable 
+of providing multimodal physical interactions on object surfaces 
+and human bodies for a wide range of applications, such as tangi-
+ble displays [24], haptic wearables [10], and robotic interfaces [8]. 
+Among the various technologies employed to realize interactive 
+surfaces, fluid-driven actuators (i.e., pneumatic and hydraulic ac-
+tuators) have attracted increasing interest due to their distinctive 
+advantages. The inherent fluidity of the working medium allows 
+such interfaces to conform to complex geometries [35] or adapt to 
+flexible, reconfigurable shapes [44]. In addition, the flowing behav-
+ior of the working material enables dynamic transformations of 
+various physical properties on object surfaces, such as color [42], 
+shape [66], temperature [72], and weight [43], as different interac-
+tion modalities. 
+Despite these benefits, traditional approaches to actuating and 
+controlling fluid-driven systems typically rely on bulky and noisy 
+electromechanical pumps and valves, which limits the possibility 
+for portable and practical designs [35, 66, 72]. In response to these 
+challenges, recent research in the domain of hydraulic actuators 
+has explored the usage of lightweight and self-contained fluidic 
+actuators that are capable of eliminating the usage of rigid, mechan-
+ical moving parts [5, 49]. These fluidic systems are mostly driven by 
+high-voltage power sources, eliminating the need for mechanical 
+pumps. Among these advanced hydraulic actuators, electroosmotic 
+pumps (EOPs) stand out for their compact multilayered structures 
+that generate electrokinetic flow directly in response to voltage 
+signals, typically below 1kV [70]. Although prior work has explored 
+utilizing EOPs to develop shape-changing actuators for haptic but-
+ton [48], display [55], and gloves [53], we see an underexplored 
+opportunity to expand the usage of EOPs beyond rigid, panel-based 
+displays, toward supporting richer interaction modalities and func-
+tionalities highlighted by the fluidic-driven actuators. 
+In this work, we present MorphingSkin, a skin-like platform that 
+integrates multiple, multimodal hydraulic actuation using flexible 
+EOPs as lightweight, self-contained fluidic actuators. We introduce 
+the overall architecture of MorphingSkin, including the flexible 
+EOPs and the surrounding elastomeric structures, which together 
+span a versatile design space for multimodal actuation in force, 
+shape, optical, and weight domains. We next demonstrate a wide 
+range of applications using MorphingSkin as an interactive sur-
+face in robotics, wearables, and physical interaction contexts, each 
+utilizing multiple actuators that work collectively within a single 
+MorphingSkin device. We then detail the fabrication process for 
+MorphingSkin devices with customized shapes and both flexible 
+and partially stretchable form factors, along with a portable driv-
+ing hardware system that enables untethered operation. Lastly, we 
+present technical evaluations of the MorphingSkin system, which 
+show comparable hydraulic performance to prior work. Through 
+this work, we envision the future of using MorphingSkin technol-
+ogy for interactive surfaces that integrate flexible form factors and 
+multimodal actuation capabilities. 
+2 Related Work 
+2.1
+ Interactive surfaces and skins 
+Interactive surfaces have been a widely explored topic in HCI, which 
+embed multimodal physical actuation or sensing capabilities on 
+the surfaces of everyday objects or the human body. Among these, 
+interfaces that feature thin, flexible, or untethered form factors 
+allow themselves to conform seamlessly to various surfaces, further 
+extending their potential as a universal, interactive second skin. 
+For instance, on object surfaces, researchers have explored attach-
+ing shape-changing devices to enable a wide range of applications, 
+including haptic feedback [7, 9], information communication [8], 
+kinetic motion [65], or modulation of the physical environment 
+such as illumination control [1, 14, 22]. Other work has focused on 
+adding color-changing materials on object surfaces to alter the phys-
+ical appearance [27, 52] or display dynamic information [21, 51]. 
+Additionally, some approaches embedded flexible electronics on ob-
+ject surfaces to support diverse sensing capabilities, such as touch 
+sensing [16], object recognition [63], or gesture and activity recog-
+nition [57]. 
+Similarly, on human skin, various approaches have been studied 
+for embedding multimodal interactions. For example, previous work 
+has introduced wearable devices that provide force output [10, 39], 
+electrical stimulation [59, 62], texture changes [20], thermal feed-
+back [19, 46], or friction modulation [41], offering rich multimodal 
+haptic experiences. Other research has utilized color-changing or 
+shape-changing materials to create wearable artifacts or on-skin 
+displays for different types of functional appearance, such as infor-
+mation encoding [25, 33], humidity regulation [67], or personalized 
+expression [12, 30, 32, 56]. Furthermore, extensive research has 
+focused on integrating electronics with textiles to realize sensing 
+capabilities, such as posture tracking [73– 75] and physiological 
+sensing [40], to enable smart wearables. 
+Our work builds upon these prior works by introducing a new 
+approach to develop a flexible, skin-like platform that integrates 
+multimodal actuation capabilities. 
+2.2 Fluid-driven actuation 
+Among the various technologies to realize interactive surfaces, 
+fluid-driven actuators (i.e., pneumatic and hydraulic actuators) have 
+garnered increasing attention due to their distinctive advantages. 
+Firstly, the inherent fluidity of the working medium allows these 
+interfaces to adapt to complex, flexible, and reconfigurable geome-
+tries, making them well-suited for applications on complex object 
+surfaces [45] or the human body [36]. 
+More importantly, the flowing behavior of the working fluid 
+enables dynamic transformations of a range of physical properties 
+that serve as the foundation for multimodal actuation. For instance, 
+extensive work has utilized pneumatic actuators [23, 31, 38, 66, 71] 
+and hydraulic actuators [7, 64] in different designs to achieve shape-
+or texture-changing surfaces. Other work has explored controlling 
+the colored fluid distribution [2, 35, 42, 58] or modulating the fluid 
+MorphingSkin UIST ’25, September 28–October 01, 2025, Busan, Republic of Korea 
+Figure 1: MorphingSkin. A skin-like platform that integrates multiple hydraulic actuators based on flexible electroosmotic 
+pumps, providing multimodal actuation capabilities, spanning force, shape, optical, and weight domains, which enables a wide 
+range of applications, including actuating surfaces on (b-c) companion robots and (e) gripper fingers, (f) multimodal wearables, 
+and physical interaction contexts such as (g) dynamic lampshades and (h) tangible displays. 
+transparency [26] to enable dynamic visual appearance on 3D ob-
+jects. In addition, works such as MobileGravity [28], PumpVR [29], 
+and See-Saw [43] utilize liquid mass transfer to alter weight distri-
+bution for haptic feedback in VR experiences or physical kinetic 
+installations. Thermotion [72], Thermaterial [69], and Thermina-
+tor [17] use fluids as thermal media to program surface temperature 
+or deliver dynamic thermal haptic feedback. Chemical Haptics [37], 
+Logic Bonbon [11], and Taste Retargeting [3] utilize fluids as chem-
+ical carriers, providing multimodal haptic or gustatory feedback on 
+the human body. 
+Inspired by these prior works, our work explores integrating 
+multiple types of hydraulic actuators into interactive surfaces to 
+achieve flexible form factors and multimodal actuation capabilities. 
+2.3 Electrical-hydraulic actuators 
+Traditional approaches to actuating and controlling fluid-driven 
+systems often rely on bulky and noisy electromechanical pumps 
+and valves, which limits their feasibility in portable or practical 
+applications [66, 72]. Research in pneumatic systems has pursued 
+multiple approaches for lightweight actuation solutions [15, 54]. 
+Similarly, recent advances in hydraulic actuators have also focused 
+on building compact, self-contained actuators to eliminate rigid 
+mechanical moving parts. 
+One type of technology is Hydraulically Amplified Self-Healing 
+Electrostatic (HASEL) actuators, which couple electrostatic and hy-
+draulic forces to support a variety of actuation modes [49]. These ac-
+tuators have been widely used in building haptic displays [7, 13, 34, 
+50] and robots [4, 47, 68] for their fast and remarkable force output. 
+Another branch involves Electrohydrodynamic (EHD) actuators, 
+which generate continuous electrokinetic flow with dielectric fluids 
+based on electrochemical reactions under high electric fields [5]. 
+Researchers have employed EHD actuators to create modular toolk-
+its [44], dynamic displays [2, 26], as well as soft robots [60]. How-
+ever, the aforementioned actuators typically require high-voltage 
+power supplies (500V–10kV) or lack the compactness for integration 
+within thin, skin-like platforms. 
+In contrast, Electroosmotic Pumps (EOPs) stand out for their 
+compact, multilayered structure capable of generating electroki-
+netic flow under relatively low voltages (typically <1kV) based 
+on the intrinsic electrical double layer. In the HCI field, Shultz et 
+al. [55] utilized EOPs to develop thin-panel displays that integrate 
+an array of shape-changing actuators for haptic feedback. Shen 
+et al. [53] used EOPs in miniature designs to create lightweight, 
+high-resolution shape-changing fingertip arrays for multi-type tac-
+tile experiences in VR applications. Rae-Grant et al. [48] developed 
+dynamic tactile buttons based on EOPs that provide fast response 
+and closed-loop deformation control. 
+While EOPs have demonstrated potential in haptic interfaces, we 
+see an underexplored opportunity to expand the usage of EOPs be-
+yond rigid, panel-based displays, toward supporting richer interac-
+tion modalities and functionalities highlighted by the fluidic-driven 
+systems. 
+In this work, we present MorphingSkin, a skin-like platform 
+that utilizes flexible EOPs as lightweight, self-contained hydraulic 
+actuators, integrating multiple, multimodal hydraulic actuation. 
+3 MorphingSkin Mechanism 
+To apply the EOP technique to our envisioned flexible and mul-
+timodal interface, a tailored structural composition is presented. 
+In particular, the design consideration of the flexible EOP layer 
+with the integrated flexible and partially stretchable EOP circuit is 
+UIST ’25, September 28–October 01, 2025, Busan, Republic of Korea Yu et al. 
+Figure 2: (a) MorphingSkin structure composition, including the coated EOP layer, output layer (colored in pink), reservoir 
+layer (in blue), connection layer, and the working fluid path (by white dashed curves), all designed using flexible or stretchable 
+materials and structures. (b) Three configurations of the working fluid path, including Collinear, Coplanar-Front, and Coplanar-
+Rear configurations. 
+unique to this project. In addition, we modularize essential func-
+tional components to allow design flexibility to customize the out-
+put modalities and form factors for different applications. 
+3.1 Structure composition 
+In this section, we introduce the structure composition of Mor-
+phingSkin. As shown in Figure 2a, the MorphingSkin structure is 
+centered around a middle EOP layer, which integrates multiple in-
+dependently controlled EOP units. Various types of elastic shells are 
+attached to both sides of the EOP layer, functioning as output layers, 
+reservoir layers, or connection layers, and enclosing the working 
+fluid inside that serves as the actuation medium. The entire skin is 
+designed using flexible or stretchable materials and structures. We 
+detail the key structural components below: 
+The EOP circuit is the embedded electronic circuit containing 
+multiple EOP units, each of which follows the basic structure con-
+sistent with prior work [48, 55, 70], consisting of two face-to-face 
+mesh-patterned electrodes that sandwich a pumping membrane 
+and an adhesive layer, as shown in Figure 2a. The two electrodes 
+are individually routed to the connector on their respective circuit 
+boards, enabling independent voltage control across each electrode 
+pair. In this work, we employ flexible printed circuits (FPCs) as 
+the base circuit board and use stretchable interconnect patterns to 
+provide overall flexibility and partial stretchability to the system. 
+The pumping membrane serves as the substrate in contact with 
+the working fluid, collectively forming the intrinsic electric double 
+layer to produce the electroosmotic flow under applied electric 
+fields. The adhesive layer ensures bonding and sealing between 
+the paired electrodes. The detailed design parameters for the EOP 
+circuit are presented in Section 6.1.1. During operation, each EOP 
+can be independently actuated by applying voltage, pumping the 
+working fluid to either side. 
+The EOP layer consists of the EOP circuit coated with stretch-
+able materials, forming the structural backbone of MorphingSkin, 
+as shown in Figure 2a. This layer also serves as a continuous barrier 
+that separates the elastic shells on both sides of the device, while 
+the electrode mesh regions remain exposed to allow working fluid 
+to pass through. When needed, additional fluidic vias are designed 
+to facilitate cross-layer fluid transport. 
+The output layer is a type of elastic shell attached to the EOP 
+layer, designed to provide functional actuations when the working 
+fluid is pumped into or out of the shell through the embedded EOPs. 
+By varying the shell geometry (e.g., volumetric cavities or fluidic 
+channels, shown in Figure 2a), as well as the material stiffness 
+and transparency, the output layer enables a variety of actuation 
+modalities (e.g., force generation, shape changes, or optical changes). 
+The design space of these multimodal actuation is detailed in Section 
+4. 
+The reservoir layer is another type of elastic shell attached to 
+the EOP layer, designed to store and supply working fluid for the 
+EOPs in the MorphingSkin device. Typically, the reservoir layers 
+are composed of soft, sagging elastic bags that passively deform to 
+balance the internal pressure with the atmospheric pressure during 
+fluid transport. Note that multiple EOPs may share a common 
+reservoir layer to save space and the working fluid, as shown in 
+Figure 2a. 
+The connection layer is a thin, planar elastic shell engraved 
+with millifluidic channels, enabling in-plane fluid transfer on either 
+side of the skin. Each fluidic channel terminates at either an exposed 
+electrode region or a fluidic via on the EOP layer, connecting the 
+EOPs and the elastic shells on different locations, as shown in Figure 
+2a. To prevent flow blockage when the internal pressure decreases, 
+small structural supports are added on the wall opposite to EOP 
+electrodes to ensure enough spacing for fluid transport. 
+The working fluid functions as the fluidic medium for actuation 
+throughout MorphingSkin. It is typically distributed within the 
+elastic shells and remains in contact with the embedded EOPs via 
+the exposed region on the EOP layer. When voltage is applied to an 
+EOP, the working fluid is then transferred across the EOP, enabling 
+functional actuation. 
+MorphingSkin UIST ’25, September 28–October 01, 2025, Busan, Republic of Korea 
+In addition, the presented structure is compatible with the in-
+tegration of other functional electronic components, such as the 
+heart rate sensors and touch buttons shown in the later application 
+section. 
+3.2 Hydraulic actuator and working fluid path 
+In the complete MorphingSkin system, each EOP is connected to 
+one output layer and one reservoir layer through either side (an 
+intermediate connection layer may be used for fluidic routing). Dur-
+ing operation, the EOP pumps the working fluid either from the 
+reservoir layer to the output layer or in the reverse direction, which 
+in turn alters the fluid mass, as well as the hydraulic pressure within 
+the output layer, resulting in pre-programmed functions such as 
+shape changes. Thus, each EOP, together with its adjoining out-
+put layers and reservoir layers, constitutes an individual hydraulic 
+actuator within the MorphingSkin. 
+Specifically, when the EOP is applied with a voltage that pumps 
+the working fluid into the output layer, the fluid mass within the 
+output layer increases, and the hydraulic pressure tends to rise to 
+a positive pressure relative to the atmospheric pressure. When the 
+voltage is reversed, the EOP then pumps the working fluid back into 
+the reservoir layer, decreasing the fluid mass in the output layer and 
+thereby tending to create a negative pressure within the output layer. 
+These positive and negative hydraulic pressures serve as the active 
+driving force for the activation and deactivation of each actuator. 
+When no voltage is applied, the EOP enters a high-resistance state, 
+during which the working fluid can transfer across the EOP under 
+high fluidic resistance, gradually balancing the pressure between 
+the two sides. 
+Within each actuator, the output layer, EOP, and reservoir layer 
+are connected in sequence, forming a continuous, reversible, and 
+bidirectional working fluid path. Based on the spatial arrangement 
+of these components, we classify the fluidic paths into three config-
+urations, as shown in Figure 2b: 
+(1) Collinear configuration: The output layer, EOP, and reser-
+voir layer overlap vertically (Figure 2b1). This design is struc-
+turally compact and easy to fabricate, but may result in a 
+larger overall thickness. 
+(2) Coplanar-Front configuration: The output and reservoir 
+layers are located on the same side of the EOP layer, while 
+the EOP is covered within the output layer region and con-
+nected to the reservoir via a connection layer through the 
+back side (Figure 2b2). This layout is well-suited for saving 
+vertical space, especially when the reservoirs can be arranged 
+laterally alongside the output layer. 
+(3) Coplanar-Rear configuration: This configuration is simi-
+lar to the Coplanar-Front configuration, but with the EOP 
+covered within the reservoir region (Figure 2b3). The lay-
+out allows greater design freedom in the positioning and 
+geometry of the output layer, e.g., routing it to an area not 
+obstructed by the EOP circuit via a connection layer. How-
+ever, the expected hydraulic pressure changes in the output 
+layer may be weakened due to the self-cushioning or fluidic 
+resistance introduced by the connection layer. 
+4 Multimodal Actuation Design Space 
+By varying the design of the multilayer structures, MorphingSkin 
+achieves a versatile design space for multimodal actuation, spanning 
+force, shape, optical, and weight domains. In this section, we detail 
+the structure design and the actuation behavior of each actuation 
+modality. Note that, unless otherwise specified, all demonstrations 
+in this section were conducted at a driving voltage of ± 250 V. Details 
+of the driving hardware system are provided in Section 6.2. 
+4.1 Force generation 
+Even though extrusion and suction through EOP have been intro-
+duced in literature [48, 55], here we performed our own experi-
+ments to see if such functions are compatible with the flexible EOP 
+layer and quantify the resulting forces in our proposed structure 
+composition. 
+4.1.1 Extrusion. The extrusion modality employs an output layer 
+that remains flat in its static state (Figure 3a1). Upon activation, 
+the embedded EOP transfers working fluid from the reservoir layer 
+into the output layer, leading to an increase in both the volume 
+and internal hydraulic pressure of the output layer. When there is 
+no external load, the rising hydraulic pressure causes the output 
+layer to deform into a dome-like shape (Figure 3a2). When a load is 
+present, the output layer functions as a force transmission medium, 
+applying an extrusion force to the object it is in contact with. For 
+instance, Figure 3a3-4 demonstrates the actuator lifting a 100-gram 
+weight. 
+4.1.2 Suction. The suction modality employs a bowl-shaped out-
+put layer that contains a cavity holding a certain volume of working 
+fluid in the static state (Figure 3b1). During activation, the embed-
+ded EOP pumps the working fluid from the output layer back into 
+the reservoir layer, resulting in a reduction in both volume and 
+internal hydraulic pressure within the output layer. This leads to 
+an inward deformation of the output layer in the absence of load, 
+as shown (Figure 3b2), while enabling it to generate a suction force 
+when in airtight contact with an object surface. As shown in Figure 
+3b3-4, the actuator is able to apply a suction force to a 100-gram 
+weight, suspending it in mid-air. 
+4.2 Shape output 
+4.2.1 Kinematic Motion. The kinematic motion is built based on 
+the extrusion modality, wherein the actuator is integrated into a 
+kinematic structure. Upon activation, the generated extrusion force 
+is harnessed to drive the movement of the kinematic system. Figure 
+3c illustrates the opening motion of a kinematic hinge within 0.54 
+seconds, driven by an actuator positioned near the pivot point. 
+4.2.2 Kirigami Surface. The kirigami surface modality is also based 
+on the extrusion modality. However, it leverages the deformation of 
+the output layer to induce texture changes on an overlying kirigami 
+surface as it undergoes out-of-plane deformation along with the 
+output layer. Figure 3d illustrates the shape change of an auxetic 
+surface, laser-cut from copy paper and adhered to the output layer. 
+During activation, the entire kirigami surface conforms to the dome-
+like shape of the output layer, with regions near the center adap-
+tively opening to accommodate the deformation. 
+UIST ’25, September 28–October 01, 2025, Busan, Republic of Korea Yu et al. 
+Figure 3: Design space of multimodal actuation by MorphingSkin, spanning force, shape, optical, and weight domains. Each 
+modality is detailed with the 3D models of the structure design (follows the color code in Figure 2a) and the photographs of the 
+actuation behaviors. 
+MorphingSkin UIST ’25, September 28–October 01, 2025, Busan, Republic of Korea 
+4.3 Dynamic optics 
+4.3.1 Reflection. The reflection modality leverages the flow behav-
+ior of the colored working fluid within the fluidic channels embed-
+ded in the transparent output layer. Figure 3e presents four distinct 
+actions achieved by the actuator, in which the output layer incor-
+porates multilayer fluidic channels [42] that sequentially display 
+the characters ’U’, ’I’, ’S’, and ’T’. This actuation enables changes 
+in the reflective optical appearance of a material surface, which, in 
+contrast to light-emitting displays (e.g., LEDs), may provide a more 
+tangible and ambient form of visual feedback. For all the reflective 
+actuations designed throughout this paper, the actuation voltage is 
+set to ± 50 V to achieve an appropriate flow rate for the animation. 
+Notably, the output layer in this case can also remain open to the 
+atmosphere to balance internal pressure, allowing the fluid distri-
+bution, as well as the visual pattern, to be preserved even after the 
+power is turned off. 
+4.3.2 Refraction. The refraction modality employs a transparent 
+output layer filled with working fluid as the refractive medium. 
+As the embedded EOP pumps fluid into or retracts it from the 
+output layer, the internal pressure changes accordingly, thereby 
+altering both the shape and the optical refractive properties of 
+the output layer, functioning as a dynamic soft lens. For example, 
+Figure 3f illustrates a circular output layer undergoing inflation 
+and deflation activation, resulting in a shape transition between 
+convex (Figure 3f1) and concave (Figure 3f2) lens profiles, thus 
+producing magnification (Figure 3f3) and minification (Figure 3f4), 
+respectively. In this case, the refraction actuator adopts a Coplanar-
+Rear Configuration introduced in Section 3.2, where the EOP circuit 
+is positioned away from the output layer to prevent blocking the 
+light from passing through. 
+4.4 Weight manipulation 
+The weight manipulation in MorphingSkin relies on the mass trans-
+fer of the working fluid across the device, driven by the embedded 
+EOPs during activation. For instance, Figure 3g1–4 illustrate a Mor-
+phingSkin device comprising five separate output layers connected 
+to a shared reservoir. By selectively pumping the working fluid 
+into different output layers, the center of mass shifts accordingly, 
+causing the seesaw stand to tilt at different angles. 
+5 Example Applications 
+In this section, we focus on applications that highlight the unique 
+qualities of MorphingSkin, including its skin-like thin form fac-
+tor, flexibility, conformability, multimodal capabilities, and high 
+customizability. We demonstrate how MorphingSkin can augment 
+existing rigid surfaces—for example, by enabling a rigid gripper 
+with tunable surface textures and contact conditions, or by serving 
+as a conformal actuating surface for a companion desktop robot. 
+MorphingSkin is also well suited for on-skin input/output inter-
+faces. In addition, we explore its use in everyday physical interac-
+tion contexts, such as enhancing a tangible interface with dynamic 
+multimodal displays and using its dynamic lens to manipulate the 
+optical effects of a lamp. The control and driving hardware of these 
+demonstrations are detailed in Section 6.2. 
+5.1 Dynamic contact conditions for robot skin 
+We first demonstrate the application of MorphingSkin as a func-
+tional skin for robots with dynamic contact conditions. We pro-
+totype a clamp-shaped gripper with two fingers, where the inner 
+surface of each finger is embedded with a piece of MorphingSkin 
+mounted against a rigid backbone, containing four linearly arranged 
+actuators on each finger (Figure 4a). The actuators are implemented 
+using a Coplanar-Front configuration, in which the reservoir is 
+positioned laterally to reduce overall thickness while gaining struc-
+tural support from the backbone. Each actuator can independently 
+provide either extrusion, suction, or remain no actuation (Figure 
+4b), allowing the gripper to provide three distinct contact condi-
+tions: soft contact, suction contact, and hard contact, which match 
+the mechanical sensitivities of diverse objects. We demonstrate 
+the benefits in a familiar dining scenario that involves challenging 
+items such as plates, cakes, and chocolates (Figure 4c). 
+Soft contact: For objects that are prone to deform under com-
+pression, such as cakes or decorative flowers, the actuators on the 
+MorphingSkin can be selectively activated for extrusion, providing 
+shape-adaptive, localized soft contact, e.g., on the planar sides of 
+a cake (Figure 4d1) or the backside of flower petals (Figure 4e1). 
+This allows the gripper to preserve the object’s original shape as 
+much as possible while maximizing contact area and providing 
+sufficient contact pressure to lift the object by friction. In contrast, 
+a conventional gripper with a fixed shape may forcibly squeeze the 
+objects to obtain adequate contact, potentially causing unwanted 
+deformation or damage, such as crushing the cake’s corners (Figure 
+4d2) or distorting the entire flower (Figure 4e2). 
+Suction contact: For objects that are difficult to pinch, such as 
+the top plate in a stack, or easily marred by gripping, such as delicate 
+chocolates, the MorphingSkin actuators can apply suction contact 
+under slight pressure for airtightness, allowing lifting forces to act 
+outward, normal to the surface, and less invasive to the object. For 
+example, Figure 4f1 shows the gripper lifting a piece of chocolate by 
+suction contact at the fingertip, which helps avoid surface scratches 
+that could result from direct gripping action. Figure 4f2 illustrates 
+the lifting of the top plate in a stack through suction contact, which 
+could otherwise be challenging for pinching manipulation. 
+Hard contact: For rigid and relatively heavy objects that require 
+a larger gripping force, the MorphingSkin can operate in a passive 
+mode with all actuators remaining inactive to provide hard contact. 
+In this mode, the thin layer of the actuators above the finger’s 
+side wall is compressed, allowing the applied gripping force to be 
+transmitted to the underlying rigid backbone, which provides firm 
+support and sufficient contact pressure for lifting friction force. 
+As shown in Figure 4g, the gripper lifts a square-shaped spice jar 
+using hard contact between the four corners of the jar and the rigid 
+surfaces of the finger backbone. 
+5.2 Desktop companion robots 
+Leveraging a mechanism similar to that of dynamic contact condi-
+tions, we then apply MorphingSkin to create a desktop companion 
+robot with highly emotional expressiveness. As shown in Figure 
+5a-b, a wheel-shaped robot is equipped with circularly arranged 
+actuators capable of both extrusion and suction actuation. As a 
+UIST ’25, September 28–October 01, 2025, Busan, Republic of Korea Yu et al.
+Figure 4: Application of MorphingSkin for robot skin with dynamic contact conditions. (a) The finger of a clamp-shaped gripper 
+is embedded with MorphingSkin at the inner surface, (b) which provides extrusion, suction, or no actuation upon the four 
+linearly arranged actuators. (c) The gripper provides different contact conditions to match the mechanical sensitivities of 
+diverse objects, such as in a dining scenario, including (d-e) soft contact for objects that are prone to deform under compression, 
+(f) suction contact for objects that are difficult to pinch or easily marred by gripping, and (g) hard contact for rigid and relatively 
+heavy objects that require larger gripping force. 
+result, the collective actuation strategies can be mapped to a few 
+distinct emotional expressions. 
+Calm emotion: This emotion is expressed when the robot pe-
+riodically activates the exposed actuators to rapidly extrude and 
+then gradually retract in a passive manner, simulating a rhyth-
+mic, breathing-like motion (Figure 5c1-3). During this period, users 
+are invited to gently touch the MorphingSkin to experience the 
+biomimetic and relaxing haptic sensations rendered on the robot’s 
+surface (Figure 5c4). 
+Frightened emotion: This emotion can be triggered by an unex-
+pected physical touch or hit from the user (Figure 5d1). In response, 
+the robot rapidly engages suction actuation across the entire ring 
+of actuators, which simultaneously expresses a “defensive” posture 
+(Figure 5d2) while producing an attachment behavior to the ground, 
+mimicking the “freeze” response associated with fear. Once adhered 
+to the ground, the robot remains in place even when gently poked 
+by the user (Figure 5d3-4). 
+Excited emotion: This emotion is enabled by locomotion through 
+cyclical extrusion actuation. The extrusion force generated by actu-
+ators in contact with the ground lifts the robot itself and induces a 
+rolling motion to the side (Figure 5e2-3). This dynamic movement 
+might be used to simulate an energetic or playful mood. 
+MorphingSkin UIST ’25, September 28–October 01, 2025, Busan, Republic of Korea 
+Figure 5: Application of MorphingSkin to create a desktop companion robot. (a) A desktop robot is designed using MorphingSkin 
+as the body, containing circularly arranged actuators for extrusion and suction actuation. (b) Photograph of the desktop robot, 
+which conveys highly expressive emotions, including (c) clam emotion based on periodical breathing-like extrusion actuation, 
+(d) frightened emotion that engages suction actuation to express a "defensive" posture and "freeze" to the ground, (e) excited 
+emotion based on locomotion by extrusion actuation, and (f) mischievous characteristic by interaction with surrounding 
+objects. 
+Mischievous characteristic: This nuanced characteristic is 
+enabled by the robot’s interaction with surrounding objects through 
+both suction and extrusion actuation. In this example, the robot 
+first attaches to a user’s item via suction and moves along with it 
+(Figure 5f1-2), then pushes and releases the item through extrusion, 
+allowing the user to retrieve it (Figure 5f3-4). This sequence portrays 
+a playful and curious interaction pattern, mimicking a mischievous 
+characteristic. 
+5.3 Multimodal wearables 
+In this section, to demonstrate the application of MorphingSkin in 
+multimodal wearables, we present an interactive wrist brace that 
+integrates both haptic and visual feedback. 
+Haptic feedback: We design two groups of extrusion actu-
+ators on the MorphingSkin, positioned on both the palmar and 
+dorsal sides of the hand, respectively, with each group consisting 
+of three actuators that deliver extrusion actuation (Figure 6a-b). 
+When activated, these actuators create localized pressing sensations 
+(described as “massaging feelings” by the volunteers during the 
+test) on the skin (Figure 6c). All six actuators can be independently 
+controlled to render spatio-temporal haptic feedback animations. 
+Visual feedback: We implemented two reflective displays lo-
+cated on both the inner and outer sides of the wrist (Figure 6a-b). 
+The inner wrist features a red and continuous linear display bar 
+that can represent continuously changing data, such as heart rate 
+intensity or other physiological signals (Figure 6e). The outer wrist 
+features a patterned blue display bar designed to convey more com-
+plex information, such as counters or timers (Figure 6d). Compared 
+to light-emitting displays such as LED screens, these reflective dis-
+plays serve as ambient displays that might provide more subtle, 
+non-intrusive visual feedback, appearing to blend seamlessly into 
+the human skin. 
+In addition, to demonstrate the compatibility of our Morph-
+ingSkin with existing electronics, we also integrated input and 
+sensing modules into the wrist brace, including a heart rate sensor 
+on the inner side of the wrist (Figure 6f1) and two touch buttons 
+on the outer side of the wrist (Figure 6f2). 
+By collectively using both the multimodal actuators and the 
+integrated sensors, the MorphingSkin wrist brace can support a va-
+riety of application scenarios. Combined with the portable driving 
+hardware introduced in Section 6.2, further untethered operation 
+is supported. We envision three scenarios using the MorphingSkin 
+wrist brace. For example, during yoga practice, the wrist brace can 
+deliver sequential pressing feedback on either side of the hand to 
+indicate the intended movement direction (Figure 6g). In scenar-
+ios such as meditation, the wrist brace can perform synchronized, 
+gentle pressing and releasing actions across all actuators, which 
+may help users regulate their breathing rhythm (Figure 6h). In both 
+cases, users can occasionally glance at the two reflective displays 
+to gather useful information, such as checking the exercise ses-
+sion progress via the outer display, or understanding the heart rate 
+intensity through the inner display. In a different scenario such 
+UIST ’25, September 28–October 01, 2025, Busan, Republic of Korea Yu et al.
+Figure 6: Application of MorphingSkin in multimodal wearables. (a) An interactive wrist brace is designed using MorphingSkin, 
+containing both haptic and visual feedback and integrated sensors. (b) Photographs of the wrist brace in the worn state. (c) 
+Haptic feedback by multiple extrusion actuators for spatio-temporal haptic animations. (d) Visual feedback by a reflection 
+actuator in a patterned-bar shape. (e) Visual feedback by a reflection actuation in a linear-bar shape. (f) Integrated sensors, 
+including a heart rate sensor and two touch buttons. We envision the usage of the MorphingSkin wrist brace in three scenarios, 
+including (g) yoga practice, (h) meditation, and (i) outdoor cycling. 
+as outdoor cycling, when worn on both hands, the wrist braces 
+can provide directional haptic cues, such as activating the haptic 
+actuators on the left or right wrist brace to signal a left or right 
+turn, and meanwhile present the cycling progress via the reflective 
+display on the outer side of the wrist (Figure 6i). 
+5.4 Multimodal tangible display 
+In this section, to demonstrate the application of MorphingSkin for 
+multimodal tangible displays, we present an interactive educational 
+book featuring multiple dynamic effects, including refractive and 
+reflective visual animations as well as shape movement. As illus-
+trated in Figure 7a-b, we use MorphingSkin to develop a "magic 
+MorphingSkin UIST ’25, September 28–October 01, 2025, Busan, Republic of Korea 
+Figure 7: Application of MorphingSkin in multimodal tangible display. (a) A "magic page" using MorphingSkin is designed 
+for a human anatomy book, providing dynamic effects, including reflective animation, refractive magnification, and shape 
+movement. (b) Photograph of the "magic page" placed on the anatomy book with a respiratory-system theme card. (c) Usage 
+process of the "magic page" that leverages flexibility for foldable storage. (d) Reflective animation that illustrates the airflow 
+through the trachea. (e-f) Refractive magnification that mimics the volume changes of the alveoli. (g-h) Shape movement that 
+represents the movement of the lungs and diaphragm. 
+page" within a human anatomy book, which illustrates the biologi-
+cal functional processes of different respiratory organs. As shown 
+in Figure 7c, to use the magic page, the user unrolls the flexible 
+magic page, places it on a background page, and then overlays it 
+with a themed card representing the respiratory system. 
+Reflective animation Based on the reflection actuation, re-
+flective visual animation is used to illustrate the airflow through 
+the trachea. When activated, the actuator pumps the blue-colored 
+working fluid from its reservoir into the trachea-shaped fluidic 
+channel, simulating the inhalation phase (Figure 7d1). Upon deacti-
+vation, the fluid is withdrawn back into the reservoir, simulating 
+the exhalation phase (Figure 7d2). 
+Refractive magnification Based on the refraction actuation, a 
+visual magnification effect is utilized to mimic the volume changes 
+of the alveoli during respiration. When activated, the working fluid 
+inflates the output layer, causing it to expand and create a mag-
+nifying refractive effect, simulating the alveoli expansion during 
+inhalation (Figure 7e1, f1). Upon deactivation, the output layer de-
+flates and the refractive effect is reset, simulating alveolar recoil 
+during exhalation (Figure 7e2, f2). 
+Shape movement Based on the kinematic motion actuation, 
+shape movement is designed to represent the movement of the lungs 
+and diaphragm. Upon activation, the inflating output layer pushes 
+up the overlaid paper element, mimicking lung expansion and di-
+aphragm contraction during inhalation (Figure 7g1, h1). When 
+UIST ’25, September 28–October 01, 2025, Busan, Republic of Korea Yu et al. 
+deactivated, the output layer retracts, allowing the paper element 
+to recover its original position, simulating lung deflation and di-
+aphragm relaxation during exhalation (Figure 7g2, h2). 
+Notably, these actuators can be synchronously controlled to 
+activate and deactivate, illustrating how multiple organs work in 
+coordination within the respiratory system. 
+5.5 Dynamic lampshade 
+In this section, we demonstrate the application of MorphingSkin as 
+a dynamic lampshade based on its multimodal actuation, including 
+shape and optical changes, and their interaction with light. 
+As shown in Figure 8a-b, we design a lampshade wrapped around 
+a non-diffusive light source using MorphingSkin, which contains a 
+group of vertically oriented, strip-shaped shape-changing actuators 
+functioning as dynamic soft lenses. Upon activation, the embedded 
+EOPs pump working fluid from the backside reservoirs into these 
+lenses, causing them to inflate and deform into a convex shape 
+(Figure 8b2). 
+Figure 8c illustrates the dynamic light patterns projected onto 
+the ground directly caused by the refraction of the light through the 
+inflated lenses. When the lenses are inflated to a certain thickness, 
+they focus the light onto the ground, forming concentrated light 
+patterns in different directions. 
+Figure 8d shows another light effect, where the light patterns 
+are projected onto a surrounding translucent diffuser film. Notably, 
+due to gravity, the inflation of these soft lenses occurs progressively 
+from bottom to top, thus dynamically refracting the light to pro-
+duce a group of linear light patterns with variable lengths. The 
+combination of multiple linear light patterns collectively provides 
+an affordance for ambient visual display or aesthetic expression. 
+Figure 8e further demonstrates the usage of the shape-changing 
+lampshade to actuate the texture changes on an overlaid kirigami 
+surface. As the lenses inflate, the auxetic patterns on the kirigami 
+surface selectively open at different locations, thereby altering the 
+transmission behavior of light and creating a spatially varied illu-
+mination environment. 
+6 Fabrication and Implementation 
+6.1 Fabrication of MorphingSkin 
+Below, we detail the fabrication process for MorphingSkin devices 
+with customized designs and both flexible and partially stretchable 
+form factors. The fabrication process consists of four main steps: 
+(1) Assemble the flexible EOP circuit, (2) coat the EOP layer, (3) 
+fabricate and bond the elastic shells, and (4) install the working 
+fluid. 
+6.1.1 Assemble the flexible EOP circuit. In this work, we employ 
+industrial flexible printed circuits (FPCs) as the substrate electrodes 
+to fabricate the EOP, which ensures both flexibility and partial 
+stretchability compared to previous work [53, 55]. 
+The electrode design for the EOPs is illustrated in Figure 9a. 
+Each electrode features a central electrode mesh composed of a 
+double-sided metal-covered surface. Within this mesh region, vias 
+are arranged in a hexagonal pattern, with each via measuring 0.16 
+mm in diameter and spaced 0.37 mm apart, yielding an open area 
+of approximately 17%. Surrounding the electrode mesh is a bond-
+ing region, where a minimum width of 2 mm is recommended to 
+ensure adequate bonding and sealing quality. Although these EOP 
+electrodes exhibit moderate flexibility (comparable to a thin copper 
+sheet), we employ linear or serpentine traces with a narrow width 
+to connect these EOP electrodes, which contributes the primary 
+flexibility and partial stretchability to the overall circuit. Most of 
+the electrodes are fabricated using double-sided FPCs, with a wire 
+width of 0.25 mm and a spacing of 0.25 mm between adjacent traces 
+or edges. The electrode surface is insulated and protected by poly-
+imide soldermask except for the electrode mesh region. A detailed 
+cross-sectional illustration is shown in Figure 9e, where the total 
+thickness of a single layer of the electrode is approximately 0.11 
+mm. We fabricate the FPC electrodes from JLCPCB by uploading 
+manually designed files. 
+A complete EOP unit consists of two electrodes that sandwich 
+a pumping membrane and an adhesive layer. The pumping mem-
+brane is designed with a contour that extends 0.2 mm outward 
+from the electrode mesh region, and fabricated using a Universal 
+CO2 laser cutting machine and Grade F borosilicate glass fiber filter 
+paper as the material. To facilitate the assembly of multiple EOP 
+units using flexible circuits, we introduce an approach using ther-
+moplastic polyurethane (TPU) gaskets and heat pressing to bond 
+the electrodes. The TPU gasket is designed to fill the gap between 
+the pump membrane and the surrounding electrode region, with a 
+thickness of approximately 0.4 mm, which is similar to the thickness 
+of the pump membrane before applying the heat press. The gaskets 
+are then 3D printed using NinjaFlex 85A water-translucent TPU 
+filament on an Ultimaker 5 printer. Figure 9b shows the assembly 
+process, where we first place one EOP electrode at the bottom, use 
+tweezers to carefully place the pump membrane and TPU gasket in 
+position, and place the second electrode on top. Carrier films are 
+used on both the bottom and top to sandwich these components and 
+maintain their position for the subsequent heat pressing process. 
+We then apply the heat press to the components at 180°C for about 
+5 minutes, during which the TPU gaskets are expected to melt and 
+as fully as possible fill the bonding region, ensuring a secure seal. 
+A sample of assembled EOPs with cured TPU adhesive is shown 
+in Figure 9c. The total thickness of each EOP after heat pressing is 
+about 0.4 mm, with a cross-sectional photograph shown in Figure 
+9d. Necessary electronic components, such as cable connectors, are 
+then soldered onto the EOP circuit after the heat press. For certain 
+FPC designs where heat pressing is impractical (e.g., due to pre-
+mounted electronic components), we follow prior work [53] and 
+use laser-cut 3M 467MP double-sided adhesive tape as the bonding 
+material. 
+6.1.2 Coat the EOP layer. Following the electrode assembly, we 
+encapsulate the bonded EOP circuit with a layer of stretchable 
+material that provides support for the MorphingSkin and separates 
+the elastic shells located on both sides. 
+One option we have adopted for most prototypes in this project 
+is using silicone as the coating material. Here, we use Smooth-On 
+Sorta-Clear 12 as the coating material. The process involves first 
+casting a bottom silicone layer, followed by placing and gluing the 
+EOP circuit onto this layer, and then casting the top silicone layer. 
+To facilitate accurate placement and alignment, a transparent glass 
+MorphingSkin UIST ’25, September 28–October 01, 2025, Busan, Republic of Korea 
+Figure 8: Application of MorphingSkin as a dynamic lampshade. (a) A lampshade using MorphingSkin is wrapped around a 
+light source, containing a group of strip-shaped shape-changing actuators, which (b) deform into a convex shape when inflated, 
+functioning as dynamic soft lenses. (c) Dynamic light patterns projected onto the ground in different directions caused by 
+direct refraction. (d) Dynamic light patterns projected onto a diffuser film, displaying multiple linear patterns with variable 
+lengths. (e) Texture changes on an overlaid kirigami surface that alters the illumination environment spatially. 
+Figure 9: (a-c) Assembling the flexible EOP circuit. (d) Cross-
+section photography of the coated EOP layer. (e) Cross-
+section illustration of a single layer of EOP electrode. 
+plate is used as the base, with a printed sketch placed underneath. 
+To keep the electrode mesh on the EOP circuit exposed and not 
+blocked by silicone, we reserve hollow regions in the bottom sili-
+cone layer using mask tape (Figure 10a), and similarly protect the 
+electrode mesh region on both sides of the EOP circuit with mask 
+tape before casting the top silicone layer (Figure 10c). To ensure 
+strong bonding and sealing between the EOP circuit surface and 
+the silicone material, we apply Smooth-On Sil-Poxy glue to the 
+contact surface, either on the silicone surface before placing the 
+EOP circuit (Figure 10b), or on the electrode’s bonding region after 
+the circuit is in place (Figure 10c). To ensure that the EOP circuit 
+is as vertically centered as possible within the encapsulation, we 
+carefully design the thicknesses of the top and bottom silicone lay-
+ers, along with all mask tapes used, shown in Figure 10a,c,d. The 
+masks are constructed by stacking multiple layers of 0.1 mm-thick 
+single-layer mask tape and laser cutting into custom shapes. The 
+total coating thickness is around 1.2 mm to 1.5 mm. Once the top 
+layer of silicone is fully cured, we carefully remove the mask tapes 
+from both sides of the EOP circuit using tweezers. The fully encap-
+sulated EOP circuit is shown in Figure 10e-f, with its cross-section 
+displayed in Figure 9d. 
+We also proposed an alternative method that uses VHB tape 
+as the coating material. While our observations suggest that the 
+VHB tape may undergo debonding after several days, possibly 
+degraded by the working fluid, this approach remains simple and 
+fast to implement, making it a potential option for rapid testing. To 
+fabricate the coating layer, we stack a bottom VHB layer, the EOP 
+circuit, and a top VHB layer sequentially and then apply vertical 
+pressure to increase the bonding and sealing quality (Figure 10g). 
+We use 3M VHB 4905 tape with a thickness of 0.5 mm as both the 
+bottom and the top VHB layer. The total coating thickness is around 
+1.0 mm to 1.3 mm. Both VHB layers are pre-cut using a Universal 
+laser cutting machine to create the hollow regions that expose the 
+electrode mesh region on the EOP circuit. To facilitate handling, 
+transfer films are used to hold, transfer, and apply the VHB tapes. 
+The final VHB-coated EOP circuit is shown in Figure 10h-i. 
+UIST ’25, September 28–October 01, 2025, Busan, Republic of Korea Yu et al. 
+Figure 10: Coating the EOP layer with (a-f) silicone material 
+and (g-i) VHB tape. 
+6.1.3 Fabricate and bond the elastic shells. Next, we fabricate elastic 
+shells that are bonded to both sides of the MorphingSkin. These 
+shells serve various functions, including output layers, connection 
+layers, or reservoir layers. 
+Depending on the geometric configuration of the shell, we in-
+troduce two fabrication methods: The first type is a bowl-shaped 
+shell, which features a central cavity with a certain depth to accom-
+modate liquid, surrounded by a continuous rim of uniform height 
+that serves as the bonding surface to the coating layer, as shown in 
+Figure 11. These shells are used mainly as shape-changing output 
+layers or as liquid reservoirs. In this work, we fabricate these bowl-
+shaped shells by casting silicone into 3D-printed molds. The second 
+type is channel-shaped shells, which consist of relatively shallow 
+(e.g., 0.5mm deep) but more complex two-dimensional fluidic chan-
+nels, similarly surrounded by a uniform height bonding surface, 
+shown in Figure 11. These shells are typically used as connection 
+layers or, in some cases (e.g., reflective displays), as output layers. To 
+fabricate these channel-shaped shells, we either cast silicone using 
+3D-printed molds, or engrave the channels directly into the surface 
+of silicone or VHB tape using a Universal laser cutting machine, fol-
+lowing previous work [42]. Depending on the fabrication method, 
+the desired softness, and the optical clarity, we select Smooth-On 
+Ecoflex 00-30, SORTA-Clear 12, or 3M VHB 4905 tape as the shell 
+materials. 
+Once the shells are fabricated, they are bonded to the coating 
+layer using different techniques, depending on the materials and 
+the shell geometry. When both the shells and the coating layer 
+are made of VHB tape, the shells are carefully aligned and pressed 
+onto the coating layer using a transfer film. When the bonding 
+surfaces involve VHB tape and silicone, or both are silicone, we 
+use Smooth-On Sil-Poxy glue as the bonding adhesive. For shells 
+with large bonding areas, the glue is applied uniformly using a 3D 
+printed stencil (Figure 12a1). For shells with narrow bonding rims, 
+the glue is manually dispensed onto the shell’s bonding surfaces 
+using a syringe (Figure 12a2). After the glue is applied, the shells 
+are aligned and pressed onto the coating layer using a transfer film 
+(Figure 12b). 
+Figure 11: Design and fabrication of the elastic shells. 
+Figure 12: Bonding of the elastic shells. 
+6.1.4 Install the working fluid. After the shells are assembled and 
+bonded, we install the working fluid into the MorphingSkin. Fol-
+lowing previous work [55], we use a syringe with a 30G needle 
+to first evacuate the air inside each actuator and then inject the 
+working fluid (Figure 13a). This process is repeated as necessary 
+until the internal air is fully displaced and replaced by the working 
+fluid. The silicone used to construct the device exhibits self-sealing 
+behavior upon removal of the 30G needle. When required, we use 
+Smooth-On Sil-Poxy glue to seal any leakage points. In this work, 
+we use Propylene Carbonate as the working fluid. To achieve dy-
+namic display in reflective modality, we color the working fluid 
+with alcohol-based ink. 
+A fully assembled MorphingSkin device after fluid installation 
+is shown in Figure 13b, which is capable of undergoing multiple 
+types of deformation, including bending, twisting, and stretching, 
+shown in 13c. 
+6.2 Driving hardware system 
+In this work, for rapid testing in most of the demonstrations, we 
+adopted a similar driving hardware as previous work [70], which 
+consists of a high-voltage DC converter and a series of relays man-
+ually controlled via an Arduino board. Unless otherwise specified, 
+all actuations throughout the paper were conducted at ±250 V. 
+Moreover, to support demonstrations requiring more complex 
+programmed actuations and untethered control, we developed a 
+portable version of the driving hardware system, as introduced 
+below. As shown in Figure 14a, the hardware system is built around 
+a Raspberry Pi Zero 2 W microcontroller, a DC-DC boost converter 
+MorphingSkin UIST ’25, September 28–October 01, 2025, Busan, Republic of Korea 
+Figure 13: (a-b) Installing the working fluid and finishing. 
+(c) The fully assembled MorphingSkin device undergoing 
+multiple types of deformation. 
+(HRB12150-250DG-20W), and four 8-channel serial-to-parallel con-
+verters with high-voltage push-pull outputs (HV513). The DC-DC 
+boost converter steps up a low input voltage (e.g., 12 V) to a high 
+output voltage (e.g., 150–250 V), where the output voltage can be 
+pre-configured by adjusting a control knob on the converter module. 
+The HV513 serial-to-parallel converters are used to assign high-
+voltage signals to designated output ports. The total maximum 
+output power of all ports is 20 W. The hardware is connected to the 
+EOP circuits via a 0.5 mm pitch flat flexible cable (FFC). The power 
+of the hard hardware system is supplied by 12 V lithium batteries 
+or chargers. 
+The four 8-channel serial-to-parallel converters provide a total 
+of 32 output channels, which comprise 16 ports, with each port 
+using a pair of channels. We can program each port with Python to 
+output positive voltage, negative voltage, or zero voltage in time 
+sequence, thus using each port to independently control a single 
+EOP actuator in the MorphingSKin device. 
+Figure 14b shows the size of the hardware system in non-tethered 
+usage, with a volume of approximately 10x6x2 cm. The portability 
+enables the usage of MorphingSkin in mobile applications such as 
+wearable devices. 
+Figure 14: Driving hardware system that contains 16 pro-
+grammable output ports with pre-set output voltages rang-
+ing from 150 V to 250 V, enabling untethered operation of 
+MorphingSkin devices. 
+Figure 15: Technical evaluation of the open flow rate and the 
+blocked pressure of the EOP device. 
+7 Technical Evaluation 
+7.1
+ Open flow rate and blocked pressure 
+In this experiment, we evaluated the performance of the EOP that 
+follows the fabrication process in this work, including the open 
+flow rate and blocked pressure. 
+The experiment setup is shown in Figure 15a A 12mm-diameter, 
+round-shaped EOP is fixed in a specially designed flow cell, with its 
+two sides sealed off from each other to allow the working fluid to 
+flow through the EOP. When measuring the flow rate, a calibrated 
+SLF3S-0600F Liquid Flow Sensor was connected in series with the 
+EOP flow cell, and the two ends of the device were extended below 
+the liquid surface of an open container filled with working fluid 
+through silicone tubes, as shown in Figure 15a. When measuring 
+pressure, we removed the flow sensor and connected the MS5837-
+30BA pressure sensor on the same side in a blocked manner, with 
+the other end staying the same, as shown in Figure 15b. 
+We injected the working fluid into the entire device using a 
+syringe and evacuated the internal air bubbles. As in prior work [55], 
+we used a 1 Hz square wave signal to drive the test EOP device. The 
+amplitude of the square wave was set at each level from 0 V to 250 
+V in increments of 50 V, with each test lasting at least 10 seconds. 
+We used an adjustable DC high-voltage boost converter, powered 
+by a 12 V power supply, to generate the driving voltage between 
+0V to 250 V, and used two relays controlled by an Arduino Nano 
+board to produce the desired square-wave voltage signal applied 
+to the test device. Each experiment was repeated three times using 
+different EOP devices. 
+UIST ’25, September 28–October 01, 2025, Busan, Republic of Korea Yu et al. 
+7.1.1 Data collection and analysis. We used the software on the 
+PC to collect the data from the flow sensor, and used the controlled 
+Arduino Nano to collect the data from the pressure sensor. After 
+obtaining the data, for each voltage level 𝑈 , we computed the aver-
+age of the test data points that exceed 70% of the maximum (for the 
+positive half-cycle) or minimum (for the negative half-cycle) value 
+separately, which then served as the performance metric under +𝑈 
+and −𝑈 , respectively. In total, we obtained the open flow rate and 
+blocked pressure performance at 10 voltage levels ranging from 
+-250 V to +250 V, in 50 V increments, excluding 0 V. 
+7.1.2 Results. Figure 15c-d show the open flow rate and the blocked 
+pressure data under 10 typical cycles within a test under 250 V 
+voltage level. We observed a maximum instantaneous flow rate of 
+approximately 20 mL/min on the EOP in our test with an area of 
+113 mm2 , and a maximum instantaneous pressure of approximately 
+25 kPa, which are at the same order of magnitude as the previous 
+work [48] and [55], respectively. These results indicate that the 
+EOP produced by the fabrication process in this paper might have 
+performance comparable to the previous work. 
+Figure 15e shows the relationship between the open flow rate 
+and the applied voltage in three tests, where all three tests showed 
+a consistent linear relationship, similar to the previous work [55]. 
+However, one group of the data showed an overall weak response, 
+and we inferred that this might be due to the manual assembly 
+error of the test EOP. The dashed line in the figure shows the result 
+of linear fitting for all three groups of data, with 𝑟 2 = 0.95 and a 
+slope of 59.6 𝜇L/min/V. 
+Figure 15f presents the relationship between the blocked pres-
+sure and the applied voltage on three tests. Among them, one set 
+of the data showed a relatively weak overall response, which we 
+similarly attributed to manual assembly error. Notably, across all 
+three test sets, we observed a consistent asymmetric response re-
+garding the blocked pressure, where either the positive or negative 
+half-cycle exhibited slightly stronger performance. To normalize 
+this asymmetry for comparison, we plot the data with the stronger 
+overall response in the positive voltage range, and the weaker one 
+in the negative range. As a result, all three test sets demonstrated a 
+similar trend in their response patterns. We assumed that this asym-
+metric response might be attributed to the asymmetric property 
+of the materials in EOP (e.g., the filter paper) or the asymmetric 
+assembling operation during the fabrication process. Accordingly, 
+we performed linear fitting on the data of positive voltage and neg-
+ative voltage separately, with 𝑟 2 values of 0.95 and 0.91, and slopes 
+of 75.4 Pa/V and 38.4 Pa/V, respectively. 
+7.2 Power consumption, heat generation, and 
+durability 
+In this experiment, we evaluated several long-term engineering per-
+formance metrics of the MorphingSkin actuator, including power 
+consumption, heat generation, and durability, based on a typical 
+and simple MorphingSkin test device. 
+The experimental setup is illustrated in Figure 16a. The Morph-
+ingSkin device, made into a shape-changing actuator, is horizontally 
+mounted at the center of the setup. The actuator is based on a 12 
+mm-diameter round-shaped EOP, with an output layer and a reser-
+voir layer made from Smooth-On Ecoflex 00-30 silicone, directly 
+Figure 16: Technical evaluation of the power consumption, 
+heat generation, and durability of a typical and simple Mor-
+phingSkin test device. 
+attached to either side. Approximately 0.53 mL of working fluid is 
+injected into the actuator to fully occupy the internal volume. A 
+square wave signal with a 6-second period and 100 V amplitude 
+was used to drive the actuator. During each cycle, at the first 3-
+second inflation phase, we applied +100 V to the device, causing 
+the EOP to pump the entire working fluid from the reservoir to the 
+output layer, resulting in an extrusion deformation (Figure 16b1-4); 
+the subsequent 3-second deflation phase applies -100 V, pumping 
+the fluid back into the reservoir, reversing the deformation (Figure 
+16b4-6). We used the same hardware system as Section 7.1 to pro-
+vide the driving voltage signals. The experiment ran continuously 
+for 1 hour, totaling 600 actuation cycles. 
+7.2.1 Data collection and analysis. We used a side-view camera 
+capturing video at 25 fps to record the deformation behavior of 
+the actuator, and then used a MATLAB-based computer vision 
+program to extract the upper contour of the device and compute 
+the peak displacement in each cycle. The peak displacement is 
+defined as the vertical distance between the actuator’s highest 
+point and the fixed base plane height in each cycle (Figure 16b4). 
+We used a top-view thermal camera that captures video at 25 fps 
+to record the temperature of the device. We manually extracted 
+the maximum temperature of the device every 25 cycles from the 
+captured video. We used a 1-ohm sampling resistor in series with 
+the circuit to measure the voltage across it at a 100 Hz sampling 
+rate using a NI-6341 DAQ. The device’s current was then calculated 
+using Ohm’s law. To reduce noise from the measurement equipment, 
+we removed the outliers that are larger than 50 mA, and used a 
+6-order Butterworth low-pass filter to smooth the noise. 
+7.2.2 Results. Figure 16c1 shows the current over a 60-second 
+window. We observed an average current of 2.43 mA during the 
+MorphingSkin UIST ’25, September 28–October 01, 2025, Busan, Republic of Korea 
+inflation phase and 4.33 mA during the deflation phase. The asym-
+metry in current magnitude and waveform between the two phases 
+may be attributed to differences in pressure resistance encountered 
+by the EOP, when transferring the working fluid to deform versus 
+restore the output shell. The average power consumption across 
+the 10 cycles is 0.36 W. 
+Figure 16c2 shows the current over all cycles, where the current 
+range remained stable throughout, except for a gradual increase in 
+the deflation-phase current after about 350 cycles. We hypothesize 
+this may result from drift in the sampling resistor’s resistance or a 
+cumulative static offset in the measurement device. 
+Figure 16c3 presents the peak displacement over all cycles. The 
+average displacement is 6.0 mm, with a standard deviation of 0.080 
+mm. Note that the dashed segment illustrates the region where 
+the camera loses focus. We observed a slight initial increase in 
+displacement followed by a gradual decline starting around cycle 50. 
+We infer that this may be caused by gas generation from impurities 
+in the working fluid during operation, where the gas accumulation 
+in the output layer increased the internal volume, leading to a rise 
+in peak displacement, and the gas buildup in the reservoir blocked 
+the pumping area of the EOP, reducing the pumping amount of the 
+working fluid and consequently decreasing the peak displacement. 
+Figure 16c4 shows the temperature evolution during the test. 
+The maximum surface temperature rose from 25°C to 46°C in the 
+first 5 minutes, then gradually decreased to around 35°C over the 
+remaining time. We attribute this decline to the accumulation of air 
+bubbles in the reservoir, which may block the effective pumping 
+area of the EOP, reducing both the fluid transfer amount and the 
+accompanying heat generation. 
+7.3 Stretchability and Failure test 
+Figure 17: Technical evaluation of the stretchability and the 
+failure test of a typical MorphingSkin test device. 
+In this experiment, we tested the maximum tensile strain by 
+a tensile test and observed the failure mode, based on a typical 
+MorphingSkin test device. 
+The test device is designed with eight actuators arranged in a 
+row, where each actuator contains an EOP with an 8 by 8mm square 
+shape, spaced 17mm apart, and connected using stretchable serpen-
+tine traces, following the same design shown in Figure 9a. During 
+the fabrication process, we coated the EOP circuit with 1.5mm-thick 
+Smooth-on Sorta-Clear 12, and then attached reservoirs and out-
+put layers made of Smooth-on Ecoflex 0030 on either side of the 
+coated EOP layer, forming the complete actuators that are capable 
+of extrusion-style shape changes. The final assembled test device 
+is the same as that shown in Figure 13b, except that we added a 3 
+cm-long solid silicone on both ends of the test device for attaching 
+to the fixtures of the tensile machine. During the test, we stretched 
+the test device vertically at a rate of 145 mm/min, starting from 0% 
+strain. Simultaneously, we activated the eight actuators on the test 
+device in sequence, under a 100 V input and a 1-second duration, 
+to continuously observe the working state of the device until it 
+failed. We used a video camera to record the stretching process and 
+collected the load-strain curve from the test software. 
+7.3.1 Results. Figure 17a,c show the stretching process and the 
+load-strain curve from the stretching test. We observed that the test 
+device exhibited approximately linear elastic deformation before 
+about 47% strain and remained functional in the video. After that, a 
+break occurred in the EOP circuit, causing part of the actuators to 
+fail. In total, four circuit breaks occurred successively as the device 
+was stretched to 80% strain. Figure 17b shows the photo of the 
+test device after the tensile test, where we observed that all four 
+break points on the EOP circuit occurred at the connection points 
+between the serpentine trace and the EOP area, and the actuators 
+near the break points all experienced leakage, possibly caused by 
+the accompanying cracks or breaks of the silicone coating. The actu-
+ators without circuit breaks, however, did not exhibit leakage. From 
+the above, we infer that the factor limiting the maximum tensile 
+strain of this test case might be the maximum tensile strain of the 
+EOP circuit. That is to say, in future work, the overall stretchability 
+of MorphingSkin could potentially be improved by optimizing the 
+design of the serpentine traces or adopting fully stretchable circuits, 
+while remaining within the tensile limits of other materials (e.g., 
+silicone) and the bonding methods used in the device. 
+8 Limitation and Future Work 
+8.1
+ Material and fabrication technique 
+Although MorphingSkin in our work has achieved progress in 
+flexibility and stretchability compared to previous EOP actuators, 
+enabled by the introduction of new materials and fabrication pro-
+cesses, several limitations still remain. 
+For example, during operation, we continue to observe that 
+propylene carbonate gradually generates gas, and the colored alcohol-
+based ink dissolved in the propylene carbonate slowly fades. These 
+phenomena may reduce the actuator’s overall performance over 
+time. Additionally, the VHB tape tends to debond within 48 hours 
+as in contact with propylene carbonate, leading to leakage issues 
+of the actuator. Manual fabrication errors, such as misalignment or 
+poor sealing quality, can also negatively affect the actuator perfor-
+mance, such as weakening the pumping flow rate and pressure, or 
+increasing the heat generation. 
+UIST ’25, September 28–October 01, 2025, Busan, Republic of Korea Yu et al. 
+Future work could investigate the underlying mechanisms be-
+hind these material failures and adopt better material and digital 
+fabrication strategies to enhance the durability, stability, and con-
+sistency of the MorphingSkin devices. 
+8.2 Technical research of MorphingSkin 
+In this work, we demonstrated the multimodal actuation by Mor-
+phingSkin on a flexible platform. Nevertheless, to introduce the 
+MorphingSkin actuators to broader engineering and design con-
+texts, several avenues for future work remain. 
+One direction involves investigation of the effect of mechanical 
+strain, particularly stretching, on the actuator’s performance. In 
+the current implementation, stretching in MorphingSkin primarily 
+occurs in the serpentine interconnects of the flexible printed cir-
+cuits and the surrounding elastic shell. The EOPs embedded within 
+the non-stretchable regions of the FPCs experience only bending 
+and are not designed to stretch. This structural constraint may help 
+mitigate the impact of overall device strain on the EOP’s perfor-
+mance. However, the exact impact of mechanical deformation (e.g., 
+bending, squeezing) on the FPC-based EOPs still requires further 
+experimental investigation. 
+Other directions involve studies of the relationships between 
+detailed design parameters (e.g., EOP design [6], output shell ge-
+ometry, and material stiffness) and the resulting multimodal actu-
+ation performance. Standardized actuator designs based on Mor-
+phingSkin could be established to serve as a benchmark for future 
+research. Additionally, the integration of sensing and precise con-
+trol of the MorphingSkin actuators still remains crucial to enhance 
+the controllability and the programmability of the multimodal ac-
+tuation capabilities. 
+8.3 User experience and feedback 
+In this work, we demonstrated a wide range of potential applica-
+tions for MorphingSkin, showing both the breadth and engineer-
+ing feasibility of how MorphingSkin integrates multimodal output 
+modalities into a flexible, partially stretchable, self-contained, and 
+even untethered interactive platform. However, the user experience 
+and feedback have only been explored to a limited extent in this 
+work. 
+We believe several directions would be worth investigating via 
+future user studies or design workshops: (1) Haptic sensations: How 
+do users perceive the haptic feedback of MorphingSkin when worn 
+on the body? How are these sensations affected by design factors, 
+such as actuator sizes, pressure levels, and body location? What 
+cognitive information can be encoded via spatio-temporal haptic 
+sequences provided by MorphingSkin? (2) Robotic skin: What other 
+functional designs might users envision in daily life, given the 
+robotic skins with unique outputs, such as positive/negative pres-
+sure or dynamic textures? Where might such skins be deployed, 
+such as on existing robotic platforms or everyday objects? (3) Multi-
+modal display: What other information or visual effects might users 
+find expressible through combinations of reflection, refraction, and 
+shape change? How do these modalities interact with each other? 
+While we acknowledge that a full investigation of these questions 
+lies beyond the scope of this paper, we propose an initial approach to 
+evaluating user experience or the higher-level actuation behaviors, 
+by combining the technical evaluation results (i.e., blocked pressure 
+and open flow rate) and established knowledge, such as analytical or 
+simulation methods and also psychophysical studies. For example, 
+by simply multiplying the blocked pressure by the actuator surface 
+area, we can estimate the pressing force applied to human skin, 
+and then predict the user’s sensations by comparing it with the 
+skin sensitivity on a certain body region [18]. We can also use 
+Finite Element Analysis (FEA) to simulate the shape changes and 
+speed of the elastic shells under hydraulic flow and the resulting 
+changes in surface texture or light refraction path, and then predict 
+user’s emotional or cognitive perceptions during interaction by 
+comparing with previous studies on expressive robotic textures [23] 
+or illuminating materials [61]. These insights may also inform the 
+future development of application-specific design and simulation 
+tools. 
+9 Conclusion 
+In this work, we present MorphingSkin, a skin-like platform that 
+integrates multimodal hydraulic actuation based on flexible EOPs. 
+We introduce the structure composition of MorphingSkin and the 
+versatile design space for multimodal actuation in force, shape, 
+optical, and weight domains. We demonstrate a wide range of ap-
+plications using MorphingSkin, including actuating surfaces on 
+companion robots and gripper fingers, multimodal wearables, and 
+physical interaction contexts such as dynamic lampshades and tan-
+gible displays. We detail the fabrication process for MorphingSkin 
+devices, along with a portable driving hardware system that enables 
+untethered operation. Lastly, we present three groups of technical 
+evaluations of the MorphingSkin system, which show compara-
+ble hydraulic performance to prior work. Through this work, we 
+envision the future of using MorphingSkin technology for inter-
+active surfaces that integrate flexible form factors and multimodal 
+actuation capabilities. 
+Acknowledgments 
+This work was supported by the First Year Fellowship from the 
+Mechanical Engineering Department at UC Berkeley and the Na-
+tional Science Foundation 2427455 (CAREER). We thank Hajun Lee 
+for the insights on the fabrication techniques and all the other lab 
+members for brainstorming and discussion during the project. 
+References 
+[1] Lea Albaugh, Scott Hudson, and Lining Yao. 2019. Digital Fabrication of Soft 
+Actuated Objects by Machine Knitting. In Proceedings of the 2019 CHI Conference 
+on Human Factors in Computing Systems (CHI ’19). Association for Computing 
+Machinery, New York, NY, USA, 1–13. doi:10.1145/3290605.3300414 
+[2] Kanon Aoyama, Takafumi Morita, Ziyuan Jiang, Yu Kuwajima, Tomoka Kurosawa, 
+Naoki Hosoya, Shingo Maeda, and Yasuaki Kakehi. 2025. Liquebits: Colored 
+Expressive Control of Liquid Fiber based on Electrohydrodynamics Actuation. 
+In Proceedings of the Nineteenth International Conference on Tangible, Embedded, 
+and Embodied Interaction (TEI ’25). Association for Computing Machinery, New 
+York, NY, USA, 1–12. doi:10.1145/3689050.3704934 
+[3] Jas Brooks, Noor Amin, and Pedro Lopes. 2023. Taste Retargeting via Chem-
+ical Taste Modulators. In Proceedings of the 36th Annual ACM Symposium on 
+User Interface Software and Technology (UIST ’23). Association for Computing 
+Machinery, New York, NY, USA, 1–15. doi:10.1145/3586183.3606818 
+[4] Thomas J. K. Buchner, Toshihiko Fukushima, Amirhossein Kazemipour, Stephan-
+Daniel Gravert, Manon Prairie, Pascal Romanescu, Philip Arm, Yu Zhang, Xingrui 
+Wang, Steven L. Zhang, Johannes Walter, Christoph Keplinger, and Robert K. 
+Katzschmann. 2024. Electrohydraulic musculoskeletal robotic leg for agile, adap-
+tive, yet energy-efficient locomotion. Nature Communications 15, 1 (Sept. 2024), 
+MorphingSkin UIST ’25, September 28–October 01, 2025, Busan, Republic of Korea 
+7634. doi:10.1038/s41467-
+024-51568-3 Publisher: Nature Publishing Group. 
+[5] Vito Cacucciolo, Jun Shintake, Yu Kuwajima, Shingo Maeda, Dario Floreano, and 
+Herbert Shea. 2019. Stretchable pumps for soft machines. Nature 572, 7770 (Aug. 
+2019), 516–519. doi:10.1038/s41586-019-1479-6 Number: 7770 Publisher: Nature 
+Publishing Group. 
+[6] Hsu-Feng Chang and Shyang-Jye Chang. 2025. Design optimization and per-
+formance enhancement of electroosmotic pumps for tactile applications using 
+Taguchi-based methodology. Sensors and Actuators A: Physical 389 (Aug. 2025), 
+116568. doi:10.1016/j.sna.2025.116568 
+[7] Yanjun Chen, Xuewei Liang, Si Chen, Yuwen Chen, Hongnan Lin, Hechuan Zhang, 
+Chutian Jiang, Feng Tian, Yu Zhang, Shanshan Yao, and Teng Han. 2022. HapTag: 
+A Compact Actuator for Rendering Push-Button Tactility on Soft Surfaces. In 
+Proceedings of the 35th Annual ACM Symposium on User Interface Software and 
+Technology (UIST ’22). Association for Computing Machinery, New York, NY, 
+USA, 1–11. doi:10.1145/3526113.3545644 
+[8] Tingyu Cheng, Jung Wook Park, Jiachen Li, Charles Ramey, Hongnan Lin, Gre-
+gory D. Abowd, Carolina Brum Medeiros, HyunJoo Oh, and Marcello Giordano. 
+2022. PITAS: Sensing and Actuating Embedded Robotic Sheet for Physical In-
+formation Communication. In Proceedings of the 2022 CHI Conference on Human 
+Factors in Computing Systems (CHI ’22). Association for Computing Machinery, 
+New York, NY, USA. doi:10.1145/3491102.3517532 event-place: New Orleans, LA, 
+USA. 
+[9] Kyung Yun Choi, Jinmo Lee, Neska ElHaouij, Rosalind Picard, and Hiroshi Ishii. 
+2021. aSpire: Clippable, Mobile Pneumatic-Haptic Device for Breathing Rate 
+Regulation via Personalizable Tactile Feedback. In Extended Abstracts of the 2021 
+CHI Conference on Human Factors in Computing Systems (CHI EA ’21). Association 
+for Computing Machinery, New York, NY, USA, 1–8. doi:10.1145/3411763.3451602 
+[10] Alexandra Delazio, Ken Nakagaki, Roberta L. Klatzky, Scott E. Hudson, Jill Fain 
+Lehman, and Alanson P. Sample. 2018. Force Jacket: Pneumatically-Actuated 
+Jacket for Embodied Haptic Experiences. In Proceedings of the 2018 CHI Conference 
+on Human Factors in Computing Systems (CHI ’18). Association for Computing 
+Machinery, New York, NY, USA, 1–12. doi:10.1145/3173574.3173894 
+[11] Jialin Deng, Patrick Olivier, Josh Andres, Kirsten Ellis, Ryan Wee, and Florian 
+Floyd Mueller. 2022. Logic Bonbon: Exploring Food as Computational Artifact. 
+In CHI Conference on Human Factors in Computing Systems. ACM, New Orleans 
+LA USA, 1–21. doi:10.1145/3491102.3501926 
+[12] Laura Devendorf, Joanne Lo, Noura Howell, Jung Lin Lee, Nan-Wei Gong, M. Emre 
+Karagozler, Shiho Fukuhara, Ivan Poupyrev, Eric Paulos, and Kimiko Ryokai. 
+2016. "I Don’t Want to Wear a Screen": Probing Perceptions of and Possibilities 
+for Dynamic Displays on Clothing. In Proceedings of the 2016 CHI Conference 
+on Human Factors in Computing Systems (CHI ’16). Association for Computing 
+Machinery, New York, NY, USA, 6028–6039. doi:10.1145/2858036.2858192 
+[13] Amir Firouzeh, Ayana Mizutani, Jonas Groten, Martin Zirkl, and Her-
+bert Shea. 2024. PopTouch: A Submillimeter Thick Dynamically Re-
+configured Haptic Interface with Pressable Buttons. Advanced Ma-
+terials 36, 8 (2024), 2307636. doi:10.1002/adma.202307636 _eprint: 
+https://onlinelibrary.wiley.com/doi/pdf/10.1002/adma.202307636. 
+[14] Jack Forman, Ozgun Kilic Afsar, Sarah Nicita, Rosalie Hsin-Ju Lin, Liu Yang, 
+Megan Hofmann, Akshay Kothakonda, Zachary Gordon, Cedric Honnet, Kristen 
+Dorsey, Neil Gershenfeld, and Hiroshi Ishii. 2023. FibeRobo: Fabricating 4D 
+Fiber Interfaces by Continuous Drawing of Temperature Tunable Liquid Crystal 
+Elastomers. In Proceedings of the 36th Annual ACM Symposium on User Interface 
+Software and Technology (UIST ’23). Association for Computing Machinery, New 
+York, NY, USA, 1–17. doi:10.1145/3586183.3606732 
+[15] Jesse T. Gonzalez and Scott E. Hudson. 2022. Layer by Layer, Patterned Valves 
+Enable Programmable Soft Surfaces. Proc. ACM Interact. Mob. Wearable Ubiquitous 
+Technol. 6, 1 (March 2022), 12:1–12:25. doi:10.1145/3517251 
+[16] Daniel Groeger and Jürgen Steimle. 2018. ObjectSkin: Augmenting Everyday 
+Objects with Hydroprinted Touch Sensors and Displays. Proc. ACM Interact. Mob. 
+Wearable Ubiquitous Technol. 1, 4 (Jan. 2018), 134:1–134:23. doi:10.1145/3161165 
+[17] Sebastian Günther, Florian Müller, Dominik Schön, Omar Elmoghazy, Max 
+Mühlhäuser, and Martin Schmitz. 2020. Therminator: Understanding the In-
+terdependency of Visual and On-Body Thermal Feedback in Virtual Reality. In 
+Proceedings of the 2020 CHI Conference on Human Factors in Computing Systems. 
+ACM, Honolulu HI USA, 1–14. doi:10.1145/3313831.3376195 
+[18] Doyeon Han, Moonyoung Park, Junsuk Choi, Heonseop Shin, Donghwan Kim, 
+and Sungsoo Rhim. 2022. Assessment of Pain Onset and Maximum Bearable 
+Pain Thresholds in Physical Contact Situations. Sensors (Basel, Switzerland) 22, 8 
+(April 2022), 2996. doi:10.3390/s22082996 
+[19] Teng Han, Fraser Anderson, Pourang Irani, and Tovi Grossman. 2018. HydroRing: 
+Supporting Mixed Reality Haptics Using Liquid Flow. In Proceedings of the 31st 
+Annual ACM Symposium on User Interface Software and Technology (UIST ’18). 
+Association for Computing Machinery, New York, NY, USA, 913–925. doi:10. 
+1145/3242587.3242667 event-place: Berlin, Germany. 
+[20] Violet Yinuo Han, Abena Boadi-Agyemang, Yuyu Lin, David Lindlbauer, and 
+Alexandra Ion. 2023. Parametric Haptics: Versatile Geometry-based Tactile Feed-
+back Devices. In Proceedings of the 36th Annual ACM Symposium on User Interface 
+Software and Technology (UIST ’23). Association for Computing Machinery, New 
+York, NY, USA, 1–13. doi:10.1145/3586183.3606766 
+[21] Ollie Hanton, Zichao Shen, Mike Fraser, and Anne Roudaut. 2022. FabricatINK: 
+Personal Fabrication of Bespoke Displays Using Electronic Ink from Upcycled E 
+Readers. In Proceedings of the 2022 CHI Conference on Human Factors in Computing 
+Systems (CHI ’22). Association for Computing Machinery, New York, NY, USA, 
+1–15. doi:10.1145/3491102.3501844 
+[22] Felix Heibeck, Basheer Tome, Clark Della Silva, and Hiroshi Ishii. 2015. uniMorph: 
+Fabricating Thin Film Composites for Shape-Changing Interfaces. In Proceedings 
+of the 28th Annual ACM Symposium on User Interface Software & Technology. 
+ACM, Charlotte NC USA, 233–242. doi:10.1145/2807442.2807472 
+[23] Yuhan Hu and Guy Hoffman. 2023. What Can a Robot’s Skin Be? Designing 
+Texture-changing Skin for Human–Robot Social Interaction. J. Hum.-Robot 
+Interact. 12, 2 (2023), 26:1–26:19. doi:10.1145/3532772 
+[24] Hiroshi Ishii, Daniel Leithinger, Sean Follmer, Amit Zoran, Philipp Schoessler, 
+and Jared Counts. 2015. TRANSFORM: Embodiment of "Radical Atoms" at 
+Milano Design Week. In Proceedings of the 33rd Annual ACM Conference Extended 
+Abstracts on Human Factors in Computing Systems (CHI EA ’15). Association 
+for Computing Machinery, New York, NY, USA, 687–694. doi:10.1145/2702613. 
+2702969 
+[25] Yu Jiang, Alice C Haynes, Narjes Pourjafarian, Jan Borchers, and Jürgen Steimle. 
+2024. Embrogami: Shape-Changing Textiles with Machine Embroidery. In Pro-
+ceedings of the 37th Annual ACM Symposium on User Interface Software and 
+Technology (UIST ’24). Association for Computing Machinery, New York, NY, 
+USA, 1–15. doi:10.1145/3654777.3676431 
+[26] Ziyuan Jiang, Takafumi Morita, Kanon Aoyama, Yu Kuwajima, Naoki Hosoya, 
+Shingo Maeda, and Yasuaki Kakehi. 2023. A Method for Controlling the Continu-
+ous Transparency of Three-dimensional Objects Utilizing Mechanical Emulsi-
+fication. In Proceedings of the Seventeenth International Conference on Tangible, 
+Embedded, and Embodied Interaction (TEI ’23). Association for Computing Ma-
+chinery, New York, NY, USA, 1–6. doi:10.1145/3569009.3573122 
+[27] Yuhua Jin, Isabel Qamar, Michael Wessely, Aradhana Adhikari, Katarina Bulovic, 
+Parinya Punpongsanon, and Stefanie Mueller. 2019. Photo-Chromeleon: Re-
+Programmable Multi-Color Textures Using Photochromic Dyes. In Proceedings 
+of the 32nd Annual ACM Symposium on User Interface Software and Technology. 
+ACM, New Orleans LA USA, 701–712. doi:10.1145/3332165.3347905 
+[28] Alexander Kalus, Johannes Klein, Tien-Julian Ho, Lee-Ann Seegets, and Niels 
+Henze. 2024. MobileGravity: Mobile Simulation of a High Range of Weight in 
+Virtual Reality. In Proceedings of the 2024 CHI Conference on Human Factors in 
+Computing Systems (CHI ’24). Association for Computing Machinery, New York, 
+NY, USA, 1–13. doi:10.1145/3613904.3642658 
+[29] Alexander Kalus, Martin Kocur, Johannes Klein, Manuel Mayer, and Niels Henze. 
+2023. PumpVR: Rendering the Weight of Objects and Avatars through Liquid Mass 
+Transfer in Virtual Reality. In Proceedings of the 2023 CHI Conference on Human 
+Factors in Computing Systems (CHI ’23). Association for Computing Machinery, 
+New York, NY, USA, 1–13. doi:10.1145/3544548.3581172 
+[30] Hsin-Liu (Cindy) Kao, Christian Holz, Asta Roseway, Andres Calvo, and Chris 
+Schmandt. 2016. DuoSkin: rapidly prototyping on-skin user interfaces using 
+skin-friendly materials. In Proceedings of the 2016 ACM International Symposium 
+on Wearable Computers (ISWC ’16). Association for Computing Machinery, New 
+York, NY, USA, 16–23. doi:10.1145/2971763.2971777 
+[31] Hyunyoung Kim, Aluna Everitt, Carlos Tejada, Mengyu Zhong, and Daniel Ash-
+brook. 2021. MorpheesPlug: A Toolkit for Prototyping Shape-Changing Interfaces. 
+In Proceedings of the 2021 CHI Conference on Human Factors in Computing Sys-
+tems (CHI ’21). Association for Computing Machinery, New York, NY, USA, 1–13. 
+doi:10.1145/3411764.3445786 
+[32] Pin-Sung Ku, Kunpeng Huang, and Cindy Hsin-Liu Kao. 2022. Patch-O: De-
+formable Woven Patches for On-body Actuation. In Proceedings of the 2022 CHI 
+Conference on Human Factors in Computing Systems (CHI ’22). Association for 
+Computing Machinery, New York, NY, USA, 1–12. doi:10.1145/3491102.3517633 
+[33] Pin-Sung Ku, Shuwen Jiang, Wei-Hsin Wang, and Hsin-Liu Cindy Kao. 2024. 
+ECSkin: Tessellating Electrochromic Films for Reconfigurable On-skin Displays. 
+Proc. ACM Interact. Mob. Wearable Ubiquitous Technol. 8, 2 (May 2024), 60:1–60:26. 
+doi:10.1145/3659613 
+[34] Edouard Leroy and Herbert Shea. [n. d.]. Hydraulically Amplified Electrostatic 
+Taxels (HAXELs) for Full Body Haptics. ([n. d.]). doi:10.1002/admt.202300242 
+[35] Guanhong Liu, Haiqing Xu, Xianghua(Sharon) Ding, Mingyue Gao, Bowen Li, 
+Fushen Ruan, and Haipeng Mi. 2022. ”It Puts Life into My Creations”: Under-
+standing Fluid Fiber as a Media for Expressive Display. In Proceedings of the 2022 
+CHI Conference on Human Factors in Computing Systems (CHI ’22). Association 
+for Computing Machinery, New York, NY, USA. doi:10.1145/3491102.3501990 
+event-place: New Orleans, LA, USA. 
+[36] Yuhu Liu, Satoshi Nishikawa, Young ah Seong, Ryuma Niiyama, and Yasuo 
+Kuniyoshi. 2021. ThermoCaress: A Wearable Haptic Device with Illusory Moving 
+Thermal Stimulation. In Proceedings of the 2021 CHI Conference on Human Factors 
+in Computing Systems (CHI ’21). Association for Computing Machinery, New 
+York, NY, USA. doi:10.1145/3411764.3445777 event-place: Yokohama, Japan. 
+[37] Jasmine Lu, Ziwei Liu, Jas Brooks, and Pedro Lopes. 2021. Chemical Haptics: 
+Rendering Haptic Sensations via Topical Stimulants. In The 34th Annual ACM 
+UIST ’25, September 28–October 01, 2025, Busan, Republic of Korea Yu et al. 
+Symposium on User Interface Software and Technology. ACM, Virtual Event USA, 
+239–257. doi:10.1145/3472749.3474747 
+[38] Qiuyu Lu, Jifei Ou, João Wilbert, André Haben, Haipeng Mi, and Hiroshi 
+Ishii. 2019. milliMorph – Fluid-Driven Thin Film Shape-Change Materials 
+for Interaction Design. In Proceedings of the 32nd Annual ACM Symposium on 
+User Interface Software and Technology. ACM, New Orleans LA USA, 663–672. 
+doi:10.1145/3332165.3347956 
+[39] Yiyue Luo, Junyi Zhu, Kui Wu, Cedric Honnet, Stefanie Mueller, and Wojciech 
+Matusik. 2023. MagKnitic: Machine-knitted Passive and Interactive Haptic Tex-
+tiles with Integrated Binary Sensing. In Proceedings of the 36th Annual ACM 
+Symposium on User Interface Software and Technology (UIST ’23). Association for 
+Computing Machinery, New York, NY, USA, 1–13. doi:10.1145/3586183.3606765 
+[40] Eric Markvicka, Guanyun Wang, Yi-Chin Lee, Gierad Laput, Carmel Majidi, and 
+Lining Yao. 2019. ElectroDermis: Fully Untethered, Stretchable, and Highly-
+Customizable Electronic Bandages. In Proceedings of the 2019 CHI Conference 
+on Human Factors in Computing Systems (CHI ’19). Association for Computing 
+Machinery, New York, NY, USA, 1–10. doi:10.1145/3290605.3300862 
+[41] Alex Mazursky, Jacob Serfaty, and Pedro Lopes. 2024. Stick&Slip: Altering Fin-
+gerpad Friction via Liquid Coatings. In Proceedings of the 2024 CHI Conference 
+on Human Factors in Computing Systems (CHI ’24). Association for Computing 
+Machinery, New York, NY, USA, 1–14. doi:10.1145/3613904.3642299 
+[42] Hila Mor, Tianyu Yu, Ken Nakagaki, Benjamin Harvey Miller, Yichen Jia, and 
+Hiroshi Ishii. 2020. Venous Materials: Towards Interactive Fluidic Mechanisms. 
+In Proceedings of the 2020 CHI Conference on Human Factors in Computing Systems. 
+ACM, Honolulu HI USA, 1–14. doi:10.1145/3313831.3376129 
+[43] Takafumi Morita and Yasuaki Kakehi. 2023. see-saw: A Kinetic Installation 
+that Unfolds in Silence Driven by Liquid Flow. In SIGGRAPH Asia 2023 Art 
+Papers (SA ’23). Association for Computing Machinery, New York, NY, USA, 1–6. 
+doi:10.1145/3610591.3616434 
+[44] Takafumi Morita, Yu Kuwajima, Ayato Minaminosono, Shingo Maeda, and Ya-
+suaki Kakehi. 2022. HydroMod : Constructive Modules for Prototyping Hydraulic 
+Physical Interfaces. In CHI Conference on Human Factors in Computing Systems. 
+ACM, New Orleans LA USA, 1–14. doi:10.1145/3491102.3502096 
+[45] Jifei Ou, Mélina Skouras, Nikolaos Vlavianos, Felix Heibeck, Chin-Yi Cheng, 
+Jannik Peters, and Hiroshi Ishii. 2016. aeroMorph - Heat-sealing Inflatable Shape-
+change Materials for Interaction Design. In Proceedings of the 29th Annual Sym-
+posium on User Interface Software and Technology (UIST ’16). Association for Com-
+puting Machinery, New York, NY, USA, 121–132. doi:10.1145/2984511.2984520 
+[46] Roshan Lalitha Peiris, Yuan-Ling Feng, Liwei Chan, and Kouta Minamizawa. 
+2019. ThermalBracelet: Exploring Thermal Haptic Feedback Around the Wrist. In 
+Proceedings of the 2019 CHI Conference on Human Factors in Computing Systems. 
+ACM, Glasgow Scotland Uk, 1–11. doi:10.1145/3290605.3300400 
+[47] Purnendu, Sasha M Novack, Eric Acome, Christoph Keplinger, Mirela Alistar, 
+Mark D Gross, Carson Bruns, and Daniel Leithinger. 2021. Electriflow: Soft 
+Electrohydraulic Building Blocks for Prototyping Shape-changing Interfaces. 
+In Proceedings of the 2021 ACM Designing Interactive Systems Conference (DIS 
+’21). Association for Computing Machinery, New York, NY, USA, 1280–1290. 
+doi:10.1145/3461778.3462093 
+[48] Tucker Rae-Grant, Chris Harrison, and Craig Shultz. 2024. DynaButtons: Fast 
+Interactive Soft Buttons with Analog Control. In 2024 IEEE Haptics Symposium 
+(HAPTICS). 366–371. doi:10.1109/HAPTICS59260.2024.10520864 ISSN: 2324-7355. 
+[49] Philipp Rothemund, Nicholas Kellaris, Shane K. Mitchell, Eric Acome, and 
+Christoph Keplinger. 2021. HASEL Artificial Muscles for a New Gener-
+ation of Lifelike Robots—Recent Progress and Future Opportunities. Ad-
+vanced Materials 33, 19 (2021), 2003375. doi:10.1002/adma.202003375 _eprint: 
+https://onlinelibrary.wiley.com/doi/pdf/10.1002/adma.202003375. 
+[50] Natalia Sanchez-Tamayo, Zachary Yoder, Philipp Rothemund, Giulia Ballardini, 
+Christoph Keplinger, and Katherine J. Kuchenbecker. [n. d.]. Cutaneous Electro-
+hydraulic (CUTE) Wearable Devices for Pleasant Broad-Bandwidth Haptic Cues. 
+Advanced Science n/a, n/a ([n. d.]), 2402461. doi:10.1002/advs.202402461 _eprint: 
+https://onlinelibrary.wiley.com/doi/pdf/10.1002/advs.202402461. 
+[51] Ticha Sethapakdi, Laura Huang, Vivian Hsinyueh Chan, Lung-Pan Cheng, Fer-
+nando Fuzinatto Dall’Agnol, Mackenzie Leake, and Stefanie Mueller. 2023. Po-
+lagons: Designing and Fabricating Polarized Light Mosaics with User-Defined 
+Color-Changing Behaviors. In Proceedings of the 2023 CHI Conference on Human 
+Factors in Computing Systems (CHI ’23). Association for Computing Machinery, 
+New York, NY, USA, 1–14. doi:10.1145/3544548.3580639 
+[52] Ticha Sethapakdi, Paris Myers, Tianyu Yu, Juliana Covarrubias, Mackenzie Leake, 
+and Stefanie Mueller. 2024. Thermochromorph: Dynamic Relief Printing with 
+Thermochromic Inks. In SIGGRAPH Asia 2024 Art Papers (SA ’24). Association for 
+Computing Machinery, New York, NY, USA, 1–7. doi:10.1145/3680530.3695445 
+[53] Vivian Shen, Tucker Rae-Grant, Joe Mullenbach, Chris Harrison, and Craig 
+Shultz. 2023. Fluid Reality: High-Resolution, Untethered Haptic Gloves using 
+Electroosmotic Pump Arrays. In Proceedings of the 36th Annual ACM Symposium 
+on User Interface Software and Technology (UIST ’23). Association for Computing 
+Machinery, New York, NY, USA, 1–20. doi:10.1145/3586183.3606771 
+[54] Ali Shtarbanov. 2021. FlowIO Development Platform – the Pneumatic “Raspberry 
+Pi” for Soft Robotics. In Extended Abstracts of the 2021 CHI Conference on Human 
+Factors in Computing Systems (CHI EA ’21). Association for Computing Machinery, 
+New York, NY, USA, 1–6. doi:10.1145/3411763.3451513 
+[55] Craig Shultz and Chris Harrison. 2023. Flat Panel Haptics: Embedded Elec-
+troosmotic Pumps for Scalable Shape Displays. In Proceedings of the 2023 CHI 
+Conference on Human Factors in Computing Systems (CHI ’23). Association for 
+Computing Machinery, New York, NY, USA, 1–16. doi:10.1145/3544548.3581547 
+[56] Katherine Wei Song, Christine Dierk, Szu Ting Tung, and Eric Paulos. 2023. 
+Lotio: Lotion-Mediated Interaction with an Electronic Skin-Worn Display. In 
+Proceedings of the 2023 CHI Conference on Human Factors in Computing Systems 
+(CHI ’23). Association for Computing Machinery, New York, NY, USA, 1–15. 
+doi:10.1145/3544548.3581098 
+[57] Wei Sun, Yuwen Chen, Yanjun Chen, Xiaopeng Zhang, Simon Zhan, Yixin Li, 
+Jiecheng Wu, Teng Han, Haipeng Mi, Jingxian Wang, Feng Tian, and Xing-Dong 
+Yang. 2022. MicroFluID: A Multi-Chip RFID Tag for Interaction Sensing Based 
+on Microfluidic Switches. Proceedings of the ACM on Interactive, Mobile, Wearable 
+and Ubiquitous Technologies 6, 3 (2022), 141:1–141:23. doi:10.1145/3550296 
+[58] Saya Suzunaga, Yuichi Itoh, Yuki Inoue, Kazuyuki Fujita, and Takao Onoye. 2020. 
+TuVe: A Shape-changeable Display using Fluids in a Tube. In Proceedings of the 
+2020 International Conference on Advanced Visual Interfaces (A VI ’20). Association 
+for Computing Machinery, New York, NY, USA, 1–9. doi:10.1145/3399715.3399874 
+[59] Yudai Tanaka, Alan Shen, Andy Kong, and Pedro Lopes. 2023. Full-hand 
+Electro-Tactile Feedback without Obstructing Palmar Side of Hand. In Pro-
+ceedings of the 2023 CHI Conference on Human Factors in Computing Systems 
+(CHI ’23). Association for Computing Machinery, New York, NY, USA, 1–15. 
+doi:10.1145/3544548.3581382 
+[60] Wei Tang, Yiding Zhong, Huxiu Xu, Kecheng Qin, Xinyu Guo, Yu Hu, Pingan 
+Zhu, Yang Qu, Dong Yan, Zhaoyang Li, Zhongdong Jiao, Xujun Fan, Huayong 
+Yang, and Jun Zou. 2023. Self-protection soft fluidic robots with rapid large-
+area self-healing capabilities. Nature Communications 14, 1
+ (Oct. 2023), 6430. 
+doi:10.1038/s41467-023-42214-5 Publisher: Nature Publishing Group. 
+[61] Cesar Torres, Jasper O’Leary, Molly Nicholas, and Eric Paulos. 2017. Illumina-
+tion Aesthetics: Light as a Creative Material within Computational Design. In 
+Proceedings of the 2017 CHI Conference on Human Factors in Computing Systems. 
+ACM, Denver Colorado USA, 6111–6122. doi:10.1145/3025453.3025466 
+[62] Anusha Withana, Daniel Groeger, and Jürgen Steimle. 2018. Tacttoo: A Thin 
+and Feel-Through Tattoo for On-Skin Tactile Output. In Proceedings of the 31st 
+Annual ACM Symposium on User Interface Software and Technology (UIST ’18). 
+Association for Computing Machinery, New York, NY, USA, 365–378. doi:10. 
+1145/3242587.3242645 
+[63] Te-Yen Wu, Lu Tan, Yuji Zhang, Teddy Seyed, and Xing-Dong Yang. 2020. Capac-
+itivo: Contact-Based Object Recognition on Interactive Fabrics using Capacitive 
+Sensing. In Proceedings of the 33rd Annual ACM Symposium on User Interface 
+Software and Technology (UIST ’20). Association for Computing Machinery, New 
+York, NY, USA, 649–661. doi:10.1145/3379337.3415829 
+[64] Zeyu Yan and Huaishu Peng. 2021. FabHydro: Printing Interactive Hydraulic 
+Devices with an Affordable SLA 3D Printer. In The 34th Annual ACM Symposium 
+on User Interface Software and Technology (UIST ’21). Association for Computing 
+Machinery, New York, NY, USA, 298–311. doi:10.1145/3472749.3474751 event-
+place: Virtual Event, USA. 
+[65] Willa Yunqi Yang, Yifan Zou, Jingle Huang, Raouf Abujaber, and Ken Nakagaki. 
+2024. TorqueCapsules: Fully-Encapsulated Flywheel Actuation Modules for 
+Designing and Prototyping Movement-Based and Kinesthetic Interaction. In 
+Proceedings of the 37th Annual ACM Symposium on User Interface Software and 
+Technology (UIST ’24). Association for Computing Machinery, New York, NY, 
+USA, 1–15. doi:10.1145/3654777.3676364 
+[66] Lining Yao, Ryuma Niiyama, Jifei Ou, Sean Follmer, Clark Della Silva, and Hiroshi 
+Ishii. 2013. PneUI: Pneumatically Actuated Soft Composite Materials for Shape 
+Changing Interfaces. In Proceedings of the 26th Annual ACM Symposium on 
+User Interface Software and Technology (UIST ’13). Association for Computing 
+Machinery, New York, NY, USA, 13–22. doi:10.1145/2501988.2502037 event-place: 
+St. Andrews, Scotland, United Kingdom. 
+[67] Lining Yao, Jifei Ou, Chin-Yi Cheng, Helene Steiner, Wen Wang, Guanyun Wang, 
+and Hiroshi Ishii. 2015. bioLogic: Natto Cells as Nanoactuators for Shape Chang-
+ing Interfaces. In Proceedings of the 33rd Annual ACM Conference on Human 
+Factors in Computing Systems (CHI ’15). Association for Computing Machinery, 
+New York, NY, USA, 1–10. doi:10.1145/2702123.2702611 
+[68] Zachary Yoder, Ellen H. Rumley, Ingemar Schmidt, Philipp Rothemund, and 
+Christoph Keplinger. 2024. Hexagonal electrohydraulic modules for rapidly 
+reconfigurable high-speed robots. Science Robotics 9, 94 (Sept. 2024), eadl3546. 
+doi:10.1126/scirobotics.adl3546 Publisher: American Association for the Advance-
+ment of Science. 
+[69] Tianyu Yu, Yige Fan, Zhixiang Zhang, Qingyu Hu, Weiye Xu, Haipeng Mi, and 
+Stefanie Mueller. 2024. Thermaterial: Program Ambient Heat Transfer Behaviors 
+on Objects through Fluidic Composites. In Extended Abstracts of the 2024 CHI 
+Conference on Human Factors in Computing Systems (CHI EA ’24). Association for 
+Computing Machinery, New York, NY, USA, 1–8. doi:10.1145/3613905.3650747 
+[70] Tianyu Yu, Yang Liu, Yujia Liu, Qiuyu Lu, Teng Han, and Haipeng Mi. 2024. 
+FlexEOP: Flexible Shape-changing Actuator using Embedded Electroosmotic 
+MorphingSkin UIST ’25, September 28–October 01, 2025, Busan, Republic of Korea 
+Pumps. In Adjunct Proceedings of the 37th Annual ACM Symposium on User 
+Interface Software and Technology (UIST Adjunct ’24). Association for Computing 
+Machinery, New York, NY, USA, 1–5. doi:10.1145/3672539.3686785 
+[71] Tianyu Yu, Mengjia Niu, Haipeng Mi, and Qiuyu Lu. 2024. MilliWare: Parametric 
+Modeling and Simulation of Millifluidic Shape-changing Interface. In Proceedings 
+of the Eleventh International Symposium of Chinese CHI (CHCHI ’23). Association 
+for Computing Machinery, New York, NY, USA, 461–467. doi:10.1145/3629606. 
+3629654 
+[72] Tianyu Yu, Weiye Xu, Haiqing Xu, Guanhong Liu, Chang Liu, Guanyun Wang, 
+and Haipeng Mi. 2023. Thermotion: Design and Fabrication of Thermofluidic 
+Composites for Animation Effects on Object Surfaces. In Proceedings of the 2023 
+CHI Conference on Human Factors in Computing Systems (CHI ’23). Association for 
+Computing Machinery, New York, NY, USA, 1–19. doi:10.1145/3544548.3580743 
+[73] Tianhong Catherine Yu, Riku Arakawa, James McCann, and Mayank Goel. 2023. 
+uKnit: A Position-Aware Reconfigurable Machine-Knitted Wearable for Gestural 
+Interaction and Passive Sensing using Electrical Impedance Tomography. In 
+Proceedings of the 2023 CHI Conference on Human Factors in Computing Systems 
+(CHI ’23). Association for Computing Machinery, New York, NY, USA, 1–17. 
+doi:10.1145/3544548.3580692 
+[74] Tianhong Catherine Yu, Manru Mary Zhang, Peter He, Chi-Jung Lee, Cassidy 
+Cheesman, Saif Mahmud, Ruidong Zhang, Francois Guimbretiere, and Cheng 
+Zhang. 2024. SeamPose: Repurposing Seams as Capacitive Sensors in a Shirt for 
+Upper-Body Pose Tracking. In Proceedings of the 37th Annual ACM Symposium 
+on User Interface Software and Technology (UIST ’24). Association for Computing 
+Machinery, New York, NY, USA, 1–13. doi:10.1145/3654777.3676341 
+[75] Junyi Zhu, Yuxuan Lei, Aashini Shah, Gila Schein, Hamid Ghaednia, Joseph 
+Schwab, Casper Harteveld, and Stefanie Mueller. 2022. MuscleRehab: Improving 
+Unsupervised Physical Rehabilitation by Monitoring and Visualizing Muscle 
+Engagement. In Proceedings of the 35th Annual ACM Symposium on User Interface 
+Software and Technology (UIST ’22). Association for Computing Machinery, New 
+York, NY, USA, 1–14. doi:10.1145/3526113.3545705 

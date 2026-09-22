@@ -1,0 +1,1801 @@
+TYPE Methods
+PUBLISHED /two.tnum/zero.tnum July /two.tnum/zero.tnum/two.tnum/three.tnum
+DOI /one.tnum/zero.tnum./three.tnum/three.tnum/eight.tnum/nine.tnum/fcomp./two.tnum/zero.tnum/two.tnum/three.tnum./eight.tnum/four.tnum/eight.tnum/zero.tnum/two.tnum/three.tnum
+OPEN ACCESS
+EDITED BY
+Kostas Karpouzis,
+Panteion University, Greece
+REVIEWED BY
+Insook Choi,
+University of Salford, United Kingdom
+Steve Boyer,
+California State University, Long Beach,
+United States
+Antal Haans,
+Eindhoven University of T echnology,
+Netherlands
+*CORRESPONDENCE
+Angelika Mader
+a.h.mader@utwente.nl
+RECEIVED /zero.tnum/three.tnum January /two.tnum/zero.tnum/two.tnum/two.tnum
+ACCEPTED /zero.tnum/five.tnum June /two.tnum/zero.tnum/two.tnum/three.tnum
+PUBLISHED /two.tnum/zero.tnum July /two.tnum/zero.tnum/two.tnum/three.tnum
+CITATION
+Mader A, Dertien E, Weda J and van Erp J
+(/two.tnum/zero.tnum/two.tnum/three.tnum) Tinkering with social touch technology.
+Front. Comput. Sci. /five.tnum:/eight.tnum/four.tnum/eight.tnum/zero.tnum/two.tnum/three.tnum.
+doi: /one.tnum/zero.tnum./three.tnum/three.tnum/eight.tnum/nine.tnum/fcomp./two.tnum/zero.tnum/two.tnum/three.tnum./eight.tnum/four.tnum/eight.tnum/zero.tnum/two.tnum/three.tnum
+COPYRIGHT
+© /two.tnum/zero.tnum/two.tnum/three.tnum Mader, Dertien, Weda and van Erp. This
+is an open-access article distributed under the
+terms of the
+Creative Commons Attribution
+License (CC BY) . The use, distribution or
+reproduction in other forums is permitted,
+provided the original author(s) and the
+copyright owner(s) are credited and that the
+original publication in this journal is cited, in
+accordance with accepted academic practice.
+No use, distribution or reproduction is
+permitted which does not comply with these
+terms.
+Tinkering with social touch
+technology
+Angelika Mader/one.tnum*, Edwin Dertien /two.tnum, Judith Weda /one.tnumand
+Jan van Erp /one.tnum,/three.tnum
+/one.tnumHuman Media Interaction Group, Faculty of Electrical Engineer ing, Mathematics and Computer Science
+(EEMCS), University of Twente, Enschede, Netherlands, /two.tnumRobotics and Mechatronics Group, Faculty of
+Electrical Engineering, Mathematics and Computer Science (EE MCS), University of Twente, Enschede,
+Netherlands, /three.tnumNetherlands Organization for Applied Scientiﬁc Research TNO, Soesterberg, Netherlands
+Social touch technology, haptic technology to mediate social touch i nteractions,
+potentially contributes to reducing negative eﬀects of skin hu nger and social
+isolation. This ﬁeld is developing and while there are a number of prototypes,
+few became products and less persisted in the market today. Viable social touch
+technology is essential for research on social touch and it has an une xplored
+market potential. Making prototypes and evaluating them is the approach of
+generating knowledge in Research through Design (RtD). In RtD, researchers
+investigate the speculative future, probing on what the world co uld and should
+be, leaving the exact method of designing prototypes open. On e possible
+method is tinkering, characterized by a playful and creative ex ploration. Tinkering
+environments, however, need a careful design of toolkits and se tting. In this
+study, we report on the toolkit and setup we used for a tinkering -based teaching
+unit on social touch technology, held within an introductory course of an
+Interaction T echnology master program, and describe the result ing prototypes.
+With a qualitative analysis of the results, we consider the teaching unit as a success,
+w.r.t. the diversity of the concepts developed. Tinkering is we ll-known as a playful
+method for education in Science, T echnology, Engineering, and Mat hs, aiming at
+school children and high school students. It is not yet establishe d as a design
+method in itself, and not considered as element of an academic skil l set. Here,
+we argue that tinkering is a valuable design method in the conte xt of social touch
+technology, and that it has a place in the design approaches within an academic
+setting. In a further step, we also want to include experts from ot her domains
+in the design process, such as psychologists or fashion designer s. For that end,
+we suggest expanding a current toolkit for wearable technology wit h concepts
+from the teaching unit, more scaﬀolding tools, a variety of tacti le actuators, and a
+software tool that allow for (re)conﬁguring designs rather th an programing them.
+KEYWORDS
+tinkering, social touch technology, teaching, Research throu gh Design, toolkit design
+/one.tnum. Introduction
+/one.tnum./one.tnum. Social touch in social touch technology
+Social touch plays a key role in close social relationships and fulﬁlls an important role
+in the regulation of physical and emotional wellbeing ( Field, 2010). However, distance and
+social isolation create barriers for social touch, and, overall, a decline in social touch over
+the past two decades is signaled (
+Jewitt et al., 2021 ). Negative eﬀects of touch deprivation
+can be partially mitigated by mediating social touch through technology, known as social
+touch technology or STT (
+van Erp and Toet, 2015 ). However, while there existed already a
+Frontiers in Computer Science /zero.tnum/one.tnum frontiersin.org
+Mader et al. /one.tnum/zero.tnum./three.tnum/three.tnum/eight.tnum/nine.tnum/fcomp./two.tnum/zero.tnum/two.tnum/three.tnum./eight.tnum/four.tnum/eight.tnum/zero.tnum/two.tnum/three.tnum
+range of prototype applications (Huisman, 2017), only few concepts
+made it to commercially available products, where even less
+persisted. Two factors may play a role here. One is that the potential
+for innovative future applications and products is huge and not
+yet explored and understood. In this line,
+Jewitt et al. (2021)
+presents a call to action to designers, developers, and researchers to
+rethink and reimagine social touch through a deeper engagement
+with the social and sensory aspects of touch. The other factor
+that may contribute to the low persistence of products on the
+market may be found in low acceptance. Technology Acceptance
+Models (TAM) indicate that perceived usefulness and perceived
+ease of use are main reasons for the intention to use a product
+(
+Davis, 1989). Accordingly, these have to be addressed in the design
+of products for the market. Both factors will be addressed and
+discussed in this study.
+Above observations motivated us to develop an innovative
+approach based on tinkering to design STT that increases the
+chances of end-user acceptance and market success. We report
+the development of the tinkering approach and its ﬁrst results,
+and provide a toolkit with tinkering components and a set
+of “scaﬀolding” cards ready to be used in educational and
+other settings.
+From the technological point of view, there are solutions such
+as (almost) real-time connection over internet, and small electronic
+building blocks allowing for wearability. Actuators for social touch,
+however, are still restricted; vibration motors are the most simple
+and accessible realization, but are noisy and give a restricted tactile
+sensation, that is diﬀerent from a human touch in many ways.
+Other technologies such as servo motors, shape memory alloys, and
+pneumatic or hydraulic actuators can stimulate diﬀerent sensory
+receptors, but come also with diﬀerent drawbacks (e.g., they are
+bulky and noisy) that make them not yet suitable (for wearables)
+for mediated social touch. However, a number of initiatives and
+research lines are busy with the development of textile actuators
+or new developments in wearable pneumatic actuators that will be
+available in the near future (
+Maziz et al., 2017).
+From an application point of view, STT is still coming short in
+the replication of a human touch. In Huisman (2017), the author
+states “Mediated social touch is less sensory rich than actual social
+touch, not just in terms of cutaneous and kinesthetic feedback, but
+also in terms of feedback from other modalities which may not
+necessarily be present in mediated social touch.”
+At this point, we want to take the perspective that (a) human-
+to-human touch might be an inspiration for applications of STT ,
+but technical applications of social touch may supersede human
+possibilities (imagine a full body hug with ten arms) and (b) that
+achievement of the positive eﬀect on social needs is more important
+than a replication of a human touch. This leaves space for a wide
+range of out-of-the-box concepts.
+/one.tnum./two.tnum. Research through Design and tinkering
+For novel applications, creative ideas are relevant, and, beyond
+these, also knowledge on how to address new characteristics
+introduced by social touch over a distance, such as inherent
+asymmetry in comparison to a direct human-to-human touch, the
+non-reciprocity (in a physical touch, the toucher also feels the touch
+s/he gives), ambiguous attribution (who is actually the initiator of
+a touch if there is, e.g., computation involved) (
+Huisman, 2017 ),
+complex agency (e.g., is the vest touching me or the person who
+gave me the vest?), or intrusiveness (a touch might be unexpected
+and not ﬁtting a situation). In the context of STT , Research through
+Design (RtD) could be a suitable approach to gain this knowledge.
+“RtD asks researchers to investigate the speculative future, probing
+on what the world could and should be” (
+Zimmerman and Forlizzi,
+2014). It builds on generating knowledge by introducing prototypes
+into the world, and reﬂect, measure, discuss, and analyze the eﬀect,
+sometimes the coming-into-being, of these artifacts (
+Stappers and
+Giaccardi, 2017). According to Gaver (2012), making is part of the
+paradigms of RtD, i.e., most of us agree that the practice of making
+is a route to discovery, and that the synthetic nature of design
+allows for richer and more situated understandings than those
+produced through more analytic means. While in this, approach
+design is driving part of research, RtD does not deﬁne how to
+generate and design new prototypes. It is method agnostic (
+Stappers
+and Giaccardi, 2017 ), in the sense that the method of designing
+prototypes can be ﬁlled in various ways.
+In this study, we suggest that tinkering is a suitable design
+approach for out-of-the box prototypes in the context of STT.
+Tinkering is characterized by a playful way of working, stimulating
+creativity, where goals are self chosen, evaluated, and re-deﬁned in
+an iterative process. In tinkering, the design space is explored in
+a hands-on manner, inviting to get into a conversation with the
+material (
+Schön, 1992), experience its possibilities and restrictions,
+and getting inspiration from these. Tinkering is a process having
+trial-and-error at its core (
+Martinez and Stager, 2013 ), where
+trial-and-error should not be understood as randomness, but
+more as a way to explore and experience material properties.
+Depending on the background of the tinkerer, this exploration
+can be very systematic (as we have seen in tinkerers with an
+art school education), but are always guided by curiosity and
+background (including professional background). Following this
+process, tinkerers are open to serendipity, observation of the
+unexpected. There is no expectation that others following the
+same process would produce the same or even a similar ﬁnal
+artifact (
+Zimmerman and Forlizzi, 2014 ). Especially in the context
+of haptics, experiencing the material is also a key factor in the
+exploration. Insights that need to be experienced are, for example,
+a stroke by a series of vibration motors is very diﬀerent from
+a stroke by a hand, feeling one’s own heart beat via a vibration
+motor is awkward, and the noise of a (vibration) motor can spoil
+the touch experience, but a vibration motor still can generate a
+pleasant feeling of massage on a shoulder. There is an endless
+list on the qualities of touch experiences, and contexts in which
+they are perceived diﬀerently, that need a hands-on approach
+for evaluation. The hands-on approach shows limitations of the
+material, but at the same time also shows new possibilities and
+stimulates creativity.
+Most tinkering approaches in teaching aim children in primary
+schools or high school students, as in-school activities as well
+as out-school activities, and the approach is especially popular
+for Science, Technology, Engineering, and Mathematics (STEM)
+education (
+Vossoughi and Bevan, 2014 ). However, as the authors
+Frontiers in Computer Science /zero.tnum/two.tnum frontiersin.org
+Mader et al. /one.tnum/zero.tnum./three.tnum/three.tnum/eight.tnum/nine.tnum/fcomp./two.tnum/zero.tnum/two.tnum/three.tnum./eight.tnum/four.tnum/eight.tnum/zero.tnum/two.tnum/three.tnum
+elaborated in Quinn and Bell (2013) and Mader and Dertien
+(2016), tinkering can also be a valuable contribution in academic
+teaching. At our university, we are applying tinkering-based
+teaching approaches in several courses of our bachelor program on
+Creative Technology as well as in a master program on Interaction
+Technology. In both, it has demonstrated its value for creating
+innovative concepts and prototypes.
+/one.tnum./three.tnum. Tinkering with social touch technology
+We expect that the need for innovative applications of STT
+makes tinkering a promising approach that stimulates the creation
+of prototypes with novel concepts. Especially for touch, it is
+important to create tangible prototypes; it is inherent to this sensory
+modality. User evaluation of these prototypes drive insights in
+the RtD approach (
+Zimmerman and Forlizzi, 2014 ), and has the
+potential to increase the body of knowledge on STT , and further on
+also to improve the maturity of concepts.
+According to these expectations, we come to the following
+research question:
+Is tinkering a design approach that can foster the ﬁnding of
+novel applications in STT?
+In this study, we will answer this research question based on the
+results of a tinkering-based teaching unit on STT in an Interaction
+Technology master program.
+Tinkering activities need the design of a setup, i.e., material,
+scaﬀolding, etc. We will describe the components of such a setup
+in general, and speciﬁcally for the teaching unit considered. The
+analysis of the students’ results will provide an answer to our
+research question.
+Students of Interaction Technology have technical knowledge
+beyond what a “general public” would have, which allowed them to
+manage the technical challenges of the tinkering task. However, we
+expect it to be valuable if multidisciplinary teams, with no speciﬁc
+technical background, could also tinker with touch technology.
+Therefore, as a step further, we would like to enable experts of other
+domains to explore the possibilities of STT , such as psychologists,
+fashion and interaction designers, or physiotherapists. They can
+bring in diﬀerent perspectives of user needs and, accordingly,
+contribute to a better perception of usefulness and technology
+acceptance. To this end, we suggest further steps in the design of a
+toolbox for STT , building on an existing toolbox for tinkering with
+wearable technology.
+/one.tnum./four.tnum. Outline of this study
+In Section 2, we report on a tinkering-based teaching unit
+on STT in an Interaction Technology master program. It builds
+on a generic framework for tinkering sessions, that is elaborated
+conceptually, and on the design of its key elements. Concept,
+material, and results of this teaching unit for two cohorts of
+students will be presented. We will discuss how the results of
+the students answer our research question. Section 3 is about the
+additional design steps needed for the toolkit to make it accessible
+for non-technologist. We describe material developed earlier
+FIGURE /one.tnum
+Abstract schema of the research methodology.
+for tinkering with wearable technology, and suggest extensions
+allowing broader groups of stakeholders to tinkering with STT. A
+discussion is contained in Section 4, and a conclusion can be found
+in Section 5.
+/two.tnum. Tinkering for social mediated touch
+In this section, we report on a tinkering-based teaching unit on
+social touch technology, and the evaluation of the results from that
+teaching unit.
+To this end, we introduce the basic concepts of tinkering,
+and the relevant aspects that need to be designed for tinkering
+activities. We further describe how these concepts were instantiated
+in a teaching unit. The tinkering-based teaching unit on remote
+social touch was part of an introductory course “Foundations of
+Interaction Technology”. In total, 34 teams, each consisting of
+two students, followed a 2-week haptics challenge. This course
+was given in the academic year 2020/2021 two times, where more
+students participated in the ﬁrst round. The introductory course
+is part of the master program “Interaction Technology”. Students
+participating come from diﬀerent bachelor programs, such a
+Creative Technology (an ICT-based design program), Computer
+Science, Industrial Design, Mechanical Engineering, Electrical
+Engineering, Artiﬁcial Intelligence, and also from Psychology and
+other bachelor programs.
+The abstract schema of our research approach is illustrated in
+Figure 1 and will be detailed later.
+In our context, we understand tinkering as both a method and
+a mindset that can be applied in design and teaching, stimulating
+creativity, stressing ownership, and motivation.
+Resnick and Rosenbaum (2013) give the following deﬁnition:
+The tinkering approach is characterized by a playful, experimental,
+iterative style of engagement, in which makers are continually
+reassessing their goals, exploring new paths, and imagining new
+possibilities.
+Adding onto this deﬁnition (
+Mader and Dertien, 2016 ),
+tinkerers follow a process in which problems and challenges are
+self-deﬁned and re-deﬁned during the process. Depending on the
+background, the process may initially be seemingly undirected, or
+start with a systematic exploration of the material (as we have
+Frontiers in Computer Science /zero.tnum/three.tnum frontiersin.org
+Mader et al. /one.tnum/zero.tnum./three.tnum/three.tnum/eight.tnum/nine.tnum/fcomp./two.tnum/zero.tnum/two.tnum/three.tnum./eight.tnum/four.tnum/eight.tnum/zero.tnum/two.tnum/three.tnum
+observed, e.g., for people with an education in art). Tinkering
+is driven by curiosity and playfulness. It is characterized by an
+iterative way of experimenting and prototyping, where observation
+and reﬂection lead to deﬁning a new challenge. Failing is embraced
+as a vehicle for insight and progress (
+Ryoo and Kekelis, 2018 ).
+Many people in our culture have early tinkering experiences with
+playing LegoTM, where often no goal was set in the beginning, and
+constructions were explored by experimenting.
+The concept of tinkering as used was initially formulated by the
+Do It Yourself (DIY) and Maker Movement, and tinkering is often
+mentioned as an approach used in Maker Spaces. In the literature,
+the distinction between making and tinkering is often not sharp
+(
+Vossoughi and Bevan, 2014 ) and concepts gets mixed. A useful
+deﬁnition is provided by Martinez and Stager (2013):
+• Making is about the active role construction plays in learning.
+The maker has a product in mind when working with tools
+and materials.
+• Tinkering is a mindset, a playful way to approach and solve
+problems through direct experience, experimentation, and
+discovery.
+Many making and tinkering activities aim school children,
+out-of-school or in-school activities (
+Martinez and Stager, 2013 ;
+Petrich et al., 2013 ; Vossoughi and Bevan, 2014 ). According to
+Vossoughi and Bevan (2014), its invitational potential may be a
+part of what is driving so much interest in making as an important
+innovation in teaching and learning practice, particularly after
+the predominance of text-based, test-driven, teacher-centered
+STEM instruction. Tinkering-based STEM activities are designed
+for diﬀerent target groups, ranging from children in primary
+schools to high school students (
+Martinez and Stager, 2013 ;
+Petrich et al., 2013 ; Resnick and Rosenbaum, 2013 ; Vossoughi
+and Bevan, 2014 ). Learning goals of tinkering activities are broad,
+where often a range of process-related capabilities and higher
+order thinking skills are considered as relevant (
+Exploratorium,
+2017).
+In teaching, at our university, we have been applying tinkering
+approaches in several bachelor and master courses for a number
+of years. We argue (
+Quinn and Bell, 2013 ; Mader and Dertien,
+2016) that tinkering can also contribute to teaching in an
+academic setting, as elements of scientiﬁc activities, such as
+observation, reﬂection, hypothesis forming, and experimentation,
+are also activities within a tinkering process. In addition to these
+generic tasks in science, learning goals in our programs also
+include design skills, i.e., that students can come up with novel
+concepts, realize them in working prototypes, and evaluate their
+concepts.
+The main point is that even if the participants self-direct their
+process, a carefully chosen setting is relevant for the success of
+the approach. We identiﬁed a number of key ingredients (
+Resnick
+and Rosenbaum, 2013 ; Mader and Dertien, 2016 ) that constitute a
+setting for enabling participants to tinker, that we call a “tinkering
+playground”.
+Since the tinkering playground should contain everything
+regarding (or designed for) a tinkering activity, we also refer to
+the tinkering playground as the “whole”: the combination of seed,
+toolbox, discovery (goal), and facilitation—bound to a location
+in time and space. In the following, we describe the elements
+of a playground, and how we implemented these for the haptics
+challenge.
+/two.tnum./one.tnum. Space, time, and basic equipment
+In
+Resnick and Rosenbaum (2013), the authors state that
+“designing contexts for tinkerability is as important as designing
+kits for tinkerability.” Tinkering takes place in a certain
+environment. Ideally, it should be a stimulating place, inviting to
+be creative, providing the space necessary. This includes the space
+for experiments, and also the space for interaction with at least
+the facilitator, or other tinkerers. It is bound by time, has a start
+moment, and a deﬁned end.
+Due to COVID-19 regulations, the haptics teaching unit was
+given online, and the students worked from home, i.e., most
+students in a team also worked in remote places. For regular
+education activities, our university provides a stimulating learning
+and prototyping environment in the DesignLab, that includes open
+space available, with tables, whiteboards, basic materials like paper
+and post-its, a mechanical and an electrical workshop, sewing
+machines, 3D-printers, and laser cutters, inspired by FabLab or
+MakerSpace concepts.
+/two.tnum./two.tnum. Toolbox
+In general, a toolbox contains diﬀerent sorts of building blocks.
+In the ﬁrst place, these may be physical building blocks (paper, clay,
+and electronics), but also can be virtual (software and algorithms)
+or concepts (social media and serious games). Moreover, a toolbox
+always also contains what a person brings in, skills and knowledge
+or templates gained by experience. The toolbox, therefore, does not
+only contain what is provided but also the background of a tinkerer,
+and is therefore also a very personal and growing set. Mature
+tinkerers can extend their toolset independently, and ﬁnally, take
+the whole world as a source. Higher level knowledge can certainly
+be part of a (personal) toolbox of a tinkerer, and can range from,
+e.g., knowledge in the electrical domain like resistance of wires
+to existing examples or insights on the context in the domain of
+interest, as well as scientiﬁc results in an academic context.
+For a speciﬁc tinkering activity, a toolbox tailored for the aims
+of the activity is required. The choice for a good toolbox is not
+only about an adequate selection of material. Rather, some material
+needs to be designed to be accessible in a tinkering workshop for
+a speciﬁc target group, taking the area of interest into account.
+In
+Resnick and Rosenbaum (2013), identiﬁed immediate feedback,
+ﬂuid experimentation, and open exploration as key principles
+guiding the design of toolboxes (kits). Fluid experimentation,
+according to the authors, includes the ease of getting started and
+connecting objects.
+For ease of connection, we consider aﬀordance of the toolbox
+objects as of one of the crucial criteria. In short, aﬀordance
+describes the property of an object to self-explain its usage
+(
+Norman, 2002): a button invites to push it, Lego TM does not need
+much explanation how to stick blocks together. In a tinkering
+Frontiers in Computer Science /zero.tnum/four.tnum frontiersin.org
+Mader et al. /one.tnum/zero.tnum./three.tnum/three.tnum/eight.tnum/nine.tnum/fcomp./two.tnum/zero.tnum/two.tnum/three.tnum./eight.tnum/four.tnum/eight.tnum/zero.tnum/two.tnum/three.tnum
+session, it should be easy for the participants to ﬁnd out how to use
+the building blocks. A card set with explanations for each toolbox
+element can be one useful option here.
+For the ease of getting started, a toolbox needs to be introduced.
+Scaﬀolding exercises, like small step-by-step instructions, can help
+participants to start using some of the tools or techniques. For
+example, needle and thread, hot-melt and cardboard, soldering iron
+and connecting wires, wiring up sensors to an Arduino board, and
+starting up and using a certain programing environment.
+In general, the elements of a toolbox have to be designed for the
+target users (learners or designers) in a way, that they can focus on
+a general theme of the tinkering playground, and do not need to
+spend a major part of the time on getting the supporting material
+to work. Participants without programing experience cannot be
+expected to learn to program an Arduino as part of a tinkering
+session. A dedicated graphical interface allowing to select, position,
+and connect components to a conﬁguration that then generates
+Arduino code would be an example for such a design eﬀort to
+take. As another example, one of the authors designed through a
+number of editions of a tinkering workshop on inﬂatables, a paper-
+cup construction with a powerful copter motor and fan as the easy-
+to-use core technology for inﬂation (
+Neidlinger and Dertien, 2015 ;
+Dertien and Neidlinger, 2016).
+For the haptics challenge, the tinkering part addressed a
+conceptual level and a material level. Accordingly, the toolbox also
+contained these two levels. The conceptual part of the toolbox was
+covered with an introductory overview presentation on haptics
+and social touch. These included the sensory system, the role
+and relevance of touch, the eﬀect of touch in diﬀerent contexts,
+examples for touch technology, and more. For the material part
+of the toolbox, students received a list of hardware components
+to buy (usually, we provide boxes of material, due to remote
+teaching in this year, students needed to get the components
+themselves). For sensing touch, two sensors were chosen, a bend
+sensor (60 mm) and touch sensor (capacitative sensors can be
+constructed using aluminum foil and wires). Vibration motors (3
+× vibration DC motor module) as actuators were added to the
+toolbox. For the control, an Arduino nano v3.0 microcontroller
+was selected. In addition, cables, a breadboard and prototyping
+wires, resistors (4.7k /Omega1, 3 × 1M/Omega1), and tape were required.
+Additionally, students could make use of whatever material they
+had available, especially a laptop or PC with internet connection,
+textile, stuﬀed animals, garment, or other. Concerning software, the
+programing environments of Processing and Arduino including a
+WebSocket library for the internet connection (standard available
+in Processing) had to be downloaded and installed. Instructions for
+these components, actions, program fragments for the respective
+sensors, and references to websites with more detailed explanations
+and instruction how to use the material were given. The students
+were composed in teams, such that in each team, knowledge on
+Arduino programing and prototyping was present. Speciﬁc design
+of the toolbox components was not required here.
+/two.tnum./three.tnum. Seed
+A tinkering process needs a starting point, a “prompt” or
+“trigger”. This point should be a stimulant to enter a self-directed
+process. There are various possibilities for a seed: beginners, not
+experienced in tinkering, may need a small example project to
+perform, with the idea that they understand the possibilities of the
+toolbox and can proceed with an own idea. An alternative for a
+seed is to give a ﬁrst goal to achieve, which is less deﬁned than
+an example project. There, the process and speciﬁc building blocks
+needed to get there, are still open. For more experienced tinkerers,
+simply a new material or interesting new piece of technology could
+work as a seed. Also, on a conceptual level, a theme might also be
+seed to start a process. The seed needs some introduction, e.g., a
+step-by-step group exercise, or an easy to follow description how to
+set up an example project.
+For the haptics challenge, on the conceptual level, the seed
+is basically the theme of the challenge, remote social touch. On
+the material level, an example project of a remote handshake was
+provided as a seed, building on the toolbox given. This example
+project consisted of building instructions and code.
+/two.tnum./four.tnum. Process
+The overall process includes introduction of the topic and
+mindset, the setting, the toolbox, and possibly also the seed. Times
+for feedback or breaks may be included, or starting moments for
+new iterations. The timing of the process is also a relevant design
+step for a tinkering session. Altogether, the start-up exercises should
+take only a small fragment of the overall time available. The core
+part of a tinkering process begins with the seed. The process is
+driven by curiosity, creativity, and serendipity as guiding principles.
+It needs observation and reﬂection to learn from experiments and
+early discoveries, to extend and improve for the next discovery.
+It is ideally an iterative process with a series of discoveries and
+starting over again. The process depends very much on the maturity
+and experience of the tinkerer, and it also forms the core of
+the tinkering mindset. Many of tinkering activities for children
+span only over a block for a few hours, but, especially in an
+academic teaching context, can also be spread over a longer
+period.
+The teaching unit on haptics took 2 weeks overall. Students
+had approximately 26 h available for the teaching unit, of which
+8 h were scheduled and 18 h for their individual tinkering
+process.
+• To provide the conceptual basis as toolbox ingredients, two
+presentations on social touch and haptics were given, as
+mentioned above.
+• The tinkering period started with an introductory lecture on
+the setting and procedure.
+• As preparation to the introductory lecture, students were
+asked to get a networking example running, to receive help
+during the lecture in case it would not work.
+• During the introduction, students were asked to set up
+the example project of a remote handshake based on the
+networking example, using the bend sensor and a vibration
+motor. In the session, they could get help with the example
+project.
+• After the introduction session, students could tinker in a ﬁrst
+iteration with the material and brainstorm on an application.
+Frontiers in Computer Science /zero.tnum/five.tnum frontiersin.org
+Mader et al. /one.tnum/zero.tnum./three.tnum/three.tnum/eight.tnum/nine.tnum/fcomp./two.tnum/zero.tnum/two.tnum/three.tnum./eight.tnum/four.tnum/eight.tnum/zero.tnum/two.tnum/three.tnum
+• In a second session, students pitched their concepts and
+received feedback from peers and lecturers.
+• Afterward, students started with a second iteration, and
+realized that in a prototype.
+• A teaching assistant was available for a technical help session.
+• Finally, the results were presented.
+/two.tnum./five.tnum. Facilitator
+The facilitators have many tasks. They introduce the toolbox
+and a seed, or help to identify a seed. They are guarding the mindset,
+stimulate reﬂection, give feedback, and give support in scaﬀolding.
+They are setting the mood, creating an atmosphere where it is not
+only ok to fail but faults are considered as stepping stones (
+Ryoo
+and Kekelis, 2018). They set the threshold low, the ceiling high, and
+provide wide walls ( Resnick et al., 2018 ), manage the pace, help to
+get unstuck (Petrich et al., 2013), and keep the ﬂow.
+For the teaching unit on haptics, two of the authors provided
+the introductory presentations on the conceptual level, followed
+by the introduction to the tinkering-based haptics challenge. One
+of them was also main responsible for the teaching unit, and was
+available for questions of the students during the whole period. For
+the technical support, a teaching assistant was in charge. Chairing
+the presentations with feedback and peer feedback was shared
+between members of the research group.
+At this point, the abstract methodology shown in
+Figure 1 can
+be detailed as shown in Figure 2.
+/two.tnum./six.tnum. Discovery
+A crucial aspect of a tinkering process is that the tinkerer
+decides on her or his own goals. The discovery is self-deﬁned; it
+might be a new product or prototype, where it is suﬃcient, if it
+is new for the tinkerer. It might also be a new or better way of
+doing things, or a new concept. The self-deﬁnition of where it
+goes makes the tinkerer real owner of the result and the path. The
+ingredients of the toolbox mentioned above can stimulate in the
+deﬁnition of result and path, but it is also the personal background
+and experience resulting in story telling that forms a goal for
+the tinkering eﬀorts. A tinkerer might get help with stimulation,
+reﬂection, feedback, or getting unstuck when necessary.
+The following descriptions of the discoveries in the haptics
+challenge are the ﬁrst part of the evaluation as illustrated in
+Figure 2.
+We ﬁrst give a few speciﬁc examples from the students’ results,
+before analyzing the overall results.
+The ﬁrst example is a ball game. The game starts and ends
+with a ﬁst bump of the two players, realized with a vibration
+motor, bend-sensor on the hand, and an accelerometer. One player
+virtually possesses a ball, and can throw it physically, where the
+accelerometer would measure the throwing speed. Through a
+visual, the other player can see the ball approaching, and also feel
+it through increasing intensity as the virtual ball is “approaching”.
+When the ball has reached his position, he can catch it, also
+initializing a vibration at the side of the thrower.
+Figure 3 shows
+the visualizations that both players can see while playing the game.
+The setup and prototype can be seen in
+Figure 4.
+The next example is about a remote social touch for a family
+member who has to undergo diagnosis in an MRI scanner. A
+patient is there lying in a tube and may feel lonely and scared.
+The social touch is meant to calm and comfort the patient, and
+realized by a pair of sleeves. The patient can indicate that she
+wants to receive a touch by bending her ﬁngers. The remote family
+member feels this wish by a vibration, and then can give either
+a soft or strong touch by touching capacitative sensors on his
+sleeve with a ﬁngertip or with the full hand. The patient would
+receive a stroking touch through three vibration motors on her
+sleeve with a ﬁxed stroking illusion pattern, vibrating either soft or
+strong.
+Figure 5 shows the setup of the project and the prototype
+realization.
+In the following example illustrated in Figure 6, the
+students want to enrich texting on a smartphone by touch
+and physical elements. For that purpose, they extended
+existing bunny phone cases with electronics. When
+pressing the left or right back side of one smartphone,
+the ears at the other smartphone would move. Also the
+tail would wiggle and a vibration motor would send a
+touch.
+In the fourth example, the student referred to her childhood.
+When she was stressed her mother would put her hand on
+the child’s forehead, to comfort her. As the student now
+lives in a diﬀerent country, the prototype suggested should
+realize this gesture on distance.
+Figure 7 shows the concept.
+The electronic setup here is very simple, consisting of a
+bend sensor and vibration motor on each side, integrated in
+an animal-shaped wash cloth for each side. Technically, the
+example does not go much beyond the warming up example
+the students did in the course, but it has a strong story telling
+part.
+The last example is a remote version of the rock-scissors-paper
+game. As illustrated in
+Figure 8, the three gestures for a rock,
+scissors, or paper, respectively, and also for a ﬁst, are detected by
+a number of bend sensors and capacitative sensors. The winner of a
+game receives a vibration touch as reward.
+For the haptics challenge, the students had, as mentioned
+above, some general lectures of social touch, and for technology
+scaﬀolding, a “hello-world-example” connecting a bend-sensor
+on one side to a vibration motor on the other side, connected
+via internet. The categories used to characterize the projects
+are identiﬁed a posteriori, to understand and describe the
+breadth of projects. The categories were not presented to the
+students beforehand. The article of
+Ipakchian Askari et al. (2022)
+provides an excellent taxonomy of applications in STT. This
+taxonomy would have been an alternative to analyze the students’
+projects. Unfortunately, at the time when the characterization
+was done, the article was not yet published. However, we
+assume that the main conclusion from the analysis would be
+similar.
+The students’ discoveries included a context and interaction
+for mediated social touch and a prototype. The social contexts
+students addressed were people in a relationship, grandparents and
+grandchildren, relatives, (study) friends, or colleagues, children in a
+Frontiers in Computer Science /zero.tnum/six.tnum frontiersin.org
+Mader et al. /one.tnum/zero.tnum./three.tnum/three.tnum/eight.tnum/nine.tnum/fcomp./two.tnum/zero.tnum/two.tnum/three.tnum./eight.tnum/four.tnum/eight.tnum/zero.tnum/two.tnum/three.tnum
+FIGURE /two.tnum
+Detailed schema of the research methodology.
+FIGURE /three.tnum
+Visualization of the ball game for the remote players. Fist bump left; ball approaching in the middle; ball caught on the right.
+FIGURE /four.tnum
+Left sketch of the setup and right prototypes of the ball game for the remote players.
+hospital and their parents, or a family member in a radio treatment
+in a hospital.
+The social interactions considered were basically of two
+diﬀerent categories:
+• Exchanging or giving touch as main activity in itself.
+The touches should represent stroking, caressing, hugging,
+tickling, tapping on the shoulder, a handshake, or a high-ﬁve
+(28 teams of 34). These touches had the intended meaning to
+Frontiers in Computer Science /zero.tnum/seven.tnum frontiersin.org
+Mader et al. /one.tnum/zero.tnum./three.tnum/three.tnum/eight.tnum/nine.tnum/fcomp./two.tnum/zero.tnum/two.tnum/three.tnum./eight.tnum/four.tnum/eight.tnum/zero.tnum/two.tnum/three.tnum
+FIGURE /five.tnum
+Left sketch of the setup and right prototypes for a comforting touch of a family member during an MRI sca n.
+conﬁrm and intensify the relationship, and/or to comfort or
+de-stress the receiver.
+• Augmentation of another shared activity, a ball game, rock-
+paper-scissors, texting on a smartphone, watching a movie,
+doing workout, and relaxation movements. These touches had
+two intended functions, intensify the experience of the activity,
+and create a feeling of connectedness (7 teams of 34).
+The objects they made were:
+• Symmetric devices, such as stuﬀed animals, cushions, squeeze
+balls, smartphone extensions, or gloves, where symmetry
+describes that both devices are functionally identical, and a
+touch can be sent either way.
+• Asymmetric devices such as a glove or other touch device
+connected to a diﬀerent device, such as a glove, sleeve, facial
+mask, shoulder wrap or sweater, where asymmetric means that
+a touch can be sent only one directional, so there is a dedicated
+sender and receiver of the touch.
+/two.tnum./seven.tnum. Observations and further evaluation
+/two.tnum./seven.tnum./one.tnum. Story telling
+For almost all students, the starting point of their prototype
+was a story and context (32 out of 34). As the challenges
+took place during the COVID-19 pandemic, most students
+took the need for touch due to the contact restriction in
+this phase as main motivation (24 of 34). Four teams had a
+combination of other and COVID-19 related contexts, such as
+in the ball game illustrated in
+Figure 4 which is also suitable for
+grandparents who cannot run to play with a grandchild. Four
+teams had a motivation not connected to the pandemic, such
+as the example of a family member in an MRI scanner from
+Figure 5.
+/two.tnum./seven.tnum./two.tnum. Technical level required
+Technically, all teams could cope with the technology of
+the toolbox and the instructions given. In all teams, experience
+with Arduinos or other microcontrollers was present. All had
+FIGURE /six.tnum
+Smart phone extension allowing for adding social touch and
+physical ear movement.
+more or less working prototypes, several with common problems
+with bad electric connections or poor internet connection. Some
+prototypes were more elaborate, depending on extra skills of the
+students concerning sewing, 3D printing or internet technology,
+and physical computing, such as the examples of the smartphone
+case in
+Figure 6 or the ball game in Figure 4. Most used the internet
+connection provided (31 of 34), and some teams (3 out of 34) used
+WIFI or MQTT as a data transmission protocol.
+Concerning the technology, most teams used the components
+for the toolbox given [i.e., capacitative sensors (16 of 34), bend
+sensors (24 of 34), vibration motors (34 of 34)], several students
+used LED lights (7 of 34), and only a few used other technical
+elements not contained in the toolbox, such as stronger servo
+motors (1 of 34), piezo speaker (2 of 34), or a resistor network
+for temperature (1 of 34). Our conclusion here is, that, even if the
+number of components of the toolbox was very limited, it allowed
+for a variety of prototypes and concepts. The toolbox, therefore, met
+the requirement of wide walls allowing for a wide range of diﬀerent
+types of projects (
+Resnick et al., 2018 ). An explanation here might
+be, that working on a conceptual level, vibration motors were
+Frontiers in Computer Science /zero.tnum/eight.tnum frontiersin.org
+Mader et al. /one.tnum/zero.tnum./three.tnum/three.tnum/eight.tnum/nine.tnum/fcomp./two.tnum/zero.tnum/two.tnum/three.tnum./eight.tnum/four.tnum/eight.tnum/zero.tnum/two.tnum/three.tnum
+FIGURE /seven.tnum
+The touch device should allow the mother to give her daughter a comfort ing touch on the forehead as she has done physically in the past.
+FIGURE /eight.tnum
+A remote version of the rock-scissors-paper game with a touch for the winning partner.
+considered as a placeholder for touch technology that generates
+diﬀerent stimuli.
+/two.tnum./seven.tnum./three.tnum. Variety of the results
+The example students were given for the technical setup test
+was a simple handshake (with a bend sensor and vibration motor).
+In the examples of STT presented in the course, most were related
+to hugs, and, of course, students had access to publications on
+social touch, especially the overview article of
+Huisman (2017).
+Out of the 34 teams, 9 teams chose for stuﬀed animals (or similar,
+like a cushion) and 7 teams had an application including a glove,
+which was deﬁnitely in the range of what was expected. The
+range of versions of social touch that was addressed, such as
+Frontiers in Computer Science /zero.tnum/nine.tnum frontiersin.org
+Mader et al. /one.tnum/zero.tnum./three.tnum/three.tnum/eight.tnum/nine.tnum/fcomp./two.tnum/zero.tnum/two.tnum/three.tnum./eight.tnum/four.tnum/eight.tnum/zero.tnum/two.tnum/three.tnum
+stroking, caressing, hugging, tickling, tapping on the shoulder,
+or high-ﬁve, was beyond what was presented in the course for
+STT , but could have been found in the literature also. A huge
+variety was in story telling perspective of the projects, ranging
+from applications for lovers, children and parents, grandparents,
+relatives, or just friends. Deﬁnitely beyond expectation, were
+applications, where social touch was not used as the primary
+goal of the exchange, but was added to another form of social
+interaction to intensify the experience of the activity on one
+hand, and also create a feeling of connectedness on the other
+hand. The applications here were diverse, like a ball game, rock-
+paper-scissors, making music together, texting on a smartphone,
+watching a movie, doing workout, and relaxation movements, as
+mentioned above. It is diﬃcult to deﬁne a metric for diversity
+in storytelling. The abstract properties that can be counted still
+reﬂect aspects of diversity, but cannot capture the creativity of the
+concepts.
+A few teams also addressed problems on a conceptual
+level of STT and, e.g., considered diﬀerent protocols for
+consensus of receiving touch (7 out of 34), how to initiate
+and agree on touches over distance, addressing problems of
+synchronicity, and intrusiveness of remote touch technology.
+In the case of synchronicity, one problem that was identiﬁed
+was that the sender could not “see” if the receiver was
+indeed receiving the touch, and, therefore added an option
+to store a touch, such that the receiver could get the
+touch later when (s)he would be available. Other students
+implemented a step of consensus to their protocol, which
+addresses synchronicity (the receiver is indeed available)
+and intrusiveness (the receiver is ready to receive a touch).
+The students did not use deﬁnitions from literature of
+“intrusiveness” and “synchronicity”, but did describe the problems
+behind.
+On top of this, one team added also vibration feedback
+for reciprocity. The sender could feel when the receiver got
+the touch. The teams that had primarily another shared
+activity, which was augmented or intensiﬁed by touch,
+and had all protocols for conditions when to trigger the
+touch.
+Our conclusion based on these results, are two-fold, on one
+side concerning the teaching perspective, and on the other side
+concerning the research question of this study.
+For the teaching perspective, the question is whether the
+setup of the course and material led to the intended outcomes.
+The intended outcomes include a design aspect and an academic
+(reﬂection) aspect. On the design part, the main criterium is
+the diversity of the solutions. Although there were 9 out of
+34 prototypes including stuﬀed animals, and 9 with gloves, the
+overall diversity is broad, even more than expected, and we can
+conclude that the choices taken for the setup and toolbox were
+appropriate. This conclusion follows the statement of
+Resnick:
+if we see a great diversity of projects, to us that’s a sign of
+success. Additionally, for the academic part, results from the
+course were promising. Several teams (7 out of 34), in the
+discussion of their prototypes were able to identify concepts
+inherent to touch technology (i.e., synchronicity and intrusiveness)
+that were not addressed in the course, in a relatively short teaching
+unit.
+At this point, we want to answer the initial research question:
+Is tinkering a design approach that can foster the ﬁnding of novel
+applications in social touch technology?
+The same arguments as above, the diversity of projects, and
+the generation of project beyond the expected, support a positive
+answer to our research question.
+We also see support for our initial suggestion that tinkering
+might be a suitable design approach in the context of Research
+through Design (RtD). The perspective of RtD is that the creation
+of prototypes is a stepping stone to understanding the conceptual
+complexity of an application domain. As mentioned above, through
+designing and realizing a prototype, some of the students were able
+to identify inherent problems (and possible solutions) of mediated
+social touch.
+/three.tnum. Accessibility of tinkering for touch
+technology
+The target group of the tinkering challenge in the previous
+section were university students, where most of them had a
+knowledge base in technology. As the challenge was set up,
+experience with sensors, actuators, and microcontrollers was
+present in each student team. The design eﬀort required to make
+a toolbox accessible for the target group of tinkerers was very low
+for the student group, enabling them to create prototypes. Still a few
+students reported that this caused an imbalance in eﬀort.
+In a further step, we would like to open up the approach
+of tinkering also for diﬀerent target groups, who probably have
+more or diﬀerent knowledge on the conceptual level and less
+on the technical level. Supporting multidisciplinary design eﬀorts,
+we would like to include psychologists, fashion and interaction
+designers, haptologists, physiotherapists, or other stakeholders in a
+tinkering process on applications in haptics. On a conceptual level,
+experts from other domains can bring in diﬀerent expertise and
+other perspectives. They can contribute to a broader exploration
+of the design space, and come to richer or more meaningful
+set of prototypes. Additionally, their reﬂections also build on
+diﬀerent expertise and perspectives. Altogether, knowledge derived
+by a multidisciplinary team has the chance to be more varied.
+In this context, we especially consider the hands-on aspects of
+tinkering as design activity as valuable. Active exploration with
+direct feedback gives more insight on the possibilities and the
+restrictions of the (technological) material available. On one hand,
+this can stimulate a creative process, and on the other hand, it
+connects concepts invented better to the state-of-the-art technology
+available.
+In this section, we suggest a design of a tinkering playground
+on the next level, allowing broader groups of tinkerers, and
+requiring less technical knowledge to come to a working prototype.
+Following
+Stappers and Giaccardi (2017), this is a design for design
+eﬀort. Starting point for our suggestions is a setup and concept
+for a tinkering playground developed for wearable technology.
+The toolkit was already designed for a target group of laymen.
+Experiences with it showed that the concept is suitable for
+people without technical experience. This setup will serve as
+basis for a social touch technology tinkering kit, as we consider
+the latter also in the wearables domain. In the following, we
+Frontiers in Computer Science /one.tnum/zero.tnum frontiersin.org
+Mader et al. /one.tnum/zero.tnum./three.tnum/three.tnum/eight.tnum/nine.tnum/fcomp./two.tnum/zero.tnum/two.tnum/three.tnum./eight.tnum/four.tnum/eight.tnum/zero.tnum/two.tnum/three.tnum
+ﬁrst will describe the ingredients of the wearable technology
+playground. In the second part, we will suggest extensions of this
+playground that supports a greater variety of prototypes for touch
+technology.
+/three.tnum./one.tnum. Tinkering with wearable technology
+There can be diﬀerent design goals for a wearable toolbox. For
+example, for the Lilypad family of components,
+/one.tnumeasy integration
+in garments and textiles was certainly a design goal. There,
+sensors, controllers, and actuators come mounted on printed
+circuit boards in round shapes with connection points that can
+easily be sewed by hand using conductive thread. Using these
+components supports already a high level of wearability of the
+garment created. Another example is the Wearable Bits (
+Jones et al.,
+2020b), that use felt-mounted sensors and actuators that can be
+connected using snaps. Integration in or to garments may even
+be easier there, as no sewing is required and connecting sensors
+and actuators is simple. How the integration and programing of a
+controller is solved, is, however, not clear. Another focus is set by
+Hamdan et al. (2018), where the realization of circuits is supported
+by embroidery technology. Also here, the textile properties are
+in the center of attention, more than a toolbox approach. In
+general, a toolbox for tinkering with wearable technology has to
+tackle one or more aspects of a multidisciplinary problem space,
+including fashion, design, electronics, electronics integration, and
+programing.
+In past workshops, we had experienced that tinkering with
+wearable technology often suﬀers from a high threshold concerning
+technology skills. As a consequence, often the workshops did not
+go much further than a starting exercise of sewing led lights
+on garments or bags, or following some readymade recipes. It
+is not uncommon to get stuck with electronic connectivity tasks
+or programing. Our approach for a wearable technology toolbox
+emphasizes the exploration of novel concepts. Accordingly, our
+design focus was the support of easy prototyping. Here, “easy”
+refers to plug and play technology, where connecting components
+in a prototype is straightforward, and the programing eﬀort
+reduced to a minimum. Core of the design is a microcontroller
+interface that allows to plug in maximal three sensors and three
+actuators in a uniform way. In addition to the components,
+tools, and materials themselves, we also provided a set of cards
+corresponding to these materials, as aid in exploring the toolbox,
+instruction, planning of a design, and as reference. The wearability
+aspect was kept simple and solved by a range of materials
+such as velcro and elastics, allowing to ﬁx a setup on the
+body.
+In November 2019, we organized two workshops with the aim
+to design novel concepts of wearable technology for a “general”
+public. This small series of events was organized by the local Media
+Lab and attracted a diverse audience of students in media/arts,
+designers, artists, or pensioners interested in arts and crafts. Due
+to COVID-19, not more editions of this workshop could be
+performed.
+/one.tnumhttps://www.sparkfun.com/tutorials//one.tnum/three.tnum/three.tnum
+/three.tnum./one.tnum./one.tnum. Toolbox
+The wearable toolbox consists of sensors, actuators, control,
+and connectivity. Table 1 contains a list of the components, and
+Figure 9 shows the toolbox elements with the respective cards.
+During the workshop, a set of tools and materials/supplies are
+provided which is also shown on the cards in
+Figure 10.
+The design eﬀort for the toolbox components consisted of the
+following: Where needed (for example, with the microcontroller
+and the bend sensor), 3D printed housing was designed to facilitate
+mounting and protect the electronics for reduced risk of short
+circuit. The vibration motors come with fragile connection so
+they have been fortiﬁed with a ﬂexible compound (Sugru). The
+speciﬁc microcontoller (Arduino Beetle) is very small, it has the
+dimensions of a regular USB stick. It has been modiﬁed to connect
+three sensors and three actuators, all using the same 3-wire leads.
+Resistors and transistors required for the connection of the sensors
+and actuators were already integrated in the leads. The USB plug
+of the microcontroller (see
+Figure 11) can be connected directly
+into a laptop for programing, or directly into the powerbank for
+standalone operation, reducing wiring hassle. The leads of sensors
+and actuators are about 30 cm long and can be extended, such
+that they can easily be positioned anywhere on the body. The
+materials that have been provided to make “garments” or, at least,
+allow the components to be worn have been selected to build
+low-ﬁ proof of concept designs rather than high-ﬁ fashionable
+prototypes.
+/three.tnum./one.tnum./two.tnum. Seed
+As process/conversation starters, a series of imaginary designs
+were provided on paper, consisting of a short description and
+the speciﬁc components (as cards) needed to create them.
+There is a careful balance to maintain with providing these
+examples. The example has to be clear, and just interesting
+enough. It should trigger participants to improve upon rather
+than to replicate. The starter themes were the following,
+where the components needed are listed on paper, and the
+corresponding cards explaining the projects are shown in
+Figure 12.
+• Party: At a party, let your garment blink in the rhythm of the
+music or your heart (With microphone or heart rate sensor
+and led strip).
+• Posture Coach: Give a sign (vibration or sound) when
+slouching for too long (With bend sensor and vibration motor
+or buzzer).
+• Tail: When you are happy or frightened, wag your tail or set
+up spikes (With skin resistance sensor and servo motor).
+• Traﬃc: On your bike, give the direction with a blinking led
+strip on your back by touch sensors (With led strip and touch
+sensor).
+/three.tnum./one.tnum./three.tnum. Process
+At the start of the workshop, speciﬁc instructions were given to
+the participants aimed at exploring the toolbox and understanding
+Frontiers in Computer Science /one.tnum/one.tnum frontiersin.org
+Mader et al. /one.tnum/zero.tnum./three.tnum/three.tnum/eight.tnum/nine.tnum/fcomp./two.tnum/zero.tnum/two.tnum/three.tnum./eight.tnum/four.tnum/eight.tnum/zero.tnum/two.tnum/three.tnum
+TABLE /one.tnum Toolbox components for tinkering with wearable technology.
+Sensors Actuators Control and connectivity Tools and supplies
+Bending (ﬂexible) Vibration motor Microcontroller board Self-adhesive Velcro
+Capacitive touch Miniature RC servo ( = Arduino Beetle) Fabric (soft)
+Light intensity Light strip (neopixel) Male–female 3-wire leads Hot-melt glue gun
+Heart rate / pulse Buzzer Powerbank Tape (duct tape, cloth tape)
+Skin resistance Sewing machine
+Audio level Cable-ties
+Cardboard (rigid)
+Split pins and MakeDo plugs
+Staples and stapler
+FIGURE /nine.tnum
+The designed set of tinkering components with a set of cards provi ding “scaﬀolding”.
+the available materials. In detail, the workshops followed the steps
+below:
+1. A general introduction on wearable technology.
+2. Explanation of the sense-think-act paradigm—whereas this
+paradigm is at the basis of our work, it turned out that it is not
+self-evident for a general public. The sense-think-act paradigm
+describes a cyclical process, where the sense-part consists of the
+collection of all the sensor values by a controller. The think-part
+refers to how the controller processes the input values. For the
+application considered here, much of the processing is in a style
+of if value is above a speciﬁed threshold switch on this actuator
+for this duration. The act-part of the sense-think-act paradigm
+then includes to the activation or deactivation of the actuators
+involved.
+3. A short introduction to the ingredients of the toolbox;
+4. Simple card-sorting exercise (ﬁnd the part belonging to the card,
+do you understand what it does?);
+5. The assignment for the participants to choose one of the
+predeﬁned assignments and performing it themselves, if wanted;
+6. The assignment to think of a concept and realizing that;
+Frontiers in Computer Science /one.tnum/two.tnum frontiersin.org
+Mader et al. /one.tnum/zero.tnum./three.tnum/three.tnum/eight.tnum/nine.tnum/fcomp./two.tnum/zero.tnum/two.tnum/three.tnum./eight.tnum/four.tnum/eight.tnum/zero.tnum/two.tnum/three.tnum
+FIGURE /one.tnum/zero.tnum
+The card set describing the components of the toolkit.
+7. Facilitation, stimulation, and answering questions;
+8. Conﬁguration of the controller program according to the
+concept of the participant.
+/three.tnum./one.tnum./four.tnum. Observations
+The card-sorting exercise proved to be suﬃcient, but also
+necessary. The provided starter cards with example projects were
+a good pointer for participants that were immediately stuck. Other
+participants dived in right away and paid these example designs no
+heed. This coincides with our observations on diﬀerent learning
+styles of (design) students. The two workshops gave indication, that
+the setup does work. Several participants stuck to the predeﬁned
+examples, where their result would be the understanding of the
+concept. Some participants went further and had creative ideas
+they could realize comparably fast. One example was for cyclists
+at night, a light on the arm that starts blinking when the arm is
+raised, realized by a ﬂex sensor and a LED strip. Another example
+was to prevent falling asleep while watching a ﬁlm, where the head
+falling to the side would raise an alarm, realized by an accelerometer
+on a head-band and a vibration motor. programing was still a
+bottleneck, where the facilitators had to take over the programing.
+As the program schema given required more a conﬁguration task
+than bottom-up programing, the eﬀort was not very high. Still,
+it would be desirable to have a graphical programing interface
+that allows the participants themselves to generate code from
+building blocks that can be selected, connected, and equipped with
+conditions.
+Altogether, we conclude that the workshops showed that
+participants without a background in electronics can use the
+components of the wearable toolbox to create prototypes for new,
+self-deﬁned concepts.
+/three.tnum./two.tnum. A toolbox for tinkering with touch
+technology
+As a next step, we suggest the design of a toolbox for tinkering
+with touch technology. There are not many existing toolboxes that
+focus on the quality of touch. Some focus on connectivity such as
+the toolbox kit by hapticlabs.io (
+Müller, 2020), or focus on a speciﬁc
+technology such as pneumatics by ﬂowIo ( Shtarbanov, 2021 ), or
+oﬀer textile integration options such as the Swatch-bits (Jones et al.,
+2020a), but options for users to explore and link the quality of touch
+to conceptual development is largely lacking.
+Based on the positive experience with the wearable toolbox,
+we would also emphasize here a focus on easy prototyping and
+integration of electronic components, and also the explanatory
+material in the form of card sets and example projects, as
+well as the process. For the multidisciplinary target groups in
+mind, this setup gives the possibility to create concepts and
+working prototypes without technical expertise. For the domain
+of touch technology, however, we consider not only the creation
+of concepts as relevant, but, as an additional design goal for
+the toolbox, also the possibility to explore the experience and
+Frontiers in Computer Science /one.tnum/three.tnum frontiersin.org
+Mader et al. /one.tnum/zero.tnum./three.tnum/three.tnum/eight.tnum/nine.tnum/fcomp./two.tnum/zero.tnum/two.tnum/three.tnum./eight.tnum/four.tnum/eight.tnum/zero.tnum/two.tnum/three.tnum
+FIGURE /one.tnum/one.tnum
+The seed projects, front and back side on top and bottom, respectively.
+FIGURE /one.tnum/two.tnum
+Simple setup for posture-warning device: microcontroller (plugs
+into a power bank directly), cabling, vibration motor, and bend
+sensor.
+diﬀerent qualities of touch. In short, we suggest an extension
+with the following items, which will be discussed in more detail
+below:
+• Actuators: the most important extension is the option to use
+more diverse actuators for touch technology, i.e., a cluster
+or an array of vibration motors and pneumatic elements to
+explore diﬀerent directions. Also heating/cooling actuators
+(Peltier), adjustable ribbons contracted by motors, and shape
+memory alloy can be considered (but are for now not explored
+into detail).
+• Sensors: more sensors for sensing touch, the intensity of
+touch, and measuring of touch patterns.
+• Control and connectivity: for taking the physical distribution
+of touch initiation and touch perception into account,
+controller boards oﬀering wireless (internet) connectivity are
+necessary. For experimenting and experiencing more complex
+haptic sensations also speciﬁc control devices and hardware
+setups are relevant.
+/three.tnum./two.tnum./one.tnum. Actuators
+The vibration motor has become a de-facto standard for
+haptics, at least it is a component many participants, students,
+and designers recognize from, for example, smartphones or
+game controllers. Many electronic and software solutions exist to
+improve the quality and versatility of haptics using these motors.
+Multiple vibration motors, together with a set of actuation patterns
+Frontiers in Computer Science /one.tnum/four.tnum frontiersin.org
+Mader et al. /one.tnum/zero.tnum./three.tnum/three.tnum/eight.tnum/nine.tnum/fcomp./two.tnum/zero.tnum/two.tnum/three.tnum./eight.tnum/four.tnum/eight.tnum/zero.tnum/two.tnum/three.tnum
+would be desirable. In addition, arrays or grids of vibration motors
+that allow the generation of haptic illusions could be a meaningful
+extension. To experiment with multi-channel output, a MIDI
+compatible miniature driver board (shown in
+Figure 13) has been
+developed as potential addition to the toolbox. This board has 14
+output channels for vibration motors.
+Although vibration motors are the most mature touch
+technology, they cover only a fragment of potential touch
+sensations. It would be desirable to oﬀer other dimensions and
+qualities of touch to explore. There is a number of diﬀerent
+actuation principles that generate diﬀerent touch experiences, such
+as stroke or pressure. Motors could be used here that use a
+contracting mechanism for generating pressure or a squeeze like
+the Hey bracelet
+/two.tnumcontract adjustable ribbons or actuate pneumatic
+setups.
+Inﬂatables or inﬂatable wearables have been explored (e.g.,
+Neidlinger and Dertien, 2015 ), inspired by the soft robotics
+toolbox ( Holland et al., 2014 ). Also McKibben muscles make use
+of pneumatics to provide touch through pressure, and can be
+integrated in textile (
+Backe et al., 2019 ). A system making use of
+pneumatics is typically more complex than a—just—electrically
+driven system. Where in previous examples, a servo or vibration
+motor can be connected directly to a powered controller, and for
+pneumatics, an air reservoir (pump, compressor, or pressurized
+canister) is needed, combined with air-tight tubing (electrically
+operated) valves and eventually an actuator, such as an inﬂatable
+pocket or bladder. Toy brands such as LegoTM and Fischer Technik
+/three.tnum
+have proven that it is possible to oﬀer a complete functioning
+pneumatic set at a scale suitable for prototyping of wearables.
+For experiments with haptic pneumatics, we experimented with a
+number of valves and pumps used in blood pressure sensors. Also
+coupling syringes (as manually operated pressure sources) to linear
+servos have proven to be a versatile (if a bit slow) solution to provide
+portable, low-power (low-noise) air supply.
+To experiment with the design of McKibben actuators, the main
+ingredients for tinkering we found suitable are:
+• Party balloons (1 m long, 5 mm diameter) as bladder
+• Braided sleeve for cable protection, 5 mm diameter (stretched)
+• Small barbed pneumatic connector pieces (LEGO T-pieces
+work well too)
+• Pneumatic hose (LEGO pneumatic brand works well)
+• Miniature cable-ties and heat shrink tube to seal the ends and
+make mechanical connection possible.
+To experiment with inﬂatable pockets (which can act as pneumatic
+pressure actuator), we have been using the following ingredients:
+• 3D printed casting mold
+• EcoFlex 30-50 silicone casting compound
+• Pneumatic hose (LEGO Pneumatic brand).
+For both type of actuators, the McKibben muscles or inﬂatable
+silicone pockets, controlled supply of pressurized air is necessary.
+/two.tnumhttps://feelhey.com
+/three.tnumhttps://www.ﬁschertechnik.de/en/
+To explore pneumatic control, ﬁrst a simple way of actuation is
+by using a syringe as pressure source. For controllable actuation,
+an addition of a linear servo with a stroke in the same order of
+magnitude works well, although the performance is too slow to
+generate a haptic “impulse”.
+Figure 14 shows the components we eventually selected for
+tinkering with pneumatic control. As an air supply, either a syringe
+or a small 3V electric pump (used in conventional blood-pressure
+measuring devices) can be used. For switching air supply, either
+a 3-way LEGO valve or SMC070 5V solenoid valves (which can
+be connected directly to a low-drop power driver, as used on the
+previously shown board in
+Figure 13) is used. For air routing, we
+use the ﬂexible LEGO 4 mm tube with corresponding T-pieces.
+For sensing air-pressure either a LEGO compatible manometer
+or a Honeywell NBPDANN150PGUNV with compatible INA122
+instrumentation ampliﬁer is oﬀered.
+In this way, for all relevant aspects for exploration (supply,
+routing, measurement, and switching), we oﬀer both a manual
+option as well as an electronic option.
+Although pneumatic bladders or McKibben actuators are more
+complex to design and integrate than the previously mentioned
+vibration motors, build, construction, and control have proven
+to be possible within the bounds of a tinkering session. For
+example a one-day workshop is typically enough for exploring
+components, conceptualizing and designing a functional prototype,
+as demonstrated during a workshop at TEI (
+Neidlinger and
+Dertien, 2015).
+The other actuation options mentioned, such as twisting yarn
+actuators using (DC)motors, servo/tendon driven mechanisms,
+and shape memory alloy-based actuators are still on the wish-
+list, but prove (for now) to be too much dependent on the
+integration in a garment as a whole. The actuators we deemed
+suitable for the tinkering toolbox are self-contained enough to
+be used, for example, with some simple velcro straps to explore
+the quality of touch. Eventually, they also allow for integration
+into the fabric, but it is not a prerequisite to do this from
+the start.
+A special category are actuators that use (or produce) heat.
+Thermal foil, peltier elements, but also shape memory alloy produce
+heat, either as desired form of haptics or as a by-product (in the
+case of shape memory alloy). This requires careful consideration
+of control, power, and (thermal) protection. For now, these types
+of actuators have been experimented with, but they are not mature
+enough to become a building block in the toolbox yet.
+/three.tnum./two.tnum./two.tnum. Sensors
+For the functional aspects of a wearable concept, the previously
+selected sensors for physiological measurements have proved
+to be suﬃcient. The following interesting applications can be
+conceptualized or prototyped.
+• Heart rate (Grove Ear-clip optical heart rate sensor)
+• Respiratory rate (Adafruit conductive rubber cord)
+• Flexing motion (Spectra Symbol 4.5" resistive bend sensor)
+• Muscle contraction (Sparkfun EMG Muscle Sensor v3 Kit or
+Myoware)
+Frontiers in Computer Science /one.tnum/five.tnum frontiersin.org
+Mader et al. /one.tnum/zero.tnum./three.tnum/three.tnum/eight.tnum/nine.tnum/fcomp./two.tnum/zero.tnum/two.tnum/three.tnum./eight.tnum/four.tnum/eight.tnum/zero.tnum/two.tnum/three.tnum
+FIGURE /one.tnum/three.tnum
+A /one.tnum/four.tnum-channel MIDI compatible control board,left controlling a pneumatic valve and right controlling /seven.tnum vibration motors.
+FIGURE /one.tnum/four.tnum
+Selection of components for tinkering with pneumatic wearables : syringe (A) and small electric pump (B) for air supply; miniature SMC valve (C),
+Honeywell air pressure sensor (D), and ﬁtting INA/one.tnum/two.tnum/two.tnum instrumentation ampliﬁer(E). For air routing, we use LEGO(R) T-pieces (F), buﬀer tank (G), hose
+(H), and pressure gauge (I).
+• Skin resistance (Grove GSR-sensor)
+• Displacement (Sharp GP2y0a21yk0f 10-80 cm distance
+sensor).
+However, for many applications, a haptic wearable performs
+some form of mediation. A touch or gesture by one user is relayed
+to the wearable of the other, and vice versa. This means that
+preferably the haptic gesture (i.e., gripping a wrist, stroking an
+arm, and giving a pat on the back) should be sensed from the user
+perspective.
+At the moment, the following components have been added to
+the toolbox for this speciﬁc category of user interaction, shown in
+Figure 15.
+• Piezo resistive ink-based pressure sensors (such as FlexiForce
+and ThinForce sensors)
+• Single point capacitive touch sensors (integrated boards by
+Grove, Adafruit, or Sparkfun)
+• Multi-point capacitive touch sensors (grove board)
+• Spectra Symbol SoftPot linear touch sliders
+• Electric contact [Makey Makey (
+Collective and Shaw, 2012 )
+style].
+A complex aspect is that these sensors, although they are very
+lightweight and ﬂexible, still do not allow full, ﬂexible integration
+into a fabric. Using wires and electric contact allows for spatial
+layout of contact points in fabric; however, the durability of this
+Frontiers in Computer Science /one.tnum/six.tnum frontiersin.org
+Mader et al. /one.tnum/zero.tnum./three.tnum/three.tnum/eight.tnum/nine.tnum/fcomp./two.tnum/zero.tnum/two.tnum/three.tnum./eight.tnum/four.tnum/eight.tnum/zero.tnum/two.tnum/three.tnum
+FIGURE /one.tnum/five.tnum
+Sensors for sensing haptic gestures: a spectra symbol softpot ﬂexi ble sliding sensor, two round piezo-resistive ink-based press ure sensors, a
+capacitive single-point touch sensor, and a Grove compatible /one.tnum/two.tnum-channel capacitive sensor board and a resistive bend sensor.
+(and potential for short circuits) does not make it suitable for
+prototyping and tinkering.
+/three.tnum./two.tnum./three.tnum. Connectivity
+Since the goal of the toolkit is to facilitate conceptualizing
+and making working prototypes, connection of components and
+electronics should take little time, be safe, simple, fault tolerant
+(without too much in-depth knowledge of electronics), and above
+all robust enough to continue working in a prototype that is actually
+worn by a user.
+A selection of contemporary toolkits for prototyping of
+(wearable) electronics has been made focusing on diﬀerences in
+connectivity strategies and also looking at the basic contents and
+focus. The selection is shown in
+Table 2 and is shown in Figure 16.
+Sets using the Arduino Lilypad (shown in Figures 16A) focus
+on sewable electronics. Components usually have large (3 mm)
+plated-through holes in a PCB which can be sewn onto cloth
+using conductive thread. This is an excellent way of experimenting
+with integration of electronics in clothing, but shifts focus from
+conceptualizing and prototyping to the more art-and-crafts side of
+making.
+In other prototyping systems for embedded electronics,
+diﬀerent connectivity designs are used. By far, the easiest to connect
+are LittleBits shown in
+Figure 16B: self-guiding magnetic locks
+automatically “snap” together. Since the connection has to be
+aligned well, this system is less suitable for wearable use: the system
+is very sensitive to motion (and works best on a ﬂat surface or
+build support plate). In most Arduino starter kits (including the
+“oﬃcial” starter kit shown in
+Figure 16C), a standard breadboard
+and jumper-wires are used. This makes connectivity completely
+dependent on component and is very cost eﬃcient. A system
+build on breadboard is typically unsuitable for wearable use, and
+breadboard wires lack mechanical locking, so they rely on contact
+mechanics only. Hence, for the prototyping kit described in this
+study, we chose to ﬁnd a ﬂexible but uniform wire/cable system.
+With systems such as gravity (3-wire, color indexed) and
+grove (4-wire, orientation lock), shown in
+Figure 16E, cables are
+grouped and uniform sockets have been chosen. This approach
+yields more robust connectivity at the price of having to supply
+(or manufacture) ﬁxed length cables. Bitalino (
+Figure 16D) comes
+with a snap-oﬀ board which can be broken up in functional bits to
+wear the system on the body. For connectivity, a mini-USB (like)
+cable is used which again has to be obtained in correct lengths.
+Makeblock MakerX (
+Figure 16F) uses also a ﬁxed length 4-wire
+lead, but instead of connecting each device individually to the main
+control board, the system uses a bus-system so all modules can be
+daisy-chained. Very robust, small, and ﬂexible, but it comes with
+a price tag: every module has a small on-board microcontroller to
+handle bus communication.
+As trade-oﬀ between complexity, price, and the desire to use
+uniform connectors, we chose to go for a three-wire link similar
+to the system proposed by DF-Robot’s Gravity. Instead of the
+form-factor of a large (standard) Arduino or shield, we chose
+a very small Arduino form factor (the beetle) and augmented
+this with a row of 3-pin connectors similar to the Gravity
+system.
+For wires, standard extension cables for RC-servos (with
+Graupner/JR sockets) have been chosen. The wires can be obtained
+pre-made in diﬀerent lengths, are very ﬂexible, and cost-eﬀective,
+and the color coding (signal: orange, VCC: red, and GND: brown)
+can be explained and used well.
+/three.tnum./two.tnum./four.tnum. Control
+Many controllers exist allowing WIFI or Bluetooth
+wireless connectivity. Examples are the Adafruit Feather
+series or ESP32 boards. Although software development and
+templates/examples for connectivity are vital for prototyping
+interactive wearables, for the scope of tinkering with
+haptics and social touch, we put our focus on a diﬀerent
+aspect.
+To generate haptic patterns and emulate stroking motions (by
+controlling a sequence of pneumatic muscles contracting, or a
+series of vibration motors), the control board shown in
+Figure 13
+can be controlled from a PC or laptop as a MIDI compatible
+musical instrument, facilitating the design of patterns, sequences,
+and loops and thus allowing for simple experiments with the quality
+Frontiers in Computer Science /one.tnum/seven.tnum frontiersin.org
+Mader et al. /one.tnum/zero.tnum./three.tnum/three.tnum/eight.tnum/nine.tnum/fcomp./two.tnum/zero.tnum/two.tnum/three.tnum./eight.tnum/four.tnum/eight.tnum/zero.tnum/two.tnum/three.tnum
+TABLE /two.tnum Diverse prototyping sets for (wearable) electronics focusing on connectivity strategies.
+System Connectivity Mechanical
+locking
+Largest item size Sensors Actuators
+Lilypad source:
+lilypad.com
+Conductive yarn Sewn, ﬁxed Main controller
+(ﬂora/gemma) 8 cm diameter
+Temperature, motion,
+light, color
+Colored LEDs, sound,
+vibration
+Gravity source:
+dfrobot.com
+3-wire connection, color
+scheme
+Mating socket and plug
+(3-lead)
+Main board arduino form
+factor 6 × 8 cm
+Light, sound, motion,
+proximity, distance
+Light, buzzer
+Grove source: seed
+studio.com
+4-wire connection,
+orientation lock. Signals
+are I2C, serial, digital or
+analog
+Mating socket and plug
+(4-lead)
+Main board 6 × 8 cm Light, sound,
+temperature/humidity
+Servo, colored LEDs,
+display, buzzer
+Arduino (standard kit)
+source:
+arduino.cc
+Separate single wires in
+breadboard
+Fragile breadboard
+connection
+breadboard 6 × 16 cm Sound, distance, light,
+temperature/humidity,
+tilt
+Colored LEDs,
+servo/stepper motor,
+displays, buzzer
+Littlebits source:
+sphero.com
+Magnetic connectors Must be on rigid base or
+ﬂat surface
+Arduino board: 10 × 5 cm Sound, light,
+temperature, motion,
+pressure
+Light, servo motors,
+sound
+Hexwear source:
+shop.stemcenterusa.com//
+products/hexwear-
+wearable-electronics-kit
+Sewable connectors and
+conductive yarn
+Sewn, ﬁxed Main board diameter 10 cm Sound, temperature Colored LEDs, buzzer
+Pimoroni bear kit source:
+pimoroni.com
+Sewable connectors and
+conductive yarn
+Sewn, ﬁxed Main board 4 × 5 cm Tilt switch Colored LEDs, buzzer
+Bitalino source: pluxbio
+signals.com
+Breakaway board, sensor
+leads, and boards
+Mating socket and plugs
+(3-wire JST)
+Main section 8 × 10 cm EMG, ECG, temp,
+motion, GSR, light
+intensity
+LED
+Makeblock MakerX
+source:
+makeblock.com
+4-wire bus leads,
+universal signal protocol
+Mating sockets and plugs
+with lock (mini 4-wire
+JST)
+Battery box: 5 × 5 cm Distance, color, motion,
+vision, proximity, gas,
+light, temperature,
+capacitive sensing,
+heading
+Sound, vibration,
+motors, pump, servo
+FIGURE /one.tnum/six.tnum
+Platforms for prototyping of electronics considered for wearables : (A) Lilypad, (B) LittleBits, (C) Arduino starter kit, (D) Bitalino, (E) Grove, and (F)
+Makeblock.
+Frontiers in Computer Science /one.tnum/eight.tnum frontiersin.org
+Mader et al. /one.tnum/zero.tnum./three.tnum/three.tnum/eight.tnum/nine.tnum/fcomp./two.tnum/zero.tnum/two.tnum/three.tnum./eight.tnum/four.tnum/eight.tnum/zero.tnum/two.tnum/three.tnum
+FIGURE /one.tnum/seven.tnum
+The ROLI seaboard MIDI input device used to record haptic touch p atterns.of touch. Any audio scoring software (such as Garageband, Logic,
+Cubase, Ableton, etc.) can be used as a tool to “compose” haptic
+patterns.
+Patterns can be stored, edited, played, and looped to explore
+the qualitative aspect. As user to generate patterns, we have been
+using diverse (musical) input devices such as piano keyboard
+style (i.e., Korg nanoKey USB MIDI), sampler pad keyboard
+style (i.e., AKAI MPX series), and a recent (and very suitable
+device) pressure key style (i.e., ROLI seaboard) shown in
+Figure 17.
+Oﬀering students and designers a ready-to-go setup consisting
+of the control board ( Figure 13), a laptop with audio software (or
+simple installation instructions) and an input device shifts the focus
+of the design of haptic wearables for touch from the connectivity
+and control to experiential design.
+/four.tnum. Discussion
+Our initial question was whether tinkering a is design
+approach that can foster the ﬁnding of novel applications in
+STT. A design challenge based on tinkering with 34 teams of
+students showed that this is indeed the case. The prototypes
+designed realized a diverse range of applications, which was
+the criteria for success. Especially, a category of unexpected
+results supports this conclusion. These unexpected results did
+not apply a remote social touch as primary goal, but are
+part of a shared activity. These shared activities included
+games such as catching a ball or rock-paper-scissors, making
+music together, doing workout, relaxation movements, adding
+touches on a smart phone to text chats, or watching a movie
+together.
+/four.tnum./one.tnum. Stimulating creativity in tinkering
+Creativity seems to be stimulated by (at least) the following two
+sources: the dialogue with the material and story telling, which will
+be elaborated in the following.
+Here, we want to emphasize the diﬀerence between “know
+what” and “know how” (e.g.,
+Cross, 1982). Tinkering, as a hands-
+on activity, supports “know how”. It is a “dialogue with the
+material”, that leads to an understanding of the working principles,
+properties, and limitations of the material, e.g., how components
+can be combined or need to be combined. To some part, this is
+a practical skill that includes tacit knowledge, other than explicit
+criteria, rules, and procedures, and “knowing how” is often in-
+action (
+Schön, 1992 ). In small experiments, the tinkerer gets
+immediate feedback of eﬀects and experiences generated by the
+material. Following experiments could be invented to intensify
+or smoothen the observed experience, set it in a speciﬁc context,
+or combine it with other eﬀects. In this way, the experiences,
+reﬂections on them, and associations guide the tinkerer in the
+realization of prototypes, stimulating and making use of his or
+her creativity. In contrast to this path, “know what” would just
+include the knowledge on the components and their functionality.
+The eﬀect of their combinations would be an imagined experience
+that possibly does not match with a real experience, and it is
+questionable to what extent this would stimulate further steps in
+a design process.
+Examining the students’ projects, it seems that story telling is
+also a motor of creativity, stimulated by the toolbox and tinkering
+playground. With story telling, students deﬁned contexts for which
+they designed their prototypes. The stories were shaped by personal
+backgrounds, and, at this point in time, also by the shortcomings
+due to the lockdown situation. In an iterative tinkering process,
+Frontiers in Computer Science /one.tnum/nine.tnum frontiersin.org
+Mader et al. /one.tnum/zero.tnum./three.tnum/three.tnum/eight.tnum/nine.tnum/fcomp./two.tnum/zero.tnum/two.tnum/three.tnum./eight.tnum/four.tnum/eight.tnum/zero.tnum/two.tnum/three.tnum
+by interaction with the material and toolbox, stories, contexts, and
+prototypes were reﬁned.
+The goal of STT products is to create experiences by remote
+touch that increase wellbeing. On one hand, the currently
+available technical components come short in the replication of
+human touch. On the other hand, an experience of touch is
+not constituted by the sensors and actuators alone. A context
+or metaphor contributes to a high degree to an experience of
+touch, like the mother’s hand on the forehead, or the ball game
+from the examples of the students. In this sense, we see the
+story telling part in the tinkering process as relevant for the
+creation of experiences. Accordingly, people and experts with
+diﬀerent lenses also can contribute diﬀerent stories and contexts
+and, accordingly, to prototypes with a wider spectrum of touch
+experiences.
+/four.tnum./two.tnum. Design methods and tinkering
+In classical science, observation is one of the ﬁrst steps of
+scientiﬁc activities, as part of characterization (
+Brody, 2012 ).
+In the world of the artiﬁcial, the object of observations
+is not nature, but artifacts. In
+Gaver (2012), the author
+argues “... that an endless string of design examples is
+precisely at the core of how design research should operate,
+and that the role of theory should be to annotate those
+examples rather than replace them.” We would like to add
+on this statement that there is not only an endless string of
+prototypes needed but also a diversity in the prototypes of that
+string.
+Accordingly, we expect that other target groups for tinkering
+with a diﬀerent background and expertise could increase
+the diversity of prototypes on STT , and in a next step,
+increase also the knowledge on STT gained through these.
+Psychologists, fashion and interaction designers, haptologists,
+physiotherapists, or artists have diﬀerent insights about
+the possibilities and needs for social touch, which could be
+speciﬁc part of their individual tinkering toolboxes. To include
+these groups, the design step in the technology part of the
+material is needed to reduce complexity, and make it easily
+accessible.
+Our motivation stemmed from the observation that STT
+suﬀers from low acceptance and/or market uptake. We, therefore,
+explicitly developed the described tinkering approach since it
+involves stakeholders early in the design process. Comparing the
+tinkering approach, as suggested in this study, to Participatory
+Design (PD) (
+Ehn, 2008 ), the inclusion of stakeholders in the
+design process is shared in both design approaches. In general,
+PD aims at a broader circle of stakeholders than what we have
+suggested here. However, the main characteristics of stakeholders
+that we mentioned in this study are that they bring in a diﬀerent
+expertise on users’ needs, and are not necessarily experts in
+technology. These characteristics would not exclude stakeholders
+as considered by PD. The design method in PD, however, is
+less speciﬁc as we see a tinkering approach, and it is more
+understood as a group process, which we did not emphasize
+here for tinkering. PD also starts more often with a more
+speciﬁc design question, whereas tinkering most often has a
+theme, but the design question typically is identiﬁed in the
+process.
+Also in Design Thinking (DT) (
+Johansson-Sköldberg et al.,
+2013), the starting point is typically a problem to solve, and a
+team with heterogeneous expertise solves the problem together.
+Prototypes are also relevant for DT , but are only in one of many
+diﬀerent steps in a design process, whereas tinkering is mainly
+oriented toward prototypes. Deﬁnitely, the management aspect in
+DT is absent in tinkering.
+/four.tnum./three.tnum. Technology acceptance
+As mentioned above, only few STT products that made it
+to the market (
+Huisman, 2017 ), and of those that did enter the
+market, the majority does not persist very long. A major reason
+that STT products do not remain on the market is (probably)
+that they do not meet expectations of users. The Technology
+Acceptance Model (TAM) (
+Davis, 1989 ) tries to identify reasons
+that products are not used, one of them is the intention of
+potential users to really use the product. Main factors inﬂuencing
+the intended usage are perceived usability (PU) and perceived
+ease of use (PEOU) (
+Papakostas et al., 2021 ). The deﬁnition of
+PEOU is the degree to which a person believes that using a
+particular system would be free from eﬀort (
+Davis, 1989). This can
+be directly interpreted also in the context of STT products. The
+deﬁnition of PU is “the degree to which a person believes that
+using a particular system would enhance their job performance”
+(
+Davis, 1989 ). As the goals of STT are not in the area of job
+performance, or performing tasks as eﬃcient as possible, more
+suitable deﬁnitions have to be identiﬁed here. Instead, STT aims at
+wellbeing, social connectedness, comforting, sensoric stimulation,
+etc. (
+Jewitt et al., 2021 ). While it seems to be plausible that PU
+in the context of STT can be interpreted diﬀerently, it still needs
+to be validated to what extent results for PU in the original
+deﬁnition can also be interpreted for goals of STT mentioned. An
+extension of the TAM models to products of wearable technology
+(
+Chang et al., 2016 ) is also relevant to STT , including a range of
+other factors such as wearability, connectivity, social norm, and
+others.
+On a diﬀerent level, the haptics toolbox suggested itself is
+also a technology product that may ﬁnd acceptance or not.
+Considering experts of other domains as users of this technology,
+also here technology acceptance has to be taken into account,
+the experts also have a role as learners. The main goals in
+toolbox design (
+Resnick et al., 2018 ) can be mapped directly
+to TAM elements: “low threshold” describes that the toolbox
+elements can be used with little eﬀort, which clearly contributes
+to PEOU. “Wide walls” say that broad range of projects is
+possible, and “high ceilings” means that the projects allow also
+for complexity. Both are describing usefulness of a toolbox, and
+it is up to scaﬀolding (see also Section 2 for the role of a
+facilitator), to make this visible to the users to stimulate PU.
+Moreover, in
+Liu et al. (2021), it was shown for a learning
+context, concept maps have positive eﬀect on PU and PEOU.
+The sense-think-act-paradigm, which is part of the introduction
+Frontiers in Computer Science /two.tnum/zero.tnum frontiersin.org
+Mader et al. /one.tnum/zero.tnum./three.tnum/three.tnum/eight.tnum/nine.tnum/fcomp./two.tnum/zero.tnum/two.tnum/three.tnum./eight.tnum/four.tnum/eight.tnum/zero.tnum/two.tnum/three.tnum
+and scaﬀolding in our context, is an instance of a context map.
+Playfulness in a learning context was investigated as an external
+factor for TAM in
+Papakostas et al. (2022). It was shown to
+have a positive eﬀect on PU and PEOU. As playfulness is a
+driving concept of tinkering, we assume that it also here has a
+positive eﬀect on PU and PEOU. Altogether, we argue that the
+design criteria for the haptic tinkering toolkit and the tinkering
+environment described in this study do address the elements of
+TAM that are relevant for intention to use the haptic tinkering
+toolkit.
+/five.tnum. Conclusion and recommendations
+In our study, we showed that tinkering is a suitable
+design approach for out-of-the box prototypes in the context
+of Social Touch Technology. In a teaching unit for a haptics
+challenge, students of a Interaction Technology master programme
+produced a wide range of prototypes and concepts on mediated
+social touch using tinkering. Moreover, it resulted in reﬂections
+on relevant concepts like intrusiveness, and how to deal
+with it.
+Our initial motivation for this work was that there are no
+suﬃcient products of STT on the market that can mitigate needs
+of social touch. Increasing the variety of prototypes and concepts is
+one way to eventually identify the products that are really suitable,
+and, we showed that tinkering can contribute to the increase of the
+variety. Another way to identify the useful touch applications is to
+include experts in the design process who have more insight on the
+user needs, leading to prototypes that better meet the user needs
+and have higher acceptance. For this end, we suggest a better design
+of the tinkering toolkit. The current tinkering toolset is “ready to
+use” for people with a technical background. Making tinkering with
+Social Touch Technology accessible for people without technical
+experience, we recommend the design of a toolkit, with high-level
+building blocks for sensors and haptic actuators.
+Data availability statement
+The original contributions presented in the study are included
+in the article/supplementary material, further inquiries can be
+directed to the corresponding author.
+Ethics statement
+Ethical review and approval was not required for the study on
+human participants in accordance with the local legislation and
+institutional requirements. The patients/participants provided their
+written informed consent to participate in this study.
+Author contributions
+AM, JW, ED, and JE substantial contributions to the conception
+and design of the work, the acquisition, and analysis or
+interpretation of data for the work. All authors contributed to the
+article and approved the submitted version.
+Conﬂict of interest
+The authors declare that the research was conducted in the
+absence of any commercial or ﬁnancial relationships that could be
+construed as a potential conﬂict of interest.
+Publisher’s note
+All claims expressed in this article are solely those of the
+authors and do not necessarily represent those of their aﬃliated
+organizations, or those of the publisher, the editors and the
+reviewers. Any product that may be evaluated in this article, or
+claim that may be made by its manufacturer, is not guaranteed or
+endorsed by the publisher.
+References
+Backe, C., Guo, L., Jager, E., and N-K., P. (2019). “Towards re sponding fabrics–
+textile processing of thin thread-like pneumatic actuators, ” i n Conference Smart
+Materials and Surfaces SMS (Lisbon).
+Brody, T. A. (2012). The Philosophy Behind Physics . Berlin: Springer Science &
+Business Media.
+Chang, H., Lee, S. C., and Ji, Y. G. (2016). Wearable device adopt ion model with
+TAM and TTF. Int. J. Mobile Commun. 14, 518. doi: 10.1504/IJMC.2016.078726
+Collective, B. M., and Shaw, D. (2012). “Makey Makey: improvisi ng tangible and
+nature-based user interfaces, ” in Proceedings of the Sixth International Conference on
+T angible, Embedded and Embodied Interaction(Ontario: Kingston), 367–370.
+Cross, N. (1982). Designerly ways of knowing. Design Stud. 3, 221–227.
+Davis, F. (1989). Perceived usefulness, perceived ease of use , and user acceptance of
+information technology. MIS Q. 13, 319.
+Dertien, E., and Neidlinger, K. (2016). Blow it up - inﬂatable wea rables’. Make Mag.
+50, 76–78.
+Ehn, P. (2008). “Participation in design things, ” in Proceedings of the Tenth
+Anniversary Conference on Participatory Design 2008, PDC ’08 (Bloomington: Indiana
+University), 92–101.
+Exploratorium. (2017). Learning Dimensions of Making and Tinkering: A
+Professional Development Tool for Educators . Available online at: https://www.
+exploratorium.edu/sites/default/ﬁles/ﬁles/Learning%20Dimensions%20of%20Making
+%20and%20Tinkering.pdf
+Field, T. (2010). Touch for socioemotional and physical well-be ing: a review. Dev.
+Rev. 30, 367–383. doi: 10.1016/j.dr.2011.01.001
+Gaver, W. (2012). “What should we expect from research through design?” in
+Conference on Human Factors in Computing Systems - Proceedings (Austin, TX).
+Hamdan, N. A., Voelker, S., and Borchers, J. (2018). Sketch&Stitch: Interactive
+Embroidery for E-Textiles. New York, NY: Association for Computing Machinery.
+Holland, D. P., Park, E. J., Polygerinos, P., Bennett, G. J., and Walsh, C. J. (2014). The
+soft robotics toolkit: shared resources for research and des ign. Soft Robot. 1, 224–230.
+doi: 10.1089/soro.2014.0010
+Huisman, G. (2017). Social touch technology: a survey of haptic technology
+for social touch. IEEE Trans. Hapt. 10, 391–408. doi: 10.1109/TOH.2017.26
+50221
+Ipakchian Askari, S., Haans, A., and IJsselsteijn, W. (2022). Uncovering
+terra incognita in the AHD design space: a review of aﬀective h aptic
+devices. Front. Comput. Sci. 4, 795772. doi: 10.3389/fcomp.2022.79
+5772
+Jewitt, C., Price, S., Steimle, J., Huisman, G., Golmohammadi, L ., Pourjafarian, N.,
+et al. (2021). Manifesto for digital social touch in crisis. Front. Comput. Sci. 3, 754050.
+doi: 10.3389/fcomp.2021.754050
+Frontiers in Computer Science /two.tnum/one.tnum frontiersin.org
+Mader et al. /one.tnum/zero.tnum./three.tnum/three.tnum/eight.tnum/nine.tnum/fcomp./two.tnum/zero.tnum/two.tnum/three.tnum./eight.tnum/four.tnum/eight.tnum/zero.tnum/two.tnum/three.tnum
+Johansson-Sköldberg, U., Woodilla, J., and Çetinkaya, M. (201 3). Design
+thinking: past, present and possible futures. Creat. Innovat. Manage. 22, 121–146.
+doi: 10.1111/caim.12023
+Jones, L., Nabil, S., and Girouard, A. (2020a). “Swatch-bits: prototyping e-
+textiles with modular swatches, ” in Proceedings of the Fourteenth International
+Conference on T angible, Embedded, and Embodied Interaction (Sidney),
+893–897.
+Jones, L., Nabil, S., McLeod, A., and Girouard, A. (2020b). “We arable bits:
+scaﬀolding creativity with a prototyping toolkit for wearable e- textiles, ” inProceedings
+of the Fourteenth International Conference on T angible, Embedded, and Emb odied
+Interaction, TEI ’20 (New York, NY: Association for Computing Machinery),
+165–177.
+Liu, Y., Liu, Y., and Yue, K. (2021). “Investigating the fact ors that inﬂuence
+technology acceptance of an educational game integrating mix ed reality and concept
+maps, ” in2021 International Conference on Advanced Learning Technologies (ICAL T)
+(Tartu), 409–413.
+Mader, A., and Dertien, E. (2016). “Tinkering as method in ac ademic teaching, ” in
+83: E&PDE 16, ed E. Bohemia (Twente: The Design Society), 240–245.
+Martinez, S. L., and Stager, G. (2013). Invent to Learn: Making, Tinkering, and
+Engineering in the Classroom. Torrance, CA: Constructing Modern Knowledge Press.
+Maziz, A., Concas, A., Khaldi, A., Stålhand, J., Persson, N.-K ., and Jager,
+E. W. (2017). Knitting and weaving artiﬁcial muscles. Sci. Adv. 3, e1600327.
+doi: 10.1126/sciadv.1600327
+Müller, T. (2020). Designing with haptic feedback (Dissertation). Faculty of Science
+and Technology, Umeå Institute of Design, Umeå University, Umeå, Sweden. Available
+online at: http://urn.kb.se/resolve?urn=urn:nbn:se:umu:diva-172622
+Neidlinger, K., and Dertien, E. (2015). “Tei 2015 studio inte ractive inﬂatables:
+amplifying human behaviors, ” inProceedings of the Ninth International Conference on
+T angible, Embedded, and Embodied Interaction (Stanford, CA: Stanford University),
+489–491.
+Norman, D. A. (2002). The Design of Everyday Things. New York, NY: Basic Books.
+Papakostas, C., Troussas, C., Krouska, A., and Sgouropoulou, C . (2022).
+Exploring users’ behavioral intention to adopt mobile augmente d reality
+in education through an extended technology acceptance model. Int. J.
+Hum. Comput. Interact. 39, 1294–1302. doi: 10.1080/10447318.2022.206
+2551
+Papakostas, C., Troussas, C., Krouska, A., and Sgouropoulou, C . (2021). Measuring
+user experience, usability and interactivity of a personalized mobile augmented reality
+training system. Sensors 21:3888. doi: 10.3390/s21113888
+Petrich, M., Wilkinson, K., and Bevan, B. (2013). “Designing for tinkerability, ” in
+It Looks Like Fun, but Are They Learning? eds M. Honey and D. E. Kanter (Taylor &
+Francis), pp 50–70.
+Quinn, h., and Bell, P. (2013). “Designing for tinkerability, ” in How Designing,
+Making, and Playing Relate to the Learning Goals of K-12 Science Educ ation, eds M.
+Honey and D. E. Kanter (Taylor & Francis), pp 17–33.
+Resnick, M. The 4 p’s of creative learning - passion. Available online at: https://www.
+youtube.com/watch?v=IAYgBf7S4NQ
+Resnick, M., Myers, B., Nakakoji, K., Shneiderman, B., Paus ch, R., Selker, T., et
+al. (2018). Design Principles for Tools to Support Creative Thinking . Carnegie Mellon
+University. doi: 10.1184/R1/6621917.v1
+Resnick, M., and Rosenbaum, E. (2013). “Designing for tinke rability, ” in Design,
+Make, Play: Growing the Next Generation of STEM Innovators, eds M. Honey and D. E.
+Kanter (Taylor & Francis), pp 163–181.
+Ryoo, J., and Kekelis, L. (2018). Reframing failure in making: the value of play,
+social relationships, and ownership. J. Youth Dev. 13, 49–67. doi: 10.5195/jyd.201
+8.624
+Schön, D. (1992). Designing as reﬂective conversation with the materials of a design
+situation. Knowledge Based Syst. 5, 3–14.
+Shtarbanov, A. (2021). “FlowIO development platform–the pneumat ic “raspberry
+pi” for soft robotics, ” in Extended Abstracts of the 2021 CHI Conference on Human
+Factors in Computing Systems (Yokohama), 1–6.
+Stappers, P., and Giaccardi, E. (2017). Research through Design, 2nd Edn . The
+Interaction Design Foundation.
+van Erp, J. B. F., and Toet, A. (2015). Social touch in human-
+computer interaction. Front. Digit. Humanit. 2, 2. doi: 10.3389/fdigh.2015.0
+0002
+Vossoughi, S., and Bevan, B. (2014). Making and Tinkering: A Review of the
+Literature. National Research Council Committee on Out of School Time S TEM.
+p. 1–55.
+Zimmerman, J., and Forlizzi, J. (2014). Research Through Design in HCI. New York,
+NY: Springer.
+Frontiers in Computer Science /two.tnum/two.tnum frontiersin.org

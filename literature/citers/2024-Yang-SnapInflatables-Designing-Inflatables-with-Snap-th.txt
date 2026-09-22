@@ -1,0 +1,1175 @@
+SnapInflatables: Designing Inflatables with Snap-through 
+Instability for Responsive Interaction 
+Yue Yang Lei Ren Chuang Chen Bin Hu 
+yang_yue@zju.edu.cn renlei_design@zju.edu.cn chenchuang@zju.edu.cn hhzzybb@gmail.com 
+Zhejiang University Zhejiang University Zhejiang University Hangzhou City University 
+Hangzhou, China Hangzhou, China Hangzhou, China Hangzhou, China 
+Zhuoyi Zhang Xinyan Li Yanchen Shen Kuangqi Zhu 
+zhuoyi_zhang@zju.edu.cn leexinyan@tongji.edu.cn ssyys8@nottingham.edu.cn kuangqizhu@zju.edu.cn 
+Zhejiang University Tongji University University of Nottingham Zhejiang University 
+Hangzhou, China Shanghai, China Ningbo China Hangzhou, China 
+Ningbo, China 
+Junzhe Ji Yuyang Zhang Yongbo Ni Jiayi Wu 
+jjunzhe@zju.edu.cn zhangyuyang@hzcu.edu.cn y.ni0420221@arts.ac.uk daiiisy.wu@gmail.com 
+Zhejiang University Hangzhou City University University of the Arts Rhode Island School of 
+Hangzhou, China Hangzhou, China London Design 
+London, United Kingdom Rhode Island, United States 
+Qi Wang Jiang Wu Lingyun Sun Ye Tao 
+qiwangdesign@tongji.edu.cns jiang.wu@nottingham.edu.cn sunly@zju.edu.cn taoye@hzcu.edu.cn 
+Tongji University University of Nottingham Zhejiang University Hangzhou City University 
+Shanghai, China Ningbo China Hangzhou, China Hangzhou, China 
+Ningbo, China 
+Guanyun Wang∗ 
+guanyun@zju.edu.cn 
+Zhejiang University 
+Hangzhou, China 
+Figure 1: Applications that are designed based on SnapInflatables. (a) A wearable button with bouncing haptic feedback. (b) An 
+interactive game controller that operates the seagull’s head and tail to control the wings to flap up and down. (c) Portable and 
+deformable lighting. 
+∗Corresponding author 
+Permission to make digital or hard copies of all or part of this work for personal or 
+classroom use is granted without fee provided that copies are not made or distributed 
+for profit or commercial advantage and that copies bear this notice and the full citation 
+on the first page. Copyrights for components of this work owned by others than the 
+author(s) must be honored. Abstracting with credit is permitted. To copy otherwise, or 
+republish, to post on servers or to redistribute to lists, requires prior specific permission 
+and/or a fee. Request permissions from permissions@acm.org. 
+CHI ’24, May 11–16, 2024, Honolulu, HI, USA 
+© 2024 Copyright held by the owner/author(s). Publication rights licensed to ACM. 
+ACM ISBN 979-8-4007-0330-0/24/05 
+https://doi.org/10.1145/3613904.3642933 
+ABSTRACT 
+Snap-through instability, like the rapid closure of the Venus flytrap, 
+is gaining attention in robotics and HCI. It offers rapid shape recon-
+figuration, self-sensing, actuation, and enhanced haptic feedback. 
+However, conventional snap-through structures face limitations 
+in fabrication efficiency, scale, and tunability. We introduce Snap-
+Inflatables, enabling safe, multi-scale interaction with adjustable 
+sensitivity and force reactions, utilizing the snap-through instabil-
+ity of inflatables. We designed six types of heat-sealing structures 
+enabling versatile snap-through passive motion of inflatables with 
+
+CHI ’24, May 11–16, 2024, Honolulu, HI, USA Yue Yang, et al. 
+diverse reaction and trigger directions. A block structure enables 
+ultra-sensitive states for rapid energy release and force amplifica-
+tion. The motion range is facilitated by geometry parameters, while 
+force feedback properties are tunable through internal pressure set-
+tings. Based on experiments, we developed a design tool for creating 
+desired inflatable snap-through shapes and motions, offering pre-
+views and inflation simulations. Example applications, including a 
+self-locking medical stretcher, interactive animals, a bounce button, 
+and a large-scale light demonstrate enhanced passive interaction 
+with inflatables. 
+CCS CONCEPTS 
+• Human-centered computing → Interactive systems and 
+tools. 
+KEYWORDS 
+snap-through instability, inflatable, shape-changing interface, re-
+sponsive interaction 
+ACM Reference Format: 
+Yue Yang, Lei Ren, Chuang Chen, Bin Hu, Zhuoyi Zhang, Xinyan Li, Yanchen 
+Shen, Kuangqi Zhu, Junzhe Ji, Yuyang Zhang, Yongbo Ni, Jiayi Wu, Qi Wang, 
+Jiang Wu, Lingyun Sun, Ye Tao, and Guanyun Wang. 2024. SnapInflatables: 
+Designing Inflatables with Snap-through Instability for Responsive Interac-
+tion. In Proceedings of the CHI Conference on Human Factors in Computing 
+Systems (CHI ’24), May 11–16, 2024, Honolulu, HI, USA. ACM, New York, NY, 
+USA, 15 pages. https://doi.org/10.1145/3613904.3642933 
+1 INTRODUCTION 
+Snap-through instability, observed in natural phenomena like the 
+rapid closure of the Venus flytrap [11], has attracted attention in 
+the field of robotics and human-computer interaction (HCI). It 
+enables swift and reversible shape changes with minimal energy 
+input, offering the potential for physical intelligence, including self-
+sensing and actuation, within relatively simple structures. In HCI, 
+structures exhibiting snap-through instability have been introduced 
+to enhance haptic feedback [2], 3D print pop-up objects to save 
+on manufacturing time and materials [30], reposition wearable 
+devices for various use cases [9], and enable simple logic control 
+[18]. Beyond HCI, snap-through instability is researched in the 
+mechanical field and leveraged in robotics [5] for high-speed shape 
+reconfiguration [32], adaptive sensing, rapid grasping [19], as well 
+as electronics-free controls [10]. 
+Despite their versatility and adaptiveness, the current methods 
+for fabricating structures with snap-through instability primarily 
+rely on mechanical assembly, 3D printing [3], origami folding [2, 19], 
+or gel casting elastomers [20]. These fabrication techniques have 
+limitations in terms of efficiency and accessibility when it comes 
+to rapidly producing 3D structures with snap-through instability 
+across various scales. Moreover, most of these structures have fixed 
+force feedback characteristics once they are fabricated. 
+Inflatable structures offer a unique opportunity to achieve snap-
+through instability with adjustable force feedback. It supports the 
+rapid fabrication of structures in multi-scales with the advantages 
+of safety, portability, and ease of interaction. While inflated objects 
+exhibit snap-through transformations when subjected to external 
+overload [21], little research has been dedicated to analyzing and 
+designing the snap-through instability of inflated objects. Most 
+existing research and applications concerning inflatable structures 
+focused on stability [33]. The instability of inflated structures under 
+external force is generally meant to be avoided, and its potential 
+for application in tangible interaction remains unexplored. 
+SnapInflatables presents a novel approach to easily designing and 
+fabricating inflatables with customized snap-through instability. By 
+designing heat-sealing patterns, we achieve versatile snap-through 
+passive motion of inflatables with varying reaction behaviors and 
+trigger force directions. We also offer the option of ultra-sensitive 
+states that enable rapid energy release and force amplification. We 
+conducted a series of experiments to analyze these structures. The 
+range of reactions is controlled by the geometry parameter, and 
+the force feedback properties of the same object can be tunable 
+through internal pressure settings. Since the shape and motion of 
+inflated structures are hard to imagine, we developed an interac-
+tive design tool that assists in the creation of customized inflatable 
+structures with customized motion. This tool not only enables the 
+set of motion types and the adjustment of motion range but also 
+offers motion previews, inflation simulations, and fabrication files. 
+Example applications, including self-locking medical stretchers, in-
+teractive animals, and wearable bounce-back buttons, demonstrate 
+the application of snap-through instability of inflatables in shape 
+reconfiguring, self-sensing and responding, and haptic feedback. 
+Compared to existing works in inflatable shape-changing in-
+terfaces, SnapInflatables offers a novel option for shape-changing 
+and interaction: leveraging the snap-through deformations of fully 
+inflated objects under external triggers without the need for con-
+tinually connecting bulky pumps to change the gas volume during 
+use. We hope SnapInflatables to be an accessible yet powerful way 
+for designers, makers, and manufactures to create inflatables at 
+various scales with customized responsive interactions in various 
+scenarios. 
+The key contributions of this paper are as follows: 
+• An accessible method of designing and fabricating inflata-
+bles with tunable snap-through instability. We developed 
+software that assists users in designing and previewing the 
+interactive motion of inflatables and generating fabrication 
+files, including parametric control of fabrication geometry 
+and corresponding inflation simulation. 
+• Design of inflatable structures with snap-through bistability: 
+Based on the design of heat-sealing patterns, we present 
+three types of inflatable structures with snap-through in-
+stability in different motions, three types of indirect con-
+trol units supporting input and reactions in different direc-
+tions, and a blocking structure supporting transition to ultra-
+sensitivity state. 
+• Experiment analysis of tunable motion range and force 
+behavior: We experimentally analyzed the motion range 
+of structures with different geometry parameters, tuning 
+force feedback and response speed through internal pressure 
+change. 
+• Example applications: We explore the application of snap-
+through instability on inflated objects in shape reconstruc-
+tion, self-sensing and responding, and haptic feedback, in-
+cluding a self-responding healthcare stretcher, a series of 
+interactive dynamic animals, and a wearable bounce button. 
+SnapInflatables: Designing Inflatables with Snap-through Instability for Responsive Interaction CHI ’24, May 11–16, 2024, Honolulu, HI, USA 
+2 RELATED WORKS 
+2.1
+ Structure with Snap-Through Instability 
+Snap-through instability represents a mechanical phenomenon 
+characterized by the rapid transition between two stable states 
+when subjected to an applied load. This phenomenon is marked 
+by bistable mechanisms that emerge from geometric or material 
+properties, making it possible to store and release energy for fast ac-
+tuation. Bistable structures, once snapped into a stable state, do not 
+require continuous power input to maintain their position, offering 
+reconfigurability in specific applications. Furthermore, they often 
+necessitate fewer components compared to traditional mechanisms. 
+These properties have garnered significant attention due to their 
+potential applications in robotics [5] for high-speed shape reconfig-
+uration on land and underwater [32], adaptive sensing, and rapid 
+grasping [19], as well as electronics-free controls [6, 8, 10]. In the 
+field of HCI, structures exhibiting snap-through instability have 
+been introduced to enhance haptic feedback [5], facilitate the fab-
+rication of unfoldable objects to save on manufacturing time and 
+materials [36], reposition wearable devices for various use cases 
+[9], and enable simple logic control [18]. 
+Current fabrications of bistable structures mostly rely on me-
+chanical assembly, 3D printing [3], origami folding [2, 19], or casting 
+elastomers [20]. However, these approaches are designed for spe-
+cific application scenarios. Limited research has been conducted on 
+snap instability through heat-sealing inflated objects, apart from 
+the efforts within the aerospace domain [15], which involve only a 
+singular moving direction. To afford this mechanism for a broader 
+usage in HCI field with enhanced and sufficient fabrication effi-
+ciency, scalability, and post-fabrication tunability. We design and 
+fabricate inflated structures to broaden the usage of snap-through 
+bistability. In our work, inflated structures offer compelling advan-
+tages: (1) A plane object with heat-sealing pattern can quickly trans-
+form into 3D bistable structures through inflation, enabling rapid 
+manufacturing; (2) The fabrication of 3D inflated bistable struc-
+tures is accessible across different scales; (3) Bistable inflatables 
+can deflate for compact storage and transport; (4) The interaction 
+feedback, particularly energy barriers and trigger forces, of the 
+same object after fabrication is tunable by adjusting air pressure, fa-
+cilitating adaptability to meet specific requirements. (5) Compared 
+to traditional mechanical structures. Inflatable structures exhibit a 
+cushioning effect, especially during abrupt shape transformations, 
+enhancing safety for both individuals and objects. 
+2.2 Inflatable Shape-Changing Interface and 
+Interaction with Inflatables 
+Inflatable shape-changing interfaces have found applications 
+across diverse fields, including soft robotics, furniture [33], 
+architecture[14], assistive devices[43], transportation tool [29], as 
+well as virtual reality props and tactile feedback systems [17, 36]. In-
+flated structures offer numerous advantages, including lightweight 
+construction, cost-effectiveness, size scalability, and ease of storage. 
+In HCI field, there has been a substantial accumulation of accessi-
+ble and rapid manufacturing methods for inflatable devices. These 
+methods encompass techniques such as heat-sealing through laser 
+cutting [40], as well as CNC machining and 3D printing [7, 39, 42]. 
+This versatility enables the fabrication of inflatable interfaces rang-
+ing from micro-scale [25] to human-scale applications [33]. Re-
+search in the design of inflatable interfaces has explored various 
+aspects, including bending combinations [28, 31], as well as modu-
+larized objects [4]. 
+While versatile, most interactions with inflatable structures lever-
+age shape alteration relying on volume changing, which requires 
+continuous connections to inflation or deflation mechanisms such 
+as bulky pumps, limiting their usage in broader real-life scenar-
+ios. Despite the effort of improving control systems like flowIO 
+[34] and liquid-to-gas drive device [27], the inflation and defla-
+tion times are constrained by tube and pump power, which limit 
+the response speed of inflatables during the interaction [36]. This 
+limitation is especially evident in shape changes of inflatables in 
+big scales [35, 37] and synchronization of digital interaction. Be-
+sides, the shape change caused by deflation reduces the stiffness 
+of an inflatable structure and limits its functional use. Some re-
+searchers explore achieving the rapid and strong shape change and 
+interaction behavior of inflated objects by adding tendon wires 
+[29], employing smaller chambers to manipulate larger ones, and 
+incorporating rigid elements [21]. 
+Beyond shape changing as an output of interaction, researchers 
+have been enabling sensing of inflatables by embedding sensors into 
+inflatable structures for touch and slide interactions [35]. Another 
+approach is leveraging physical intelligence; for example, fluid 
+computation kits [26] explore sensing and signal processing by 
+manipulating air passage and direction. In most cases, once an 
+inflatable structure is fabricated and fully inflated, it typically settles 
+into a single stable configuration. Researchers in the fields of HCI 
+and robotics have primarily focused on the mechanical stability 
+achieved after inflation. The design method and potential of inflated 
+structures with multiple stable states after inflated, as well as the 
+snap-through transitions between these stable states, remain largely 
+unexplored. 
+SnapInflatables achieves multiple stable states of inflatable struc-
+ture in versatile directions through the design of heat-sealing pat-
+terns. SnapInflatables explores the snap-through passive motion 
+of inflated objects. It enables rapid and versatile shape change to 
+multi-state states under external interaction without the need to 
+connect to pumps. It enables inflated structure with simple self-
+sensing and responsiveness without additional sensing and control 
+devices. The aim is to broaden the design potential of inflatable 
+structures for enhanced interaction possibilities. 
+2.3 Designing Structures for Passive Feedback 
+Augmentation 
+Augmenting passive haptic feedback and passive motion control 
+has demonstrated promising potential across various application 
+contexts, such as enhancing existing everyday items, simulating 
+force feedback for virtual reality (VR) props, and enhancing eyes-
+free inputs on smart wearables. Researchers have explored the 
+rapid personalized manufacturing of passive feedback and motion, 
+leveraging passive mechanisms such as 3D printing spring [16], 3D 
+printing linkages [22], 3D printing hinge, embedding Magnet [44], 
+laser-cutting plastic compliant structures [23, 38], and cutting and 
+folding Kirigami-based button [2]. 
+CHI ’24, May 11–16, 2024, Honolulu, HI, USA Yue Yang, et al. 
+Although these methodologies have exhibited effectiveness in 
+various scenarios, they may encounter constraints when applied 
+to enhancing inflatable soft interfaces. This is mainly attributed to 
+the introduction of rigid materials, which compromise the inherent 
+benefits of inflatable objects, such as comfort, safety, and ease of 
+storage. The non-linearity of inflated objects also presents chal-
+lenges in employing these methodologies seamlessly. The approach 
+of embedding haptic feedback on fabric, as demonstrated in [13], is 
+not suitable for inflatable objects because digital embroidery would 
+compromise the integrity of the inflatable structure. As such, there 
+is a pressing need to devise approaches that enable the incorpora-
+tion of passive tactile feedback or deformation effects into inflatable 
+soft interfaces while preserving their advantages. 
+SnapInflatables achieves the augmentation of passive feedback 
+and simple motion control in inflated objects through heat-sealing 
+structures. This approach preserves the advantages and use cases 
+of inflated objects while remaining compatible with common man-
+ufacturing methods of inflatables. 
+3 OVERVIEW OF SNAPINFLATABLES 
+3.1
+ Machanism and Basic Behavior of 
+SnapInflatables 
+The snap-through instability of inflated objects comes from the bi-
+directional bending mechanism similar to [31]. When a flat airbag 
+composed of nearly inextensible materials is subjected to inflation, 
+the outline of the airbag contracts inward due to expansion in 
+the direction of thickness of the airbag in Figure 2a. During this 
+process, the presence of point-like heat-sealed spots reduces nearby 
+gas content, and limited contraction space on the plane facilitates 
+the formation of radial creases. Additionally, at the edge of the 
+airbag, limited contraction along the edge direction also leads to 
+one or several creases. If two thermoplastic points are sufficient, 
+these creases align along the line connecting them. The parallel 
+tension stiffness of these "folded creases" increases while their 
+vertical shear stiffness decreases. This internal change in stiffness 
+gives rise to bistability (Figure 2b): Under the compression inward, 
+the airbag tends to fold in regions with lower stiffness, with the 
+option of two opposite directions. When a force exceeding a specific 
+threshold is applied, the structure undergoes an abrupt transition 
+to the alternative stable state, resulting in a tactile "click" sensation, 
+and it remains in this state even after the force is released. 
+3.2 Design Space 
+We are motivated to harness the benefits of snap-through insta-
+bility in SnapInflatables structures which opens up a new design 
+space for creating tangible interaction with inflated objects without 
+connecting a pump, enabling responsiveness to human input and 
+environmental stimuli through snap-through transformations. We 
+present a diagram described in Figure 3 to map out the design space 
+of SnapInflatables: 
+1) Motion type. SnapInflatables introduces heat-sealing struc-
+tures primitives to achieve a wide array of bistable motions and a 
+combination of control and output actions, with motions in differ-
+ent planes and directions. 2) Motion range. The range of motion is 
+controlled by the geometric parameters of the internal heat-sealed 
+patterns. 3) Response speed and force. Response speed and force 
+Figure 2: Mechanism of SnapInflatable with snap-through 
+instability. (a) Inflation compresses the airbag externally 
+towards the center. (b) The schematic representation of a 
+potential energy curve is plotted to elucidate the fundamen-
+tal principles underlying the snap-through buckling mecha-
+nism. (c) Rapid switching of stable states. 
+feedback can be finely tuned through adjustments of internal pres-
+sure. 4) Trigger sensitivity. A blocking structure facilitates a rapid 
+transition from a high-energy barrier to an ultra-sensitive state. 
+5) Interaction Scale. The flexibility in size and materials allows 
+for interaction across diverse scales, from fingertip to whole-body 
+scale, and integration with existing inflatable objects. 
+In our applications, we leverage the advantages of snap-through 
+instability for interaction, including self-sensing and responsive 
+behavior, shape reconstruction, and snap-through haptic feedback. 
+4 STRUCTURAL DESIGN OF 
+SNAPINFLATABLES 
+Through the design of heat sealing patterns, we derive three major 
+output motions and three indirect motion controls that have snap-
+through instability. The direct motion unit and indirect control 
+units are categorized by whether the external input force or motion 
+and the reaction of the inflated airbag are in the same direction. 
+Figure 4 gives an overview of the cut-and-sealing structure, stable 
+state, and motion that each primitive offers. Below, we enumerate 
+the structure and motion effect of each unit. 
+4.1 Direct Control Types 
+The direct motion units enable an inflated airbag with multiple 
+stable states in various orientations. These states are associated 
+with distinct shape transitions and motion effects, such as planar 
+bending, vertical bending, and bidirectional coaxial twisting. As 
+the structure was pushed or turned, it would rapidly transform 
+into another state, like bending or twisting to the opposite side to 
+preserve its stability. Each motion unit permits customization of 
+motion range through the parameterization of its intrinsic pattern, 
+which will be subjected to experimental analysis in forthcoming 
+Section 5.1. Planar-Bend unit with bi-points configuration enabled 
+an inflated object to bend laterally in the original plane prior to 
+inflation (Figure 4a). This is due to the tendency of two points to 
+form creases or exhibit a trend of forming creases, resulting in 
+SnapInflatables: Designing Inflatables with Snap-through Instability for Responsive Interaction CHI ’24, May 11–16, 2024, Honolulu, HI, USA 
+Figure 3: Design space of SnapInflatables. 
+Figure 4: The structural library of SnapInflatables. 
+an increase in stiffness along the long axis of the inflatable. How-
+ever, the overall inflatable experiences a contracting force due to 
+inflation. Therefore, the entire bi-point inflatable structure can be 
+equivalent to a buckled system composed of a spring and an elastic 
+rob. Vertical-Bend with quadruple-point configurations permitted 
+an inflated object to fold vertically to the original plane (Figure 
+4b). Building upon the equivalent model of the bi-point configura-
+tion, the addition of two points along the transverse central axis 
+increases the transverse stiffness. The connecting lines and their 
+extension to the edges of the inflatable enhance the transverse 
+stiffness, equivalent to a transverse elastic beam. The two beams 
+form a cross structure, making the behavior of the quadruple-point 
+inflatable tend to resemble a buckled system folding around the 
+transverse axis. Coaxial-Twist with penta-points configurations 
+form two orthogonal folding creases on each surface, resulting in 
+bistable states in the twisted position, allowing bidirectional torsion 
+(Figure 4c). The five points create a cross-shaped folding crease, 
+and the cross-shaped equivalent elastic rod structure restricts the 
+bending deformation of the inflatable. However, due to the weaker 
+stiffness at the central point, the inflatable can twist around here, 
+and the creases at the points’ connecting lines also provide space 
+for deformation. 
+4.2 Indirect Control Types 
+To enhance interaction with inflatable objects, our study system-
+atically explored three indirect motion control units. These units 
+were designed for situations where external forces, such as those 
+exerted by humans, triggered responses from the inflatable object 
+CHI ’24, May 11–16, 2024, Honolulu, HI, USA Yue Yang, et al. 
+that were different from the input. Additionally, these structures 
+were engineered to enable minor input motions to produce sig-
+nificant deformations or movements on a larger scale. This was 
+achieved by strategically employing heat-sealing structures, elimi-
+nating the need for additional mechanical elements. Each control 
+unit displayed characteristics of snap-through instability, where an 
+external force applied energy beyond a certain threshold, resulting 
+in a snap-through buckling event. This phenomenon produced a 
+distinct directional output motion, and the altered shape remained 
+stable even after removing the applied force. 
+T-Fold. The T-shaped inflatable structure, featuring a diamond 
+arrangement of four points with an extra point below, divides the 
+inflatable into three zones (see Figure 4d): left, right, and top regions. 
+This design facilitates coordinated movements among the three 
+segments, enabling multi-planar bending around their intersection 
+point. In this setup, manipulating the two shorter arms (left and 
+right) simultaneously influences the behavior of the third, top arm 
+within the vertical plane. Applying inward pressure on the shorter 
+arms induces their rotation towards the user in the horizontal 
+plane. This action controls the top arm vertically, causing it to fold 
+away from the user within the same plane. This interplay allows 
+for complex, user-directed manipulation within a defined spatial 
+configuration. As shown in Figure 4d, adding a lower point extends 
+the vertical crease, facilitating lateral folding of the lower segment. 
+When a contracting force is applied, the inflatable exhibits bistable 
+buckling characteristics. The folding axes converge at the junction 
+of the four points, fostering mutual coupling of movements in both 
+vertical and horizontal planes. 
+Cross-Fold. The Cross-fold unit is a cross-shaped inflatable 
+object with two sets of diamond-patterned points arranged on op-
+posing sides of its central region, connected by points in the middle 
+(Figure 4e). This configuration allows for controlling lateral arms 
+to drive the top and nether arms bending in the vertical direction, 
+inversely, controlling the opening and closing of the top and nether 
+arms enables the rotations of the other two arms in the horizontal 
+plane. For example, if a user squeezes the left and right inflatables 
+towards himself in the horizontal plane, he can control the rotation 
+of the top and nether large inflatables away from himself with snap-
+through feedback. The principle of this phenomenon is consistent 
+with that of T-fold, with the difference being the mirroring on 
+the other side of the T-shaped inflatable, achieving symmetrical 
+deformation and control. 
+Cross-Flip. Cross-Flip unit, a cross-shaped inflatable object with 
+a central four-point configuration and extension points, exhibits 
+snap-through instability (Figure 4f). Applying an input force at the 
+center of the arch will trigger concave deformation, causing the 
+surrounding arms to flip upward. The structure shown in Figure 4f 
+is similar to that in Figure 4e, but the distance between the middle 
+four points is larger, and the wrinkles near each point cannot be 
+connected. Therefore, it fails to form a local saddle shape. However, 
+for the entire symmetrical structure, it can be similarly considered 
+as a cross-shaped elastic rod, the contracting force of the inflatable 
+is equivalent to a cross-shaped spring. This configuration forms a 
+planar buckled structure with a rhombus face in the middle, similar 
+to the cap of a jam jar with two stable points, one above and one 
+below. 
+4.3 Block structure: Rapid Transition of Trigger 
+Sensitivity 
+To achieve an ultra-sensitive state, we introduce a "blocking" struc-
+ture on the sides, which confines the bistable structure to its inter-
+mediate state, situated between the stable states (Figure 5). During 
+this phase, there is an exceptionally low energy barrier, and the 
+stored strain energy approaches its maximum level, making it easy 
+to trigger with efficient energy release. 
+The bistable side wing structures in this study exhibited both 
+stability and the capacity for rapid reshaping. This characteris-
+tic facilitated a swift shift in trigger sensitivity within a single 
+airbag, transitioning from a high-energy barrier state, which typi-
+cally presents significant triggering challenges, to an ultra-sensitive 
+state. Figure 5 delineates these effects. A rapid modification of the 
+side wings’ state significantly reduced the minimum trigger force 
+needed to initiate snap-through, potentially to as little as 5% of 
+the maximum value, as demonstrated with steel balls of 100 g and 
+5 g. The experimental configuration was meticulously controlled, 
+maintaining a uniform distance of 8 cm from the joint to both the 
+100 g and 5 g loads (Sample Size: 32 cm × 6 cm). To ensure the 
+robustness and repeatability of results, this experimental protocol 
+was meticulously executed 20 times. In three instances of the ex-
+periment, the application of a 5g load failed to initiate activation. 
+This is hypothesized to be attributable to a positional deviation in 
+the blocking structure, compromising its sensitivity. 
+Figure 5: Transition of trigger sensitivity through block struc-
+ture. (a) High energy barrier state with a load of 100 g. (b) 
+Changing the folding direction of the block structures. (c) 
+Close-up view of block structure. The original inflatables 
+switch to an ultra-sensitive state and will be triggered by a 
+load of 5 g. 
+5 INVESTIGATION ON TUNABLE MOTION 
+Various parameters, such as structure and internal pressure, can 
+affect the snap-through motion characteristics of inflatables. Cur-
+rently, there is no standardized design method for creating inflata-
+bles with snap-through disability. SnapInflatables allows tunable 
+bistability in different methods. In this section, we validate and 
+evaluate the general applicability of the proposed structure and 
+SnapInflatables: Designing Inflatables with Snap-through Instability for Responsive Interaction CHI ’24, May 11–16, 2024, Honolulu, HI, USA 
+Figure 6: Testing key geometrical parameters of six kinds of motion types. 
+establish a systematic design methodology by comparing the trig-
+ger force of steady-state switching, the deformation effect, and the 
+response time of the structure under different design parameters. 
+All test samples in Section 5 were made by nylon-coated TPU 
+material (yarn density of 210 D). The manufacturing process of 
+all test samples follows a methodology similar to [7]. Specifically, 
+a 3D printer was promptly modified to thermally seal the nylon-
+coated TPU with the same parameters (200 ℃, 100 mm/min) used 
+for all inflatable samples. Heat-sealable fabrics with thermoplastic 
+coatings are readily available commercially, and the stacked layer 
+assembly of such fabrics is a well-established process in the textile 
+industry for the rapid and low-cost production of textile laminates 
+at scale. 
+5.1 Geometry Parameter 
+The geometric parameters of the heat-sealing pattern, including 
+point size, spacing, and proximity to edges, have a notable impact 
+on steady-state characteristics. Our key test parameter is point 
+spacing, with a primary focus on investigating the range of motion, 
+particularly the steady-state position. The main body width of the 
+test samples is 60 mm. Data were derived from min-max plots with 
+three repeated experiments per setup. 
+5.1.1 Two Points: Planar-Bend. Increasing the distance between 
+two points from 10 mm to 70 mm in 10 mm increments, we observe 
+an increase followed by a decrease in the planar bending angles, 
+peaking at 48.3° torsion at 40 mm, as shown in Figure 6 a. If the 
+distance is too far, the two points become difficult to interact with 
+each other, while if the distance is too short, the two points can be 
+regarded as one point. 
+5.1.2 Four Points: Vertical-Bend. For the Vertical-Bend structure, 
+both vertical and horizontal point distances are key geometric pa-
+rameters. To facilitate measurement and achieve the most notice-
+able deformation angles, we fixed the horizontal distance at 20 
+mm and varied the vertical distance from 10 mm to 50 mm in 10 
+mm increments, resulting in a gradual decrease in the inflatables’ 
+vertical bending angle (Figure 6b). 
+5.1.3 Five Points: Coaxial-Twist. In the Coaxial-Twist structure 
+with a fixed center point, angles between the line from the non-
+central point to the center point and the horizontal were adjusted 
+from 15° to 65°, increasing by 5° intervals. The torsional motion 
+range first increases, then decreases with angle changes, peaking at 
+36.7° torsion at 50° (Figure 6c). This is because as the angle decreases, 
+the angular crease formed from point to point also decreases, while 
+when the angle increases, the distance between points becomes too 
+large, reducing the pinning effect. 
+5.1.4 T-Fold and Cross-Fold. The T-Fold structure and Cross-Fold 
+structure, derived from the Vertical-Bend structure, demonstrate 
+deformation range patterns affected by vertical point distance. This 
+aligns with the experimental results of the Vertical-Bend structure, 
+indicating a larger range of motion with a smaller vertical point 
+distance (Figure 6d and e). 
+5.1.5 Cross-Flip. In the Cross-Flip structure test, by fixing four 
+points on the outer ring and adjusting the distance between them 
+and four points on the inner ring, we observed a maximum arch 
+height of 38.4 mm(indicating a larger motion range) at a 30 mm 
+distance(Figure 6f). We noted that when the distance fell below 
+20mm, the expansion height of the central airbag surpassed the 
+CHI ’24, May 11–16, 2024, Honolulu, HI, USA Yue Yang, et al. 
+entire airbag’s arch height, resulting in the absence of snap-through 
+instability. 
+5.2 Scale 
+Upon scaling the structure to different sizes, consistent snap-
+through instability and similar motions were observed across all 
+sizes. Furthermore, the influence of Geometry Parameters on the 
+motion range, as detailed in Section 5.1, displayed similar trends in 
+airbags of varying sizes. 
+We compare the deformation angles of six different structures 
+in large and small samples with a 4:1 size ratio. In the Cross-Fold 
+structure, the small sample was 15 mm wide, and the large one was 
+60 mm to ensure heat-sealing the sample in a single process. For the 
+other five structures, the small samples were 30 mm wide, and the 
+large ones were 120 mm. The experimental data exhibited consistent 
+deformation angles between the large and small samples (Figure 7). 
+However, subtle differences in the motion range were noted upon 
+uniform scaling, particularly in the Planar-Bend structural units. 
+This discrepancy was postulated to be the result of several factors: 
+(1) non-proportional scaling of print path widths, causing uneven 
+changes in the rigidity of the indented areas; (2) gravitational effects 
+on different sizes; (3) fluctuations in inflation and compression at 
+the airbag’s bending point, restricting its motion range; and (4) vari-
+ations in print quality across batches. These elements contributed 
+to inaccuracies in the anticipated motion range within our software 
+tool. 
+Figure 7: Testing different scales of six kinds of motion types. 
+5.3 Internal Air Pressure 
+Different internal pressures can adjust the interactive performance 
+of the inflatable structure. For bistability performance, increased 
+internal pressure enhanced airbag rigidity [41], subsequently in-
+creasing the trigger force and response speed [12]. 
+A four-point Vertical Bend motion type was employed as an 
+example to assess this effect, measuring trigger force, response time, 
+and bending angle in 140 mm by 60 mm inflatables. The inflatables 
+were filled for accurate internal pressure measurements using a 
+pressure-regulating valve. Figure 8 revealed a positive correlation 
+between trigger force and air pressure, with a 2.5-fold variation 
+in trigger force. Conversely, steady-state switching response time 
+was inversely related to air pressure, showing a 3.5-fold variation. 
+Changes in pressure have minimal impact on airbag deformation 
+(less than 1° difference), demonstrating the effectiveness of pressure 
+adjustments in modulating airbag force behavior. 
+Figure 8: Internal air pressure testing. (a) Adjusting the in-
+ternal air pressure of an already-made airbag can modify its 
+performance of snap-through instability. The trigger force 
+of the airbag is positively correlated with the air pressure, 
+while the response time is negatively correlated with the 
+air pressure. (b) Experimental setup of force measurement 
+parameters. 
+6 DESIGN TOOL 
+Since the shape and motion of inflatables are hard to imagine, 
+We developed a design tool to conveniently customize interactive 
+inflatable structures with multi-stable properties. The design tool 
+is a plugin for Rhinoceros1 , built with Grasshopper2 , Kangaroo3 
+and HumanUI4 . 
+The tool mainly consists of three parts, including Joint Type 
+Selection, Joint Adjustment, and Inflation Preview. The Joint Type 
+Selection panel provides 6 types of motion for users to choose from. 
+The Joint Adjustment panel contains the location button and adjust-
+ment settings for the designed motion. Users can drag the Motion 
+Range slider to parameterize motion range and rapidly preview 
+the motion of 2D patterns. Finally, the Inflation Preview panel al-
+lows the user to view the 3D inflation simulation, which facilitates 
+user-driven design iterations for inflatable interaction behavior. 
+6.1 Design Walkthrough 
+In this section, we provide an example design walkthrough of using 
+our design tool to create a 3D interactive inflatable seagull (Figure 
+10). For this, the user needs to design the motion joints on the 
+seagull. The whole design platform of the seagull is based on the 
+2D and 3D environment of Rhinoceros. 
+Step 1. Import Outline: In the Rhino editing environment, a user 
+first clicks the Import Outline button to import a 2D seagull outline. 
+(Figure 9a). 
+Step 2. Select Type: The design tool allows the user to choose the 
+desired type of motion from the drop-down list. The icons above 
+introduce six motion types, once the user selects one, the Guidance 
+1https://www.rhino3d.com/
+2https://www.grasshopper3d.com/
+3https://www.food4rhino.com/en/app/kangaroo-physics
+4https://www.food4rhino.com/en/app/human-ui 
+SnapInflatables: Designing Inflatables with Snap-through Instability for Responsive Interaction CHI ’24, May 11–16, 2024, Honolulu, HI, USA 
+Figure 9: Interface of SnapInflatable design tool. 
+Figure 10: SnapInflatable workflow: (a) Import 2D outline. (b) Choose the target motion type. (c) Set the joint position. (d) 
+Preview and adjust the motion range. (e) Simulate the inflating effect and the switch of stable states. (f) (Optional) Add another 
+joint and repeat the previous steps. (g) Export the generated printable pattern. 
+image will pop up below to show the referenced motion effect of 
+the chosen type (Figure 9a). 
+Step 3. Set Location: After selecting a motion type, the user is 
+required to set the joint location to decide which parts of the seagull 
+are going to rotate. According to the Guidance which shows an 
+example of the location, the user clicks the Set Location button and 
+selects the specified area on the seagull outline (Figure 9a). After 
+the selection, the tool captures possible operation failures: if the 
+size of the imported model is not suitable for the joint, the joint will 
+not be able to perform the original motion. Therefore, we added 
+an Alerting Function to report errors and remind users to leave 
+enough space for the joint (Figure 11). Besides, we also display 
+design guidance for each motion type to help users better set the 
+joint location. 
+Step 4. Adjust Range: To obtain a rapid preview of the designed 
+motion, the user can open the Motion Preview button and drag the 
+Adjust Range slider to set the motion range. Then the user can adjust 
+the motion between two stable states and preview the deformation 
+of the 2D seagull pattern, which presents a synchronized three-
+dimensional effect of the flattened geometry folding (Figure 9a). 
+Optional steps. In this case, the seagull has more than one mov-
+able joint with different motion types. Our tool allows the user to 
+add more joints by clicking the Add Joint button and repeating the 
+above steps (Figure 9a). For the Y-bend motion type, the user can 
+also choose to Add Ultra-sensitive Structures by clicking the button 
+(Figure 9b). 
+Step 5. Simulation: Then the user can open the Start Inflation 
+Preview button to see the inflated simulation of the selected joint 
+in the 3D view. Basically, the user can switch the stimulation states 
+through the Stable State options (Figure 9b). And if the user needs to 
+preview the entire inflated simulation again from the beginning 2D 
+pattern, the Process Refresh button is there to realize it. Furthermore, 
+CHI ’24, May 11–16, 2024, Honolulu, HI, USA Yue Yang, et al. 
+Figure 11: Joint Location Instruction. (a) The interface will present the corresponding guidance picture after the user selects 
+the motion type, allowing the user to see the reference effect and remind to enter a red line or wireframe to set the joint. (b-c) 
+Alerting function: The semi-transparent area indicates the space required when positioning the joint. If the external outline is 
+too short relative to the joint (b), or the distance between the two is too close when placing multiple joints (c), the software 
+interface will display Error text, and the modeling area will show the visual alert. 
+if the user chooses more than one joint, our design tool will provide 
+an extra drop-list called Main Joint. The user can select one of the 
+joints from the drop list and choose its state. This function allows 
+the user to rapidly switch the desired state of different joints to 
+obtain different simulation results. 
+Step 6. Export: Finally, the user engages the Export function 
+to generate a 2D printable schematic, which amalgamates the ini-
+tially outlined design with the motion structure conceived. This 
+schematic is subsequently inputted into a 3D printer, facilitating 
+the tangible realization of the model (refer to Figure 9b). 
+In terms of customization, the user possesses the option to either 
+irrevocably seal the air injection port or affix a valve apparatus to 
+the inflatables, contingent upon the specific requirements of the 
+application. This modification enables repeated inflation and defla-
+tion cycles and permits fine-tuning of the trigger force associated 
+with the bistable structure. 
+7 ASSISTIVE STRUCTURES 
+Figure 12: Assistive structures. (a) Assistive Kirigami struc-
+ture for fixing inflatables. (b) Self-sealing structure. (c) Gas 
+blocking and pressure adjusting structure for force adjust-
+ment. 
+7.1 Assistive Fixed Structure 
+We designed a structure enabling users to attach inflatables to di-
+verse objects, such as stretchers, large inflatable products, and even 
+human bodies (see Figure 12a). Since fixing any point of the de-
+formable structure onto the original object is impractical due to the 
+need for all inflated structure points to move relative to the original 
+object, we devised edges with flexible Kirigami structure beyond 
+securing inflatables using velcro and hot pressing directly onto 
+existing surfaces, inspired by [2], This Kirigami structure permits 
+the attachment of the deformable structure to the existing object’s 
+surface while allowing its edges to move freely. The tensile proper-
+ties of the Kirigami structure influence the snap-through instability. 
+A densely cut Kirigami structure with sufficient stretchability en-
+ables the inflatable to exhibit bistable behavior, while a sparsely 
+cut Kirigami with limited stretchability results in a monostable 
+behavior with bounce-back effects. 
+7.2 Self-Sealing Structure 
+A flipped multi-layer structure near the air inlet that utilizes the 
+expansion of the inflated airbag to squeeze the air opening (Figure 
+12b). This allows the airbag to automatically seal after inflation 
+without the need to connect an air hose. When it is time to deflate 
+or re-inflate, the inlet port can be directly inserted by the air tube 
+to adjust the gas status again. 
+7.3 Gas Blocking Structure 
+A narrow airway between the bistable structure and the additional 
+storage inflatables allows the gas to flow between the two spaces 
+only when manually applying force to the critical area and remains 
+in the new stable state after the external force is removed (Figure 
+12c). This allows the user to manually change the inflation level of 
+the inflatables, which is used to change the form factor and force 
+behavior as mentioned in Section 5.3. 
+8 APPLICATION EXAMPLES 
+8.1
+ Responsive Self-Locking Stretcher 
+The self-sensing and rapid actuation of SnapInflatables makes it suit-
+able for emergency rescue. In this study, we developed a stretcher 
+that can quickly self-lock using the bistable structure in Figure 13. 
+When medical staff lifts the patient onto the stretcher, the gravity 
+SnapInflatables: Designing Inflatables with Snap-through Instability for Responsive Interaction CHI ’24, May 11–16, 2024, Honolulu, HI, USA 
+of the patient triggers the bistable structure to quickly switch states, 
+make the Velcro at the end of the trap contact and bond together, 
+forming an "inflatable belt" that limits and protects the body of the 
+patient. This design eliminates the need for traditional elastic bands 
+on the stretcher, improving treatment speed. 
+Figure 13: Responsive self-locking stretcher. 
+8.2 Interactive Inflatable Animals 
+Snap-through instability can create fascinating interactive behav-
+iors. We have utilized bionic design to create several interactive 
+animals (Figure 14), ensuring both playability and interaction safety. 
+For instance, we applied cross-control in a seagull mechanism, 
+making its wings move up and down by oscillating its head and 
+tail (Figure 14a). The circuits embedded on the surface can detect 
+bistable transformations through changes in connectivity. The sig-
+nals are transmitted via Bluetooth to a computing device, serving as 
+a game controller. Users can manipulate the posture of this realistic 
+bird to control the flight of a digital bird in the game. 
+Figure 14: Interactive inflatable bionic design. (a) The 
+Fluttering-seagull game controller with circuits embedded to 
+virtually play the Flappy Bird game. (b) The shape-shifting 
+lizard. (c) The elephant whose nose drives its ears. 
+We have also developed a shape-changing lizard with multiple 
+joints that can move its head, limbs, and body trunk in various 
+directions (Figure 14b). Users could select different target poses 
+for storytelling. In another case, a bistable structure in the trunk 
+region induces a sudden change in the shape of the elephant’s 
+ears indirectly, causing them to stand upright when the trunk is 
+pulled downward (Figure 14c). Upon release, the elephant’s ears can 
+remain raised. Additionally, the trunk exhibits flexibility, allowing 
+it to bend at different angles. 
+8.3 Bounce-Back Wearable Button 
+Inflatables with snap-through bistability provide tactile feedback. 
+We integrated a button into clothing with click-feel bounce-back 
+haptic feedback (Figure 15), facilitating the sick and the elderly 
+to report situations and call for help during emergencies. This 
+enables reporting and seeking assistance without using a phone 
+or relying on visual contact. The material of inflatables is durable, 
+washable, and seamlessly integrates with common fabrics through 
+heat-sealing, making it highly suitable for wearable applications. 
+The button structure itself possesses bistability. After being installed 
+on clothing, when pressed, the button experiences resistance and 
+rebound from the elastic surface of the skin, causing the button 
+to bounce back. This feature enables continuous and repeated use. 
+This feature enables users to repeatedly press the button and receive 
+continuous tactile feedback. 
+Figure 15: Wearable Button with snap-through bounce back 
+haptic feedback. 
+8.4 Large-scale Deformable Lighting 
+SnapInflatable can be used to create large and lightweight furniture, 
+offering tactile feedback for interaction. Figure 16 displays a light, 
+safe, and easily storable lamp that measures 1.45 m long when 
+inflated. The bistable structure can alter the lamp’s shape and switch 
+the circuits on both sides, changing the light direction and providing 
+a natural and comfortable interaction. 
+Figure 16: Large-scale deformable lighting (a) Portable stor-
+age state of the lamp; (b) Opened after inflation; (c-d) Bistable 
+switching of lighting direction. 
+8.5 Shoelace-free Sneakers 
+SnapInflatables can be integrated into the shoe sole, using bistable 
+inflatables to provide more convenient securing measures than 
+shoelaces. When the user steps into the shoes, the bistable struc-
+ture in the sole experiences force, triggering a state change and 
+automatically securing around the ankle. When taking off the shoes, 
+the user can step on the heel, utilizing the bistable transition to 
+easily slip out. Compared to concept shoes with similar functions 
+relying on mechanical hinges, SnapInflatables allows the sole to 
+possess bistable characteristics while being seamlessly integrated 
+during fabrication. 
+CHI ’24, May 11–16, 2024, Honolulu, HI, USA Yue Yang, et al. 
+Figure 17: Shoelace-free sneakers (a-b) Sneakers in idle state 
+with the opening wide. (c) When pressure is applied to the 
+sole of the sneakers, it triggers a stable state transformation, 
+resulting in the flattening of the sole. 
+9 DISCUSSION, LIMITATION, AND FUTURE 
+WORK 
+9.1
+ Size, Thickness & Material 
+The fabrication of large-sized inflatables can be achieved through 
+various methods, including CNC and manual ironing for heat press-
+ing. We have accumulated some experience creating heat-sealing 
+patterns with an FDM 3D printer, especially considering its lim-
+ited build-platform size. In terms of print path settings, we suggest 
+dividing large-sized patterns, leaving some overlapping areas to 
+enhance durability and stability at the joints, and placing auxiliary 
+alignment points around the split patterns for better alignment. 
+Regarding hardware, placing long rollers at the bottom sides of 
+the raised printer platform enables sectional printing of materials. 
+When creating large-sized bistable inflatables, the heat-pressed in-
+flatables’ wiring diameter cannot be increased using the printer, 
+and the heat-pressed points are prone to stretching. Future work 
+can focus on further optimizing software design tools and hard-
+ware modifications to expand the printer’s capability for producing 
+large-sized inflatables. 
+We have conducted initial tests to examine the influence of vary-
+ing sizes, thicknesses, and materials on triggering force. The results 
+indicate a positive correlation between thicker materials, larger 
+sizes, and increased triggering force. 
+9.2 Robustness and Safety 
+To evaluate the robustness and safety of SnapInflatables, we con-
+ducted a test where a person weighing 73.2 kg stood on the inflata-
+bles without any support. The results showed that the inflatables 
+did not rupture, and their trigger force, deformation degree, and 
+other parameters did not change significantly. 
+9.3 Fatigue Test and Durability 
+To assess the durability and performance of our inflatable system, 
+we conducted a comprehensive evaluation involving repetitive ac-
+tuation of the inflatables. Using a robotic arm, we moved the inflata-
+bles back and forth 1000 times, constantly switching its steady state. 
+The test results showed that the changes in deformation degree, 
+trigger force, and response time were less than 5%, demonstrating 
+the durability of SnapInflatables. 
+Figure 18: (a) Varying yarn density in nylon-coated TPU sam-
+ples resulted in trigger force differences from 9.69 N to 4.63 
+N. (b) Tested samples of different sizes (70 mm × 30 mm to 
+280 mm × 120 mm) exhibited trigger force variations, with 
+the largest airbag at 10.23 N and the smallest at 2.02 N. (c) Ma-
+terial tests, including nylon-coated TPU, Polyamide coated 
+Polyethylene, and TPU, demonstrated suitability for con-
+structing bistable structures with trigger forces ranging from 
+1.07 N to 4.63 N. 
+Inflatable structures inevitably experience minor air leakage over 
+time, which can alter the triggering force and response speed. We 
+conducted a preliminary control experiment. The triggering force 
+and response speed decrease by 5% after 14 days. The rate of air 
+leakage is similar to that of common existing airbag products and 
+remains within an acceptable range, not significantly impacting 
+usability. 
+9.4 Mechanical Analysis of Instability 
+In this paper, we have presented a comprehensive behavior library 
+of SnapInflatables, along with the design tool and user interface. 
+However, due to the significant nonlinearity of air aerodynamics, 
+detailed mechanical calculations and dynamic simulations have 
+not been included yet. Our future work will incorporate quantita-
+tive mechanical feedback to elucidate the governing rules of the 
+airbag structure under various input excitations and dynamic re-
+sponse characteristics including internal air pressure, trigger force, 
+response time, and bending angle. To deliver more precise simula-
+tion results, future iterations of the design tool will also focus on 
+integration with finite element analysis (FEA) platforms tailored for 
+inflatable structures. This endeavor aims to enhance the adaptabil-
+ity of our design software in meeting users’ specific requirements, 
+thereby stimulating a broader design space. 
+9.5 Choice of Heat-Sealing Patterns 
+This study’s core investigation centered on the use of dot-shaped 
+indentations to control snap-through instability. Future research 
+will extend to line indentations and inflatable contour designs for 
+similar effects. Dot indentations were chosen primarily for their 
+SnapInflatables: Designing Inflatables with Snap-through Instability for Responsive Interaction CHI ’24, May 11–16, 2024, Honolulu, HI, USA 
+unique coaxial twisting potential and their ease of fabrication, en-
+hancing manufacturing efficiency and alignment with heat-sealing 
+tools. Such simplicity of use made reconfigurable dot-shaped in-
+dentations an exciting future endeavor and exploration, inspired 
+by [1]. 
+In our preliminary experiments, strong magnets were used as 
+an alternative to heat-sealing to achieve bi-stable control (Figure 
+19). Magnets that attract on the opposite surface of the inflatables 
+were observed to induce a degree of bistability, especially when the 
+internal air pressure was relatively low. This discovery validates 
+the potential for reconfiguring the positions, types, and behavior of 
+bistable structures within the inflatables. However, it is important to 
+note that when the internal air pressure becomes too high, magnets 
+may disengage. Therefore, future work may explore more powerful 
+methods to achieve reconfiguration. 
+Figure 19: Exploring experiments involving the creation of 
+structures with snap-through instability using repositionable 
+magnets. 
+9.6 Other Influence Factor of Snap-Through 
+Instability 
+In addition to the factors we have analyzed and experimented with 
+previously, stable states are influenced by various other factors. 
+Heat Sealing Direction. The stability of the two stable states 
+slightly differs, and it is associated with the direction of the heat-
+sealing patterns. Similar to what has been observed with Aero-
+Morph [31], the inflatables tend to fold preferentially in the direc-
+tion of the 3D-printed heat-sealing lines. This direction corresponds 
+to stronger stability in the stable state. 
+Edges. The presence of excess material on the outer edges of 
+the inflatable plays a significant role. The folding direction of the 
+material affects stability. By minimizing excess material at the edges 
+or strategically increasing it, we can achieve effects similar to rein-
+forcing the locking of the inflatables in a particular stable state. 
+Manipulating the edges in this manner generates an asymmet-
+rical triggering force in the overall bistable property. Excessive 
+thickness in edge materials can even lead to inflatables exhibiting 
+mechanical performance resembling a singular stable state. This 
+observed relationship allows us to effectively modulate the force 
+behavior of a single inflatable object by adjusting its inflation pres-
+sure. 
+9.7 Force Limit with Potential Design Scenarios 
+The motion hinges created by the heat-sealing patterns have a 
+restricted trigger force and limited force feedback, consequently 
+constraining the length of arms they can actuate. Despite this lim-
+itation, they possess significant potential applications in security 
+interactions, including haptic feedback and information display. 
+For scenarios demanding a more robust force, supplementary ac-
+cessories like Velcro can be employed to enhance the force. Self-
+responsive inflatables can trigger the combination of accessories 
+like Velcro for augmented force. 
+9.8 Actuation Methods and Compatibility with 
+Other Technologies 
+Our structural design is adaptable to various triggering sources 
+other than mechanical loading. It can respond to diverse actuation 
+inputs, including temperature, moisture, light, electricity, or shape 
+memory alloy (SMA) [32], as well as magnetic fields. In the fu-
+ture, it can be integrated with mobile robots [24] to expand spatial 
+interaction possibilities. Furthermore, our structure, designed for 
+rapid response effects, complements existing fabrication methods 
+of inflatables, such as those described in [33]. 
+10 CONCLUSION 
+In this study, we present an innovative approach to designing 
+and fabricating inflatables that harness the power of snap-through 
+instability for responsive interaction. Our methodology involves 
+six types of heat-sealing patterns that induce snap-through mo-
+tions and offer control operations in versatile directions within 
+inflatables. The incorporation of a block structure allows for swift 
+transitions to an ultra-sensitive state, triggered by a force change 
+to just 5% of its maximum value. Through experimental analyses, 
+we have effectively controlled the motion range via geometry pat-
+terns and adjusted force behavior by modulating internal pressure. 
+Furthermore, we have developed a design tool that facilitates the 
+creation and visualization of custom inflatables, tailoring shape 
+change effects and motion interactions. Demonstrated applications 
+of SnapInflatables, including healthcare stretchers, dynamic inter-
+active animals, and a wearable bounce button, have highlighted 
+the immense potential of inflatable objects featuring snap-through 
+instability. These applications showcase their capabilities in shape 
+reconfiguration, self-sensing and actuation, and enhancement of 
+haptic feedback. Notably, SnapInflatables allow for rapid passive 
+interaction without the need for continuous pumps. Looking ahead, 
+we envision SnapInflatables revolutionizing the way designers and 
+manufacturers leverage inflatable technology to create interactive 
+experiences across diverse scales and scenarios. 
+ACKNOWLEDGMENTS 
+This project is supported by the Zhejiang Provincial Natural Sci-
+ence Foundation of China under Grant No. LR24F020001 and No. 
+LY23F020020, as well as the Fundamental Research Funds for the 
+Central Universities (No. 2022FZZX01-22). We extend our apprecia-
+tion to Yitong Wang for her contributions to the initial experiments 
+and ideation, Ye Jian for suggesting lighting applications and pro-
+viding assistance with figure typography, and Haotian Chen for 
+aiding in the evaluation experiments. 
+REFERENCES 
+[1] Robert L. Baines, Sree Kalyan Patiballa, and Rebecca Kramer-Bottiglio. 2021. 
+Rapidly Reconfigurable Inextensible Inflatables. In 2021 IEEE 4th International 
+Conference on Soft Robotics (RoboSoft). IEEE, New Haven, CT, USA, 29–34. https: 
+//doi.org/10.1109/RoboSoft51838.2021.9479435 
+CHI ’24, May 11–16, 2024, Honolulu, HI, USA Yue Yang, et al. 
+[2]
+ Zekun Chang, Tung D. Ta, Koya Narumi, Heeju Kim, Fuminori Okuya, Dongchi 
+Li, Kunihiro Kato, Jie Qi, Yoshinobu Miyamoto, Kazuya Saito, and Yoshihiro 
+Kawahara. 2020. Kirigami Haptic Swatches: Design Methods for Cut-and-Fold 
+Haptic Feedback Mechanisms. In Proceedings of the 2020 CHI Conference on 
+Human Factors in Computing Systems. ACM, Honolulu HI USA, 1–12. https: 
+//doi.org/10.1145/3313831.3376655 
+[3] Tian Chen, Mark Pauly, and Pedro M. Reis. 2021. A reprogrammable mechanical 
+metamaterial with stable memory. Nature 589, 7842 (Jan. 2021), 386–390. https: 
+//doi.org/10.1038/s41586-020-03123-5 
+[4] Yu-Wen Chen, Wei-Ju Lin, Yi Chen, and Lung-Pan Cheng. 2021. PneuSeries: 
+3D Shape Forming with Modularized Serial-Connected Inflatables. In The 34th 
+Annual ACM Symposium on User Interface Software and Technology. ACM, Virtual 
+Event USA, 431–440. https://doi.org/10.1145/3472749.3474760 
+[5] Yinding Chi, Yanbin Li, Yao Zhao, Yaoye Hong, Yichao Tang, and Jie Yin. 2022. 
+Bistable and Multistable Actuators for Soft Robots: Structures, Materials, and 
+Functionalities. Advanced Materials 34, 19 (May 2022), 2110384. https://doi.org/ 
+10.1002/adma.202110384 
+[6] Jun Kyu Choe, Junsoo Kim, Hyeonseo Song, Joonbum Bae, and Jiyun Kim. 2023. A 
+soft, self-sensing tensile valve for perceptive soft robots. Nature Communications 
+14, 1 (July 2023), 3942. https://doi.org/10.1038/s41467-023-39691-z 
+[7] Kyung Yun Choi and Hiroshi Ishii. 2021. Therms-Up!: DIY Inflatables and In-
+teractive Materials by Upcycling Wasted Thermoplastic Bags. In Proceedings 
+of the Fifteenth International Conference on Tangible, Embedded, and Embodied 
+Interaction. ACM, Salzburg Austria, 1–8. https://doi.org/10.1145/3430524.3442457 
+[8] Colter J. Decker, Haihui Joy Jiang, Markus P. Nemitz, Samuel E. Root, Anoop 
+Rajappan, Jonathan T. Alvarez, Jovanna Tracz, Lukas Wille, Daniel J. Preston, 
+and George M. Whitesides. 2022. Programmable soft valves for digital and analog 
+control. Proceedings of the National Academy of Sciences 119, 40 (Oct. 2022), 
+e2205922119. https://doi.org/10.1073/pnas.2205922119 
+[9] David Dobbelstein, Tobias Arnold, and Enrico Rukzio. 2018. Snapband: a flexible 
+multi-location touch input band. In Proceedings of the 2018 ACM International 
+Symposium on Wearable Computers. ACM, Singapore Singapore, 214–215. https: 
+//doi.org/10.1145/3267242.3267248 
+[10] Dylan Drotman, Saurabh Jadhav, David Sharp, Christian Chan, and Michael T. 
+Tolley. 2021. Electronics-free pneumatic circuits for controlling soft-legged robots. 
+Science Robotics 6, 51 (Feb. 2021), eaay2627. https://doi.org/10.1126/scirobotics. 
+aay2627 
+[11] Yoël Forterre, Jan M. Skotheim, Jacques Dumais, and L. Mahadevan. 2005. How 
+the Venus flytrap snaps. Nature 433, 7024 (Jan. 2005), 421–425. https://doi.org/ 
+10.1038/nature03185 
+[12] Benjamin Gorissen, David Melancon, Nikolaos Vasios, Mehdi Torbati, and Katia 
+Bertoldi. 2020. Inflatable soft jumper inspired by shell snapping. Science Robotics 
+5, 42 (May 2020), eabb1967. https://doi.org/10.1126/scirobotics.abb1967 
+[13] Maas Goudswaard, Abel Abraham, Bruna Goveia Da Rocha, Kristina Andersen, 
+and Rong-Hao Liang. 2020. FabriClick: Interweaving Pushbuttons into Fabrics 
+Using 3D Printing and Digital Embroidery. In Proceedings of the 2020 ACM De-
+signing Interactive Systems Conference. ACM, Eindhoven Netherlands, 379–393. 
+https://doi.org/10.1145/3357236.3395569 
+[14] Jianzhe Gu, Yuyu Lin, Qiang Cui, Xiaoqian Li, Jiaji Li, Lingyun Sun, Cheng Yao, 
+Fangtian Ying, Guanyun Wang, and Lining Yao. 2022. PneuMesh: Pneumatic-
+driven Truss-based Shape Changing System. In CHI Conference on Human Factors 
+in Computing Systems. ACM, New Orleans LA USA, 1–12. https://doi.org/10. 
+1145/3491102.3502099 
+[15] Jiaming Guo, Xinghan Qiu, Zaoxu Zhang, Lamei Zhang, and Changguo Wang. 
+2022. Inflated Pillow with Flexible Bistable Kink: Snap Design and Application. 
+AIAA Journal 60, 11 (Nov. 2022), 6500–6505. https://doi.org/10.2514/1.J062130 
+[16] Liang He, Huaishu Peng, Michelle Lin, Ravikanth Konjeti, François Guimbretière, 
+and Jon E. Froehlich. 2019. Ondulé: Designing and Controlling 3D Printable 
+Springs. In Proceedings of the 32nd Annual ACM Symposium on User Interface 
+Software and Technology. ACM, New Orleans LA USA, 739–750. https://doi.org/ 
+10.1145/3332165.3347951 
+[17] Sheng-Pei Hu and June-Hao Hou. 2019. Pneu-Multi-Tools: Auto-Folding and 
+Multi-Shapes Interface by Pneumatics in Virtual Reality. In The Adjunct Publica-
+tion of the 32nd Annual ACM Symposium on User Interface Software and Technology. 
+ACM, New Orleans LA USA, 36–38. https://doi.org/10.1145/3332167.3357107 
+[18] Alexandra Ion, Ludwig Wall, Robert Kovacs, and Patrick Baudisch. 2017. Digital 
+Mechanical Metamaterials. In Proceedings of the 2017 CHI Conference on Human 
+Factors in Computing Systems. ACM, Denver Colorado USA, 977–988. https: 
+//doi.org/10.1145/3025453.3025624 
+[19] Yongkang Jiang, Yingtian Li, Ke Liu, Hongying Zhang, Xin Tong, Diansheng 
+Chen, Lei Wang, and Jamie Paik. 2023. Ultra-tunable bistable structures for 
+universal robotic applications. Cell Reports Physical Science 4, 5 (May 2023), 
+101365. https://doi.org/10.1016/j.xcrp.2023.101365 
+[20] Lishuai Jin, Yueying Yang, Bryan O. Torres Maldonado, Sebastian David Lee, 
+Nadia Figueroa, Robert J. Full, and Shu Yang. 2023. Ultrafast, Programmable, and 
+Electronics-Free Soft Robots Enabled by Snapping Metacaps. Advanced Intelligent 
+Systems 5, 6 (June 2023), 2300039. https://doi.org/10.1002/aisy.202300039 
+[21] Haneol Lee and Hugo Rodrigue. 2023. Harnessing the nonlinear properties of 
+buckling inflatable tubes for complex robotic behaviors. Materials Today 63 
+(March 2023), 59–88. https://doi.org/10.1016/j.mattod.2023.02.005 
+[22] Nianlong Li, Han-Jong Kim, LuYao Shen, Feng Tian, Teng Han, Xing-Dong Yang, 
+and Tek-Jin Nam. 2020. HapLinkage: Prototyping Haptic Proxies for Virtual 
+Hand Tools Using Linkage Mechanism. In Proceedings of the 33rd Annual ACM 
+Symposium on User Interface Software and Technology. ACM, Virtual Event USA, 
+1261–1274. https://doi.org/10.1145/3379337.3415812 
+[23] Hongnan Lin, Liang He, Fangli Song, Yifan Li, Tingyu Cheng, Clement Zheng, 
+Wei Wang, and HyunJoo Oh. 2022. FlexHaptics: A Design Method for Passive 
+Haptic Inputs Using Planar Compliant Structures. In CHI Conference on Human 
+Factors in Computing Systems. ACM, New Orleans LA USA, 1–13. https://doi. 
+org/10.1145/3491102.3502113 
+[24] Ting-Han Lin, Willa Yunqi Yang, and Ken Nakagaki. 2023. ThrowIO: Actu-
+ated TUIs that Facilitate “Throwing and Catching” Spatial Interaction with 
+Overhanging Mobile Wheeled Robots. In Proceedings of the 2023 CHI Confer-
+ence on Human Factors in Computing Systems. ACM, Hamburg Germany, 1–17. 
+https://doi.org/10.1145/3544548.3581267 
+[25] Qiuyu Lu, Jifei Ou, João Wilbert, André Haben, Haipeng Mi, and Hiroshi 
+Ishii. 2019. milliMorph – Fluid-Driven Thin Film Shape-Change Materials 
+for Interaction Design. In Proceedings of the 32nd Annual ACM Symposium on 
+User Interface Software and Technology. ACM, New Orleans LA USA, 663–672. 
+https://doi.org/10.1145/3332165.3347956 
+[26] Qiuyu Lu, Haiqing Xu, Yijie Guo, Joey Yu Wang, and Lining Yao. 2023. Fluidic 
+Computation Kit: Towards Electronic-free Shape-changing Interfaces. In Proceed-
+ings of the 2023 CHI Conference on Human Factors in Computing Systems. ACM, 
+Hamburg Germany, 1–21. https://doi.org/10.1145/3544548.3580783 
+[27] Takafumi Morita, Ziyuan Jiang, Kanon Aoyama, Ayato Minaminosono, Yu Kuwa-
+jima, Naoki Hosoya, Shingo Maeda, and Yasuaki Kakehi. 2023. InflatableMod: 
+Untethered and Reconfigurable Inflatable Modules for Tabletop-sized Pneu-
+matic Physical Interfaces. In Proceedings of the 2023 CHI Conference on Hu-
+man Factors in Computing Systems. ACM, Hamburg Germany, 1–15. https: 
+//doi.org/10.1145/3544548.3581353 
+[28] Takumi Murayama, Junichi Yamaoka, and Yasuaki Kakehi. 2020. Reflatables: 
+A Tube-based Reconfigurable Fabrication of Inflatable 3D Objects. In Extended 
+Abstracts of the 2020 CHI Conference on Human Factors in Computing Systems. 
+ACM, Honolulu HI USA, 1–8. https://doi.org/10.1145/3334480.3382904 
+[29] Ryuma Niiyama, Young Ah Seong, Yoshihiro Kawahara, and Yasuo Kuniyoshi. 
+2021. Blower-Powered Soft Inflatable Joints for Physical Human-Robot Interac-
+tion. Frontiers in Robotics and AI 8 (Aug. 2021), 720683. https://doi.org/10.3389/ 
+frobt.2021.720683 
+[30] Yuta Noma, Koya Narumi, Fuminori Okuya, and Yoshihiro Kawahara. 2020. Pop-
+up Print: Rapidly 3D Printing Mechanically Reversible Objects in the Folded State. 
+In Proceedings of the 33rd Annual ACM Symposium on User Interface Software and 
+Technology. ACM, Virtual Event USA, 58–70. https://doi.org/10.1145/3379337. 
+3415853 
+[31] Jifei Ou, Mélina Skouras, Nikolaos Vlavianos, Felix Heibeck, Chin-Yi Cheng, 
+Jannik Peters, and Hiroshi Ishii. 2016. aeroMorph - Heat-sealing Inflatable Shape-
+change Materials for Interaction Design. In Proceedings of the 29th Annual Sym-
+posium on User Interface Software and Technology. ACM, Tokyo Japan, 121–132. 
+https://doi.org/10.1145/2984511.2984520 
+[32] Dinesh K. Patel, Xiaonan Huang, Yichi Luo, Mrunmayi Mungekar, M. Khalid 
+Jawed, Lining Yao, and Carmel Majidi. 2023. Highly Dynamic Bistable Soft Actu-
+ator for Reconfigurable Multimodal Soft Robots. Advanced Materials Technologies 
+8, 2 (Jan. 2023), 2201259. https://doi.org/10.1002/admt.202201259 
+[33] Harpreet Sareen, Udayan Umapathi, Patrick Shin, Yasuaki Kakehi, Jifei Ou, Hi-
+roshi Ishii, and Pattie Maes. 2017. Printflatables: Printing Human-Scale, Func-
+tional and Dynamic Inflatable Objects. In Proceedings of the 2017 CHI Conference 
+on Human Factors in Computing Systems. ACM, Denver Colorado USA, 3669–3680. 
+https://doi.org/10.1145/3025453.3025898 
+[34] Ali Shtarbanov. 2021. FlowIO development platform – the pneumatic “Raspberry 
+pi” for soft robotics. In Extended abstracts of the 2021 CHI conference on human 
+factors in computing systems. Association for Computing Machinery, New York, 
+NY, USA. tex.articleno: 479. 
+[35] Saiganesh Swaminathan, Michael Rivera, Runchang Kang, Zheng Luo, Kadri Bu-
+gra Ozutemiz, and Scott E. Hudson. 2019. Input, Output and Construction Meth-
+ods for Custom Fabrication of Room-Scale Deployable Pneumatic Structures. 
+Proceedings of the ACM on Interactive, Mobile, Wearable and Ubiquitous Technolo-
+gies 3, 2 (June 2019), 1–17. https://doi.org/10.1145/3328933 
+[36] Shan-Yuan Teng, Tzu-Sheng Kuo, Chi Wang, Chi-huan Chiang, Da-Yuan Huang, 
+Liwei Chan, and Bing-Yu Chen. 2018. PuPoP: Pop-up Prop on Palm for Virtual 
+Reality. In Proceedings of the 31st Annual ACM Symposium on User Interface 
+Software and Technology. ACM, Berlin Germany, 5–17. https://doi.org/10.1145/ 
+3242587.3242628 
+[37] Shan-Yuan Teng, Cheng-Lung Lin, Chi-huan Chiang, Tzu-Sheng Kuo, Liwei 
+Chan, Da-Yuan Huang, and Bing-Yu Chen. 2019. TilePoP: Tile-type Pop-up 
+Prop for Virtual Reality. In Proceedings of the 32nd Annual ACM Symposium on 
+User Interface Software and Technology. ACM, New Orleans LA USA, 639–649. 
+SnapInflatables: Designing Inflatables with Snap-through Instability for Responsive Interaction CHI ’24, May 11–16, 2024, Honolulu, HI, USA 
+https://doi.org/10.1145/3332165.3347958
+ 
+[38] Guanyun Wang, Yue Yang, Mengyan Guo, Kuangqi Zhu, Zihan Yan, Qiang 
+Cui, Zihong Zhou, Junzhe Ji, Jiaji Li, Danli Luo, and others. 2023. ThermoFit: 
+Thermoforming smart orthoses via metamaterial structures for body-fitting and 
+component-adjusting. Proceedings of the ACM on Interactive, Mobile, Wearable 
+and Ubiquitous Technologies 7, 1 (2023), 1–27. Publisher: ACM New York, NY, 
+USA. 
+[39] Guanyun Wang, Kuangqi Zhu, Lingchuan Zhou, Mengyan Guo, Haotian Chen, 
+Zihan Yan, Deying Pan, Yue Yang, Jiaji Li, Jiang Wu, and others. 2023. PneuFab: 
+Designing low-cost 3D-Printed inflatable structures for blow molding artifacts. 
+In Proceedings of the 2023 CHI conference on human factors in computing systems. 
+Association for Computing Machinery, New York, NY, USA, 1–17. 
+[40] Junichi Yamaoka, Kazunori Nozawa, Shion Asada, Ryuma Niiyama, Yoshihiro 
+Kawahara, and Yasuaki Kakehi. 2018. AccordionFab: Fabricating Inflatable 3D 
+Objects by Laser Cutting and Welding Multi-Layered Sheets. In Adjunct Proceed-
+ings of the 31st Annual ACM Symposium on User Interface Software and Technology. 
+ACM, Berlin Germany, 160–162. https://doi.org/10.1145/3266037.3271636 
+[41] Jian Zhang and Chen Li. 2022. Simulation study on performance optimization 
+factors of inflatable cushion based on rigidity theory. SN Applied Sciences 4, 2 
+(Feb. 2022), 51. https://doi.org/10.1007/s42452-021-04931-8 
+[42] Xiaoliang Zhao, Jia Chen, Jinhui Li, Mengmeng Jin, Zihan Deng, Xiaopeng Li, 
+Wei Zhang, Minghua Jin, Fangtian Ying, Qi Wang, and Guanyun Wang. 2021. 
+MultiPneu: Inflatable Deformation of Multilayered Film Materials. In The Ninth 
+International Symposium of Chinese CHI. ACM, Online Hong Kong, 158–161. 
+https://doi.org/10.1145/3490355.3490517 
+[43] Yijun Zhao, Yong Shen, Xiaoqing Wang, Jiacheng Cao, Shang Xia, Fangtian Ying, 
+and Guanyun Wang. 2021. PneuMat: Pneumatic Interaction System for Infant 
+Sleep Safety Using Shape-Changing Interfaces. In Extended Abstracts of the 2021 
+CHI Conference on Human Factors in Computing Systems. ACM, Yokohama Japan, 
+1–7. https://doi.org/10.1145/3411763.3451597 
+[44] Clement Zheng, Jeeeun Kim, Daniel Leithinger, Mark D. Gross, and Ellen Yi-Luen 
+Do. 2019. Mechamagnets: Designing and Fabricating Haptic and Functional 
+Physical Inputs with Embedded Magnets. In Proceedings of the Thirteenth Interna-
+tional Conference on Tangible, Embedded, and Embodied Interaction. ACM, Tempe 
+Arizona USA, 325–334. https://doi.org/10.1145/3294109.3295622 

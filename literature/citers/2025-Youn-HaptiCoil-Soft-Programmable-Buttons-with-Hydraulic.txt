@@ -1,0 +1,1279 @@
+HaptiCoil: Soft Programmable Buttons with Hydraulically 
+Coupled Haptic Feedback and Sensing 
+Jung-Hwan Youn 
+University of Illinois 
+Urbana-Champaign 
+Urbana, Illinois, USA 
+jy92@illinois.edu 
+Seung Heon Lee 
+University of Illinois 
+Urbana-Champaign 
+Urbana, Illinois, USA 
+sl226@illinois.edu 
+Craig Shultz 
+University of Illinois 
+Urbana-Champaign 
+Urbana, Illinois, USA 
+shultz88@illinois.edu 
+Figure 1: A) HaptiCoils are miniature haptic soft buttons built from commodity microspeakers combined with custom hydraulic 
+couplings. B) Our devices support both input force sensing and output feedback through a single pair of wires. In example XR 
+scenarios users can interact with C) mid-air virtual buttons, or D) buttons co-located with real, physical surfaces such as a 
+desktop. In the former, feedback is triggered by tracked finger position, while in the latter, its triggered by the sensed grounded 
+reaction force between the desktop and the users finger. 
+Abstract 
+We present HaptiCoil, an embedded system and interaction method 
+for prototyping low-cost, compact, and customizable wide band-
+width (1-500 Hz) soft haptic buttons. HaptiCoil devices are built 
+using mass-produced, waterproof planar micro-speakers which 
+are adapted to direct energy to the skin using a novel hydraulic 
+coupling mechanism. They can sense force input, using a measure-
+ment of self-inductance, and provide output in a single package, 
+yielding a flexible all-in-one button solution. Our devices offer a 
+wider perceptual range of tactile stimuli than industry standard 
+approaches, while maintaining comparable power threshold levels 
+(typical threshold under 40 mW). We detail the construction and un-
+derlying principles of our approach, as well as an extensive physical 
+quantification of both input and output. We share psychophysical 
+This work is licensed under a Creative Commons Attribution 4.0 International License. 
+CHI ’25, Yokohama, Japan 
+© 2025 Copyright held by the owner/author(s). 
+ACM ISBN 979-8-4007-1394-1/25/04 
+https://doi.org/10.1145/3706598.3713175 
+data on device bandwidth, and show three illustrative examples 
+of how HaptiCoil buttons can implemented in use cases such as 
+spatial computing, digital inking, and remote control. 
+CCS Concepts 
+• Human-centered computing → Haptic devices. 
+Keywords 
+Haptics, Buttons, Human-Computer Interaction, Speaker, Voice-coil 
+ACM Reference Format: 
+Jung-Hwan Youn, Seung Heon Lee, and Craig Shultz. 2025. HaptiCoil: Soft 
+Programmable Buttons with Hydraulically Coupled Haptic Feedback and 
+Sensing. In CHI Conference on Human Factors in Computing Systems (CHI 
+’25), April 26–May 01, 2025, Yokohama, Japan. ACM, New York, NY, USA, 
+16 pages. https://doi.org/10.1145/3706598.3713175 
+1 Introduction 
+The humble button is a core user interaction element that is older 
+than computing itself. They are so pervasive in everyday experience 
+that we rarely give them a second thought. Keyboards, microwave 
+CHI ’25, April 26–May 01, 2025, Yokohama, Japan Youn et al. 
+ovens, doorbells, elevators, even automobiles, each operate at the 
+touch of a button. More recently, buttons in HCI contexts have 
+begun to be programmable. Software defined haptic buttons, in-
+troduced in early mobile devices and popularized by the "Taptic 
+Engine" in the Apple watch and iPhone in 2014, have proliferated 
+in the market, making their way into laptop trackpads, gaming 
+controllers, automotive touchscreens, and now even the sides of 
+smartphones. 
+While these highly integrated solutions are slowly entering the 
+mainstream, sometimes even without us noticing (notably with the 
+release of the Camera Control button in the iPhone 16), designers 
+and practitioners have limited access to iterate haptic button re-
+sponses and form factor. This has been identified as a key challenge 
+holding haptic experience (HX) design back [48]. Many haptic APIs 
+offer exceedingly limited control over the type of haptic response a 
+programmable button can provide, and as a result, these buttons 
+typically serve solely as a direct replacement for their mechani-
+cal predecessors. Tactile effects are completely predefined, buried 
+under layers of embedded hardware and software abstraction. Re-
+searchers, however, routinely desire to experiment outside of these 
+limited effects, and a recent survey of expert haptic experience (HX) 
+designers revealed that they list variation of haptic effect at the top 
+of what they consider makes a "good haptic experience" [19]. 
+Left with limited options, many researchers decide to build the 
+entire engineered system by themselves. Often they reach for an 
+inexpensive and small vibration motor, such as a linear resonant 
+actuator (LRA) or eccentric rotating mass (ERM), and pair this 
+with a easy to implement touch sensing technology (such as a self-
+capacitive sensor or a strain gauge force sensor). Only then do they 
+realize the restrictions of these actuators and sensors, leaving them, 
+once again, with a limited set of effects to play with. In order to 
+disrupt this frustrating loop, we believe that there needs to be a 
+proliferation of approaches and understanding on how to enable 
+compact but highly expressive haptic buttons. By developing and 
+showcasing examples of such devices being built, characterized, 
+and integrated, we aim to contribute to the growing body of HX 
+design research and methods. 
+In our work here, we demonstrate how it is possible to design 
+and build an entirely self-contained touch sensor, high performance 
+actuator, and soft coupling system in a compact and low cost way 
+that also affords rapid prototyping and customization. These are all 
+of the requisite components needed for a button, however we stress 
+that HaptiCoils can also be used in any place where localized cuta-
+neous skin actuation may be desired. During our design process we 
+sought to balance system performance and haptic expressivity with 
+ease of construction and practical requirements of system integra-
+tion. This allows designers the freedom to explore the size, shape, 
+and range of haptic experiences, which can later guide the engineer-
+ing of these experiences into real products. After reviewing prior 
+work, our paper walks through what a HaptiCoil is, additionally 
+explaining the design decisions around its concept. We then discuss 
+a typical button implementation, and perform a physical evaluation 
+of both the actuator and sensor aspects of HaptiCoils. Finally, we 
+perform a preliminary psychophysical experiment, offering data 
+on the broad frequency capabilities compared to the baseline of a 
+Linear Resonant Actuator (LRA). Finally we provide three example 
+demo applications: a thimble type device for XR, a pen device for 
+digital inking, and a low-profile embedded button application in a 
+remote media control. 
+2 Background & Related Work 
+We focus on three areas of related work: miniature embedded haptic 
+actuation, fluidic haptic approaches, and combined haptic actuation 
+and sensing. 
+2.1 Miniature Embedded Haptic Actuation 
+Providing clear haptic feedback during both pressing and releasing 
+actions enhances user experience by offering unambiguous system 
+confirmation. Haptic devices can generally be categorized into pas-
+sive and active devices. Passive devices offer haptic feedback by 
+dissipating mechanical energy applied by the user, through spring 
+mechanisms. For over a century this has been the dominant way 
+to provide button feedback, and a range of microswitchs, capaci-
+tive membrane switches, and every manner of scissor mechanism 
+has been implemented in keyboards, mice, and gaming controllers. 
+Some of these mechanisms have been examined in an HCI context, 
+such as [28, 73]. However, once constructed, passive haptic button 
+response is unvarying. 
+Active haptic devices, on the other hand, provide controllable 
+haptic feedback through external energy sources. Piezoelectric ac-
+tuators, such as the commercially available TDK Powerhap and 
+Piezohap actuators, are promising for haptic applications due to 
+their small size, fast response, and low energy consumption [4, 32, 
+57]. Despite challenges such as small displacement and the need 
+for high voltage (50-200V), companies like Boreas Technologies 
+have introduced efficient piezo drivers that could solve the issue, 
+though at a cost. Other compact haptic actuation methods have also 
+been explored, the most common including shape memory alloys 
+[13, 22, 35], electrotactile actuators [29, 61], dielectric elastomer 
+actuators (DEAs) [17, 24, 69, 70]. The typical limitation of these 
+technologies is their small output mobilities (ability to move large 
+distances quickly) as well as their commercial readiness and accep-
+tance. Even now, however, SMA and piezo based buttons are making 
+it into certain mobile devices due to their extreme compactness. 
+Thus, electromagnetic actuation, commercialized for over a cen-
+tury, remains one of the most common methods to provide haptic 
+feedback. ERMs and LRAs offer strong vibrotactile feedback with 
+high efficiency, with the trade-off of poor output control (ERMs) 
+or narrow frequency range (LRAs). Various miniaturized haptic de-
+vices have been developed using commercially available ERMs [49] 
+and LRAs [8, 20, 42, 58]. However, their limited frequency range 
+restricts their use in more advanced haptic applications requiring 
+"high-definition" output, and many times their form factor does 
+not match the intended use case. To address this, researchers have 
+also developed their own electromagnetic actuator integrations 
+[34, 40, 45, 62]. Vibrotactile coil based products, such as Haptuator 
+from Tactile Labs [65], and C-2 from Engineering Acoustics Inc [37], 
+have also become the gold standard for vibrotactile research due to 
+their broad operating frequency range (10-1000 Hz). However, their 
+high cost ($80-$200) remains a barrier to widespread experimen-
+tation. So-called "tactile-exciters", a class of coil based actuators 
+originally designed for bass reproduction applications, have also 
+been used in haptics research, though typically in configuration 
+HaptiCoil: Soft Programmable Buttons with Hydraulically Coupled Haptic Feedback and Sensing CHI ’25, April 26–May 01, 2025, Yokohama, Japan 
+Figure 2: Comparison our HaptiCoil with common vibrotac-
+tile actuator types and fluidic actuator types. First five rows 
+updated and taken from [7]. HaptiCoils offer the implemen-
+tation advantages of generic devices, but the customizibility, 
+expressivity and self-sensing of more complex devices. 
+similar to LRAs, therefore we treat them as a similar class. These 
+devices are typically bulky and offer limited customizability, see 
+Figure 2 for a full actuator comparison chart (categories adapted 
+from [7]). Finally, wearable haptic devices utilizing miniature DC 
+motors also show great potential for providing multi-DOF tactile 
+feedback, yet are typically reserved only for static or low frequency 
+force rendering, see [39] for a review. 
+2.2 Fluidic Haptic Approaches 
+A variety of haptic devices, including haptic buttons, shape chang-
+ing devices, and wearablables, have been recent explored using 
+fluidic (e.g. pneumatic or hydraulic) actuation. 
+Pneumatic systems offer strong advantages, including being 
+lightweight and delivering high power performance. However, the 
+need for bulky air compressors, valves, solenoids, and air supply 
+lines to control them complicates miniaturization efforts [56]. One 
+of the most common approaches in pneumatic-based haptic devices 
+involves inflating and deflating soft silicone membranes using pneu-
+matic control lines. It is so common that HCI toolkits have also been 
+developed for easing implementation [52]. This method has been 
+applied in dynamic haptic buttons [15], shape changing devices 
+[66], braille devices [16, 47, 63], tactile feedback devices [6], and 
+wearable haptic devices [31, 33, 71, 72]. Commercial approaches 
+remain extremely high cost, and recent works have aimed develop-
+ing compact pneumatic-based haptic devices by replacing external 
+air compressors with voice-coil actuation [50, 53], electrostatic ac-
+tuation [55] and even thermal actuation [60]. However, their low 
+output force or slow actuation speed remain as a challenge. 
+Hydraulic actuation holds great potential for compact haptic 
+devices due to its fast, stable, and reliable power transmission capa-
+bilities [2]. Moreover, hydraulic actuators provide good mechanical 
+impedance matching with human skin and underlying tissue (being 
+primarily composed of water), making them more attractive meth-
+ods for haptics. The simplest hydraulic approach involves using 
+commercially available hydraulic pumps and valves. Wearable rings 
+[14] and pens [64] have been developed using these methods. Very 
+recently, researchers have focused on developing compact, light-
+weight advanced hydraulic pump techniques, such as electrostatic 
+zipping actuation [5, 25, 43], hydraulic coupled dielectric elastomer 
+actuators [68], and electroosmotic pumps [44, 51, 54]. Despite these 
+significant advancements, reliability and stability in the long term 
+remain understudied. A notable alternative approach is described in 
+[36], which uses human input for pumping, though this work was 
+focused more on visual interactions rather than controllable tac-
+tile feedback. A comprehensive comparison between fluidic haptic 
+approaches and the HaptiCoil is presented in Figure 2. 
+2.3 Combined Haptic Actuation and Sensing 
+The haptic button is an I/O interface that provides both haptic 
+feedback and touch sensing. A simple method to achieve sensing 
+capability is by combining haptic actuators with external sensors, 
+such as force sensor [5, 23], accelerometers, [11] or microphones 
+[59]. Recently, several attempts have been presented to develop 
+self-sensing haptic actuators that integrate both tactile sensing and 
+haptic feedback. 
+Piezoelectric actuators offer self-sensing capabilities by detecting 
+the charge generated from piezoelectric effect, an effect demon-
+strated in [67]. DEAs also posses sensing capabilities by monitoring 
+changes in capacitance [46]. A few researchers have presented 
+DEA-based haptic devices with self-sensing functionality [12]. 
+Electromagnetic actuators again are particularly promising for 
+self-sensing, due to a strong coupling between electrical and me-
+chanical domains. Recent research has shown that self-sensing 
+LRAs can utilize back electromotive force (back-EMF) to detect 
+change in velocity of the internal mass under applied pressure 
+[9]. While these device can measure external pressure, reliable 
+measurement of back-EMF requires disconnecting the actuator 
+while sensing, which complicates the control circuit. Compared to 
+back-EMF sensing, self-sensing haptic devices that actively mea-
+sure low frequency current through the voice-coil can effectively 
+detect applied pressure [8, 27, 38]. Back-EMF and low-frequency 
+current sensing are inherently tied to the actuation waveform, re-
+quiring significant voltages (>1 V) to sense mechanical changes like 
+damping or stiffness. This coupling limits waveform options and 
+precludes sensing without significant actuation. For HaptiCoils, we 
+developed a low-voltage (20 mV) sensing method at high frequency 
+(>1 MHz), frequency decoupling it from tactile actuation (<500 
+Hz). Unlike back-EMF and current-sensing, which struggle with 
+combining static (DC) and highly dynamic (>100 Hz) sensing, our 
+high-frequency self-inductance measurement effectively detects 
+static and rapidly changing coil displacement (and by proxy, ap-
+plied force), representing what we believe is a novel and significant 
+contribution to the field. Our method does not yet allow for truly 
+CHI ’25, April 26–May 01, 2025, Yokohama, Japan Youn et al. 
+Figure 3: A) Mechanical schematic of HaptiCoils, showing 
+the main parts, and how the output surface deforms under 
+applied voltage. In B) we see a real prototype HaptiCoil. 
+simultaneous sensing and actuation, but we believe there may be a 
+path to allow this. 
+3 HaptiCoil - Walkthrough and Design 
+Approach 
+HaptiCoils operate like any other button in the sense that they 
+can monitor user input, Figure 1B, and provide press confirmation 
+feedback, Figure 1C. In a basic application, such as a push button 
+on a remote control, a micro-controller monitors the measured 
+self-inductance of the HaptiCoil, looking for changes to the input 
+baseline. Once a user presses on the device surface, this deforma-
+tion hydraulically couples to inner coil surface, causing it to move. 
+This movement causes a systematic change in the self-inductance, 
+which is seen by the micro-controller. Once the self-inductance 
+reading changes beyond a programmable threshold, the HaptiCoil 
+is triggered, energizing its coil with an output current and voltage. 
+As seen Figure 3, mechanical force is coupled back to the user as 
+a "click". If desired, a second inductance threshold can set as the 
+user lifts their finger, providing a second release "click" akin to 
+the passive feedback a keyboard button gives during typing. This 
+basic interaction can also occur with a finger mounted button (see 
+Figure 1C and D, and Figure 20). Here, the HaptiCoil is triggered 
+by sensing the user’s position in a virtual environment (Figure 1C) 
+or as they interact with a physical surface (Figure 1D). 
+The software defined nature of HaptiCoils allow designers to 
+implement a wide range of input behaviors and output sensations. 
+The construction method employed also allows researchers to play 
+with and adjust HaptiCoils to different sizes, shapes, output powers, 
+and specific use cases. In addition, the waterproof speaker, fluid (i.e. 
+tap water), 3D printed enclosure, encapsulating silicone are robust, 
+simple, and safe (See Figure 3 or Figure 4). HaptiCoils can also 
+be adapted to other fluid coupling techniques (from microfluidics 
+research). They allow rapid prototyping of devices, and multiple 
+avenues for device miniaturization and optimization. Importantly, 
+Figure 4: A) An exploded view showing each HaptiCoil com-
+ponent separately. We consider the speaker its own sub-
+assembly. B) Once assembled, HaptiCoils are filled through 
+a silicone adhesive port in the side of the device, and air is 
+evacuated using the same. C) The final result is a compact, 
+self-contained actuator. 
+once constructed, a HaptiCoil is an entirely self-contained elec-
+tromechanical system (with only 2 wires connected to drive elec-
+tronics). This means that the haptic feedback is entirely localized, 
+and will not transmit to or be affected by other parts of the de-
+vice. This greatly simplifies device integration and affords more 
+complicated devices. 
+Performance wise, our aim was to be uncompromising. Hapti-
+Coils are very sensitive at their input (verified to detect at least 
+100 mN), and offer a broad range of haptic output (≈ 1-500 Hz, 
+rise time on the order of 10 ms and force output of over 100 mN). 
+This performance is enabled by the use of a highly mobile speaker 
+voice-coil, which is directly linked to the skin and body. It is worth 
+noting that this manner of coupling is different from LRAs and 
+other moving-magnet type actuators, such as the "Haptuator" [65]. 
+These devices attempt to render an acceleration (G force), which 
+becomes harder and harder to do once the actuator is attached to 
+additional mass (because of Newton’s 2nd Law). In contrast, the 
+moving-coil design of HaptiCoil, coupled with hydraulic routing 
+and coupling, allow HaptiCoils to easily scale to different sizes, 
+locations, and configurations. 
+4 IMPLEMENTATION 
+In this section we detail HaptiCoil construction, speaker selection, 
+principles of operation (including actuation and sensing), design 
+variations, cost, and the drive electronics. 
+4.1 General Construction 
+HaptiCoils are constructed from waterproof miniaturized speak-
+ers which are coupled to a soft silicone membrane via a fluid, as 
+shown in Figure 3A. This design combines the speaker’s high band-
+width with the fast and reliable power transmission of the hydraulic 
+system due to the incompressible nature of the fluid. 
+The fabrication process of our Hapticoils is presented in Figure 
+4. The fluid chamber is prepared by 3D-printer (Formlabs Form 4) 
+with clear V4 resin (Formlabs). The transparent resin allows for easy 
+inspection of trapped air bubbles, although the chamber can also be 
+fabricated using other 3D printing materials, such as Acrylonitrile 
+Butadiene Styrene (ABS) or Polylactic Acid (PLA). The fluid cham-
+ber is designed to be slightly larger than the speaker dimensions 
+(chamber size= 18 × 13 × 3 mm in this case) and includes a small 
+HaptiCoil: Soft Programmable Buttons with Hydraulically Coupled Haptic Feedback and Sensing CHI ’25, April 26–May 01, 2025, Yokohama, Japan 
+Figure 5: A) The small signal T/S model we applied to aide 
+in the speaker selection process. This models the coupled 
+electrical and mechanical system dynamics, especially the 
+force factor BL. B) A selection of different sized speakers we 
+prototyped with. Microspeakers come in a range of shapes 
+and sizes, and can be tailored to a specific use case. 
+hole (1 × 2 mm) at one edge to facilitate fluid injection. Then, the 
+fluid chamber is bonded to the speaker with cyanoacrylate adhesive 
+(Loctite 401) to prevent fluid leakage. The soft touch membrane, 
+which serves as a pressure-coupling material between the speaker 
+and the user’s skin, is a pre-cured material (Rogers HT-6000, Shore 
+10A, 0.25 mm thickness) purchased from McMaster-Carr. Adhesion 
+of the silicone membrane to the fluid chamber can be difficult, but 
+we found two reliable methods. First, a plasma surface treatment 
+wand (Electro-Technic Products BD-20A) can applied to the soft 
+membrane to activate its surface. The treatment wand is passed 
+over the membrane for several seconds, then it is adhered using 
+laser-cut pressure-sensitive adhesive (PSA) sheets (3M 467MP). Sec-
+ond, a cyanoacrylate adhesive (Loctite 401) can be used directly 
+between the fluid chamber and membrane. We found the former 
+processes more reliable and clean, and the latter process is cheaper 
+but messier. After bonding, water is injected into the chamber, and 
+air is evacuated using a syringe and dispensing needle through a 
+small filling hole, which is designed in the side of the chamber wall, 
+see Figure 4B. We use tap water as the fluid due to is low viscosity, 
+low toxicity, and easy of use. Finally, the filling hole is sealed with 
+room temperature vulcanizing (RTV) silicone adhesive (Permatex 
+80050). 
+4.2 Speaker Selection 
+To aide in selecting a speaker we pre-screened various shapes and 
+sizes of speakers (Figure 5B) by measuring the Thiele/Small (T/S) 
+parameters using a two-channel FFT analysis, similar to that used 
+in [53]. Additionally, speakers were required to have a high IP water 
+resistance rating. Figure 5A presents a lumped parameter model 
+we fit to each speaker. We selected the miniature speaker (CMS-
+151135-18S-X8) that has the highest BL parameter (also known 
+Figure 6: A) Hydraulic coupling mechanism in directly cou-
+pled HaptiCoils. Due to the incompressible nature of water, 
+speaker coil displacement results in a deformation of the 
+HaptiCoil touch surface. B) The same principle applies in 
+indirect applications, as fluid pressure is still linked hydrauli-
+cally to the touch surface. C) The customizable nature of the 
+HaptiCoil coupling allows designers to utilize various shapes 
+and sizes of output deformation when operating under a 200 
+ms square wave input. 
+as force factor) of those tested (1.22 N/A). High BL implies large 
+output forces for a given current, and we found this to be the single 
+most useful parameter in selection. We also sought to find speakers 
+with low coil resistance, allowing us to apply large currents for 
+relatively small voltages. Using this approach additional speakers 
+on the market can be quickly pre-screened for their appropriateness 
+in HaptiCoils. 
+4.3 Direct or Indirect Actuation & Output Shape 
+Variation 
+Hydraulic systems offer a distinct advantage in efficiently transmit-
+ting power from one point to another. Leveraging this advantage, 
+a HaptiCoil can be designed using both direct and indirect actu-
+ation, as illustrated in Figure 6A, B. In the direct case, pressure 
+is straightforwardly focused on the touch surface. In the indirect 
+case, the touch surface is physically separated from the actuator via 
+a hydraulic channel. This separation affords HaptiCoil designers 
+CHI ’25, April 26–May 01, 2025, Yokohama, Japan Youn et al. 
+Figure 7: Self-inductance sensing principle. The speaker coil 
+changes its configuration with respect to the magnetic gap 
+flux lines, leading to a small change in inductance. Drawing 
+is only a coarse representation, not the actual speaker geom-
+etry. 
+more flexibility to create complex structures or a dense array within 
+a limited space. An example of this in shown later in Figure 21. 
+We also found that HaptiCoils are adept at providing vivid output 
+shapes than can quickly pop up or down from the surface of the 
+device. We believe this can lead to interesting haptic and visual 
+output designs for shape display purposes and emphasize this point 
+by showcasing various shaped outputs. These were achieved by 
+changing the shape and size of HaptiCoil surface hole. Figure 6C 
+shows some representative shapes in the popped out configuration. 
+During this test, we applied a square wave input a 200 ms period. 
+Images were captured with a high-speed camera (CHRONOS 2.1-
+HD). Pop down shapes can be seen in Figure 22. Due to the soft 
+nature of the membrane, the edges of the output hole can also be 
+felt by users as a designable passive haptic effect. 
+4.4 Sensing principles 
+Sensing of applied pressure in our HaptiCoil prototypes is done 
+through a high frequency (> 1 MHz) self-inductance measurement. 
+Through our testing, we observed that the self-inductance of the 
+speaker coil systematically changes as it moves inwards (positive 
+displacement) or outwards (negative displacement) due to an exter-
+nally applied force. Specifically, the self-inductance decreases when 
+the cone moves inwards and increases when it moves outwards. 
+We measured this phenomenon using an LCR meter operating at 
+200 kHz. The exact mechanism driving these inductance changes 
+remains unclear without detailed knowledge of the coil’s internal 
+geometry and the structure of the magnetic field. We hypothesize 
+that these inductance variations result from changes in the mag-
+netic flux through the coil as its position shifts. If the coil moves 
+away from the flux lines, self-inductance would decrease, which 
+aligns with observations of similar microspeaker constructions. Fur-
+thermore, since cone displacement is hydraulically linked (Figure 7) 
+to the displacement of the output surface, our HaptiCoil prototypes 
+are very sensitive to surface displacement and pressing force as 
+well. 
+Figure 8: A) A complete embedded HaptiCoil system, includ-
+ing power and driving electronics. B) Simplified schematic of 
+the HaptiCoil driver and the self-inductance measurement 
+circuit. C) A detail schematic representation of HaptiCoil 
+front-end electronics, incorporating a Class AB amplifier 
+and sensor buffer and peak detection circuits. 
+4.5 Drive Electronics 
+To measure the self-inductance of the speaker while maintaining 
+the haptic operation of the speaker, we needed to build a custom 
+control circuit (shown in Figure 8A) which includes both actuating 
+and sensing electronics in a single signal path. This circuit includes a 
+small differential Class-AB audio amplifier (TI TPA6211A1), a shunt 
+inductor, and a dual channel pre-amplifier (TI OPA2354) consisting 
+of a high gain differential stage followed by a peak detector. A 3 
+MHz sense signal is injected by our micro-controller, and is added 
+to a low frequency (<1000 Hz) haptic signal using an additive input 
+configuration. It should be noted that the user can not feel the 
+vibration generated by the sense signal, due to its small amplitude 
+(20 mV) and high frequency (3 MHz). In-practice, we time multiplex 
+these signals, meaning we are only sensing or actuating at a given 
+time, not in combination. 
+Considering only the sensing path, the sensing oscillation signal 
+is injected through the same audio amplifier that plays the haptic 
+signal. The amplifier load is modified to include a shunt inductor 
+HaptiCoil: Soft Programmable Buttons with Hydraulically Coupled Haptic Feedback and Sensing CHI ’25, April 26–May 01, 2025, Yokohama, Japan 
+in series with the speaker, as seen in Figure 8C. Using an inductor 
+instead of a resistor means that the shunt inductor adds minimal ad-
+ditional impedance at haptic frequencies. At our sensing frequency 
+(3 MHz), however, the shunt inductance and speaker’s variable 
+self-inductance form an inductive divider, and the amplitude of the 
+signal at Vsense is thus highly sensitive to changes in speaker self-
+inductance. The rest of the circuit is designed to convert this high 
+frequency sinusoid into a rectified DC signal. The voltage is ampli-
+fied using a differential op-amp with 𝐺 ≈ 100, and a peak detector 
+creates an easy to read signal for the micro-controller ADC. The 
+sensor output has a inverse relationship with the self-inductance 
+of the HatptiCoil due to the inductor divider relationship. 
+4.6 Cost 
+Cost is a primary consideration in our design. The main cost savings 
+comes from the low cost of the speaker ($1.3). Remaining materials 
+are inexpensive: silicone membrane (23¢/g), 3d printed resin (20¢/g), 
+adhesive sheet (0.001¢/mm2), and silicone adhesive (5¢/g), which 
+makes total cost less than $1.5. The price of the electronic sensing 
+and actuating components per channel is less than $3.5, while 
+our MCU board (Teensy 4.0) is a large one time cost ($23.8). We 
+anticipate that the cost of driving electronics could come down 
+significantly with scale, as they are all low voltage (<5 V), and are 
+similar to the electronics in mass-produced smart style earbuds. 
+5 PHYSICAL EV ALUATION 
+We characterized our HaptiCoil designs through a series of physi-
+cal experiments. First, we detail the output displacement and the 
+blocked force characteristics of the HaptiCoils at various operating 
+frequencies. Then, we report on the force sensing capability of our 
+prototype. 
+5.1 Blocked Force 
+One of the most important aspects of a haptic button is the output 
+force it can provide to the skin, specifically the skin of the fingertip. 
+Previous studies have shown that the typical pressing force during 
+tapping a touchscreen, typing on a physical keyboard, and clicking a 
+mouse button is around 0.5 N [1, 18, 21]. Thus, our goal for HaptiCoil 
+was to deliver sufficient output force under this amount of preload. 
+We measured blocked force using a piezoresistive strain gauge 
+force sensor (ATI Nano17) and a fingertip-like proxy. The blocked 
+force refers to the force generated by the HaptiCoil when its motion 
+is completely restricted by the force sensor. The initial contact force 
+between the HaptiCoil and the force sensor was precisely controlled 
+using a motorized linear stage (Optics Focus MOX-02-100). We 
+attached fingertip-like structure covered with soft foam resembling 
+human skin to serve as a coupling between the force sensor and the 
+HaptiCoil. A data acquisition device (NI USB-6211) generated haptic 
+test signals various frequencies and simultaneously measured the 
+force sensor data and the current flowing through the speaker. We 
+tested three different HaptiCoils with output hole sizes ranging 
+from 4 mm to 6 mm. The test setup can be seen in Figure 9. 
+Figure 10A shows the profile of the blocked force of the Hap-
+tiCoil at various operating frequencies (preload = 0.5 N). Results 
+validated that our HaptiCoils can operate at all frequencies tests, 
+from 1-400 Hz, as can be seen in Figure 10B. The HaptiCoil with a 
+Figure 9: Measurement setup for blocked force recording. We 
+used a linear stage and 6-DOF force sensor to apply a known 
+force to a HaptiCoil via a fingertip-like structure and soft 
+foam. 
+Figure 10: Results from blocked force tests showing A) time 
+recordings of force. B) Plot of 3 different HaptiCoil’s peak 
+force amplitudes between 1 Hz and 400 Hz. C) Power con-
+sumption recordings of the HaptiCoil (P=IV) for various peak 
+output forces (𝑓 = 10 Hz). 
+larger hole size produces a larger output force as the output force is 
+proportional (F = PA) to the area under the same applied pressure 
+in a hydraulic system. We also validated that our HaptiCoil (hole 
+size: 6 mm) can produce a controllable output force by controlling 
+the input power, shown in Figure 10C. To verify whether the output 
+force of HaptiCoil is sufficient for a haptic button applications, we 
+estimated the resulting skin deformation using a dynamic model 
+that couples HaptiCoil with the fingerpad skin, as can be seen in 
+Figure 11A. The results presented in Figure 11B demonstrated that 
+CHI ’25, April 26–May 01, 2025, Yokohama, Japan Youn et al. 
+Figure 11: A) Dynamic model of the HaptiCoil coupled with 
+the fingertip. Skin parameters (𝑘 = 900 N/m, 𝑐 = 1.56 N·sec/m) 
+were obtained from [30] B) Comparison between the esti-
+mated skin deformation the detection threshold obtained 
+from [3]. C) Measured blocked force under various preloads 
+(𝑓 = 10 Hz). 
+Figure 12: A) Stability of force application over 10 s at 180 
+Hz. B) Step response of HaptiCoil current and force. The rise 
+time is approximately 2.1 ms, and is nearly symmetric with 
+the 2.6 ms fall time. 
+skin deformation is at least 4 times larger than the reported detec-
+tion threshold at low frequency (1 Hz), and up to 200 times larger 
+for high-frequency vibration stimuli (> 100 Hz) [3]. Results shown 
+in Figure 11C further validated that our HaptiCoils can deliver per-
+ceptible force even under a high preload of 10 N. This is achieved 
+because the hole structure limits the pressure transmitted to the 
+internal fluid, effectively preventing the collapse of the speaker 
+membrane. Figure 12A shows that we can produce a stable out-
+put force during 1,800 cycles (10 s operation) at 180 Hz. The step 
+response of a HaptiCoil is shown in Figure 12B, with calculated 
+rise and fall times of 2.1 ms and 2.6 ms. This fast speeds validate 
+the effectiveness of using an in-compressible fluid for transmitting 
+force. 
+5.2 Free Displacement 
+The surface deformation is also a crucial aspect of a haptic but-
+ton, as it directly impacts haptic perception. Unlike the blocked 
+force test, we measured the displacement of HaptiCoil without 
+any external preload. To effectively stimulate the fingerpad, the 
+required displacement of the haptic device varies depending on size 
+and operating frequency of the device. In practical use, the output 
+displacement of the HaptiCoil is less than free displacement due 
+to the load from the skin (as described by our dynamic fingertip 
+model), however these recordings still offer a good benchmark of 
+performance. We recorded the output free displacement of Hapti-
+Coils at various operating frequencies using a photoelectric sensor 
+(Baumer CH-8501) and a data acquisition device (NI USB-6211). The 
+focal point of the laser was controlled using a linear stage. Figure 
+13 shows the displacement measurement test setup. A sinusoidal 
+signal was applied for 5 seconds, and the displacement and current 
+were recorded simultaneously. 
+The displacement profiles of three HaptiCoils at various oper-
+ating frequencies (1-400 Hz) are presented in Figure 14A. During 
+the experiment, the average input power was maintained at 2.7 W 
+(current= 1 A). The results indicate that the HaptiCoil with a 5 mm 
+hole size produced the largest displacement in low frequency range 
+(1-60 Hz), with an estimated -3 dB bandwidth of approximately 70 
+Hz. Figure 14B shows the peak displacement curve of a HaptiCoil 
+(hole size = 5 mm) under different input power at a 10 Hz operation. 
+Calculated rise and fall times to a step input are 14.7 ms and 19.4 
+ms, respectively, indicating rapid inflation and deflation speeds (see 
+14C). Additionally, we compared the displacement at the center and 
+edge of the HaptiCoil, as shown in Figure 15A, to confirm that our 
+actuator can produce pure localized displacement. The results in 
+15B confirm that our actuator can produce a localized vibration at 
+the surface with minimal displacement outside the touch surface, a 
+result that is also felt qualitatively. 
+Figure 13: Measurement setup for free displacement tests, 
+showing the configuration of the laser based distance sensor. 
+HaptiCoil: Soft Programmable Buttons with Hydraulically Coupled Haptic Feedback and Sensing CHI ’25, April 26–May 01, 2025, Yokohama, Japan 
+Figure 14: Results of free displacement tests. A) Peak displacement versus frequency for 3 different HaptiCoils. B) Peak 
+displacement vs power consumption at 𝑓 = 10Hz. C) Large displacement response to 1 A step input. Measured rise and fall 
+times are 14.7ms and 19.4ms respectively. 
+Figure 15: Results from displacement isolation test. A) Cen-
+ter and Edge locations measured on the HaptiCoil and B) 
+the applied current and displacements recorded. Negligible 
+Edge displacement measured even at over 0.2 mm Center 
+displacement. 
+5.3 Force Sensing 
+HaptiCoils can measure input force by monitoring the inductance 
+of the coil, as introduced in Section 4.4. In Section 4.5, we presented 
+the circuit to measure the inductance of the coil in real-time. Figure 
+16A presents the sensed output profile of a complete HaptiCoil as a 
+function of applied force. For this test, we used a motorized linear 
+stage and a force sensor, identical to those used in the blocked 
+force measurement test. The results demonstrated remarkably lin-
+ear relationship between the sensor output and applied force within 
+the range of 0-1 N. Figure 16B compares the sensor output of the 
+HaptiCoil to the reference force captured by the force sensor under 
+touch input conditions with a real finger. Results demonstrated 
+that the HaptiCoil could rapidly detect pressing forces with a 5 
+ms delay and releasing force with a 100 ms delay. We further in-
+vestigated sensing performance of the HaptiCoil under an ener-
+gized button-click scenario. The HaptiCoil was designed to provide 
+click feedback during both the pressing and releasing phases of 
+button interaction, as shown in Figure 17. A second-order digital 
+biquadratic low-pass filter with a cut-off frequency of 1000 Hz was 
+Figure 16: Results from sensor force evaluation. A) Sensor 
+output voltage changes in an approximately linear fashion 
+with applied force from our fake finger probe. B) The sensor 
+output is fast and strongly correlated to real touch input 
+force, capturing both fast taps and strong presses. 
+applied to the sensor output to reduce high-frequency vibration 
+transients. Results showed that our self-inductance measurement 
+is significantly affected by the applied impulse haptic signal. We 
+hypothesize three main reasons for this, including: rapidly chang-
+ing coil position (our main sensing effect), changes in flux due to 
+large applied current (which we have measured by blocking coil 
+displacement), and the limited common-mode rejection (CMRR) 
+of our sensing pre-amplifier. Low frequency CMRR is also limited 
+due to the small remaining resistance of our sense inductor (0.23 
+CHI ’25, April 26–May 01, 2025, Yokohama, Japan Youn et al. 
+Figure 17: Recorded sensor output and haptic signal over time 
+during a button click. The haptic signal responds quickly to 
+the sensor output data. 
+Ω). We believe these effects could be reduced or compensated for 
+in future work, however to address this interference in this imple-
+mentation sensor output was temporarily disregarded immediately 
+after applying the haptic signal. This allowed for stabilization over 
+a 100 ms period. While further investigation is needed to explore 
+potential compensation methods, the findings confirmed that Hapti-
+Coils can accurately monitor real-time, consecutive button presses 
+at a high speed of 200 ms intervals. Furthermore, the HaptiCoil 
+exhibited rapid response to sensor output, achieving a 0.8 ms delay 
+and generating a 1.25 ms long haptic click. 
+6 PSYCHOPHYSICAL EV ALUATION 
+We conducted preliminary psychophysical tests to assess users’ 
+ability to perceive various haptic feedback from our HaptiCoil pro-
+totypes as compared to an industry baseline LRA. We measured the 
+power detection thresholds of our HaptiCoils with a similarly sized 
+LRA (JIE YI ELECTRONICS JYLRA1040ZF) at various frequencies. 
+Power detection threshold is indicative of a device’s energy effi-
+ciency, and, to some extent, its dynamic range, as we limited applied 
+power to a fraction of a Watt. A small group of participants (N=4, 
+mean age of 30, all identified as male) participated in both tests. 
+Both psychophysical tests were fully automated, with participants 
+recording yes or no answers on a keyboard. 
+The power detection thresholds of our HaptiCoils and LRA were 
+measured under sinusoidal input signals at four different frequen-
+cies: 10 Hz, 60 Hz, 180 Hz (resonance frequency of the LRA), and 
+500 Hz. Similar to the performance evaluation, we tested three Hap-
+tiCoils with varying hole sizes (3 mm, 4 mm, and 5 mm) and a 10 
+mm wide LRA. Figure 18A shows the setup for the power detection 
+Figure 18: A) Physical setup for Power Detection Threshold 
+Test, showing the linear guide, constant force spring, as well 
+as HaptiCoil, LRA, and finger locations. B) View from partic-
+ipant’s perspective. C) Size and shape of LRA and HaptiCoil 
+used in threshold tests. 
+Figure 19: A) An example of the 1-up-2-down staircase proce-
+dure for measuring the power detection threshold. B) Results 
+from Power Detection Threshold Test for a baseline LRA, and 
+three different HaptiCoils. 
+threshold test. During the test, we ensured that the participants’ 
+fingertips were fully engaged with the haptic devices under light 
+contact pressure. Prior research indicates that this contact pres-
+sure is generally below 1 N of force [10, 41]. The test setup, which 
+HaptiCoil: Soft Programmable Buttons with Hydraulically Coupled Haptic Feedback and Sensing CHI ’25, April 26–May 01, 2025, Yokohama, Japan 
+Figure 20: XR UI Example. A) Exploded view of an indirect type HaptiCoil as a fingertip "thimble" designed to wrap around a 
+user’s finger. B) Cross section showing hydraulic path. C) Cross section showing input sensing of a "force pinch" gesture. D) 
+Output path showing rendered localized haptic feedback. E) Describes a mid-air selection gesture composed of optical hand 
+recognition, pinch gesture recognition, and click confirmation feedback coming from force pinch. F) A mixed reality demo 
+showing a virtual button overlaid on a real desktop. User feels grounded force through the thimble, and receives appropriate 
+force click feedback. G) A self-haptics use case where the user feels self-grounded forces in additional for force click feedback. 
+consists of a linear guide rail and a constant force spring (McMaster-
+Carr 1845N1), allowed participants to maintain a consistent contact 
+force of 0.88 N, as shown in Figure 18B. To eliminate any auditory 
+cues, participants wore headphones playing pink noise. For each 
+trial, a sinusoidal signal was applied to the speaker for 1 second, 
+and the current flow through the HaptiCoils/LRA was recorded. 
+For fair comparison, HaptiCoils were designed to have a identical 
+contact area as the LRA shown in Figure 18C. 
+We utilized a descending transformed 1-up-2-down double stair-
+case procedure to calculate the 70.7% detection response point on a 
+psychometric curve [26]. As shown in Figure 19A, the descending 
+staircase began with an easily perceived amplitude, and participants 
+were prompted by our measurement software if they could perceive 
+the stimulus, responding with "Yes" or "No". If the response was 
+"No, " the vibration intensity was increased. If the response was 
+"Yes, " the same stimulus was reapplied. Once the participants gave 
+two consecutive "Yes" responses, the vibration intensity was de-
+creased. This procedure continued until 10 reversal responses were 
+recorded, with the detection threshold determined by the mean of 
+the last 6 reversals. The power detection threshold was calculated 
+based on the measured current flow and resistance of the actuator. 
+Additionally, we limited the maximum current to 150% of peak 
+current listed in the speaker/LRA datasheet. 
+All participants demonstrated clearly converging staircases in 
+their final six reversals. Figure 19B illustrates the average power 
+detection thresholds along with standard deviations. At its reso-
+nance (180 Hz), the LRA exhibited an extremely low input power 
+threshold of 0.3 mW, as expected. However, none of the participants 
+could perceive the LRA stimulus at 10Hz vibration, even with an 
+input power exceeding 650 mW. The input power thresholds for the 
+5 mm diameter HaptiCoil (sample 2) were 3-4 times higher than the 
+LRA at 60 Hz and 180 Hz. Conversely, this HaptiCoil demonstrated 
+lower power thresholds at both low (10 Hz) and high frequencies 
+(500 Hz), 21 mW and 0.8 mW respectively. We believe this clear 
+result demonstrates the broad perceptual bandwidth capabilities of 
+our prototypes, even with a small sample size. It also shows that 
+the trade-off for broader range is reasonable, and compelling tactile 
+effects can be generated by HaptiCoils without needing excessive 
+applied power. 
+7 DEMO APPLICATIONS 
+We presented and validated our self-sensing HaptiCoil, demonstrat-
+ing its ability to operate across a broad frequency range with high 
+output capability and high input sensitivity. In this section, we 
+showcase three example demonstration applications to highlight 
+the versatility of our approach. The applications include a fingertip 
+wearable device for XR interactions, stylus pen for digital inking, 
+and a compact, multi-button remote control. Please also see our 
+Video Figure for more information. 
+7.1 Fingertip Wearable XR Input Device 
+Due to their lightweight and compact nature, HaptiCoils are well 
+suited for wearable applications. We built a small, indirect type 
+HaptiCoil with the speaker mounted to the fingernail and the touch 
+surface wrapped around the tip of the finger (Figures 20A, B). Due 
+to the sensitivity of the HaptiCoil’s input, it can sense being put on, 
+as this causes a slight deformation in the touch surface. Once fitted, 
+the device can not only provide localized haptic feedback directly 
+CHI ’25, April 26–May 01, 2025, Yokohama, Japan Youn et al. 
+Figure 21: Digital Sylus Example. A) Exploded view of two indirect type HaptiCoils embedded in a 3D printed stylus housing. B) 
+Cross section showing hydraluic paths. C) Prototype device. D) An example drawing app showing draw canvas and options bar. 
+E) Single force click input recognition changes pen from drawing to erasing. F) Double force click input recognition pops up 
+stroke width menu slider. G) Directional cues (left-to-right or right-to-left) are rendered in the direction of highlighting text. 
+H) Spatial textures are rendered to simulate different feelings of pen on surface sliding. 
+to the fingerpad (Figure 20D), it can also detect force between the 
+bottom of the case and the outside world, as shown in the scenarios 
+seen in Figures 20E, F, and G. 
+First, imagine an VR number input scenario, Figure 20E, where a 
+number pad is revealed when a user makes a typical pinch gesture 
+(as detected by the head mounted device’s on-board cameras). Now 
+imagine the user can move their hand (while still holding the pinch 
+gesture) and select a specific number from the group, confirming 
+their selection by "clicking" on it via a force pinch. This confirma-
+tion is detected by the HaptiCoil and click feedback profiles clear 
+communication to the user of their selection. 
+Next, a number pad can also be co-located with real physical 
+surfaces, such as a workstation desktop, Figure 20F. As the user’s 
+finger nears the desktop, the on-board cameras project their posi-
+tion to highlight an intended number. Once the user contacts the 
+surface, they feel kinesthetic feedback from real grounded reaction 
+force. If they continue pushing against this force, the HaptiCoil can 
+detect an input force and trigger a click confirmation. 
+Finally, imagine a self-haptics scenario, where a number pad 
+appears on the user’s opposite hand once they turn their palm to-
+wards the on-board cameras. Similar to the grounded desktop, a 
+user can push their finger against a specific location of their hand, 
+selecting a button and receiving force appropriate click feedback 
+to confirm their selection. In each of these 3 scenarios, the Hap-
+tiCoil serves as a wearable button, taking on different functions 
+depending on the context of user interaction. In this sense, it a 
+type of spatial computing equivalent of a traditional mouse-click. 
+Of course, HaptiCoils can also be triggered due to totally virtual 
+buttons, such as in Figure 1C. 
+7.2 Digital Stylus with Force Sensing and 
+Feedback 
+We also envisioned and built a 3D printed digital pen, complete 
+with a conductive rubber pen tip, and two integrated counter fir-
+ing HaptiCoils. The speakers were mounted near the rear of the 
+device, and the output was routed to two small openings (4 × 4 
+mm) (seen Figure 21A-C). This rear actuator configuration is similar 
+to the latest Apple Pencil (which includes vibrotactile feedback); 
+however, we use hydraulic channels to focus localized haptics into 
+the compact space between the fingers near the tip of the pen, as it 
+is difficult to place speakers in that area directly. Using hydraulic 
+channels, the digital pen can achieve a compact structure similar 
+to that of a commercial digital stylus, as shown in Figure 21C. 
+We designed an example drawing application on a Surface Go 
+tablet, as shown in Figure 21D, to demonstrate haptic input and 
+output. Single click input Figure 21E is used to quickly switch 
+between drawing and erasing modes, while a force pinch and drag 
+"double-click" input is used to change stroke width (Figure 21F). 
+We also envision directional cues rendered to the user, by firing 
+phase offset haptics to the index finger and thumb (Figure 21G), a 
+technique known to create apparent tactile motion. This motion can 
+help indicate, for example, the rightward or leftward highlighting of 
+text while reading an article. Finally, broadband tactile textures can 
+be rendered via our HaptiCoils, depending on the virtual texture 
+the pen is sliding across on screen, Figure 21H, adding a sense of 
+realism to the digital inking experience. 
+HaptiCoil: Soft Programmable Buttons with Hydraulically Coupled Haptic Feedback and Sensing CHI ’25, April 26–May 01, 2025, Yokohama, Japan 
+Figure 22: Remote Control Example. A) Five HaptiCoils are 
+arrayed with different output shapes revealed when a nega-
+tive voltage is applied. B) Controller can be used to control 
+a mediaplayer using typical forward, backward, up, down, 
+pause/play paradigm. 
+7.3 Multi-button Remote Control 
+For our final example, we built a low-profile programmable click 
+remote control (total thickness of 7 mm, outside dimension 45 × 
+45 mm), as shown in Figure 22. This controller housed an array of 
+5 separate HaptiCoils, each sensed and driven independently. We 
+designed the HaptiCoil output hole shapes to match an up, down, 
+left, right, and center configuration, allowing users to feel the loca-
+tions of the buttons without looking (Figure 22A). We found that 
+implementing multiple HaptiCoils in close proximity created mini-
+mal interference, however we could detect some subtle cross-talk 
+in self-inductance baselines for particularly strong haptic effects. 
+This effect, however, could be easily compensated, or even ignored, 
+as buttons were only clicked one at a time. The use case for this ex-
+ample is a media player, where a user can pause or play the song by 
+clicking on the center button, and skip forward or backwards using 
+the right and left buttons. Clicking up and down allows them to 
+change between songs. We implemented keyboard HID commands 
+to emulate a keyboard media player, and programmed custom click 
+sensations in our micro-controller. 
+8 LIMITATION AND FUTURE WORK 
+Although our HaptiCoils demonstrate promising advantages in 
+terms of wide bandwidth and compact design, challenges remain re-
+garding its low output force and displacement. This is primarily be-
+cause the speaker we used was designed for acoustic purposes, not 
+for haptics. We believe that the performance of the HaptiCoil can 
+be significantly improved by optimizing the voice-coil. Specifically, 
+increasing the BL factor and efficiency of the voice-coil through 
+the use of a thicker coil with more turns should enhance its per-
+formance, and increasing max displacement by using a different 
+suspension can increase output displacement. The HaptiCoil re-
+quires a larger coil area than the actuation area, which is the same 
+as the hole size, to achieve a large deformation. Therefore, the ratio 
+between the coil size and hole size should also be explored in the 
+future to optimize the performance. Another challenge is gener-
+ating static forces without overheating the coil due to the Joule 
+heating. We do not claim to be capable of rendering static force 
+now, as this is a well-known issue with electromagnetic approaches. 
+The simplest solution to reduce heating effects, however, is to re-
+duce the coil’s resistance by using thicker wire. Alternatively, we 
+could explore using a coolant as the fluid in the system to dissipate 
+the heat generated in the coil more effectively. We also observed 
+some performance degradation when a preload exceeding 1 N was 
+applied. This occurred because the speaker was designed to have 
+a soft membrane to maximize the acoustic pressure and mobility. 
+The speaker membrane is fully deformed under high preloads, and 
+unable to produce force sufficiently. This issue could be addressed 
+by optimizing the mechanical impedance of the HaptiCoil to closely 
+match that of the skin. 
+The sensing method we employed also presents challenges. First, 
+cross-talk occurs between the coils and sensors in the circuit, as any 
+signal current flowing through the voice-coil causes the shifting in 
+inductance. This can make it difficult to provide continuous sensa-
+tion while maintaining accurate touch sensing between coils. Addi-
+tionally, we also observed subtle baseline shifts in the sensor output 
+during operation similar to shifting baselines in self-capacitance 
+measurements, which should be addressed further. As mentioned 
+prior, applied current also shift self-inductance, and future work 
+should look at compensating for this using a feed-forward model. 
+This is intriguing, as it could lead to closed-loop position and force 
+rendering, further increasing the haptic performance of HaptiCoils. 
+The dynamic performance of the HaptiCoil is highly influenced 
+by inadvertent air bubbles in the fluid, as air is compressible and 
+introduces compliance into the system. This invalidates our as-
+sumption of an in-compressible fluid. Consequently, degassing the 
+air during fabrication becomes crucial, adding complexity to the 
+process. We also encountered fluid loss over the course of days, 
+which limits the long-term stability of the actuator. We believe this 
+evaporation occurs primarily through the thin silicone membrane, 
+and this could be minimized by optimizing the membrane selec-
+tion or selecting a more suitable fluid. Another challenge we faced 
+was fluid leakage, which can happen through any tiny holes. To 
+prevent this, special attention to sealing during the fabrication is 
+essential. Over-application of silicone sealant is effective, but messy. 
+Additionally, the limited temperature range poses a constraint in 
+particular applications due to potential vaporization or freezing 
+of the water. It can be addressed by replacing the water with a 
+fluid that has a higher vaporization temperature and lower freezing 
+temperature. The durability of the silicone membrane is another 
+concern, as its compliance makes it prone to punctures or tears. We 
+believe that using a more robust silicone membrane, or covering 
+with a thin, durable surface layer, could be a workable solution. 
+Although we selected a single microspeaker to demonstrate the 
+potential of the HaptiCoil in this work, we believe that HaptiCoils 
+could be easily fabricated in various designs and sizes. For instance, 
+earbuds could be promising candidates for the HaptiCoil, as they 
+already incorporate miniaturized circuit boards with Bluetooth 
+CHI ’25, April 26–May 01, 2025, Yokohama, Japan Youn et al. 
+Figure 23: Proposed Future Work involving A) Extreme minia-
+turization of HaptiCoil implementation using commodity 
+smart earbud electronics, and B) Customization of HaptiCoil 
+sizes and power ratings for different parts of the hand and 
+body. 
+communication and on-board power (see Figure 23A). Addition-
+ally, Figure 23B shows the potential for implementing of various 
+speakers in the market to create a HaptiCoil haptic glove. Beyond 
+minaturization of the electronics, we believe that HaptiCoils could 
+also be miniaturized using the same techniques seen in these minia-
+ture speakers, i.e. careful 3D design, manufacture, and assembly. 
+However this goes against the prototyping ethos of this method. 
+Nonetheless, small moving coil actuators could be miniaturized and 
+implemented with stiffer, compact suspensions and well defined 
+contact points as opposed to explicitly using fluid as a coupling 
+medium. This might help bring some advantages of moving coil 
+actuators to mass production. 
+9 CONCLUSION 
+In this work, we presented HaptiCoil, a method of created wide-
+bandwidth (1-500 Hz) soft haptic buttons at a low-cost which are 
+compact, and customizable. This approach combines the high band-
+width of the commoditized water proof speakers with the efficient 
+power transmission of hydraulic coupling mechanisms to deliver 
+versatile haptic feedback. Furthermore, our HaptiCoils can sense 
+user force input by monitoring changes in the inductance of the 
+coil. 
+We provided a comprehensive physical quantification of both ac-
+tuation and sensing capabilities by measuring force, displacement, 
+sensing behavior. Our physical evaluation demonstrates that the 
+HaptiCoils can precisely detect human input and deliver wide-band 
+localized tactile feedback. We also validated that our HaptiCoil 
+offers a haptic stimuli with a broader perceptual range compared 
+to an industry standard approaches the LRA, as confirmed through 
+psycopysical evaluation. Finally, we showcased three implementa-
+tions of our device: a fingertip XR wearable, a digital stylus, and a 
+remote media control. 
+Acknowledgments 
+We would like to offer special thanks Wenzhen Yuan for loaning 
+the use of her 3D printer, and Yanjun Chen for discussions on VR 
+scenario. 
+References 
+[1] Deanna S. Asakawa, George H. Crocker, Adam Schmaltz, and Devin L. Jindrich. 
+2017. Fingertip forces and completion time for index finger and thumb touch-
+screen gestures. Journal of Electromyography and Kinesiology 34 (June 2017), 
+6–13. https://doi.org/10.1016/j.jelekin.2017.02.007 
+[2] Shantonu Biswas and Yon Visell. 2019. Emerging Material Tech-
+nologies for Haptics. Advanced Materials Technologies 4, 4 
+(2019), 1900042. https://doi.org/10.1002/admt.201900042 _eprint: 
+https://onlinelibrary.wiley.com/doi/pdf/10.1002/admt.201900042. 
+[3] S. J. Bolanowski, Jr., G. A. Gescheider, R. T. Verrillo, and C. M. Checkosky. 1988. 
+Four channels mediate the mechanical aspects of touch. The Journal of the 
+Acoustical Society of America 84, 5 (Nov. 1988), 1680–1694. https://doi.org/10. 
+1121/1.397184 
+[4] Hsiang-Yu Chen, Jaeyoung Park, Steve Dai, and Hong Z. Tan. 2011. Design and 
+Evaluation of Identifiable Key-Click Signals for Mobile Devices. IEEE Transactions 
+on Haptics 4, 4 (Oct. 2011), 229–241. https://doi.org/10.1109/TOH.2011.21 
+[5] Yanjun Chen, Xuewei Liang, Si Chen, Yuwen Chen, Hongnan Lin, Hechuan Zhang, 
+Chutian Jiang, Feng Tian, Yu Zhang, Shanshan Yao, and Teng Han. 2022. HapTag: 
+A Compact Actuator for Rendering Push-Button Tactility on Soft Surfaces. In 
+Proceedings of the 35th Annual ACM Symposium on User Interface Software and 
+Technology (UIST ’22). Association for Computing Machinery, New York, NY, 
+USA, 1–11. https://doi.org/10.1145/3526113.3545644 
+[6] Kyung Yun Choi, Jinmo Lee, Neska ElHaouij, Rosalind Picard, and Hiroshi Ishii. 
+2021. aSpire: Clippable, Mobile Pneumatic-Haptic Device for Breathing Rate 
+Regulation via Personalizable Tactile Feedback. In Extended Abstracts of the 2021 
+CHI Conference on Human Factors in Computing Systems (CHI EA ’21). Association 
+for Computing Machinery, New York, NY, USA, 1–8. https://doi.org/10.1145/ 
+3411763.3451602 
+[7] Seungmoon Choi and Katherine J. Kuchenbecker. 2013. Vibrotactile Display: 
+Perception, Technology, and Applications. Proc. IEEE 101, 9 (Sept. 2013), 2093– 
+2104. https://doi.org/10.1109/JPROC.2012.2221071 
+[8] Artem Dementyev, Pascal Getreuer, Dimitri Kanevsky, Malcolm Slaney, and 
+Richard F Lyon. 2021. VHP: Vibrotactile Haptics Platform for On-body Ap-
+plications. In The 34th Annual ACM Symposium on User Interface Software and 
+Technology (UIST ’21). Association for Computing Machinery, New York, NY, 
+USA, 598–612. https://doi.org/10.1145/3472749.3474772 
+[9] Artem Dementyev, Alex Olwal, and Richard F. Lyon. 2020. Haptics with Input: 
+Back-EMF in Linear Resonant Actuators to Enable Touch, Pressure and Environ-
+mental Awareness. In Proceedings of the 33rd Annual ACM Symposium on User 
+Interface Software and Technology (UIST ’20). Association for Computing Machin-
+ery, New York, NY, USA, 420–429. https://doi.org/10.1145/3379337.3415823 
+[10] Alan K. Goble, Amy A. Collins, and Roger W. Cholewiak. 1996. Vibrotactile 
+threshold in young and old observers: The effects of spatial summation and the 
+presence of a rigid surround. The Journal of the Acoustical Society of America 99, 
+4 (April 1996), 2256–2269. https://doi.org/10.1121/1.415413 
+[11] Mayank Goel, Jacob Wobbrock, and Shwetak Patel. 2012. GripSense: using built-
+in sensors to detect hand posture and pressure on commodity mobile phones. In 
+Proceedings of the 25th annual ACM symposium on User interface software and 
+technology (UIST ’12). Association for Computing Machinery, New York, NY, USA, 
+545–554. https://doi.org/10.1145/2380116.2380184 
+[12] Sebastian Gratz-Kelly, Tim Krüger, Gianluca Rizzello, Stefan Seelecke, and 
+Giacomo Moretti. 2023. An audio-tactile interface based on dielectric elas-
+tomer actuators. Smart Materials and Structures 32, 3 (Feb. 2023), 034005. 
+https://doi.org/10.1088/1361-665X/acb6da Publisher: IOP Publishing. 
+[13] Nur Al-huda Hamdan, Adrian Wagner, Simon Voelker, Jürgen Steimle, and Jan 
+Borchers. 2019. Springlets: Expressive, Flexible and Silent On-Skin Tactile Inter-
+faces. In Proceedings of the 2019 CHI Conference on Human Factors in Computing 
+Systems (CHI ’19). Association for Computing Machinery, New York, NY, USA, 
+1–14. https://doi.org/10.1145/3290605.3300718 
+[14] Teng Han, Fraser Anderson, Pourang Irani, and Tovi Grossman. 2018. HydroRing: 
+Supporting Mixed Reality Haptics Using Liquid Flow. In Proceedings of the 31st 
+Annual ACM Symposium on User Interface Software and Technology (UIST ’18). 
+Association for Computing Machinery, New York, NY, USA, 913–925. https: 
+//doi.org/10.1145/3242587.3242667 
+[15] Chris Harrison and Scott E. Hudson. 2009. Providing dynamically changeable 
+physical buttons on a visual display. In Proceedings of the SIGCHI Conference on 
+Human Factors in Computing Systems (CHI ’09). Association for Computing Ma-
+chinery, New York, NY, USA, 299–308. https://doi.org/10.1145/1518701.1518749 
+HaptiCoil: Soft Programmable Buttons with Hydraulically Coupled Haptic Feedback and Sensing CHI ’25, April 26–May 01, 2025, Yokohama, Japan 
+[16]
+ Inwook Hwang, Seongcheol Mun, Jung-Hwan Youn, Hyeong Jun Kim, Seung Koo 
+Park, Meejeong Choi, Tae June Kang, Qibing Pei, and Sungryul Yun. 2024. Height-
+renderable morphable tactile display enabled by programmable modulation of 
+local stiffness in photothermally active polymer. Nature Communications 15, 
+1 (March 2024), 2554. https://doi.org/10.1038/s41467-024-46709-7 Publisher: 
+Nature Publishing Group. 
+[17] Xiaobin Ji, Xinchang Liu, Vito Cacucciolo, Yoan Civet, Alae El Haitami, Sophie 
+Cantin, Yves Perriard, and Herbert Shea. 2021. Untethered Feel-Through Haptics 
+Using 18-µm Thick Dielectric Elastomer Actuators. Advanced Functional Ma-
+terials 31, 39 (2021), 2006639. https://doi.org/10.1002/adfm.202006639 _eprint: 
+https://onlinelibrary.wiley.com/doi/pdf/10.1002/adfm.202006639. 
+[18] Peter W. Johnson, Mats Hagberg, E. Wigaeus Hjelm, and David Rempel. 2000. 
+Measuring and characterizing force exposure during computer mouse use. 
+Scandinavian Journal of Work, Environment & Health 26, 5 (2000), 398–405. 
+https://doi.org/10.5271/sjweh.560 
+[19] Erin Kim and Oliver Schneider. 2020. Defining Haptic Experience: Foundations 
+for Understanding, Communicating, and Evaluating HX. In Proceedings of the 2020 
+CHI Conference on Human Factors in Computing Systems (CHI ’20). Association 
+for Computing Machinery, New York, NY, USA, 1–13. https://doi.org/10.1145/ 
+3313831.3376280 
+[20] Hwan Kim, Minhwan Kim, and Woohun Lee. 2016. HapThimble: A Wearable 
+Haptic Device towards Usable Virtual Touch Screen. In Proceedings of the 2016 
+CHI Conference on Human Factors in Computing Systems (CHI ’16). Association 
+for Computing Machinery, New York, NY, USA, 3694–3705. https://doi.org/10. 
+1145/2858036.2858196 
+[21] Jeong Ho Kim, Lovenoor Aulck, Michael C. Bartha, Christy A. Harper, and 
+Peter W. Johnson. 2014. Differences in typing forces, muscle activity, comfort, 
+and typing performance among virtual, notebook, and desktop keyboards. Applied 
+Ergonomics 45, 6 (Nov. 2014), 1406–1413. https://doi.org/10.1016/j.apergo.2014. 
+04.001 
+[22] Jin Hee (Heather) Kim, Joan Stilling, Michael O’Dell, and Cindy Hsin-Liu Kao. 
+2023. KnitDema: Robotic Textile as Personalized Edema Mobilization Device. In 
+Proceedings of the 2023 CHI Conference on Human Factors in Computing Systems 
+(CHI ’23). Association for Computing Machinery, New York, NY, USA, 1–19. 
+https://doi.org/10.1145/3544548.3581343 
+[23] Sunjun Kim and Geehyuk Lee. 2013. Haptic feedback design for a virtual but-
+ton along force-displacement curves. In Proceedings of the 26th annual ACM 
+symposium on User interface software and technology (UIST ’13). Association for 
+Computing Machinery, New York, NY, USA, 91–96. https://doi.org/10.1145/ 
+2501988.2502041 
+[24] Dae-Young Lee, Seung Hee Jeong, Andy J. Cohen, Daniel M. Vogt, Matthias 
+Kollosche, Geoffrey Lansberry, Yiğit Mengüç, Ali Israr, David R. Clarke, and 
+Robert J. Wood. 2022. A Wearable Textile-Embedded Dielectric Elastomer 
+Actuator Haptic Display. Soft Robotics 9, 6 (Dec. 2022), 1186–1197. https: 
+//doi.org/10.1089/soro.2021.0098 Publisher: Mary Ann Liebert, Inc., publishers. 
+[25] Edouard Leroy, Ronan Hinchet, and Herbert Shea. 2020. Multimode Hydrauli-
+cally Amplified Electrostatic Actuators for Wearable Haptics. Advanced Mate-
+rials 32, 36 (2020), 2002564. https://doi.org/10.1002/adma.202002564 _eprint: 
+https://onlinelibrary.wiley.com/doi/pdf/10.1002/adma.202002564. 
+[26] H. Levitt. 1971. Transformed Up-Down Methods in Psychoacoustics. The Journal 
+of the Acoustical Society of America 49, 2B (Feb. 1971), 467–477. https://doi.org/ 
+10.1121/1.1912375 
+[27] Dengfeng Li, Jingkun Zhou, Kuanming Yao, Sitong Liu, Jiahui He, Jingyou Su, 
+Qing’ao Qu, Yuyu Gao, Zhen Song, Chunki Yiu, Chuanlu Sha, Zhi Sun, Binbin 
+Zhang, Jian Li, Libei Huang, Chenyu Xu, Tsz Hung Wong, Xingcan Huang, Jiyu Li, 
+Ruquan Ye, Lei Wei, Zhengyou Zhang, Xu Guo, Yuan Dai, Zhaoqian Xie, and Xinge 
+Yu. 2022. Touch IoT enabled by wireless self-sensing and haptic-reproducing 
+electronic skin. Science Advances 8, 51 (Dec. 2022), eade2450. https://doi.org/10. 
+1126/sciadv.ade2450 Publisher: American Association for the Advancement of 
+Science. 
+[28] Hongnan Lin, Liang He, Fangli Song, Yifan Li, Tingyu Cheng, Clement Zheng, 
+Wei Wang, and HyunJoo Oh. 2022. FlexHaptics: A Design Method for Passive 
+Haptic Inputs Using Planar Compliant Structures. In Proceedings of the 2022 
+CHI Conference on Human Factors in Computing Systems (CHI ’22). Association 
+for Computing Machinery, New York, NY, USA, 1–13. https://doi.org/10.1145/ 
+3491102.3502113 
+[29] Hongnan Lin, Xuanyou Liu, Shengsheng Jiang, Qi Wang, Ye Tao, Guanyun Wang, 
+Wei Sun, Teng Han, and Feng Tian. 2024. TacTex: A Textile Interface with 
+Seamlessly-Integrated Electrodes for High-Resolution Electrotactile Stimulation. 
+In Proceedings of the CHI Conference on Human Factors in Computing Systems 
+(CHI ’24). Association for Computing Machinery, New York, NY, USA, 1–16. 
+https://doi.org/10.1145/3613904.3642873 
+[30] Jack Lindsay, Richard J. Adams, and Blake Hannaford. 2013. Improving tactile 
+feedback with an impedance adapter. In 2013 World Haptics Conference (WHC). 
+713–718. https://doi.org/10.1109/WHC.2013.6548496 
+[31] Yuhu Liu, Satoshi Nishikawa, Young ah Seong, Ryuma Niiyama, and Yasuo 
+Kuniyoshi. 2021. ThermoCaress: A Wearable Haptic Device with Illusory Moving 
+Thermal Stimulation. In Proceedings of the 2021 CHI Conference on Human Factors 
+in Computing Systems (CHI ’21). Association for Computing Machinery, New 
+York, NY, USA, 1–12. https://doi.org/10.1145/3411764.3445777 
+[32] Jani Lylykangas, Veikko Surakka, Katri Salminen, Jukka Raisamo, Pauli Laitinen, 
+Kasper Rönning, and Roope Raisamo. 2011. Designing tactile feedback for piezo 
+buttons. In Proceedings of the SIGCHI Conference on Human Factors in Computing 
+Systems (CHI ’11). Association for Computing Machinery, New York, NY, USA, 
+3281–3284. https://doi.org/10.1145/1978942.1979428 
+[33] Yuxin Ma, Tianze Xie, Peng Zhang, Hwan Kim, and Seungwoo Je. 2024. AirPush: 
+A Pneumatic Wearable Haptic Device Providing Multi-Dimensional Force Feed-
+back on a Fingertip. In Proceedings of the CHI Conference on Human Factors in 
+Computing Systems (CHI ’24). Association for Computing Machinery, New York, 
+NY, USA, 1–13. https://doi.org/10.1145/3613904.3642536 
+[34] Alex Mazursky, Shan-Yuan Teng, Romain Nith, and Pedro Lopes. 2021. MagnetIO: 
+Passive yet Interactive Soft Haptic Patches Anywhere. In Proceedings of the 2021 
+CHI Conference on Human Factors in Computing Systems (CHI ’21). Association 
+for Computing Machinery, New York, NY, USA, 1–15. https://doi.org/10.1145/ 
+3411764.3445543 
+[35] Moritz Alexander Messerschmidt, Sachith Muthukumarana, Nur Al-Huda Ham-
+dan, Adrian Wagner, Haimo Zhang, Jan Borchers, and Suranga Chandima 
+Nanayakkara. 2022. ANISMA: A Prototyping Toolkit to Explore Haptic Skin De-
+formation Applications Using Shape-Memory Alloys. ACM Trans. Comput.-Hum. 
+Interact. 29, 3 (2022), 19:1–19:34. https://doi.org/10.1145/3490497 
+[36] Hila Mor, Tianyu Yu, Ken Nakagaki, Benjamin Harvey Miller, Yichen Jia, and 
+Hiroshi Ishii. 2020. Venous Materials: Towards Interactive Fluidic Mechanisms. 
+In Proceedings of the 2020 CHI Conference on Human Factors in Computing Systems. 
+ACM, Honolulu HI USA, 1–14. https://doi.org/10.1145/3313831.3376129 
+[37] Bruce J. P. Mortimer, Gary A. Zets, and Roger W. Cholewiak. 2007. Vibrotactile 
+transduction and transducers. The Journal of the Acoustical Society of America 
+121, 5 Pt1 (May 2007), 2970–2977. https://doi.org/10.1121/1.2715669 
+[38] Ken Nakagaki, Daniel Fitzgerald, Zhiyao (John) Ma, Luke Vink, Daniel Levine, 
+and Hiroshi Ishii. 2019. inFORCE: Bi-directional ‘Force’ Shape Display for Haptic 
+Interaction. In Proceedings of the Thirteenth International Conference on Tangible, 
+Embedded, and Embodied Interaction (TEI ’19). Association for Computing Ma-
+chinery, New York, NY, USA, 615–623. https://doi.org/10.1145/3294109.3295621 
+[39] Claudio Pacchierotti, Stephen Sinclair, Massimiliano Solazzi, Antonio Frisoli, 
+Vincent Hayward, and Domenico Prattichizzo. 2017. Wearable Haptic Systems 
+for the Fingertip and the Hand: Taxonomy, Review, and Perspectives. EEE Trans. 
+Haptics 10, 4 (2017), 580–600. https://doi.org/10.1109/TOH.2017.2689006 
+[40] Chaeyong Park, Jinhyuk Yoon, Seungjae Oh, and Seungmoon Choi. 2020. Aug-
+menting Physical Buttons with Vibrotactile Feedback for Programmable Feels. 
+In Proceedings of the 33rd Annual ACM Symposium on User Interface Software 
+and Technology (UIST ’20). Association for Computing Machinery, New York, NY, 
+USA, 924–937. https://doi.org/10.1145/3379337.3415837 
+[41] D. T. Pawluk and R. D. Howe. 1999. Dynamic contact of the human fingerpad 
+against a flat surface. Journal of Biomechanical Engineering 121, 6 (Dec. 1999), 
+605–611. https://doi.org/10.1115/1.2800860 
+[42] Pornthep Preechayasomboon and Eric Rombokas. 2021. Haplets: Finger-Worn 
+Wireless and Low-Encumbrance Vibrotactile Haptic Feedback for Virtual and 
+Augmented Reality. Frontiers in Virtual Reality 2 (Sept. 2021). https://doi.org/10. 
+3389/frvir.2021.738613 Publisher: Frontiers. 
+[43] Purnendu, Jess Hartcher-O’Brien, Vatsal Mehta, Nicholas Colonnese, Aakar 
+Gupta, Carson J. Bruns, and Priyanshu Agarwal. 2023. Fingertip Wearable High-
+resolution Electrohydraulic Interface for Multimodal Haptics. In 2023 IEEE World 
+Haptics Conference (WHC). 299–305. https://doi.org/10.1109/WHC56415.2023. 
+10224383 ISSN: 2835-9534. 
+[44] Tucker Rae-Grant, Chris Harrison, and Craig Shultz. 2024. DynaButtons: Fast 
+Interactive Soft Buttons with Analog Control. In 2024 IEEE Haptics Symposium 
+(HAPTICS). 366–371. https://doi.org/10.1109/HAPTICS59260.2024.10520864 ISSN: 
+2324-7355. 
+[45] Jun Rekimoto. 2013. Traxion: a tactile interaction device with virtual force 
+sensation. In Proceedings of the 26th annual ACM symposium on User interface 
+software and technology (UIST ’13). Association for Computing Machinery, New 
+York, NY, USA, 427–432. https://doi.org/10.1145/2501988.2502044 
+[46] Samuel Rosset, Benjamin M. O’Brien, Todd Gisby, Daniel Xu, Herbert R. Shea, and 
+Iain A. Anderson. 2013. Self-sensing dielectric elastomer actuators in closed-loop 
+operation. Smart Materials and Structures 22, 10 (Sept. 2013), 104018. https: 
+//doi.org/10.1088/0964-1726/22/10/104018 Publisher: IOP Publishing. 
+[47] Alex Russomanno, Zhentao Xu, Sile O’Modhrain, and Brent Gillespie. 2017. A 
+pneu shape display: Physical buttons with programmable touch response. In 2017 
+IEEE World Haptics Conference (WHC). 641–646. https://doi.org/10.1109/WHC. 
+2017.7989976 
+[48] Oliver Schneider, Karon MacLean, Colin Swindells, and Kellogg Booth. 2017. 
+Haptic experience design: What hapticians do and where they need help. In-
+ternational Journal of Human-Computer Studies 107 (Nov. 2017), 5–21. https: 
+//doi.org/10.1016/j.ijhcs.2017.04.004 
+[49] Sougata Sen and David Kotz. 2020. VibeRing: using vibrations from a smart 
+ring as an out-of-band channel for sharing secret keys. In Proceedings of the 
+10th International Conference on the Internet of Things (IoT ’20). Association for 
+CHI ’25, April 26–May 01, 2025, Yokohama, Japan Youn et al. 
+Computing Machinery, New York, NY, USA, 1–8. https://doi.org/10.1145/3410992. 
+3410995 
+[50] Vivian Shen, Chris Harrison, and Craig Shultz. 2024. Expressive, Scalable, Mid-air 
+Haptics with Synthetic Jets. ACM Trans. Comput.-Hum. Interact. 31, 2 (2024), 
+14:1–14:28. https://doi.org/10.1145/3635150 
+[51] Vivian Shen, Tucker Rae-Grant, Joe Mullenbach, Chris Harrison, and Craig 
+Shultz. 2023. Fluid Reality: High-Resolution, Untethered Haptic Gloves using 
+Electroosmotic Pump Arrays. In Proceedings of the 36th Annual ACM Symposium 
+on User Interface Software and Technology (UIST ’23). Association for Computing 
+Machinery, New York, NY, USA, 1–20. https://doi.org/10.1145/3586183.3606771 
+[52] Ali Shtarbanov. 2021. FlowIO Development Platform – the Pneumatic “Raspberry 
+Pi” for Soft Robotics. In Extended Abstracts of the 2021 CHI Conference on Human 
+Factors in Computing Systems (CHI EA ’21). Association for Computing Machinery, 
+New York, NY, USA, 1–6. https://doi.org/10.1145/3411763.3451513 
+[53] Craig Shultz and Chris Harrison. 2022. LRAir: Non-contact Haptics Using Syn-
+thetic Jets. In 2022 IEEE Haptics Symposium (HAPTICS). https://doi.org/10.1109/ 
+HAPTICS52432.2022.9765565 
+[54] Craig Shultz and Chris Harrison. 2023. Flat Panel Haptics: Embedded Electroos-
+motic Pumps for Scalable Shape Displays. In Proceedings of the 2023 CHI Confer-
+ence on Human Factors in Computing Systems (CHI ’23). Association for Computing 
+Machinery, New York, NY, USA, 1–16. https://doi.org/10.1145/3544548.3581547 
+[55] Kahye Song, Sung Hee Kim, Sungho Jin, Sohyun Kim, Sunho Lee, Jun-Sik Kim, 
+Jung-Min Park, and Youngsu Cha. 2019. Pneumatic actuator and flexible piezoelec-
+tric sensor for soft virtual reality glove system. Scientific Reports 9, 1 (July 2019), 
+8988. https://doi.org/10.1038/s41598-019-45422-6 Publisher: Nature Publishing 
+Group. 
+[56] Andrew A. Stanley, Erik S. Roby, and Sean J. Keller. 2024. High-speed fluidic 
+processing circuits for dynamic control of haptic and robotic systems. Science 
+Advances 10, 14 (April 2024), eadl3014. https://doi.org/10.1126/sciadv.adl3014 
+Publisher: American Association for the Advancement of Science. 
+[57] Takashi Suzuki. 2024. Enhancing the Human Tactile Sensitivity through an 
+Individually Optimized Imperceptible Vibration Stimulation. In Extended Ab-
+stracts of the 2024 CHI Conference on Human Factors in Computing Systems 
+(CHI EA ’24). Association for Computing Machinery, New York, NY, USA, 1– 
+6. https://doi.org/10.1145/3613905.3650826 
+[58] Shan-Yuan Teng, Pengyu Li, Romain Nith, Joshua Fonseca, and Pedro Lopes. 
+2021. Touch&Fold: A Foldable Haptic Actuator for Rendering Touch in Mixed 
+Reality. In Proceedings of the 2021 CHI Conference on Human Factors in Computing 
+Systems (CHI ’21). Association for Computing Machinery, New York, NY, USA, 
+1–14. https://doi.org/10.1145/3411764.3445099 
+[59] Yu-Chih Tung and Kang G. Shin. 2016. Expansion of Human-Phone Interface By 
+Sensing Structure-Borne Sound Propagation. In Proceedings of the 14th Annual 
+International Conference on Mobile Systems, Applications, and Services (MobiSys 
+’16). Association for Computing Machinery, New York, NY, USA, 277–289. https: 
+//doi.org/10.1145/2906388.2906394 
+[60] Ryusei Uramune, Hiroki Ishizuka, Takefumi Hiraki, Yoshihiro Kawahara, Sei 
+Ikeda, and Osamu Oshiro. 2020. HaPouch: Soft and Wearable Haptic Display 
+Devices using Liquid-to-gas Phase Change Actuator. In Adjunct Proceedings of 
+the 33rd Annual ACM Symposium on User Interface Software and Technology (UIST 
+’20 Adjunct). Association for Computing Machinery, New York, NY, USA, 53–55. 
+https://doi.org/10.1145/3379350.3416183 
+[61] Keigo Ushiyama and Pedro Lopes. 2023. FeetThrough: Electrotactile Foot Interface 
+that Preserves Real-World Sensations. In Proceedings of the 36th Annual ACM 
+Symposium on User Interface Software and Technology (UIST ’23). Association 
+for Computing Machinery, New York, NY, USA, 1–11. https://doi.org/10.1145/ 
+3586183.3606808 
+[62] Velko Vechev, Juan Zarate, David Lindlbauer, Ronan Hinchet, Herbert Shea, 
+and Otmar Hilliges. 2019. TacTiles: Dual-Mode Low-Power Electromagnetic 
+Actuators for Rendering Continuous Contact and Spatial Haptic Patterns in 
+VR. In 2019 IEEE Conference on Virtual Reality and 3D User Interfaces (VR). 312– 
+320. https://doi.org/10.1109/VR.2019.8797921 Conference Name: 2019 IEEE 
+Conference on Virtual Reality and 3D User Interfaces (VR) ISBN: 9781728113777 
+Place: Osaka, Japan Publisher: IEEE. 
+[63] Xiaosong Wu, Seong-Hyok Kim, Haihong Zhu, Chang-Hyeon Ji, and Mark G. 
+Allen. 2012. A Refreshable Braille Cell Based on Pneumatic Microbubble Ac-
+tuators. Journal of Microelectromechanical Systems 21, 4 (Aug. 2012), 908–916. 
+https://doi.org/10.1109/JMEMS.2012.2190043 Conference Name: Journal of Mi-
+croelectromechanical Systems. 
+[64] Songlin Xu, Zhiyuan Wu, Shunhong Wang, Rui Fan, and Nan Lin. 2020. Hydrauio: 
+Extending Interaction Space on the Pen through Hydraulic Sensing and Haptic 
+Output. In Adjunct Proceedings of the 33rd Annual ACM Symposium on User 
+Interface Software and Technology (UIST ’20 Adjunct). Association for Computing 
+Machinery, New York, NY, USA, 43–45. https://doi.org/10.1145/3379350.3416180 
+[65] Hsin-Yun Yao and Vincent Hayward. 2010. Design and analysis of a recoil-type 
+vibrotactile transducer. The Journal of the Acoustical Society of America 128, 2 
+(Aug. 2010), 619–627. https://doi.org/10.1121/1.3458852 
+[66] Lining Yao, Ryuma Niiyama, Jifei Ou, Sean Follmer, Clark Della Silva, and Hi-
+roshi Ishii. 2013. PneUI: pneumatically actuated soft composite materials for 
+shape changing interfaces. In Proceedings of the 26th annual ACM symposium 
+on User interface software and technology (UIST ’13). Association for Computing 
+Machinery, New York, NY, USA, 13–22. https://doi.org/10.1145/2501988.2502037 
+[67] Sang Ho Yoon, Siyuan Ma, Woo Suk Lee, Shantanu Thakurdesai, Di Sun, Flávio P. 
+Ribeiro, and James D. Holbery. 2019. HapSense: A Soft Haptic I/O Device with 
+Uninterrupted Dual Functionalities of Force Sensing and Vibrotactile Actuation. 
+In Proceedings of the 32nd Annual ACM Symposium on User Interface Software 
+and Technology (UIST ’19). Association for Computing Machinery, New York, NY, 
+USA, 949–961. https://doi.org/10.1145/3332165.3347888 
+[68] Jung-Hwan Youn, Seung-Mo Jeong, Young-Seok Choi, and Ki-Uk Kyung. 2019. A 
+Soft Tactile Display Using Dielectric Elastomer Actuator for Fingertip Interaction. 
+In Haptic Interaction, Hiroyuki Kajimoto, Dongjun Lee, Sang-Youn Kim, Masashi 
+Konyo, and Ki-Uk Kyung (Eds.). Springer, Singapore, 15–17. https://doi.org/10. 
+1007/978-981-13-3194-7_4 
+[69] Jung-Hwan Youn, Heeju Mun, and Ki-Uk Kyung. 2021. A Wearable Soft Tactile 
+Actuator With High Output Force for Fingertip Interaction. IEEE Access 9 (2021), 
+30206–30215. https://doi.org/10.1109/ACCESS.2021.3058979 
+[70] Jung-Hwan Youn, Ibrahim Bin Yasir, and Ki-Uk Kyung. 2020. Self-sensing Soft 
+Tactile Actuator for Fingertip Interface. In 2020 IEEE/RSJ International Conference 
+on Intelligent Robots and Systems (IROS). 8939–8944. https://doi.org/10.1109/ 
+IROS45743.2020.9341087 ISSN: 2153-0866. 
+[71] Eric M. Young, Amirhossein H. Memar, Priyanshu Agarwal, and Nicholas Colon-
+nese. 2019. Bellowband: A Pneumatic Wristband for Delivering Local Pres-
+sure and Vibration. In 2019 IEEE World Haptics Conference (WHC). https: 
+//doi.org/10.1109/WHC.2019.8816075 
+[72] Bowen Zhang and Misha Sra. 2021. PneuMod: A Modular Haptic Device with 
+Localized Pressure and Thermal Feedback. In Proceedings of the 27th ACM Sym-
+posium on Virtual Reality Software and Technology (VRST ’21). Association for 
+Computing Machinery, New York, NY, USA, 1–7. https://doi.org/10.1145/3489849. 
+3489857 
+[73] Clement Zheng, Zhen Zhou Yong, Hongnan Lin, HyunJoo Oh, and Ching Chiuan 
+Yen. 2022. Shape-Haptics: Planar & Passive Force Feedback Mechanisms for 
+Physical Interfaces. In Proceedings of the 2022 CHI Conference on Human Factors 
+in Computing Systems (CHI ’22). Association for Computing Machinery, New 
+York, NY, USA, 1–15. https://doi.org/10.1145/3491102.3501829 

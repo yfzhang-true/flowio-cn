@@ -1,0 +1,1756 @@
+VIREO: Web-based Graphical Authoring of Vibrotactile Feedback
+for Interactions with Mobile and Wearable Devices
+Mihail Terenti and Radu-Daniel Vatavu
+MintViz Lab, MANSiD Research Center, S ¸tefan cel Mare University of Suceava
+13 Universitatii, 720229 Suceava, Romania
+AR TICLE HISTOR Y
+Compiled September 17, 2022
+ABSTRACT
+We introduce VIREO, a web-based software tool for graphical authoring of vibro-
+tactile feedback for mobile and wearable applications. VIREO enables ﬂexible spec-
+iﬁcation of vibrotactile patterns with model-based and free-draw sketch input, and
+is compatible with mobile and wearable devices that support JavaScript, either
+natively at the platform level or in a web browser. We demonstrate the practical
+utility of VIREO by presenting several applications implemented for a smartphone,
+smartwatch, smart armband, and a pair of smartglasses that integrate vibrotactile
+feedback patterns authored with VIREO. Also, we present the results of an usability
+evaluation study involving sixteen participants represented by coders with various
+programming experience and levels of programming language proﬁciency, including
+JavaScript. We discuss our contribution in the context of the results of a Systematic
+Literature Review that we conducted on the topic of software tools, editors, and
+platforms developed in the scientiﬁc community for authoring vibrotactile feedback.
+Since one major ﬁnding of our review is the little availability of such contributions,
+we release VIREO as a free web resource for researchers and practitioners that wish
+to author and integrate vibrotactile feedback in mobile and wearable applications.
+KEYWORDS
+Vibrotactile feedback; mobile devices; wearable devices; web tool; JavaScript
+1. Introduction
+Smart mobile devices, such as smartphones, tablets, and phablets, have become domi-
+nant in the landscape of personal computing devices, enabling interaction on the go and
+rich possibilities for communication, access to information, and interactions in mixed
+reality environments. Also in this landscape, smart wearables, such as smartwatches,
+smartglasses, and digital jewellery, represent the fastest-growing technological innova-
+tion for mobile users (Menear, 2020), providing new functionality and services com-
+plementary to the prevalent smartphone (Chen, Chen, Liu, Chen, and Li, 2021; Sani,
+Boos, Yun, and Zhong, 2015), but also likely to replace smartphones in the foreseeable
+future. Mobile and wearable devices enable a diversity of output modalities for users,
+from primarily visual feedback on smartphones and smartwatches (Matulic, Ganeshan,
+Fujiwara, and Vogel, 2021; Wenig, Sch¨ oning, Olwal, Oben, and Malaka, 2017) to aural
+feedback for devices worn on the head (Brezolin, Santos, de Lima, Zanella, Rieder,
+CONTACT Radu-Daniel Vatavu. Email: radu.vatavu@usm.ro
+and De Marchi, 2017; Casamassima, Ferrari, Milosevic, Rocchi, and Farella, 2013) to
+haptic feedback for ﬁtness trackers and electronic rings (Han, Han, Annett, Ander-
+son, Huang, and Yang, 2017; Turmo Vidal, Zhu, Waern, and M´ arquez Segura, 2021;
+Vatavu, Mossel, and Sch¨ onauer, 2016). However, the choice of the output modality also
+depends on the context in which such devices are used and worn. For instance, in some
+contexts of use, interaction with mobile and wearable devices needs to be subtle (Pohl,
+Muresan, and Hornbæk, 2019), non-disturbing to the user and the others (Anderson,
+Grossman, Wigdor, and Fitzmaurice, 2015), while nevertheless retaining highly in-
+formative and eﬀective qualities despite temporary situations and interaction-related
+constraints determined by the context of use (Heller, Vanacken, Geurts, and Luyten,
+2020; Wobbrock, 2019).
+Among the possible feedback modalities available on mobile and wearable devices,
+haptic feedback enables a wide range of possible implementations that target various
+receptors on the human body—in the form of tactile, thermal, or force feedback (Bas-
+dogan, Giraud, Levesque, and Choi, 2020; Jones, 2016; Kang and Lee, 2018; Song,
+Lim, and Yun, 2016; Wang, Guo, Liu, Zhang, Xu, and Xiao, 2019; Youn, Lee, Kim,
+Shim, Chan, and Lee, 2021)—and has been found eﬀective for contexts of use char-
+acterized by constraints such as those enumerate above. Vibrotactile feedback, which
+falls under the general category of haptics, is implemented via controlled vibrations
+targeting speciﬁc cutaneous mechanoreceptors located in the human skin. Compared
+to other haptic modalities, vibrotactile feedback is widely available on a diversity of
+mobile and wearable devices that integrate vibration motors, e.g., from the buzz of
+an incoming call on a smartphone or smartwatch (Hong, Lee, and Choi, 2013; Israr,
+Zhao, and Schneider, 2015; Park and Choi, 2017; Sch¨ onauer, Mossel, Zaiti, and Vatavu,
+2015) to the rumble of a game controller (Swindells, Pietarinen, and Viitanen, 2014)
+to a hobbyist’s custom-made wearable prototypes (Terenti and Vatavu, 2022), which
+makes it an accessible modality for practitioners to use in their applications.
+Several options are available to design, implement, and integrate vibrotactile feed-
+back into applications, among which two main trends can be identiﬁed: (i) specifying
+vibrotactile feedback programmatically at code level and (ii) using authoring tools and
+editors to design vibration patterns, which are exported to applications. For instance,
+Apple’s Core Haptics1 enables implementation of haptic patterns that are highly cus-
+tomizable, but need to be speciﬁed in code via API calls, and Haptrix 2 is an example
+of a graphical editor that leverages Core Haptics to make the developers’ task eas-
+ier in that regard. Unfortunately, some of these solutions target speciﬁc platforms
+and/or operating systems, as these two examples show, which limits the range of sup-
+ported devices. Other tools address a wider range of platforms, operating systems,
+and programming languages, but specialize on particular haptic synthesis or render-
+ing technology. For instance, Lofelt Studio 3 enables iOS and Android developers to
+design, test, and integrate tactile eﬀects for mobile devices by deriving haptic clips
+from audio ﬁles. However, the audio ﬁle must be available to start oﬀ haptics design.
+Unlike Lofelt, Syntacts4 enable design of rich vibrotactile patterns from scratch with a
+powerful editor and APIs for C++, C#, Python, and Unity developers, but the results
+are rendered via audio interfaces, which limits the range of addressable target devices
+1Core Haptics — Apple Developer Documentation, https://developer.apple.com/documentation/
+corehaptics.
+2Haptrix - Create & Share Haptic Experiences, https://www.haptrix.com.
+3Lofelt - Unlock the power of haptics in mobile devices, https://lofelt.com.
+4Syntacts — The Tactor Synthesizer, https://www.syntacts.org.
+2
+to desktop platforms. 5 More ﬂexible tools that enable authoring of vibrotactile pat-
+terns in a way that is not platform-, synthesis-, and rendering technology-dependent
+have been demonstrated in the scientiﬁc literature (Hong et al., 2013; Lee and Choi,
+2012; Lee, Ryu, and Choi, 2009a; Pan¨ eels, Anastassova, and Brunet, 2013; Ryu and
+Choi, 2008) but, unfortunately, they are not publicly available.
+In this context, new initiatives and corresponding tools are needed in the community
+to democratize design of rich and expressive vibrotactile feedback patterns and their
+integration in applications addressing a wide range of mobile and wearable devices,
+including new devices with diverse characteristics, development platforms, and operat-
+ing systems to be released in the foreseeable future. Since such devices are expected to
+feature web connectivity in order to access cloud services (Chen, Ma, Li, Wu, Zhang,
+and Youn, 2017), integrate with IoT (Furini, Mirri, Montangero, and Prandi, 2020),
+or simply to retrieve and share data (Schneegass, Poguntke, and Machulla, 2019), we
+argue that web technology in the form of programming languages, communication pro-
+tocols, and data formats designed for the web 6,7 can be leveraged as an all-inclusive
+medium for both vibrotactile feedback design on the web and rendering of vibrations
+on a target device. Such an approach will democratize both the process of designing
+vibrotactile feedback patterns, including their management and sharing as readily ac-
+cessible online collections, but also implementation on a wide range of mobile and
+wearable devices that support web applications natively or in a web browser. In this
+context, we make the following practical contributions in this paper:
+(1) We conduct a Systematic Literature Review (SLR) on the topic of software au-
+thoring tools, editors, and platforms developed in the scientiﬁc community for
+vibrotactile feedback design in order to understand the extent of these contribu-
+tions, their authoring techniques, target platforms, and addressed devices. Our
+ﬁndings, based on the analysis of twenty-ﬁve software tools and corresponding
+scientiﬁc papers published at peer-reviewed academic venues, show that most
+of the tools have targeted desktop environments and, arguably because of that,
+very few are still publicly available.
+(2) We introduce VIREO (VIbrotactile Online EditoR, see Figure 1 for a screen-
+shot), our software tool for authoring vibrotactile feedback patterns on the web
+with several convenient features for practitioners: model-based authoring of vi-
+brotactile patterns, pattern composition via direction manipulation, pattern au-
+thoring via free-draw sketching and user demonstration, management of pattern
+libraries on the web, and easy integration with mobile and wearable devices
+that are connected to the web. We discuss technical implementation details of
+VIREO, present user workﬂows, and describe the techniques available in VIREO
+for authoring vibrotactile patterns.
+(3) We demonstrate the practical utility of VIREO by presenting applications de-
+5Although adaptation to mobile platforms might be possible; see FAQ, Can Syntacts be used for mobile
+haptic applications?, https://www.syntacts.org/faq. However, Syntacts was primarily intended for desktop-
+based research and applications (see link above).
+6For example, wearables running Tizen can be programmed with just HTML, CSS, and JavaScript. Tizen
+Studio enables development of web applications for mobile, wearable, and TV devices, which consist of HTML,
+JavaScript, and CSS combined in a package deployed to a Tizen device, such as Samsung Galaxy smartwatches;
+see https://docs.tizen.org/application/web/index.
+7Vibration API ( https://developer.mozilla.org/en-US/docs/Web/API/Vibration API) enables web appli-
+cations to access the vibration hardware from mobile and wearable devices as long as the patterns can be
+described as series of on and oﬀ pulses. This functionality is limited, but via pulse-width modulation (PWM),
+it enables many haptic eﬀects for web applications running JavaScript, e.g., see http://www.hapticsjs.org or
+https://npm.io/package/vtp.js.
+3
+Figure 1. Our tool, VIREO, freely available at https://vireoapp.com enables graphical authoring of vibro-
+tactile feedback patterns for augmenting interactions on mobile and wearable devices that run JavaScript,
+either as standalone applications or in a web browser. VIREO allows researchers and practitioners to specify
+model-based vibrotactile patterns, e.g., exponential or harmonic waves, or simply to sketch a graphical pattern
+to start oﬀ their designs, and then to deploy those designs to a target device. Note: we illustrate in this picture
+a vibration pattern with comfortable, smooth, and soft emotional connotations (Seiﬁ et al., 2015).
+veloped for smartphone, smartwatch, smart armband, and smartglasses devices
+integrating vibrotactile feedback patterns authored with VIREO.
+(4) We conduct an usability evaluation study with VIREO and sixteen participants
+representing coders with various levels of programming experience in various
+programming languages and platforms. Our ﬁndings show a good overall usabil-
+ity for authoring vibrotactile feedback patterns with VIREO, conﬁrmed by the
+SUS (70.47) and CSUQ (2.68) usability tests, respectively.
+2. Related W ork
+We relate to prior work describing applications, tools, and graphical editors designed
+to assist researchers and practitioners in authoring and implementing vibrotactile feed-
+back. To this end, we conduct a Systematic Literature Review (SLR) study to identify
+such prior work and to perform an overview of the software tools that have been devel-
+oped in the scientiﬁc community, and in particular tools that are publicly available. For
+the design of our SLR, we followed Siddaway, Wood, and Hedges (2019) for best prac-
+tice recommendations and adopted the PRISMA method (Liberati, Altman, Tetzlaﬀ,
+Mulrow, Gøtzsche, Ioannidis, Clarke, Devereaux, Kleijnen, and Moher, 2009) for the
+identiﬁcation, screening, eligibility, inclusion, and snowballing steps. In the following,
+we describe these steps in detail.
+4
+2.1. Study Design and Implementation
+2.1.1. Identiﬁcation
+This step consists in identifying work relevant to our topic of interest by specifying
+keywords, search operators, and electronic databases where to search for those key-
+words (Siddaway et al., 2019). Our focus is on software tools that enable authoring
+vibrotactile feedback patterns for mobile and wearable interactions. However, even
+though we are interested in mobile and wearable devices only, we considered the scope
+of our SLR to be much broader, as we ﬁgured that mobile and especially wearable
+devices have been little addressed by such tools. Regarding the relevant venues where
+such research has been traditionally disseminated, we considered SIGCHI conferences,
+available through the ACM Digital Library, and IEEE specialized venues, such as the
+Haptics Symposium, World Haptics, and Transactions on Haptics, available from the
+IEEE Xplore scientiﬁc database. We searched keywords in the abstracts of the papers
+available from these two databases since searching through the entire text resulted in
+many nonrelevant records, while searching just in the paper titles resulted in missing
+relevant work. Based on these considerations, we ran the following query:
+Abstract: (vibrotactile AND (feedback OR pattern*) AND (tool* OR
+platform* OR author*)))
+that returned 18 results from ACM DL and 52 results from IEEE Explore. 8
+2.1.2. Screening
+We screened the abstracts of these papers to evaluate their relevancy for our topic
+of interest regarding software tools for vibrotactile feedback. We removed 43 papers,
+most of which described applications that employed vibrotactile feedback, for which
+the keywords from our query were used in another context, e.g., “surgical tools” in the
+visuohaptic bone saw simulator of Olsson, Nysj¨ o, Singh, Thor, and Carlbom (2015)
+or “operating power tools” in the exploration of Yin, Otis, Fortin, and Cooperstock
+(2019) of assembly tasks in VR with a simulated impact wrench. After the screening
+step, we arrived at a number of 27 papers.
+2.1.3. Eligibility and Inclusion
+We scrutinized the remaining papers by reading the entire text in order to identify
+tools, editors, platforms, or applications developed for authoring vibrotactile patterns.
+To this end, we formulated the following eligibility criteria: (EC 1) the content of the
+paper must be available, in English, and the content was peer-reviewed, (EC 2) the
+paper is about vibrotactile feedback, and (EC3) the paper describes a tool, in any form,
+that enables authoring of vibrotactile feedback patterns for integration in applications.
+By applying these criteria, we removed 14 references, 9 leaving a subset of 13 papers
+relevant to our topic of investigation.
+8An adapted form of the query was used in IEEE Xplore due to the speciﬁcs of the IEEE Xplore search
+engine, but with the same keywords and operators: ”Abstract”: vibrotactile AND (”Abstract”: feedback OR
+”Abstract”: pattern*) AND (”Abstract”: tool* OR ”Abstract”: platform* OR ”Abstract”: author*).
+9We also removed (Lee and Choi, 2012) that described VibScoreEditor, a tool relevant to our scope, but
+already presented in a previous paper (Lee et al., 2009a) by the same authors.
+5
+Table 1.: Authoring tools for vibrotactile feedback identiﬁed in our Systematic Literature Review (SLR) study. Notes: diﬀerent
+colors depict diﬀerent goals, target devices, and authoring techniques for these tools. The last row shows our tool, VIREO, with
+distinct characteristics in this landscape.
+Reference T ool name Objective of the
+tool/research†
+Authoring
+platform‡ T arget device§ Authoring technique ¶ Avail-
+able?
+1 Enriquez and
+MacLean (2003)
+Hapticon
+Editor T Haptic icon design G Desktop L Terrain display
+Q Composition of
+predeﬁned patterns Q User
+demonstration
+−
+2
+Swindells,
+Maksakov,
+MacLean, and
+Chung (2006)
+Haptic Icon
+Prototyper T Haptic icon design G Desktop L Generic, not
+speciﬁed
+Q Composition of
+predeﬁned patterns
+Q Waveform editing
+−
+3
+Eid, Andrews,
+Alamri, and
+El Saddik (2008)
+HAMLAT
+T Enhancing immersive
+experiences (extension of a VR
+graphics engine with haptics)
+G Desktop L VR devices
+Q Direct manipulation
+(edit haptic
+properties-stifness,
+friction)
+−
+4
+Ryu and Choi
+(2008); Lee et al.
+(2009a)
+posVib
+Editor
+T Generic-purpose vibrotactile
+pattern authoring G Desktop L Multi-actuator
+devices
+Q Composition of
+predeﬁned patterns −
+5 Park, Hwang, and
+Hwang (2009)
+Vibration
+Composer
+T Software tool
+recommendations for designing
+vibrotactile patterns
+G Desktop L Handheld Q Composition of
+predeﬁned patterns −
+6
+Lee and Choi
+(2012); Lee et al.
+(2009a); Lee, Ryu,
+and Choi (2009b)
+VibScore
+Editor
+T Generic-purpose vibrotactile
+pattern authoring G Desktop L Generic, not
+speciﬁed
+Q Concept of ”vibrotactile
+score” Q Composition of
+predeﬁned patterns
+−
+7 Kim, Cha, Ryu,
+and Oakley (2010) − T Enhancing immersive
+experiences (tactile video) G Desktop L Custom glove
+Q Direct manipulation
+(map vibrations to video
+with a software brush)
+−
+8
+Park, Choi,
+Hwang, Kim, Sa,
+and Joung (2011)
+− T Enabling virtual buttons for
+mobile touchscreen devices G Mobile L Mobile devices Q Select from library (72
+records) −
+9 Hong et al. (2013)
+New
+Vibration
+Editor
+T Generic-purpose vibrotactile
+pattern authoring G Mobile L Mobile devices
+Q User demonstration
+(pressure input on
+touchscreen)
+−
+10
+Pan¨ eels et al.
+(2013) TactiPEd T Generic-purpose vibrotactile
+pattern authoring G Desktop L Multi-actuator
+devices Q Waveform editing −
+11
+Swindells et al.
+(2014)
+ViviTouch
+Studio
+T Prototyping mixed audio,
+video, and vibrotactile
+feedback
+G Desktop L Game
+controllers
+Q Composition of
+predeﬁned patterns −
+12
+Mart´ ınez, Garc´ ıa,
+Oliver, Molina, and
+Gonz´ alez (2014)
+VITAKI T Enhancing immersive
+experiences (VR) G Desktop L VR devices
+Q Composition of
+predeﬁned patterns
+Q Waveform editing
+−
+13
+Schneider and
+MacLean (2014) mHIVE
+T Collaborative manipulation
+and exploration of haptic
+sensations
+G Mobile L Generic, not
+speciﬁed
+Q Composition of
+predeﬁned patterns
+Q Waveform editing
+−
+14
+Dong, Gao,
+Al Osman, and
+El Saddik (2015)
+Web
+MPEGV
+Haptic
+Authoring
+T Enhancing immersive
+experiences (MPEG-V) G Web L VR devices
+Q Direct manipulation
+(edit haptic
+properties-stifness,
+friction)
+−
+15 Israr et al. (2015) Feel
+Messenger
+T Enhancing social and
+interpersonal communication G Mobile L Mobile devices Q Select from library −
+16 Seiﬁ et al. (2015) VibViz T Taxonomy and navigation for
+vibrotactile library G Web L Generic,
+wristband
+Q Select from library (120
+records)
+Yes
+[link]
+17
+Schneider, Israr,
+and MacLean
+(2015)
+Mango
+T Enabling professional
+animators to design for
+vibrotactile grids
+G Desktop L Vibrotactile
+arrays
+Q Animation tools
+(timeline, keyframes, object
+paths)
+−
+18
+Le, Zhu, Kosinski,
+Fjeld, Azh, and
+Zhao (2016)
+Ubitile T Vibrotactile feedback for
+interactive tabletops
+G Ring &
+tabletop
+L Ring &
+tabletop
+Q User demonstration
+(movements of the ﬁnger
+wearing a ring)
+−
+19
+Schneider and
+MacLean (2016) Macaron T Generic-purpose vibrotactile
+pattern authoring G Web L Generic, not
+speciﬁed Q Waveform editing Yes
+[link]
+20
+Huang, Chan, Jian,
+Chang, Chen,
+Yang, Hung, and
+Chen (2016)
+VibroPlay T Enhancing immersive
+experiences (VR)
+G VR
+(HMD)
+L Chair with
+actuators
+Q Direct manipulation
+(switch virtual actuators
+on/oﬀ in VR)
+−
+21
+Boer, Vallg˚ arda,
+and Cahill (2017)
+Hedonic
+Haptic
+player
+T Exploration of ”aesthetic
+form-giving” in interaction
+design
+G Desktop L Custom
+wearable
+Q Composition of
+predeﬁned patterns −
+22
+Park and Choi
+(2017) PhysVib
+T Enhancing immersive
+experiences (extension of a
+video game physics engine with
+haptics)
+G Mobile L Mobile devices
+Q Automatic generation
+(exponentially-decaying
+sinusoidal model)
+Yes
+[link]
+23
+Clark, Schneider,
+MacLean, and Tan
+(2017)
+MacaronMix T Generic-purpose vibrotactile
+pattern authoring G Web L Generic, not
+speciﬁed
+Q Automatic generation
+(vibrotactile morphing with
+DTW)
+Yes
+[link]
+24
+Danieau, Guillotel,
+Dumas, Lopez,
+Leroy, and Mollet
+(2018)
+HFX Studio T Enhancing immersive
+experiences (VR) G Desktop L Generic, not
+speciﬁed
+Q Haptic perceptual
+models −
+25
+Pezent, Cambio,
+and O’Malley
+(2021)
+Syntacts
+T Generic-purpose vibrotactile
+pattern authoring
+T Audio-controlled haptics
+G Desktop L Vibrotactile
+arrays
+Q Composition of
+predeﬁned patterns
+Q Waveform editing
+Q Numerical models
+Yes
+[link]
+This paper VIREO
+T Generic-purpose vibrotactile
+pattern authoring for
+T Speciﬁc applications in
+mobile and wearable
+computing
+G Web
+L Mobile and
+wearable devices
+supporting web
+standards and
+JavaScript
+Q Pattern models Q
+Waveform editing
+Q Composition of patterns
+Q Direct manipulation
+(pattern composition)
+Q User demonstration (free
+draw input)
+Yes
+[link]
+†Legend: T generic tools (7) T immersive environments/media (8) T speciﬁc applications, devices, or user groups (8) T research-
+oriented explorations (3).
+‡Legend: G web (4) G desktop (14) G mobile (5) G speciﬁc device (2).
+§Legend: L mobile devices (5) L VR and game controllers (4), L custom device (9), L generic, not always speciﬁed (7).
+¶Legend: Q composition of patterns (10) Q library-based (3) Q waveform editing (6) Q user demonstration (3) Q model-based (4) Q
+speciﬁc techniques (5).
+6
+2.1.4. Snowballing
+We browsed the list of references of the eligible papers and identiﬁed 8 new papers
+relevant to our scope (abackward snowballing procedure) from a total of 591 references.
+We also looked at the Google Scholar citations of the papers from our set and identiﬁed
+4 more papers from a total of 676 citations (a forward snowballing procedure). Our
+ﬁnal set is composed of 25 papers and corresponding tools for authoring vibrotactile
+feedback; see Table 1 for an overview.
+2.2. Results
+The tools for authoring vibrotactile feedback identiﬁed in our SLR were introduced
+for a diversity of reasons and a variety of objectives involving vibrotactile feedback as
+well as for a variety of target platforms and devices. In our analysis, we grouped this
+prior work according to several criteria; see the next subsections and the columns of
+Table 1.
+2.2.1. Objective of the tool
+We identiﬁed four main reasons to introduce tools for authoring vibrotactile feedback
+in the scientiﬁc community. In decreasing order, these are: (1) to support new user
+experiences in immersive media and environments (30.8%) (Danieau et al., 2018; Dong
+et al., 2015; Eid et al., 2008; Huang et al., 2016; Israr et al., 2015; Kim et al., 2010;
+Mart´ ınez et al., 2014; Park and Choi, 2017), (2) to address speciﬁc devices or speciﬁc
+professional user groups (30.8%) (Enriquez and MacLean, 2003; Le et al., 2016; Park
+et al., 2011; Pezent et al., 2021; Schneider et al., 2015; Schneider and MacLean, 2014;
+Swindells et al., 2006, 2014), (3) generic tools to assist with authoring vibrotactile
+feedback (26.9%) (Clark et al., 2017; Hong et al., 2013; Lee and Choi, 2012; Lee et al.,
+2009a; Pan¨ eels et al., 2013; Pezent et al., 2021; Ryu and Choi, 2008; Schneider and
+MacLean, 2016), and (4) research-oriented exploration of vibrotactile feedback that, as
+part of the underlying scientiﬁc method, required new tools (11.5%) (Boer et al., 2017;
+Park et al., 2009; Seiﬁ et al., 2015). For instance, Huang et al. (2016) introduced Vi-
+broPlay, a tool for authoring 3D tactile eﬀects for immersive media experiences, that
+implemented authoring via direct manipulation in VR: the haptic designer touches
+virtual replicas of actual actuators, reproduced in the VR environment, by switching
+them on and oﬀ to produce the desired eﬀect. Lee et al. (2009a) and Lee and Choi
+(2012) introduced and evaluated the VibScore Editor, an application developed for
+generic-purpose vibrotactile pattern authoring that employs the concept of a “vibro-
+tactile score,” implemented with graphical symbols of musical notes. Le et al. (2016)
+were interested in enhancing applications for interactive tabletops with vibrotactile
+feedback on the user’s hand. To this end, they described an authoring technique based
+on user demonstration: movements of the ﬁnger wearing a ring with built-in IMU sens-
+ing were mapped to vibration duration and intensity, respectively. Boer et al. (2017)
+is an example of a scientiﬁc examination where a new tool for vibrotactile feedback
+was needed to enable “diﬀerent forms of pleasurable experiences targeting diﬀerent
+moods and situations of the wearer” (p. 911). The authors explored and discussed
+aspects of aesthetic form-giving in interaction design, which they evaluated with a
+custom wearable device and application for creating vibrotactile feedback for that de-
+vice. VibViz (Seiﬁ et al., 2015) was introduced as both a taxonomy and tool to assist
+designers in the exploration of haptic collections with “easy and highly navigable ac-
+7
+cess to large, diverse sets of vibrotactile stimuli, on the premise that multiple access
+pathways facilitate discovery and engagement” (p. 254).
+2.2.2. Authoring platforms
+We found that the majority of the tools introduced in the scientiﬁc community ad-
+dressed desktop platforms (56.0%) followed by mobile (20.0%), web (16.0%) (Clark
+et al., 2017; Dong et al., 2015; Schneider and MacLean, 2016; Seiﬁ et al., 2015), and
+tools addressing speciﬁc devices (8.0%) (Huang et al., 2016; Le et al., 2016). Of these,
+tools for the web are the easiest to access by practitioners from various platforms and
+operating systems. For example, Schneider and MacLean (2016) introduced Macaron,
+a vibrotactile eﬀect editor on the web implementing gallery examples, composability
+of patterns via copy and paste, and visibility of the pattern parameters. Clark et al.
+(2017) delivered an update, MacaronMix, featuring automatic generation of vibrotac-
+tile eﬀects with Dynamic Time Warping as part of a morphing process where parent
+signals are blended to create new patterns. Seiﬁ et al. (2015) presented VibViz, a web
+application for navigating a library of 120 vibrotactile patterns with associated sen-
+sory, emotional, and metaphorical connotations. Dong et al. (2015) developed the Web
+MPEGV Haptic Authoring tool for multimedia applications to enable developers to
+edit haptic properties for 3D objects on the web.
+2.2.3. Target devices
+The tools analyzed in our SLR were developed for vibrotactile feedback addressing
+custom devices (36.0%) (Boer et al., 2017; Enriquez and MacLean, 2003; Huang et al.,
+2016; Kim et al., 2010; Le et al., 2016; Pan¨ eels et al., 2013; Pezent et al., 2021; Ryu and
+Choi, 2008; Schneider et al., 2015), mobile devices (20.0%), and VR and game con-
+trollers (16.0%) (Dong et al., 2015; Eid et al., 2008; Mart´ ınez et al., 2014; Swindells
+et al., 2014), while a percent of 28.0% of the papers did not specify the target de-
+vice (Clark et al., 2017; Danieau et al., 2018; Lee and Choi, 2012; Lee et al., 2009a,b;
+Schneider and MacLean, 2014, 2016; Seiﬁ et al., 2015). For example, Le et al. (2016)
+were interested in vibrotactile feedback delivered on the user’s ﬁnger with a ring dur-
+ing interactions with tabletops, Swindells et al. (2014) targeted game controllers, and
+Eid et al. (2008), Mart´ ınez et al. (2014), and Dong et al. (2015) targeted VR devices.
+A few tools (Hong et al., 2013; Israr et al., 2015; Park and Choi, 2017; Park et al.,
+2011) explicitly addressed mobile devices, while wearables were targeted by three tools
+identiﬁed by our SLR: VibViz with a wristband (Seiﬁ et al., 2015), tactile video with a
+glove (Kim et al., 2010), and the Hedonic Haptic Player (Boer et al., 2017) delivering
+vibrotactile feedback at various locations on the user’s body in the context of exploring
+aesthetic interaction design.
+2.2.4. Authoring techniques
+We found several types of authoring techniques implemented by the tools that we ana-
+lyzed, as follows: composition of patterns (32.3%), waveform editing (19.3%) (Mart´ ınez
+et al., 2014; Pan¨ eels et al., 2013; Pezent et al., 2021; Schneider and MacLean, 2014,
+2016; Swindells et al., 2006), use of numerical models to specify patterns (12.9%) (Clark
+et al., 2017; Danieau et al., 2018; Park and Choi, 2017; Pezent et al., 2021), library
+of patterns (9.7%) (Israr et al., 2015; Park et al., 2011; Seiﬁ et al., 2015), authoring
+by means of user demonstration (9.7%) (Enriquez and MacLean, 2003; Hong et al.,
+2013; Le et al., 2016), and techniques speciﬁc to various target devices and/or address-
+8
+ing professional user groups (16.1%) (Dong et al., 2015; Eid et al., 2008; Kim et al.,
+2010; Lee and Choi, 2012; Lee et al., 2009a; Schneider et al., 2015). For example,
+Hong et al. (2013) implemented user demonstration of vibrotactile pattern authoring
+via pressure input on touchscreens. Park and Choi (2017) presented a technique for
+the automatic generation of vibrotactile eﬀects for a video game physics engine based
+on an exponentially-decaying sinusoidal model. Mart´ ınez et al. (2014) and Pezent
+et al. (2021) presented tools featuring waveform editing and composition of predeﬁned
+patterns. Schneider et al. (2015) introduced a new authoring technique, speciﬁcally
+addressing professional animators, which employed animation tools, such as the time-
+line, key frames, and object paths, to specify vibration patterns for vibrotactile arrays.
+Other tools, such as posVibEditor (Ryu and Choi, 2008), were speciﬁcally designed
+for a wide range of practitioners with a diversity of skills and experience with hap-
+tics, i.e., “posVibEditor [is a tool] for quick and easy design of vibrotactile patterns
+for vibration motors. The tool supports the drag-and-drop design paradigm so that
+novice users can easily learn and interact with the tool” (p. 120), while ViviTouch
+Studio (Swindells et al., 2014) was speciﬁcally developed for rapid prototyping. Some
+papers also included comparative evaluations of several authoring techniques. For in-
+stance, Huang et al. (2016) argued that haptic design based on sound waves did not
+transfer well into tactile sensations for practitioners without suﬃcient expertise, and
+proposed an authoring technique based on direct manipulation of virtual actuators in
+VR for a physical chair with actuators. Hong et al. (2013) compared user demonstra-
+tion with conventional waveform-based authoring and reported comparable or superior
+performance of the former technique.
+2.2.5. Availability of tools
+Of all the twenty-ﬁve tools included in our analysis, only ﬁve are publicly avail-
+able (Clark et al., 2017; Park and Choi, 2017; Pezent et al., 2021; Schneider and
+MacLean, 2016; Seiﬁ et al., 2015), of which two, Macaron (Schneider and MacLean,
+2016) and MacaronMix (Clark et al., 2017), share the same web application; see Ta-
+ble 1 for the web links. PhysVib (Park and Choi, 2017) is an extension for a video
+game physics engine that enables integration of immersive experiences in mobile video
+games via automatic generation of haptic eﬀects, available on github. Macaron and
+MacaronMix (Clark et al., 2017; Schneider and MacLean, 2016) implement waveform
+editing and automatic generation of vibrotactile eﬀects by blending existing patterns.
+VibViz (Seiﬁ et al., 2015) enables access to a library of 120 vibrotactile patterns with
+corresponding sensory, emotional, and metaphorical mappings. And Syntacts (Pezent
+et al., 2021) is a haptic rendering framework for desktop platforms with audio inter-
+faces.
+2.2.6. Summary
+The results of our SLR revealed a variety of useful and creative techniques for au-
+thoring vibrotactile feedback on a variety of platforms and for a diversity of target
+devices, including mobile and wearable devices according to our scope. Unfortunately,
+the tools featuring those techniques are not publicly available or, when they are, are
+highly specialized, such as the audio haptics from by Syntacts (Pezent et al., 2021)
+that are available for desktop platforms only. These ﬁndings suggest that further ef-
+forts are needed in the scientiﬁc community to make software tools readily available
+to researchers and practitioners in order to foster new scientiﬁc discoveries and practi-
+9
+cal developments involving vibrotactile feedback for mobile and wearable interactions.
+Regarding the latter, our SLR revealed a few tools targeting mobile platforms (Hong
+et al., 2013; Israr et al., 2015; Park and Choi, 2017; Park et al., 2011; Schneider and
+MacLean, 2014), but limited work for wearable platforms, for which only speciﬁc de-
+vices were targeted, such as a custom pair of gloves (Kim et al., 2010), electronic
+ring (Le et al., 2016), wristband (Seiﬁ et al., 2015), and the Hedonic Haptic player de-
+vice (Boer et al., 2017), respectively. However, oﬀ-the-shelf wearable devices integrate
+vibration motors and readily support web standards, protocols, and data formats just
+like the more complex mobile platforms. Therefore, we introduce VIREO, our tool
+that is freely available on the web, which capitalizes on the results of our SLR and
+features many of the useful authoring techniques that we identiﬁed in the scientiﬁc
+literature; see the last row of Table 1. Speciﬁcally, VIREO implements waveform edit-
+ing (Mart´ ınez et al., 2014; Pan¨ eels et al., 2013; Pezent et al., 2021; Schneider and
+MacLean, 2014, 2016; Swindells et al., 2006), composition of patterns (Boer et al.,
+2017; Enriquez and MacLean, 2003; Lee et al., 2009a; Mart´ ınez et al., 2014; Park
+et al., 2009; Pezent et al., 2021; Ryu and Choi, 2008; Schneider and MacLean, 2014;
+Swindells et al., 2006, 2014), direct manipulation (Dong et al., 2015; Eid et al., 2008;
+Huang et al., 2016; Kim et al., 2010), and vibrotactile feedback authoring via user
+demonstration (Hong et al., 2013; Le et al., 2016). Just like posVibEditor (Lee et al.,
+2009a; Ryu and Choi, 2008), VibScoreEditor (Lee and Choi, 2012), New Vibration
+Editor (Hong et al., 2013), TactiPEd (Pan¨ eels et al., 2013), Macaron and Macaron-
+Mix (Clark et al., 2017; Schneider and MacLean, 2016), and Syntacts (Pezent et al.,
+2021), VIREO implements generic-purpose vibrotactile pattern authoring, but ad-
+dresses mobile and wearable devices speciﬁcally. Also, just like VibViz (Seiﬁ et al.,
+2015), Macaron and MacaronMix (Clark et al., 2017; Schneider and MacLean, 2016),
+and Web MPEGV (Dong et al., 2015), VIREO runs on the web. In the next section,
+we present VIREO in detail.
+3. VIREO
+We introduce VIREO, our software tool for authoring vibrotactile feedback patterns
+on the web and integration in mobile and wearable applications. We start with the
+design requirements for VIREO, informed by the results of our SLR study and a
+brainstorming session about requirements for authoring tools on the web, and continue
+with technical implementation details and a description of the main features.
+3.1. Design Requirements for VIREO
+Based on our analysis of the scientiﬁc literature and our goals and scope regarding
+vibrotactile feedback for mobile and wearable interactions, we identify the following
+design requirements (DRs) for VIREO:
+DR1: Web-based availability. VIREO must be easily accessible to researchers and prac-
+titioners from various platforms and operating systems, for which a web-based
+software design solution is the most straightforward approach to implementing
+such a desideratum. The results from our SLR showed that the majority of the
+software tools proposed in the scientiﬁc literature were delivered for speciﬁc oper-
+ating systems, platforms, or devices (see Table 1), which constitutes a limitation
+in terms of their large-scale accessibility.
+10
+DR2: Model-based design for accurate numerical modeling of vibrotactile feedback pat-
+terns. VIREO must provide access to a library of mathematical models in order
+to specify vibrotactile patterns with numerical precision, including models com-
+monly used for implementing vibrotactile feedback in the scientiﬁc literature,
+e.g., linear or exponential variation of vibration intensity over time (Park and
+Choi, 2017; Pezent et al., 2021). Expert practitioners can easily identify these
+models and readily employ them to specify custom vibrotactile feedback pat-
+terns with mathematical precision. Also, patterns obtained with various models
+can be combined by means of pattern composition techniques (Boer et al., 2017;
+Enriquez and MacLean, 2003; Ryu and Choi, 2008; Swindells et al., 2006, 2014)
+to author increasingly complex designs of vibrotactile feedback. For example, by
+specifying a sequence of a linearly increasing intensity of vibration followed by
+a linearly decreasing one, a “triangle” pattern is obtained.
+DR3: Speciﬁcation of vibrotactile patterns via user demonstration to foster rapid pro-
+totyping. VIREO must provide simple mechanisms that enable practitioners to
+quickly generate vibrotactile feedback patterns based on ﬁrst-order approxima-
+tions provided by means of demonstrations, e.g., sketches and free drawing for a
+graphical authoring software tool. This design requirement enables novice users
+to readily employ VIREO before becoming familiarized with numerical models
+(DR2), but also expert users that wish to quickly evaluate preliminary ideas for
+vibrotactile feedback patterns.
+DR4: Easy integration with mobile and wearable devices. Authoring work usually takes
+place on desktop PCs with large displays and computing resources, from which
+the results are deployed to the target devices, which in our case are represented
+by mobile and wearable devices supporting vibrotactile feedback via the inte-
+grated vibration actuators. Consequently, such devices must easily integrate with
+VIREO so that practitioners can readily test their vibrotactile pattern designs
+and integrate those patterns into applications. The focus of VIREO on mobile
+and wearable devices is motivated by the prevalence of the former and increas-
+ing adoption of the latter in the context where smart wearables represent the
+fastest-growing technological innovation for mobile users (Menear, 2020).
+A simple way to implement DR4 is for the target device to support web standards (e.g.,
+HTML), web languages (e.g.. JavaScript), and data-interchange formats designed for
+the web (e.g., JSON), just like VIREO. This requirement is met by all smartphones
+and by many wearables with integrated Wi-Fi functionality. Some wearables, such as
+smartwatches running Tizen OS, can even be programmed with web technology alone,
+such as HTML and JavaScript.10 Also, web languages are becoming increasingly pop-
+ular among developers, e.g., “as of early 2020, JavaScript and HTML/CSS were the
+most commonly used programming languages among software developers around the
+world, with nearly 68 percent of respondents stating that they used JavaScript and
+63.5 percent using HTML/CSS,” according to a Statista April 2021 report. 11 The
+web-based orientation of VIREO (requirement DR 1) makes this desideratum easily
+implementable on the web, i.e., target devices can access a dedicated web page gener-
+ated automatically by VIREO that enables controlled access to vibrotactile patterns.
+Thus, we add another requirement for VIREO that contours its scope more precisely:
+10Tizen Studio enables development of web applications for mobile, wearable, and TV devices, which consist of
+HTML, JavaScript, and CSS combined in a package deployed to a Tizen device; see https://docs.tizen.org/
+application/web/index.
+11Statista. Most used programming languages among developers worldwide, as of early 2020, https://
+www.statista.com/statistics/793628/worldwide-developer-survey-most-used-languages .
+11
+DR5: JavaScript-orientation. Target devices that integrate with VIREO or for which
+VIREO exports vibrotactile feedback patterns support JavaScript applications,
+either natively or in a web browser.
+Design requirements DR1 to DR3 ensure that VIREO is easily accessible to a large
+category of practitioners that use diverse platforms and operating systems, while DR 4
+and DR5 ensure that VIREO addresses uniformly a large category of mobile and wear-
+able devices by leveraging their built-in web connectivity. Moreover, support for DR 5
+can be found in previous initiatives in the HCI engineering community for JavaScript-
+based development frameworks for wearables, such as Weave (Chi and Li, 2015) for
+cross-wearable interaction, FlowIO (Shtarbanov, 2021) for wearable soft robotics, and
+SAPIENS (Schipor, Vatavu, and Wu, 2019b) for peripheral interactions with mobile
+and wearable devices, to name just a few examples.
+3.2. Technical Implementation Details
+We implemented VIREO using Node.js, 12 a popular cross-platform runtime environ-
+ment based on JavaScript. For the back-end, we employed NestJS, 13 one of the most
+popular Model-View-Controller frameworks for Node.js, enabling design and develop-
+ment of eﬃcient and scalable applications for the web. We preferred NestJS since it
+oﬀers a collection of handy, well-structured tools out of the box, such as WebSockets
+and an API for CLI tools for best-practice architectural patterns and well-structured
+web applications, among other useful features. We developed the client-side applica-
+tion with VueJS,14 a fast and powerful JavaScript framework for reactive UIs so that
+VIREO can be accessed from many devices with a uniform user experience. This choice
+of technology enabled us to reuse JavaScript code between the server and client sides of
+VIREO, reducing thus eﬀorts and resources for code writing and testing. To represent
+vibrotactile patterns graphically in the UI, we employed Chart.js, 15 one of the most
+popular JavaScript libraries for data visualization on the web. Moreover, Chart.js can
+be easily extended via plugins, which allowed us to rapidly add the extra functionality
+needed in our UI, such as direct manipulation of the individual models composing a
+vibrotactile pattern, custom visualization eﬀects, and free-draw input directly on the
+chart with the mouse, stylus, and ﬁnger. Next, we present user workﬂows in VIREO
+and describe authoring techniques for vibrotactile feedback patterns.
+3.3. User Workﬂows
+To implement our design requirements DR 2 to DR4 (Subsection 3.1), we devised the
+following main user workﬂows for VIREO (see Figure 2 for visual illustrations):
+(a) A new user registers with VIREO. After logging in, the user gets access to a
+workspace where they can create, edit, test, and export vibrotactile patterns.
+The initial workspace contains an example of a vibrotactile pattern visualized
+as a 1D signal on the time dimension. The pattern is simple—a linear model
+followed by an exponentially decreasing one, describing the variation in vibration
+intensity—with only few parameters to control, such as the slope for the linear
+12Node.js, https://nodejs.org.
+13NestJS - A progressive Node.js framework, https://nestjs.com.
+14Vue.js, the progressive JavaScript framework, https://vuejs.org.
+15Chart.js — Open source HTML5 Charts for your web site, https://www.chartjs.org.
+12
+model and the decay rate for the exponential model, respectively; see Figure 2a.
+The user can play with these parameters to see their eﬀect, explore and add new
+models, and save the pattern to their library.
+(b) A registered user logs into their workspace in VIREO, where their previously
+authored vibrotactile patterns are available in the form of a library of patterns.
+The user can add, edit, and remove patterns; see Figure 2b. There are three
+ways to author a new vibrotactile pattern in VIREO: (i) from scratch, by using
+mathematical models, e.g., linear, exponential, harmonic, etc., (ii) from scratch,
+by sketching the shape of the pattern with the mouse, stylus, or ﬁnger on the
+screen, and (iii) by cloning an existing vibrotactile pattern from the library and
+editing it anew.
+(c) The user wishes to test how a selection of the vibrotactile patterns they created
+with VIREO feels on a smartphone and a smartwatch, respectively. The user
+adds those patterns from the library to a collection of patterns , for which a
+quick access code is automatically generated by VIREO; see Figure 2c. From the
+target device, VIREO is accessed with that code in the web browser, which gives
+instant access to the patterns of the collection. The user can play the patterns
+on the smartphone and smartwatch to evaluate their eﬀect.
+(d) The user has decided on a collection of vibrotactile patterns to use in an ap-
+plication targeting a speciﬁc device. They export the collection as a JavaScript
+ﬁle that contains the patterns encoded in JSON, but also JavaScript code that
+plays the patterns with the Vibration API, 16 a Web API compatible with many
+platforms. The ﬁle is imported into the application that is being developed for
+the target device; see the user workﬂow in Figure 2d.
+(e) The user wants to share a subset of vibrotactile patterns from their VIREO
+library with a colleague developer. They create a new collection, to which they
+add the vibrotactile patterns they wish to share, and send the access code to their
+colleague. With the access code, the second user can either play the vibrotactile
+patterns on a target device or import them into their own library from their
+VIREO workspace; see Figure 2e for the workﬂow.
+We kept the user workﬂows simple and with few steps in order to ensure the func-
+tionality planned for VIREO, according to our design requirements, with minimum
+eﬀort expected from users. The most important feature of VIREO is authoring vi-
+brotactile feedback patterns, for which we implemented several options: model-based
+design and editing of model parameters, composition of multiple models, and free-draw
+input for rapid speciﬁcation of vibrotactile feedback based on user demonstration. In
+the following subsections, we present these features in detail.
+3.4. Model-based Design of Vibrotactile Feedback
+We deﬁne a vibrotactile pattern as a function of timeA(t) specifying the intensity of the
+vibration, normalized between between 0 (no vibration) and 100 (vibration provided
+at the maximum intensity of the actuator). For example, the function A(t) = 100t
+⏐⏐2
+0,
+deﬁned over the time interval [0, 2s], speciﬁes a pattern that increases linearly over a
+period of one second to the maximum intensity of the actuator, where it is capped
+for another second. Individual patterns can be composed in order to generate more
+complex patterns, i.e., A(t)=A1(t)+A2(t −τ), where τ speciﬁes the time oﬀset for the
+16Vibration API - Web APIs, https://developer.mozilla.org/en-US/docs/Web/API/Vibration API.
+13
+Registration
+The user registers 
+with VIREO with an 
+email account and 
+password.
+1 Meet the workspace
+The user is presented 
+with the workspace. 
+One example pattern is 
+in the workspace.
+2
+User exploration of the pattern & workspace3
+3.1 Exploration of the example 
+pattern
+The user edits the parameter 
+values of the models 
+composing the example.
+3.2 Exploration of new pattern 
+models
+The user selects new models, 
+and edits the values of their 
+parameters.
+Save work
+The user saves the 
+pattern to the library.
+4
+a
+EndStart
+Start End 
+Workspace with 
+library of patterns 
+The user has several 
+vibrotactile patterns   
+in their library, which 
+they want to edit or 
+expand with new ones. 
+1 
+Creation of a new vibrotactile pattern 2 
+2.1 Pattern creation by 
+composing models 
+The user creates a new 
+pattern by selecting and 
+composing models. 
+2.2 Pattern creation by free-
+draw sketch input 
+The user draws the shape of 
+the pattern with the mouse 
+or finger on the screen. 
+2.3 Creation by reusing 
+patterns from the library 
+The user opens an existing 
+pattern, saves it with a new 
+name, and then edits it. 
+Save work 
+The user saves the 
+pattern to the library. 
+4 
+Editing of an existing vibrotactile pattern 3 
+3.1 Edit component 
+The parameter values 
+of a model component 
+are modified to specify 
+the component shape. 
+3.2 Edit order of 
+components 
+The components are 
+shifted on the time axis 
+to specify the pattern.  
+b 
+Start End Workspace with 
+library of patterns 
+The user has several 
+vibrotactile patterns   
+in their library, which 
+they want to test on a 
+target device. 
+1 Finalize the 
+collection  
+The user discards the 
+collection or saves it for 
+future rounds of testing. 
+7 
+c 
+Create collection of 
+patterns 
+The user selects 
+patterns to form a 
+collection. VibroBoost 
+creates a unique 
+access code for the 
+collection. 
+2 Access the collection 
+on the target device 
+The user employs the 
+target device to open a 
+web page where the 
+access code is entered to 
+view the collection of 
+vibrotactile patterns. 
+3 New target device 
+Test the vibrotactile 
+patterns on a new 
+target device. 
+4 
+6 Share the collection 
+The user sends the access 
+code to another person, 
+which can view, test, and add 
+the vibrotactile patterns to 
+their library. 
+e 
+d 
+5 
+ Export the collection with source code 
+The user downloads the collection of vibrotactile patterns integrated 
+into JavaScript code that indexes and plays the items of the collection. 
+Figure 2. Five user workﬂows, (a) to (e), implemented in VIREO; see Subsection 3.3 for details.
+second pattern. For example, A1(t) is the linearly increasing pattern deﬁned before
+and A2(t) is a fast exponentially decreasing signal, A2(t) = 100 e−3t, which starts
+immediately after A1(t), i.e., τ = 2s, and decreases to zero in the following second:
+A(t) = 100t
+⏐⏐2
+0 + 100e−3(t−2)⏐⏐3
+2 deﬁned over the time interval [0, 3s]. This composition
+rule applies for series of more than two patterns, as follows: A(t) =
+n∑
+i=1
+Ai(t −τi)
+⏐⏐t2i
+t1i
+,
+where τi is the oﬀset of the i-th pattern of the composition deﬁned over the time
+interval [t1i,t 2i]. Note that in the above mathematical formalism the patterns Ai(t)
+are deﬁned only for positive t values, otherwise they compute to 0 (no vibration).
+We implemented the following numerical models A(t) for vibrotactile patterns in
+VIREO, for which we drew inspiration from prior software authoring tools, systems,
+and studies implementing vibrotactile feedback (Boer et al., 2017; Hong et al., 2013;
+Park and Choi, 2017; Pezent et al., 2021):
+(1) Linear model. A(t) = at +b, where a and b are the slope and intercept. This
+model can be used to create patterns of increasing ( a>0), decreasing (a<0), or
+constant (a=0) intensity of the vibration that start at the intensity denoted by
+14
+Figure 3. Examples of vibrotactile patterns generated using the numerical models available in VIREO. From
+top to bottom: linear, quadratic, exponential, logarithmic, and harmonic models with various parameters; see
+the text for the corresponding formulae.
+b; see the ﬁrst row in Figure 3 for a few examples.
+(2) Quadratic model. A(t) = at2 +bt +c, a standard form expression that deﬁnes
+a parabola with the axis of symmetry parallel to the vertical axis. The coeﬃ-
+cient a controls the degree of curvature and its sign speciﬁes how the parabola
+opens, either upwards ( a>0) or downwards ( a<0). Coeﬃcients a and b deter-
+mine the location of the axis of symmetry ( −b/2a), and c speciﬁes the height of
+the parabola when intercepting the vertical axis. This model generates vibration
+patterns that increase or decrease with more degrees of freedom compared to
+the linear model (e.g., A(t) = 100(t − 1)2 starts with a fast decrease in vibra-
+tion intensity that attenuates progressively), but also symmetric patterns that
+increase then decrease and vice versa (e.g., A(t) = −300t2 + 300t increases to
+75% of the maximum vibration intensity of the actuator during the ﬁrst half of
+a second and then decreases to zero in the next half); see the second row from
+Figure 3 for more examples.
+(3) Exponential model. A(t) = Amaxe−λt+D +c speciﬁes vibration intensity that
+varies exponentially with time, where Amax denotes the maximum amplitude
+and c is the intercept as in the previous models. This model can be used to
+generate a variety of vibration patterns that increase or decrease at various rates
+according to the λ and D parameters, e.g., A(t) =e2.5t+0.5 speciﬁes a vibration
+that increases slowly from 0 to 50% of the maximum intensity of the actuator
+over one and a half seconds; see the third row from Figure 3.
+(4) Logarithmic model. A(t) = Amaxln(at) + c is the inverse of the exponential
+model, useful to specify vibrations that increase at various rates then cap at
+speciﬁc intensity values; see the fourth row from Figure 3.
+(5) Harmonic model. A(t) = Amaxe−τtsin(2πωt) +c speciﬁes harmonic oscillations
+with frequency ω. Amaxe−τt is an envelope function parameterized by the max-
+imum intensity Amax and the decaying constant τ. This model can generate a
+variety of patterns that involve oscillations; see the ﬁfth row from Figure 3 for
+several examples.
+Figure 4 shows how the parameter values are speciﬁed for models in VIREO. Also,
+the patterns generated using these models can be combined to create increasingly more
+15
+Figure 4. Specifying parameter values, time oﬀset, and duration for numerical models in VIREO.
+Figure 5. Examples of vibrotactile patterns authored with VIREO via pattern composition. Note: the colors
+match those from Figure 3, e.g., red hues specify the linear model. Through composition, increasingly complex
+vibration patterns can be authored in VIREO.
+complex patterns; see Figure 5. The time oﬀset of the individual, simpler patterns can
+be speciﬁed numerically or via direct manipulation with the mouse by dragging the
+pattern to the desired location, where a magnetic eﬀect adjusts its position precisely.
+3.5. Sketch-based Speciﬁcation of Vibrotactile Feedback
+Model-based authoring of vibrotactile feedback produces numerically accurate spec-
+iﬁcation of patterns of various complexity, as demonstrated in the previous section.
+However, a use case that arises in practice is when the practitioner wishes to rapidly
+test how a vibrotactile pattern feels like, without being concerned for the time being
+by the exact mathematical modeling of that pattern. To support this requirement
+(DR3), also useful for novice users, we implemented a free draw authoring feature,
+where the user employs the mouse, stylus, or ﬁnger to draw the approximate shape
+of the vibrotactile pattern on the screen; see Figure 6, left. VIREO approximates this
+shape with rectangles of variable width (which are actually linear models with zero
+slope), for which the minimum width can be speciﬁed by the practitioner, e.g., 50ms
+for the example illustrated in Figure 6, right. Patterns created with free-draw input are
+compatible for composition with other patterns since we implemented the free draw
+feature just like any another model in VIREO.
+3.6. Integrating Vibrotactile Feedback Patterns from VIREO in Mobile
+and Wearable Applications
+According to the user workﬂow illustrated in Figure 2d, collections of vibrotactile
+patterns can be exported from VIREO in the form of a JavaScript ﬁle. The ﬁle contains
+an array of patterns speciﬁed as a series of vibration intensities and corresponding
+time duration. This intermediate representation (see Figure 6, right for an example)
+is an approximation of the pattern waveform from VIREO that is convenient for
+rendering vibrotactile feedback with the Vibration Web API on mobile and wearable
+16
+  
+Figure 6. Left: free-draw pattern authoring in VIREO with the mouse, stylus, or ﬁnger directly on the screen.
+Right: an approximation of the pattern from the left image with rectangles (linear models with zero slope).
+devices supporting JavaScript, either as standalone applications or in the web browser.
+However, since the Vibration API only accepts patterns represented as series of on-oﬀ
+pulses,17 we simulate vibration intensity with pulse-width modulation (PWM) (Barr,
+2001). Listing 1 shows an example of JavaScript code exported from VIREO. The
+object vireo exposes the method toNavigatorFormat(patternName) that takes as
+a parameter the name of the vibrotactile pattern and implements PWM to convert
+vibration intensities from the pattern representation into on-oﬀ pulses expected by
+the navigator.vibrate(...) function of the Vibration Web API; see Listing 2. The
+navigatorVibrate(patternName) method calls navigator.vibrate(...) directly.
+1 const V I R E O P a t t e r n s = {
+2 " Start " : [
+3 { i n t e n s i t y :84 , du ra tio n :100} , { i n t e n s i t y :83 , du ra tio n :50} ,
+4 { i n t e n s i t y :33 , du ra tio n :100} , { i n t e n s i t y :84 , du ra tio n :100} ,
+5 { i n t e n s i t y :83 , du ra tio n :50} , { i n t e n s i t y :33 , du rat io n :100} ,
+6 { i n t e n s i t y :84 , du ra tio n :100} , { i n t e n s i t y :83 , du ra tio n :50} ,
+7 { i n t e n s i t y :33 , du ra tio n :100} , { i n t e n s i t y :84 , du ra tio n :100} ,
+8 { i n t e n s i t y :83 , du ra tio n :50} , { i n t e n s i t y :33 , du rat io n :100}
+9 ] ,
+10 " Game over " : [
+11 { i n t e n s i t y :58 , du ra tio n :50} , { i n t e n s i t y :55 , du rat io n :50} ,
+12 { i n t e n s i t y :53 , du ra tio n :50} , { i n t e n s i t y :52 , du rat io n :50} ,
+13 { i n t e n s i t y :51 , du ra tio n :50} , { i n t e n s i t y :51 , du rat io n :50} ,
+14 { i n t e n s i t y :50 , du ra tio n :50} , { i n t e n s i t y :50 , du rat io n :50} ,
+15 { i n t e n s i t y :50 , du ra tio n :100} , { i n t e n s i t y :95 , du ra tio n :50} ,
+16 { i n t e n s i t y :85 , du ra tio n :50} , { i n t e n s i t y :75 , du rat io n :50} ,
+17 { i n t e n s i t y :65 , du ra tio n :50} , { i n t e n s i t y :55 , du rat io n :50} ,
+18 { i n t e n s i t y :45 , du ra tio n :50} , { i n t e n s i t y :35 , du rat io n :50} ,
+19 { i n t e n s i t y :25 , du ra tio n :50} , { i n t e n s i t y :10 , du rat io n :100}
+20 ]
+21 };
+22 fu nc tio n t o N a v i g a t o r F o r m a t ( p a t t e r n N a m e ) { ... }
+23 fu nc tio n n a v i g a t o r V i b r a t e ( p a t t e r n N a m e ) { ... }
+24 fu nc tio n vireo () { ... }
+25 export default vireo ;
+Listing 1 Excerpt of JavaScript code with a collection of vibrotactile patterns exported from VIREO.
+1 import vireo from " ./ exported - pat te rns " ;
+2
+3 const pattern = vireo . t o N a v i g a t o r F o r m a t ( " Start " );
+17https://developer.mozilla.org/en-US/docs/Web/API/Vibration API
+17
+4 n a v i g a t o r . vibrate ( pattern );
+5
+6 // or
+7 // vireo . n a v i g a t o r V i b r a t e (" Start ");
+Listing 2 Excerpt of JavaScript code used in end-user applications.
+4. Demonstrative Applications
+We demonstrate in this section how VIREO can be used for practical implementa-
+tion of vibrotactile feedback in user interfaces for mobile and wearable devices, and
+present applications for a smartphone, smartwatch, smart armband, and pair of smart-
+glasses. Note that our goal in this section is not to focus on design choices for various
+mappings between application events and vibration patterns (that have been exam-
+ined thoroughly elsewhere in the scientiﬁc literature (Boer et al., 2017; Brewster and
+Brown, 2004; Cauchard, Cheng, Pietrzak, and Landay, 2016; Plaisier, Holt, and Kap-
+pers, 2020; Seiﬁ et al., 2015; Shiraga, Kinoshita, and Go, 2016; Vyas, Taha, Blum, and
+Cooperstock, 2020)), but rather to demonstrate the versatility of our web-based ap-
+proach adopted for VIREO to readily implement vibrotactile feedback for mobile and
+wearable interactions. To this end, we employ the VibViz library (Seiﬁ et al., 2015) to
+identify vibration patterns possessing diverse functional and aﬀective characteristics
+suited to our application types.
+4.1. Vibrotactile Feedback for a Smartphone Video Game
+We implemented the classical Snake18 game, where the user maneuvers a continuously
+moving snake, and tries to catch apples to accumulate points, while the snake’s body
+grows in length. We chose three game events to augment with vibrotactile feedback:
+the snake changes its direction of movement following user input, points are awarded
+when apples are eaten, and the game is over. Figure 7a illustrates the corresponding
+vibrotactile patterns, which we chose from the VibViz (Seiﬁ et al., 2015) library by
+using the keyword “game.” For example, when points are awarded to the user after
+the snake has eaten an apple, a vibration pattern is rendered with a happy connota-
+tion (Seiﬁ et al., 2015), while the “game over” event has a pattern suggesting sadness,
+but also encouragement. Since VibViz does not provide numerical descriptions of these
+patterns, we speciﬁed them with the numerical models available in VIREO, e.g., we
+created the “game over” pattern by combining an exponential model (10e−10t +50
+⏐⏐0.5
+0 )
+with a linear one ( −200t + 100
+⏐⏐1
+0.5) and the “points awarded” pattern with three
+consecutive linear models (650 t
+⏐⏐0.15
+0 , 650(t − 0.15)
+⏐⏐0.30
+0.15, and 650( t − 0.3)
+⏐⏐0.45
+0.30) and a
+triangle composed of a linearly increasing and decreasing model (650(t −0.45)
+⏐⏐0.60
+0.45 and
+−650(t − 0.60) + 97.5
+⏐⏐0.75
+0.60). The same results were obtained, with unnoticeable diﬀer-
+ences, when we recreated these patterns in VIREO with the free-draw input technique,
+which approximated the drawings with 50ms-long rectangles as in Figure 6, right.
+18Snake (video game genre) - Wikipedia, https://en.wikipedia.org/wiki/Snake (video game genre).
+18
+Change in 
+direction 
+Points 
+awarded 
+Game over Start 
+running 
+Light encour 
+agement 
+Strong encour 
+agement 
+Personal 
+record 
+achieved 
+About 2/3 of the 
+points of interest are 
+not visible 
+About 1/3 of the  
+points of interest are 
+not visible 
+Very few points of 
+interest are still  
+not visible 
+Selection confirmation 
+for a point of interest 
+a b 
+c d 
+1 2 3 4 5 6 7 
+8 
+ 9 
+ 10 11 
+1 2 3 4 5 6 7 
+8 9 10 11 8 9 10 11 
+Figure 7. Applications for a smartphone, smartwatch, smart armband, and smartglasses, respectively, for
+which we integrated patterns from VIREO to provide vibrotactile feedback to the user corresponding to var-
+ious application events, e.g., notiﬁcation of “points awarded” in a mobile game or a “strong encouragement”
+vibration as a motivation during jogging for a smartwatch user.
+4.2. Delivery of Notiﬁcations on Smartwatches
+We implemented a smartwatch application for joggers. We used Tizen Studio to
+develop a HTML/CSS/JavaScript web application that we deployed to a Samsung
+Galaxy Watch 3. The application monitors running time and provides the user with
+vibrotactile feedback according to speciﬁc milestones: start of the running exercise,
+light and strong encouragements when the running time approaches predeﬁned mile-
+stones, such as 15 and 30 minutes, and achieving a new personal record of running
+time. We created vibrotactile patterns for these events in VIREO using composition of
+the linear, logarithmic, and harmonic models, respectively; see Figure 7b for a visual
+illustration of these patterns and our smartwatch application. For example, we created
+the vibration for “light encouragement” with a logarithmic model (23ln(750t)
+⏐⏐0.10
+0 ) fol-
+lowed by a linear model ( −670(t − 0.10) + 100
+⏐⏐0.25
+0.10), to suggest positive emotion (Seiﬁ
+et al., 2015) to the user.
+19
+4.3. Augmenting Touch Input on Interactive Tabletops with a Wearable
+Device and Vibrotactile Feedback
+For our next demonstration, we considered an information visualization application
+running on an Ideum interactive tabletop, for which we enhanced multitouch input
+with vibrotactile feedback delivered on the user’s hand. We developed a web appli-
+cation displaying a map with touristic points of interest indicated by colored circles;
+see Figure 7c. The user employs zoom-in and zoom-out multitouch gestures to browse
+regions of the map. However, because of the large number of points of interest, not all
+of them can be eﬀectively presented visually at once on the map. Rather, some points
+come into view and others are hidden as the user zooms in into a speciﬁc region of
+the map. To inform the user about how many points of interest are available in that
+region, even if not all of them are visible, we provided vibrations on the user’s arm
+with the Myo 19 armband and the corresponding Myo JavaScript API. We selected
+four application events to augment with vibrotactile feedback when the user touches
+the screen (denoted by numbers 8 to 11 in Figure 7c): many points of interest are
+available around the touch point but are hidden from view, some points of interest
+are available, very few points are still hidden from view, and selection conﬁrmation
+for a point of interest. We designed those patterns in VIREO using composition of
+the linear, exponential, and harmonic models, respectively, to suggest the metaphor-
+ical connotations (Seiﬁ et al., 2015) of diﬀerent amounts of data. For example, the
+vibration pattern with two spikes was speciﬁed in VIREO by composing exponential
+(e19.6(t−0.1) + 49
+⏐⏐0.30
+0.10) and linear ( −333.3(t − 0.3) + 100
+⏐⏐0.45
+0.30) models.
+4.4. Vibrotactile Feedback on Smartglasses
+As a ﬁnal demonstration, we accessed the interactive map web application presented in
+Subsection 4.3 from the Vuzix Blade 20 smartglasses, a device with see-through lenses
+and integrated touchpad and vibration motors in the temple; see Figure 7d. The small
+display of the glasses device exacerbated the visualization problem about too many
+points of interest to be visualized at once on the map. Since Vuzix Blade can run a
+web browser that supports JavaScript and the Vibration Web API, our application ran
+on the smartglasses without any adaptation, delivering the four types of vibrotactile
+feedback patterns to the user when touching the glasses temple.
+4.5. Summary
+All the applications presented in this section were developed using HTML, CSS, and
+JavaScript either as standalone applications (e.g., for the Galaxy Watch 3) or appli-
+cations on the web that can be accessed with a web browser (for the smartphone,
+tabletop, and smartglasses demonstrators, respectively). Our goal with these applica-
+tions was to highlight the practicality and feasibility of the DR 5 design requirement
+for VIREO: by leveraging the built-in capacity of mobile and wearable devices to con-
+nect to the web and support JavaScript, vibrotactile feedback can be straightforwardly
+integrated in applications targeting such devices.
+19https://developerblog.myo.com
+20https://www.vuzix.com/products/blade-smart-glasses-upgraded
+20
+Gender distribution
+JavaScript Java C# C++
+Python
+Python PHP C
+Typescript BashRuby
+VB.NET
+Haskell R
+ObjectiveC
+10 
+7.5 
+5 
+2.5 
+0 
+4.19 years
+(any language)
+1.43 years
+(JavaScript)
+Programming experience (years) Programming proficiency level
+3.00 out of 5 
+(preferred language)
+2.31 out of 5 
+(JavaScript)
+1 - Fundamental awareness |2 - Novice  | 3 - Intermediate |4 - Advanced | 5 - Expert
+Known programming languages
+Figure 8. Demographic details of the participants from our usability study.
+Figure 9. The task for the usability study was to employ VIREO to author the three vibrotactile patterns
+illustrated in this ﬁgure. From left to right, the complexity of the vibration patterns increases from one model
+to a combination of linear models to a combination of diﬀerent models (right).
+5. User Study
+We conducted a user study with coders with various levels of experience in various
+programming languages to evaluate the usability of VIREO as a software tool on the
+web for authoring vibrotactile feedback for applications on mobile devices. The study
+was approved by the Ethics Committee of the University of Suceava, ref. 50/21.01.2022.
+5.1. Participants
+We recruited a total number of sixteen participants from our University’s student body
+with an announcement on an email list. Ten participants (62.5%) declared themselves
+as male and six (37.5%) as female. Their age range was between 21 and 34 years
+(M=25.6, SD=3.4 years). All of the participants were Computer Science students hav-
+ing up to ten years of programming experience (M=4.2, SD=3.0 years) with a diversity
+of programming languages and platforms. Their average self-reported programming
+proﬁciency level was 3.00 (SD=1.03) on a scale from 1 (“fundamental awareness”) to
+2 (“novice”), 3 (“intermediate”), 4 (“advanced”) to 5 (“expert”). Our participants self-
+reported experience with JavaScript, the programming language of choice for VIREO,
+was up to four years (M=1.4, SD=1.6 years) and their average JavaScript proﬁciency
+level was 2.31 (SD=1.25) reported on the scale ranging from 1 (“fundamental aware-
+ness”) to 5 (“expert”). A number of eight participants (50%) were also working in
+the software industry as software developers, engineers, and quality assurance testers.
+None of the participants had used software tools for designing vibrotactile feedback
+before our study. Figure 8 shows the demographic details of our sample of participants.
+21
+5.2. Procedure and Task
+The study was conducted entirely online. Registration to the study was done via a
+Google Forms questionnaire that collected the email addresses of the volunteers. We
+created individual login accounts in VIREO for each participant and sent the login
+details to the email addresses they used to register for the study. A second Google
+Forms document secured the informed consent from the registered participants that
+responded to our follow-up email. Upon login, the participants were provided a tutorial
+of VIREO and a 3-minute long video demonstrating how to use VIREO to create
+vibrotactile feedback patterns and collections of patterns. The instructions given to
+the participants were to freely explore VIREO and, once they felt they understood
+how it worked, they had to author three vibrotactile patterns with diﬀerent levels of
+complexity (see Figure 9) and add them to a collection. To enable the participants to
+easily test the vibrotactile patterns on their smartphone, we also provided the snake
+video game described in Section 4 already set up to play the three vibrotactile patterns
+from Figure 9. We did not impose any time constraints on the exploration of VIREO
+or on performing the vibrotactile pattern authoring task. When we analyzed the logs
+automatically captured during the study, we found that the participants spent on
+average 88 minutes with VIREO. After the participants ﬁnished the task, they were
+asked to ﬁll in a Google Forms questionnaire that collected their experience using
+VIREO with speciﬁc measures, presented in detail next.
+5.3. Measures
+We collected the following measures during our study:
+(1) SUS, the System Usability Scale (Brooke, 1996), a 10-item instrument for evalu-
+ating overall usability. For each item of SUS, the degree of agreement is entered
+using a 5-point Likert scale with responses ranging from 1 (“strongly disagree”)
+to 5 (“strongly agree”). The individual responses are aggregated into a score
+ranging from 0 (low usability) to 100 (perfect score).
+(2) CSUQ, the Computer System Usability Questionnaire (Lewis, 1995), 21 a 19-item
+instrument for assessing overall user satisfaction with system usability that pro-
+vides four scores: overall usability (CSUQ-Overall), system usefulness (CSUQ-
+SysUse), information quality (CSUQ-InfoQual), and interface quality (CSUQ-
+InterQual). For each item of CSUQ, the degree of agreement is entered using
+a 7-point Likert scale with possible responses ranging from 1 (“strongly agree”)
+to 7 (“strongly disagree”) and a “not applicable” point outside the scale. Lower
+scores denote better usability.
+(3) Perceived-Difficulty-Models. We evaluated the perceived diﬃculty of em-
+ploying mathematical models to author vibrotactile feedback patterns in VIREO
+(see Subsection 3.4), which we measured with a 5-point Likert scale with items
+from 1 (“not diﬃcult”) to 2 (“little diﬃcult”), 3 (“moderately diﬃcult”), 4 (“dif-
+ﬁcult”) to 5 (“very diﬃcult”) in response to the question “How would you rate
+the use of mathematical models for creating vibrotactile patterns in VIREO?”
+(4) Perceived-Difficulty-FreeSketch. We evaluated the perceived diﬃculty
+of employing the free-sketch option to author vibrotactile feedback patterns in
+VIREO (see Subsection 3.5), which we measured with a 5-point Likert scale with
+21We used the CSUQ version instead of PSSUQ by following the recommendation from (Lewis, 1995, p. 77)
+to apply CSUQ when the usability study is in a nonlaboratory setting, which was the case for our study.
+22
+items ranging from 1 (“not diﬃcult at all”) to 5 (“very diﬃcult”) in response to
+the question “How would you rate the free-sketch option for creating vibrotactile
+patterns in VIREO?”
+5.4. Results
+The average SUS score was 70.47 (SD=24.63), representing a relatively high value
+falling in the “acceptable” range and located close to the “good” usability mark on
+the SUS scale, respectively, according to the acceptability ranges 22 and adjective rat-
+ings23 for interpreting SUS scores from (Bangor et al., 2009; Bangor, Kortum, and
+Miller, 2008). Also, the average CSUQ- Overall score was 2.68 (SD=1.41), located
+in the ﬁrst part of the 7-point CSUQ scale (lower values that are closer to 1 denote
+better performance). The scores obtained on each CSUQ subscale were of a similar
+magnitude: 2.74 for CSUQ-SysUse (SD=1.59), 2.75 for CSUQ-InfoQual (SD=1.37),
+and 2.40 for CSUQ- InterQual (SD=1.41), respectively. By converting the CSUQ-
+Overall score to a 0-100 scale (Lewis, 2018a, p. 6), we obtained 70.96 (SD=26.52),
+a value nearly identical with the one obtained with SUS. These results show a good
+overall usability for the task of authoring vibrotactile feedback patterns with VIREO,
+conﬁrmed by two popular usability tests.
+To understand the eﬀect of our participants’ programming experience and pro-
+gramming proﬁciency levels on perceived usability, we divided the participants into
+two groups, beginners and advanced, by applying the following rule: a participant was
+in the advanced group if they had at least ﬁve years of programming experience or
+their self-declared programming proﬁciency level was at least 4 (“Advanced, I can suc-
+cessfully apply theory concepts”). By applying this rule, we obtained two equally-sized
+groups with eight participants each: beginners (M=1.75, SD=1.17 years of program-
+ming experience and M=2.25, SD=0.89 on the programming proﬁciency scale) and
+advanced (M=6.63, SD=2.13 years of programming experience and M=3.75, SD=0.46
+on the programming proﬁciency scale). Mann-Whitney U tests did not ﬁnd a sta-
+tistically signiﬁcant eﬀect of the programming experience on the SUS (U=25.000,
+Z=-0.738, p=.505, n.s.) or CSUQ (U=31.000, Z=-0.105, p=.959, n.s.) scores. These
+results suggest a similar level of perceived usability for both beginners and advanced
+programmers, but further evaluations with larger user groups are recommended.
+Regarding the actual method to author vibrotactile patterns, i.e., model-based
+or free-sketch input, we found an average Perceived-Difficulty-Models of 1.88
+(Mdn=2) and an average Perceived-Difficulty-FreeSketch of 2.31 (Mdn=2),
+both close to the “little diﬃcult” anchor from the 5-point Likert scale used to
+evaluate these measures. A Wilcoxon signed-rank test did not detect any sta-
+tistically signiﬁcant diﬀerence between the two authoring methods ( Z= − 1.567,
+p=.117>.05, n.s.). Also, Mann-Whitney U tests did not detect any statistically
+signiﬁcant eﬀects of the programming experience, beginners and advanced, on
+Perceived-Difficulty-Models (U=26.000, Z=-0.732,p=.574, n.s.) or Perceived-
+Difficulty-FreeSketch (U=30.000, Z=-0.217, p=.878, n.s.), respectively.
+22According to the standard letter grade scale for interpreting SUS scores (Bangor, Kortum, and Miller, 2009),
+products that score in the 90s are “exceptional,” products that score in the 80s are “good,” and products that
+score in the 70s are “acceptable”; also see Lewis (2018b).
+23According to Bangor et al. (2009), the correspondence between adjective ratings and mean SUS scores
+are: “worst imaginable” (M=12.5, SD=13.1), “awful” (M=20.3, SD=11.3), “poor” (M=35.7, SD=12.6), “OK”
+(M=50.9, SD=13.8), “good” (M=71.4, SD=11.6), “excellent” (M=85.5, SD=10.4), and “best imaginable”
+(M=90.9, SD=13.4); also see Lewis (2018b).
+23
+6. Limitations
+There are a few limitations to VIREO, which we acknowledge in this section. First,
+our implementation leveraging JavaScript and the Vibration API enables us to ad-
+dress a variety of mobile and wearable devices, but also limits the applicability of
+VIREO to those devices that support the API. Although a large number of devices
+and platforms are implicitly supported, e.g., browser compatibility speciﬁcations 24
+include Chrome, Edge, Firefox, Opera, WebView Android, Chrome Android, Opera
+Android, and Samsung Internet, other platforms and browsers, such as Internet Ex-
+plorer, Safari, and Safari on iOS, are not. For these platforms, future work will look at
+generating platform-speciﬁc code for integrating vibrotactile patterns authored with
+VIREO (Subsection 3.6). Second, VIREO does not dispose yet of a set of predeﬁned vi-
+brotactile patterns to start oﬀ the authoring process, although such a feature would be
+helpful for rapid prototyping alongside our free-sketch input method (Subsection 3.5).
+We will address this limitation in future versions of VIREO. In the next section, we
+present more future work opportunities.
+7. Conclusion and F uture W ork
+We introduced VIREO, a tool for the web that enables design of vibrotactile feedback
+patterns and easy deployment and integration of those patterns in applications tar-
+geting mobile and wearable devices with web connectivity and support for JavaScript.
+We also presented the results of a SLR study conducted to analyze and understand
+contributions in the scientiﬁc community regarding tools and platforms that enable
+authoring and implementation of vibrotactile feedback. Due to its web-based orien-
+tation and speciﬁc focus on mobile and wearable devices, VIREO stands out distinc-
+tively in this landscape. Moreover, we make VIREO freely available to researchers and
+practitioners. Future work will consider several new features that we plan for the next
+versions of VIREO, as follows: (1) integration with web-based software architecture for
+implementing interactions in smart environments (Schipor, Vatavu, and Vanderdon-
+ckt, 2019a; Schipor et al., 2019b) to extend the range of possible mobile and wearable
+applications of VIREO in the context of ambient intelligence, (2) integration with Vir-
+tual and Augmented Reality applications, such as applications running on Microsoft
+HoloLens and HTC Vive, for which WebSocket-based communications can be used to
+integrate directly with the collections of patterns from VIREO, and (3) extension of
+VIREO with a library of vibrotactile patterns as a starting point for practitioners to
+customize vibration patterns for their applications.
+Acknowledgements
+This work is part of a project that has received funding from the European Union’s
+Horizon 2020 research and innovation programme under the Marie Sk lodowska-Curie
+grant agreement No 860114.
+24Details available at https://developer.mozilla.org/en-US/docs/Web/API/Vibration API. Also see https:
+//caniuse.com/vibration for more details and tests.
+24
+Notes on contributors
+Mihail Terenti is a Marie Sk lodowska-Curie Early Stage Researcher at the S ¸tefan cel
+Mare University of Suceava, Romania, where he works on multimodal feedback to
+augment the user experience of touch input.
+Radu-Daniel Vatavu is a Professor of Computer Science at the S ¸tefan cel Mare
+University of Suceava, where he directs the Machine Intelligence and Information Vi-
+sualization Research Laboratory. His research interests include human-computer in-
+teraction, augmented reality, ambient intelligence, and accessible computing.
+References
+Anderson, F., Grossman, T., Wigdor, D., Fitzmaurice, G., 2015. Supporting subtlety
+with deceptive devices and illusory interactions. In: Proceedings of the 33rd Annual
+ACM Conference on Human Factors in Computing Systems. ACM, New York, NY,
+USA, p. 1489–1498.
+URL https://doi.org/10.1145/2702123.2702336
+Bangor, A., Kortum, P., Miller, J., 2009. Determining what individual SUS scores
+mean: Adding an adjective rating scale. J. Usability Studies 4 (3), 114–123.
+URL https://uxpajournal.org/determining-what-individual-sus-scores-
+mean-adding-an-adjective-rating-scale
+Bangor, A., Kortum, P. T., Miller, J. T., 2008. An empirical evaluation of the system
+usability scale. International Journal of Human–Computer Interaction 24 (6), 574–
+594.
+URL https://doi.org/10.1080/10447310802205776
+Barr, M., September 2001. Pulse width modulation. Embedded Systems Programming,
+103–104.
+Basdogan, C., Giraud, F., Levesque, V., Choi, S., 2020. A review of surface haptics:
+Enabling tactile eﬀects on touch surfaces. IEEE Transactions on Haptics 13 (3),
+450–470.
+URL http://dx.doi.org/10.1109/toh.2020.2990712
+Boer, L., Vallg˚ arda, A., Cahill, B., 2017. Giving form to a hedonic haptics player.
+In: Proceedings of the 2017 Conference on Designing Interactive Systems. DIS ’17.
+ACM, New York, NY, USA, p. 903–914.
+URL https://doi.org/10.1145/3064663.3064792
+Brewster, S., Brown, L. M., 2004. Tactons: Structured tactile messages for non-visual
+information display. In: Proceedings of the Fifth Conference on Australasian User
+Interface - Volume 28. AUIC ’04. Australian Computer Society, Inc., AUS, p. 15–23.
+Brezolin, F. L., Santos, G., de Lima, J. C., Zanella, M., Rieder, R., De Marchi, A.
+C. B., 2017. Evaluating the performance of wearable tecassist device using aural
+and tactile feedbacks. In: Proceedings of the XVI Brazilian Symposium on Human
+Factors in Computing Systems. IHC 2017. ACM, New York, NY, USA.
+URL https://doi.org/10.1145/3160504.3160574
+Brooke, J., 1996. SUS: A Quick and Dirty Usability Scale. In: Jordan, P. W., Thomas,
+B., McClelland, I. L., Weerdmeester, B. (Eds.), Usability Evaluation in Industry.
+CRC Press, London, UK, p. 189–194.
+URL https://www.taylorfrancis.com/chapters/edit/10.1201/
+9781498710411-35/susquick-dirty-usability-scale-john-brooke
+Casamassima, F., Ferrari, A., Milosevic, B., Rocchi, L., Farella, E., 2013. Wearable
+25
+audio-feedback system for gait rehabilitation in subjects with Parkinson’s disease.
+In: Proceedings of the 2013 ACM Conference on Pervasive and Ubiquitous Com-
+puting Adjunct Publication. UbiComp ’13 Adjunct. ACM, New York, NY, USA, p.
+275–278.
+URL https://doi.org/10.1145/2494091.2494178
+Cauchard, J. R., Cheng, J. L., Pietrzak, T., Landay, J. A., 2016. ActiVibe: Design and
+Evaluation of Vibrations for Progress Monitoring. In: Proceedings of the 2016 CHI
+Conference on Human Factors in Computing Systems. ACM, New York, NY, USA,
+p. 3261–3271.
+URL https://doi.org/10.1145/2858036.2858046
+Chen, M., Ma, Y., Li, Y., Wu, D., Zhang, Y., Youn, C.-H., Jan. 2017. Wearable 2.0:
+Enabling human-cloud integration in next generation healthcare systems. Comm.
+Mag. 55 (1), 54–61.
+URL https://doi.org/10.1109/MCOM.2017.1600410CM
+Chen, X., Chen, W., Liu, K., Chen, C., Li, L., 2021. A comparative study of smart-
+phone and smartwatch apps. In: Proceedings of the 36th Annual ACM Symposium
+on Applied Computing. SAC ’21. ACM, New York, NY, USA, p. 1484–1493.
+URL https://doi.org/10.1145/3412841.3442023
+Chi, P.-Y. P., Li, Y., 2015. Weave: Scripting cross-device wearable interaction. In:
+Proceedings of the 33rd Annual ACM Conference on Human Factors in Computing
+Systems. ACM, New York, NY, USA, p. 3923–3932.
+URL https://doi.org/10.1145/2702123.2702451
+Clark, B., Schneider, O. S., MacLean, K. E., Tan, H. Z., 2017. Predictable and dis-
+tinguishable morphing of vibrotactile rhythm. In: Proceedings of the IEEE World
+Haptics Conference. WHC ’17. pp. 84–89.
+URL http://dx.doi.org/10.1109/WHC.2017.7989881
+Danieau, F., Guillotel, P., Dumas, O., Lopez, T., Leroy, B., Mollet, N., 2018. HFX
+Studio: haptic editor for full-body immersive experiences. In: Proceedings of the
+24th ACM Symposium on Virtual Reality Software and Technology. VRST ’18.
+ACM, New York, NY, USA.
+URL https://doi.org/10.1145/3281505.3281518
+Dong, H., Gao, Y., Al Osman, H., El Saddik, A., 2015. Development of a web-based
+haptic authoring tool for multimedia applications. In: Proceedings of the IEEE
+International Symposium on Multimedia. ISM ’15. pp. 13–20.
+Eid, M., Andrews, S., Alamri, A., El Saddik, A., 2008. HAMLAT: A HAML-Based
+Authoring Tool for Haptic Application Development. In: Ferre, M. (Ed.), Haptics:
+Perception, Devices and Scenarios. Springer, Berlin, Heidelberg, pp. 857–866.
+URL https://doi.org/10.1007/978-3-540-69057-3 108
+Enriquez, M., MacLean, K., 2003. The hapticon editor: a tool in support of haptic com-
+munication research. In: Proceedings of the 11th Symposium on Haptic Interfaces
+for Virtual Environment and Teleoperator Systems. HAPTICS ’03. pp. 356–362.
+Furini, M., Mirri, S., Montangero, M., Prandi, C., 2020. Can IoT Wearable Devices
+Feed Frugal Innovation? In: Proceedings of the 1st Workshop on Experiences with
+the Design and Implementation of Frugal Smart Objects. FRUGALTHINGS’20.
+ACM, New York, NY, USA, p. 1–6.
+URL https://doi.org/10.1145/3410670.3410861
+Han, T., Han, Q., Annett, M., Anderson, F., Huang, D.-Y., Yang, X.-D., 2017. Frictio:
+Passive kinesthetic force feedback for smart ring output. In: Proceedings of the 30th
+Annual ACM Symposium on User Interface Software and Technology. UIST ’17.
+ACM, New York, NY, USA, p. 131–142.
+26
+URL https://doi.org/10.1145/3126594.3126622
+Heller, F., Vanacken, D., Geurts, E., Luyten, K., 2020. Impact of situational impair-
+ment on interaction with wearable displays. In: Proceedings of the 22nd Interna-
+tional Conference on Human-Computer Interaction with Mobile Devices and Ser-
+vices. MobileHCI ’20. ACM, New York, NY, USA.
+URL https://doi.org/10.1145/3406324.3410540
+Hong, K., Lee, J., Choi, S., 2013. Demonstration-based vibrotactile pattern authoring.
+In: Proceedings of the 7th International Conference on Tangible, Embedded and
+Embodied Interaction. TEI ’13. ACM, New York, NY, USA, p. 219–222.
+URL https://doi.org/10.1145/2460625.2460660
+Huang, D.-Y., Chan, L., Jian, X.-F., Chang, C.-Y., Chen, M.-H., Yang, D.-N.,
+Hung, Y.-P., Chen, B.-Y., 2016. VibroPlay: Authoring Three-Dimensional Spatial-
+Temporal Tactile Eﬀects with Direct Manipulation. In: SIGGRAPH ASIA 2016
+Emerging Technologies. SA ’16. ACM, New York, NY, USA.
+URL https://doi.org/10.1145/2988240.2988250
+Israr, A., Zhao, S., Schneider, O., 2015. Exploring embedded haptics for social network-
+ing and interactions. In: Proceedings of the 33rd Annual ACM Conference Extended
+Abstracts on Human Factors in Computing Systems. CHI EA ’15. ACM, New York,
+NY, USA, p. 1899–1904.
+URL https://doi.org/10.1145/2702613.2732814
+Jones, L. A., Dec. 2016. Perspectives on the evolution of tactile, haptic, and thermal
+displays. Presence: Teleoper. Virtual Environ. 25 (3), 247–252.
+URL https://doi.org/10.1162/PRES{ }a{ }00266
+Kang, N., Lee, S., 2018. A meta-analysis of recent studies on haptic feedback en-
+hancement in immersive-augmented reality. In: Proceedings of the 4th International
+Conference on Virtual Reality. ICVR 2018. ACM, New York, NY, USA, p. 3–9.
+URL https://doi.org/10.1145/3198910.3198911
+Kim, Y., Cha, J., Ryu, J., Oakley, I., 2010. A tactile glove design and authoring system
+for immersive multimedia. IEEE MultiMedia 17 (3), 34–45.
+URL http://dx.doi.org/10.1109/MMUL.2010.5692181
+Le, K.-D., Zhu, K., Kosinski, T., Fjeld, M., Azh, M., Zhao, S., 2016. Ubitile: A ﬁnger-
+worn I/O device for tabletop vibrotactile pattern authoring. In: Proceedings of the
+9th Nordic Conference on Human-Computer Interaction. NordiCHI ’16. ACM, New
+York, NY, USA.
+URL https://doi.org/10.1145/2971485.2996721
+Lee, J., Choi, S., 2012. Evaluation of vibrotactile pattern design using vibrotactile
+score. In: Proceedings of the IEEE Haptics Symposium. HAPTICS ’12. pp. 231–
+238.
+URL http://dx.doi.org/10.1109/HAPTIC.2012.6183796
+Lee, J., Ryu, J., Choi, S., 2009a. Graphical authoring tools for vibrotactile patterns.
+In: Proceedings of the 3rd Joint EuroHaptics conference and Symposium on Haptic
+Interfaces for Virtual Environment and Teleoperator Systems. World Haptics ’09.
+pp. 388–389.
+URL http://dx.doi.org/10.1109/WHC.2009.4810912
+Lee, J., Ryu, J., Choi, S., 2009b. Vibrotactile score: A score metaphor for designing
+vibrotactile patterns. In: World Haptics 2009 - Third Joint EuroHaptics conference
+and Symposium on Haptic Interfaces for Virtual Environment and Teleoperator
+Systems. pp. 302–307.
+URL http://dx.doi.org/10.1109/WHC.2009.4810816
+Lewis, J. R., 1995. IBM computer usability satisfaction questionnaires: Psychometric
+27
+evaluation and instructions for use. International Journal of Human–Computer In-
+teraction 7 (1), 57–78.
+URL http://dx.doi.org/10.1080/10447319509526110
+Lewis, J. R., 2018a. Measuring Perceived Usability: The CSUQ, SUS, and UMUX.
+International Journal of Human–Computer Interaction 34 (12), 1148–1156.
+URL http://dx.doi.org/10.1080/10447318.2017.1418805
+Lewis, J. R., 2018b. The system usability scale: Past, present, and future. International
+Journal of Human–Computer Interaction 34 (7), 577–590.
+URL https://doi.org/10.1080/10447318.2018.1455307
+Liberati, A., Altman, D., Tetzlaﬀ, J., Mulrow, C., Gøtzsche, P., Ioannidis, J., Clarke,
+M., Devereaux, P., Kleijnen, J., Moher, D., 08 2009. The PRISMA statement for
+reporting systematic reviews and meta-analyses of studies that evaluate health care
+interventions: Explanation and elaboration. Journal of Clinical Epidemiology 62,
+e1–34.
+URL http://dx.doi.org/10.1016/j.jclinepi.2009.06.006
+Mart´ ınez, J., Garc´ ıa, A. S., Oliver, M., Molina, J. P., Gonz´ alez, P., 2014. VITAKI:
+A vibrotactile prototyping toolkit for virtual reality and video games. International
+Journal of Human–Computer Interaction 30 (11), 855–871.
+URL http://dx.doi.org/10.1080/10447318.2014.941272
+Matulic, F., Ganeshan, A., Fujiwara, H., Vogel, D., 2021. Phonetroller: Visual Rep-
+resentations of Fingers for Precise Touch Input with Mobile Phones in VR. In:
+Proceedings of the 2021 CHI Conference on Human Factors in Computing Systems.
+CHI ’21. ACM, New York, NY, USA.
+URL https://doi.org/10.1145/3411764.3445583
+Menear, H., November 2020. Wearables could replace the smartphone sooner than
+you think. Mobile Magazine (Nov. 2020).
+URL https://mobile-magazine.com/connectivity/wearables-could-
+replace-smartphone-sooner-you-think
+Olsson, P., Nysj¨ o, F., Singh, N., Thor, A., Carlbom, I., 2015. Visuohaptic bone saw
+simulator: Combining vibrotactile and kinesthetic feedback. In: SIGGRAPH Asia
+2015 Technical Briefs. SA ’15. ACM, New York, NY, USA.
+URL https://doi.org/10.1145/2820903.2820925
+Pan¨ eels, S., Anastassova, M., Brunet, L., 2013. TactiPEd: Easy Prototyping of Tactile
+Patterns. In: Kotz´ e, P., Marsden, G., Lindgaard, G., Wesson, J., Winckler, M. (Eds.),
+Human-Computer Interaction. INTERACT ’13. Springer, Berlin, Heidelberg, pp.
+228–245.
+URL https://doi.org/10.1007/978-3-642-40480-1 15
+Park, G., Choi, S., 2017. A physics-based vibrotactile feedback library for collision
+events. IEEE Transactions on Haptics 10 (3), 325–337.
+Park, G., Choi, S., Hwang, K., Kim, S., Sa, J., Joung, M., 2011. Tactile eﬀect design
+and evaluation for virtual buttons on a mobile device touchscreen. In: Proceedings
+of the 13th International Conference on Human Computer Interaction with Mobile
+Devices and Services. MobileHCI ’11. ACM, New York, NY, USA, p. 11–20.
+URL https://doi.org/10.1145/2037373.2037376
+Park, T., Hwang, J., Hwang, W., 2009. Facilitating the design of vibration for handheld
+devices. In: Jacko, J. A. (Ed.), Human-Computer Interaction. Novel Interaction
+Methods and Techniques. Springer, Berlin, Heidelberg, pp. 496–502.
+URL https://doi.org/10.1007/978-3-642-02577-8 54
+Pezent, E., Cambio, B., O’Malley, M. K., 2021. Syntacts: Open-source software and
+hardware for audio-controlled haptics. IEEE Transactions on Haptics 14 (1), 225–
+28
+233.
+URL http://dx.doi.org/10.1109/TOH.2020.3002696
+Plaisier, M. A., Holt, R. J., Kappers, A. M., 2020. Representing numerosity through
+vibration patterns. IEEE Transactions on Haptics 13 (4), 691–698.
+Pohl, H., Muresan, A., Hornbæk, K., 2019. Charting subtle interaction in the HCI
+literature. In: Proceedings of the 2019 CHI Conference on Human Factors in Com-
+puting Systems. ACM, New York, NY, USA, p. 1–15.
+URL https://doi.org/10.1145/3290605.3300648
+Ryu, J., Choi, S., 2008. posVibEditor: Graphical authoring tool of vibrotactile pat-
+terns. In: Proceedings of the IEEE International Workshop on Haptic Audio visual
+Environments and Games. pp. 120–125.
+URL http://dx.doi.org/10.1109/HAVE.2008.4685310
+Sani, A. A., Boos, K., Yun, M. H., Zhong, L., Jun. 2015. Rio: I/O sharing between
+mobile systems. GetMobile: Mobile Comp. and Comm. 19 (1), 6–9.
+URL https://doi.org/10.1145/2786984.2786987
+Schipor, O.-A., Vatavu, R.-D., Vanderdonckt, J., 2019a. Euphoria: A scalable, event-
+driven architecture for designing interactions across heterogeneous devices in smart
+environments. Information and Software Technology 109, 43–59.
+URL https://doi.org/10.1016/j.infsof.2019.01.006
+Schipor, O.-A., Vatavu, R.-D., Wu, W., Jun. 2019b. SAPIENS: towards software ar-
+chitecture to support peripheral interaction in smart environments. Proceedings of
+the ACM on Human-Computer Interaction 3 (EICS).
+URL https://doi.org/10.1145/3331153
+Schneegass, S., Poguntke, R., Machulla, T., 2019. Understanding the impact of infor-
+mation representation on willingness to share information. In: Proceedings of the
+2019 CHI Conference on Human Factors in Computing Systems. ACM, New York,
+NY, USA, p. 1–6.
+URL https://doi.org/10.1145/3290605.3300753
+Schneider, O. S., Israr, A., MacLean, K. E., 2015. Tactile animation by direct manip-
+ulation of grid displays. In: Proceedings of the 28th Annual ACM Symposium on
+User Interface Software & Technology. UIST ’15. ACM, New York, NY, USA, p.
+21–30.
+URL https://doi.org/10.1145/2807442.2807470
+Schneider, O. S., MacLean, K. E., 2014. Improvising design with a haptic instrument.
+In: Proceedings of the IEEE Haptics Symposium. HAPTICS ’14. pp. 327–332.
+URL http://dx.doi.org/10.1109/HAPTICS.2014.6775476
+Schneider, O. S., MacLean, K. E., 2016. Studying design process and example use
+with Macaron, a web-based vibrotactile eﬀect editor. In: Proceedings of the IEEE
+Haptics Symposium. HAPTICS ’16. pp. 52–58.
+URL http://dx.doi.org/10.1109/HAPTICS.2016.7463155
+Sch¨ onauer, C., Mossel, A., Zaiti, I.-A., Vatavu, R.-D., 2015. Touch, movement and vi-
+bration: User perception of vibrotactile feedback for touch and mid-air gestures. In:
+Abascal, J., Barbosa, S., Fetter, M., Gross, T., Palanque, P., Winckler, M. (Eds.),
+Human-Computer Interaction – INTERACT 2015. Springer International Publish-
+ing, Cham, pp. 165–172.
+URL https://doi.org/10.1007/978-3-319-22723-8 14
+Seiﬁ, H., Zhang, K., MacLean, K. E., 2015. VibViz: Organizing, visualizing and nav-
+igating vibration libraries. In: Proceedings of the IEEE World Haptics Conference.
+WHC ’15. pp. 254–259.
+URL http://dx.doi.org/10.1109/WHC.2015.7177722
+29
+Shiraga, S., Kinoshita, Y., Go, K., 2016. Designing smartphone feedback based on vi-
+bration impression. In: Proceedings of the 2016 CHI Conference Extended Abstracts
+on Human Factors in Computing Systems. CHI EA ’16. ACM, New York, NY, USA,
+p. 3190–3196.
+URL https://doi.org/10.1145/2851581.2892430
+Shtarbanov, A., 2021. FlowIO Development Platform – the Pneumatic ”Raspberry Pi”
+for Soft Robotics. In: Extended Abstracts of the 2021 CHI Conference on Human
+Factors in Computing Systems. ACM, New York, NY, USA.
+URL https://doi.org/10.1145/3411763.3451513
+Siddaway, A. P., Wood, A. M., Hedges, L. V., 2019. How to do a systematic review: A
+best practice guide for conducting and reporting narrative reviews, meta-analyses,
+and meta-syntheses. Annual Review of Psychology 70 (1), 747–770.
+URL https://doi.org/10.1146/annurev-psych-010418-102803
+Song, J., Lim, J. H., Yun, M. H., 2016. Finding the latent semantics of haptic inter-
+action research: A systematic literature review of haptic interaction using content
+analysis and network analysis. Human Factors and Ergonomics in Manufacturing &
+Service Industries 26 (5), 577–594.
+URL https://doi.org/10.1002/hfm.20678
+Swindells, C., Maksakov, E., MacLean, K., Chung, V., 2006. The role of prototyping
+tools for haptic behavior design. In: Proceedings of the 14th Symposium on Haptic
+Interfaces for Virtual Environment and Teleoperator Systems. pp. 161–168.
+URL http://dx.doi.org/10.1109/HAPTIC.2006.1627084
+Swindells, C., Pietarinen, S., Viitanen, A., 2014. Medium ﬁdelity rapid prototyping
+of vibrotactile haptic, audio and video eﬀects. In: Proceedings of the IEEE Haptics
+Symposium. HAPTICS ’14. pp. 515–521.
+URL http://dx.doi.org/10.1109/HAPTICS.2014.6775509
+Terenti, M., Vatavu, R.-D., 2022. Measuring the user experience of vibrotactile feed-
+back on the ﬁnger, wrist, and forearm for touch input on large displays. In: Pro-
+ceedings of the CHI Conference on Human Factors in Computing Systems Extended
+Abstracts. CHI EA ’22. ACM, New York, NY, USA.
+URL https://doi.org/10.1145/3491101.3519704
+Turmo Vidal, L., Zhu, H., Waern, A., M´ arquez Segura, E., 2021. The design space
+of wearables for sports and ﬁtness practices. In: Proceedings of the 2021 CHI Con-
+ference on Human Factors in Computing Systems. CHI ’21. ACM, New York, NY,
+USA.
+URL https://doi.org/10.1145/3411764.3445700
+Vatavu, R.-D., Mossel, A., Sch¨ onauer, C., 2016. Digital vibrons: Understanding users’
+perceptions of interacting with invisible, zero-weight matter. In: Proceedings of the
+18th International Conference on Human-Computer Interaction with Mobile Devices
+and Services. MobileHCI ’16. ACM, New York, NY, USA, p. 217–226.
+URL https://doi.org/10.1145/2935334.2935364
+Vyas, P., Taha, F. A., Blum, J. R., Cooperstock, J. R., 2020. HapToes: vibrotactile
+numeric information delivery via tactile toe display. In: Proceedings of the 2020
+IEEE Haptics Symposium. HAPTICS ’20. pp. 61–67.
+URL http://dx.doi.org/10.1109/HAPTICS45997.2020.ras.HAP20.34.8ad689d4
+Wang, D., Guo, Y., Liu, S., Zhang, Y., Xu, W., Xiao, J., 2019. Haptic display for virtual
+reality: progress and challenges. Virtual Reality & Intelligent Hardware 1 (2), 136–
+162.
+URL https://doi.org/10.3724/SP.J.2096-5796.2019.0008
+Wenig, D., Sch¨ oning, J., Olwal, A., Oben, M., Malaka, R., 2017. WatchThru: expand-
+30
+ing smartwatch displays with mid-air visuals and wrist-worn augmented reality. In:
+Proceedings of the 2017 CHI Conference on Human Factors in Computing Systems.
+ACM, New York, NY, USA, p. 716–721.
+URL https://doi.org/10.1145/3025453.3025852
+Wobbrock, J. O., 2019. Situationally aware mobile devices for overcoming situational
+impairments. In: Proceedings of the ACM SIGCHI Symposium on Engineering In-
+teractive Computing Systems. EICS ’19. ACM, New York, NY, USA.
+URL https://doi.org/10.1145/3319499.3330292
+Yin, G., Otis, M. J.-D., Fortin, P. E., Cooperstock, J. R., Jun. 2019. Evaluating mul-
+timodal feedback for assembly tasks in a virtual environment. Proceedings of the
+ACM on Human-Computer Interaction 3 (EICS).
+URL https://doi.org/10.1145/3331163
+Youn, E., Lee, S., Kim, S., Shim, Y. A., Chan, L., Lee, G., 2021. WristDial: an eyes-free
+integer-value input method by quantizing the wrist rotation. International Journal
+of Human–Computer Interaction 37 (17), 1607–1624.
+URL https://doi.org/10.1080/10447318.2021.1898848
+31

@@ -1,0 +1,1248 @@
+du Pasquier et al., Sci. Robot. 9, eado3887 (2024)     18 December 2024
+Science RoboticS  |  ReSeaR ch aR ticle
+1 of 12
+SOFT ROBOTS
+Haptiknit: Distributed stiffness knitting for 
+wearable haptics
+Cosima du Pasquier1†*, Lavender Tessmer2†, Ian Scholl 1, Liana Tilton1, Tian Chen3,  
+Skylar Tibbits2, Allison Okamura1
+Haptic devices typically rely on rigid actuators and bulky power supply systems, limiting wearability. Soft materi-
+als improve comfort, but careful distribution of stiffness is required to ground actuation forces and enable load 
+transfer to the skin. We present Haptiknit, an approach in which soft, wearable, knit textiles with embedded pneu-
+matic actuators enable programmable haptic display. By integrating pneumatic actuators within high-  and low- 
+stiffness machine- knit layers, each actuator can transmit 40 newtons in force with a bandwidth of 14.5 hertz. We 
+demonstrate the concept with an adjustable sleeve for the forearm coupled to an untethered pneumatic control 
+system that conveys a diverse array of social touch signals. We assessed the sleeve’s performance for discrimina-
+tive and affective touch in a three- part user study and compared our results with those of prior electromagneti-
+cally actuated approaches. Haptiknit improves touch localization compared with vibrotactile stimulation and 
+communicates social touch cues with fewer actuators than pneumatic textiles that do not invoke distributed stiff-
+ness. The Haptiknit sleeve resulted in similar recognition of social touch gestures compared to a voice-  coil array 
+but represented a more portable and comfortable form factor.
+INTRODUCTION
+The sense of touch is crucial to performing everyday tasks such as 
+walking, cooking, and typing. Without touch feedback, known as 
+haptics, we lose an enormous component of our interaction with 
+the world, in particular with other human beings. Touch is used in 
+common social interactions, including soothing, expressing power, 
+and playing (1 ). Contrary to the belief that touch merely comple-
+ments speech or vision, it can serve as the sole communication 
+channel for emotions such as anger, fear, love, and gratitude (2 ). 
+Human tactile perception results from the integration of signals 
+from diverse skin mechanoreceptors, each specialized in respond-
+ing to specific stimuli. For example, Pacinian corpuscles detect 
+high- frequency vibrations, Meissner corpuscles respond to the rate 
+of skin deformation, Merkel discs focus on spatial features, and 
+Ruffini endings are sensitive to skin stretch (3 ,  4). In addition, 
+hairy skin, like that on the forearm, houses C tactile (CT) afferents 
+activating the insular cortex, a region implicated in emotional pro-
+cessing (5,  6). Wearable haptic devices stimulate these mechanore-
+ceptors to enhance artificial touch interactions, offering the 
+possibility of conveying nuanced and realistic tactile experiences. 
+Haptic devices can provide guidance ( 7), convey abstract infor -
+mation like emotions or mood (8 ), or provide additional inputs 
+in multitasking (9 ). Commercial products like smartphones and 
+smartwatches with haptic feedback primarily rely on vibration 
+feedback from electromagnetic actuators, which meet practical 
+constraints in size, weight, and power. However, vibration feed-
+back is difficult to localize because of the large receptive fields of 
+Pacinian corpuscles and is not able to realistically convey slowly 
+varying touch interactions.
+An alternative approach to mobile touch interaction has been 
+emerging, inspired by the field of soft robotics. Pneumatic actuators 
+can produce quasistatic displacement, shear, and compression to 
+communicate information to the wearer (7) and are attractive be-
+cause they can rapidly achieve relatively high forces (10,  11). Soft  
+actuators also have a stiffness profile close to that of skin (12), pro-
+moting a snug fit and comfort. Wu and Culbertson (13) demonstrat-
+ed that pneumatic actuators outperformed voice- coil motors in 
+continuity and pleasantness, and Shtarbanov et al.’s (14) pilot study 
+found that pneumatic indentation was more enjoyable than other 
+haptic sensations like suction and voice- coil motors. However, the 
+use of exclusively soft materials comes at a cost: Soft materials do 
+not typically offer strong grounding, which limits the achievable 
+intensity of reaction forces and sensations (15). For example, the 
+soft linear pneumatic actuators embedded in the haptic device by 
+Kanjanapas et al. (15) produce a maximum force of 0.7 N. To address 
+this issue, most pneumatic haptic sleeve designs use large, distrib-
+uted actuation to produce generalized sensations of compression 
+and stretch (16,  17) but require bulky and rigid hardware for pres-
+sure regulation and monitoring.
+Recently, a design paradigm has emerged to enable high-  
+intensity haptic stimulation while enabling mobility and com-
+fort: combining soft pneumatic actuators with knit textiles. The 
+modernization of knitting has transformed this millennia- old 
+tradition into a state- of- the- art industrial fabrication method. 
+Knit textiles hold two main advantages that make them attractive 
+in applications driven by human- computer interaction (HCI): 
+Their inherent compliance, which allows them to conform to 
+doubly curved surfaces without compromising their flexibility, 
+and the high- resolution control that flatbed knitting gives the de-
+signer over local mechanical properties through localized speci-
+fication of the material, pattern, and stitch (18– 20). Like soft 
+pneumatic actuators, the capacity of knits to adapt to the wearer’s 
+morphology promotes comfort and usability. The potential of 
+knits for HCI was described by Luo et  al. ( 21), who presented 
+knit sensing interfaces with conductive yarns embedded in 
+wearable garments and modulations in stitch and material to 
+control pneumatic deformation in a manner similar to classic 
+1chaRM laboratory, Stanford, ca, USa. 2Self- assembly laboratory, Massachusetts 
+institute of technology, cambridge, Ma, USa. 3a rchitected intelligent Matter labo -
+ratory, University of houston, houston, t X, USa.
+*c orresponding author. email: cosimad@ stanford. edu
+†t hese authors contributed equally to this work.
+c opyright © 2024 t he 
+a uthors, some rights 
+reserved; exclusive 
+licensee a merican 
+a ssociation for the 
+a dvancement of 
+Science. no claim to 
+original U.S. 
+Government Works 
+Downloaded from https://www.science.org at Tsinghua University on September 21, 2026
+
+du Pasquier et al., Sci. Robot. 9, eado3887 (2024)     18 December 2024
+Science RoboticS  |  ReSeaR ch aR ticle
+2 of 12
+fiber- reinforced elastomeric enclosures ( 22). Kim et al. ( 23) first 
+showcased knitting as a source of haptic feedback with KnitDermis, 
+which provides tactile stimulation using shape memory alloy mi-
+crosprings integrated in knit channels, and later KnitSkin (24), a 
+tubular actuated knit robot that can travel up the arm. Sanchez 
+et al. (25) produced thermally actuating textiles that used phase 
+change to inflate actuators without an external pressure source. 
+However, the full potential of industrial automated knitting for 
+haptic applications remains underdeveloped; there are few examples 
+that leverage embedded material properties and incorporate com -
+ponent assemblies. Existing research used homogeneous knit fabric 
+as an armature and a vehicle (26) rather than as a key component 
+of the system.
+In this work, we propose to use distributed stiffness knitting to 
+enable perceivable patterned haptic sensations, an approach we 
+call Haptiknit. This concept is embodied in a fully integrated soft  
+pneumatic haptic sleeve with distributed stimulation to the skin of 
+the forearm (Fig. 1). The sleeve is knitted as one piece, composed 
+of two main layers subdivided into six textile sublayers, that 
+achieves stiffness variations of more than two orders of magnitude 
+by controlling its topology and material. Designed and shaped to 
+conform to the forearm, it allows seamless integration of multiple 
+sets of soft actuators through the selective use of heat- fusible yarn. 
+We characterized the force generation, cycling behavior, and fre-
+quency response of the three- dimensional (3D)–printed actuators 
+for integration with a Haptiknit sleeve and show that each actua-
+tor could achieve forces above 40 N. The sleeve is powered by an 
+unencumbering, untethered pneumatic supply system worn on 
+the upper arm as a self- contained unit. We validated the ability of 
+this sleeve to effectively convey haptic feedback by replicating the 
+actuator configuration of another haptic sleeve that used voice-  
+coil motors ( 8). We benchmarked our device in a three- part hu-
+man user study that showcased the Haptiknit sleeve’s performance 
+for discriminative and affective touch. An overview of the fabrica-
+tion method and the functioning of Haptiknit can be seen in 
+Movie 1.
+RESUL TS
+Distributed stiffness knitting
+To enable high- resolution haptic feedback in our sleeve, we imple-
+mented distributed stiffness to control the deformation of soft pneu-
+matic actuators with fabric. As shown in Fig. 1, we embedded 
+actuators between two layers of fabric, one soft and one stiff, to di-
+rect deformation against the skin. Computer numerically controlled 
+knitting, the modern form of industrial knitting, enabled us to con-
+trol stiffness locally through the choice of textile topology (type 
+of knot and type of pattern) and material in one seamless fabric 
+construction (18).
+We approached stiffness distribution in two ways: by varying the 
+knit topology and by selectively adding a heat- fusing agent in high- 
+stiffness zones during fabrication. First, we demonstrated how 
+modifying only the topology affected stiffness. Figure 2A provides 
+force- displacement curves from uniaxial testing in the course direc-
+tion for three soft textiles made from the same yarn (Y eoman 540 
+Denier 80/20 nylon/Lycra) with varying topology. Fabric A was a 
+single- layer ½- gauge rib, fabric B was a double- knit ½- gauge single 
+jersey (front) and ¼- gauge single jersey (back), and fabric C was a 
+three- layer spacer fabric with double- knit single gauge jersey (front 
+and back) and tucks in the midlayer. The differences in topology are 
+visible in the microscope images in Fig. 2A. In these examples, stiff-
+ness varied by a factor of 8.43, and the textiles exhibited typical hy-
+perelastic behavior. Sample videos from the uniaxial tests for fabrics 
+A, B, and C are shown in movie S1. Uniaxial testing results of the 
+fabrics in the wale direction are shown in fig. S3A.
+Second, we selectively embedded thermoplastic fusible yarn in 
+the knit, which was melted in a heat- setting postprocessing step 
+to produce a global stiffening effect. To create high- stiffness zones 
+with sufficient contrast to fully direct the load transmission of 
+the soft pneumatic actuators, we tested three different amounts of 
+heat- fusible yarn (HMS- Griltech 390 Denier Grilon K85) in the 
+course direction: fabric D at 28.3%, fabric F at 44.4%, and fabric G at 
+54.2% of the total fabric weight, respectively. We used the same base 
+fabric knit and the same yarn as in the low- stiffness fabrics. Results 
+Fig. 1. Haptiknit system overview. (A) a haptiknit- powered sleeve is composed of multiple knit layers of distributed stiffness and embedded pneumatic actuators; with 
+eight actuators and an untethered controller, it provides multimodal haptic signals. t he (B) uninflated and (C) inflated states of the sleeve are shown schematically, in the 
+sleeve, and outside the sleeve. t he sleeve is knit in a single piece (D) and has applications, for example, in navigation (E).
+Downloaded from https://www.science.org at Tsinghua University on September 21, 2026
+
+du Pasquier et al., Sci. Robot. 9, eado3887 (2024)     18 December 2024
+Science RoboticS  |  ReSeaR ch aR ticle
+3 of 12
+presented in Fig. 2B show that the incremental increase in heat- 
+fusible yarn concentration produced a maximum stiffening factor of 
+4.9, resulting in an almost 400- fold difference from the softest to the 
+stiffest textile, as indicated by the effective stiffnesses in Fig. 2D. As 
+the amount of heat- fusible fiber doubled and then tripled, more 
+bubbles from hardened resin appeared in the microscopy images (to 
+the right of the graph in Fig. 2B), and the material exhibited increas-
+ingly plastic behavior. Because of comfort considerations, we used 
+only fabric D in the sleeve, given that testing showed that its stiffness 
+was sufficient for load transmission. As shown in Fig. 2C, the fabric 
+transitioned from the typical hyperelastic response of a textile to a 
+plastic response before and after heat setting, with a stiffening factor 
+of 19.6. Sample videos from the uniaxial tests for fabrics D, E, and F 
+are shown in movie S2. Uniaxial testing results for the fabrics in the 
+wale direction are shown in fig. S3B.
+Prototype fabrication and characterization
+Our haptic sleeve prototype shown in Figs. 1 and 3 contained three 
+integrated components: the sleeve, the actuators, and the air supply 
+system. Each component was designed and characterized priori-
+tizing comfort, discernability of haptic feedback, and portability.
+Wearable knit haptic sleeve
+We distinguished haptic feedback zones from inert zones in the 
+knit sleeve by adjusting the textile stiffness through a combina-
+tion of material and stitch type variations and heat treatment. 
+Low- stiffness regions were knit using elastic yarns (fabrics A, B, 
+and C), whereas high- stiffness regions resulted from heat setting 
+specific areas with thermoplastic fibers (fabric D). The primary 
+design requirement of the knit sleeve 
+was to transfer actuator forces onto the 
+skin for a wide range of arm sizes. The 
+design also had to accommodate the 
+assembly and installation of pneumatic 
+actuators and the routing of tubes. This 
+was achieved with compartments, chan-
+nels, and a multilayer surface topology. 
+We include a detailed knitting file in the 
+Supplementary Materials.
+The knit sleeve is organized into two 
+major layers: an inner layer in contact 
+with the skin and an outer layer within 
+which the actuators are inserted and tub-
+ing is routed. These two layers are each 
+composed of three individual sublayers 
+(six sublayers in total). The sublayers 
+each contain specific configurations of 
+high-  and low- stiffness regions as shown 
+in Fig. 3. Low- stiffness fabric regions (A, 
+B, and C) have three functions. First, the 
+fabric A regions in contact with the in-
+flatable areas of the actuators (in dark 
+blue in Figs. 2 and 3) expand and con-
+tract with pneumatic force. Second, two 
+long fabric B regions on each side of the 
+actuators (in gray in Figs. 2 and 3) allow 
+for easy routing of the hoses from actua-
+tors to the air supply system. Third, nar-
+row transverse elastic fabric C regions 
+are situated between each actuator (in 
+light blue in Figs. 2 and 3), allowing the 
+entire system to flex, twist, and adapt 
+to each user’s unique body shape. We 
+achieved this by modifying the knit to-
+pology only, using the same yarn for 
+all three regions. The arrangement of 
+Movie 1. Overview of design, fabrication, and performance of Haptiknit.
+Fig. 2. Stiffness changes using topology variation and bonding fibers. Force- displacement curves in uniaxial test-
+ing (course direction) for (A) low- stiffness fabrics, where stiffness variation is achieved by changing the topology, and 
+(B) high- stiffness fabrics, where stiffness change is achieved by adding thermoplastic fiber. a microscopic view with 
+a magnification of 50 (scale bar in picture) is shown for each fabric. (C) behavior of fabric D before and after heat set-
+ting. t he effective stiffness E is given for both curves, and the linear regression curves used to estimate the effective 
+stiffnesses are marked with a dotted gray line. (D) effective stiffnesses of all materials in n/mm. t he stiffest material 
+(fabric G) is 400 times stiffer than the softest material (fabric a ).
+Downloaded from https://www.science.org at Tsinghua University on September 21, 2026
+
+du Pasquier et al., Sci. Robot. 9, eado3887 (2024)     18 December 2024
+Science RoboticS  |  ReSeaR ch aR ticle
+4 of 12
+high- stiffness regions (fabric D) was designed to maintain cir -
+cumferential continuity of high- stiffness material, which con-
+centrates the actuation forces onto the deformable areas while 
+constraining the assembly against the body. We chose fabric D 
+over fabrics E and F for its balance of target force transmission 
+and user comfort.
+The Velcro straps for the sleeve were sized to accommodate the 
+fifth percentile of women’s forearm circumference (smallest fit) and 
+the 95th percentile of men’s forearm circumference (largest fit) (27). 
+One Velcro strap was attached to each actuator region, enabling 
+each of the four actuator pairs to be tightened individually to main-
+tain close skin contact in a wide variety of different arm shapes. The 
+placement of Velcro straps also supported the stiffness continuity 
+around the arm and was easily manipulated by the device wearer 
+during donning and doffing.
+Soft 3D- printed actuators
+Thanks to 3D printing, we can fabricate custom actuator shapes that 
+can be seamlessly integrated into a textile. We fabricated our soft  
+actuators using an SLA 3D printer (Formlabs Form 3). As shown in 
+Fig. 4C, the actuators had a diameter of 25 mm and were placed on 
+the dorsal side of the forearm in a two- by- four grid, spaced 37 mm 
+apart center to center in the proximal- distal axis and 50 mm in the 
+transverse axis (Fig. 3). These dimensions match those of the sleeve 
+reported by Salvato et al. (8), allowing us to use their social touch 
+gesture patterns in our user study. Previous research has shown that 
+this layout density effectively communicates continuous motion 
+(28) and exceeds the two- point discrimination threshold for the 
+lower dorsal arm (8,  29). A denser array would add complexity with-
+out enhancing the haptic experience. The forearm’s smooth, consis-
+tent curvature and even distribution of mechanoreceptors make it 
+ideal for delivering uniform haptic feedback. Each actuator is indi-
+vidually addressable.
+We determined the best material type and actuator thickness by 
+characterizing force responses under two conditions: blocked force 
+of a single actuator as a standalone or between two layers of fabric 
+(one soft, fabric B; and one stiff, fabric D; as shown in fig. S5, A and 
+B) to differentiate the actuators’ performances in free space and 
+embedded in a distributed stiffness textile. We chose to investigate 
+force because displacement depends on the user’s skin elasticity and 
+thus would vary across users. We tested two materials from Form-
+labs, Elastic 50A and Flexible 80A, and three wall thicknesses, 1.0, 
+1.5, and 2.0 mm, a total of six variations. The force testing procedure 
+is detailed in Materials and Methods. We show the mean results in 
+Fig. 4D.
+The results in Fig. 4D indicate that all actuator variations achieved 
+at least 35 N at the maximum pressure of 230 kPa. This is more than 
+triple the values obtained by recent work by Jumet et al. (7) that also 
+used 25- mm- diameter soft pneumatic actuators in a textile sleeve. 
+In the cases where the force is constrained by the stiff and soft textile 
+layers (dashed lines in Fig. 4D), the forces achieved were equal to or 
+very similar to those in the unconstrained tests. The higher forces 
+observed in the constrained tests are due to the fabric between the 
+actuator and sensor, which increased the contact area, in particular 
+at lower pressures. This is illustrated with finite element analysis of 
+the 2- mm Elastic 50A and Flexible 50A actuators in fig. S4.
+The higher elasticity of Elastic 50A actuators increases their de-
+formation potential. This directly increases the contact surface with 
+the force sensor, leading to consistently higher values. Thinner ac-
+tuators achieved greater forces for a similar reason. However, Elastic 
+50A actuators of 1.5 mm and below had a failure rate of 25%, and 
+1- mm- thick Flexible 80A actuators had a failure rate of 50%. We 
+chose the pressure to limit force transmission at values under 30 N 
+for comfort and safety concerns. To prioritize system robustness and 
+durability, we used actuators printed with Elastic 50A and a 2- mm 
+wall thickness, achieving maximum forces of 24 N at the standard 
+system pressure (175 kPa). We conducted cyclical tests up to 100 
+cycles on the final actuator configuration for both setups to ensure 
+consistent performance over time, avoiding issues like material fa-
+tigue or hysteresis. As shown in Fig. 4E, the actuators maintained 
+consistent performance. The fabric notably affected force transmis-
+sion at high (200 kPa) and low (150 kPa) pressures, with slight de-
+formation at high pressure and dampened deformation at low 
+pressure. At the standard pressure (175 kPa), actuator performance 
+remained stable.
+Fig. 3. Haptiknit sleeve construction overview. t he 3D view shows the sleeve cross section with circumferential continuity of stiff material integrated with Velcro clo -
+sures. t he materials and knit structures are detailed with consistent color coding throughout the text: Fabrics a, b , and c have the same material and topological varia-
+tions; fabric D was stiffened using heat- fusible yarn. t he 2D view depicts the unrolled sleeve including the locations of the integrated actuators and pneumatic hoses. 
+a lthough pairs of actuators are connected by a neck for assembly purposes, each actuator is controlled separately.
+Downloaded from https://www.science.org at Tsinghua University on September 21, 2026
+
+du Pasquier et al., Sci. Robot. 9, eado3887 (2024)     18 December 2024
+Science RoboticS  |  ReSeaR ch aR ticle
+5 of 12
+We characterized the frequency response and bandwidth of the 
+final actuator configuration (Fig. 5). The −3 dB line in Fig. 4F indi-
+cates a reduction of the signal power by 50%, and so the bandwidth, 
+and is reached at frequencies of 14.5 Hz. This means that forces per-
+ceived as skin indentation can be varied at frequencies higher than 
+the human volitional movement bandwidth (~10 Hz), which im-
+plies that the actuators can induce haptic sensations that feel natural.
+Portable pneumatic system for soft haptics
+Portability is crucial for the ambulatory potential of wearable de-
+vices and so was a priority in our work. To make the development 
+of untethered soft robots more accessible, Shtarbanov (30) recently 
+introduced FlowIO, an open- source miniature pneumatic supply 
+system. We developed a customized version of their setup, called 
+AirPort 1.0, to power the actuators, with modifications to address 
+our specific needs (see details in Materials and Methods).
+The final system, shown in fig. S1, weighs 440 g and provides a 
+bistable air supply, where each port can switch independently be-
+tween the inflation channel supplied by the positive pressure pump 
+and the deflation channel connected to the vacuum pump. Thus, 
+there are four possible states for each port: inflating, holding pres-
+sure, deflating with vacuum, and ambient pressure.
+AirPort 1.0 compares favorably to other portable pneumatic sys-
+tems. Programmable Air, the system introduced by Shrivastava 
+(31), has a similar form factor but only three output ports and half 
+the pressure range. Although AirPort has a pressure range five 
+times smaller than that of Kim et  al.’s device ( 32), it offers eight 
+ports instead of one, can pull vacuum, and is six times lighter. It can 
+be comfortably worn around the upper arm for prolonged periods 
+of time using a strap.
+User study
+We performed a three- part user study with 32 participants to test 
+the sleeve in three scenarios for both affective and discriminative 
+touch (33). The tests parallel those performed using previous haptic 
+sleeves using voice- coil motors and/or vibration motors (28). The 
+study consisted of a maximum pressure calibration step, three tests, 
+and a postexperiment assessment. In calibration, we determined the 
+maximum pressure based on each participant’s preference. In the 
+first test, participants estimated the location of individual actuators 
+(discriminative touch). In the second test, participants experienced 
+and rated nine stroking patterns (affective touch). In the third test, 
+participants interpreted and rated six social touch gestures provided 
+by the sleeve (affective touch). The postexperiment assessment in-
+cluded an open- ended discussion, during which participants pro-
+vided five ratings on perceived task accuracy and sleeve design. 
+Details of the calibration and testing procedure are given in Materi-
+als and Methods.
+Individual actuator localization
+We evaluated actuator localization accuracy to assess the feasibility 
+of our approach, as opposed to vibration, for creating a tactile dis-
+play on the forearm. We inflated each actuator to the calibrated 
+maximum pressure three times in random order and asked the par-
+ticipants to guess which actuator had been inflated, using the 1 to 8 
+location numbering shown in Figs. 3 and 5.
+Figure 5 shows the localization performance distribution by ac-
+tuator. We summed the guesses across all participants and runs for 
+when a specific actuator was inflated. The overall accuracy across 
+the experiment was 69%, more than 5.5 times chance. In every in-
+stance, the correct actuator was consistently the top choice, and the 
+Fig. 4. Soft pneumatic actuator geometry and characterization results. (A) Uninflated actuator with section view at the dotted line. (B) i nflated actuator as used to 
+measure blocked force between the rest state and the inflated state. (C) Section view of uninflated actuator as indicated in ( a ), including dimensions. (D) blocked force 
+versus pressure for N  = 4 actuators. F indicates Flexible 80a, and e indicates elastic 50a, followed by the thickness in mm. Dashed lines indicate that the actuators were 
+tested between a stiff and a soft fabric layer; full lines indicate that they were tested in blocked force with an acrylic plate. (E) Force cycling behavior of the final actuator 
+(elastic 50a, 2 mm), N  = 3. (F) a ctuator frequency response magnitude in force; the bandwidth (−3 db magnitude) is marked with black dashed lines, N = 3; averages and 
+SDs are in tables S3 and S4.
+Downloaded from https://www.science.org at Tsinghua University on September 21, 2026
+
+du Pasquier et al., Sci. Robot. 9, eado3887 (2024)     18 December 2024
+Science RoboticS  |  ReSeaR ch aR ticle
+6 of 12
+second highest scoring actuator location was directly adjacent and 
+in the same row. The side of the forearm, inner (#5 to 8) or outer (#1 
+to 4) forearm, was correctly guessed in 98% of the cases. In addition, 
+we observed that the actuation stimuli on the inner side of the fore-
+arm were predicted correctly in 76% of the cases, compared with 63% 
+on the outer side of the forearm.
+Perception of stroking patterns
+To replicate a stroking sensation, we inflated actuators 5 through 8 
+(as shown in Fig. 5) in sequential order, varying the duration of and 
+delay between each actuation. Delays were defined as the percentage 
+of the inflation duration after which the next actuator in the stroke 
+started to inflate. After each of nine stroking patterns was played, 
+participants were asked to rate their perceived continuity using an 
+8- point Likert scale, where 0  =  discrete and 7  =  continuous, and 
+pleasantness using a 15- point Likert scale, where −7 = very unpleas -
+ant, 0 = neutral, and +7 = very pleasant.
+Figure 6A shows the average continuity ratings normalized to 
+the same 1- to- 7 scale used by Culbertson et  al. (4) and their SDs 
+sorted by duration and delay. Rated continuity decreased with infla-
+tion duration when delay was held constant and decreased with de-
+lay when the duration was held constant.
+Similarly, Fig. 6B shows the average pleasantness ratings and 
+their SDs organized by pulse width and delay. All ratings were greater 
+than or equal to zero on average, implying that no stroke was consis-
+tently perceived as unpleasant. The pattern with the shortest infla-
+tion duration and largest delay was perceived as the most pleasant, 
+whereas increasing the duration generally lowered the pleasantness. 
+For short inflation durations of 200 ms, increasing the delay raised 
+pleasantness; for longer inflation durations, it showed the opposite 
+effect and decreased pleasantness.
+Recognition and perception of social touch gestures
+Our third and final test measured user recognition of six common 
+social touch “gestures” that were previously studied and mapped 
+to the two- by- four actuator layout by Salvato et al. (8): attention, 
+gratitude, happiness, calming, love, and sadness. Previous studies 
+showed that these emotions can be signaled through nonverbal 
+communication (2, 34, 35).
+The confusion matrix shown in Fig. 6C displays the aggregated 
+top choices across all participants and runs for each executed ges-
+ture, normalized row- wise. Whenever the percentages provided by 
+the participant created a tie for top choice, the point for the top 
+choice was distributed proportionally among the gestures that shared 
+the highest attributed percentage. The total classification accuracy 
+was 36%, 2.2 times the rate of chance. Attention and happiness ges-
+tures were guessed correctly at more than three times the rate of 
+chance, with the primary confusion being between these two. Grati-
+tude and sadness were guessed correctly at more than 1.6 times the 
+rate of chance and were also the top choice for their respective sce-
+nario. The calming and love gestures exhibited higher levels of con-
+fusion, approaching chance levels. This confusion led to participant 
+selection of alternative gestures, with attention replacing calming 
+and gratitude taking the place of love as the top choices, respectively.
+1234
+5678
+1 2345678
+Actuator
+0
+20
+40
+60
+80Count
+1 2345678
+Actuator
+0
+20
+40
+60
+80Count
+12345678
+Actuator
+0
+20
+40
+60
+80Count
+1234567 8
+Actuator
+0
+20
+40
+60
+80Count
+12345678
+Actuator
+0
+20
+40
+60
+80Count
+1
+12345678
+Actuator
+0
+20
+40
+60
+80Count
+2
+12345678
+Actuator
+0
+20
+40
+60
+80Count
+3
+1234567 8
+Actuator
+0
+20
+40
+60
+80Count
+4
+5678
+Fig. 5. Actuator localization accuracy results. l ocalization results for N  = 32 participants for each of the eight actuator locations; the graph counts indicate how many 
+times the location was chosen across all participants and runs; each actuator location was played three times in a randomized order.
+Downloaded from https://www.science.org at Tsinghua University on September 21, 2026
+
+du Pasquier et al., Sci. Robot. 9, eado3887 (2024)     18 December 2024
+Science RoboticS  |  ReSeaR ch aR ticle
+7 of 12
+The recall for a played gesture is the true positive rate, defined as 
+the percentage of how often a gesture was correctly guessed when 
+presented. All of our gestures had recall values 9 to 16% lower than 
+those in the confusion matrix presented in Fig. 6 of Salvato et al. (8), 
+except for happiness (55% recall in ours compared with 45%). A 
+row- wise Bhattacharyya coefficient calculation (36) between our re-
+sults and theirs, serving as an indicator of the overlap between two 
+distributions, revealed high similarities of 96, 89, 96, 95, 92, and 97% 
+by row and gesture, respectively.
+We also asked participants to rate the perceived valence, arousal, 
+and authenticity of each gesture on Likert scales from 1 to 9. Happi-
+ness received the highest average valence rating of 6.25 and sadness 
+the lowest, 4.66. Happiness also had the highest average arousal rat-
+ing of 7.31, more than 1.5 points greater than any of the other ren-
+dered gestures. Gratitude had the highest average authenticity rating 
+of 6.88 and happiness had the lowest, 3.41.
+Postexperiment ratings
+After the experiments, participants were asked to self- assess their 
+performance in the localization and gesture recognition tests. Par -
+ticipants were also asked to rate the ease of donning, comfort, and 
+aesthetics of the Haptiknit sleeve on a Likert scale from 0 = very bad 
+to 10 = very good.
+Participants’ self- assessment, normalized to a 10- point scale, 
+matched their actual accuracy for both the localization task and 
+gesture task (Fig. 7A). The gesture task had lower accuracy, with a 
+median normalized rating of 4.4 compared with 6.9 of the localiza-
+tion task.
+In the postexperiment discussion, participants described the 
+importance of actuation frequency when assessing social touch. 
+Participant 17 (P17) said the following: “Sadness and gratitude I 
+thought of as a slower movement. Attention and happiness was a 
+faster movement. But the nuances between those were more diffi-
+cult. Love was less defined for me. ” Applied force was also men-
+tioned as a determining factor by P31: “The lighter [patterns] felt 
+like gratitude or attention. The deeper and more intense [patterns] 
+felt like love, calming, or sadness. ” Another factor was the location 
+of actuation on the arm, as noted by P31: “Some of the gestures 
+were on one side of the arm and some were on both sides. The ones 
+that were on both sides I interpreted as more intimate or more 
+intense. ”
+The results from the Likert scale in Fig. 7B indicated median 
+values of 9 for ease of donning, 8 for comfort, and 7 for aesthetics. 
+Only the aesthetics rating showed mean variations of more than 
+one point in relation with participants’ previous experience using 
+human- machine interactive devices. The median aesthetic ratings 
+varied from 6 for individuals with no experience to 7 for those 
+with limited or moderate experience and further increased to 
+8.5 for individuals with extensive experience. Participant feed-
+back confirmed that key design features, such as selected low-
+stiffness regions and the closing mechanism of the sleeve, enable 
+easy donning, comfortable wear, and pleasant aesthetics, espe-
+cially among participants with previous experience testing haptic 
+devices.
+Fig. 6. Stroking ratings and social touch gesture top choice results. (A) continuity and (B) pleasantness ratings for three stroke durations and three delays. (C) normal-
+ized gesture top choice results for the six emotions communicated with the sleeve. h ighest values for participant top choice for each rendered gesture are outlined in 
+gold, the scale on the right represents how many participants guessed correctly (in %), and the bars show the SDs from the mean participant response; N = 32.
+01234567891 0
+Normalized Score (0-10)
+Location Task Self-Assessment
+Location Task Actual Accuracy
+Gesture Task Self-Assessment
+Gesture Task Actual Accuracy
+0123456789 10
+Rating (0-10)
+Ease of Donning
+Comfort
+Aesthetics
+B
+A
+Fig. 7. User study postexperiment ratings. Postexperiment ratings of (A) loca-
+tion and gesture task accuracy (self- assessed and measured) and (B) self- assessed 
+qualitative description of the sleeve; the data are expressed as a whisker- plot dia-
+gram: t he box represents the interquartile ranges, whereas the means are indicated 
+by yellow lines; the dashed lines extend out to the lower and upper quartiles; outli-
+ers are indicated with yellow crosses.
+Downloaded from https://www.science.org at Tsinghua University on September 21, 2026
+
+du Pasquier et al., Sci. Robot. 9, eado3887 (2024)     18 December 2024
+Science RoboticS  |  ReSeaR ch aR ticle
+8 of 12
+DISCUSSION
+Distributed stiffness
+In our examination of distributed stiffness, we demonstrated the 
+stiffness range attainable through topology variation and material 
+variation (via inclusion of thermoplastic yarn). The stiffness range 
+observed for our soft materials (0.122 to 1.03 N/mm) was compa-
+rable to that reported by Singal et al. (37) (0.003 to 0.223 N/mm). 
+The order- of- magnitude difference can be attributed to the use of 
+only one knit layer in their fabric samples rather than two in fabrics 
+B and C (see table S2). On the other hand, the stiffness range ob-
+served for our stiffer materials (9.78 to 48.1 N/mm) was two orders 
+of magnitude higher than those for our and Singal et  al.’s stiffest 
+unreinforced fabrics.
+In our actuator characterization, we showed that constraining 
+the pneumatic actuators with fabric B (effective stiffness 0.603 N/
+mm) had only a negligible effect on load transmission and deforma-
+tion, whereas fabric D (effective stiffness 9.78 N/mm) essentially 
+caused a “blocked force” response in that direction. We conclude 
+that to control and direct the load transmission of our actuators ef-
+fectively, we need a stiffness asymmetry of roughly one order of 
+magnitude. A single, homogeneous fabric could not simultaneously 
+provide haptic feedback accurately and anchor the actuators effec-
+tively. An equally important consideration is that the inclusion of 
+the heat- fusible yarn essentially transforms the fabric stretch re-
+sponse from that of tangled yarn to a monolithic material. Con-
+sequently, the fabric retains the ability to bend and conform 
+comfortably to the arm, but does not stretch, and effectively blocks 
+any deformation caused by the actuators.
+Although one could replicate our distributed stiffness method 
+by assembling, for example, a polymer and a fabric with the appro-
+priate stiffnesses, the design and fabrication processes would be 
+challenging, especially for a wearable device. In contrast, our mul-
+tilayer knit can deliver the required level 
+of asymmetric response through one-  
+shot manufacturing and a single post-
+processing step, considerably simplifying 
+the entire procedure. It also allows for 
+building further complexity into a design 
+without scaling the fabrication effort, 
+which opens possibilities to adapt the 
+design to other more complex body parts 
+(joints for example) or entirely differ -
+ent applications.
+Haptiknit sleeve prototype
+The implementation of the haptic sleeve 
+in our user studies supports the viability 
+of using soft pneumatic actuators and 
+distributed stiffness knitting in wearable 
+haptic devices for both affective and dis-
+criminative touch. Although haptic sensa-
+tions might differ from those caused 
+by vibration or voice- coil motors, we 
+have shown that they are equally or more 
+pleasant, can provide the feeling of con-
+tinuous motion, and are more successful 
+in communicating granular informa-
+tion. This motivates other applications re-
+quiring detailed haptic feedback, such as 
+teleoperation (Fig. 8A), sensory remapping (Fig. 8B), navigation 
+(Fig. 8C), or training movement or communication between players on 
+a team (Fig. 8D).
+In addition to providing haptic stimuli, other features of the 
+sleeve and Airport 1.0 are noteworthy. Our pneumatic supply sys-
+tem controls eight individual actuators and a force transmission 
+range of 40 N; this is distinguished from the prior work shown in 
+table S1. Whereas other user studies have used pneumatic supply 
+systems that require additional packaging on the back or the waist, 
+our system is battery powered and untethered and can be worn on 
+the arm alone. Participant feedback in the postexperiment discus-
+sion confirmed that combining distributed stiffness knitting with 
+soft actuators and Velcro straps was comfortable and easy to use. In 
+contrast with previous haptic sleeves, our device can thus be worn 
+for prolonged periods of time without affecting the participant’s 
+dexterity or mobility. In contrast, the voice- coil system of Salvato 
+et  al. (8) was heavier and prone to overheating because of quasi-
+static driving of the electromagnetic actuators, thus requiring longer 
+rest periods during user testing. These results demonstrate the po-
+tential of combining distributed stiffness knits with soft pneumatic 
+actuators, opening avenues for HCI applications requiring distrib-
+uted haptic feedback with comfort and portability.
+User study
+In this section, we first discuss the results from each part of the user 
+study individually. Then, we discuss the implications of our ap-
+proach in the wider context of wearable haptic devices.
+Localization
+Untrained participants were able to predict actuation location with a 
+mean of 69% accuracy compared with a chance value of 12.5% (one 
+in eight actuactors). This indicates that the layout of the actuator grid 
+in our sleeve allows participants to discern haptic information 
+Fig. 8. Potential applications for distributed stiffness haptics. (A) Realistic feedback in mixed reality and during 
+teleoperation. (B) Sensory remapping, for example, for an instrumented prosthetic arm. (C) navigation, for example, 
+to provide direction guidance that does not obstruct users from seeing and hearing their environment. (D) Guidance 
+and communication during sports.
+Downloaded from https://www.science.org at Tsinghua University on September 21, 2026
+
+du Pasquier et al., Sci. Robot. 9, eado3887 (2024)     18 December 2024
+Science RoboticS  |  ReSeaR ch aR ticle
+9 of 12
+accurately. We believe the selected sparseness of the actuators was 
+a good compromise between making them distinguishable and 
+enabling a continuous stroke as described above. Compared with 
+Jumet et al. (7), who also demonstrated a pneumatic textile sleeve, 
+we achieved communication of eight cues with eight actuators, 
+outperforming their method that conveyed only four cues with 
+12 actuators.
+The radial nerve wraps around the elbow and then lies on the 
+inner forearm until reaching the index finger and thumb. This re-
+sults in higher sensitivity on the inner than the outer forearm (38). 
+Correspondingly, our actuators 5 to 8, which are placed on the inner 
+arm, achieve higher average accuracy values. Our results also align 
+with prior work suggesting that haptic actuation in proximity to 
+body landmarks (also known as anchor points), like the elbow and 
+actuator 4 in our setup, is more easily distinguishable (28, 39). Even 
+for actuators with lower accuracy values (actuators 2 and 3 for ex-
+ample), actuator locations were only confused with their direct 
+neighbors. In similar actuator localization studies that used vibra-
+tion stimuli, participants typically achieved accuracy ranging from 
+35 to 55% on the forearm (28). In contrast, our study reports a 
+higher accuracy range of 44 to 89%. Vibrotactile actuators stimulate 
+the Pacinian corpuscles, which have large receptive fields, and create 
+vibration waves that propagate through the skin (39,  40), causing a 
+larger area of mechanoreceptors to be activated; these characteris-
+tics make vibration actuator locations harder to discern. We con-
+clude that our quasistatic displacement- based haptic approach is 
+more successful for discriminative touch and thus better suited for 
+applications such as a haptic display for communication.
+Stroking patterns
+Previous literature indicates that stroking motions between 1 and 
+10 cm/s are most pleasant, because of the response of CT afferents (6). 
+However, our slowest stroking pattern, which falls within this speed 
+range (600 ms and 50% delay is equivalent to 7.4 cm/s), was rated 
+lower by more than 1.25 points in pleasantness compared with the 
+highest rated stroke at 13.5 cm/s (200 ms and 50% delay), as shown 
+in Fig 6. Our highest speed stroke at 40.3 cm/s for 200 ms and 12.5% 
+delay also received a continuity rating almost three points higher 
+than that for the slowest one. This is likely due to the discrete nature 
+of our actuation, both spatially and in intensity. Spatially, our stroke 
+is a series of individual contacts, not a continuous stroke as in CT 
+afferent studies ( 6). For intensity, our pneumatic system is open- 
+loop and targets single pressure values; an actuator can only be on or 
+off, albeit at different intensities (stroke depths) and for different pe-
+riods of time. We found that stroking patterns of longer duration 
+and delays create a crawling, rather than stroking, sensation along 
+the forearm, where each indentation is easily distinguishable. This 
+could indicate that displacement, in contrast with vibrations, does 
+not activate CT afferents. It is also possible that vibrations generally 
+feel more continuous because they excite a larger portion of the skin 
+around the actuator rather than localized deformation.
+Despite this observed difference, no stroking pattern was consis-
+tently rated as unpleasant. In contrast, Culbertson et al. (4) reported 
+negative pleasantness ratings for a similar device using voice- coil 
+actuators for strokes of 200 ms and delays of 12.5% or 50%. We at-
+tribute the higher pleasantness of our device to the elasticity and 
+comfort of the knit sleeve and soft actuators, in contrast with the 
+rigid and perhaps more robotic feel of voice- coil actuators. We also 
+observed that the sleeve’s actuator grid is dense enough to create 
+stroking sensations with middling continuity ratings, as shown in 
+Fig. 6A. The shortest inflation duration of 200 ms and delay of 12.5% 
+received a continuity rating greater than 5 on the 7- point Lik-
+ert scale.
+Social touch gestures
+The confusion matrix obtained for the six touch gestures is similar 
+to that in Salvato et al., whose actuator grid dimensions and gesture 
+patterns we replicated (8): All Bhattacharyya similarity coefficients 
+for both studies were higher than 89%. However, we achieved an 
+overall lower accuracy: 36% compared with 45%. We believe that 
+this is again due to the nature of our pneumatic control system. In 
+Salvato et al., each actuator stroke could be controlled independent-
+ly to a specific indentation force. Our current control system only 
+defines whether one or multiple actuators are on or off and the pres-
+sure they initially inflate to.
+Despite differences in actuation approach, our social touch iden-
+tification results generally align with those of Salvato et  al.: Our 
+sleeve can successfully communicate human emotions, as shown in 
+the recall of attention and happiness. These two gestures entailed 
+distinguishable fast actuation patterns, such as a double tap for 
+attention or a series of short and sharp indentations across the 
+forearm for happiness. Arousal and valence also play a role in 
+how effectively an emotion was communicated. Happiness, a high- 
+accuracy gesture, achieved the highest scores, whereas sadness, a low- 
+accuracy gesture, achieved the lowest. In addition, the gestures for 
+calming and love were characterized by more complex and slow ac-
+tuation patterns, including stroking or squeezing, and test partici-
+pants reported they were generally less well defined even when 
+given their meaning. As previously observed by Bann and Bryson 
+(41), cultural background and age might also affect how these spe-
+cific emotions are communicated and understood. Our haptic sleeve 
+might be better suited to transmit well- defined and widely accepted 
+social touch gestures. Gratitude, for example, was rated as the most 
+realistic. It consisted of a single squeeze on the lower forearm, like 
+that of a hand.
+Conclusion
+Our study demonstrates the potential of combining distributed stiff-
+ness knits with soft pneumatic actuators, offering an original ap-
+proach for designing wearable haptic devices with enhanced comfort 
+and portability. The multilayer knits enable effective control over 
+load transmission and deformation in pneumatic actuators, simpli-
+fying the design and fabrication processes compared with alterna-
+tive methods.
+The Haptiknit sleeve prototype supports the feasibility of using 
+soft pneumatic actuators and distributed stiffness knitting for affec-
+tive and discriminative touch in wearable haptic devices. The posi-
+tive participant feedback on comfort and ease of use underscores 
+the practicality of the proposed approach for long- term wear. The 
+prototype also distinguishes itself by incorporating an untethered 
+pneumatic system with individual actuator control, a wide force 
+transmission range, and the ability to be worn for prolonged periods 
+without hindering dexterity or mobility. Although the user study 
+revealed discrepancies in user preferences for stroking patterns 
+compared with existing literature, the overall pleasantness of haptic 
+sensations, coupled with successful actuator localization and social- 
+touch gesture communication, supports the efficacy of our approach.
+Our research introduces an innovative framework for the design 
+and implementation of wearable haptic devices, paving the way 
+for enhanced HCI applications. The combination of distributed 
+Downloaded from https://www.science.org at Tsinghua University on September 21, 2026
+
+du Pasquier et al., Sci. Robot. 9, eado3887 (2024)     18 December 2024
+Science RoboticS  |  ReSeaR ch aR ticle
+10 of 12
+stiffness knits and soft pneumatic actuators offers a promising ave-
+nue for the development of comfortable, portable, and versatile hap-
+tic interfaces with diverse applications in the fields of communication, 
+interaction, and beyond.
+MATERIALS AND METHODS
+Distributed stiffness fabric characterization
+Homogeneous swatches were knitted using the specifications listed 
+in table S2. Each refers to a specific region of the sleeve prototype. 
+We began by obtaining optical microscopy images (Nikon Eclipse 
+MA200) with a magnification of 50 from these textile swatches be-
+fore mechanical testing.
+We then adapted the ASTM D4694- 96 Standard (42) to charac-
+terize the tensile properties of the different fabrics. We used a uni-
+versal testing machine (Instron 68SC- 2) with tensile grips to apply 
+tension. To prepare the samples, we laser cut rectangular patches of 
+size 80 mm by 40 mm using a carbon dioxide (CO 2) laser engraver 
+(Trotec Speedy 360) from each textile swatch. Three patches were 
+cut in each course direction as indicated by the orientation of the 
+longer edge. From these, we clamped both the top and the bottom 
+edges with polymethyl methacrylate clamps as shown in fig. S2 so 
+that the gauge area was 40 mm by 40 mm. Considering that some 
+yarns are viscoelastic, we ensured a constant displacement rate of 
+1 mm/s. Maximum strain was set to 200%. We captured the deforma-
+tion with a digital video camera to further understand the damage 
+mechanisms. We calculated the effective stiffness of the fabrics by 
+fitting a line of best fit to 5% strain using the following equation
+where xi is the strain in % and yi is the force in N.
+AirPort 1.0 specifications
+AirPort 1.0 was adapted from the open- source design known as 
+FlowIO by Shtarbanov et al. (30). First, we increased the number of 
+output valves from five to eight to control each actuator in the sleeve 
+independently. Second, we also changed the pumps and used the 
+Skoocom SC3802PM positive pressure pump from FlowIO’s large- 
+sized pump module and a Skoocom SC1804PM vacuum pump from 
+the medium- sized module to obtain the pressure range needed for 
+the soft pneumatic actuators. Third, we removed the block on the 
+second common air channel of FlowIO’s SMC S070 solenoid valves.
+Actuator characterization test setup
+Force was measured with a Nano 17 sensor (from ATI Industrial 
+Automation). We characterized actuators using two soft materials 
+(Elastic 50A and Flexible 80A resins from Formlabs, where 50A and 
+80A are the shore hardness) and three bellow thicknesses (1.0, 1.5, 
+and 2.0 mm). The force test setups are shown in fig. S5 (A and B). 
+Each parameter combination was tested N  = 4 times using new ac-
+tuators each time. See table S3 for means and SDs.
+The cycling behavior of actuators was tested for the final actuator 
+configuration (Elastic 50A at a 2- mm thickness) using the same test 
+setup as above (fig. S5, A and B). N = 3 actuators were tested at three 
+pressures (150, 175, and 200 kPa) each and for each test setup (total 
+of nine actuators per setup). In one cycle, pressure was ramped up to 
+the target value and held for 1 s, then the actuator was deflated to 
+atmospheric pressure and held again for 1 s. Actuators were tested 
+for 100 cycles. See table S3 for means and SDs.
+The frequency response and bandwidth were measured N  =  3 
+times in the unconstrained setups (no fabric, as shown in Fig. 2A) 
+using a square- wave pneumatic input at the nominal system pres-
+sure of 185 kPa. We induced a frequency sweep starting at 1 Hz with 
+increments of a factor of 1.2. We measured the force response F, 
+computing each magnitude in dB 20 ⋅ F
+Fmax
+. Forces were measured up 
+to 80 Hz, nearing the solenoid valves’ switching delay limit (see fig. 
+S6 for time versus pressure response). The frequency- dependent 
+force response is influenced by hardware like pumps and valves. Pri-
+oritizing wearability over high- frequency performance, we tested 
+the system’s limits and opted not to use larger components.
+Design and fabrication of the knit sleeve
+The sleeve was designed in the Create+ software interface and fabri-
+cated on a STOLL CMS 330 HP- W TT Sport industrial flatbed knit-
+ting machine. All knitting layers were fabricated simultaneously in a 
+single seamless textile. As shown in the assembly process in fig. S7, 
+when heat was applied in postprocessing, the layers bonded and 
+stiffened.
+The sleeve assembly began by placing four pairs of soft actuators 
+inside designated compartments within the sleeve. Once positioned, 
+the entire sleeve was placed in an oven and heated to 115.5°C for 
+10 min. After heating, a die shaped to match the dimensions and posi-
+tioning of the actuators was pressed down on the compartments for 
+45 s to secure the actuators in place. The sleeve was then placed onto 
+a conical tube, shaped roughly like a forearm, to form its structure. 
+After cooling, Velcro straps were attached at the level of the actuator 
+compartments, ensuring a snug fit to the skin and enabling easy 
+donning and removal of the sleeve (see fig. S7 for a visual guide to 
+the steps).
+User study design
+Participants were recruited via university email lists, with a focus on 
+ensuring a diverse range of responses across age and gender. Par -
+ticipants provided informed consent, and the protocol received ap-
+proval from the Stanford University Institutional Review Board. 
+Thirty- two participants (18 males, 13 females, and 1 who preferred 
+not to answer; ages 18 to 58 years) took part in the study. Twenty- 
+five participants reported that they were right- handed, six left- 
+handed, and one ambidextrous. Ten of the participants had extensive 
+prior experience with haptic devices, 5 moderate, 10 limited, and 7 
+had no experience. None of the participants reported cognitive or 
+sensory impairments. The ethnicity information of the participants 
+was not collected at the time of the study.
+Participants wore the sleeve on their right forearm with the ac-
+tuators located on the dorsal side. During the experiment, partici-
+pants rested on their elbow with the forearm and sleeve held freely 
+in the air, hidden by a box as shown in fig. S8. They wore active 
+noise- canceling headphones playing white noise. The modes of ac-
+tuation were controlled by the experimenter on a custom graphical 
+user interface (fig. S8).
+We calibrated the sleeve output for each participant. During cali-
+bration, we determined the first pressure at which participants could 
+feel the indentation from actuators and the pressure at which the 
+indentation started to feel uncomfortable. We activated a single ac-
+tuator (#7) starting from 115 kPa and increased the pressure in 
+E =
+∑ xiyi
+x2
+i
+(1)
+Downloaded from https://www.science.org at Tsinghua University on September 21, 2026
+
+du Pasquier et al., Sci. Robot. 9, eado3887 (2024)     18 December 2024
+Science RoboticS  |  ReSeaR ch aR ticle
+11 of 12
+increments of +15 kPa until the participant indicated they could feel 
+the actuator by saying “yes. ” We continued ramping up the pressure 
+in similar increments until participants indicated the pressure start-
+ed to feel uncomfortable, upon which calibration was stopped. This 
+procedure was repeated twice for each participant. The average 
+minimum system- controllable indentation felt by participants was 
+115 kPa, and one participant felt discomfort at 166 kPa (others felt 
+no discomfort). The maximum pressure in the experiment was then 
+set to the maximum comfortable pressure for each participant.
+Stroking continuity
+We used durations of 200, 400, and 600 ms and delays of 12.5, 25, 
+and 50%, a subset of the modes Culbertson et al. (4) previously in-
+vestigated. These nine actuation conditions were repeated twice in a 
+randomized order.
+Actuator localization
+We inflated actuators to the calibrated maximum pressure one at a 
+time, holding this state for 750 ms and deflating using a vacuum for 
+500 ms. We then asked the participants to guess which actuator had 
+been inflated, using the 1 to 8 location numbering shown in Figs. 2 
+and 6. Actuator numbering was provided separately on a printed 
+diagram. Before data collection, the participants were played each 
+actuator once in order of numbering to allow them to develop a 
+frame of reference. For the experiment, each actuator was played 
+three times in a randomized order, resulting in a total of 24 actua-
+tion stimuli.
+Social touch gestures
+For the social touch gesture study, we followed the same protocol as 
+Salvato et al. (8) to ensure a fair comparison. First, participants lis-
+tened to six audio prompts describing the social touch scenarios. 
+Next, they experienced each of the six actuator- mapped gestures 
+once in a consistent randomized order for each participant, without 
+any knowledge of the gestures’ meaning.
+During the experiment, participants were played each gesture 
+pattern three times in a randomized order, adding up to a total of 18 
+actuation sequences. After each gesture, participants verbally as-
+signed a probability that a specific gesture had been played. They 
+were told to give ratings in percentages from 0 to 100 in 10% incre-
+ments and that their ratings for a single played gesture did not have 
+to sum to 100%.
+Last, participants were played each mapped gesture once and 
+were asked for four ratings: valence, arousal, pleasantness, and au-
+thenticity (whether the gesture felt like human touch). Valence and 
+arousal scales were rated using printed Self- Assessment Manikins 
+(43) with a Likert scale from 1 to 9. Authenticity of the gestures was 
+rated using a printed Likert scale ranging from 0  = very unrealistic 
+to 10 = very realistic.
+Statistical analysis
+Fabric characterization
+For each fabric, we tested N  =  3 samples and used the mean re-
+sponse to calculate the effective stiffness.
+Actuator characterization
+For each part of the actuator characterization, we tested the follow-
+ing number of actuators: force testing N  = 4, cycling testing N  = 3, 
+and actuator frequency response N  = 3. We computed the average 
+response per pressure, cycle, and frequency, respectively. For the 
+force testing and the cycling testing, the averages per pressure are 
+given in tables S3 and S4. We added the SD to the tables because it is 
+representative of the robustness of the actuator response.
+User study
+The user study was conducted with N  = 32 participants. For the ac-
+tuator localization results, we added how many times each partici-
+pant guessed a certain actuator (correct or incorrect) location given 
+the actual actuation pattern and represent these cumulative results 
+in bar graphs in Fig. 5.
+For each stroke duration, we calculated the average continuity 
+and pleasantness ratings across all participants. The SD was added 
+to Fig. 6 to assess the level of consensus in the ratings.
+In the confusion matrix shown in Fig. 6C, we display the average 
+scores that participants assigned to each gesture. For instance, if 
+participant 1 assigned 75% attention and 25% happiness to the at-
+tention queue and participant 2 assigned 60% attention and 30% 
+love, the attention row of the matrix would show the following aver-
+age scores: attention, 67.5%; happiness, 12.5%; and love, 15%.
+Supplementary Materials
+The PDF file includes:
+Figs. S1 to S8
+tables S1 to S4
+References (44–57)
+Other Supplementary Material for this manuscript includes the following:
+Movies S1 and S2
+MDaR Reproducibility checklist
+REFERENCES AND NOTES
+ 1. i. eibl- eibesfeldt, human ethology, in New Aspects of Human Ethology, a. Schmitt,  
+K. a tzwanger, K. Grammer, K. Schäfer, eds. (Springer US, 1997), pp. 1–23.
+ 2. M. J. hertenstein, R. holmes, M. Mcc ullough, D. Keltner, t he communication of emotion 
+via touch. Emotion 9, 566–573 (2009).
+ 3. K. o . Johnson, t he roles and functions of cutaneous mechanoreceptors. Curr. Opin. 
+Neurobiol. 11, 455–461 (2001).
+ 4. h. c ulbertson, c. M. nunez, a. israr, F. lau, F. a bnousi, a. M. okamura, a social haptic 
+device to create continuous lateral motion using sequential normal indentation, in IEEE 
+Haptics Symposium (ieee, 2018), pp. 32–39.
+ 5. R. a ckerley, i. carlsson, h. Wester, h. olausson, h. b . Wasling, touch perceptions across 
+skin sites: Differences between sensitivity, direction discrimination and pleasantness. 
+Front. Behav. Neurosci. 8, 54 (2014).
+ 6. M. Y. t salamlal, n. o uarti, J. c. Martin, M. a mmi, haptic communication of dimensions of 
+emotions using air jet based tactile stimulation. J. Multimodal User Interfaces 9, 69–77 
+(2015).
+ 7. b . Jumet, Z. a. Zook, a. Yousaf, a. Rajappan, D. Xu, t . F. Yap, n. Fino, Z. liu,  
+M. K. o ’Malley, D. J. Preston, Fluidically programmed wearable haptic textiles. Device 1, 
+100059 (2023).
+ 8. M. Salvato, S. R. Williams, c. M. nunez, X. Zhu, a. israr, F. lau, K. Klumb, F. a bnousi,  
+a. M. okamura, h. c ulbertson, Data- driven sparse skin stimulation can convey social 
+touch information to humans. IEEE Trans. Haptics 15, 392–404 (2022).
+ 9. K. e. Macl ean, haptic interaction design for everyday interfaces. Rev. Hum. Factors Ergon. 
+4, 149–194 (2008).
+ 10. c. du Pasquier, t . chen, S. t ibbits, K. Shea, Design and computational modeling of a 3D 
+printed pneumatic toolkit for soft robotics. Soft Robot. 6, 657–663 (2019).
+ 11. R. F. Shepherd, F. ilievski, W. choi, S. a. Morin, a. a. Stokes, a. D. Mazzeo, X. chen, M. Wang, 
+G. M. Whitesides, Multigait soft robot. Proc. Natl. Acad. Sci. U.S.A. 108, 20400–20403 
+(2011).
+ 12. S. biswas, Y. Visell, emerging material technologies for haptics. Adv. Mater. Technol. 4, 
+1900042 (2019).
+ 13. W. Wu, h. culbertson, Wearable haptic pneumatic device for creating the illusion of 
+lateral motion on the arm, in 2019 IEEE World Haptics Conference, WHC 2019 (ieee, 2019), 
+pp. 193–198.
+ 14. a. Shtarbanov, M. Zhu, n. c olonnese, a. hajiagha Memar, Sleeveio: Modular and 
+reconfigurable platform for multimodal wearable haptic feedback interactions, in UIST 
+2023 -  Proceedings of the 36th Annual ACM Symposium on User Interface Software and 
+Technology [a ssociation for computing Machinery (acM), 2023], article no. 70, pp. 1–15.
+ 15. S. Kanjanapas, c. M. nunez, S. R. Williams, a. M. okamura, M. l uo, Design and analysis of 
+pneumatic 2- DoF soft haptic devices for shear display. IEEE Robot. Autom. Lett. 4, 
+1365–1371 (2019).
+Downloaded from https://www.science.org at Tsinghua University on September 21, 2026
+
+du Pasquier et al., Sci. Robot. 9, eado3887 (2024)     18 December 2024
+Science RoboticS  |  ReSeaR ch aR ticle
+12 of 12
+ 16. M. Zhu, a. h. Memar, a. Gupta, M. Samad, P . agarwal, Y. Visell, S. J. Keller, n. colonnese, 
+PneuSleeve: in- fabric multimodal actuation and sensing in a soft, compact, and 
+expressive haptic sleeve, in Conference on Human Factors in Computing Systems -  
+Proceedings (acM, 2020), pp 1–12.
+ 17. M. Raitor, J. M. Walker, a. M. okamura, h. c ulbertson, WRaP: Wearable, restricted- aperture 
+pneumatics for haptic guidance, in Proceedings of the IEEE International Conference on 
+Robotics and Automation (ieee, 2017), pp. 427–432.
+ 18. D. J. Spencer, Knitting Technology: A Comprehensive Handbook and Practical Guide 
+(technomic Pub., 2001).
+ 19. P . h. nguyen, W. Zhang, Design and computational modeling of fabric soft pneumatic 
+actuators for wearable assistive devices. Sci. Rep. 10, 9638 (2020).
+ 20. o . Kilic a fsar, a. Shtarbanov, h. Mor, K. nakagaki, J. Forman, K. Modrei, S. h. Jeong,  
+K. h jort, K. höök, h. ishii, omniFiber: i ntegrated fluidic fiber actuators for weaving 
+movement based interactions into the fabric of everyday life, in UIST 2021 -  Proceedings of 
+the 34th Annual ACM Symposium on User Interface Software and Technology (acM, 2021), 
+pp. 1010–1026.
+ 21. Y. l uo, K. Wu, t . s. Palacios, W. Matusik, Knitui: Fabricating interactive and sensing textiles 
+with machine knitting, in Proceedings of the 2021 CHI Conference on Human Factors in 
+Computing Systems (acM, 2021), article no. 668, 10.1145/3411764.3445780.
+ 22. Y. l uo, K. Wu, a. Spielberg, M. Foshey, D. Rus, t. Palacios, W. Matusik, Digital fabrication of 
+pneumatic actuators with integrated sensing by machine knitting, in CHI ‘22: Proceedings 
+of the 2022 CHI Conference on Human Factors in Computing Systems (acM, 2022), article. 
+no. 175, 10.1145/3491102.3517577.
+ 23. J. h. Kim, K. huang, S. White, M. c onroy, c. h.- l. Kao, KnitDermis: Fabricating tactile 
+on- body interfaces through machine knitting, in DIS ‘21: Proceedings of the 2021 ACM 
+Designing Interactive Systems Conference (acM, 2021), pp. 1183–1200.
+ 24. J. h. Kim, S. D. Patil, S. Matson, M. c onroy, c. h.- l. Kao, KnitSkin: Machine- knitted scaled 
+skin for locomotion, in CHI Conference on Human Factors in Computing Systems (acM, 
+2022), pp. 1–15.
+ 25. V. Sanchez, c. J. Payne, D. J. Preston, J. t. a lvarez, J. c. Weaver, a. t. a talay, M. boyvat,  
+D. M. Vogt, R. J. Wood, G. M. Whitesides, c. J. Walsh, Smart thermally actuating textiles. 
+Adv. Mater. Technol. 5, 2000383 (2020).
+ 26. J. h. Kim, J. Stilling, M. o ’Dell, c. h.- l. Kao, KnitDema: Robotic textile as personalized 
+edema mobilization device, in Proceedings of the 2023 CHI Conference on Human Factors in 
+Computing Systems (acM, 2023), pp. 1–19.
+ 27. e . churchill, J. t . Mcc onville, Sampling and Data Gathering Strategies for Future USAF 
+Anthropometry (a erospace Medical Research laboratory, 1976).
+ 28. R. W. cholewiak, a. a. c ollins, Vibrotactile localization on the arm: effects of place, space, 
+and age. Percept. Psychophys. 65, 1058–1077 (2003).
+ 29. M. F. nolan, t wo- point discrimination assessment in the upper limb in young adult men 
+and women. Phys. Ther. 62, 965–969 (1982).
+ 30. a. Shtarbanov, Flowio development platform -  t he pneumatic Raspberry Pi for soft 
+robotics in Conference on Human Factors in Computing Systems -  Proceedings (acM, 2021), 
+pp. 1–6.
+ 31. a. Shrivastava, Programmable-  air; https://www.programmableair.com/.
+ 32. S. J. Kim, h. chang, J. Park, J. Kim, Design of a portable pneumatic power source with 
+high output pressure for wearable robotic applications. IEEE Robot. Autom. Lett. 3, 
+4351–4358 (2018).
+ 33. a. Schirmer, i. c roy, R. ackerley, What are c- tactile afferents and how do they relate to 
+“affective touch”? Neurosci. Biobehav. Rev. 151, 105236 (2023).
+ 34. M. J. hertenstein, D. Keltner, b. a pp, b. a. bulleit, a. R. Jaskolka, touch communicates 
+distinct emotions. Emotion 6, 528–533 (2006).
+ 35. S. c. hauser, S. Mci ntyre, a. israr, h. olausson, G. J. Gerling, Uncovering human- to- human 
+physical interactions that underlie emotional and affective touch communication, in 
+2019 IEE World Haptics Conference (WHC) (ieee, 2019), pp. 407–412.
+ 36. a. bhattacharyya, on a measure of divergence between two multinomial populations. 
+Sankhyā: Indian J. Stat. 7, 401–406 (1946).
+ 37. K. Singal, M. S. Dimitriyev, S. e. Gonzalez, a. P . cachine, S. Quinn, e. a. Matsumoto, 
+Programming mechanics in knitted materials, stitch by stitch. Nat. Commun. 15, 2622 
+(2024).
+ 38. M. Schünke, e. Schulte, U. Schumacher, Thieme Atlas of Anatomy: General Anatomy and 
+Musculoskeletal System (t hieme, 2006).
+ 39. G. huisman, Social touch technology: a survey of haptic technology for social touch. IEEE 
+Trans. Haptics 10, 391–408 (2017).
+ 40. a. S. MacKlin, J. M. Yau, M. K. o ’Malley, evaluating the effect of stimulus duration on 
+vibrotactile cue localizability with a tactile sleeve. IEEE Trans. Haptics 14, 328–334 (2021).
+ 41. e . Y. bann, J. J. bryson, Measuring cultural relativity of emotional valence and arousal 
+using semantic clustering and t witter, in Cooperative Minds: Social Interaction and Group 
+Dynamics -  Proceedings of the 35th Annual Meeting of the Cognitive Science Society, CogSci 
+2013, M. Knauff, ed. (c ognitive Science Society, 2013), pp. 1809–1814.
+ 42. aStM Standard D4694- 09, 2020, “Standard test method for deflections with a 
+falling- weight- type impulse” (aStM i nternational, 2020).
+ 43. M. M. bradley, P . J. lang, Measuring emotion: t he self- assessment manikin and the 
+semantic differential. J. Behav. Ther. Exp. Psychiatry 25, 49–59 (1994).
+ 44. D. nair, G. Stankaitis, S. Duback, R. Geoffrion, J. b. Jackson, handwriting correction system 
+using wearable sleeve with optimal tactor configuration, in 2021 18th International 
+Conference on Ubiquitous Robots, UR 2021 (ieee, 2021), pp. 283–289.
+ 45. Y. liu, S. n ishikawa, Y. a. Seong, t hermocaress: a wearable haptic device with illusory 
+moving thermal stimulation, in Proceedings of the 2021 CHI Conference on Human Factors 
+in Computing Systems (acM, 2021), article no. 214.
+ 46. e . l eroy, R. hinchet, h. Shea, Multimode hydraulically amplified electrostatic actuators for 
+wearable haptics. Adv. Mater. 32, 2002564 (2020).
+ 47. e . M. Young, a. h. Memar, P . agarwal, n. c olonnese, bellowband: a pneumatic wristband 
+for delivering local pressure and vibration, in 2019 IEEE World Haptics Conference, WHC 
+2019 (ieee, 2019), pp. 55–60.
+ 48. S. basu, J. t sai, a. Majewicz, e valuation of tactile guidance cue mappings for emergency 
+percutaneous needle insertion, in IEEE Haptics Symposium, HAPTICS (ieee, 2016), pp. 
+106–112.
+ 49. G. huisman, a. Darriba Frederiks, b . Van Dijk, D. hevlen, b. Krose, t he taSSt: tactile sleeve 
+for social touch, in 2013 World Haptics Conference, WHC 2013 (ieee, 2013), pp. 211–216.
+ 50. K. bark, J. Wheeler, G. l ee, J. Savall, M. cutkosky, a wearable skin stretch device for haptic 
+feedback, in Proceedings -  3rd Joint EuroHaptics Conference and Symposium on Haptic 
+Interfaces for Virtual Environment and Teleoperator Systems, World Haptics 2009 (ieee, 
+2009), pp. 464–469.
+ 51. h. P . chien, M. c. Wu, c. c. hsu, Flowing- haptic sleeve: Research on apparent tactile 
+motion applied to simulating the feeling of flow on the arm, in UbiComp/ISWC 2021 -  
+Adjunct Proceedings of the 2021 ACM International Joint Conference on Pervasive and 
+Ubiquitous Computing and Proceedings of the 2021 ACM International Symposium on 
+Wearable Computers (acM, 2021), pp. 550–554.
+ 52. c. Y. chen, Y. Y. chen, Y. J. chung, n. h. Yu, Motion guidance sleeve: Guiding the forearm 
+rotation through external artificial muscles, in Conference on Human Factors in Computing 
+Systems -  Proceedings (acM, 2016), pp. 3272–3276.
+ 53. V. R. borkowska, a. Mcc onnell, S. Vijayakumar, a. Stokes, a. D. Roche, a haptic sleeve as a 
+method of mechanotactile feedback restoration for myoelectric hand prosthesis users. 
+Front. Rehabilit. Sci. 3, 806479 (2022).
+ 54. J. Weda, D. Kolesnyk, a. Mader, J. van erp, experiencing touch by technology, in Haptics: 
+Science, Technology, Applications: 13th International Conference on Human Haptic Sensing 
+and Touch Enabled Computer Applications, EuroHaptics 2022, Hamburg, Germany, May 
+22–25, 2022, Proceedings, h. Seifi, a. M. l. Kappers, o . Schneider, K. Drewing,  
+c. Pacchierotti, a. a bbasimoshaei, G. huisman, t. a. Kern, eds. , vol 13235 of Lecture Notes 
+in Computer Science (Springer, 2022), pp. 110–118.
+ 55. h. Z. tan, c. M. Reed, Y. Jiao, Z. D. Perez, e. c. Wilson, J. Jung, J. S. Martinez, F. M. Severgnini, 
+a cquisition of 500 english words through a ta ctile Phonemic Sleeve (taPS). IEEE Trans. 
+Haptics 13, 745–760 (2020).
+ 56. Z. Zhang, R. héron, e. l ecolinet, F. Detienne, S. Safin, Visualtouch: enhancing affective 
+touch communication with multi- modality stimulation, in ICMI 2019 -  Proceedings of the 
+2019 International Conference on Multimodal Interaction (acM, 2019), pp. 114–123.
+ 57. a. Papadopoulou, J. b erry, t . Knight, R. Picard, a ffective sleeve: Wearable materials with 
+haptic action for promoting calmness, in Distributed, Ambient and Pervasive Interactions: 
+7th International Conference, DAPI 2019, Held as Part of the 21st HCI International 
+Conference, HCII 2019, Orlando, FL, USA, July 26–31, 2019, Proceedings, n. Streitz,  
+S. Konomi, eds., vol. 11587 of Lecture Notes in Computer Science (Springer, 2019),  
+pp. 304–319.
+Acknowledgments: We thank P . liu, e. Sigin, and J. Jang for the support in collecting 
+experimental data and t . buchner for assisting in hardware part sourcing. We also 
+acknowledge the contributions of a. Parker, l. a mbali, and S. Williams for their assistance 
+with physical prototyping, early design ideation, and photographic documentation. 
+Funding: t his work was supported in part by the national Science Foundation grant nos. 
+2301355 and 2301356. Author contributions: c onceptualization: c.d.P ., i.S., and a.o . 
+Methodology: c.d.P ., l.t e., i.S., l.t i., and a.o . investigation: c.d.P ., l.t e., i.S., l.t i., l.P ., and t .c. 
+Visualization: c.d.P . and l.t e. Funding acquisition: c.d.P ., t .c., S.t ., and a.o . Project 
+administration: c.d.P . Supervision: c.d.P ., t .c., S.t ., and a.o . Writing—original draft: c.d.P ., l.t e., 
+i.S., and l.t i. Writing—review and editing: c.d.P ., S.t ., and a.o . Competing interests: c.d.P ., 
+a.M.o ., S.t ., l.t ., and i.S. are inventors on pending patent 63/612 894 (“Wearable device 
+concept powered by a combination of soft pneumatic actuators and variable stiffness”). t he 
+other authors declare that they have no conflicts of interest. Data and materials availability:  
+a ll uniaxial test data are freely available for download using the following link: https://doi.
+org/10.25740/jk534ft2383.
+Submitted 13 February 2024 
+a ccepted 19 november 2024 
+Published 18 December 2024 
+10.1126/scirobotics.ado3887
+Downloaded from https://www.science.org at Tsinghua University on September 21, 2026
+
+Haptiknit: Distributed stiffness knitting for wearable haptics
+Cosima du Pasquier, Lavender Tessmer, Ian Scholl, Liana Tilton, Tian Chen, Skylar Tibbits, and Allison Okamura
+Sci. Robot. 9 (97), eado3887.  DOI: 10.1126/scirobotics.ado3887
+Editor’s summary
+Wearable haptic devices can convey artificial touch during human computer interaction, but it is difficult to achieve
+sufficient forces and sensation with the comfort of a soft material. By combining machine knitting and pneumatic
+actuation, du Pasquier et al. developed a haptic sleeve with a high-stiffness outer layer that grounds the actuation force
+and a lower stiffness inner layer that transfers load to the skin. The Haptiknit sleeve was tested with 32 participants
+who could determine the location of an inflated actuator in a two-by-eight grid with high accuracy. The sleeve was
+also used to convey social touch gestures by inflating the actuators in different durations and patterns. Its untethered,
+portable operation holds promise for applications such as teleoperation or navigation. —Melisa Yashinski
+View the article online
+https://www.science.org/doi/10.1126/scirobotics.ado3887
+Permissions
+https://www.science.org/help/reprints-and-permissions
+Use of this article is subject to the Terms of service
+Science Robotics (ISSN 2470-9476) is published by the American Association for the Advancement of Science. 1200 New York Avenue
+NW, Washington, DC 20005. The title Science Robotics is a registered trademark of AAAS. 
+Copyright © 2024 The Authors, some rights reserved; exclusive licensee American Association for the Advancement of Science. No claim
+to original U.S. Government Works
+Downloaded from https://www.science.org at Tsinghua University on September 21, 2026

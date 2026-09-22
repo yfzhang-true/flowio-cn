@@ -1,0 +1,392 @@
+Sof Robotics and Programmable Materials for Human-Computer 
+Interaction 
+Ali Shtarbanov Anke Brocker Adriana Cabrera 
+MIT Media Lab RWTH Aachen University matrix Gruppe 
+Cambridge, USA Aachen, Germany Düsseldorf, Germany 
+alims@media.mit.edu brocker@cs.rwth-aachen.de adriana.cabrera.g@gmail.com 
+Yuhan Hu Heiko Müller Alex Mazursky 
+Cornell University University of Oldenburg University of Chicago 
+Ithaca, USA Oldenburg, Germany Chicago, USA 
+yh758@cornell.edu heiko.mueller@uni-oldenburg.de alexmazursky@uchicago.edu 
+ABSTRACT 
+Recently, subdomains of Human-Computer interaction (HCI), such 
+as Tangible Interfaces and Haptics, have experienced disruptive 
+hardware transformations owing to advances in Soft Robotics and 
+Programmable Materials. How will these felds shape the future of 
+HCI over the next decade and beyond? Unfortunately, the transfer 
+of fundamental advances from basic science to end-user experiences 
+can take years due to many interdisciplinary challenges. These in-
+clude challenges related to fabrication methods, durability, tools, 
+access to resources, and transfer of knowledge. How can we most 
+efectively overcome such challenges, what opportunities exist to 
+accelerate progress, and what application possibilities can we en-
+vision and contribute to the future? We aim for a comprehensive 
+approach to soft robotics design and fabrication and concepts of 
+future applications for their integration into daily life. This work-
+shop invites to explore how programmable materials develop new 
+streams of HCI at the intersection of technology, design, art, and 
+innovation. 
+CCS CONCEPTS 
+• Human-centered computing → Interaction techniques; Hap-
+tic devices; User interface toolkits; User studies. 
+KEYWORDS 
+Workshop, Soft Robotics, Actuated Materials, Tools, Toolkits, Pro-
+totyping, Personal Fabrication, Haptics, Interfaces, Shape-Change, 
+Access, Design 
+ACM Reference Format: 
+Ali Shtarbanov, Anke Brocker, Adriana Cabrera, Yuhan Hu, Heiko Müller, 
+and Alex Mazursky. 2023. Soft Robotics and Programmable Materials for 
+Human-Computer Interaction. In Designing Interactive Systems Conference 
+(DIS Companion ’23), July 10–14, 2023, Pittsburgh, PA, USA. ACM, New York, 
+NY, USA, 4 pages. https://doi.org/10.1145/3563703.3591460 
+Permission to make digital or hard copies of all or part of this work for personal or 
+classroom use is granted without fee provided that copies are not made or distributed 
+for proft or commercial advantage and that copies bear this notice and the full citation 
+on the frst page. Copyrights for components of this work owned by others than the 
+author(s) must be honored. Abstracting with credit is permitted. To copy otherwise, or 
+republish, to post on servers or to redistribute to lists, requires prior specifc permission 
+and/or a fee. Request permissions from permissions@acm.org. 
+DIS Companion ’23, July 10–14, 2023, Pittsburgh, PA, USA 
+© 2023 Copyright held by the owner/author(s). Publication rights licensed to ACM. 
+ACM ISBN 978-1-4503-9898-5/23/07. . . $15.00 
+https://doi.org/10.1145/3563703.3591460 
+1 BACKGROUND 
+Human-Computer Interaction (HCI), Human-Robot Interaction 
+(HRI), Haptics, Interactive art and design (among other felds in-
+volving interactions between humans and dynamic hardware) are 
+increasingly interested in leveraging novel actuation strategies, 
+advanced materials, and soft robotics design approaches [6, 23]. 
+Within HCI, this enables opportunities for highly dynamic tangible 
+interfaces [15], haptic feedback technologies that feel more realistic 
+[30], and user experiences that are more natural [20]. Soft and com-
+pliant actuated materials can better conform to diferent surfaces, 
+including the human body; enable the adoption of bio-inspired prin-
+ciples, technologies, and actuators; have infnite degrees of freedom; 
+and ofer the ability to programmatically control physical structures 
+at the material level [7]. Example characteristics include electrical 
+conductivity under large strains [8], thermoregulation at thin form 
+factors [19], high energy density [2], self-powered actuators [29], 
+computation on compliant deformable substrates [9], on-demand 
+stifness control [26], and self-healing sensors [25] among others 
+[10]. These abilities vastly expand the hardware design palette of 
+HCI researchers and ofer potential for disruptive changes in inter-
+faces, haptics, art and design, education, and personal fabrication 
+[3, 7, 11–13, 16–18, 27, 28]. Thus, we believe more focused atten-
+tion and discussion is needed in the DIS community regarding how 
+soft robotics and programable materials will continue to shape the 
+future of HCI and the design of physical interfaces. In recent years 
+a number of tutorial projects and methodologies for teaching pro-
+grammable wearables, materials and soft robotics have emerged, 
+in response to the resilience and access to sophisticated manu-
+facturing laboratories, creating opportunities for resuming DIY 
+home-based practices and continuing the development of research 
+and creative approaches. The proposed one-day onsite workshop 
+will provide a platform for discussing challenges, best practices, 
+and possible future applications in the context of soft robotics and 
+actuated materials. We hope to facilitate those as starting points to 
+explore critical questions on how HCI researchers can beneft from 
+a transfer of design-, fabrication-, and actuation strategies from 
+recent research on soft robotics and programmable materials. The 
+workshop will allow up to 20 participants to discuss and exchange 
+their experiences of HCI and Soft Robotics and the future they can 
+imagine. 
+110
+DIS Companion ’23, July 10–14, 2023, Pitsburgh, PA, USA Shtarbanov et al. 
+Figure 1: a) FlowIO device that will be introduced to workshop participants; (b) Hands-on activities and (c) soft robotic prototype 
+demo from the workshop at CHI’22. 
+2 RESEARCH QUESTIONS AND AGENDA 
+The Soft Robotics and Actuated Materials for Human-Computer In-
+teraction workshop at DIS 2023 attempts to investigate (1) the chal-
+lenges and best practices of soft robotics and actuated materials, 
+and (2) how technologies in Soft Robotics and Actuated Materials 
+will enable the future design of prototyping, education and applica-
+tions of human-machine interaction. We will bring together experts, 
+interested researchers, designers and makers from all the relevant 
+domains. The workshop focuses on technologies, their fabrication 
+methods for prototyping, and integration into meaningful future 
+applications. Particular emphasis is put on stimulating the exchange 
+of ideas between intersectional felds such as health, engineering, 
+learning, wearables, tangible user interfaces, etc. to identify novel 
+application areas beyond the traditional scope of soft robotic re-
+search. Below we outlined the central questions and challenges of 
+soft robotic methods in HCI and design research, which we address 
+in our workshop. The central questions and challenges that arise 
+when Soft Robotics strategies are leveraged in the context of HCI 
+research are outlined in the following and serve as a basis for deeper 
+discussions during the workshop. 
+2.1 Prototyping 
+Which fabrication methods are available to HCI researchers & hob-
+byists, and which are not? What are the fabrication pipelines, re-
+quired work environments, materials, and equipment? How costly 
+are these in terms of money and time? How can fabrication meth-
+ods be made more accessible, afordable, faster, and simpler for 
+everyone? What tools and resources are needed for or would aid 
+in designing, simulating, and prototyping projects that utilize pro-
+grammable and actuated materials? Some examples are silicone 
+3D printers, development platforms like FlowIO [21], websites like 
+the Soft Robotics Toolkit, and CAD tools with embedded domain 
+knowledge. Which educational formats between academia and in-
+dustry can facilitate the introduction to this topic? How can novel 
+tools and resources be made available to all interested users? What 
+tools and resources do you fnd lacking in your own workfow 
+that would signifcantly increase your productivity if they existed? 
+How can we lower the entry barrier for people from technical and 
+non-technical backgrounds to start incorporating programmable 
+materials into their projects? 
+2.2 Education 
+Soft robotics is increasingly infuencing interdisciplinary felds at 
+the intersection of art, technology, health and science; how can we 
+engage designers, artists, and educators who want to implement in-
+novative projects? How might we integrate accessible soft robotics 
+practices for makers and professionals? Researchers and practition-
+ers applied hands-on experiments with diferent techniques, materi-
+als and methods, and learning strategies in craftmanship and digital 
+practices. Can we enable the engagement of diferent audiences 
+and learners? How can we teach the successful implementation of 
+soft robotics? Material experimentation has a signifcant role in 
+providing softness and compliance to the soft robot; what materials 
+could we further explore, what socio-cultural aspects bring the 
+materiality, and how could we explore suitable materials for soft 
+robotics or bio-robotics? Recently, the exploration of robotics has 
+been oriented toward research in educational contexts, how to pro-
+mote activities around the empowerment of the use of technology, 
+learning by doing and innovating in the intersection of technology, 
+science, and art. This feld has explored applications in wearables, 
+textiles and soft materials where explorative learning and material-
+driven design play a fundamental role. These experimentations 
+often carried out in labs, are increasingly attractive in connection 
+with diferent actors involving universities, research institutions, 
+schools, and incubator centres [1]. They foster interdisciplinary 
+know-how as it is created in FabLabs, where learning-by-doing 
+occurs. 
+2.3 Future Applications 
+We see a potential for research in the areas of fabrication, tools, 
+and meaningful applications within HCI. For example, ubiquitous 
+applications using actuated materials are imaginable [18]. How can 
+we bring together HCI research, personal fabrication, and ubiq-
+uitous computing? What other research felds can be connected 
+to HCI such as Materials Science, Soft Robotics, or Microsystems 
+Engineering? 
+Actuated materials can create an autonomous expression of the 
+material in diferent scenarios. What types of interactions can be 
+realized using actuated materials? Which material afordances play 
+a role in the interaction? How can humans interact with those ma-
+terials? While soft robotics may provide designers and researchers 
+with more powerful ways for interface designs, they also raise a 
+111
+Sof Robotics and Programmable Materials for Human-Computer Interaction DIS Companion ’23, July 10–14, 2023, Pitsburgh, PA, USA 
+set of new questions: What type of interfaces are possible using 
+Soft Robotics? What kind of sensory systems already exist? What 
+models of nature can we emulate as a haptic system? Examples are 
+visual, haptic, audio, audiovisual, bio-inspired and other multimodal 
+soft interfaces [4, 13, 14, 22, 24]. How can they be implemented 
+into applications that are of interest to the HCI feld? What are the 
+diferent modalities? What are their afordances but also their limits 
+before drifting towards the uncanny valley or becoming socially 
+unacceptable? 
+The conformability of soft robots means they can assimilate into 
+the form factor of a chosen object and surface. If coupled with 
+more sensors and actuators, soft robots can then be conduits for 
+user interfaces for selected appliances. How can we incorporate 
+soft robots into the design of shape-changing interfaces for smart 
+appliance control? What real-world metaphors can we rely on to 
+enable our interactions with such shape-changing interfaces? What 
+are the limits to this fexibility and how does it afect the robustness 
+of a soft robot? 
+3 WORKSHOP STRUCTURE & GOALS 
+The workshop aims to provide time and opportunity for creative 
+thinking and experimentation. The workshop will begin with an 
+inspirational keynote from an invited speaker, highlighting their 
+vision and perspective on the intersection of soft robotics and HCI. 
+A moderated Q&A session after the keynote will provide an oppor-
+tunity to expand upon the discussion and ideas among all workshop 
+participants and the speaker. 
+Afterward, participants will present their workshop submissions. 
+Depending on the type of submissions we receive, we may struc-
+ture this as either individual talks or symposium-style poster pre-
+sentations where participants can freely roam around the room. 
+The keynote and the participant presentations will then serve as 
+inspiration for ideas that will be discussed during the morning 
+brainstorming sessions. 
+The afternoon will focus on hands-on activities and tangible 
+interactions. Participants will be able to learn new skills (such as 
+prototyping with pneumatics and thermo-responsive materials) and 
+build rapid prototypes. Then participants will be asked to talk about 
+their projects from the workshop. The hands-on activities will serve 
+as inspiration for our afternoon brainstorming session, which will 
+center on future applications. Here we encourage participants to 
+bring their prototypes and demos to enrich the exchange between 
+the audience while picturing opportunities for collaboration. 
+Our goal is to identify the various challenges that people face 
+when working with soft materials and devices. Moreover, we aim to 
+identify what new tools and techniques are needed to address these 
+challenges and bridge the gap between designers and material sci-
+entists. Additionally, we would like to discuss what options exist to 
+make the design, prototyping, and application of soft programmable 
+materials more accessible to HCI researchers and designers. 
+4 TOPICS OF INTERESTS FOR PARTICIPANTS 
+For this one-day workshop, we invite submissions that demonstrate 
+challenges and new opportunities related to the design, fabrication, 
+education aspects, and deployment of soft robotic applications or 
+tools, up to four pages. The workshop call for participation will 
+be available at https://softrobotics.io/dis23. The complete program 
+details will be posted on the website including the list of all speak-
+ers, participants, and organizers. Our DIS’23 workshop will be a 
+one-day onsite event supporting synchronous participation in a 
+virtual space if needed for unforeseen reasons. We will also provide 
+asynchronous materials beforehand. 
+Our workshop last year (www.softrobotics.io/chi22) [5] brought 
+together over two dozen cross-disciplinary academic researchers 
+and industry professionals from HCI, Soft Robotics, Art, and Haptics 
+for the frst time to explore challenges, opportunities, and the future 
+of HCI in the context of soft robotics and actuated materials. 
+During the workshop, we will aim to have a soft robotics starter 
+kit with a FlowIO device [21] for the participants, where the total 
+number of kits will depend on the availability of resources and 
+funding we can secure. Our experiences from last year’s workshop 
+show that multiple participants can share devices and materials 
+during the hands-on activities. 
+Participants will be encouraged to bring prototypes and demos at 
+any stage that they can show and tell narratives about the process 
+of fabrication and/or materials, tools, or projects of their interest 
+to work with during the hands-on activities. More information 
+regarding the hands-on part of the workshop will be disseminated 
+four weeks prior to the conference start date. Participants can keep 
+any artifacts they develop during the workshop, but they will have 
+to return any FlowIO or electronic devices provided to them. 
+REFERENCES 
+[1] Lily Chambers Adriana Cabrera and Anastasia Pistofdou. 2022. From Textiles 
+to Soft Robotics and the Emergent Approaches in STEAM and Textile Labs in 
+Conferences. (2022), 30–34. https://doi.org/10.26352/G630_2384-9509 
+[2] Cameron Aubin, Snehashis Choudhury, Rhiannon Jerch, Lynden Archer, James 
+Pikul, and Robert Shepherd. 2019. Electrolytic vascular systems for energy-dense 
+robots. Nature 571 (07 2019). https://doi.org/10.1038/s41586-019-1313-1 
+[3] Harvey Bewley and Laurens Boer. 2018. Designing Blo-nut: Design Principles, 
+Choreography and Otherness in an Expressive Social Robot. 1069–1080. https: 
+//doi.org/10.1145/3196709.3196817 
+[4] Laurens Boer and Harvey Bewley. 2018. Reconfguring the Appearance and 
+Expression of Social Robots by Acknowledging their Otherness. 667–677. https: 
+//doi.org/10.1145/3196709.3196743 
+[5] Anke Brocker, Jose A. Barreiros, Ali Shtarbanov, Kristian Gohlke, Ozgun Kilic Af-
+sar, and Sören Schröder. 2022. Actuated Materials and Soft Robotics Strategies 
+for Human-Computer Interaction Design. In Extended Abstracts of the 2022 CHI 
+Conference on Human Factors in Computing Systems (New Orleans, LA, USA) (CHI 
+EA ’22). Association for Computing Machinery, New York, NY, USA, Article 81, 
+7 pages. https://doi.org/10.1145/3491101.3503711 
+[6] Ang Chen, Ruixue Yin, Lin Cao, Chenwang Yuan, H.K. Ding, and W.J. Zhang. 
+2017. Soft robotics: Defnition and research issues. In 2017 24th International 
+Conference on Mechatronics and Machine Vision in Practice (M2VIP). 366–370. 
+https://doi.org/10.1109/M2VIP.2017.8267170 
+[7] Stephen Coyle, Carmel Majidi, Philip LeDuc, and K. Jimmy Hsia. 2018. Bio-
+inspired soft robotics: Material selection, actuation, and design. Extreme Mechan-
+ics Letters 22 (2018), 51–59. https://doi.org/10.1016/j.eml.2018.05.003 
+[8] Uranbileg Daalkhaijav, Osman Dogan Yirmibesoglu, Stephanie Walker, and Yigit 
+Mengüç. 2018. Rheological Modifcation of Liquid Metal for Additive Manufac-
+turing of Stretchable Electronics. Advanced Materials Technologies 3, 4 (2018), 
+1700351. https://doi.org/10.1002/admt.201700351 
+[9] Dylan Drotman, Saurabh Jadhav, David Sharp, Christian Chan, and Michael T. 
+Tolley. 2021. Electronics-free pneumatic circuits for controlling soft-legged 
+robots. Science Robotics 6, 51 (2021), eaay2627. https://doi.org/10.1126/scirobotics. 
+aay2627 
+[10] Nazek El-Atab, Rishabh B. Mishra, Fhad Al-Modaf, Lana Joharji, Aljohara A. Al-
+sharif, Haneen Alamoudi, Marlon Diaz, Nadeem Qaiser, and Muhammad Mustafa 
+Hussain. 2020. Soft Actuators for Soft Robotic Applications: A Review. Advanced 
+Intelligent Systems 2, 10 (2020), 2000128. https://doi.org/10.1002/aisy.202000128 
+[11] Jack Forman, Taylor Tabb, Youngwook Do, Meng-Han Yeh, Adrian Galvin, and 
+Lining Yao. 2019. ModiFiber: Two-Way Morphing Soft Thread Actuators for Tan-
+gible Interaction. In Proceedings of the 2019 CHI Conference on Human Factors in 
+Computing Systems (Glasgow, Scotland Uk) (CHI ’19). Association for Computing 
+112
+DIS Companion ’23, July 10–14, 2023, Pitsburgh, PA, USA Shtarbanov et al. 
+Machinery, New York, NY, USA, 1–11. https://doi.org/10.1145/3290605.3300890 
+[12] Kristian Gohlke. 2017. Exploring Bio-Inspired Soft Fluidic Actuators and Sensors 
+for the Design of Shape Changing Tangible User Interfaces. In Proceedings of the 
+Eleventh International Conference on Tangible, Embedded, and Embodied Interaction
+(Yokohama, Japan) (TEI ’17). Association for Computing Machinery, New York, 
+NY, USA, 703–706. https://doi.org/10.1145/3024969.3025039 
+[13] Liang He, Cheng Xu, Ding Xu, and Ryan Brill. 2015. PneuHaptic: Deliver-
+ing Haptic Cues with a Pneumatic Armband. In Proceedings of the 2015 ACM 
+International Symposium on Wearable Computers (Osaka, Japan) (ISWC ’15). 
+Association for Computing Machinery, New York, NY, USA, 47–48. https: 
+//doi.org/10.1145/2802083.2802091 
+[14] Yuhan Hu, Sang-won Leigh, and Pattie Maes. 2017. Hand Development Kit: Soft 
+Robotic Fingers as Prosthetic Augmentation of the Hand. In Adjunct Publication 
+of the 30th Annual ACM Symposium on User Interface Software and Technology 
+(Québec City, QC, Canada) (UIST ’17). Association for Computing Machinery, 
+New York, NY, USA, 27–29. https://doi.org/10.1145/3131785.3131805 
+[15] Hiroshi Ishii, Dávid Lakatos, Leonardo Bonanni, and Jean-Baptiste Labrune. 
+2012. Radical Atoms: Beyond Tangible Bits, toward Transformable Materials. 
+Interactions 19, 1 (jan 2012), 38–51. https://doi.org/10.1145/2065327.2065337 
+[16] Sourav Karmakar and Abhishek Sarkar. 2019. Design and Implementation of 
+Bio-Inspired Soft Robotic Grippers. In Proceedings of the Advances in Robotics 
+2019 (Chennai, India) (AIR 2019). Association for Computing Machinery, New 
+York, NY, USA, Article 24, 6 pages. https://doi.org/10.1145/3352593.3352618 
+[17] Ozgun Kilic Afsar, Ali Shtarbanov, Hila Mor, Ken Nakagaki, Jack Forman, Karen 
+Modrei, Seung Hee Jeong, Klas Hjort, Kristina Höök, and Hiroshi Ishii. 2021. 
+OmniFiber: Integrated Fluidic Fiber Actuators for Weaving Movement Based 
+Interactions into the ‘Fabric of Everyday Life’. In UIST ’21: Proceedings of the 
+34rd Annual ACM Symposium on User Interface Software and Technology (Virtual) 
+(UIST ’21). Association for Computing Machinery, New York, NY, USA, 1–17. 
+https://doi.org/10.1145/3472749.3474802 
+[18] Alex Mazursky, Shan-Yuan Teng, Romain Nith, and Pedro Lopes. 2021. MagnetIO: 
+Passive yet Interactive Soft Haptic Patches Anywhere. In Proceedings of the 2021 
+CHI Conference on Human Factors in Computing Systems (Yokohama, Japan) (CHI 
+’21). Association for Computing Machinery, New York, NY, USA, Article 213, 
+15 pages. https://doi.org/10.1145/3411764.3445543 
+[19] Anand K. Mishra, Thomas J. Wallin, Wenyang Pan, Patricia Xu, Kaiyang Wang, 
+Emmanuel P. Giannelis, Barbara Mazzolai, and Robert F. Shepherd. 2020. Au-
+tonomic perspiration in 3D-printed hydrogel actuators. Science Robotics 5, 38 
+(2020), eaaz3918. https://doi.org/10.1126/scirobotics.aaz3918 
+[20] Aditya Shekhar Nittala and Jürgen Steimle. 2022. Next Steps in Epidermal Com-
+puting: Opportunities and Challenges for Soft On-Skin Devices. In Proceedings of 
+the 2022 CHI Conference on Human Factors in Computing Systems (New Orleans, 
+LA, USA) (CHI ’22). Association for Computing Machinery, New York, NY, USA, 
+Article 389, 22 pages. https://doi.org/10.1145/3491102.3517668 
+[21] Ali Shtarbanov. 2021. FlowIO Development Platform – the Pneumatic “Raspberry 
+Pi” for Soft Robotics. In Extended Abstracts of the 2021 CHI Conference on Human 
+Factors in Computing Systems (Yokohama, Japan) (CHI EA ’21). Association for 
+Computing Machinery, New York, NY, USA, Article 479, 6 pages. https://doi. 
+org/10.1145/3411763.3451513 
+[22] Ronit Slyper, Ivan Poupyrev, and Jessica Hodgins. 2010. Sensing through Struc-
+ture: Designing Soft Silicone Sensors. In Proceedings of the Fifth International 
+Conference on Tangible, Embedded, and Embodied Interaction (Funchal, Portugal) 
+(TEI ’11). Association for Computing Machinery, New York, NY, USA, 213–220. 
+https://doi.org/10.1145/1935701.1935744 
+[23] Yi Sun, Yun Seong Song, and Jamie Paik. 2013. Characterization of silicone 
+rubber based soft pneumatic actuators. In 2013 IEEE/RSJ International Conference 
+on Intelligent Robots and Systems. 4446–4453. https://doi.org/10.1109/IROS.2013. 
+6696995 
+[24] Carlos E. Tejada, Raf Ramakers, Sebastian Boring, and Daniel Ashbrook. 2020. 
+AirTouch: 3D-Printed Touch-Sensitive Objects Using Pneumatic Sensing. In 
+Proceedings of the 2020 CHI Conference on Human Factors in Computing Systems 
+(Honolulu, HI, USA) (CHI ’20). Association for Computing Machinery, New York, 
+NY, USA, 1–10. https://doi.org/10.1145/3313831.3376136 
+[25] Seppe Terryn, Joost Brancart, Dirk Lefeber, Guy Van Assche, and Bram 
+Vanderborght. 2017. Self-healing soft pneumatic robots. Science Ro-
+botics 2, 9 (2017), eaan4268. https://doi.org/10.1126/scirobotics.aan4268 
+arXiv:https://www.science.org/doi/pdf/10.1126/scirobotics.aan4268 
+[26] Ilse M. Van Meerbeek, Benjamin C. Mac Murray, Jae Woo Kim, Sanlin S. Robinson, 
+Perry X. Zou, Meredith N. Silberstein, and Robert F. Shepherd. 2016. Morphing 
+Metal and Elastomer Bicontinuous Foams for Reversible Stifness, Shape Memory, 
+and Self-Healing Soft Machines. Advanced Materials 28, 14 (2016), 2801–2806. 
+https://doi.org/10.1002/adma.201505991 
+[27] Luisa von Radziewsky, Antonio Krüger, and Markus Löchtefeld. 2015. Scarfy: Aug-
+menting Human Fashion Behaviour with Self-Actuated Clothes. In Proceedings of 
+the Ninth International Conference on Tangible, Embedded, and Embodied Interac-
+tion (Stanford, California, USA) (TEI ’15). Association for Computing Machinery, 
+New York, NY, USA, 313–316. https://doi.org/10.1145/2677199.2680568 
+[28] Guanyun Wang, Ye Tao, Ozguc Bertug Capunaman, Humphrey Yang, and Lin-
+ing Yao. 2019. A-Line: 4D Printing Morphing Linear Composite Structures. In 
+Proceedings of the 2019 CHI Conference on Human Factors in Computing Systems 
+(Glasgow, Scotland Uk) (CHI ’19). Association for Computing Machinery, New 
+York, NY, USA, 1–12. https://doi.org/10.1145/3290605.3300656 
+[29] Michael Wehner, Ryan L. Truby, Daniel J. Fitzgerald, Bobak Mosadegh, George M. 
+Whitesides, Jennifer A. Lewis, and Robert J. Wood. 2016. An integrated design 
+and fabrication strategy for entirely soft, autonomous robots. Nature 536, 7617 
+(Oct. 2016), 451–455. https://doi.org/10.1038/nature19100 
+[30] Tae-Heon Yang, Jin Ryong Kim, Hanbit Jin, Hyunjae Gil, Jeong-Hoi Koo, and 
+Hye Jin Kim. 2021. Recent Advances and Opportunities of Active Materials 
+for Haptic Technologies in Virtual and Augmented Reality. Advanced Func-
+tional Materials 31, 39 (2021), 2008831. https://doi.org/10.1002/adfm.202008831 
+arXiv:https://onlinelibrary.wiley.com/doi/pdf/10.1002/adfm.202008831 
+113

@@ -1,0 +1,755 @@
+Soft Haptic Display Toolkit: A Low-Cost, Open-Source Approach to
+High Resolution Tactile Feedback
+Pijuan Yu, Alexis Urquhart, Anzu Kawazoe, Thomas K. Ferris, M. Cynthia Hipwell, Rebecca F. Friesen
+Abstract— High-spatial-resolution wearable tactile arrays
+have drawn interest from both industry and research, thanks
+to their capacity for delivering detailed tactile sensations.
+However, investigations of human tactile perception with high-
+resolution tactile displays remain limited, primarily due to the
+high costs of multi-channel control systems and the complex
+fabrication required for fingertip-sized actuators. In this work,
+we introduce the Soft Haptic Display (SHD) toolkit, designed to
+enable students and researchers from diverse technical back-
+grounds to explore high-density tactile feedback in extended
+reality (XR), robotic teleoperation, braille displays, navigation
+aid, MR-compatible somatosensory stimulation, and remote
+palpation. The toolkit provides a rapid prototyping approach
+and real-time wireless control for a low-cost, 4×4 soft wearable
+fingertip tactile display with a spatial resolution of 4 mm.
+We characterized the display’s performance with a maximum
+vertical displacement of 1.8 mm, a rise time of 0.25 second,
+and a maximum refresh rate of 8 Hz. All materials and code
+are open-sourced to foster broader human tactile perception
+research of high-resolution haptic displays.
+I. I NTRODUCTION
+The concept of the “metaverse,” first proposed in 1992, has
+recently regained popularity and has led to the development
+of various creative wearable haptic actuators and devices for
+actively interacting with virtual environments [1], including
+vibrotactile feedback for virtual textures [2] and multiple
+degrees of freedom (DOFs) force feedback driven by par-
+allel rigid kinematics [3]. Among these different techniques,
+soft haptic actuators present advantages and potential for
+wearable haptics because of their high spatial resolution,
+wearability, and safety [4], [5], [6].
+Many high-resolution soft fingertip displays are driven by
+electroosmotic [7], electrohydraulic [8], chemical reaction-
+based [9], or micro-pump actuation methods [10], [11],
+[12]. Among these, pneumatic actuators—which generate
+tactile sensations through fluid pressure—are particularly
+popular in both the haptics and soft robotics communities
+due to their relative ease of fabrication, scalability, and
+controllability. While several soft robotics toolkits have been
+developed to simplify pneumatic control systems [13], [14],
+[15], research on high-resolution pneumatic fingertip displays
+remains limited, primarily due to high costs or complex
+actuator fabrication processes [5], [10], [11].
+For instance, the commercial HaptX G1 glove integrates
+up to 135 microfluidic actuators across the fingers and palm
+This work was supported in part by the National Science Foundation
+Grant 2326453. Pijuan Yu, Alexis Urquhart, Anzu Kawazoe, M. Cynthia
+Hipwell, and Rebecca F. Friesen are with Mechanical Engineering, Texas
+A&M University, College Station, Texas. Email: pijuanyu@tamu.edu
+Thomas K. Ferris is with Department of Industrial & Systems Engineer-
+ing, Texas A&M University, College Station, Texas.
+Control Box
+4x4 Tactile Array
+Fig. 1. Overview of Soft Haptic Display (SHD) System. The 4 × 4 tactile
+array haptic display (22 x 22 x 7 mm, red) is connected to the control box
+(white) via transparent air tubes (one meter). The control box communicates
+with the laptop wirelessly using a socket communication method.
+[12], but its Mobile Airpack Edition is priced at $38,990 [16],
+making it inaccessible to many researchers. While recent
+studies propose lower-cost alternatives, they often impose
+stringent fabrication requirements, such as laser cutting [7],
+[8] or plasma bonding [8], [10], creating a significant barrier
+to entry for students and researchers interested in high-
+resolution tactile feedback.
+To address these limitations, we introduce the Soft Haptic
+Display (SHD) toolkit. Building on principles from existing
+soft robotics toolkits, the SHD is accessible to students
+and researchers with diverse technical backgrounds, enabling
+them to create custom high-resolution tactile arrays worn
+on the fingertip to provide high-density force feedback. The
+contributions of this work are summarized as follows:
+• Design details of a fingertip-sized 4 × 4 soft wearable
+tactile array.
+• A desktop-sized, lightweight (1.832 Kg) control box
+that provides real-time control of the tactile array.
+• Proportional pressure regulation, 16 binary pressure
+outputs, and 8 pressure sensor inputs.
+• 0.25 seconds actuator rise time, achieving 1.80 mm
+maximum vertical displacement with up to 8 Hz refresh
+frequency.
+• A user-friendly graphical interface for wireless, inde-
+pendent control of the tactile display with low latency.
+In addition to creating immersive interactions in virtual
+environments [1], this system supports robotic teleoperation
+2025 22nd International Conference on Ubiquitous Robots (UR)
+June 30 - July 2, 2025, College Station, Texas, USA
+979-8-3315-2441-8/25/$31.00 ©2025 IEEE 59
+2025 22nd International Conference on Ubiquitous Robots (UR) | 979-8-3315-2441-8/25/$31.00 ©2025 IEEE | DOI: 10.1109/UR65550.2025.11078133
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 01:57:32 UTC from IEEE Xplore.  Restrictions apply. 
+[17], refreshable Braille displays [18], [19], brain-activity
+mapping via somatosensory stimulation in MRI settings [20],
+spatial orientation and navigation [21], remote palpation [22],
+and various psychophysical studies. Our goal is to advance
+high-resolution haptic display research by offering a low-
+cost, rapidly developed wearable tactile array, and we have
+open-sourced all project resources at the repository below 1.
+The remainder of this paper is structured as follows. First,
+we describe the state of the art in open-source soft actuator
+systems, as well as high-resolution tactile array research.
+Then, we outline the fabrication process for the custom
+tactile array. Next, we detail the control platform, including
+hardware components, the low-level controller, and the user
+interface. Finally, we present the device characterization
+results—displacement, pressure, response time, and refresh
+frequency—to evaluate the system’s performance.
+II. R ELATED WORK
+A. Open Source Soft Robotics Systems
+Soft robotics is a rapidly growing field of research due
+to its adaptability, flexibility, and safety for human-robot
+interaction and haptics applications. A popular resource for
+new researchers and students to learn soft robotic design
+is the Soft Robotics Toolkit (SRT) [13]. As an open-access
+website, it provides detailed documentation of the design
+process for soft pneumatic actuators and a pneumatic control
+board for low-level control. Another option is the FlowIO
+miniature modular platform, which aims to guide students
+and researchers in actuating and sensing soft wearable robots
+through its five pneumatic ports and various modular com-
+ponents [14]. Other open-source websites related to soft
+robotics include Programmable Air [23], PneuSoRD [24],
+Pneumatic Controller [25], and Pneuduino [26]. These pneu-
+matic systems aim to achieve pressure regulation through
+closed-loop feedback control using pressure sensors and
+valves. However, when actuating 2 mm bubbles in a fingertip-
+sized wearable tactile array, controlling airflow by frequently
+switching binary valves with a Pulse Width Modulation
+(PWM) signal causes vibrations due to pressure fluctua-
+tions [27]. While replacing binary valves with proportional
+solenoid valves may reduce vibration, the size and cost of
+proportional valves are significantly higher, making them less
+suitable for high-resolution tactile arrays.
+Instead of developing a custom regulator, an alternative
+approach is to directly control a commercial analog pressure
+regulator. For instance, the Soft Robotics Control-Unit [15] is
+an open-source platform that uses piezo pressure regulators
+to teleoperate a soft gripper, actuate a soft Pneumatic Unit
+Cell (PUC) for vibrotactile and force feedback in virtual
+reality (VR) [28], and control a large area haptic display
+with four groups of PUCs [29]. Similarly, Meta Reality Lab
+proposed a multichannel pneumatic system with approxi-
+mately 15 identical pressure regulators to control a pneumatic
+wristband [30]. While the size and performance of these
+commercial pressure regulators are significantly better than
+1github.com/pijuanyu2022/Soft-Haptic-Display-Toolkit
+custom pressure regulators, they cost around $700 each,
+which is unaffordable for high-resolution tactile displays.
+B. Fabrication Methods of Advanced Tactile Array
+Rigid actuator technologies—such as shape-memory-alloy
+(SMA) springs [19], [31] and motorized sliders [32],
+[33]—are popular for high-resolution tactile arrays because
+they are inexpensive and easy to manufacture. However, their
+intrinsic rigidity limits conformability, slows response times,
+and lacks the biomimetic softness required for wearable
+haptics and safe human–robot interaction.
+Soft pneumatic and hydraulic actuators address these
+shortcomings by emulating biological tissue mechanics, but
+they typically require sophisticated fabrication tools. For
+example, Wu et al. presented a 2 × 3 pneumatic array,
+which utilized a UV lithography machine for mold creation
+and a Parylene deposition system for coating [34]. Shen et
+al. developed a 32-bubble fingertip actuator driven by the
+electroosmotic method, with components precisely cut using
+an ultraviolet laser cutter (LPKF U4) and a CO2 laser cutter
+(ULS VLS 4.60) [7]. Meta Reality Lab introduced a high-
+resolution electrohydraulic haptic interface comprising 16
+individually controlled bubble actuators [8]. Their fabrication
+process involved laser cutting a thermoplastic dielectric film
+with 8 holes and using a plasma bonding machine to bond a
+thin silicone sheet to one side of the dielectric film. Shan et
+al. developed a microfluidic 5 × 5 tactile array, employing a
+vacuum oven to degas and cure PDMS (RTV615) solution
+and a plasma cleaner to enhance bonding between layers
+[10]. Wang et al. [11] demonstrated a 4 × 4 pneumatic
+array fabricated by bonding two layers of thermoplastic
+polyurethane (TPU) films using a hot press machine and
+custom aluminum alloy stamps.
+While the aforementioned studies leveraged advanced
+manufacturing methods to fabricate tactile arrays and achieve
+higher performance, the reliance on expensive and complex
+fabrication tools poses significant barriers for students and
+researchers from diverse backgrounds who aim to rapidly
+develop high-resolution tactile arrays.
+III. M ATERIAL AND METHODS
+The SHD system architecture is illustrated in Fig. 2 and
+includes three data flows: control signals (green), power
+supply (red), and airflow (blue). Overall, the air pressure
+is generated by the micro pump, regulated by the pressure
+regulator, distributed into 16 channels via mini solenoid
+valves, and then directed to the silicone tactile array to
+inflate the bubbles. The host PC communicates with the
+Raspberry Pi and Arduino Uno to adjust the system pressure
+and control the valves for the high-resolution display. Details
+are described in the following subsections.
+A. Tactile Array Design
+The 4 × 4 tactile array consists of 16 hollow, bottomless
+cylindrical channels arranged within a 22 mm square grid.
+It is composed of two layers (Fig. 3): 4 mm of Dragon Skin
+10 Medium and 3 mm of EcoFlex 00-10. Dragon Skin was
+60
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 01:57:32 UTC from IEEE Xplore.  Restrictions apply. 
+Raspberry Pi 5Run_robot.py
+Arduino Uno
+12V 5A Power
+VEAB board
+Regulator
+SoftRobo.py
+Pneumatic.inoRemote PCGUI.py
+main.pytactile_array.py
+16 x Valves4 x Protoboards
+Micro Pump
+4.5 V Batteries
+SignalPowerAir flow
+SocketSerialI2CADCDACGPIODigital PinsI2C5 V24 V6 V
+Fig. 2. System architecture. The entire system, except for the host PC, is housed within the control box. Users can operate the graphical user interface
+(GUI) on the host PC to wirelessly control one pressure regulator and 16 solenoid valves for pattern display on the 4 × 4 tactile array.
+air
+tube
+dragon-skin
+2mm
+1mm 2mm
+4mm
+3mm2mm
+0.5mm
+3mm
+sil-poxy
+eco-/f_lex
+Fig. 3. Cross section diagram of silicone array .
+selected to prevent bubbling on the sides, as its thickness
+provides greater structural support. EcoFlex was chosen for
+its low tensile strength and high elasticity, allowing for
+temporary deformation at the top. To reinforce the center,
+which experiences the highest stress, the tops gradually
+increase in thickness from 0.5 mm at the edges to 1 mm
+in the middle, resulting in a 0.5 mm difference in thickness.
+The arrays were molded in two parts (Fig. 4A): the
+lower layer and the upper layer. The molds were produced
+using Prusa’s MK3S+ FDM (Fused Deposition Modeling)
+printers with PLA (Polylactic Acid). They were designed
+to be modular to prevent tearing during demolding (see
+Fig. 4B). Before molding, the molds were prepped with
+silicone release spray. The lower layer was molded first:
+Dragon Skin 10 Medium was hand-mixed for three minutes
+to ensure thorough blending. It was then degassed in a
+vacuum chamber at -68 kPa (gauge) for five minutes. Once
+bubbling ceased, the solution was removed from the vacuum
+chamber and slowly and evenly poured into the mold. The
+mold was then placed back into the vacuum chamber at 20
+(a) (b)
+Fig. 4. Tactile Array Fabrication. (A) Split pegs create holes in the
+silicone for the air tubes to be inserted; (B) Exploded view.
+inHg for three minutes to remove any remaining air bubbles.
+The lids, connected to the holder through pegs, were placed
+on top to create an even surface. The molds were left to cure
+at room temperature for five hours.
+Once cured, the lower layer was removed from the mold
+and placed at the bottom of the upper mold. The EcoFlex 00-
+10 was prepared using the same steps as the Dragon Skin 10
+Medium and was poured directly on top of the lower layer.
+This layer was left to cure for four hours. Once the final array
+was removed from the mold, 2 mm OD (outer diameter)
+plastic tubing, cut to 35 mm in length, was added. SilPoxy
+was applied in a thick layer to the bottom of each plastic
+tube, ensuring none covered the tubing hole. Each tube was
+then inserted fully into its respective hole and subsequently
+pulled up by 2 mm from the bottom of the tactile array. The
+61
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 01:57:32 UTC from IEEE Xplore.  Restrictions apply. 
+Raspberry Pi 5Arduino UnoTIP 120 transistorsPressure sensors (5V)Solenoid Valves (6V)Pressure regulator (24V)Mini air pump (4.5 V)Top enclosure12V power supplyI2C MultiplexerVEAB board12V to 6V converter12V to 5V converterSide enclosureSide enclosure
+Fig. 5. SHD Controller Box Details. The control box measures 20 cm
+in length, 15 cm in width and 15 cm in height. All enclosure components
+and board holders are 3D-printed using PLA material.
+SilPoxy was allowed to cure for 30 minutes before use.
+B. Hardware system
+The SHD hardware system is organized into three func-
+tional layers within a controller box, with an additional rear
+module dedicated to power and air supply (see Fig. 5). The
+bottom layer houses a Raspberry Pi 5 (8 GB RAM) mini-
+computer, an Arduino Uno Rev3 micro-controller, an I2C
+multiplexer (PCA9548A, Adafruit), a VEAB board, and two
+DC voltage converters. The Raspberry Pi 5 serves as the
+central controller, enabling wireless communication with a
+host PC, serial communication with the Arduino Uno, and
+direct control of the pressure regulator via the VEAB board.
+The Arduino Uno is connected to the I2C multiplexer to
+support up to eight I2C channels.
+The VEAB board is connected to a proportional piezo
+regulator (VEAB-L-26-D13-Q4-V1-1R1, Festo) capable of
+providing 0–0.1 MPa of output pressure in response to a
+0–10 V input. An mini air pump (4699, Adafruit) supplies
+air at a maximum pressure of 55 kPa and a flow rate of
+up to 2.5 liters per minute. The VEAB board incorporates
+two digital-to-analog converters (MCP4725, MicroChip) to
+deliver control signals and two analog-to-digital converters
+(ADS1014, Texas Instruments) to receive feedback from the
+regulator. Further details of the VEAB board can be found
+in the Soft Robotics Control-Unit [15].
+The middle layer of the controller box contains four
+custom circuit boards. Each board integrates four TIP120
+transistors (976, Adafruit) for switching solenoid valves
+on or off, four 1N4001 flyback diodes (755, Adafruit) to
+prevent reverse voltage damage, and two MPRLS pressure
+sensors (3965, Adafruit) rated for 0–172 kPa. Twelve of the
+transistors interface with the Arduino’s digital outputs, while
+the remaining four interface with the Raspberry Pi’s GPIO
+digital outputs. All eight pressure sensors communicate with
+the Arduino via the I2C multiplexer for data acquisition.
+The top layer includes 16 solenoid micro air valves (6V
+Air Valve, Adafruit). A 12 V adjustable power supply (4880,
+Adafruit) mounted at the rear of the controller box provides
+the primary power input. This supply is routed through the
+VEAB board to generate 24 V for the pressure regulator
+(after voltage amplification), through a DC converter (12
+V to 5 V USB Type-C, YIPIN HEXHA) for powering the
+Raspberry Pi, and through another DC converter (12 V to 6
+V Step Down Converter, DROK) for driving the 16 solenoid
+valves (see Fig. 2). The Arduino Uno receives power from
+the Raspberry Pi, which also indirectly supplies the eight
+pressure sensors through the I2C multiplexer. Due to the
+high current demand of the micro air pump, a separate 4.5
+V battery box is used to power it.
+C. Software architecture
+The control signal flow is represented as the green line in
+Fig. 2. To achieve wireless control, the host PC first utilizes
+the Secure Shell Protocol (SSH) to remotely log into the
+Raspberry Pi and launch the Python script. The host PC then
+launches Python software with a graphic interface in the local
+environment and establishes a connection to the Raspberry
+Pi via socket communication using the Transmission Control
+Protocol/Internet Protocol (TCP/IP) network. The Raspberry
+Pi and Arduino Uno communicate through a USB cable using
+a serial communication method. This setup offers several
+benefits: the TCP/IP network enables low-latency commu-
+nication (typically 1–10 ms) and high data transfer rates,
+ensuring reliable and real-time interaction. Additionally, the
+USB-serial connection allows a communication frequency of
+up to 115200 bps, supporting efficient data exchange between
+the Raspberry Pi and Arduino.
+To offer users—including students, researchers, and prac-
+titioners—the flexibility to control a high-resolution tactile
+array, debug the system, visualize pressure sensor data, and
+preserve records for future analysis, a user-friendly graphical
+user interface (GUI) was developed using the CustomTkinter
+Python library. The GUI is organized into four primary
+panels, each serving a distinct purpose in the configuration
+and operation of the tactile system (Figure 6). The sections
+below provide detailed descriptions of these panels.
+1) Setting Panel: The first panel (Figure 6A), referred to
+as the Setting Panel, is central to managing the system’s core
+configurations. Through a concise set of controls, users can
+establish a direct connection to the Raspberry Pi by entering
+its IP address in a pop-up window, restore the system to
+default settings, and archive both actuator commands and
+pressure sensor data into CSV files that include time stamps
+for traceability. Additionally, the interface appearance can be
+toggled between Light and Dark modes, and its scale can be
+adjusted from 80% to 120%, accommodating various monitor
+sizes and user preferences.
+2) Pressure Regulator Panel: The Pressure Regulator
+Panel (Figure 6B) comprises three integrated sections de-
+signed to fine-tune the system’s internal pressure. On the
+left, a real-time plot visualizes the normalized control signal
+62
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 01:57:32 UTC from IEEE Xplore.  Restrictions apply. 
+A BDC
+Fig. 6. Graphical User Interface (GUI). (A) Setting panel; (B) Pressure regulator panel; (C) Display panel; (D) Sensor panel.
+over time, enabling users to observe how the voltage applied
+to the regulator is dynamically adjusted. In the middle sec-
+tion, several waveforms—sinusoidal, square, constant, and
+custom-imported waveforms—can be selected to control the
+pressure inside the system. Of these, the constant waveform
+is often used to maintain a uniform pressure for stable force
+output across the array. The right section allows users to
+modify parameters such as amplitude for sinusoidal, square,
+and constant waveforms, while frequency can be tuned for
+sinusoidal and square waves. Both slider-based and direct
+text-entry methods are supported, ensuring precision and
+flexibility in the parameter settings.
+3) Display Panel: The Display Panel (Figure 6C) facil-
+itates real-time feedback and provides direct valve control
+for the tactile array. A log window on the left chronicles all
+user inputs and system messages, streamlining troubleshoot-
+ing efforts. The middle portion of this panel manages the
+launching of additional windows for psychophysical or other
+specialized experiments. On the right, 16 interactive toggle
+buttons correspond to the array’s 16 valves, enabling users to
+manually activate or deactivate individual channels to create
+custom patterns. An Auto tab offers an assortment of prepro-
+grammed animation sequences for demonstration purposes
+and device testing. Moreover, researchers can design and add
+their own animation patterns through this tab. In order to
+support ease of use, a “help” command can be entered into
+a dedicated text box at the bottom of the panel, and a concise
+tutorial will then be displayed within the log window.
+4) Sensor Panel: The final panel (Figure 6D), called the
+Sensor Panel, contains eight real-time plots illustrating the
+pressure sensor data over time. To facilitate monitoring, these
+plots are grouped into two tabbed views, covering sensors
+1–4 and sensors 5–8, respectively. By providing immediate
+visual feedback on the sensor readings, the panel assists users
+in diagnosing potential airflow or pressure inconsistencies
+within the system. Furthermore, the panel’s modular design
+can easily be extended to incorporate additional sensors,
+ensuring that the GUI will scale as the hardware evolves.
+IV. D EVICE CHARACTERIZATION
+To understand the characteristics of the haptic device, we
+conducted measurement experiments.
+A. Dynamic response and delay in single bubble actuation
+First, we measured the displacement of a single bubble
+using a Laser Doppler Vibrometer (VibroFlex QTec, Poly-
+tec, USA). Simultaneously, the input signal to the pressure
+regulator and the pressure from the internally mounted pres-
+sure sensor were recorded. The Laser Doppler Vibrometer
+(LDV) and the input signal to the pressure regulator were
+captured using a data acquisition (DAQ) device (NI USB-
+6211, National Instruments, USA) at a sampling rate of
+1000 Hz. The velocity data obtained from the LDV was
+converted to displacement through numerical integration. The
+pressure sensor readings were recorded by an Arduino at a
+sampling rate of 10 Hz. Using the input signal as a reference,
+we plotted the input signal to the pressure regulator, the
+displacement, and the pressure of a single bubble for sine
+and square wave inputs at frequencies of 0.5, 1, and 2 Hz
+(Fig. 7A).
+63
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 01:57:32 UTC from IEEE Xplore.  Restrictions apply. 
+Fig. 7. Input Signal and Displacement of a Single Bubble (A) Time course of the input signal to the pressure regulator (orange, voltage in V),
+bubble displacement (blue, mm), and resulting pressure (green, Pa). (B) Single-bubble displacement response to a 0.5 Hz square wave input. Rise time
+(τr = t2 −t1), defined as the interval between 10% ( t1) and 90% ( t2) of maximum displacement, is 0.25 s under safe operation (6.5 V input, 30 kPa
+pressure, 1.8 mm displacement).
+Displacement 
+1.5 mm
+Sine wave Square wave
+0.125
+0.25
+0.5
+1
+2
+4
+8
+16
+32
+(Hz)0
+Time (s)
+105
+A0.5 mm
+Displacement (mm pkpk) 
+Frequency (Hz)
+10-1 100 102101
+Sine wave Square waveB
+10-1
+100
+101
+Fig. 8. Relationship Between Input Frequency and Displacement of a Single Bubble (A) Displacement of a single bubble at 9 different input
+frequencies of sine and square waves. (B) Relationship between input frequency and bubble displacement for both sine and square wave inputs. The light
+dashed line represents the curve-fitting model for the sine wave, while the pink dashed line represents the curve-fitting model for the square wave.
+Next, we calculated the delay between the input signal
+to the pressure regulator and the corresponding bubble dis-
+placement. Figure 7B shows the alignment of one cycle of
+the 0.5 Hz square wave input and its resulting displacement.
+During the measurements, we recorded five cycles of the
+square wave over a 10-second period, and the displacements
+for all five cycles were plotted. As shown in Fig. 7B,
+the displacement of the bubble across the five cycles was
+consistent. To determine the delay, we measured the time
+lag between the rising edges of the input voltage signal and
+the corresponding displacement. The calculated rising time
+was 0.25 seconds, and this value remained consistent across
+all cycles of the square wave input.
+Latency in the system was measured by recording times-
+tamps from both the GUI and the Raspberry Pi for corre-
+sponding events, specifically when the user clicked a button
+and when the sensor data exceeded 1 kPa. Synchronized
+via the Network Time Protocol (NTP), the time difference
+between user inputs and sensor events was 164.65 ± 37.42
+ms latency across 15 trials.
+B. Frequency Characterization
+In the second part of the measurement, we investigated
+the extent to which a single bubble actuates when subjected
+to different input frequencies of sine and square waves. To
+achieve this, we measured the displacement of the bubble
+using a laser Doppler vibrometer (LDV). The input signals
+included sine and square waves at frequencies of 0.125, 0.25,
+0.5, 1, 2, 4, 8, 16, and 32 Hz. Figure 8A illustrates the
+displacement of a single bubble when exposed to the nine
+different frequencies of sine and square waves. As expected,
+maximum displacement decreased progressively between 0.5
+Hz and 8 Hz as frequency increased. However, irregular
+response was observed at 16 Hz and 32 Hz, likely attributable
+to wireless communication latency and pressure fluctuations
+induced by the 1-meter pneumatic tubing.
+We calculated the peak-to-peak displacement, defined as
+the difference between the initial state and the maximum
+displacement for each frequency, and plotted the relationship
+between input frequency and bubble displacement (Fig-
+ure 8B). As shown in Figure 8B, the displacement varies
+64
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 01:57:32 UTC from IEEE Xplore.  Restrictions apply. 
+TABLE I
+EXISTING MICROFLUID FINGERTIP WEARABLE HIGH RESOLUTION HAPTIC DISPLAY
+Tactile
+Device
+Actuation
+Method
+Array size Actuator Fabrication Method Vertical
+Displacement (mm)
+Spatial Resolu-
+tion (mm)
+Diameter
+(mm)
+2012 [34] Pneumatic 2 x 3 UV lithography, Parylene coating 0.56 2.50 1.40
+2023 [12] Pneumatic 16 Proprietary microfluidic system (HaptX) 0.90 2.50 Unknown
+2023 [7] Electroosmosis 32 Ultraviolet laser cutting, CO 2 laser cutting 1.10 2.36 1.60
+2023 [8] Electrohydraulic 4 x 4 Laser cutting, Plasma bonding 2.00 3.00 1.50
+2024 [11] Pneumatic 4 x 4 Hot press, Custom stamps 2.50 4.00 2.50
+2024 [10] Pneumatic 5 x 5 Vacuum oven, Plasma bonding 0.21 1.25 0.75
+Our work Pneumatic 4 x 4 3D printer, Vacuum chamber 1.80 4.00 3.00
+across different frequencies and wave types. However, a
+general trend is observed where the displacement decreases
+as the input frequency increases.
+V. D ISCUSSION AND FUTURE WORK
+A. Contributions
+In this study, we present the development of the Soft
+Haptic Display (SHD) toolkit, which includes the fabrication
+of a soft fluidic tactile array, firmware integration, and user
+interface (UI) design. The primary goal of the SHD is to
+provide a rapid prototyping platform that lowers the barriers
+to entry for researchers in wearable, high-resolution tactile
+feedback. The total cost of this toolkit is approximately
+$1,000, including a $700 pressure regulator, which remains
+significantly more affordable than the HaptX glove and other
+high-density arrays with comparable spatial resolution. Al-
+though less-expensive devices exist (e.g., the stepper-driven
+TactionTablet at $32 [33] or jamming-based displays at $400
+[35]), the SHD combines fingertip-sized actuators and soft
+compliance—features that are essential for applications such
+as VR tactile feedback and telerobotic manipulation.
+To facilitate ease of prototyping, our novel soft actuator
+and control box require only a 3D printer and a vacuum
+chamber for fabrication, utilizing widely available materials
+such as silicone rubber and PLA filament. For wireless
+control with low latency, the system integrates a Raspberry
+Pi 5 and an Arduino Uno. Both platforms benefit from
+large user communities that provide tutorials, troubleshooting
+resources, and support for a wide range of peripherals,
+accelerating development and reducing the learning curve.
+Additionally, the toolkit features a modern, customizable UI
+built with an open-source Python library, allowing users to
+control the tactile display in real time and monitor dynamic
+pressure values. The project repository includes compre-
+hensive documentation, covering component procurement,
+tactile array fabrication, control board soldering, system
+assembly, and software installation and execution.
+In terms of performance evaluation, our device charac-
+terization results indicate performance comparable to other
+high-resolution soft tactile devices (see Table I). The spatial
+resolution—defined as the center-to-center distance between
+adjacent actuator chambers—is 4 mm, with each chamber
+having a 3 mm diameter, resulting in an edge-to-edge sepa-
+ration of only 1 mm. In order to avoid popping the array
+bubbles, we limit maximum control voltage input to the
+regulator below 6.5 V , corresponding to a maximum 30 kPa
+of pressure and 1.8 mm step response displacement with
+a rise time of 0.25 seconds. Furthermore, the microvalves
+and pump are housed within a compact 20 × 15 × 15 cm
+control box, reducing reliance on bulky air supply systems
+and enabling a portable, backpack-compatible design.
+B. Limitations and Future work
+Despite these advancements, several limitations merit at-
+tention. First, while the SHD’s cost is substantially lower
+than commercial systems, the $700 pneumatic regulator
+remains prohibitive for independent developers or resource-
+constrained settings. Future efforts will prioritize open-
+source regulator designs or alternative pressure sources to
+further democratize access.
+Second, the pressure control system currently limits indi-
+vidual actuator modulation. While each actuator unit can be
+independently toggled on or off through the valve, individual
+height control is difficult to achieve due to the system’s
+open-loop design. Instead, all 16 actuators are modulated
+simultaneously by a single pressure regulator. The primary
+reason is that we utilized low-cost ON/OFF solenoid valves
+to minimize costs, which limits precision.
+Although we attempted to develop a bang-bang closed-
+loop control using two valves and a pressure sensor, follow-
+ing the approach in [36], applying this method in a low-
+pressure (30 kPa) pneumatic system led to air fluctuations
+and vibrations that propagate through the tubing and become
+perceptible to the user. Future research should explore ad-
+vanced pneumatic control techniques and conduct a force
+characterization experiment to evaluate performance.
+The third limitation is the lack of psychophysical exper-
+iments. While we characterized the device’s performance
+using the LDV and pressure sensor, human perception studies
+are essential. Specifically, we plan to conduct an absolute
+threshold detection experiment to determine the minimum
+perceivable pressure for tactile stimulation and a pattern
+discrimination experiment to evaluate the device’s ability by
+rendering both static and dynamic tactile patterns.
+The final limitation is that, while the toolkit provides a
+custom GUI, it currently lacks demonstrations for AR/VR
+applications. Additionally, the control box is still powered
+by a grounded power supply, which restricts untethered
+operation. Future work will focus on replacing the grounded
+power supply with a battery, enabling the control box to
+function as a wearable backpack. Furthermore, efforts will
+be directed toward integrating the tactile display with Unity
+to facilitate AR/VR-based interactions.
+65
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 01:57:32 UTC from IEEE Xplore.  Restrictions apply. 
+VI. C ONCLUSION
+In this paper, we introduced the Soft Haptic Display
+(SHD) toolkit, which offers a rapid prototyping approach for
+developing soft microfluidic tactile arrays capable of high-
+resolution force feedback. By simplifying design, fabrica-
+tion, and operation, the toolkit aims to lower barriers for
+students and researchers in haptics, soft robotics, extended
+reality, assistive technology, neuroscience, psychophysics,
+and other fields exploring high-density microactuator-based
+tactile feedback. The toolkit includes detailed instructions
+on installation, assembly, and usage, and all resources are
+available open-source. We invite interested researchers to
+make use of this toolkit, thereby expanding the horizons
+of human tactile perception research and advancing the
+development of high-resolution haptic displays.
+ACKNOWLEDGMENT
+This work was supported by the US National Science
+Foundation (NSF-2326453).
+REFERENCES
+[1] C. Pacchierotti, F. Chinello, K. Koumaditis, M. D. Luca, E. Ofek,
+and O. Georgiou, “Guest editorial haptics in the metaverse: Haptic
+feedback for virtual, augmented, mixed, and extended realities,” IEEE
+Transactions on Haptics , vol. 17, no. 2, pp. 122–128, 2024.
+[2] R. F. Friesen and Y . Vardar, “Perceived realism of virtual textures
+rendered by a vibrotactile wearable ring display,” IEEE Transactions
+on Haptics , vol. 17, no. 2, pp. 216–226, 2024.
+[3] S. B. Schorr and A. M. Okamura, “Fingertip tactile devices for virtual
+object manipulation and exploration,” in Proceedings of the 2017 CHI
+conference on human factors in computing systems , 2017, pp. 3115–
+3119.
+[4] A. Frisoli and D. Leonardis, “Wearable haptics for virtual reality and
+beyond,” Nature Reviews Electrical Engineering , pp. 1–14, 2024.
+[5] M. Emami, A. Bayat, R. Tafazolli, and A. Quddus, “A survey on hap-
+tics: Communication, sensing and feedback,” IEEE Communications
+Surveys & Tutorials , 2024.
+[6] M. Zhu, S. Biswas, S. I. Dinulescu, N. Kastor, E. W. Hawkes, and
+Y . Visell, “Soft, wearable robotics and haptics: Technologies, trends,
+and emerging applications,” Proceedings of the IEEE , vol. 110, no. 2,
+pp. 246–272, 2022.
+[7] V . Shen, T. Rae-Grant, J. Mullenbach, C. Harrison, and C. Shultz,
+“Fluid reality: High-resolution, untethered haptic gloves using elec-
+troosmotic pump arrays,” in Proceedings of the 36th Annual ACM
+Symposium on User Interface Software and Technology , 2023, pp. 1–
+20.
+[8] J. Hartcher-O’Brien, V . Mehta, N. Colonnese, A. Gupta, C. J. Bruns,
+P. Agarwal et al., “Fingertip wearable high-resolution electrohydraulic
+interface for multimodal haptics,” in 2023 IEEE World Haptics Con-
+ference (WHC). IEEE, 2023, pp. 299–305.
+[9] R. H. Heisser, C. A. Aubin, O. Peretz, N. Kincaid, H. S. An, E. M.
+Fisher, S. Sobhani, P. Pepiot, A. D. Gat, and R. F. Shepherd, “Valveless
+microliter combustion for densely packed arrays of powerful soft
+actuators,” Proceedings of the National Academy of Sciences , vol. 118,
+no. 39, p. e2106553118, 2021.
+[10] B. Shan, C. Liu, Y . Guo, Y . Wang, W. Guo, Y . Zhang, and D. Wang,
+“A multi-layer stacked microfluidic tactile display with high spatial
+resolution,” IEEE Transactions on Haptics , 2024.
+[11] Y . Wang, J. Liang, J. Yu, Y . Shan, X. Huang, W. Lin, Q. Pan, T. Zhang,
+Z. Zhang, Y . Gao et al. , “Multiscale haptic interfaces for metaverse,”
+Device, 2024.
+[12] H. Inc., “HaptX Gloves G1,” https://haptx.com/gloves-g1/, 2025, ac-
+cessed: 2025-02-11.
+[13] D. P. Holland, E. J. Park, P. Polygerinos, G. J. Bennett, and C. J.
+Walsh, “The soft robotics toolkit: Shared resources for research and
+design,” Soft Robotics , vol. 1, no. 3, pp. 224–230, 2014.
+[14] A. Shtarbanov, “Flowio development platform–the pneumatic “rasp-
+berry pi” for soft robotics,” in Extended abstracts of the 2021 CHI
+conference on human factors in computing systems , 2021, pp. 1–6.
+[15] B. J. Caasenbrood, F. E. Van Beek, H. K. Chu, and I. A. Kuling, “A
+desktop-sized platform for real-time control applications of pneumatic
+soft robots,” in 2022 IEEE 5th International Conference on Soft
+Robotics (RoboSoft) . IEEE, 2022, pp. 217–223.
+[16] C. XR., “haptx-g1-mobile-single,” https://channelxr.com/products/haptx-
+gloves-g1?variant=48733998154044, 2025, accessed: 2025-02-11.
+[17] C. Pacchierotti and D. Prattichizzo, “Cutaneous/tactile haptic feedback
+in robotic teleoperation: Motivation, survey, and perspectives,” IEEE
+Transactions on Robotics , 2023.
+[18] A. Russomanno, S. O’Modhrain, R. B. Gillespie, and M. W. Rodger,
+“Refreshing refreshable braille displays,” IEEE transactions on hap-
+tics, vol. 8, no. 3, pp. 287–297, 2015.
+[19] A. S. Walker and S. Sangelkar, “Design exploration of affordable re-
+freshable braille display technology for low-income visually impaired
+users,” in International Design Engineering Technical Conferences and
+Computers and Information in Engineering Conference , vol. 58134.
+American Society of Mechanical Engineers, 2017, p. V02BT03A012.
+[20] C. Travassos, A. Sayal, B. Direito, J. Pereira, T. Sousa, and M. Castelo-
+Branco, “Assessing mr-compatibility of somatosensory stimulation
+devices: A systematic review on testing methodologies,” Frontiers in
+Neuroscience, vol. 17, p. 1071749, 2023.
+[21] L. A. Jones and N. B. Sarter, “Tactile displays: Guidance for their
+design and application,” Human factors , vol. 50, no. 1, pp. 90–111,
+2008.
+[22] P. Yu, L. C. Batteas, T. Ferris, M. C. Hipwell, F. Quek, and R. F.
+Friesen, “Investigating passive presentation paradigms to approximate
+active haptic palpation,” IEEE Transactions on Haptics , 2024.
+[23] Programmable-air. Accessed: 2025-02-11. [Online]. Available:
+https://www.programmableair.com/
+[24] T. R. Young, M. S. Xavier, Y . K. Yong, and A. J. Fleming, “A
+control and drive system for pneumatic soft robots: Pneusord,” in 2021
+IEEE/RSJ International Conference on Intelligent Robots and Systems
+(IROS). IEEE, 2021, pp. 2822–2829.
+[25] Pneumatic controller. Accessed: 2025-02-11. [Online]. Avail-
+able: https://hdcl.mechanical.illinois.edu/open-source-materials/exo-
+test-bed/pneumatic-controller/
+[26] Pneuduino. Accessed: 2025-02-11. [Online]. Available:
+https://pneuduino.org/
+[27] Q. Gao, J. Wang, Y . Zhu, J. Wang, and J. Wang, “Research status and
+prospects of control strategies for high speed on/off valves,”Processes,
+vol. 11, no. 1, p. 160, 2023.
+[28] F. E. van Beek, Q. P. Bisschop, and I. A. Kuling, “Validation of a soft
+pneumatic unit cell (puc) in a vr experience: a comparison between
+vibrotactile and soft pneumatic haptic feedback,” IEEE Transactions
+on Haptics , 2023.
+[29] L. C. L. van Laake, M. Alberts, F. E. van Beek, and I. A. Kuling, “A
+large area soft robotic haptic display,” in 2024 IEEE 7th International
+Conference on Soft Robotics (RoboSoft) . IEEE, 2024, pp. 728–733.
+[30] B. Stephens-Fripp, A. Israr, and C. Rognon, “A multichannel pneu-
+matic analog control system for haptic displays: Multichannel pneu-
+matic analog control system (mpacs),” in Extended Abstracts of the
+2021 CHI Conference on Human Factors in Computing Systems , 2021,
+pp. 1–7.
+[31] R. Vel ´azquez, E. Pissaloux, M. Hafez, and J. Szewczyk, “Toward
+low-cost highly portable tactile displays with shape memory alloys,”
+Applied Bionics and Biomechanics , vol. 4, no. 2, pp. 57–70, 2007.
+[32] S. Hossain, A. A. Raied, A. Rahman, Z. R. Abdullah, D. Adhikary,
+A. R. Khan, A. Bhattacharjee, C. Shahnaz, and S. A. Fattah, “Text to
+braille scanner with ultra low cost refreshable braille display,” in 2018
+IEEE Global Humanitarian Technology Conference (GHTC) . IEEE,
+2018, pp. 1–6.
+[33] M. E. Vrablic, “Tactiontablet: affordable tactile graphics display,”
+Ph.D. dissertation, Massachusetts Institute of Technology, 2020.
+[34] X. Wu, S.-H. Kim, H. Zhu, C.-H. Ji, and M. G. Allen, “A refreshable
+braille cell based on pneumatic microbubble actuators,” Journal of
+Microelectromechanical Systems, vol. 21, no. 4, pp. 908–916, 2012.
+[35] J. Brown and F. Bello, “Design and characterisation of particle
+jamming-based variable stiffness displays using non-pneumatic actu-
+ators,” in 2024 IEEE Haptics Symposium (HAPTICS) . IEEE, 2024,
+pp. 379–384.
+[36] J. W. Booth, J. C. Case, E. L. White, D. S. Shah, and R. Kramer-
+Bottiglio, “An addressable pneumatic regulator for distributed control
+of soft robots,” in 2018 IEEE International Conference on Soft
+Robotics (RoboSoft) . IEEE, 2018, pp. 25–30.
+66
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 01:57:32 UTC from IEEE Xplore.  Restrictions apply. 

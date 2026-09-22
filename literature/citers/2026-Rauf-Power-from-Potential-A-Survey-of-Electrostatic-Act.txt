@@ -1,0 +1,2429 @@
+1
+Power from Potential: A Survey of Electrostatic Actuators for Haptics
+Ahad M. Rauf ∗,Member, IEEE, Ran Zhou ∗,Member, IEEE, Eric Acome,Member, IEEE, Madeline
+Balaam,Member, IEEE, Sean Follmer,Member, IEEE, Teng Han,Member, IEEE, Craig Shultz,Member, IEEE,
+Daniel Leithinger,Member, IEEE
+Abstract—As haptic interfaces integrate more seamlessly into
+wearables and everyday environments, they increasingly require
+actuators that are soft, thin, silent, and energy efficient. However,
+conventional motors and temperature-responsive polymers often
+struggle to deliver these properties due to their bulky form
+factors and high power consumption. High-Voltage Electrostatic
+Actuators (HVEAs), which generate force by applying an electric
+field to localized charge concentrations using high voltages
+and ultra-low currents, have recently emerged as a compelling
+alternative due to their fast, silent, and low-power operation
+within highly customizable and compliant form factors.
+This paper presents a focused review of HVEAs for haptics,
+examining four major classes: electrostatic switchable adhesives,
+dielectric elastomer actuators, soft electrohydraulic actuators,
+and electrokinetic pumps. For each class, we describe their
+mechanisms that enable haptic output; characterize their band-
+widths, force densities, and spatial scalability; and evaluate their
+versatility for rendering cutaneous and kinesthetic feedback
+across wearable and world-grounded interfaces. Through this
+cross-technology analysis, we identify common design constraints
+and emerging strategies for improving ergonomics, streamlining
+fabrication, and integrating self-sensing. We conclude by out-
+lining where HVEAs are uniquely positioned to advance haptic
+interaction and highlighting key research directions needed to
+translate these technologies into practical systems.
+Index Terms—electrostatic actuators, haptics, electroadhesion,
+dielectric elastomer actuators, soft electrohydraulic actuators,
+electro-kinetic pumps
+I. INTRODUCTION
+A
+S haptic interfaces move closer to the body, becoming
+wearable, on-skin, or seamlessly integrated into every-
+day environments, there is a growing demand for actuators
+that are compact, lightweight, silent, and fast-responding [1],
+[2]. These requirements can be challenging to meet with
+conventional haptic actuators such as DC motors, solenoids,
+and pneumatic pumps, which are typically bulky; vibration
+motors, which are noisy; and shape memory alloys, which
+have slow response times due to cooling delays. Beyond
+∗ Equal contribution authors.
+Ahad M. Rauf and Sean Follmer are with the Department of Mechanical
+Engineering at Stanford University, Stanford, California, United States of
+America. E-mail: ahadrauf@alumni.stanford.edu, sfollmer@stanford.edu
+Ran Zhou and Madeline Balaam are with the Division of Media Technology
+and Interaction Design at the KTH Royal Institute of Technology, Stockholm,
+Sweden. E-mail: ranzhou@kth.se, balaam@kth.se
+Eric Acome is with Artimus Robotics, Boulder, Colorado, United States of
+America. E-mail: eric@artimusrobotics.com
+Teng Han is with the Institute of Software, Chinese Academy of Science,
+Beijing, China. E-mail: hanteng@iscas.ac.cn
+Craig Shultz is with the Department of Electrical and Computer Engineer-
+ing, University of Illinois at Urbana-Champaign, Champaign, Illinois, United
+States of America. He is also with Fluid Reality, Inc., Chicago, Illinois, United
+States of America. E-mail: shultz88@illinois.edu
+Daniel Leithinger is with the Department of Design Tech at Cornell Univer-
+sity, Ithaca, New York, United States of America. E-mail: dl2265@cornell.edu
+Fig. 1. Example applications of HVEA haptic interfaces. Wearable devices are
+shown in the top left, providing cutaneous and kinesthetic feedback to render
+immersive virtual reality experiences. An in-car scenario is shown in the top
+right, using low-profile vibrotactile HVEAs in the steering wheel and touch-
+screen to communicate information without distracting drivers. A tabletop
+application is illustrated at the bottom, in which users can actively leverage
+large HVEA arrays to communicate dynamic spatio-temporal information.
+Starting from the top, images in bubbles were drawn from [3] (©2024 IEEE),
+[4] (©2022 The Authors. Advanced Intelligent Systems published by Wiley-
+VCH GmbH), [5] (©2021 IEEE), [6] (©2025 The Authors), [7] (©2021 The
+Authors. Advanced Intelligent Systems published by Wiley-VCH GmbH), [8]
+(©2024 The Authors. Advanced Science published by Wiley-VCH GmbH),
+[9] (©2022 IEEE), [10] (©2023 IEEE), [11] (©2023 The Authors), [12]
+(©2023 The Authors), and [13] (©2016 IEEE), [14] (©2021 The Authors).
+their mechanical drawbacks, these actuators typically rely on
+resistive or inductive operating principles that demand low
+voltages (<24 V) but high continuous currents (>10 mA),
+resulting in significant resistive efficiency losses.
+Recent advances in material science have resulted in a new
+class of technologies we refer to as High-V oltage Electrostatic
+Actuators (HVEAs), which operate using high voltages (>100
+V) and low currents (<1 mA). These include electrostatic
+switchable adhesives, dielectric elastomer actuators, soft elec-
+trohydraulic actuators, and electro-kinetic pumps, and example
+HVEA haptic applications are illustrated in Fig. 1. HVEAs
+are built from lightweight and flexible materials, making them
+arXiv:2607.13058v1  [cs.RO]  6 Jul 2026
+2
+2000 2004 2008 2012 2016 2020 2024
+Year
+0
+5
+10
+15
+20
+25
+30Number of New Publications Per Year
+ ESAs
+DEAs
+SEHAs
+EKPs
+Fig. 2. The number of new papers published each year that integrate HVEAs
+into haptic interfaces, aggregated across all HVEA classes in our review.
+compact, near-silent, and fast-responding, and their form factor
+can be readily customized to deliver versatile cutaneous and
+kinesthetic haptic feedback. Operating at high voltages (>100
+V) and low currents (<1 mA), HVEAs make use of capacitive
+mechanisms, which are orders of magnitude more energy
+dense than typical resistive or inductive mechanisms [15]. This
+enables HVEAs to achieve high force densities at much higher
+operating efficiencies than conventional haptic actuators. Their
+simple, customizable layer stacks integrate easily with diverse
+materials and form factors and support scalable production
+of high-spatial-resolution haptic interfaces. In addition, the
+capacitive property of HVEAs enables sensing capabilities to
+be integrated directly through circuitry, without requiring any
+changes to the mechanical actuator design. These attributes
+give HVEAs the potential to enable more ergonomic, higher-
+resolution, and more energy-efficient haptic interfaces that can
+advance a wide range of applications, such as mixed reality,
+teleoperation, healthcare, and assistive technologies.
+HVEAs have received increasing interest in the haptics
+and Human-Computer Interaction (HCI) communities, and as
+shown in Fig. 2 the number of papers published per year
+integrating HVEAs into haptic user interfaces has increased
+steadily over time. However, HVEAs still can have large
+barriers to entry because of their limited commercial avail-
+ability and the interdisciplinary expertise required to design,
+prototype, and control them. Foundational research on these
+actuators is often published in robotics and material science
+venues, which provide useful references for their materials,
+operating principles, and performance capabilities [16]–[19].
+However, haptic and wearable applications involve unique
+design, ergonomics, and perceptual constraints are not dis-
+cussed by these studies. Although several prior haptics review
+papers have mentioned HVEAs briefly as a part of larger
+discussions on surface haptics [20] and wearables for virtual
+and augmented reality [2], [21], a systematic review of HVEA
+capabilities and design within the context of haptics has yet
+to be conducted. This survey aims to bridge this literature gap
+by synthesizing knowledge across domains, making HVEAs
+approachable for haptics researchers and designers.
+Inspired by the haptics taxonomy in Culbertson et al. [22],
+we conducted a systematic PRISMA literature review [23]
+of 303 papers integrating HVEAs into haptic user interfaces.
+We categorized prior work primarily by haptic modality
+and further mapped it across form factors, technologies, and
+application domains. Through this synthesis, we provide a
+comprehensive overview of how HVEAs have been designed,
+fabricated, and integrated into haptic interfaces, highlighting
+their potential to enable more ergonomic, expressive, and
+seamlessly integrated haptic systems. Building on these take-
+aways, we identify key opportunities for which HVEAs are
+uniquely positioned to advance haptic interaction, and we
+highlight future research directions needed to better translate
+these technologies into practical systems.
+II. OVERVIEW OFHIGH-VOLTAGEELECTROSTATIC
+ACTUATORS
+HVEAs work by applying an electric field through a di-
+electric medium to produce a force on localized charge con-
+centrations. They can be further categorized by the dielectric
+between their electrodes, and we identify HVEAs as: (a)
+electrostatic switchable adhesives (ESAs) when the dielectric
+is a vacuum or gas (traditionally air), (b) dielectric elastomer
+actuators (DEAs) when the dielectric is an elastic solid, (c)
+soft electrohydraulic actuators (SEHAs) when the dielectric
+is an uncharged liquid, and (d) electro-kinetic pumps (EKPs)
+when the dielectric is an electrically charged liquid. To better
+focus on HVEAs’ unique design space, our survey omits high-
+voltage non-electrostatic actuators, such as piezoelectrics and
+liquid crystal elastomers, and low-voltage electrostatic actua-
+tors, such as conductive polymer networks [24], ionic polymer-
+metal composites [25], and stimuli-responsive hydrogels [26].
+We conducted a systematic literature review following
+PRISMA reporting guidelines [23] to understand the research
+landscape for integrating HVEAs into haptic user interfaces.
+We filtered 1232 papers from seven databases (Web of Science,
+IEEE Xplore, ACM Digital Library, Wiley Online Library,
+Elsevier ScienceDirect, Nature Portfolio, and Science) that
+included keywords in their metadata related to HVEAs and
+haptics. Specific search terms and PRISMA flowcharts are
+included in the Supplementary Materials, Sec. S1. We then
+manually screened for relevant studies that tested their device
+on people, either informally on just the authors or through
+a formal user study. We also annotated each study’s haptic
+interactions and safety considerations. Using this process, we
+found 173 relevant studies using ESAs, 127 studies using
+DEAs, 22 studies using SEHAs, and 10 studies using EKPs.
+In this section, drawing from our survey analysis, we
+first compare HVEAs quantitatively and qualitatively against
+traditional haptic actuators to understand their design space.
+We then describe each HVEA’s high-level actuation principles,
+typical configurations, and typical mechanisms for haptic ap-
+plications. Additional engineering details, including equations
+for force output, displacement, and capacitance, are included
+in the Supplementary Materials, Sec. S2.
+3
+10
+−2
+10
+−1
+10
+0
+10
+1
+10
+2
+Maximum Stroke (mm)
+10
+3
+10
+4
+10
+5
+10
+6
+10
+7
+10
+8
+10
+9
+10
+10
+Force Density (N m−3)
+ESA
+DEA
+SEHA
+EKP
+Electromagnetic
+Hydraulic
+Pneumatic
+Piezoelectric
+(a)
+10
+−1
+10
+0
+10
+1
+10
+2
+10
+3
+10
+4
+10
+5
+Actuator Volume (mm3)
+10
+0
+10
+1
+10
+2
+10
+3
+Bandwidth (Hz)
+ESA
+DEA
+SEHA
+EKP
+Electromagnetic
+Hydraulic
+Pneumatic
+Piezoelectric
+(b)
+Fig. 3. Comparison of performance metrics for actuators used to produce normal skin deformation in prior haptics literature. Actuators were grouped into three
+broad categories: HVEAs (blue), traditional actuators (pink), and piezoelectrics (yellow). (a) The x-axis shows each actuator’s maximum stroke, defined as its
+maximum normal displacement without any applied load, and the y-axis shows the ratio between each actuator’s maximum force output and its volume when
+producing that force (including fluid volume for fluidic actuators such as SEHAs, EKPs, hydraulics, and pneumatics). (b) The x-axis shows each actuator’s
+volume, defined the same as in (a), and the y-axis shows the -3 dB bandwidth of its stroke, defined as the frequency after which its normal displacement
+drops below half its maximum stroke. The raw data and additional data visualizations are provided in the Supplementary Materials, Sec. S3.A.
+A. Comparing HVEAs Against Traditional Haptic Actuators
+Fig. 3 compares performance metrics between HVEAs and
+traditional actuators used to produce normal skin deformation
+in prior haptics literature. Actuator classes were drawn from
+prior literature reviews on haptic actuators [2], [16], [21], [22].
+Fig. 3(a) plots each actuator’s maximum stroke against
+the ratio between its maximum force output and its volume
+when producing that force. For fluidic actuators (SEHAs,
+EKPs, hydraulic, pneumatic), we include the fluid volume into
+the calculated actuator volume. As shown, HVEAs deform
+less than electromagnetic, pneumatic, or hydraulic actuators,
+but in return HVEAs offer exceptional output force density.
+This high force density is because electrostatic forces scale
+with surface area, and thus the ratio between electrostatic
+force (F∝l 2, wherelis a symbolic length dimension)
+and volume (V∝l 3) improves at small sizes. By contrast,
+the force output of many traditional actuator technologies
+scales with the volume of their component magnets, pumps,
+or fluid chambers, explaining why they offer better forces and
+displacements than HVEAs at larger sizes.
+Fig. 3(b) plots each actuator’s volume against its dynamic
+bandwidth, highlighting a roughly inverse relationship. Be-
+cause of their high force density, HVEAs can be miniaturized
+to improve their bandwidth while still providing enough force
+output for haptics applications. Almost every HVEA in our
+survey had response times on the order of milliseconds, offer-
+ing a strong promise for dynamic haptic interaction even while
+approaching the spatial resolution limit of human perception.
+Beyond quantitative metrics, HVEAs can be readily fab-
+ricated using monolithic manufacturing techniques such as
+printed circuit board manufacturing, silicone molding, and
+laser cutting, which allows researchers to scalably manufacture
+high-resolution actuator arrays. In applications such as refre-
+shable braille displays [27] and shape displays [10], [28], this
+scalability allows HVEAs to achieve order-of-magnitude im-
+provements in cost and manufacturing complexity compared to
+traditional actuators. HVEAs’ versatile manufacturing process
+also means that every HVEA can be implemented in flexible
+form factors, enabling more ergonomic form factors for wear-
+ables and more seamless integration into world environments.
+We discuss these fabrication workflows further in Sec. IV-A.
+HVEAs also come with several qualitative disadvantages
+compared to traditional haptic actuators. HVEAs’ high voltage
+requirements demand special safety and circuit design con-
+siderations, and commercial high voltage power supplies are
+often bulky and expensive. Moreover, most HVEAs are not
+sold off-the-shelf for easy prototyping, and their manufactur-
+ing processes, while scalable and theoretically efficient, can
+sometimes involve specialized materials such as carbon black
+powder, liquid dielectrics, and porous glass fillers. HVEA
+performance also tends to degrade in non-ideal conditions,
+such as in high humidity or dirty environments, although this
+degradation has not yet been rigorously failure tested to the ex-
+tent that traditional actuators have. We present recommended
+design workflows, safety guidelines, and circuit components
+that address some of these limitations in Sec. IV.
+The next four subsections will discuss design trade-offs
+further for each individual HVEA type, describing each of
+their high-level actuation principles and haptic mechanisms.
+B. Electrostatic Switchable Adhesives (ESAs)
+Electrostatic switchable adhesion, often shortened to elec-
+troadhesion, is the electrostatic attraction between two contact-
+ing or near-proximity surfaces held at a potential difference.
+As shown in Fig. 4(a), it is implemented in two primary ways.
+4
+ Oper ating Principles of HVEAs (High-V oltage Electr ostatic Actuat ors)
+Electric 
+Field V
++V
++ + + + + + + + + + + + + + + +  
+Co-planar Electr o d es
+Induced
+Char ges
+Electric 
+Field
++V + + + + + + 
+V
+Contr ollable 
+F riction_  _  _
++ + + + + + + + + + + + + + T r anspar ent 
+Electr odesGlass Displa y
+ESAs (a)
+Electr ostatic Switchable Adhesiv es 
+a.i
+E S A s
+P ar allel Electr o d es _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  
+E S A s
+ Sw itcha b le B r a k e a.iv
+Low F riction
+Sliding
+0V
+0V
+V
+R i g id o r  Elastic Soli d
+Dielectric
+Electr ostatic F or ce
++ + + + + + + + + + + + 
+_  _  _  _  _  _  _  _  _  _  _  _  
+Re v ersible  adhesion
+a.ii
+Elastic Solid 
+Dielectric
+L i qu i d
+DielectricLater al 
+ExpansionNormal Compr ession VV + + + + + + + + + + + + + + + + + 
+_  _  _  _  __  _  _  _  _  _  _  _  _  _  _  _  
+Elastic  deformation Hy dr aulic  amplification
+T ypical HVEA Configur ations
+D EA s
+ b.iiS tac k  Actuat or
+0V
+0V
++ + + +Hig h  F riction
+No Sliding_  _  _  _  
+V
+T ouchscr een F riction Contr ol a.v
+V
+T op View Lengt h  D ecr eases
+T ypical HVEA Mechanisms for Haptic A pplications
+b.iv c.iv
+0V V0
+Later al F or ceNormal F or ce ,
+D isplacement+ +F r ame + ++ + V0V
+_ __ __ _
+_  _  _  _  _  _  
+A rbitr ar y Sur face
++ + + + + + 
+a.iii
+A ir Gap
+Resistiv ely Gr ounded 
+thr ough B odyR body
+_  _  _  _  _  _  -V
+0V
+Rigid or Elastic
+Electr odes 0V
+0V
+DEAs (b)
+Dielectric Elast omer Actuat ors
+b.i
+D EA s
+ F r ame-couple d
+Hy d r ostatically-couple d
+Pr eload Spring (optional)
+ Membr ane
+Fluid
+F or ce
+0V
+A mplify Displacement
+b.iiiR oll Actuat or
+A mplify F or ce
+V
+V 1 +  
+_
+F eatur e applies t o all SE A s
+D onut Actuat or
+0V 0V 0V
+V
++ + +
+_ _ _ _ _ _ _
++ + + +
+V
+Elastic 
+Electr odes
+___ +++
+b.v
+_  _  _
++ + + 
+_  _  _
+V V
++ + + + + + 
+R oute d  Actuation c.v
+T ouch 
+P oint Integr ated Pump
+V0
+Flexible Fluid 
+Channel
++ + + + + + + V
+_  _  _  _  _  _  _
+Hy dr aulic Flow
+Electr odes with Holes
+_
++ 
+_
++ 
+_
++ 
+_
++ 
+V + + + _  _  _  
+SEH As (c)
+Soft Electr oHy dr aulic Actuat ors 
+c.i
+S EH A s
+ Pr ogr essi v e Z ipping
+S EH A s
+ Co-locate d  Actuation
+0V0V
++ + + _  _  _  
+V
++  
+_
+V + +
+_  _  
+P eano Actuat or
+c.iii
+_  _  _ Normal F or ce
+Flexible  Shell 
+Dielectric
+0V
+X
+Soft Membr ane
+XX
+X X X
+X
+XX
++ +
+_  _  
+V 2 + + + _  _  _  
+Flexibl e
+Electr odes
+Pr essur e
++ +
+_  _  
+c.ii
+EKPs (d)
+Electr o-Kinetic Pumps
+Rigid or 
+Elastic 
+Electr odes
+d.i
+E K P s
+Dielectric Liquid
+Electr o-Hy d r o D ynamic (EH D ) d.ii
+E K P s
+ F i b er- b ase d  Pump (EH D )
+V
+Reser v oir
++ + + +
+X
+I on - dr ag
+XX XX X
+X X X
+_  _+  + +  +V0V V
+Fluid 
+Flow
+C h ar ge I n j ection 
+f r om Electr odes
+d.iiiElectr o-Osmotic Pump (EOP)
+Sur face-ioniz ed wall _  _ _  _
+Electric 
+D ouble 
+La y er
+0V V
++ + + + 
+A queous Electr olyte Fluid
+X +
+X +
+X +
+X X
+_  _  _  _
+Fluid flow
+d.iv
+Hy dr auli c
+Pump0V
+V S h ape 
+C h ange
+V
+T r ansmi t
+T emper atur e Colder Fluid
+Channel- b ase d  Actuation (EOP) d.v
+-X
+-X
+-X
+Fluid Flow
+V
+-X
+-X
+X +
+X +
+X +
+X +
+-X
+-X
+-X
+-X
+X
+-X
+_  _
+-X
+X +
+X +
+X +
+-X
+-X
+0V0V
+-X
+-X
+Liquid 
+Molecule
+L i q ui d 
+Dielectric
++ + + +
+X
+X Liquid 
+Ion
+_  _  _  _
+Fluid  tr anspor t
+-X
+X +
+X +
+X +
+-X
+-X
+Sur face-ioniz ed 
+Material as 
+P or ous Filter
+Fluid 
+Flow
+-X
+-X
+X +
+X +
+X +
+-X
+-X
+-X
+-X
+-X
+X + X +
+X +
+X +
+-X
+0V V
+Fig. 4. Schematic diagrams of each HVEA type’s (i) operating principles, (ii-iii) typical electrode layouts and configurations, and (iv-v) typical mechanisms
+for haptics applications. Each HVEA’s geometry and dielectric material significantly affect its haptic output.
+The parallel electrode configuration mimics a traditional
+electrical capacitor. Applying a potential difference between
+the electrodes causes them to accumulate opposite charges that
+then attract the two surfaces together. Although both electrodes
+are usually directly driven by the power supply, if one surface
+(most commonly a human fingertip in haptics applications) is
+semiconducting and resistively connected to earth ground, the
+power supply can just drive the other surface with a voltage
+or current also referenced to earth ground. This latter case
+forms a resistive divider between the dielectric’s resistance,
+the fingertip-to-dielectric contact resistance, and the body’s
+resistance to earth ground. The contact resistance’s potential
+drop generates an electrostatic force, called the Johnsen-
+Rahbek effect [31], that attracts the fingertip to the dielectric.
+In the co-planar electrode configuration, potential differ-
+ences between the interdigitated electrodes patterned onto
+the dielectric create fringing fields that induce an equal but
+opposite charge distribution in the opposing surface. Similar to
+the Johnsen-Rahbek configuration, co-planar electrodes allow
+all the electronics to be concentrated into a single surface,
+reducing bulk and enabling the clutch to adhere to generic
+surfaces in the field and to small, delicate objects. However,
+because the second surface is not connected to the main circuit,
+the potential difference between surfaces is only half the power
+supply’s, decreasing the attractive force by 75% compared to
+the parallel electrode configuration [32].
+5
+100 101 102 103 104 105 106 107 108 109
+Shear Force Capacity / RMS Power (N W−1)
+10−3
+10−2
+10−1
+100
+101
+102
+103
+104
+Bandwidth (Hz)
+Electroadhesion
+Pneumatic/Hydraulic
+Electromagnetic
+Phase Change
+Chemical
+Fig. 5. Comparison of performance metrics for centimeter-scale switchable
+adhesives adhering to bulk material substrates in the literature, with categories
+drawn from prior review papers [29], [30]. The x-axis shows the ratio between
+shear force capacity and power consumption, and the y-axis shows the
+bandwidth, which we define as the drive frequency after which the shear
+force capacity drops to half its maximum value. More details about the data
+collection and raw data is provided in the Supplementary Materials, Sec. S3.B.
+ESAs are unique among HVEAs for their ability to adhere
+to nearby objects with only microscopic deformation. The
+resulting friction from this normal force can also be used
+to counteract applied shear loads on either surface, and it
+can be coupled with an elastic actuator or spring for variable
+stiffness control or shape change. However, these mechanisms
+are often space inefficient, and as shown in Fig. 3(a) ESA
+cutaneous feedback mechanisms generally have the smallest
+output deformation and force density among HVEAs. ESA
+electrodes can be patterned onto a wide variety of substrates,
+from touchscreens [33] to flexible printed circuit boards [10]
+to textiles [34]. As shown in Fig. 5, ESAs achieve response
+times and shear force capacities several orders of magnitude
+higher than other switchable adhesion mechanisms, enabling
+dynamic, energy-efficient kinesthetic haptic feedback.
+C. Dielectric Elastomer Actuators (DEAs)
+Dielectric elastomer actuators (DEAs) are a class of elec-
+troactive polymer that change their shape in response to
+an applied electric field. Originally discovered in 1880 by
+R¨oentgen after spraying charges onto rubber [35], DEAs are
+commonly implemented today by sandwiching a soft dielectric
+between compliant electrodes. As illustrated in Fig. 4(b.i),
+when a voltage is applied between the electrodes, the dielectric
+compresses, decreasing in thickness and increasing in area.
+DEAs can output large strains (10-50%) and moderate
+stresses (∼100 kPa) within a compact form factor, and their
+simple layer stack allows them to be scalably fabricated in
+high-spatial-resolution arrays. As shown in Fig. 4(b.iv), many
+designs use a pre-stretched DEA film fixed to a rigid boundary
+frame. When a voltage is applied, the membrane’s lateral
+expansion is constrained by the frame, causing it to buckle out
+of plane and generate haptic feedback. Preload springs can also
+be added to amplify this displacement [36]. Shear deformation
+can also be rendered by fixing the DEA to only one side of
+the boundary frame [37]. As shown in Fig. 4(b.v), these DEAs
+can be used as a deformable membrane on a fluid-filled pouch
+[38]. The hydrostatically coupled force can be felt by a user
+interacting with the pouch’s non-DEA surfaces, allowing the
+user to avoid direct contact with the high-voltage electrodes.
+Among HVEAs, DEAs stand out for their exceptional force
+density and bandwidth, but as shown in Fig. 3(a, b) their
+performance drops drastically when scaled to larger sizes. To
+address this, DEAs can be stacked in series or parallel to
+enhance their output. Stacking DEAs in series (Fig. 4(b.ii))
+amplifies their normal deformation proportional to the number
+of layers. Alternatively, a large DEA sheet can be rolled into
+a tight cylinder that expands axially and shrinks in diameter
+once a voltage is applied (Fig. 4(b.iii)). This effectively stacks
+each DEA layer in parallel, and the cylinder’s force output
+scales proportional to the number of layers. Care must be
+taken when stacking or rolling DEAs, however, because the
+dielectric breakdown of a single DEA can propagate through
+and destroy the entire stack. We discuss how to add a safety
+factor to address this risk in Sec. IV-B.
+D. Soft ElectroHydraulic Actuators (SEHAs)
+Soft ElectroHydraulic Actuators (SEHAs), originally intro-
+duced as Hydraulically Amplified Self-healing ELectrostatic
+(HASEL) actuators [39], consist of a flexible shell partially
+covered by electrodes and filled with a liquid dielectric (Fig.
+4(c.i)). When voltage is applied, the resulting electrostatic
+force squeezes the shell shut, displacing the liquid from
+between the electrodes into the surrounding volume. Because
+liquids are nearly incompressible, this hydraulic flow can be
+efficiently directed from a large pouch to a small end effector,
+amplifying force output and enabling larger shape change.
+As illustrated in Fig. 4(c.ii, c.iii), SEHAs progressively zip
+from the shell’s edge towards its center as the applied voltage
+increases, expanding in thickness and contracting in length.
+Expanding SEHAs, such as donut actuators, can achieve large
+strains (>100%), while contracting SEHAs, such as Peano-
+HASEL actuators, can output large forces (>100 kPa) [40].
+Most haptic SEHAs incorporate co-located actuation, where
+liquid is redistributed within a single pouch [41], [42]. As
+shown in Fig. 4(c.iv), a variant of this design, called Hydrauli-
+cally Amplified taXELs (HAXELs), can also leverage multiple
+electrodes per pouch to control whether the force output
+is primarily normal or shear [41]. The incompressibility of
+liquids also enables routed actuation (Fig. 4(c.v)), in which the
+actuation source is separated from the output inflatable pouch
+either vertically [43]–[45] or via integrated fluid channels [46],
+[47], allowing a more compact footprint at the contact point.
+Unlike the solid dielectric in DEAs, the liquid dielectric in
+SEHAs can reflow after dielectric breakdown to restore in-
+sulation, providing self-healing and improving device lifetime
+and reliability. This property allows stacked SEHAs to achieve
+large deformations with less risk of catastrophic dielectric
+failure if a single SEHA in the series breaks down [11], [39].
+6
+E. Electro-Kinetic Pumps (EKPs)
+Electro-Kinetic Pumps (EKPs) arrange electrodes within a
+dielectric liquid. They generate fluid flow by injecting charge
+into the dielectric and then attracting the charged liquid to-
+wards the powered electrodes. Unlike SEHA electrodes, which
+are insulated from the dielectric through the elastomeric pouch,
+EKP electrodes make direct contact with the liquid. Although
+charges can be injected in different ways [48], haptic systems
+have primarily explored two methods: Electro-HydroDynamic
+Pumps (EHDPs) and Electro-Osmotic Pumps (EOPs).
+EHDPs inject electrons directly from the negatively charged
+electrode by applying a large voltage between closely spaced
+electrodes (Fig. 4(d.ii)). These ions migrate toward the positive
+electrode, dragging the dielectric fluid along. EHDPs tend to
+generate low static pressures (usually 5-10 kPa) and high flow
+rates (>50 mL/min) [49], [50], making them useful for fluid
+transport in fiber-based pumps (Fig. 4(d.iv)).
+EOPs take advantage of the fact that free charges inherently
+form at solid-liquid interfaces by including a porous filter
+soaked in dielectric liquid as a spacer between the electrodes
+(Fig. 4(d.iii & d.v)). This porous filter increases the number
+of solid-liquid interfaces and thus the number of free charges,
+which allows EOPs to operate at much lower voltages than
+EHDPs. From their structure, EOPs tend to generate higher
+pressures (>50 kPa) and lower flow rates (around 5-10
+mL/min) than EHDPs [12], making them well-suited for haptic
+applications that utilize shape change and normal force.
+Functionally, EKPs combine the high spatial resolutions of
+DEAs with the self-healing liquid dielectric advantages of
+SEHAs. Their form factor is less versatile than that of DEAs
+and SEHAs due to the need for precisely spaced electrodes (in
+the case of EHDPs) or porous filters (in the case of EOPs),
+but we envision future work will explore novel mechanisms
+that take advantage of EKPs’ unique properties.
+III. INTEGRATINGELECTROSTATICACTUATORSINTO
+HAPTICSYSTEMS
+Human haptic perception is derived from sensory organs
+distributed across the body and is commonly divided into two
+modalities: cutaneous and kinesthetic [51]. Cutaneous haptics
+is perceived through mechanoreceptors, thermoreceptors, and
+nociceptors (pain receptors) embedded in the skin to convey
+localized information such as pressure, texture, and vibration.
+Kinesthesia is defined as the body’s sense of movement and
+position, and kinesthetic feedback is produced by applying
+forces and torques that can be sensed in a user’s muscles,
+tendons, and joints. Inspired by Culbertson et al. [22], we also
+define haptic surfaces, which allow users to explore haptic
+actuators distributed across a large surface for simultaneous
+cutaneous and kinesthetic feedback interactions.
+To understand the design space of prior work integrating
+HVEAs into haptic systems, we categorize each paper in
+our survey by whether its intended purpose was to produce
+localized cutaneous feedback, kinesthetic feedback, or a haptic
+surface. We also denoted whether the haptic device was active
+(contributing energy or outputting positive work on the user)
+or passive (dissipating energy provided by the user or system),
+in line with previous wearable haptics taxonomies [52], [53].
+A. Localized Cutaneous Feedback
+We categorize localized cutaneous feedback actuators based
+on their ability to stimulate skin mechanoreceptors responsive
+to normal skin deformation and lateral skin stretch. We include
+vibrotactile feedback as an optional addition to these two
+categories if HVEAs trigger this skin deformation at high
+frequency. Several studies also explored cutaneous feedback
+stimuli other than skin deformation, which we discuss in Sec.
+III-A5. Within each group, we further organize the devices by
+their form factors, technologies, and applications. Fig. 6 high-
+lights several examples of previous HVEA haptic integrations
+targeted at localized cutaneous feedback. We include more
+details about human haptic perceptual thresholds of localized
+cutaneous feedback in the Supplementary Materials, Sec. S3.
+1) Normal Skin Deformation with Optional Vibrotactile
+Feedback (Wearables):Actuators that provide normal de-
+formation and force to the skin enable users to perceive
+contact, shape, and dynamic pressure. These cues can enable
+applications such as simulating physical object encounters in
+VR or rendering salient social and affective touch. Our survey
+identified actuators that produce these cues by deforming the
+skin through either discrete on-off or continuous pressure mod-
+ulation, sometimes accompanied by low- or high-frequency
+vibration. Among HVEAS, normal skin deformation is most
+commonly achieved through out-of-plane (OOP) actuation,
+with an alternative approach using bending DEAs that operate
+similarly to rotary motors [54]. We found OOP actuators in 26
+ESA papers, 83 DEA papers, 15 SEHA papers, 5 EKP papers,
+and 4 papers that combine DEAs and ESAs.
+HVEAs share an advantage of being thin and compact, mak-
+ing them well-suited for high-resolution OOP actuation. Dif-
+ferent technologies, however, show distinct trade-offs: DEAs
+and ESAs generally benefit from simpler layer stacks that
+support finer spatial resolutions, while SEHAs and EKPs tend
+to deliver larger displacements and forces. For instance, Pyo et
+al. used DEAs to create the highest spatial resolution actuator
+array in our literature review, a 10x10 array spaced at 400
+pixels/cm2, but each actuator only had a stroke of 10 µm and
+a force output of 3.6 mN [55]. The highest-resolution ESA
+array in our survey had 44.4 pixels/cm 2, but each dot could
+only output 60 µm stroke and 2.5 mN output force [56]. The
+highest-resolution SEHA array had 16 pixels/cm 2 [46], using
+routed hydraulic channels to separate the higher-resolution
+output array from the bulkier electrodes and fluid reservoirs.
+Its actuators could displace up to 1.66 mm and output forces
+up to 60 mN. The highest-resolution EKP dot array had 20
+pixels/cm2, and each pixel had a 120 µm stroke and 100 mN
+force output [57]. Rolled DEAs can also be used for high-
+force applications, although they tend to be less compact than
+similar SEHAs or EKPs; for example, Levard et al. [58] built
+an array with 16 pixels/cm 2 in which each DEA could output
+displacements up to 1.2 mm and block forces over 1 N.
+Wearable devices represent an important class of haptic
+interfaces, as they provide effective feedback on the skin while
+allowing users to move freely in physical space. However,
+designing wearable haptic devices that are both expressive
+and unobtrusive remains challenging [2], [16]. HVEAs can
+7
+Fig. 6. Examples of HVEA haptic applications targeting localized cutaneous
+feedback. The images were drawn from (a.i) [59] (©2019 The Authors),
+(a.ii) [6] (©2025 The Authors), (a.iii) [46] (©2023 IEEE), (a.iv) [57] (©2023
+The Authors), (b.i) [8] (©2024 The Authors. Advanced Science published
+by Wiley-VCH GmbH), (b.ii) [60] (©2023 The Authors. Advanced Materials
+Technologies published by Wiley-VCH GmbH), (c.i) [5] (©2021 IEEE), (c.ii)
+[14] (©2021 The Authors), (d.i) [61] (©2020 Wiley-VCH GmbH), (d.ii) [37]
+(©2018 IEEE), (e.i) [3] (©2024 IEEE), (f.i) [49] (©2023 The American
+Association for the Advancement of Science). Icons inspired by [62].
+help address long-standing challenges in wearable haptics, as
+they can be made soft, thin, and flexible to conform to the
+human body. These have been made using all four HVEA
+technologies, and we broadly categorize prior work into single
+actuators and pixel arrays.
+Single-Unit Wearable Actuatorsare primarily applied to the
+fingertip to deliver normal force and vibrotactile feedback in
+Virtual Reality (VR). As shown in Fig. 6(a.i), Song et al. [63]
+developed a soft ESA actuator that operates like a pneumatic
+version of a donut SEHA, producing gentle on-off cues when
+integrated in a glove. Mun et al. [64] integrated a flexible
+frame-coupled stacked DEA actuator into a rubber glove,
+enabling controllable surface protrusions and high-frequency
+vibrations to simulate cues such as button clicks, localized
+elastic response, and bubble bursts in VR. Several studies have
+also explored mounting rigid-coupled [65] and hydrostatically-
+coupled DEAs [66] near the fingertips using rigid structural
+parts. These designs structurally support the actuator to press
+into the skin when activated, improving responsiveness but
+reducing the device’s compactness and compliance. Shao et
+al. [47] introduced a routed SEHA design that positions the
+soft pumping pouch on the back of the hand and transmits
+dielectric liquid through thin, flexible tubes to a 30-µm-thick
+fingertip chamber. This configuration provides strong, salient
+feedback, while keeping the fingertip unit unobtrusive. In their
+VR demonstrations, the actuator could render natural touch
+sensations such as pressing on soft objects and perceiving the
+geometry of virtual objects during grasping.
+Single-unit wearable actuators have also been designed for
+the arm. Sanchez-Tamayo et al. designed CUTE [8], a co-
+located SEHA worn on the wrist like a watch (Fig. 6(b.i)). In
+their perceptual study, participants could accurately distinguish
+between different touch patterns and described the sensations
+as pleasant and expressive, ranging from calming to excit-
+ing. High-frequency cues were associated with alarms, while
+more regular patterns with slow transitions and pauses were
+described as lifelike.
+Wearable Pixel Arraysextend single actuators by enabling
+programmable spatiotemporal control. This allows them to
+render finer spatial details for realistic simulations of shape
+contours, surface texture, and complex dynamic patterns, mak-
+ing them especially valuable for VR applications. Our review
+identified 14 papers introducing wearable HVEA-based pixel
+arrays, demonstrating a range of form factors and mechanisms.
+Youn et al. [36] developed an ultra-thin (1.1 mm) 3x3 DEA
+array that could produce patternable tactile feedback on the
+fingertip, palm, and forearm, as shown in Fig. 6(a.ii). Using a
+compression spring mechanism, it achieves high force density
+outperforming many earlier DEA arrays [67], [68], and each
+pixel could block forces up to 2.2 N and output displacements
+up to 310 µm at 280 Hz. The device could render both
+low-frequency tactile patterns and high-frequency vibration,
+and user studies demonstrated that participants could reliably
+discriminate dynamic patterns, frequencies, and textures.
+HAXEL SEHAs, as described in Sec. II-D, allow systems
+to dynamically switch between normal and shear force output.
+First introduced in 2020 by Leroy et al. [41], HAXELs
+have since been manufactured with silicone for improved
+compliance and wearability [42] and in various sizes from
+3 mm (for fingertip arrays) to 15 mm (for arrays on the
+hand, forearm, shoulder, neck, or lower back) [60]. These
+studies report that users can clearly distinguish different spatio-
+temporal cues, including moving rows of raised pixels to
+signify a “swipe,” rotating patterns in clockwise and anti-
+clockwise directions, and rendering high-frequency vibrations.
+Although the highest-resolution co-located SEHA array in our
+survey had 11.1 pixels/cm 2 [60], Purenendu et al. [46] built
+a 16 pixels/cm 2 array using routed SEHAs (Fig. 6(a.iii)). By
+placing larger SEHA pumping pouches on the back of the
+fingertip and connecting them to contact units via elastomeric
+tubes, each pixel could achieve up to 1.66 mm stroke and 60
+mN force output, although the extra tubing distance decreased
+their actuator’s bandwidth to about 7 Hz (Fig. 6(a.iii)).
+Using EOP EKPs, Shen et al. [57] developed Fluid Reality
+(Fig. 6(a.iv)), a fully self-contained haptic glove featuring
+160 individually addressable pixels across all five fingerpads.
+By operating at 300 V , compared to the kiloV olt ranges
+typically required by SEHAs, they were able to miniaturize
+the electronics into the glove’s wristband for truly untethered
+wearable haptic experiences. Each fingerpad had a spatial
+resolution of 20 pixels/cm2, and pixel could deliver millimeter-
+scale displacements up to frequencies of hundreds of Hertz
+for expressive tactile feedback. Through user studies in VR,
+participants could accurately recognized static and animated
+8
+shapes presented on an individual fingerpad, and they reported
+that the glove could help recreate the properties of virtual
+objects, such as shape, texture, and compliance, through tactile
+exploration. These sensations were well perceived and reported
+to be distinguishable, realistic, expressive, and harmonious. Yu
+et al. [69] later extended EOP EKPs into MorphingSkin, a
+flexible EOP array that can conform to the hand.
+2) Normal Skin Deformation with Optional Vibrotactile
+Feedback (World-Grounded and Handheld Devices):OOP
+HVEAs have also been applied in world-grounded and hand-
+held applications to enrich everyday interactions with objects
+and surroundings. For instance, Kim et al. [5] (Fig. 6(c.i))
+attached a thin, flexible SEHA to a car’s steering wheel,
+providing localized vibration to deliver navigation cues to
+the driver. In a medical context, Lee et al. [70] integrated
+DEAs into a handheld, pen-shaped surgical tool. The tool
+also included a 3-DoF force sensor on the probe, and its
+measurements were translated into haptic feedback via three
+DEA units around the tool handle’s circumference.
+Refreshable braille displaysrepresent a promising real-
+world application of HVEAs and a common benchmark for
+OOP actuator arrays. These devices deliver raised-dot patterns
+of braille characters according to standardized tactile guide-
+lines [27], [71], which require sufficient deformations, resistive
+forces, and inter-dot spacings for clear fingertip perception.
+They also need to refresh fast enough to support natural
+reading speeds. Commercial displays typically include 40-80
+braille cells (comprising up to 640 individually addressable
+dots), while larger units for two-handed reading can have up
+to 720 braille cells. However, devices on the market mostly
+rely on bulky piezoelectric bimorphing beams and cost many
+thousands of dollars, limiting portability and affordability [27].
+The manufacturing scalability and high spatial resolution of
+DEAs present a promising fit for refreshable braille displays,
+comprising 20 papers in our literature review. The largest
+fabricated braille display among them is by Ren et al. [72],
+who made 324 braille cells by spray coating all of the
+electrodes and dielectric onto a substrate using an airbrush
+and a laser-cut mask. Each of their braille cells consisted
+of 3x2 DEA dots, totaling 1944 individually addressable
+pixels. While many planar DEAs can achieve the required
+deformation at high driven voltages [73], [74], rolled DEAs
+typically deliver superior performance. Levard et al. [58], for
+instance, developed a rolled DEA braille cell that could output
+displacements up to 1.2 mm and block forces over 1 N, well
+exceeding the tactile requirement for braille reading.
+Pushbuttonsare another common application, comprising
+12 papers in our survey. Many implementations include both
+OOP actuation and sensing for bidirectional interaction. Chen
+et al. [75] developed HapTag, which integrates a sensing layer
+beneath an OOP SEHA unit, creating a soft, compact button
+that can be attached to daily soft surfaces. Also using SEHAs,
+Firouzeh et al. [76] developed PopTouch, a transparent button
+for high-bandwidth actuation. Their sensing was achieved
+either through integration into a capacitive touchscreen or
+by overlaying the actuator with thin-film piezoelectric sen-
+sors. PopTouch also used novel anchored-HAXELs, featuring
+a snap-through force-displacement profile that convincingly
+replicates the familiar “click” of physical buttons.
+EKPs have also been used to design dynamic tactile buttons.
+Fujii et al. [14] developed a soft haptic button using stacked
+EHDPs, as seen in Fig. 6(c.ii). When activated, dielectric
+liquid is pumped into the chamber, raising the top elastomeric
+membrane. Rae-Grant et al. designed DynaButtons [77], which
+integrated an EOP EKP with a pressure-sensing layer for
+enable fast, expressive, closed-loop button interactions.
+Gratz-Kelly et al. [78] expanded these techniques to develop
+an audio-tactile button, driving a frame-coupled DEA with
+low-frequency, high-voltage signals for haptic actuation; high-
+frequency, low-voltage signals for proprioceptive capacitance
+sensing; and high-frequency, high-voltage signals to vibrate
+the DEA and produce sound. They demonstrated that multiple
+of these drive schemes could be added together to create
+diverse audio-tactile experiences.
+3) Lateral Skin Stretch with Optional Vibrotactile Feedback
+(Wearables):Compared to normal forces, human skin is
+roughly 2–3× more sensitive to lateral (shear) forces [79].
+In daily life, lateral skin stretch commonly occurs passively
+when fingers slide across surfaces with varying friction, and
+Sec. III-C1 will review how ESAs have been extensively
+used to create programmable-friction haptic surfaces. In this
+section, we focus on localized lateral skin stretch actively
+delivered by HVEA actuators. 8 papers in our literature review
+explored HVEAs, primarily using DEAs and SEHAs, for
+wearable applications, and 8 papers explored HVEAs for
+world-grounded applications.
+Bolzmacher et al. [80] presented one of the first wear-
+able HVEAs for lateral skin stretch in 2006 by wrapping a
+fiber-reinforced DEA around a participant’s arm. They report
+that the DEA’s expansion in-plane produced discernable skin
+stretch, but their device also required an external high voltage
+amplifier, limiting portability. Ji et al. [61] later introduced
+untethered feel-through haptics by mounting an ultra-thin
+(0.018 mm), flexible DEA film and a custom low-profile
+480 V power supply onto the fingertip (Fig. 6(d.i)). Their
+actuator’s in-plane expansion can deliver a well-localized
+pulsing sensation at low frequencies (1–20 Hz), while higher
+frequencies (100–500 Hz) produce a vibration felt across the
+entire fingertip. HAXEL SEHAs can also produce shear forces,
+as noted in Sec. III-A1, and generally offer larger forces and
+displacements but lower spatial resolutions and bandwidths
+than comparable DEA solutions [60].
+4) Lateral Skin Stretch with Optional Vibrotactile Feedback
+(World-Grounded Devices):Han et al. [37] used DEAs to
+deliver localized lateral skin stretch to the thumb and index
+fingertips of an MRI-compliant graspable operator, conveying
+forces sensed by a robotized biopsy needle (Fig. 6(d.ii)).
+Notably, HVEAs can be built without metallic components,
+ensuring compatibility for MRIs and in other magnetic envi-
+ronments. DEA arrays have also been explored for rendering
+spatial skin stretch patterns; for example, Knoop et al. [81]
+developed a 5x5 hinged pin array, which used a continuous
+DEA membrane underneath the pins to deliver controlled
+lateral skin stretch across a fingertip.
+5) Miscellaneous Cutaneous Feedback Interactions:
+HVEAs can also deliver cutaneous feedback beyond skin de-
+9
+Fig. 7. Examples of HVEA haptic applications targeting kinesthetic feedback.
+The images were drawn from (a.i & a.iii) [4] (©2022 The Authors. Advanced
+Intelligent Systems published by Wiley-VCH GmbH), (a.ii) [7] (©2021 The
+Authors. Advanced Intelligent Systems published by Wiley-VCH GmbH),
+(a.iv) [83] (©2016 IEEE), (b.i) [84] (©2022 IEEE), (c.i) [85] (©2009 IEEE).
+formation. For instance, Iriarte et al. [3], shown in Fig. 6(e.i),
+and Fukushima and Kajimoto [82] demonstrated contactless
+electrostatic piloerection by charging electrodes up to 5-20
+kV and positioning them a few centimeters away from partic-
+ipants’ napes, forearms, and hands. The resulting electrostatic
+attraction lifted participants’ body hair, creating goosebumps.
+Most participants described the stimulation as comfortable and
+pleasant after the initial surprise, although both studies also
+reported large individual differences in piloerection sensitivity.
+Electrohydrodynamic EKPs have also been employed for
+thermal stimulation, with five out of the six EHDPs in our
+literature review implementing fiber-based pumps that can
+transport hot or cold liquid from a reservoir through tubes
+wrapped around a user’s hand or body. The highest flow rate
+EHDP, shown in Fig. 6(f.i), could pump up to 55 mL/min,
+allowing cold liquid to move from a reservoir on the back of
+a user’s hand through tubes across the entire hand within two
+seconds, or from a reservoir on a user’s chest through tubes
+across their entire torso within five seconds [49].
+B. Kinesthetic Feedback
+Kinesthetic feedback conveys a sense of force, motion, or
+resistance through muscles and joints. Among the reviewed
+studies, only ESAs were employed to generate this form of
+feedback, using electrostatic attraction to both passively brake
+and actively drive movement.
+1) Passive Kinesthetic Feedback:As shown in Fig. 7(a, b),
+electrostatic switchable adhesives can be integrated into cloth-
+ing or exoskeletons to programmatically brake and dissipate
+energy during a person’s motion. These ESAs comprise two
+conductive strips, either thin metal shims or conductive fabric
+strips, coated in a thin dielectric and mounted to different
+bony protrusions in the body. When the voltage is off, the
+two conductive strips can deform with the user’s body and
+slide against each other. When the two strips are held at a
+potential difference, however, they adhere together and resist
+further movement by the user. We found 7 papers integrating
+ESAs into haptic gloves, 6 on haptic sleeves, 3 on shoulder
+exoskeletons, and 1 each on ankle and back exoskeletons.
+Gloves were the most common form factor of passive kines-
+thetic feedback in our survey. Every paper mentioned VR as
+the primary use case, taking advantage of many VR headsets’
+integrated hand tracking. Hands can move in complex ways,
+and choosing the right locations to mount ESAs on the hand
+is particularly important to deal with metacarpal abduction
+(particularly for the thumb). Hinchet et al. [86] found that
+mounting one conductive strip to the first joint of each finger
+and the second conductive strip to the wrist works well, with
+the thumb’s clutch tilted 30 ◦ outwards to help cope with its
+more complex flexion and abduction motion. The strips also
+need to be wrapped in either a fabric or plastic guide sheath
+to ensure they only deform along each finger’s axis. Hinchet
+and Shea [4] developed our survey’s highest performing glove,
+shown in Fig. 7(a.i), which could block up to 50 N per
+finger at only 300 V . The fabric construction meant the haptic
+glove was thin (1.3 mm), lightweight (28 g), and fast (<100
+ms response time). It also conformed well to users’ hands,
+enabling accurate finger tracking for VR applications.
+ESAs have also been implemented in sleeves and arm ex-
+oskeletons, where clutches are positioned between the forearm
+and upper arm on either the upper arm’s ventral side (to restrict
+elbow extension) or its dorsal side through a guide on the
+elbow joint (to restrict elbow flexion). The best performing
+haptic sleeves were by Zhang et al. [87], who engaged three
+clutches in parallel at 300 V to block up to 304.8 N, and
+Ramachandran et al. [7] (shown in Fig. 7(a.ii)), who made a
+single clutch that could block up to 92.4 N at 400 V . These
+results compare favorably against human performance studies,
+which show most people cannot produce more than 116 N of
+static force during elbow flexion and extension [88], although
+Hinchet and Shea [4] showed that even 5 N is sufficient for
+many VR discrimination tasks. Beyond VR applications [4],
+[34], haptic sleeves have been explored for drone teleoperation
+[89] and motor learning [7], while grounded arm exoskeletons
+have supported rehabilitation usecases [84] (Fig. 7(b.i)).
+Other body-worn ESA clutches have been explored in
+various exoskeleton form factors for improving movement
+efficiency and reducing muscle exertion. Diller et al. [90]
+mounted five ESA clutches in parallel between a person’s
+knee and shoe to serve as an ankle exoskeleton, as shown
+in Fig. 7(a.iv). When clutched, the ESAs adhered to a rubber
+spring that would then stretch and provide passive kinesthetic
+feedback as the person’s ankle flexed during their gait. The
+exoskeleton could block up to 501 N with response times as
+fast as 30 ms, and during a person’s gait it could exert up to
+7.3 N·m on an average step. Hinchet and Shea [4], as shown in
+Fig. 7(a.iii), integrated eight long, narrow ESA clutches around
+the shoulder that could block different arm movements. Each
+actuator could reportedly block up to 196 N. These results
+compare favorably even against human performance studies,
+which show most people cannot produce more than 250 N of
+static force during shoulder flexion and extension [88].
+Beyond exoskeletons, ESAs have also been attached on
+objects to provide passive kinesthetic feedback. Mishra et al.
+[91] integrated ESAs with co-planar interdigitated electrodes
+10
+on the bottom of everyday objects like a computer mouse,
+cardboard box, and fish toy to produce up to 5 N of kinetic
+friction given an input voltage of 2.3 kV when participants
+dragged the objects across a flat tabletop.
+2) Active Kinesthetic Feedback:A specific form factor of
+ESAs, called “Dual Excitation Multiphase Electrostatic Drive”
+(DEMED), can also be used to generate active forces to
+drive and guide user movement rather than only resisting it.
+DEMEDs etch a three-phase skewed electrode pattern into
+both sides of an ESA, and when both sides are driven with a
+three-phase input signal (the top electrodes are phase shifted
+by 120 ◦ relative to the bottom electrodes), the 120 ◦ phase
+shift and skewed electrode pattern result in a traveling wave
+of shear force pushing both sides apart. Multiple DEMEDs
+can also be stacked in parallel to amplify the output force. We
+found two papers by Hara et al. [85] and Kimura et al. [92]
+integrating eight-layer DEMEDs into haptic joysticks. Hara et
+al.’s haptic joystick, shown in Fig. 7(c.i), could produce up to
+18.0 N of force and 3.1g accelerations using a 2.4 kV , 10 Hz
+drive signal. Kimura et al.’s haptic joystick demonstrated up
+to 7 N of force using a 1.4 kV , 330 Hz drive signal.
+C. Haptic Surfaces
+Haptic surfaces represent another major class of interfaces
+that allow users to actively explore with their hands as the
+surface dynamically alters its texture or shape. This category
+includes surfaces that vary their friction as the fingers slide
+across them, as well as those that integrate near-silent, high-
+performance vibrotactile actuators. HVEAs have also been
+implemented in tabletop pin arrays and deformable crust
+surfaces that render dynamic shape change, providing simulta-
+neous kinesthetic and cutaneous feedback when users interact
+with them freely with their hands. Haptic surfaces typically
+integrate sensing to respond dynamically to user interaction.
+To properly render desired shapes, the actuators need to be able
+to withstand the roughly 0.5 - 1 N normal forces applied by
+typical users during fingertip exploration [71], [93]. HVEAs’
+high bandwidth and force density are well suited for creating
+responsive 2D and 2.5D haptic surfaces.
+1) Variable Friction Surfaces:
+a) Electrovibration:The single most common applica-
+tion in our survey (comprising 83 papers) was integrating
+ESAs into flat surfaces to create a variable-friction haptic
+plane. Charging a conductive electrode below a thin dielectric
+induces an opposite charge in a user’s fingertip, creating
+friction as the user drags their finger along the display. This
+mechanism, also known as electrovibration, was first proposed
+in 1970 by Strong and Troxel [94]. Meyer et al. proposed a
+carrier wave modulation strategy in 2014 that takes advantage
+of the unique electric double layer properties of human skin,
+increasing the frictional bandwidth of these displays well into
+the kHz regime [95], and Shultz et al. demonstrated in 2018
+that this modulation strategy could even be used to produce
+audio tones and even music as a user’s finger catches and slips
+against the display’s surface at high frequency [96].
+Electrovibration can also be integrated into touchscreens,
+where the display’s surface serves as a dielectric covering
+a transparent electrode. The electrode is typically made of
+indium-thin oxide (ITO) given its low cost and moderate bend
+resistance, but flexible touchscreens that expect frequent bend-
+ing (for example, for folding smartphones, as shown in Fig.
+8(a.ii)) also have explored soft electrodes made from conduc-
+tive polymers [97]. The idea of an electrovibration touchscreen
+was first proposed by Yamamoto et al. in 2003 [98], and it
+gained more widespread application after 2010 by leveraging
+commercial platforms such as the Senseg Feelscreen [99], 3M
+SCT3250 MicroTouch [33], and TanvasTouch [100].
+ESA frictional touchscreens are most commonly imple-
+mented by directly using a user’s fingertip as the substrate
+(31 papers), as illustrated in Fig. 4(a.v), but some studies
+have also explored attaching grounded electrodes to the user’s
+fingertips or having the user hold a grounded stylus (6 papers).
+Multi-touch interactions can be enabled by adding multiple
+electrodes underneath the display surface, in the former setup
+[101], [102], or by adding extra grounded contact pads for
+each finger in the latter case [13], [103]. The highest-resolution
+multi-electrode setup in our survey, developed by Haga et
+al. [104], comprises a 52x32 grid of electrodes underneath
+a 4.1” diagonal screen. The array’s 1.75 mm pitch (66.1
+electrodes/cm2) is much finer than that of traditional Braille
+displays (16 dots/cm 2), and modulation strategies can further
+improve this spatial resolution. For example, Yamamoto et al.
+[98] found that scaling the drive voltage frequency with the
+user’s fingertip speed allowed their display to replicate surface
+textures roughly 2x finer than its physical electrode pitch.
+Electrovibration touchscreens can be much quieter than
+traditional haptic touchscreens based on conventional linear
+resonant actuators (LRAs) or eccentric rotary mass (ERM)
+actuators. Prior work has taken advantage of this near-silence
+for methodical activities such as digital painting [105], or
+by adding separate audio overlays for multi-modal haptics in
+automotive user interfaces [9] (Fig. 8(a.iii)) and interactive
+tools for people with visual impairments [106], [107]. Multi-
+electrode setups can further enable novel interactions not
+possible with traditional technologies, including multi-player
+virtual hockey games with personalized friction feedback, as
+shown in Fig. 8(a.i) [13], and two-handed exploration of a
+dynamically textured surface [108].
+Integrating ESAs into touchscreens have been shown in
+many studies to offer performance and qualitative improve-
+ments over purely visual displays [105], [109]–[113] and
+traditional vibrotactile displays [114] for sighted participants.
+However, for users with visual impairments, preliminary user
+studies using single-electrode ESA touchscreens show they lag
+behind traditional dot matrix displays in both performance
+and qualitative metrics [106], [115]. Further testing should
+explore the effectiveness of multi-electrode touchscreens for
+multi-finger and two-handed interaction.
+b) Reverse Electrovibration:As opposed to electrovibra-
+tion ESAs, which ground the user’s body and apply charge
+on a surface, “reverse electrovibration” ESAs apply a charge
+to the user’s body which allows them to induce an opposite
+charge in any generic object in the field connected to earth
+ground. Bau and Poupyrev’s REVEL interface [118] imple-
+ment this by strapping a current source to the user’s body or
+11
+Fig. 8. Examples of HVEA haptic applications targeting haptic surfaces.
+The images were drawn from (a.i) [13] (©2016 IEEE), (a.ii) [97] (©2024
+American Chemical Society) (a.iii) [9] (©2022 IEEE), (b.i) [28] (©2019
+IEEE), (b.ii) [11] (©2023 The Authors), (b.iii) [12] (©2023 The Authors),
+(c.i) [10] (©2023 IEEE), and (c.ii) [116] (©2024 The American Association
+for the Advancement of Science), (d.i) [117] (©2023 The Authors).
+to contacting surfaces such as their chair or shoe. The current
+source injects an AC charge into the user, and the authors
+reported that users could interact with arbitrary objects in
+their environment and feel texture even on physically smooth
+surfaces. The texture depended on the input charge waveform,
+and they showed that these induced textures could be even
+coupled with an AR visual interface for perceptual illusions.
+Wang et al. [119] also explored reverse electrovibration to
+touchscreen interaction by charging a stylus instead of the
+user’s body. This is a much simpler way to achieve multi-point
+feedback than multi-electrode electrovibration touchscreens,
+although it requires that each stylus is wired to the touchscreen
+to equalize their ground potential.
+2) Vibrating Plates:Eight ESA papers and one DEA paper
+in our survey papers explored integrating traditional touch-
+screens with out-of-plane vibrotactile actuators (Fig. 8(d.i)).
+The ESA papers called their devices electrostatic resonant
+actuators (ERAs), inspired by electromagnetic linear resonant
+actuators. ERAs comprise two large planar electrodes, with
+the top suspended over the bottom by small spacers or a low-
+profile spring, and the surfaces vibrate when when a sinusoidal
+voltage is applied between the two plates. These actuators out-
+put the highest deformation at their resonance frequency, and
+their geometry can be tuned to set this resonance frequency
+near the optimal sensitivity of skin mechanoreceptors. Mason
+et al. [120] developed the best-performing ERA in our survey,
+mounting two 6 x 5.3 cm2 ERAs on either side of a 28 cm-long
+touchbar. Together, the ERAs could drive a 100 g payload at
+accelerations up to 8.8g and with a resonance frequency of 196
+Hz. The ERAs could also be driven at different frequencies to
+control the resonance profile along the touchbar’s length.
+Yun et al. [121] fabricated a large array of fin-like transpar-
+ent DEAs on a flexible touchscreen panel. Each DEA was 7
+x 0.2 x 0.4 mm 3 in size, and each and could deform up to 4.1
+µm out of plane while producing forces up to 14 mN, enabling
+localized vibrotactile feedback over the display’s length.
+3) Pin Arrays:Pin arrays are 2.5D displays that can render
+a pixelated version of a continuous surface. They use an array
+of pins that can be independently raised or lowered from
+a grounded state to a desired height. Pin arrays allow for
+whole-hand haptic interactions, enabling tactile manipulation
+of CAD models and accessible 3D prototyping tools for blind
+or visually impaired makers [122]. They are traditionally made
+using arrays of commercial linear actuators, which are fast
+and reliable but are also relatively bulky and power-intensive
+[123]. We identified three studies in our literature review that
+explored using HVEAs to produce pin arrays.
+Most similar to the form of traditional pin arrays, Zhang
+et al. [28] fabricated an ESA clutch array with co-planar
+electrodes, which allowed them to concentrate all of the
+driving electronics into the pin array housing (Fig. 8(b.i)). To
+render a shape, they first used a stepper motor to raise a 4x2
+array of brass pins up to a maximum height of 50 mm. They
+then lowered all of the pins at a constant speed, and when each
+pin reached its desired height they adhered the pin in place
+with its corresponding ESA clutch. The system combines a
+large stroke length, characteristic of traditional pin arrays, with
+a spatial resolution (34.6 pins/cm 2) comparable to that of the
+best ESA OOP dot array in our review (44.4 pixels/cm 2 [56]).
+Its spatial resolution is also much larger than that of, to the
+authors’ knowledge, the highest resolution DC motor-based
+pin array with comparable stroke (2.0 pins/cm 2) [124].
+SEHAs and EKPs have also been explored as linear actua-
+tors for haptic pin arrays, trading off the smaller stroke lengths
+of their fluidic actuators in exchange for having higher refresh
+rates. Johnson et al. [11] developed a 10x10 array of stacked
+SEHA HASEL actuators capable of transmitting forces up
+to 2.5 N and generating displacements up to 14 mm at 10
+Hz refresh rates (Fig. 8(b.ii)). Each actuator was 6x6x9 cm 3,
+and the authors demonstrated the display’s ability for dynamic
+2.5D pattern rendering, whole-hand haptic interaction, and
+moving small objects around the display surface. Shultz and
+Harrison [12] developed a 32-pixel array of EKP electro-
+osmotic pumps capable of blocking forces up to 1.4 N and
+generating displacements up to 5.75 mm at lower frequencies
+(0.25 - 1 Hz). As shown in Fig. 8(b.iii), each cell was about
+1x1x0.5 cm3 and could programmably move between a raised
+position, neutral, and a lowered position by controlling its elec-
+trode voltage polarity. The authors demonstrated the display’s
+ability for dynamic pattern rendering and fingertip haptic
+interaction. They also demonstrated that the EKP array could
+be placed underneath a flexible AMOLED screen to couple
+visual display elements with tactile bumps and vibration.
+12
+4) Deformable Crust Surfaces:Deformable crust shape
+displays differ from pin arrays by embedding actuation or
+variable stiffness mechanisms into the surface itself, reducing
+assembly bulk, facilitating curved surface rendering, and en-
+abling whole-hand surface interaction. These displays and their
+vision of “digital clay” prototyping tools have received much
+interest in haptics research [125]. However, traditional variable
+stiffness mechanisms such as pneumatic layer jamming are
+often difficult to integrate into thin, elastic surfaces [126], and
+emerging technologies such as ionic electro-actuated polymers
+are often fabrication-limited to fingertip-sized displays [24].
+Two papers in our review applied HVEAs to produce fast-
+actuating, high degree-of-freedom deformable crust surfaces.
+Rauf et al. [10], shown in Fig. 8(c.i), explored this design space
+by using electroadhesive auxetic skins to create programmable
+shape change when wrapped as a strain-limiting layer around a
+pneumatic pouch. The auxetic skins are manufactured as flex-
+ible printed circuit boards with dielectric-laminated electrodes
+on each auxetic unit cell. By layering multiple sheets and
+applying a voltage between electrodes on subsequent layers,
+electroadhesion locks individual auxetic unit cells, modulating
+the pneumatic pouch’s local stiffness and thereby the global
+output shape. By leveraging ESAs’ scalable manufacturing
+processes, its 10x10 ESA array was found to be the highest
+degree-of-freedom deformable crust surface as of yet [125].
+Its 20x20 cm 2 size enabled whole-hand haptic interaction,
+although it was only tested to produce simple shapes.
+Jang et al. [116], shown in Fig. 8(c.ii), applied SEHAs
+to build a fingertip-sized deformable crust surface. They pat-
+terned a rigid panel with a 5x5 electrode grid for the bottom
+surface and used a PVC gel sheet embedded with a thin
+flexible electrode layer for the top haptic surface. The entire
+display measured 38 x 38 x 1.5 mm 3 and weighed only 7
+grams. Applying a potential difference between an electrode
+on the bottom surface and the grounded top electrode causes
+the PVC gel sheet to compress locally, squeezing a wave of
+dielectric liquid outwards. Locking every electrode but one
+squeezes all the liquid into that one cell, generating forces
+up to 2.4 N and displacements up to 2.0 mm at 1 Hz and
+1.0 mm at 30 Hz. Locking groups of cells in sequence could
+create waves for dynamic haptic experiences and to move light
+objects around at speeds of up to 140 mm/s.
+IV. DESIGNWORKFLOWS ANDCONSIDERATIONS FOR
+ELECTROSTATICACTUATORS
+Designing high-voltage actuators requires careful attention
+to user safety and comfort. Each HVEA type operates us-
+ing different voltage regimes, with EOPs using the smallest
+average RMS voltage across all papers surveyed (287.5 V),
+followed by ESAs (723 V), DEAs (2978 V), SEHAs (4160 V),
+and finally EHDPs (7042 V). Supplementary Materials, Sec.
+S5 lists additional details about this voltage distribution. While
+higher voltages generally enable greater force outputs, they
+also introduce additional safety precautions and limit circuit
+component selection. In this section, we outline typical HVEA
+design workflows and discuss key considerations for ensuring
+actuator safety, efficacy, and durability.
+A. Fabricating HVEAs
+HVEAs can be fabricated in many ways, varying from low-
+fidelity prototyping to professional manufacturing. Accessible
+and low-cost fabrication pipelines can broaden HVEA adop-
+tion within the haptic community. Thus, in this section, we
+first highlight works that proposed easy-to-implement toolkits
+or design workflows for each HVEA technology. We then
+discuss more advanced manufacturing approaches identified in
+our survey and share practical insights, such as several off-the-
+shelf starter kits. These resources can help haptics researchers
+and designers new to HVEAs get started with prototyping.
+ESAs are the fastest and most forgiving HVEA to fabricate.
+Mishra et al. [91] present a low-cost toolkit that required
+only aluminum foil or copper tape (for the electrodes) and
+polyimide tape (for the dielectric). They showed a variety of
+prototypes integrating ESAs into everyday objects, such as a
+computer mouse and a fish toy, for kinesthetic feedback.
+DEAs also have a simple and customizable layer stack, and
+Franinovi´c and Franzke [127] provide a helpful toolkit and
+many examples for integrating carbon black powder (for the
+electrodes) with VHB foil (for the dielectric).
+SEHAs require more materials and tools for prototyping,
+but Mitchell et al. [128] introduce a fairly low-cost and
+customizable SEHA fabrication pipeline that adapts an FDM
+3D printer to heat-seal thin plastic sheets into a pouch. The
+pouches can be filled with dielectric liquid (Envirotemp FR3,
+Cargill) using a syringe, sealed at the fill port with a soldering
+iron, and coated with carbon black paint to form the electrodes.
+We were not able to find a similar toolkit for EOP EKPs,
+but Fujii et al. [14] present simple instructions for building
+EHDPs. They use a vinyl cutter to cut copper tape into an
+interdigitated electrode pattern and using a laser-cut acrylic
+box to contain the dielectric liquid reservoir.
+More advanced manufacturing techniques can further im-
+prove scalability, actuator performance, and spatial resolution.
+Flexible printed circuit boards enable high-resolution, bend-
+able electrode arrays with integrated wiring [10], [57], and
+the circuit layouts can be programmatically generated to easily
+scale between different array sizes [10]. Silicone molding and
+laser-cut stencils can scalably manufacture customized pouch
+shapes for SEHAs [60]. Inspired by micro-electromechanical
+systems (MEMS) [129], [130], high-spatial-resolution ESAs
+and DEAs can be fabricated using photolithography [55],
+[56], [72], and ultra-thin dielectric layers can be applied onto
+electrodes using chemical vapor deposition [96]. Dielectrics
+can also be blade cast over large areas by mixing powdered
+forms of the dielectric with a solvent [60], [90], [131].
+Several start-ups also sell commercial development kits for
+HVEAs. ESA touchscreens from Tanvas [100] were used in
+6 papers in our literature review. ESTAT Actuation originated
+from a project developing bipolar ESAs for ankle exoskeletons
+[90], and it sells development kits of their bipolar ESAs in
+different form factors. Artimus Robotics originated from a
+project developing SEHA HASELs for soft robotics [39], and
+they remain active in the research space. They sell SEHA
+development kits and high voltage power supplies capable of
+multi-channel HVEA actuation and capacitive sensing. Fluid
+Reality is in the process of commercializing EOP EKPs [57].
+13
+B. High Voltage Safety Near the Human Body
+Similar to conventional electronics, high voltage exposure
+risk depends mainly on the current intensity-duration and the
+charge-duration injected into the body. Underwriters Laborato-
+ries (UL) and the International Electro-technical Commission
+(IEC) provide safety standards that are commonly used when
+verifying the safety of consumer electronics. Both sources
+conservatively prescribe that 0.5 mA RMS is enough to trigger
+a startle reaction, 5 mA RMS triggers a “let-go” reaction,
+and 20 mA RMS can trigger ventricular fibrillation. Currents
+under 20 mA have little to no risk of ventricular fibrillation for
+any contact duration, and for short durations, hig her currents
+are also acceptable. For example, both UL and IEC consider
+300 mA to have little to no risk of ventricular fibrillation if
+applied to the skin for less than 25 ms, while 3 A of current
+is considered “safe” if applied for under 100 µs [132].
+High voltages have the potential for greater harm because
+of their ability to produce high currents and their potential
+to induce arcing. For back-of-the-envelope calculations, a
+common approximation, called the human-body model, is that
+the human body can be estimated as a 1.5 kΩresistor and 100
+pF capacitor in parallel to ground [133], [134]. In addition,
+while skin can resist brief sparks under 500 V , voltages above
+1 kV can induce arcing through desiccated skin [132].
+Summarizing prior high voltage safety guidelines, we
+present four design recommendations towards safe human-
+HVEA interaction:
+(1) The high voltage power supply’s maximum output
+current should ideally be under 20 mA. If larger currents
+are needed to ensure device performance, additional safety
+circuitry should be implemented to shut off the current within
+a time specified by the UL and IEC guidelines (in general,
+within a few milliseconds) [132].
+(2) The HVEA’s capacitance should be kept below a critical
+limit to avoid spontaneous discharge into the human body if
+accidentally touched. Assuming users have dry skin, Pourazadi
+et al. [135] conservatively found this limit to be 1.85 µF for
+HVEAs charged at 1 kV and 80 nF at 10 kV . For context, 80
+nF is equivalent to a DEA with a 250 µm thick VHB 4905
+dielectric and a 0.7 m 2 cross-sectional area; it is uncommon
+to reach these limits without stacking many HVEAs in series.
+We provide equations for each HVEA’s capacitance in the
+Supplementary Materials, Sec. S1 and more details about these
+capacitance limits in the Supplementary Materials, Sec. S7.
+(3) High voltage electrodes and wires should have a layer
+of insulation (ideally two, in case of catastrophic dielectric
+failure), each rated for at least 2×the nominal operating
+voltage [136]. Where possible, the grounded electrode should
+be oriented closer to the user. For example, polyimide has
+a rated dielectric strength of about 100 V/µm, so a 1 kV
+application should use 1-2 layers of 20 µm (0.8 mil) thick
+polyimide tape to insulate the electrodes.
+(4) Researchers should follow their institution’s safety reg-
+ulations for working with high voltages. The IEEE Std 510-
+1983 [137] provides general guidance, such as enclosing high
+voltage setups within a box or barrier, posting “DANGER -
+HIGH VOLTAGE” signs, discharging all capacitive devices
+after use, and wearing rubber gloves when handling live wires.
+We refer interested readers to the excellent reviews by
+Pourazadi et al. [135] and Reilly [132] on specific design
+guidance before testing any devices near the upper threshold
+of these safety limitations on humans.
+C. High Voltage Circuitry Component Selection
+1) High Voltage Power Supply:There are two primary
+methods to output a high-voltage drive signal for HVEAs.
+If the application only requires a constant voltage for on/off
+haptic signals, a DC-DC converter is sufficient. Low-cost, low-
+power DC-DC converters can be implemented manually using
+Cockcroft-Walton multipliers [3], [138] or flyback transform-
+ers [61], and higher-power DC-DC converters can be pur-
+chased commercially. Commercial modules can be incredibly
+compact, only a few cm 3 in volume, and they can be driven
+by batteries for ultra-portable and wearable applications.
+Variable-intensity haptic sensations, such as sinusoidal vi-
+bration patterns, are typically generated by amplifying a
+scaled-down version of the signal from a microcontroller or
+function generator up to the desired high voltage range. These
+amplifiers are often expensive and bulky, with most commer-
+cial solutions coming as rack-mounted or floor tower units.
+However, open source projects, such as the Peta-pico-V oltron
+[139], and commercial UltraV olt amplifiers from Advanced
+Energy have been used in prior work for portable applications.
+Supplementary Materials, Sec. S5 summarizes our survey’s
+most common high voltage power supplies and amplifiers,
+including several portable and relatively affordable options.
+Most HVEAs operate using wall power or batteries. How-
+ever, Qu et al. [74] present an interesting alternative, powering
+a DEA dot array using a triboelectric nanogenerator (TENG)
+built from a 16 cm 2 polyimide sheet on top of aluminum foil
+and an acrylic block. The TENG generated voltages up to
+3.25 kV and currents up to 2 µA, and the dot array could
+be refreshed every time a user pressed on the TENG. They
+refreshed the dot array 20,000 times and found that the TENG
+and the dot array showed no performance degradation.
+2) High-Voltage Logic Circuitry:Many applications pair
+a high-voltage power supply with additional logic circuitry to
+quickly charge and discharge HVEAs. This is required because
+many high-voltage power supplies require a small start-up time
+before their output voltage settles. In addition, compact DC-
+DC converters are often worse at sinking current than sourcing
+it, and without a separate discharge circuit, HVEA dielectrics
+can take seconds to minutes to fully reverse their space charge
+polarization after the high voltage is removed. HVEAs that
+accumulate space charge over many actuation cycles often
+worsen in performance until the space charge is dissipated
+[11], [90], so for many applications it can often be useful to
+have additional circuitry to quickly discharge an HVEA.
+Common logic circuits used in prior literature include com-
+mon source amplifiers, push–pull output stages such as half
+bridges and full bridges, and optocoupler relays. We include
+a comparison of the pros and cons of different logic circuits
+in terms of implementation complexity, rise and fall time, and
+cost in the Supplementary Materials, Sec. S6. In summary,
+half bridges comprising an NMOS and PMOS transistor work
+14
+well up to about 600 V , half bridges comprising three NMOS
+transistors work well up to about 4 kV , and optocoupler relays
+are best for voltages above 4 kV . Full bridges allow for faster
+discharging than half bridges, especially for power supplies
+that are worse at sinking currents than sourcing them, but they
+require twice as many transistors and twice the board space.
+D. Self-Sensing Circuitry
+Every HVEA can be modeled as a capacitor in series with
+its electrodes’ resistance and in parallel with its dielectric’s
+resistance. Although this paper primarily focuses on HVEAs’
+use as actuators, an HVEA’s capacitance and resistance can
+be related to its internal deformation for proprioceptive sens-
+ing and, depending on the application, to the proximity of
+nearby surfaces for exteroceptive sensing. The Supplementary
+Materials, Sec. S1 provides formulas to relate the measured
+capacitance and resistance to HVEA geometry. Prior methods
+for simultaneous high voltage actuation and sensing of HVEAs
+can be grouped into three main categories: resistive sensing,
+capacitive sensing, and complex impedance sensing.
+Resistive sensing is typically implemented by dividing the
+high voltage power supply’s output voltage and current wave-
+forms, where the current can be measured from the voltage
+drop over a small resistor in series with the HVEA. Alterna-
+tively, a resistive divider can be formed between the HVEA
+and an external resistor, and the voltage across the external
+resistor can be used to estimate the HVEA’s resistance [13],
+[140]. Resistive sensing methods are fast and reliable in rigid
+applications such as touchscreens. However, the resistance of
+soft electrodes often degrades over time or after large strain,
+limiting resistive sensing’s reliability over long durations.
+Capacitive sensing methods work by adding a low-voltage,
+high-frequency AC waveform to the high-voltage actuation
+signal. The capacitance can be measured from the voltage drop
+over the HVEA through a capacitive divider [141]–[143], from
+the AC input’s phase shift through the HVEA [39], [101], or by
+comparing the voltage rise and fall time constants through two
+different load resistors [144]. Capacitance sensing is generally
+more reliable than resistance sensing for macro-scale HVEAs.
+However, it can be noisy because of capacitive coupling with
+the environment, and many algorithms still assume that the
+electrode resistance is constant and does not degrade over time.
+The most robust (and computationally intensive) methods
+measure an HVEA’s complex impedance, including both its
+resistance and capacitance. These methods typically sample
+the voltage and current output of the high-voltage power
+supply while also adding a low-voltage, high-frequency si-
+nusoidal sensing signal to the high-voltage actuation signal. A
+recursive least squares method can be implemented to extract
+the HVEA’s resistance and capacitance in real time for generic
+high voltage drive signals [78], [145]. Linearized methods can
+further improve robustness if the high voltage drive signal is
+known to be constant (DC), linear, or sinusoidal [146], [147].
+Very few papers in our literature review have extended
+these single-channel implementations of simultaneous actua-
+tion and sensing to larger HVEA arrays. The largest array with
+simultaneous actuation and sensing in our literature review
+comprised 32 ESAs [148], and the next-largest comprised 6
+SEHAs [149]. Many papers either remove the high voltage
+signal while sensing, as done by Haga et al. [101] across
+a 42 x 32 electrode array in an ESA touchscreen, or use
+alternative sensing methods such as magnetic [11] or resistive
+strain sensors [150]. Future work should investigate more
+scalable circuitry and calibration techniques for multi-channel
+simultaneous actuation and sensing.
+V. CONCLUSIONS ANDOUTLOOK
+The field of high-voltage electrostatic actuators has greatly
+expanded during the past decade, showcasing novel technolo-
+gies, diverse applications, and interdisciplinary collaboration.
+Through this systematic literature review, we synthesized how
+these actuators have been designed, fabricated, and integrated
+into haptic interfaces, while identifying trends in form factors,
+applications, and safety considerations.
+Our review reveals that HVEAs offer distinctive advantages
+over conventional haptic actuators. By classifying prior work
+by touch modality and further mapping it across HVEA form
+factors, technologies, and application domains, our analysis
+highlights how HVEAs address long-standing design and
+ergonomic challenges in haptics. Their thin, compact, and
+compliant structures allow them to conform naturally to the
+human body and integrate seamlessly into the surrounding
+environment. HVEAs’ ability to render versatile sensations
+across multiple haptic modalities opens up novel perceptual
+possibilities, ranging from kinesthetic feedback and control-
+lable normal or shear force to high-bandwidth, yet near-silent
+vibrations. Their energy-efficient operation makes them ideal
+for untethered use across wearables and handheld devices.
+HVEAs can also be easily manufactured at scale, and
+a number of studies in our review manufactured arrays of
+hundreds to thousands of individually addressable actuators
+using monolithic manufacturing techniques. For HCI and
+haptics researchers, understanding these capabilities is not only
+technically valuable but practically empowering, enabling the
+design and deployment of more ergonomic, expressive, and
+energy-efficient haptic systems across diverse applications.
+Despite their potential, several major barriers still exist to
+widespread HVEA deployment. Their specialized manufac-
+turing techniques and drive circuitry have limited HVEA’s
+commercial availability and increased the barrier to entry
+for haptics researchers. HVEAs have primarily planar output
+geometries, and prior literature has largely explored their
+ability to produce cutaneous feedback rather than kinesthetic
+feedback. Finally, the field continues to suffer from a lack
+of interdisciplinary knowledge exchange between communities
+such as materials science, HCI, and haptics.
+A. Future Directions
+Building on the takeaways from this survey, we identify
+several future directions for advancing the integration of
+HVEAs in haptic interfaces and applications. These perspec-
+tives are informed by our author team’s specialized expertise
+in developing HVEA and haptic systems, as well as by
+collective insights from the HCI community. In particular,
+15
+we organized a workshop at the 2023 ACM Symposium on
+User Interface Software and Technology (UIST) [151], which
+brought together 20 participants from academia and industry
+over a day of interactive demos, focused discussions, and
+hands-on ideation, where we identified key challenges and
+opportunities of HVEAs for haptics. In the following, we
+outline these directions, aiming to pave pathways for future
+exploration in HVEA-based haptic research.
+1) Fostering Interdisciplinary Collaboration and Knowl-
+edge Synthesis:Advancing HVEA technologies for haptic
+applications requires close interdisciplinary collaboration be-
+tween communities, including but not limited to material
+science, mechanical engineering, physics, HCI, haptics, and
+design. Such knowledge synthesis can inform HCI and haptic
+researchers about cutting-edge advancements, such as new
+high-κdielectric materials and mechanisms for lower-voltage
+operation [152]. Ionic electro-active polymers, such as conduc-
+tive polymer networks [24], ionic polymer-metal composites
+[25], and stimuli-responsive hydrogels [26], are emerging
+actuators that can leverage HVEA’s flexible form factors and
+integrated self-sensing at voltages under 10 V , and although
+manufacturing these at scale remains challenging they remain
+a promising area for future research. Deeper interdisciplinary
+collaboration also allows HCI researchers and designers to
+communicate their goals, priorities, considerations, and con-
+cerns to material and mechanical experts, accelerating the
+translation of HVEAs into real-world applications.
+Collaboration within the HVEA domain itself also holds
+great potential. Although all HVEAs share similar electrostatic
+actuation principles and high-voltage operation, most of the
+devices in our survey employ only a single HVEA tech-
+nology. By leveraging the customizability of these actuators,
+particularly their thin, flexible, and layer-based architectures,
+future systems could combine multiple HVEA types to create
+multimodal haptic devices. For example, while kinesthetic
+feedback has so far been explored primarily through ESAs,
+integrating SEHAs or DEAs could enable richer, composite
+tactile and kinesthetic experiences.
+2) Developing Accessible Prototyping and Haptic Design
+Toolkits:In our workshop [151], a recurring theme was
+that haptics researchers often consider HVEAs to have a
+high barrier to entry. This is due to a number of factors,
+such as the lack of off-the-shelf commercial HVEAs for fast
+prototyping, the mixed electromechanical experience required
+to fully understand how HVEAs operate, and the intimidation
+of working with high voltages. Although we attempt to address
+some of these fabrication workflows in Sec. IV, future work
+should explore how to best develop and sustain accessible
+HVEA prototyping toolkits for HCI and haptics researchers.
+Beyond actuator prototyping, there is also a need for
+design-oriented toolkits that support the creative exploration
+of HVEA-based haptics. A key strength of HVEAs lies in
+their capability to provide versatile and expressive touch
+sensations. To fully harness this potential, haptic researchers
+and designers must be able to experience and design with
+HVEA-delivered cues directly, without needing the complex
+technical knowledge and skills to build them from scratch.
+Such toolkits could follow the model of open-source projects
+like FlowIO [153], TactorBots [154], and ANISMA [155],
+which freely loaned development and design kits to academics
+in return for hardware, software, and tutorial contributions that
+could last beyond the project’s original developer.
+3) Characterizing the User Experience and Felt Quality of
+HVEA-Delivered Haptics:While HVEA haptic innovations
+have achieved remarkable technical progress, their evaluation
+of haptic performances has largely centered on engineering
+matrices such as bandwidth, displacement, blocking force, or
+response rate. Their user studies typically emphasize con-
+trolled measures of perceivability, pattern discrimination, and
+XR simulation’s realism. Beyond these standardized metrics,
+however, many papers report that HVEAs offer a user experi-
+ence and felt quality unique from traditional actuators.
+Several studies have begun to investigate how HVEA-
+delivered sensations are perceived and described by users. In
+Fukushima and Kajimoto’s study on piloerection [82], for ex-
+ample, they found participants often explained their experience
+through metaphors, describing the artificial goosebumps as
+“a wind sensation” or that “I felt like I was wearing aura.”
+Using electrostatic frictional displays, Tomita et al. [156]
+had Japanese users describe different friction patterns and
+frequencies using onomonopoeias such as “gori-gori” (dry and
+crunchy) or “tsuru-tsuru” (smooth and slippery). Their findings
+suggest that more intuitive, symbolic language can allow users
+to better convey how they feel about tactile sensations. Future
+research can learn from these early insights to better convey
+the experiential quality of HVEA-based haptics. Doing so
+would make their features and benefits more compelling to
+the broader haptics community, inviting and inspiring further
+exploration of this emerging class of technologies.
+4) Enhancing Wearability by Leveraging HVEA Properties:
+HVEA actuators hold great potential for wearable haptic
+devices, as they are thin, soft, compliant, and self-contained.
+Their customizable scale and geometry make them highly
+adaptable, not only as direct replacements for conventional
+actuators within rigid enclosures and housings [8], but also as
+components embedded in soft materials such as silicone rubber
+gloves [4], [63]. Several works have demonstrated direct skin
+attachment of thin-film HVEA actuators using adhesives [6],
+[60], highlighting their conformability for on-skin haptics.
+Woven textiles represent another promising substrate for
+haptic garments and wearables, and many HVEAs can be
+readily adapted to fiber-like or sheet-based form factors. ESAs
+have been integrated into textiles either using conductive
+fabric [157] or by adhering dielectric films to textiles using
+conductive tape [131], while Smith et al. [49] demonstrated
+woven EHDP fibers directly into a textile for distributed
+thermal feedback. These examples illustrate strong compat-
+ibility between HVEAs and textile-based haptic wearables.
+However, though Hinchet and Shea [131] showed that their
+textile electrostatic clutch could be washed in soapy water
+to recover its adhesive performance after wear, few studies
+have systematically examined the washability and long-term
+durability of HVEA textile systems. Future work should build
+upon those foundations, enabling wearable haptic devices that
+are more ergonomic, robust, and long-lasting for everyday use.
+16
+5) Integrating HVEAs into Real-World Applications:While
+fundamental research is crucial for maturing HVEA technolo-
+gies, there is also a pressing need for application-focused stud-
+ies that demonstrate their benefits in real-world contexts. Be-
+yond measuring and quantifying technical capabilities, future
+work should investigate how these advantages translate into
+improved user experiences and enhanced practical outcomes.
+In the realm of accessibility, HVEAs have already shown
+promise in building more compact and scalable refreshable
+braille displays [72] and towards providing more salient navi-
+gation cues for people with low vision [106], [115] In medical
+contexts, several studies have leveraged HVEAs’ compatibility
+with magnetic resonance environments and their suitability for
+compact exoskeletons [15], [37], [158], pointing toward further
+opportunities in rehabilitation and healthcare technologies. As
+haptic interfaces are increasingly explored for enhancing well-
+being, such as stress relief and emotion regulation, HVEAs of-
+fer advantages over commonly used vibration motors through
+their more silent, nuanced, and expressive tactile feedback.
+Teleoperation of humanoid robots represents another emerg-
+ing frontier for HVEAs. Their high force density, responsive-
+ness, and low latency make them ideal for gloves or suits
+that deliver instantaneous, realistic feedback from remote envi-
+ronments. Through interdisciplinary collaboration, particularly
+with HCI researchers and designers, we are confident and
+looking forward to seeing how future explorations can uncover
+novel application scenarios and broaden the design space,
+enabling HVEA-based haptic technologies to meaningfully
+enhance both everyday and domain-specific experiences.
+Future work should further characterize the durability and
+robustness of HVEAs in this real-world environments. ESAs,
+DEAs, and SEHAs have already demonstrated lifetimes in
+the millions of cycles in controlled lab settings [39], [90],
+[159]. However, sweat buildup and environmental factors such
+as humidity and temperature can affect HVEA performance,
+particularly in wearable applications [160], and their impact
+should be better understood before practical use.
+ACKNOWLEDGMENTS
+The authors thank Joe Mullenbach and Yanjun Chen for
+their help in organizing the UIST 2023 workshop that inspired
+this review [151]. They also thank Jad Mahmoud Halabi
+and Pan ˇce Naumov for their insights in choosing comparison
+metrics for the Ashby plots in Fig. 3.
+Ahad Rauf and Sean Follmer’s work on this project is
+supported by the National Science Foundation award grant
+no. 2142782. Ran Zhou and Madeline Balaam’s work on
+this project is funded by the European Union (ERC, Intimate
+Touch, 101043637). Views and opinions expressed are how-
+ever those of the author(s) only and do not necessarily reflect
+those of the European Union or the European Research Coun-
+cil. Neither the European Union nor the granting authority can
+be held responsible for them.
+REFERENCES
+[1] M. Zhu, S. Biswas, S. I. Dinulescu, N. Kastor, E. W. Hawkes, and
+Y . Visell, “Soft, wearable robotics and haptics: Technologies, trends,
+and emerging applications,”Proceedings of the IEEE, vol. 110, no. 2,
+p. 246–272, Feb. 2022.
+[2] J. Yin, R. Hinchet, H. Shea, and C. Majidi, “Wearable soft technologies
+for haptic sensing and feedback,”Adv. Funct. Mater., vol. 31, no. 39,
+p. 2007428, 2021.
+[3] N. Iriarte, I. Ezcurdia, S. Elizondo, J. Irisarri, D. Hemmerling, A. Ortiz,
+and A. Marzo, “Contactless electrostatic piloerection for haptic sensa-
+tions,”IEEE Trans. Haptics, vol. 17, no. 2, p. 140–151, Apr. 2024.
+[4] R. J. Hinchet and H. Shea, “Glove- and sleeve-format variable-friction
+electrostatic clutches for kinesthetic haptics,”Adv. Intell. Syst., vol. 4,
+no. 12, p. 2200174, 2022.
+[5] H. Kim, J. Nam, M. Kim, and K.-U. Kyung, “Wide-bandwidth soft
+vibrotactile interface using electrohydraulic actuator for haptic steering
+wheel application,”IEEE Robotics and Automation Letters, vol. 6,
+no. 4, p. 8245–8252, Oct. 2021.
+[6] J.-H. Youn, S.-Y . Jang, I. Hwang, Q. Pei, S. Yun, and K.-U. Kyung,
+“Skin-attached haptic patch for versatile and augmented tactile inter-
+action,”Science Advances, vol. 11, no. 12, p. eadt4839, Mar. 2025.
+[7] V . Ramachandran, F. Schilling, A. R. Wu, and D. Floreano, “Smart
+textiles that teach: Fabric-based haptic device improves the rate of
+motor learning,”Adv. Intell. Syst., vol. 3, no. 11, p. 2100043, 2021.
+[8] N. Sanchez-Tamayo, Z. Yoder, P. Rothemund, G. Ballardini,
+C. Keplinger, and K. J. Kuchenbecker, “Cutaneous electrohydraulic
+(cute) wearable devices for pleasant broad-bandwidth haptic cues,”Adv.
+Sci., p. 2402461, 2024.
+[9] S. J. Breitschaft, A. Pastukhov, and C.-C. Carbon, “Where’s my
+button? evaluating the user experience of surface haptics in featureless
+automotive user interfaces,”IEEE Trans. Haptics, vol. 15, no. 2, p.
+292–303, Apr. 2022.
+[10] A. M. Rauf, J. S. Bernardo, and S. Follmer, “Electroadhesive aux-
+etics as programmable layer jamming skins for formable crust shape
+displays,” inIEEE Int. Conf. Robot. Autom. (ICRA), May 2023, p.
+2591–2597.
+[11] B. K. Johnson, M. Naris, V . Sundaram, A. V olchko, K. Ly, S. K.
+Mitchellet al., “A multifunctional soft robotic shape display with
+high-speed actuation, sensing, and control,”Nature Communications,
+vol. 14, no. 1, p. 4516, Jul. 2023.
+[12] C. Shultz and C. Harrison, “Flat panel haptics: Embedded electroos-
+motic pumps for scalable shape displays,” inCHI Conf. on Human
+Factors in Computing Systems, Apr. 2023, p. 1–16.
+[13] T. Nakamura and A. Yamamoto, “A multi-user surface visuo-haptic
+display using electrostatic friction modulation and capacitive-type
+position sensing,”IEEE Trans. Haptics, vol. 9, no. 3, p. 311–322, Jul.
+2016.
+[14] J. Fujii, S. Nakamaru, and Y . Kakehi, “Layerpump: Rapid prototyping
+of functional 3d objects with built-in electrohydrodynamics pumps
+based on layered plates,” inProc. Int. Conf. on Tangible, Embedded,
+and Embodied Interaction, 2021.
+[15] J. Mahmoud Halabi, E. Ahmed, S. Sofela, and P. Naumov, “Perfor-
+mance of molecular crystals in conversion of light to mechanical work,”
+Proc. National Academy of Sciences, vol. 118, no. 5, p. e2020604118,
+Feb. 2021.
+[16] Ankit, T. Y . K. Ho, A. Nirmal, M. R. Kulkarni, D. Accoto, and
+N. Mathews, “Soft actuator materials for electrically driven haptic
+interfaces,”Adv. Intell. Syst., vol. 4, no. 2, p. 2100061, 2022.
+[17] O. Perera, R. Liyanapathirana, G. Gargiulo, and U. Gunawardana, “A
+review of soft robotic actuators and their applications in bioengineering,
+with an emphasis on hasel actuators’ future potential,”Actuators,
+vol. 13, no. 1212, p. 524, Dec. 2024.
+[18] P. Rothemund, N. Kellaris, S. K. Mitchell, E. Acome, and C. Keplinger,
+“Hasel artificial muscles for a new generation of lifelike robots—recent
+progress and future opportunities,”Adv. Mater., vol. 33, no. 19, p.
+2003375, 2021.
+[19] B. Vermes and T. Czigany, “Non-conventional deformations: Materials
+and actuation,”Materials, vol. 13, no. 66, p. 1383, Jan. 2020.
+[20] C. Basdogan, F. Giraud, V . Levesque, and S. Choi, “A review of
+surface haptics: Enabling tactile effects on touch surfaces,”IEEE Trans.
+Haptics, vol. 13, no. 3, p. 450–470, Jul. 2020.
+[21] H. Bai, S. Li, and R. F. Shepherd, “Elastomeric haptic devices for
+virtual and augmented reality,”Adv. Funct. Mater., vol. 31, no. 39, p.
+2009364, 2021.
+[22] H. Culbertson, S. B. Schorr, and A. M. Okamura, “Haptics: The present
+and future of artificial touch sensation,”Annual Review of Control,
+Robotics, and Autonomous Systems, vol. 1, no. 1, pp. 385–409, 2018.
+[23] M. J. Page, J. E. McKenzie, P. M. Bossuyt, I. Boutron, T. C. Hoffmann,
+C. D. Mulrowet al., “The prisma 2020 statement: an updated guideline
+for reporting systematic reviews,”BMJ, p. n71, Mar. 2021.
+17
+[24] J. Wang, M. Sotzing, M. Lee, and A. Chortos, “Passively addressed
+robotic morphing surface (parms) based on machine learning,”Science
+Advances, vol. 9, no. 29, p. eadg8019, Jul. 2023.
+[25] G.-H. Feng and S.-Y . Hou, “Investigation of tactile bump array actuated
+with ionic polymer–metal composite cantilever beams for refreshable
+braille display application,”Sensors and Actuators A: Physical, vol.
+275, p. 137–147, Jun. 2018.
+[26] G. Paschew and A. Richter, “High-resolution tactile display operated by
+an integrated “smart hydrogel” actuator array,” inElectroactive Polymer
+Actuators and Devices (EAPAD), vol. 7642, Apr. 2010, p. 856–863.
+[27] N. H. Runyan and D. B. Blazie, “The continuing quest for the
+“holy braille” of tactile displays,” inNano-Opto-Mechanical Systems
+(NOMS), vol. 8107, Sep. 2011, p. 81070G.
+[28] K. Zhang, E. J. Gonzalez, J. Guo, and S. Follmer, “Design and
+analysis of high-resolution electrostatic adhesive brakes towards static
+refreshable 2.5d tactile shape display,”IEEE Trans. Haptics, vol. 12,
+no. 4, p. 470–482, Oct. 2019.
+[29] A. B. Croll, N. Hosseini, and M. D. Bartlett, “Switchable adhesives
+for multifunctional interfaces,”Adv. Mater. Technol., vol. 4, no. 8, p.
+1900193, 2019.
+[30] Z. Liu and F. Yan, “Switchable adhesion: On-demand bonding and
+debonding,”Adv. Sci., vol. 9, no. 12, p. 2200264, 2022.
+[31] A. Johnsen and K. Rahbek, “A physical phenomenon and its appli-
+cations to telegraphy, telephony, etc.”Journal of the Institution of
+Electrical Engineers, vol. 61, no. 320, p. 713–725, Jul 1923.
+[32] A. M. Rauf and S. Follmer, “Modeling the dynamics of sub-millisecond
+electroadhesive engagement and release times,”Extreme Mechanics
+Letters, vol. 79, p. 102382, Sep. 2025.
+[33] O. Bau, I. Poupyrev, A. Israr, and C. Harrison, “Teslatouch: electro-
+vibration for touch surfaces,” inProc. ACM Symp. on User interface
+software and technology, Oct. 2010, p. 283–292.
+[34] V . Vechev, R. Hinchet, S. Coros, B. Thomaszewski, and O. Hilliges,
+“Computational design of active kinesthetic garments,”ACM Symp. on
+User Interface Software and Technology, p. 1–11, Oct. 2022.
+[35] W. C. R ¨ontgen, “Ueber die durch electricit ¨at bewirkten form- und
+volumen¨anderungen von dielectrischen k ¨orpern,”Annalen der Physik,
+vol. 247, no. 13, p. 771–786, Jan. 1880.
+[36] J.-H. Youn, S.-Y . Jang, I. Hwang, Q. Pei, S. Yun, and K.-U. Kyung,
+“Skin-attached haptic patch for versatile and augmented tactile inter-
+action,”Science Advances, vol. 11, no. 12, p. eadt4839, 2025.
+[37] A. K. Han, J. H. Bae, K. C. Gregoriou, C. J. Ploch, R. E. Goldman,
+G. H. Gloveret al., “Mr-compatible haptic display of membrane
+puncture in robot-assisted needle procedures,”IEEE Trans. Haptics,
+vol. 11, no. 3, p. 443–454, Jul. 2018.
+[38] G. Frediani, D. Mazzei, D. E. De Rossi, and F. Carpi, “Wearable wire-
+less tactile display for virtual interactions with soft bodies,”Frontiers
+in bioengineering and biotechnology, vol. 2, p. 31, 2014.
+[39] E. Acome, S. K. Mitchell, T. Morrissey, M. Emmett, C. Benjamin,
+M. Kinget al., “Hydraulically amplified self-healing electrostatic
+actuators with muscle-like performance,”Science, vol. 359, no. 6371,
+pp. 61–65, 2018.
+[40] N. Kellaris, V . Gopaluni Venkata, G. M. Smith, S. K. Mitchell,
+and C. Keplinger, “Peano-hasel actuators: Muscle-mimetic, electro-
+hydraulic transducers that linearly contract on activation,”Science
+Robotics, vol. 3, no. 14, p. eaar3276, Jan. 2018.
+[41] E. Leroy, R. Hinchet, and H. Shea, “Multimode hydraulically amplified
+electrostatic actuators for wearable haptics,”Adv. Mater., vol. 32,
+no. 36, p. 2002564, 2020.
+[42] G. Grasso, S. Rosset, and H. Shea, “Fully 3d-printed, stretchable, and
+conformable haptic interfaces,”Adv. Funct. Mater., vol. 33, no. 20, p.
+2213821, 2023.
+[43] A. K. Han, S. Ji, D. Wang, and M. R. Cutkosky, “Haptic surface display
+based on miniature dielectric fluid transducers,”IEEE Robotics and
+Automation Letters, vol. 5, no. 3, pp. 4021–4027, 2020.
+[44] S. Chen, Y . Chen, J. Yang, T. Han, and S. Yao, “Skin-integrated stretch-
+able actuators toward skin-compatible haptic feedback and closed-loop
+human-machine interactions,”npj Flexible Electronics, vol. 7, no. 1,
+p. 1, 2023.
+[45] I.-D. S ˆırbu, G. Moretti, S. Dir `e, L. Fambri, R. Vertechy, D. Meniglio,
+and M. Fontana, “Electrostatic actuator for tactile display based on
+hydraulically coupled dielectric fluids and soft structures,” inElec-
+troactive Polymer Actuators and Devices (EAPAD), vol. 10966, 2019,
+pp. 334–339.
+[46] Purnendu, J. Hartcher-O’Brien, V . Mehta, N. Colonnese, A. Gupta,
+C. J. Bruns, and P. Agarwal, “Fingertip wearable high-resolution
+electrohydraulic interface for multimodal haptics,” inIEEE World
+Haptics Conference (WHC), 2023, pp. 299–305.
+[47] Y . Shao, A. Shagan Shomron, B. Javot, C. Keplinger, and K. J.
+Kuchenbecker, “Wearable electrohydraulic actuation for salient full-
+fingertip haptic feedback,”Adv. Mater. Technol., p. 2401525, 2025.
+[48] B. D. Iverson and S. V . Garimella, “Recent advances in microscale
+pumping technologies: a review and evaluation,”Microfluidics and
+Nanofluidics, vol. 5, no. 2, p. 145–174, Aug. 2008.
+[49] M. Smith, V . Cacucciolo, and H. Shea, “Fiber pumps for wearable
+fluidic systems,”Science, vol. 379, no. 6639, p. 1327–1332, Mar. 2023.
+[50] T. Morita, Y . Kuwajima, A. Minaminosono, S. Maeda, and Y . Kakehi,
+“Hydromod: Constructive modules for prototyping hydraulic physical
+interfaces,” inCHI Conf. on Human Factors in Computing Systems,
+Apr. 2022, p. 1–14.
+[51] S. J. Lederman and R. L. Klatzky, “Haptic perception: A tutorial,”
+Attention, Perception, & Psychophysics, vol. 71, no. 7, pp. 1439–1459,
+2009.
+[52] C. Pacchierotti, S. Sinclair, M. Solazzi, A. Frisoli, V . Hayward, and
+D. Prattichizzo, “Wearable haptic systems for the fingertip and the
+hand: Taxonomy, review, and perspectives,”IEEE Trans. Haptics,
+vol. 10, no. 4, p. 580–600, Oct. 2017.
+[53] R. S. Dahiya, G. Metta, M. Valle, and G. Sandini, “Tactile sens-
+ing—from humans to humanoids,”IEEE Trans. Robot., vol. 26, no. 1,
+p. 1–20, Feb. 2010.
+[54] C. Cameron, L. DiValentin, R. Manaktala, A. McElhaney, C. Nostrand,
+O. Quinlanet al., “Using electroactive polymers to simulate the sense
+of light touch and vibration in a virtual reality environment,” inIEEE
+Systems and Information Engineering Design Symp., 2011, pp. 121–
+126.
+[55] D. Pyo, S. Ryu, K.-U. Kyung, S. Yun, and D.-S. Kwon, “High-pressure
+endurable flexible tactile actuator based on microstructured dielectric
+elastomer,”Applied Physics Letters, vol. 112, no. 6, p. 061902, Feb.
+2018.
+[56] S. Takagi, H. Sasaki, M. Shikida, and K. Sato, “Electrostatic latch
+mechanism for handling projection on arrayed vertical motion system,”
+inTransducers, Jun. 2007, p. 1147–1150.
+[57] V . Shen, T. Rae-Grant, J. Mullenbach, C. Harrison, and C. Shultz,
+“Fluid reality: High-resolution, untethered haptic gloves using elec-
+troosmotic pump arrays,” inProc. ACM Symp. on User Interface
+Software and Technology, Oct. 2023, p. 1–20.
+[58] T. Levard, P. J. Diglio, S.-G. Lu, L. J. Gorny, C. D. Rahn, and Q. M.
+Zhang, “Pvdf core-free actuator for braille displays: design, fabrication
+process, and testing,” inElectroactive Polymer Actuators and Devices
+(EAPAD), vol. 7976, Mar. 2011, p. 305–313.
+[59] K. Song, S. H. Kim, S. Jin, S. Kim, S. Lee, J.-S. Kimet al., “Pneumatic
+actuator and flexible piezoelectric sensor for soft virtual reality glove
+system,”Scientific Reports, vol. 9, no. 1, p. 8988, Jul. 2019.
+[60] E. Leroy and H. Shea, “Hydraulically amplified electrostatic taxels
+(haxels) for full body haptics,”Adv. Mater. Technol., vol. 8, no. 16, p.
+2300242, 2023.
+[61] X. Ji, X. Liu, V . Cacucciolo, Y . Civet, A. El Haitami, S. Cantinet al.,
+“Untethered feel-through haptics using 18-µm thick dielectric elastomer
+actuators,”Adv. Funct. Mater., vol. 31, no. 39, p. 2006639, 2021.
+[62] A. Frisoli and D. Leonardis, “Wearable haptics for virtual reality and
+beyond,”Nature Reviews Electrical Engineering, vol. 1, no. 10, pp.
+666–679, 2024.
+[63] K. Song, S. H. Kim, S. Jin, S. Kim, S. Lee, J.-S. Kimet al., “Pneumatic
+actuator and flexible piezoelectric sensor for soft virtual reality glove
+system,”Scientific reports, vol. 9, no. 1, p. 8988, 2019.
+[64] S. Mun, S. Yun, S. Nam, S. K. Park, S. Park, B. J. Parket al., “Electro-
+active polymer based soft tactile interface for wearable devices,”IEEE
+Trans. Haptics, vol. 11, no. 1, pp. 15–21, 2018.
+[65] J.-H. Youn, H. Mun, and K.-U. Kyung, “A wearable soft tactile actuator
+with high output force for fingertip interaction,”IEEE Access, vol. 9,
+pp. 30 206–30 215, 2021.
+[66] H. Boys, G. Frediani, M. Ghilardi, S. Poslad, J. C. Busfield, and
+F. Carpi, “Soft wearable non-vibratory tactile displays,” inIEEE Int.
+Conf. on Soft Robotics, 2018, pp. 270–275.
+[67] I. M. Koo, K. Jung, J. C. Koo, J.-D. Nam, Y . K. Lee, and H. R. Choi,
+“Development of soft-actuator-based wearable tactile display,”IEEE
+Trans. Robot., vol. 24, no. 3, p. 549–558, Jun. 2008.
+[68] Y . Guo, Y . Luo, R. Plamthottam, S. Pei, C. Wei, Z. Hanet al., “Haptic
+artificial muscle skin for extended reality,”Science Advances, vol. 10,
+no. 43, p. eadr1765, 2024.
+[69] T. Yu, P. He, B. T. Wei, C. Wang, X. Li, X. Wanget al., “Morphingskin:
+A skin-like platform that integrates multimodal hydraulic actuators
+based on flexible electroosmotic pumps,” inProc. ACM Symp. on User
+Interface Software and Technology, 2025.
+18
+[70] C. Lee, U. Kim, D.-H. Lee, C. T. Nguyen, D. T. Nguyen, H. Phung
+et al., “Development of a smart handheld surgical tool with tactile
+feedback,”Intelligent Service Robotics, vol. 10, no. 2, pp. 149–158,
+2017.
+[71] A. M. Smith, G. Gosselin, and B. Houde, “Deployment of fingertip
+forces in tactile exploration,”Experimental Brain Research, vol. 147,
+no. 2, p. 209–218, Nov. 2002.
+[72] K. Ren, S. Liu, M. Lin, Y . Wang, and Q. M. Zhang, “A compact
+electroactive polymer actuator suitable for refreshable braille display,”
+Sensors and Actuators A: Physical, vol. 143, no. 2, p. 335–342, May
+2008.
+[73] X. Niu, P. Brochu, H. Stoyanov, S. R. Yun, and Q. Pei, “Bistable
+electroactive polymer for refreshable braille display with improved
+actuation stability,” inElectroactive Polymer Actuators and Devices
+(EAPAD), vol. 8340, Apr. 2012, p. 203–210.
+[74] X. Qu, X. Ma, B. Shi, H. Li, L. Zheng, C. Wanget al., “Refresh-
+able braille display system based on triboelectric nanogenerator and
+dielectric elastomer,”Adv. Funct. Mater., vol. 31, no. 5, p. 2006612,
+2021.
+[75] Y . Chen, X. Liang, S. Chen, Y . Chen, H. Lin, H. Zhanget al., “Haptag:
+A compact actuator for rendering push-button tactility on soft surfaces,”
+inProc. ACM Symp. on User Interface Software and Technology, 2022.
+[76] A. Firouzeh, A. Mizutani, J. Groten, M. Zirkl, and H. Shea, “Poptouch:
+A submillimeter thick dynamically reconfigured haptic interface with
+pressable buttons,”Adv. Mater., vol. 36, no. 8, p. 2307636, 2024.
+[77] T. Rae-Grant, C. Harrison, and C. Shultz, “Dynabuttons: Fast inter-
+active soft buttons with analog control,” inIEEE Haptics Symposium
+(HAPTICS), 2024, pp. 366–371.
+[78] S. Gratz-Kelly, T. F. Kr ¨uger, S. Seelecke, G. Rizzello, and G. Moretti,
+“A tri-modal dielectric elastomer actuator integrating linear actuation,
+sound generation, and self-sensing capabilities,”Sensors and Actuators
+A: Physical, vol. 372, p. 115332, Jul. 2024.
+[79] J. Biggs and M. Srinivasan, “Tangential versus normal displacements
+of skin: relative effectiveness for producing tactile sensations,” inProc.
+Symp. on Haptic Interfaces for Virtual Environment and Teleoperator
+Systems, Mar. 2002, p. 121–128.
+[80] C. Bolzmacher, J. Biggs, and M. Srinivasan, “Flexible dielectric
+elastomer actuators for wearable human-machine interfaces,” inSmart
+Structures and Materials: Electroactive Polymer Actuators and Devices
+(EAPAD), vol. 6168, 2006, pp. 27–38.
+[81] L. E. Knoop and J. Rossiter, “Towards shear tactile displays with
+deas,” inELECTROACTIVE POLYMER ACTUATORS AND DEVICES
+(EAPAD), Y . BarCohen, Ed., vol. 9056, 2014.
+[82] S. Fukushima and H. Kajimoto, “Facilitating a surprised feeling by
+artificial control of piloerection on the forearm,” inProc. Augmented
+Human International Conference, Mar. 2012, p. 1–4.
+[83] S. Diller, C. Majidi, and S. H. Collins, “A lightweight, low-power
+electroadhesive clutch and spring for exoskeleton actuation,” inIEEE
+Int. Conf. Robot. Autom. (ICRA), May 2016, p. 682–689.
+[84] N. Feizi, S. F. Atashzar, M. R. Kermani, and R. V . Patel, “Modeling
+and high-definition control of a smart electroadhesive actuator: Toward
+application in rehabilitation,”IEEE Trans. Medical Robotics and Bion-
+ics, vol. 4, no. 4, p. 1057–1067, Nov. 2022.
+[85] M. Hara, G. Matthey, A. Yamamoto, D. Chapuis, R. Gassert, H. Bleuler,
+and T. Higuchi, “Development of a 2-dof electrostatic haptic joystick
+for mri/fmri applications,” inIEEE Int. Conf. Robot. Autom. (ICRA),
+May 2009, p. 1479–1484.
+[86] R. Hinchet, V . Vechev, H. Shea, and O. Hilliges, “Dextres: Wearable
+haptic feedback for grasping in vr via a thin form-factor electrostatic
+brake,” inProc. Symp. on User Interface Software and Technology, Oct
+2018, p. 901–912.
+[87] H. Zhang and H. Shea, “Clutchable fabric actuator for energy-efficient
+wearable robots,”Adv. Funct. Mater., vol. 35, no. 6, p. 2415099, 2025.
+[88] United States Department of Defense,Military Standard - Design
+Criteria Standard, Sep. 2020, no. MIL-STD-1472H.
+[89] V . Ramachandran, M. Macchini, and D. Floreano, “Arm-wrist haptic
+sleeve for drone teleoperation,”IEEE Robotics and Automation Letters,
+vol. 7, no. 4, p. 12054–12061, Oct. 2022.
+[90] S. B. Diller, S. H. Collins, and C. Majidi, “The effects of electroadhe-
+sive clutch design parameters on performance characteristics,”Journal
+of Intelligent Material Systems and Structures, vol. 29, no. 19, p.
+3804–3828, Nov. 2018.
+[91] A. Mishra, P. Kumar, J. Shukla, and A. Parnami, “Haptidrag: A device
+with the ability to generate varying levels of drag (friction) effects
+on real surfaces,”Proc. ACM Interact. Mob. Wearable Ubiquitous
+Technol., vol. 6, no. 3, pp. 131:1–131:26, Sep. 2022.
+[92] F. Kimura, A. Yamamoto, M. Hara, J. Ryu, H. Bleuler, and T. Higuchi,
+“System development of an admittance-controlled 2-dof haptic device
+using electrostatic motors,” inIEEE World Haptics Conference, Jun.
+2011, p. 263–268.
+[93] D. T. V . Pawluk and R. D. Howe, “Dynamic contact of the human fin-
+gerpad against a flat surface,”Journal of Biomechanical Engineering,
+vol. 121, no. 6, p. 605–611, Dec. 1999.
+[94] R. M. Strong and D. E. Troxel, “An electrotactile display,”IEEE Trans.
+Man-Machine Systems, vol. 11, no. 1, p. 72–79, Mar. 1970.
+[95] D. J. Meyer, M. Wiertlewski, M. A. Peshkin, and J. E. Colgate, “Dy-
+namics of ultrasonic and electrostatic friction modulation for rendering
+texture on haptic surfaces,” inIEEE Haptics Symposium (HAPTICS),
+Feb. 2014, p. 63–67.
+[96] C. Shultz, M. Peshkin, and J. E. Colgate, “The application of tactile,
+audible, and ultrasonic forces to human fingertips using broadband
+electroadhesion,”IEEE Trans. Haptics, vol. 11, no. 2, p. 279–290, Apr.
+2018.
+[97] B. Park, E. Choi, G. Byun, G. Choe, S. W. Hong, H. Yanget al.,
+“Flexible and transparent electrovibration-based haptic display with
+low driving voltage,”ACS Applied Materials & Interfaces, vol. 16,
+no. 41, p. 55864–55872, Oct. 2024.
+[98] A. Yamamoto, T. Ishii, and T. Higuchi, “Electrostatic tactile display for
+presenting surface roughness sensation,” inIEEE Int. Conf. Industrial
+Technology, vol. 2, 2003, pp. 680–684 V ol.2.
+[99] J. Linjama and V . M ¨akinen, “E-sense screen: Novel haptic display with
+capacitive electrosensory interface,” in4th Workshop for Haptic and
+Audio Interaction Design, Sep. 2009.
+[100] “Tanvas - surface haptic technology and products.” [Online]. Available:
+https://tanvas.co/
+[101] H. Haga, D. Sugimoto, Y . Yang, H. Sasaki, T. Asai, and K. Shigemura,
+“Capacitive touchscreen-integrated electrostatic tactile display with
+localized sensation,”Journal of the Society for Information Display,
+vol. 27, no. 2, p. 59–71, 2019.
+[102] G. Ilkhani and E. Samur, “Creating multi-touch haptic feedback on an
+electrostatic tactile display,” inIEEE Haptics Symposium (HAPTICS),
+Mar. 2018, p. 163–168.
+[103] T. Nakamura and A. Yamamoto, “Multi-finger electrostatic passive
+haptic feedback on a visual display,” inWorld Haptics Conference
+(WHC), Apr. 2013, p. 37–42.
+[104] H. Haga, K. Yoshinaga, J. Yanase, D. Sugimoto, K. Takatori, and
+H. Asada, “43.3: Electrostatic tactile display using beat phenomenon
+of voltage waveforms,”SID Symposium Digest of Technical Papers,
+vol. 45, no. 1, p. 623–626, 2014.
+[105] J. R. Kim, R. H. Osgouei, and S. Choi, “Effects of visual and haptic
+latency on touchscreen interaction: A case study using painting task,”
+inIEEE World Haptics Conference (WHC), Jun. 2017, p. 159–164.
+[106] S. Feitl, J. Kreimeier, and T. G ¨otzelmann, “Accessible electrostatic
+surface haptics: Towards an interactive audiotactile map interface for
+people with visual impairments,” inProc. of the Int. Conf. on PErvasive
+Technologies Related to Assistive Environments, Jul. 2022, p. 522–531.
+[107] Y . Yoo, J. Lim, H. Cho, and S. Choi, “Touchphoto: Enabling in-
+dependent picture-taking and understanding of photos for visually-
+impaired users,” inHaptic Interaction, H. Kajimoto, D. Lee, S.-Y . Kim,
+M. Konyo, and K.-U. Kyung, Eds., 2019, p. 278–283.
+[108] H. Haga, T. Asai, S. Takeuchi, H. Sasaki, H. Yamamoto, and K. Shige-
+mura, “Tactile touch display using segmented-electrode array with
+tactile strength stabilization,”IEICE Transactions on Electronics, vol.
+E104.C, no. 2, p. 64–72, 2021.
+[109] G. Liu, S. Lv, X. Wang, and X. Sun, “Performance of the rotation
+gesture based on electrostatic tactile feedback devices,”Interacting with
+Computers, vol. 33, no. 5, p. 511–521, Jul. 2021.
+[110] X. Yan, R. Li, X. Sun, and G. Liu, “Effects of touch force profiles
+and waveforms of electrostatic tactile feedback on touchscreen pan
+operation,”The Computer Journal, vol. 62, no. 7, p. 1016–1035, 2019.
+[111] Q. Wang, X. Sun, D. Cao, and G. Liu, “Enhanced interactive perfor-
+mance of zoom-in/out gestures using electrostatic tactile feedback on
+touchscreens,”The Computer Journal, vol. 65, no. 2, p. 261–274, 2022.
+[112] Y . Zhang and C. Harrison, “Quantifying the targeting performance
+benefit of electrostatic haptic feedback on touchscreens,” inProc. Int.
+Conf. on Interactive Tabletops & Surfaces, Nov. 2015, p. 43–46.
+[113] G. Liu, X. Sun, D. Wang, Y . Liu, and Y . Zhang, “Effect of electrostatic
+tactile feedback on accuracy and efficiency of pan gestures on touch
+screens,”IEEE Trans. Haptics, vol. 11, no. 1, p. 51–60, 2018.
+[114] T. A. Smith and J. L. Gorlewicz, “Hue: A hybrid ultrasonic and
+electrostatic variable friction touchscreen,” in2017 IEEE World Haptics
+Conference (WHC), Jun. 2017, p. 635–640.
+19
+[115] A. Bateman, O. K. Zhao, A. V . Bajcsy, M. C. Jennings, B. N.
+Toth, A. J. Cohenet al., “A user-centered design and analysis of
+an electrostatic haptic touchscreen system for students with visual
+impairments,”International Journal of Human-Computer Studies, vol.
+109, p. 102–111, Jan. 2018.
+[116] S.-Y . Jang, M. Cho, H. Kim, M. Choi, S. Mun, J.-H. Younet al.,
+“Dynamically reconfigurable shape-morphing and tactile display via
+hydraulically coupled mergeable and splittable pvc gel actuator,”Sci-
+ence Advances, vol. 10, no. 39, p. eadq2024, 2024.
+[117] S. M. Rajkumar, K. V . Singh, T.-H. Yang, and J.-H. Koo, “Modeling
+and experimental evaluation of haptic localization using electrostatic
+vibration actuators,”IEEE Access, vol. 11, p. 18582–18589, 2023.
+[118] O. Bau and I. Poupyrev, “Revel: tactile feedback technology for
+augmented reality,”ACM Trans. Graph., vol. 31, no. 4, pp. 1–11, 2012.
+[119] Q. Wang, X. Ren, and X. Sun, “Ev-pen: an electrovibration haptic
+feedback pen for touchscreens,” inSIGGRAPH ASIA 2016 Emerging
+Technologies, Nov. 2016, p. 1–2.
+[120] T. Mason, J.-H. Koo, Y .-M. Kim, and T.-H. Yang, “Experimental
+evaluation on the effect of electrode configuration in electrostatic actu-
+ators for increasing vibrotactile feedback intensity,”Applied Sciences,
+vol. 10, no. 15, p. 5375, 2020.
+[121] S. Yun, S. Park, B. Park, S. Ryu, S. M. Jeong, and K.-U. Kyung, “A
+soft and transparent visuo-haptic interface pursuing wearable devices,”
+IEEE Trans. Ind. Electron., vol. 67, no. 1, p. 717–724, Jan. 2020.
+[122] A. F. Siu, S. Kim, J. A. Miele, and S. Follmer, “shapecad: An accessible
+3d modelling workflow for the blind and visually-impaired via 2.5d
+shape displays,” inACM SIGACCESS Conference on Computers and
+Accessibility, Oct. 2019, p. 342–354.
+[123] J. Alexander, A. Roudaut, J. Steimle, K. Hornbæk, M. Bruns Alonso,
+S. Follmer, and T. Merritt, “Grand challenges in shape-changing
+interface research,” inCHI Conf. on Human Factors in Computing
+Systems, Apr 2018, p. 1–14.
+[124] A. F. Siu, E. J. Gonzalez, S. Yuan, J. B. Ginsberg, and S. Follmer,
+“shapeshift: 2d spatial manipulation and self-actuation of tabletop
+shape displays for tangible and haptic interaction,” inCHI Conf. on
+Human Factors in Computing Systems, Apr. 2018, p. 1–13.
+[125] J. Wang and A. Chortos, “Control strategies for soft robot systems,”
+Adv. Intell. Syst., vol. 4, no. 5, p. 2100165, 2022.
+[126] E. Steltz, A. Mozeika, N. Rodenberg, E. Brown, and H. Jaeger,
+“Jsel: Jamming skin enabled locomotion,” inIEEE/RSJ Int. Conf. on
+Intelligent Robots and Systems, Oct. 2009, p. 5672–5677.
+[127] K. Franinovi ´c and L. Franzke, “Shape changing surfaces and structures:
+Design tools and methods for electroactive polymers,” inCHI Conf. on
+Human Factors in Computing Systems, May 2019, p. 1–12.
+[128] S. K. Mitchell, X. Wang, E. Acome, T. Martin, K. Ly, N. Kellariset al.,
+“An easy-to-implement toolkit to create versatile and high-performance
+hasel actuators for untethered soft robots,”Adv. Sci., vol. 6, no. 14, p.
+1900178, 2019.
+[129] A. M. Rauf, D. S. Contreras, R. M. Shih, C. B. Schindler, and K. S. J.
+Pister, “Nonlinear dynamics of lateral electrostatic gap closing actuators
+for applications in inchworm motors,”Journal of Microelectromechan-
+ical Systems, vol. 31, no. 1, p. 29–36, Feb. 2022.
+[130] A. M. Rauf, B. G. Kilberg, C. B. Schindler, S. A. Park, and K. S. J.
+Pister, “Towards aerodynamic control of miniature rockets with mems
+control surfaces,” inIEEE Conference on Micro Electro Mechanical
+Systems (MEMS), Jan. 2020, p. 523–526.
+[131] R. Hinchet and H. Shea, “High force density textile electrostatic
+clutch,”Adv. Mater. Technol., vol. 5, no. 4, p. 1900895, 2020.
+[132] J. P. Reilly,Applied Bioelectricity. New York, NY: Springer, 1998.
+[133] United States Department of Defense,Electrical Tests (Digital) For
+Microcircuits, Mar. 2025, no. MIL-STD-883–3.
+[134] EOS/ESD Association and JEDEC Solid State Technology Association,
+ESDA/JEDEC Joint Standard for Electrostatic Discharge Sensitivity
+Testing, May 2017, no. ANSI/ESDA/JEDEC JS-001-2017.
+[135] S. Pourazadi, A. Shagerdmootaab, H. Chan, M. Moallem, and
+C. Menon, “On the electrical safety of dielectric elastomer actuators in
+proximity to the human body,”Smart Materials and Structures, vol. 26,
+no. 11, p. 115007, Oct. 2017.
+[136] International Electrotechnical Commission (IEC),Audio/video, infor-
+mation and communication technology equipment - Part 1: Safety
+requirements, no. IEC 62368-1:2018.
+[137] IEEE Power Engineering Society,IEEE Recommended Practices for
+Safety in High-Voltage and High-Power Testing, 1983, no. ANSI/IEEE
+Std 510-1983.
+[138] A. Mujibiya, “Corona: Interactivity of body electrostatics in mobile sce-
+narios using wearable high-voltage static charger,” inProc. Int. Conf.
+on Human-Computer Interaction with Mobile Devices and Services,
+Aug. 2015, p. 435–444.
+[139] S. Schlatter, P. Illenberger, and S. Rosset, “Peta-pico-voltron: An open-
+source high voltage power supply,”HardwareX, vol. 4, p. e00039, Oct.
+2018.
+[140] M. Matysek, H. Haus, H. Moessinger, D. Brokken, P. Lotz, and
+H. F. Schlaak, “Combined driving and sensing circuitry for dielectric
+elastomer actuators in mobile applications,” inElectroactive Polymer
+Actuators and Devices (EAPAD), vol. 7976, Mar. 2011, p. 314–324.
+[141] I. Trase, Z. Xu, Z. Chen, H. Tan, and J. X. J. Zhang, “Thin-film
+bidirectional transducers for haptic wearables,”Sensors and Actuators
+A: Physical, vol. 303, p. 111655, Mar. 2020.
+[142] I. Trase, H. Z. Tan, Z. Chen, and J. X. J. Zhang, “Flexible electrostatic
+transducer array with displacement control for haptic sensing and
+actuation,”Sensors and Actuators A: Physical, vol. 317, p. 112452,
+Jan. 2021.
+[143] M. Matysek, P. Lotz, T. Winterstein, and H. F. Schlaak, “Dielectric
+elastomer actuators for tactile displays,” inWorld Haptics, Mar. 2009,
+p. 290–295.
+[144] S. Gratz-Kelly, T. Kr ¨uger, G. Rizzello, S. Seelecke, and G. Moretti, “An
+audio-tactile interface based on dielectric elastomer actuators,”Smart
+Materials and Structures, vol. 32, no. 3, p. 034005, Feb. 2023.
+[145] S. Gratz-Kelly, T. Kr ¨uger, S. Seelecke, G. Rizzello, and G. Moretti,
+“A self-sensing approach for multi-mode dielectric elastomer actuator-
+loudspeaker devices,” inElectroactive Polymer Actuators and Devices
+(EAPAD), vol. 12482, Apr. 2023, p. 21–31.
+[146] D. Chen, T. Besier, I. Anderson, and T. McKay, “Optimal haptic feed-
+back control of artificial muscles,” inElectroactive Polymer Actuators
+and Devices (EAPAD), vol. 9056, Mar. 2014, p. 632–637.
+[147] L. E. Knoop, J. Rossiter, and T. Assaf, “Follicular deas for two-
+way tactile communication,” inElectroactive Polymer Actuators and
+Devices (EAPAD), vol. 9430, Apr. 2015, p. 514–521.
+[148] A. M. Rauf, “High-bandwidth electrostatic clutch arrays for high-
+resolution shape displays,” Ph.D. Dissertation, Stanford University,
+2025.
+[149] “Artimus robotics.” [Online]. Available: https://www.artimusrobotics.
+com
+[150] A. Fishman, S. Catsis, M. Homer, and J. Rossiter, “Touch and see:
+Physical interactions stimulating patterns in artificial cephalopod skin,”
+inIEEE Int. Conf. on Soft Robotics, Apr. 2018, p. 1–6.
+[151] D. Leithinger, R. Zhou, E. Acome, A. M. Rauf, T. Han, C. Shultz, and
+J. Mullenbach, “Electro-actuated materials for future haptic interfaces,”
+inAdjunct ACM Symp. on User Interface Software and Technology,
+Oct. 2023, p. 1–3.
+[152] S.-D. Gravert, E. Varini, A. Kazemipour, M. Y . Michelis, T. Buchner,
+R. Hinchet, and R. K. Katzschmann, “Low-voltage electrohydraulic
+actuators for untethered robotics,”Science Advances, vol. 10, no. 1, p.
+eadi9319, 2024.
+[153] A. Shtarbanov, “Flowio development platform – the pneumatic ”rasp-
+berry pi” for soft robotics,” inExtended Abstracts of the CHI Conf. on
+Human Factors in Computing Systems, May 2021, p. 1–6.
+[154] R. Zhou, Z. Schwemler, A. Baweja, H. Sareen, C. L. Hunt, and
+D. Leithinger, “Tactorbots: A haptic design toolkit for out-of-lab
+exploration of emotional robotic touch,” inCHI Conf. on Human
+Factors in Computing Systems, 2023.
+[155] M. A. Messerschmidt, S. Muthukumarana, N. A.-H. Hamdan, A. Wag-
+ner, H. Zhang, J. Borchers, and S. C. Nanayakkara, “Anisma: A
+prototyping toolkit to explore haptic skin deformation applications
+using shape-memory alloys,”ACM Trans. Comput.-Hum. Interact.,
+vol. 29, no. 3, Jan. 2022.
+[156] H. Tomita, S. Saga, H. Kajimoto, S. Vasilache, and S. Takahashi, “A
+study of tactile sensation and magnitude on electrostatic tactile display,”
+inIEEE Haptics Symposium (HAPTICS), Mar. 2018, p. 158–162.
+[157] T. Kitagishi, H. Hiraki, H. Nakamura, Y . Ishiguro, and J. Rekimoto,
+“Pinching tactile display: A cloth that changes tactile sensation by elec-
+trostatic adsorption,” inProc. Int. Conf. on Advanced Visual Interfaces,
+Jun. 2024, p. 1–9.
+[158] A. Yamamoto, K. Ichiyanagi, T. Higuchi, H. Imamizu, R. Gassert,
+M. Ingoldet al., “Evaluation of mr-compatibility of electrostatic linear
+motor,” inIEEE Int. Conf. Robot. Autom. (ICRA), 2005, pp. 3658–3663.
+[159] C. Tang, B. Du, S. Jiang, Z. Wang, X.-J. Liu, and H. Zhao, “A review
+on high-frequency dielectric elastomer actuators: Materials, dynamics,
+and applications,”Adv. Intell. Syst., vol. 6, no. 2, p. 2300047, 2024.
+[160] E. AliAbbasi, M. Muzammil, O. Sirin, P. Lef `evre, O. G. Martinsen,
+and C. Basdogan, “Effect of finger moisture on tactile perception of
+electroadhesion,”IEEE Trans. Haptics, vol. 17, no. 4, p. 841–849, Oct.
+2024.

@@ -1,0 +1,1278 @@
+"I’m Not Touching You. It’s The Robot!": Inclusion Through A 
+Touch-Based Robot Among Mixed-Visual Ability Children 
+Isabel Neto Yuhan Hu Filipa Correia 
+INESC-ID, Instituto Superior Técnico, Cornell University ITI, LARSYS, Instituto Superior 
+Universidade de Lisboa USA Técnico, Universidade de Lisboa 
+Portugal Portugal 
+Filipa Rocha João Nogueira Katharina Buckmayer 
+LASIGE, Faculdade de Ciências, ITI, LARSYS, Instituto Superior ITI, LARSYS, Instituto Superior 
+Universidade de Lisboa Técnico, Universidade de Lisboa Técnico, Universidade de Lisboa 
+Portugal Portugal Portugal 
+Guy Hofman Hugo Nicolau Ana Paiva 
+Cornell University ITI, LARSYS, Instituto Superior INESC-ID, Instituto Superior Técnico, 
+USA Técnico, Universidade de Lisboa Universidade de Lisboa, Portugal
+Portugal Örebro University & Umeå University 
+Sweden 
+Figure 1: Children’s Touch Behaviors 
+ABSTRACT 
+Children with visual impairments often struggle to fully partici-
+pate in group activities due to limited access to visual cues. They 
+have difculty perceiving what is happening, when, and how to 
+act—leading to children with and without visual impairments being 
+frustrated with the group activity, reducing mutual interactions. To 
+address this, we created Touchibo, a tactile storyteller robot acting 
+in a multisensory setting, encouraging touch-based interactions. 
+Touchibo provides an inclusive space for group interaction as touch 
+is a highly accessible modality in a mixed-visual ability context. In a 
+study involving 107 children (37 with visual impairments), we com-
+pared Touchibo to an audio-only storyteller. Results indicate that 
+Touchibo signifcantly improved children’s individual and group 
+participation perception, sparking touch-based interactions and the 
+storyteller was more likable and helpful. Our study highlights touch-
+based robots’ potential to enrich children’s social interactions by 
+prompting interpersonal touch, particularly in mixed-visual ability 
+settings. 
+This work is licensed under a Creative Commons Attribution 
+International 4.0 License. 
+HRI ’24, March 11–14, 2024, Boulder, CO, USA 
+© 2024 Copyright held by the owner/author(s). 
+ACM ISBN 979-8-4007-0322-5/24/03. 
+https://doi.org/10.1145/3610977.3634992 
+CCS CONCEPTS 
+• Social and professional topics → Children; People with 
+disabilities; • Human-centered computing → Haptic devices; 
+Empirical studies in HCI. 
+KEYWORDS 
+Soft Robotics, Children-Robot Interaction, Shape-change, Visually 
+Impaired, Tactile Interaction, Storytelling, Group Dynamics 
+ACM Reference Format: 
+Isabel Neto, Yuhan Hu, Filipa Correia, Filipa Rocha, João Nogueira, Katharina 
+Buckmayer, Guy Hofman, Hugo Nicolau, and Ana Paiva. 2024. "I’m Not 
+Touching You. It’s The Robot!": Inclusion Through A Touch-Based Robot 
+Among Mixed-Visual Ability Children. In Proceedings of the 2024 ACM/IEEE 
+International Conference on Human-Robot Interaction (HRI ’24), March 11– 
+14, 2024, Boulder, CO, USA. ACM, New York, NY, USA, 11 pages. https: 
+//doi.org/10.1145/3610977.3634992 
+1 INTRODUCTION 
+Children with visual impairment (VI) are increasingly educated 
+alongside their sighted peers in mainstream schools. Yet, current 
+practices and technologies often fail to provide inclusive learning 
+experiences in groups with mixed visual abilities settings. Indeed, 
+recent studies show that children with visual impairment face is-
+sues related to participation, lack of collaborative learning, reduced 
+511
+HRI ’24, March 11–14, 2024, Boulder, CO, USA Isabel Neto et al. 
+social engagement, and the potential for isolation [74, 78]. A com-
+mon group activity in classrooms is storytelling. Storytelling plays 
+a vital role in classroom learning, supporting cognitive develop-
+ment, language acquisition, emotional regulation, social growth, 
+and imagination [40, 49, 58]. Stories also convey moral lessons, 
+cultural values, emotions, and societal knowledge. In addition to 
+its educational benefts, storytelling can provide a sense of com-
+munity and belongingness as a shared group activity [41, 112]. 
+However, traditional storytelling heavily relies on visual media, 
+such as picture books and videos, which can exclude children with 
+visual impairment from these educational and social benefts. Re-
+cent technological advancements enable the creation of immersive 
+multisensory experiences that extend beyond traditional audio-
+visual methods [34, 51, 75]. The senses of touch and smell, which 
+are accessible independently of visual ability, provide an opportu-
+nity to enhance the ambiance of a story with additional elements. 
+For instance, they can evoke sensations like the comfort of a baking 
+cake in a warm kitchen or the sharp discomfort of the spines of a 
+sea urchin. Additionally, they can play a crucial role in promoting 
+inclusive education and fostering social bonds through interper-
+sonal touch [17, 35, 46]. This potential remains largely unexplored, 
+particularly in settings with mixed visual ability. 
+In this paper, we investigate the potential of Touchibo [53], a 
+robotic multisensory platform, as a new medium for group story-
+telling that can create inclusive and enjoyable experiences. Touch-
+ibo is a modular platform that was co-created with children and 
+educators. It incorporates haptics, scent, wind, audio, light, and 
+can dynamically change its soft shapes. We aimed to answer four 
+research questions: (1) Does a shared storytelling experience with 
+Touchibo afect children’s perceptions of group dynamics and proso-
+cial behaviors? (2) How does the Touchibo robot, a touch-based 
+storyteller in a multisensory space, impact story comprehension? 
+(3) How does the Touchibo robot impact children’s empathy and 
+user perceptions of the storyteller (e.g., engagement, likability, so-
+cial acceptance)? and (4) How do children behave and react during 
+a multisensory storytelling activity, particularly in terms of tactile 
+exploration and touch behaviors? 
+To address these questions, we conducted a user study with 107 
+children (37 children with VI) comprising 36 mixed-visual ability 
+groups. The groups were exposed to a storytelling activity under 
+one of two conditions: (1) control, which corresponds to audio-only 
+storytelling method, or (2) Touchibo, the experimental condition, 
+where children experience a multisensory storytelling experience, 
+adding touch, smell and lights. 
+The results indicate that the touch-based experience was inclu-
+sive and the robot improved children’s sense of individual and 
+group participation, regardless of their visual ability, making the 
+storyteller more likable and helpful than the control condition. 
+It also encouraged continuous tactile exploration and diverse in-
+terpersonal touch behaviors among children (Figure 1). However, 
+children in the audio-only condition were more adept at identifying 
+story character’s emotions compared to children in the Touchibo 
+condition. Prosociality, story comprehension, storyteller engage-
+ment, empathy, and social acceptance remained similar across both 
+conditions. 
+This paper presents three key contributions. First, it provides 
+empirical evidence of the efects of Touchibo as an inclusive sto-
+rytelling medium on multiple levels of analysis (e.g. prosociality, 
+interaction comfort, individual and group perceived participation). 
+Second, it describes the design and development of a storytelling 
+experience that integrates the sense of touch with other senses. 
+Finally, it ofers a set of broader implications on the challenges 
+and benefts of exploring multiple non-visual modalities in robot 
+design, including blending elements like shape-changing skins and 
+wind efects, to enhance children’s interaction in mixed-visual abil-
+ity groups. These contributions are relevant to designers and re-
+searchers of multisensory robotic technologies, as well as educa-
+tional researchers. They provide the basis for designing systems 
+for inclusive interactions by engaging multiple sensory channels. 
+2 RELATED WORK 
+We discuss related work in: touch benefts and applications, children 
+storytelling with robots, and robots for group dynamics. 
+2.1 Interpersonal Touch and Robots 
+Through the sense of touch, we explore the world and bond with 
+others [26, 36, 104]. We map haptic information into meaning; these 
+skills evolve during childhood and are independent of the user’s 
+visual ability [12, 107]. Interpersonal touch is used to display afec-
+tion, and is vital for children’s development [15, 33, 35, 46]. The di-
+verse range of interpersonal touch behaviors, such as patting, hand-
+holding or hitting serve to convey emotions, strengthen bonds, and 
+defne power dynamics [44–46]. In educational settings, touch as-
+sumes a signifcant role [19, 86, 110], developing social competences 
+through touch in play activities [35, 85]. While touch is an innate 
+sense regardless of children’s visual ability [12, 107], it is important 
+to note that children with visual impairment may have reduced 
+access to peer interactions [74] The integration of touch-mediated 
+technology holds the potential for enhancing interpersonal connec-
+tions, efectively conveying emotions [10, 36, 44, 45, 51, 88, 120, 121], 
+and shaping our perceptions of interactions [42, 55, 56, 61]. Dis-
+tinct emotional expressions can manifest through various stim-
+ulus , including vibration [73, 93, 116], shape-changing capabili-
+ties [34, 51, 54, 59, 69, 71], applied pressure [89] and varying tem-
+perature [111]. Moreover, adding visual lights and colors [2] and 
+audio context [30] enriches the overall experience [53]. In human-
+robot interactions, the development of robots equipped with tactile-
+sensitive "skin" serves as an efective emotional medium [51–54], 
+that can be used for individual interactions [6, 50, 114, 115, 120], 
+in out-of-the-lab contexts [121]. Although robots equipped with 
+tactile interfaces and agency may enable interpersonal touch and 
+foster inclusion irrespective of children’s sensory capabilities, touch 
+in HRI did not gather enough attention. This work will explore the 
+touch infuence on children-robot interactions among children with 
+diferent visual abilities. 
+2.2 Storytelling in Child Robot Interaction 
+Storytelling is a playful activity to develop children’s social skills [40]. 
+By engaging with diferent characters and stories, children learn 
+how to identify, express, and self-regulate emotions [49], to em-
+pathize with themselves and others [47] fostering inclusion [112], 
+512
+Inclusion Through A Touch-Based Robot Among Mixed-Visual Ability Children HRI ’24, March 11–14, 2024, Boulder, CO, USA 
+encouraging social and ethical behaviors [108]. Storytelling also 
+promotes collaboration in group activities [13, 108], develop chil-
+dren’s creativity [18, 49, 49], and enhance language skills [14]. In-
+teractive platforms such as mobile applications [13, 90], VR [16], 
+robots [84], tangibles [20, 105, 108, 109], and immersive spaces [1, 
+3, 18] showed the potential of enhanced multimodal interfaces for 
+storytelling [91, 109]. In child-robot interactions, researchers have 
+demonstrated how embodied agents can efectively capture chil-
+dren’s attention and evoke empathy [25, 67, 118]. Emotional robots 
+play a role as co-creators, nurturing children’s creativity [100, 103]. 
+The level of agency exhibited by a robot has shown its impact 
+on children’s own sense of agency [63] as well as on parent-child 
+relationships [63]. Companion robots have been instrumental in 
+supporting literacy [64, 113]. Robotic storytellers have assisted 
+children in group interactions, grasping the emotional nuances 
+of a story’s context [66], or fostering inclusion for both children 
+with and without visual impairment [7]. Regardless of their role, 
+robots usually use visual cues, such as lights and gestures, and audio 
+speech to communicate emotions and narrative. However, tactile 
+information can also enrich and enhance the attention paid to the 
+story [61, 91, 108]. While storytelling robots are an efective tool for 
+developing children’s social skills, its use in groups of children with 
+diferent visual abilities is relatively rare. Our work aims to expand 
+this line of research by investigating the impact of touch-based 
+robotic storytellers with mixed-visual ability groups of children. 
+2.3 Robots for Group Dynamics 
+Social robots can shape group dynamics [21, 92], and their be-
+haviors can signifcantly impact how they are perceived within 
+the group [22–24]. Robots have the potential to encourage con-
+versation by prompting questions [119] or employing humor [87]. 
+Additionally, a robot that makes vulnerable statements about its 
+actions can reduce group tensions [101], or an unfair distribution 
+of resources can negatively afect group members’ perceptions 
+of each other [60]. In children groups, robots can enhance their 
+performance by demonstrating empathy during their learning ac-
+tivities [4] by asking relationship-focused questions during team-
+work [101]. Robots can also contribute to confict resolution by 
+fagging the confict onset [94]. Robots have been shown to infu-
+ence participation dynamics in group activities. They can regulate 
+the speaking time of each member [76, 106], encourage less active 
+members to speak [37, 97]. Designating a group member responsi-
+ble for a robot may lead him to be less included by the group [102]. 
+Exclusion experiences involving robots can have prosocial efects, 
+being less selfsh and feel closer to others. Those efects extend 
+beyond the immediate interaction [31, 32]. Among the few works 
+on inclusion efects in children-robot interactions, a robot success-
+fully facilitated the integration of an immigrant child into a group 
+activity [38, 39]. Moreover, a mediator robot promoted inclusion 
+among children, making them feel heard regardless of visual impair-
+ment, by driving the conversation fow while balancing speaking 
+time [76]. These studies demonstrated the signifcant impact that 
+robots can have on group dynamics, with their behaviors and me-
+diation strategies. However, to the best of our knowledge, touch 
+impact has not yet been explored in children’s group interactions 
+and its efect on inclusion, supporting the novelty of our work. 
+3 USER STUDY 
+Our study aimed to explore efective ways of creating engaging and 
+inclusive storytelling experiences for groups of children, including 
+those with and without visual impairments. Specifcally, we con-
+ducted a user study to examine the impact of a robot’s physical 
+presence in a multisensory storytelling activity on various factors, 
+including group dynamics, story comprehension, the storyteller’s 
+perception, and children’s tactile interactions. 
+3.1 Multisensory Workspace and Robot 
+Behaviors 
+We used Touchibo, a versatile robotic prototype designed for in-
+clusive storytelling experiences for children, regardless of their 
+visual abilities [53]. Touchibo assembles a shape-changing robot, a 
+speaker, lights, a scent machine, and a fan. Touchibo is designed to 
+provide a multisensory experience, incorporating haptic, auditory, 
+olfactory, and visual elements to engage children of mixed-visual 
+abilities. The workspace, the robot behaviors, and the activity were 
+designed in an iterative process with a focus group composed of 
+four psychologists, two educators, and one teenager with blindness. 
+Our focus was optimizing the spatial layout to spark interaction, 
+enhancing multisensory feedback, and the robot’s emotional ex-
+pressions. 
+There are two primary types of haptic feedback implemented in 
+Touchibo: the prototype’s workspace and the shape-change robot 
+(see fgure 2a). The workspace, inspired by a cave-like structure, 
+is covered in soft fabric and includes sleeves for children to inter-
+act without seeing its interior. A PC fan mounted on the frame 
+can be activated, providing warmth through a heat resistor when 
+needed. The shape-changing robot [53], resembling a turtle with a 
+rigid head and tail (see fgure 2b ) has six soft and shape-changing 
+skins controlled by a pneumatic actuator [96]. These skins include 
+tentacles, goosebumps, wrinkles, and spikes, and they enhance the 
+robot’s expressiveness. The mapping between the dynamic skins 
+and each emotion was chosen based on previous validation user 
+studies both with adults [51, 54], and mixed-visual ability children 
+[77]. Specifcally, we infated tentacles and goosebumps to express 
+happiness, defated goosebumps for sadness, infated spikes for 
+anger and fear, and synchronized skin movements into a rhythmic 
+pattern to show liveliness. We introduced olfactory feedback us-
+ing a fresh grass scent to evoke a jungle setting [17]. Inside the 
+workspace, lights were added to capture children’s attention and 
+spark curiosity. These lights followed a color-emotion mapping, 
+where green represented calmness, red anger, blue sadness, purple 
+fear, and yellow happiness [43, 70, 98, 99]. 
+A small speaker delivered the story narrative with a pre-recorded 
+female adult’s voice. In Touchibo condition, the speaker was placed 
+within the cave-like structure, and children were informed that the 
+Touchibo robot was a hidden storyteller and a character. In the 
+control condition, children were informed that a storyteller pre-
+recorded the story and the speaker was exposed at the table. The 
+narrative was created by psychologists, that use the story in schools 
+to foster inclusion among children. It features animals in a jungle 
+exploring their unique feelings across 16 scenes, each featuring 
+diferent emotions for each animal character. The robot adapted 
+its emotional behavior to match the characters, utilizing various 
+513
+HRI ’24, March 11–14, 2024, Boulder, CO, USA Isabel Neto et al. 
+Figure 2: Touchibo prototype. a) its components b) robot skins 
+shapes c) user study setup 
+skin movements and lights. Additionally, the fan contributed to the 
+story’s ambiance; when the heating resistor was of, it conveyed 
+calmness, and when activated, it introduced tension. In our supple-
+mentary materials, we have included a video and a mapping illus-
+trating the storyline aligned with each multimodal stimulus [57]. 
+3.2 Study design 
+To address our research questions, we conducted a user study in 
+which small groups of participants (between 2 and 4 children per 
+group, and 1 of them with VI) engaged in a storytelling activity. 
+The study had two experimental conditions (audio-only control vs 
+multisensory storytelling). For analyses of individual participats, 
+the study design can be considered a 2x2, with the children’s visual 
+acuity as another factor (sighted vs visually impaired). The same 
+audio narrative, with a recorded female voice, was used in both 
+conditions: (1) the control condition, representing traditional sto-
+rytelling, without any visual cues to be accessible for all children, 
+used only the audio narrative, or (2) the Touchibo condition, rep-
+resenting an experimental setup, adding to the audio-narrative a 
+multisensory storytelling encounter using lights, scents, wind and 
+shape-changing skins. Groups were randomly allocated to one of 
+two experimental conditions. 
+3.2.1 Hypotheses. In the beginning of the study, we raised sev-
+eral hypotheses about the impact of using a touch-based robot in 
+a shared multisensory space and its perception among children 
+with diferent visual abilities. Additionally, we wanted to assess the 
+infuence of multimodal feedback on story comprehension, pay-
+ing particular attention to how haptic feedback, used in character 
+tactile-based emotions, and ambient sensations impact understand-
+ing, refection, and character’s emotion identifcation. Lastly, we 
+aimed to investigate the impact of the robot’s embodiment and its 
+ability to convey character’s emotions. Therefore, our hypotheses 
+applied to all children regardless of their visual ability and were as 
+follows: 
+H1: Children’s prosocial behavior will be higher when 
+using Touchibo compared to an audio-only storytelling ex-
+perience, regardless of their visual ability. This expectation is 
+based on the tangible nature of the Touchibo condition, emphasiz-
+ing the signifcance of touch in fostering human connections and 
+developing social skills [35, 46]. 
+H2: In a multisensory experience children, regardless of 
+their visual abilities, will perceive higher participation of 
+themselves and of the other group members. The innate nature 
+of touch, [12, 107] makes the Touchibo condition accessible to 
+everyone in the group. 
+H3: A multisensory session, conducted by a robot serving 
+as both a storyteller and a story character, can increase chil-
+dren’s comprehension of the narrative. Enhancing their story 
+understanding, refection and capacity to identify character 
+emotions compared to an audio-only session. This hypothesis 
+draws on the benefts of multisensory experiences in emotional 
+mapping [30, 107], and story co-creation [1, 3, 18, 91, 109]. 
+H4: A storyteller robot will evoke higher levels of em-
+pathy, social acceptance, likability, utility, and engagement 
+towards the storyteller compared to audio-only condition. 
+Our expectation to present the robot as a hidden storyteller crea-
+ture to the children follows previous results on the infuence of 
+embodiment on children’s perceptions of a robot’s social capabil-
+ities [25, 29, 62, 65, 68, 113], and on the impact that touch-based 
+greetings have on the perception of a robot [9]. 
+3.3 Participants 
+We recruited 107 children (37 with VI), 54 girls and 53 boys, ages 6 to 
+15 (? = 9.70, ?? = 0.20), organized into 36 groups within the same 
+class, spanning from frst to sixth school-level, distributed across 
+13 mainstream schools. Depending on the children’s dynamic, the 
+teachers defned the groups randomly within the class. Each group 
+consisted of two to four children, with at least one child having a 
+visual impairment (except G15 and G21 having two children with 
+VI; and G24 and G25 with none). Most groups consisted of three 
+children, except for G5, G6, and G13, which had two children, and 
+G26 and G27, which had four, with no observed diference due to 
+group size. Children self-reported their familiarity with their peers 
+on a 7-point scale (? = 3.35, ?? = 0, 12), showing that children 
+knew each other from class (3) and occasionally played with each 
+other (4). [8]. Teachers provided information on children’s visual 
+acuity, which was categorized into two levels based on professional 
+diagnoses [79]: thirty-eight participants with visual impairment 
+(comprising 20 with low vision and 18 with blindness, only one did 
+not perceive any light), and sixty nine sighted. One child in each 
+of four groups (G2, G3, G24, and G25) was diagnosed with autism 
+spectrum disorder and was unable to complete the questionnaire. 
+Thus, data from these groups was excluded from the analysis. Our 
+institution’s ethics committee approved the research protocoland 
+the legal guardian’s signed consent forms. All children agreed to 
+participate and could quit at any time. 
+3.4 Procedure 
+Each session lasted approximately 30 minutes, and each group of 
+children engaged in the storytelling activity within a designated 
+room at their school (e.g., the library). Two researchers were present 
+to manage the equipment setup and guide the children throughout 
+the study. The general setup is a table where groups would sit to 
+listen to the story (and explore in experimental conditions) and 
+another with a Hanoi tower, dolls to help children answer ques-
+tionnaires using tangible probs. Touchibo was at the table, hidden 
+under a white fabric with three sleeves for children to place their 
+hands on and explore (see fgure 2c). 
+514
+Inclusion Through A Touch-Based Robot Among Mixed-Visual Ability Children HRI ’24, March 11–14, 2024, Boulder, CO, USA 
+When arriving, researchers guided the group to the table to par-
+ticipate in the storytelling activity. In a random selection order, 
+each group had the control condition, listening to the story, or 
+the Touchibo condition, the multisensory experience. The story 
+had 16 scenes and lasted (? = 6.11?, ?? = 0.07) in control and 
+(? = 8.20?, ?? = 0.18) in Touchibo condition. Each scene had a 
+duration of 25 seconds, yet in the multisensory conditions, the inter-
+vals between scenes were extended. This was because the children 
+required more time to recognize the conclusion of the previous 
+scene and stop moving or talking. Consequently, we initiated a 
+new scene only once all children were quiet. After listening to the 
+story, each child, accompanied by a researcher, would answer the 
+questionnaire individually for around 10 minutes. The supplemen-
+tary fles include the questionnaires [57]. Lastly, researchers invited 
+children to distribute 3D stickers among the group members as they 
+saw ft; the number of stickers corresponded to the group’s size 
+plus one. Upon leaving the room, each child received an envelope 
+containing the stickers selected for them [39]. 
+3.5 Measures 
+Our measures can be grouped into four aspects related to each of 
+the four research questions. A detailed description of each measure 
+is provided as supplementary material of the paper. 
+Children rate the (A) proximity scale between each other [8]. (B) 
+group dynamics was measured both with one behavioral measure 
+and through a subjective questionnaire. We collected children’s 
+(B1) prosocial attitudes by asking children to split 3D stickers be-
+tween themselves and the rest of the group. The prosociality score 
+corresponds to the percentage of stickers given to others, consider-
+ing that the total number of stickers varies according to the group 
+size (? + 1). We also asked children about their (B2) comfort level, 
+the (B3) Perception of their own participation (i.e., self-inclusion), 
+measuring each child’s personal sense of inclusion in the activity. 
+Children answered the question "Were you able to participate?", 
+and the (B4) perception of group participation (i.e., group inclusion), 
+which assessed each child’s opinion on all group members’ inclu-
+sion through the question "Was everyone able to participate?". Both 
+B3 and B4 were assessed via a 5-point scale rating. We assessed 
+the (C) story comprehension in the subjective questionnaire with 
+one item on the (C1) complexity of the story, four items on the 
+(C2) story understanding, four items on the (C3) story refection, 
+and four items on the (C4) identifcation of emotions on the story 
+characters. The questionnaire also included the (D) perceptions of 
+the storyteller, specifcally one item on the (D1) likability, one item 
+on the (D2) utility, one item on the (D3) empathy, one item on (D4) 
+social acceptance, and one item on (D5) engagement. While the 
+previous measures were employed in both conditions, the aspect 
+related to touch behaviors was only assessed in the Touchibo con-
+dition. We analyzed (E) touch behaviors between children, namely 
+the (E1) duration of touch behaviors, and the (E2) type of touch 
+behavior [5, 45], which were labelled as stroking, hand-holding, 
+tickling, pinching, pushing, or contact (see fg. 1). Lastly, we looked 
+at (F) touching interactions with Touchibo, specifcally the (F1) 
+duration of those touch explorations, and the (F2) type of touch 
+exploration being either static hand, dynamic hand, fngertips, or 
+fngers pulling [28] (see fg. 3). These behavioral measures were 
+manually annotated from video observations as follows. 
+Figure 3: Children diferent exploration types 
+The questionnaires were adapted from prior research. They cov-
+ered various aspects, including story comprehension [66, 68], sto-
+ryteller’s perception (empathy [29], likability [11], utility, social 
+acceptance [65]), and children interaction (engagement [72, 113], 
+participation [72, 76] and comfort to others touch [46]). 
+3.6 Data Analysis 
+We analyzed the questionnaire data from 32 groups. Moreover, we 
+analyzed the video recordings of the 12 groups in the multisensory 
+storytelling condition to capture children’s touch behaviors. For 
+the remaining sessions, video recordings were captured using two 
+synchronized webcams: one focused on Touchibo and the children’s 
+hand interactions, and the other on children’s facial expressions and 
+audible reactions. Additionally, researchers recorded the children’s 
+responses to the questionnaires. 
+The analysis of video recordings and children’s responses pro-
+ceeded as follows: initially, two coders annotated interpersonal 
+touch behaviors [5, 45], and exploration types [28]. Coders then it-
+erated until converging on an inter-rater reliability (Cohen’s Kappa) 
+score of 0.81. Then, two researchers examined the children’s an-
+swers on story comprehension [66], including story understanding, 
+refection, and character’s emotion identifcation. These responses 
+were categorized on a three-point scale: 0 (making up an answer), 
+1 (providing a simple answer), and 2 (ofering a complex answer). 
+They converged on an inter-rater reliability (Cohen’s Kappa) score 
+of 0.98. Four researchers conducted peer validation to ensure ac-
+curacy and consistency throughout the coding process for both 
+video and questionnaire data. The Likert scale questions used tac-
+tile questionnaires [76] were inspired by prior research, children’s 
+comfort [45], storyteller’s perception [11, 29, 65], and participa-
+tion [76]. The statistical analyses used Two-Way ANOVAs using 
+the conditions (audio-only control vs multisensory storytelling) 
+and children’s visual acuity (sighted vs visually impaired) as the 
+independent variables. 
+4 FINDINGS 
+We report the main efects of the condition on all of our dependent 
+variables, as these directly validate our hypotheses. Additionally, 
+we report only statistically signifcant main efects of the visual 
+acuity factor. We do not report any interaction efect as none was 
+statistically signifcant ( ? > .050). 
+4.1 Group dynamics 
+Regarding individual prosocial behaviors, each child gave, on av-
+erage, 65% of the stickers to the other children in their group. We 
+515
+HRI ’24, March 11–14, 2024, Boulder, CO, USA Isabel Neto et al. 
+found no signifcant diference in children’s prosocial attitude (F1) 
+to share stickers between the two conditions (? (1, 85) = .646, ? = 
+.424, ?2 = .008, H1 not supported). 
+The statistical analysis of the subjective questionnaire revealed 
+no signifcant diference in the perceived comfort of the group 
+interaction between conditions (? (1, 85) = 1.123, ? = .292, ?2 = 
+.013), (? = 3.854, ?? = .054) (F2). However, we found signifcant 
+main efects of the condition on both the perception of their own 
+participation (? (1, 72) = 5.097, ? = .027, ?2 = .066) (F3) and on the 
+perceptions of group participation, (? (1, 87) = 7.336, ? = .008, ?2 = 
+.076). (F4). Children perceived higher participation of themselves 
+and the group in the Touchibo condition compared to the control 
+condition. However, children’s prosocial behaviours and perceived 
+comfort were not signifcantly diferent. Children visual ability did 
+not infuence the group metrics results (H2 supported). 
+4.2 Story comprehension 
+Children attributed similar levels of perceived complexity to the 
+story between conditions (? (1, 91) = .652, ? = .421, ?2 = .007) (F5). 
+They were also asked about the story plot and their refections on 
+the characters’ motivations, showing no diferences in the story 
+understanding (? (1, 85) = 2.059, ? = .186, ?2 = .021) (F6), nor 
+on the refection about the story (? (1, 91) < .001, ? = .987, ?2 < 
+.001) between the two conditions (F7). Nevertheless, when asked 
+to identify the emotions of the story characters, children in the 
+control condition scored signifcantly higher ( ? (1, 91) = 5.099, ? = 
+.026, ?2 = .053; ? = 2.641, ?? = .177) than children in the Touchibo 
+condition (? = 2.092, ?? = .167) (F8). These results do not support 
+H3; instead, Touchibo negatively afected the story comprehension 
+in terms of children capacity to identify emotions identifcation 
+when compared to the control. 
+4.3 Perceptions of the storyteller 
+When comparing children’s perceptions of the storyteller between 
+conditions, we found signifcant diferences in likability (? (1, 91) = 
+5.869, ? = .017, ?2 = .061) (F9) and utility (? (1, 91) = 5.236, ? = 
+.024, ?2 = .054) (F10), but not on empathy (? (1, 91) = .185, ? = 
+.668, ?2 = .002) (F11), social acceptance (? (1, 91) = 3.146, ? = 
+.079, ?2 = .033) (F12), nor on engagement (? (1, 91) = .349, ? = 
+.556, ?2 = .004) (F13). Children attributed higher levels of likability 
+and utility to the storyteller in the Touchibo condition (? ??? = 
+3.465, ?? = .163; ? ? ?? = 3.492, ?? = .173) compared to the control 
+condition (? ??? = 2.888, ?? = .173; ? ? ?? = 2.915, ?? = .183). These 
+results partially support H4. 
+4.4 Touch behaviors 
+The percentage of time spent touching peers’ hands was not signif-
+icantly diferent between sighted and children with visual impair-
+ment (? (1, 35) = .310, ? = .581, ?2 = .009) (F14). Regardless of their 
+visual acuity, children spent, on average, 24.3% of the session touch-
+ing their peers. Among the time spent touching other children, we 
+also classifed the type of touch behavior. We did not fnd signifcant 
+diferences on each type between children’s visual acuity (F15), 
+specifcally on stroking (? (1, 31) = 1.589, ? = .217), hand-holding 
+(? (1, 31) = .577, ? = .454), tickling (? (1, 31) = 2.840, ? = .102), 
+pinching (? (1, 31) = 2.123, ? = .155), pushing (? (1, 31) = 3.191, ? = 
+.084), or contact (? (1, 31) = 1.398, ? = .246). Overall, 70.6% of chil-
+dren’s touch behaviors were classifed as contact, 12.2% as stroking, 
+7.9% as hand-holding, 0.8% as pinching, 0.7% as pushing, and 0.4% 
+as tickling. From the 12 groups that were video coded, fve children 
+did not touch anyone, while 18 touched someone less than 25% 
+of the time, and eight less than 50% of the time. Only six children 
+consistently touched each other more than 50% of the time. We did 
+not fnd signifcant diferences on children’s touch time due to age 
+(? (1, 36) = 0.164, ? = .688, ?2 = .013) (F16) nor on group proximity 
+(? (1, 36) = 1.637, ? = .209, ?2 = .126) (F17). 
+Regarding the percentage of the session duration spent exploring 
+and interacting with the Touchibo robot, we also did not fnd signif-
+icant diferences between the two levels of children’s visual acuity 
+(? (1, 35) = .331, ? = .569, ?2 = .009) (F18). Overall, children spent, 
+on average, 97.1% of the time exploring the robot and interacting 
+with it. When classifying the type of touch exploration, which could 
+either be static hand, dynamic hand, fngertips, or fngers pulling, 
+we did not fnd signifcant diferences between children with vi-
+sual impairment and sighted children (? (1, 36) = 2.743, ? = .107; 
+? (1, 36) = 1.158, ? = .289; ? (1, 36) = 1.307, ? = .261; ? (1, 36) = 
+.065, ? = .800, respectively) (F19). Among children’s exploration 
+touches, 26.6% were static hands, 15.6% were dynamic hands, 50.8% 
+were fngertips, and 6.9% were fngers pulling. 
+4.5 Additional correlations 
+We performed an exploratory correlation analysis between the 
+touch-related measures (only from the Touchibo condition) and our 
+dependent measures. We found a signifcant positive correlation 
+between the time spent on hand-holding touches by children and 
+the subjective perception of their participation in the activity (? = 
+.360, ? = 31, ? = .046) (F20). 
+5 DISCUSSION 
+This study aimed to assess whether a touch-based robot used in 
+a multisensory storytelling activity could foster inclusion among 
+children with diferent visual abilities by promoting physical con-
+tact. This section answers our research questions and discusses the 
+implications of employing social robots for touch-interactions and 
+group dynamics. 
+5.1 Answering the Research Questions 
+Does a shared storytelling experience with Touchibo afect 
+children’s perceptions of group dynamics and prosocial be-
+haviors? (RQ1) 
+First, our fndings showed that a shared touch-based platform en-
+couraging touch interactions can infuence each child’s subjective 
+perceptions of participation supported by the correlation between 
+touch and own participation perception (F3,F19,H2). The act of 
+touch prompts active participation during the activity, aligning with 
+previous studies where spatial exploration increased action and 
+collaboration among children [39]. Second, in Touchibo condition, 
+children touched each other comfortably while exploring (F2), facil-
+itating awareness of each other’s movements and fostering group 
+interactions during the experience. This fnding aligns with psycho-
+logical studies highlighting the bonding nature of touch [35, 46, 86]. 
+Third, every child had equal access to Touchibo since nobody could 
+516
+Inclusion Through A Touch-Based Robot Among Mixed-Visual Ability Children HRI ’24, March 11–14, 2024, Boulder, CO, USA 
+see the robot or how their hands interacted with it. The results 
+demonstrated that children perceived the inclusive nature of the 
+touch-based robot, with balanced group participation perception 
+(F4). This result is consistent with previous research in which a me-
+diator robot balanced participation among children with diferent 
+visual abilities, using proximity, lights, and speech [76]. Lastly, while 
+children’s perception of group participation could suggest bonding 
+and perceived inclusion, there was no corresponding impact on 
+their prosocial behavior (F1,H1). This unexpected result, contrary 
+to previous research [39, 117], may be due to the pre-existing close-
+ness among children (? = 3.35, ?? = 0, 12) or the nature of the 3D 
+stickers distribution task, in which appealing and diverse stickers 
+made it challenging for children to give up on their preferred ones 
+[39, 117]. Overall, our fndings support that a robot with a shared 
+tactile zone encourages spontaneous touch interactions through 
+its shape-changing movements, enhances children’s sense of par-
+ticipation, and is also perceived as more inclusive. These results 
+extend prior literature, suggesting that a robot may infuence group 
+dynamics and inclusion by promoting organic touch-based interac-
+tions without necessarily mediating those interactions [39, 76]. We 
+shed light on the potential of the robot’s touch and skin to facilitate 
+human interactions, that should be explored in future studies. 
+How does the Touchibo, a touch-based storyteller in a 
+multisensory space, impact story comprehension? (RQ2) 
+The Touchibo robot, which conveyed emotions through shape-
+changing movements synchronized with the storyline, did not sig-
+nifcantly enhance children’s overall story comprehension in terms 
+of understanding and refection when compared to the control con-
+dition (F6,F7,H3). Children’s identifcation of character emotions 
+was higher in the control condition, where only audio was used 
+(F8,H3). This outcome contrasts with prior research highlighting 
+the advantages of robotic agents with emotional expression in story-
+telling activities [25, 66, 67] and their role in developing children’s 
+literacy skills, particularly within this target age group [64] and in 
+mixed-visual ability settings [7]. The study’s videos showed that 
+the groups did not consistently perceive or associate Touchibo’s 
+tactile expressions with emotions. Unlike existing literature that 
+efectively utilizes shape-changing capabilities and temperature 
+variations to convey emotions [34, 51, 54, 59, 69, 71], our observa-
+tions suggested that children often associated Touchibo’s actions 
+with shapes and movements rather than emotional states. For in-
+stance, in group 21 comments such as "It is a broom (G21C1_VI)" 
+"No no, it is a sausage (G21C2_S)" were made for the tentacles skin, 
+"No, it is a huge bubble (G21C3_S)" for the goosebumps skin, or "The 
+robot’s head looks like a steering wheel" (G21C1_VI)). Others refected 
+the robot’s movement, like "Wow, this doesn’t stop, I’m going to keep 
+exploring (G21C1_VI)" and "Can you please slow down? (G21C3_S)" 
+"It is not me; it is the robot! (G21C2_S)". Additionally, groups men-
+tioned other sensory modalities, including scent (? = 1), lights 
+(? = 2), wind (? = 1), and hot wind (? = 4), but these were not 
+consistently linked to the story’s ambience. The reason behind the 
+shapes-emotions mismatch may have several explanations. First, 
+the Touchibo condition may have overwhelmed children with an 
+abundance of sensory modalities, making it challenging for them to 
+establish clear connections between the storyline and non-verbal ex-
+pressions, aligning with concerns about sensory overload in technol-
+ogy studied with both children and adults with and without visual 
+impairment [27, 48]. Second, conveying emotions through tactile 
+information is inherently challenging. While accurate emotional-
+shape mappings have been established with sighted adults [54], 
+these mappings were enriched by visual experiences not available 
+in the Touchibo condition, which may have reduced all children’s 
+emotional identifcation [12, 107]. Third, the novelty efect of the 
+robot and its potential to distract from group interaction is well-
+documented in the literature [66, 76]. Lastly, the touch interactions 
+among children for bonding seemed to divert their focus from the 
+story. This outcome aligns with previous studies, in which a story-
+teller agent’s touch at emotional story moments distracted a child 
+from the story content [61]. Our fndings indicate that the vari-
+ous types of feedback, including lights, shapes, movements, wind, 
+and scent, used to describe the ambience and the robot’s behavior 
+were not consistently perceived by the children and may be too 
+overwhelming. Additionally, the distracting factor of the robot and 
+the touch interactions among children reduced their attention to 
+the story and the character’s emotions, ultimately yielding better 
+results for story comprehension in the control condition. 
+How does the Touchibo robot impact children’s empathy 
+and user perceptions of the storyteller? (RQ3) 
+Previous research has indicated that robots, as embodied agents, 
+compared to audio companions, tend to be perceived as more en-
+gaging, likable, and empathetic and create a stronger intention in 
+children to befriend [65, 80]. However, our results revealed that 
+children preferred the Touchibo robot only in terms of likability 
+and utility (F9,F13,H4). It is important to note that visual acuity 
+infuenced how children perceived the storyteller’s sociability. Chil-
+dren with visual impairment rated the storyteller (both audio-only 
+and Touchibo) as more favorably regarding likability, engagement, 
+and desire to befriend them compared to sighted children. Our fnd-
+ings suggest that the robot’s behaviors (exclusively tactile) were 
+not uniformly perceived as socially engaging among children. Ro-
+bot’s social behaviors infuence the user’s perception more than its 
+embodiment [68]. Future studies should explore how to enhance 
+the perception of touch-based robots by children with and without 
+visual impairment. 
+How do children behave and react during a multisensory 
+storytelling activity, particularly in terms of tactile explo-
+ration and touch behaviors? (RQ4) 
+We observed how children interacted with Touchibo during the 
+storytelling activity. Our fndings revealed that children engaged 
+in tactile exploration of the robot approximately 97.1% of the time, 
+(F16,F17). In the remaining instances, they briefy withdrew their 
+hands from the "cave" or explored its interior. Regardless of their 
+visual abilities, children used various methods to explore the robot, 
+employing their fngers (by pulling or gently touching) or their 
+entire hand (either dynamically or statically) (see Figure 3). Interest-
+ingly, while exploring the robot, children also touched themselves 
+roughly a quarter of the time, employing a range of touch behav-
+iors (see Figure 1). The most common behavior was simply making 
+contact, where children touched each other briefy, followed by 
+stroking or hand-holding. However, the extent of interpersonal 
+touch among children varied widely within each group, specif-
+cally ranging between no touch and touching more than half of 
+the activity time. Notably, there seemed to be a group efect on 
+individual touch behaviors; all the children who engaged in more 
+517
+HRI ’24, March 11–14, 2024, Boulder, CO, USA Isabel Neto et al. 
+than 25% of the activity touching someone (roughly 2 minutes or 
+more) were from the same groups, and similarly, the children who 
+did not touch anyone were also grouped together. The motivations 
+behind touch among children were not always clear. Still, our ob-
+servations indicated that groups with higher levels of interaction 
+used touch as a form of play and enjoyment. For instance, they 
+would playfully catch each other’s hands (G27), gently tap or tickle 
+each other (G18), or even engage in fnger-crossing activities for 
+extended periods (Groups 21 and 26). In one instance (G21), touch 
+was used to guide one child to the robot’s moving zone. In con-
+trast, groups with lower levels of interaction (less than 25%) had 
+only occasional and brief instances of touch, suggesting that these 
+occurrences were largely coincidental and not a result of children 
+feeling comfortable with intentional touch. One child’s comment, 
+"He is on my side (referring to C2_S) (C1_S), " exemplifed this lack 
+of comfort with others touching her [46]. These fndings show the 
+infuence of touch in children’s interactions and raise important 
+considerations for future research. First, touch is a pervasive aspect 
+of human interaction, and a child’s ability to continuously touch a 
+robot can keep them engaged throughout an activity, as refected in 
+the perceived participation rates. Second, the rate of interpersonal 
+touch and tactile exploration behaviors varied among children and 
+groups, potentially refecting factors such as group proximity [5], 
+and individual characteristics like touch avoidance [46]. Lastly, we 
+observed no notable diferences in exploration types and touch 
+behaviors between children with diferent visual abilities. In con-
+clusion, our study aligns with previous research emphasizing the 
+importance of touch interactions [35, 46], and suggests that using 
+the robot’s skins as shared spaces for children’s tactile interactions 
+has the potential to enhance inclusive experiences. 
+5.2 Broader Implications 
+Our research has generated valuable insights and recommendations 
+for designing future touch-based robots for inclusive and engag-
+ing group activities, with potential applications in a wide range of 
+contexts. First, robot’s skin can boost engagement by provid-
+ing a continuous stimulus that keeps users focused on the activity. 
+Second, touch-based robots can foster human interaction by 
+creating a safe, comfortable, and encouraging environment. They 
+act as equalizers, positively impacting group dynamics by increas-
+ing perceived participation without driving the interaction. This 
+inclusivity concept can beneft various groups, including minorities, 
+diferent genders, or individuals with diferent abilities. Third, the 
+relationship between touch and group behavior. The correla-
+tion between touch behaviors and perceived participation opens up 
+promising avenues for future research in robotics. Forth, utilizing 
+multiple sensory modalities, such as scent and wind, can nudge the 
+user experience. However, it’s crucial to carefully balance multi-
+modality to prevent sensory overload. Lastly, explore non-visual 
+robotic social interactions may open up opportunities for human-
+robot social engagement in contexts with reduced visibility, such 
+as dark rooms or underwater environments. 
+5.3 Limitations and Future Work 
+While this study provided valuable insights, it is essential to ac-
+knowledge its limitations and consider future research directions. 
+Perceived Participation link to Inclusion: In our study, we 
+employed a measure that linked perceived participation with the 
+concept of inclusion. We explored perceptions of inclusion from 
+both an individual perspective (self-inclusion) and a collective per-
+spective (group-inclusion). It’s important to note that our approach 
+was subjective, which may not fully capture objective inclusion (i.e. 
+balanced participation) nor the broader defnition of inclusion that 
+also accounts for the uniqueness and sense of belonging within the 
+group [95]. Cultural Variations: The study involved 37 groups 
+from 13 schools in a specifc country, Portugal. Results may vary in 
+diferent cultural contexts due to varying attitudes towards touch. 
+Nevertheless, the study’s fndings can ofer implications that apply 
+broadly. Prosocial Evaluation Bias: The evaluation of prosocial 
+behaviors may have been infuenced by the appealing and diversity 
+of stickers. Future research should aim to standardize the incentives 
+for prosocial evaluation to reduce potential bias. Longitudinal 
+Studies: Conducting longitudinal studies is essential to evaluate 
+the expressiveness of touch-based skins accurately. Developing a 
+precise tactile mapping of emotions and social behaviors requires 
+time and training. Exploring New Tactile Cues: Future research 
+should explore innovative tactile cues to encourage interpersonal 
+touch, convey emotions and social behaviors clearly, and guide 
+users’ attention efectively. Address Touch Avoidance. Overcom-
+ing touch avoidance is essential in developing new touch-based 
+robot interactions to ensure comfortable and inclusive user expe-
+riences. Other Mixed-ability Settings: the groups that included 
+children with autism, engaged in the group activity for more than 
+8 minutes, showed the potential of robotic touch in this settings. 
+Robot Facilitators: to promote group interactions without directly 
+controlling their interactions and in reduced visibility settings rep-
+resents a promising avenue for future research. 
+6 CONCLUSION 
+In our study, we used a touch-based robot to create a multisensory 
+storytelling experience for groups of children with diferent visual 
+abilities. The Touchibo robot acted as a storyteller, changing its 
+shape to match the story’s emotions and encouraging the children 
+to touch and interact with it. Notably, the robot didn’t take control 
+of the interaction and remained hidden from the children’s view. 
+Results show that Touchibo signifcantly increased children’s par-
+ticipation perception, individually and as a group, compared to just 
+listening to audio. All children liked the robot and found it helpful, 
+making it suitable for group activities involving children with and 
+without visual impairment. However, the robot’s presence didn’t 
+afect the children’s prosociality, and it wasn’t as efective as audio 
+in conveying the emotions of the story characters. Overall, our 
+work revealed important results for group interactions with robots, 
+inclusion in mixed-ability settings, and touch-based robots. 
+ACKNOWLEDGMENTS 
+We thank F. Carvalho, V. Balsinha, Afectos and all schools in-
+volved. FCT support: UIDB/50009/2020 [82], UIDB/50021/2020 [81], 
+2022.00816.CEECIND/CP1713/CT0013 [83], SFRH/BD/06452/2021, 
+SFRH/BD/06589/2021, IAPMEI/ANI/FCT CRAI C628696807-00454142, 
+EU DCitizens GA-101079116, Hybrida PTDC/CCI-INF/7366/2020, 
+Tailor GA-952215 and NSF Grant 1830471. 
+518
+Inclusion Through A Touch-Based Robot Among Mixed-Visual Ability Children HRI ’24, March 11–14, 2024, Boulder, CO, USA 
+REFERENCES 
+[1] Ruhiyati Idayu Abu Talib, Predrag K Nikolic, Mohd Shahrizal Sunar, and Rui 
+Prada. 2020. In-visible island: Inclusive storytelling platform for visually im-
+paired children. Mobile Networks and Applications 25 (2020), 913–924. 
+[2] Akshita, Harini Alagarai Sampath, Bipin Indurkhya, Eunhwa Lee, and Yudong 
+Bae. 2015. Towards Multimodal Afective Feedback: Interaction between Vi-
+sual and Haptic Modalities. In Proceedings of the 33rd Annual ACM Confer-
+ence on Human Factors in Computing Systems (Seoul, Republic of Korea) (CHI 
+’15). Association for Computing Machinery, New York, NY, USA, 2043–2052. 
+https://doi.org/10.1145/2702123.2702288 
+[3] Houman Alborzi, Allison Druin, Jaime Montemayor, Michele Platner, Jessica 
+Porteous, Lisa Sherman, Angela Boltman, Gustav Taxen, Jack Best, Joe Hammer, 
+et al. 2000. Designing StoryRooms: Interactive storytelling spaces for children. 
+In Proceedings of the 3rd conference on Designing interactive systems: processes, 
+practices, methods, and techniques. Association for Computing Machinery, New 
+York, NY, USA, 95–104. 
+[4] Patrícia Alves-Oliveira, Pedro Sequeira, Francisco S Melo, Ginevra Castellano, 
+and Ana Paiva. 2019. Empathic robot for group learning: A feld study. ACM 
+Transactions on Human-Robot Interaction (THRI) 8, 1 (2019), 1–34. 
+[5] Peter A Andersen, Laura K Guerrero, and Susanne M Jones. 2006. Nonverbal 
+Behavior in Intimate Interactions and Intimate Relationships. (2006). 
+[6] Rebecca Andreasson, Beatrice Alenljung, Erik Billing, and Robert Lowe. 2018. 
+Afective touch in human–robot interaction: conveying emotion to the Nao 
+robot. International Journal of Social Robotics 10 (2018), 473–491. 
+[7] Cristiana Antunes, Isabel Neto, Filipa Correia, Ana Paiva, and Hugo Nicolau. 
+2022. Inclusive’R’Stories: An Inclusive Storytelling Activity with an Emotional 
+Robot. In 2022 17th ACM/IEEE International Conference on Human-Robot Interac-
+tion (HRI). 90–100. https://doi.org/10.1109/HRI53351.2022.9889502 
+[8] Arthur Aron, Elaine N Aron, and Danny Smollan. 1992. Inclusion of other in 
+the self scale and the structure of interpersonal closeness. Journal of personality 
+and social psychology 63, 4 (1992), 596. 
+[9] Joao Avelino, Filipa Correia, Joao Catarino, Pedro Ribeiro, Plinio Moreno, Alexan-
+dre Bernardino, and Ana Paiva. 2018. The Power of a Hand-shake in Human-
+Robot Interactions. In 2018 IEEE/RSJ International Conference on Intelligent Robots 
+and Systems (IROS). 1864–1869. https://doi.org/10.1109/IROS.2018.8593980 
+[10] Jeremy N Bailenson, Nick Yee, Scott Brave, Dan Merget, and David Koslow. 2007. 
+Virtual interpersonal touch: Expressing and recognizing emotions through 
+haptic devices. Human–Computer Interaction 22, 3 (2007), 325–353. 
+[11] Christoph Bartneck, Dana Kulić, Elizabeth Croft, and Susana Zoghbi. 2009. 
+Measurement instruments for the anthropomorphism, animacy, likeability, per-
+ceived intelligence, and perceived safety of robots. International journal of social 
+robotics 1 (2009), 71–81. 
+[12] Elisabeth Baumgartner, Christiane B Wiebel, and Karl R Gegenfurtner. 2015. 
+A comparison of haptic material perception in blind and sighted individuals. 
+Vision research 115 (2015), 238–245. 
+[13] Steve Benford, Benjamin B. Bederson, Karl-Petter Åkesson, Victor Bayon, Al-
+lison Druin, Pär Hansson, Juan Pablo Hourcade, Rob Ingram, Helen Neale, 
+Claire O’Malley, Kristian T. Simsarian, Danaë Stanton, Yngve Sundblad, and 
+Gustav Taxén. 2000. Designing Storytelling Technologies to Encouraging 
+Collaboration between Young Children. In Proceedings of the SIGCHI Confer-
+ence on Human Factors in Computing Systems (The Hague, The Netherlands) 
+(CHI ’00). Association for Computing Machinery, New York, NY, USA, 556–563. 
+https://doi.org/10.1145/332040.332502 
+[14] Marina Umaschi Bers and Justine Cassell. 1998. Interactive storytelling systems 
+for children: Using technology to explore language and identity. Journal of 
+Interactive Learning Research 9 (1998), 183–215. 
+[15] Malin Björnsdotter, Ilanit Gordon, Kevin A Pelphrey, Håkan Olausson, and 
+Martha D Kaiser. 2014. Development of brain mechanisms for processing 
+afective touch. Frontiers in behavioral neuroscience 8 (2014), 24. 
+[16] Kristopher Blom and Stef Beckhaus. 2005. Emotional storytelling. In IEEE 
+Virtual Reality Conference. 23–27. 
+[17] Jas Brooks, Pedro Lopes, Judith Amores, Emanuela Maggioni, Haruka Mat-
+sukura, Marianna Obrist, Roshan Lalintha Peiris, and Nimesha Ranasinghe. 
+2021. Smell, Taste, and Temperature Interfaces. In Extended Abstracts of the 2021 
+CHI Conference on Human Factors in Computing Systems (Yokohama, Japan) (CHI 
+EA ’21). Association for Computing Machinery, New York, NY, USA, Article 76, 
+6 pages. https://doi.org/10.1145/3411763.3441317 
+[18] Justine Cassell and Kimiko Ryokai. 2001. Making space for voice: Technologies 
+to support children’s fantasy and storytelling. Personal and ubiquitous computing 
+5 (2001), 169–190. 
+[19] Asta Cekaite and Disa Bergnehr. 2018. Afectionate touch and care: Embodied 
+intimacy, compassion and control in early childhood education. European early 
+childhood education research journal 26, 6 (2018), 940–955. 
+[20] Bhavya Chopra and Richa Gupta. 2022. StoryBox: Independent Multi-Modal 
+Interactive Storytelling for Children with Visual Impairment. In Extended Ab-
+stracts of the 2022 CHI Conference on Human Factors in Computing Systems (New 
+Orleans, LA, USA) (CHI EA ’22). Association for Computing Machinery, New
+York, NY, USA, Article 420, 7 pages. https://doi.org/10.1145/3491101.3519651 
+[21] F. Correia, P. Alves-Oliveira, N. Maia, T. Ribeiro, S. Petisca, F. S. Melo, and A. 
+Paiva. 2016. Just follow the suit! Trust in human-robot interactions during 
+card game playing. In 2016 25th IEEE International Symposium on Robot and 
+Human Interactive Communication (RO-MAN). 507–512. https://doi.org/10.1109/ 
+ROMAN.2016.7745165 
+[22] Filipa Correia, Carla Guerra, Samuel Mascarenhas, Francisco S Melo, and Ana 
+Paiva. 2018. Exploring the impact of fault justifcation in human-robot trust. 
+In Proceedings of the 17th international conference on autonomous agents and 
+multiagent systems. 507–513. 
+[23] Filipa Correia, Samuel Mascarenhas, Rui Prada, Francisco S Melo, and Ana Paiva. 
+2018. Group-based emotions in teams of humans and robots. In Proceedings of the 
+2018 ACM/IEEE international conference on human-robot interaction. Association 
+for Computing Machinery, New York, NY, USA, 261–269. 
+[24] Filipa Correia, Francisco S Melo, and Ana Paiva. 2022. When a Robot Is Your 
+Teammate. Topics in Cognitive Science (2022). 
+[25] Sandra Costa, Alberto Brunete, Byung-Chull Bae, and Nikolaos Mavridis. 2018. 
+Emotional storytelling using virtual and robotic agents. International Journal of 
+Humanoid Robotics 15, 03 (2018), 1850006. 
+[26] Laura Crucianelli and Maria Laura Filippetti. 2020. Developmental perspectives 
+on interpersonal afective touch. Topoi 39, 3 (2020), 575–586. 
+[27] Luigi F Cuturi, Elena Aggius-Vella, Claudio Campus, Alberto Parmiggiani, and 
+Monica Gori. 2016. From science to technology: Orientation and mobility in 
+blind children and adults. Neuroscience & Biobehavioral Reviews 71 (2016), 
+240–251. 
+[28] Ravinder S Dahiya, Giorgio Metta, Maurizio Valle, and Giulio Sandini. 2009. 
+Tactile sensing—from humans to humanoids. IEEE transactions on robotics 26, 1 
+(2009), 1–20. 
+[29] Amol Deshmukh, Srinivasan Janarthanam, Helen Hastie, Mei Yii Lim, Ruth 
+Aylett, and Ginevra Castellano. 2016. How expressiveness of a robotic tutor 
+is perceived by children in a learning environment. In 2016 11th ACM/IEEE 
+International Conference on Human-Robot Interaction (HRI). IEEE, 423–424. 
+[30] Murray J Dyck, Charles Farrugia, Ian M Shochet, and Martez Holmes-Brown. 
+2004. Emotion recognition/understanding ability in hearing or vision-impaired 
+children: do sounds, sights, or words make the diference? Journal of Child 
+Psychology and Psychiatry 45, 4 (2004), 789–800. 
+[31] Hadas Erel, Elior Carsenti, and Oren Zuckerman. 2022. A carryover efect in hri: 
+Beyond direct social efects in human-robot interaction. In 2022 17th ACM/IEEE 
+International Conference on Human-Robot Interaction (HRI). IEEE, 342–352. 
+[32] Hadas Erel, Yoav Cohen, Klil Shafrir, Sara Daniela Levy, Idan Dov Vidra, Tzachi 
+Shem Tov, and Oren Zuckerman. 2021. Excluded by Robots: Can Robot-Robot-
+Human Interaction Lead to Ostracism?. In Proceedings of the 2021 ACM/IEEE 
+International Conference on Human-Robot Interaction (Boulder, CO, USA) (HRI 
+’21). Association for Computing Machinery, New York, NY, USA, 312–321. https: 
+//doi.org/10.1145/3434073.3444648 
+[33] Teresa Farroni, Letizia Della Longa, and Irene Valori. 2022. The self-regulatory 
+afective touch: a speculative framework for the development of executive 
+functioning. Current Opinion in Behavioral Sciences 43 (2022), 167–173. 
+[34] Feng Feng, Dan Bennett, Zhi-jun Fan, and Oussama Metatla. 2022. It’s Touch-
+ing: Understanding Touch-Afect Association in Shape-Change with Kine-
+matic Features. In Proceedings of the 2022 CHI Conference on Human Factors 
+in Computing Systems (New Orleans, LA, USA) (CHI ’22). Association for 
+Computing Machinery, New York, NY, USA, Article 428, 18 pages. https: 
+//doi.org/10.1145/3491102.3502003 
+[35] Tifany Field. 2014. Touch. MIT press. 
+[36] Alberto Gallace and Charles Spence. 2010. The science of interpersonal touch: 
+An overview. Neuroscience Biobehavioral Reviews 34, 2 (2010), 246–259. https: 
+//doi.org/10.1016/j.neubiorev.2008.10.004 Touch, Temperature, Pain/Itch and 
+Pleasure. 
+[37] Sarah Gillet, Ronald Cumbal, André Pereira, José Lopes, Olov Engwall, and 
+Iolanda Leite. 2021. Robot Gaze Can Mediate Participation Imbalance in Groups 
+with Diferent Skill Levels. In Proceedings of the 2021 ACM/IEEE International 
+Conference on Human-Robot Interaction (Boulder, CO, USA) (HRI ’21). Association 
+for Computing Machinery, New York, NY, USA, 303–311. https://doi.org/10. 
+1145/3434073.3444670 
+[38] Sarah Gillet and Iolanda Leite. 2020. A robot mediated music mixing activity for 
+promoting collaboration among children. In Companion of the 2020 ACM/IEEE 
+International Conference on Human-Robot Interaction. 212–214. 
+[39] Sarah Gillet, Wouter van den Bos, Iolanda Leite, et al. 2020. A social robot 
+mediator to foster collaboration and inclusion among children.. In Robotics: 
+Science and Systems. 
+[40] Laurence R. Goldman. 2020. Child’s Play: Myth, Mimesis and Make-Believe. 
+Routledge, London. https://doi.org/10.4324/9781003084914 
+[41] Timo Göttel. 2011. Reviewing children’s collaboration practices in storytelling 
+environments. In Proceedings of the 10th International Conference on Interaction 
+Design and Children (IDC ’11). Association for Computing Machinery, New York, 
+NY, USA, 153–156. https://doi.org/10.1145/1999030.1999049 
+[42] Antal Haans, Christiaan de Nood, and Wijnand A. IJsselsteijn. 2007. Investigating 
+Response Similarities between Real and Mediated Social Touch: A First Test. In 
+519
+HRI ’24, March 11–14, 2024, Boulder, CO, USA Isabel Neto et al. 
+CHI ’07 Extended Abstracts on Human Factors in Computing Systems (San Jose, 
+CA, USA) (CHI EA ’07). Association for Computing Machinery, New York, NY, 
+USA, 2405–2410. https://doi.org/10.1145/1240866.1241015 
+[43] Mitsuhiko Hanada. 2018. Correspondence analysis of color–emotion associa-
+tions. Color Research & Application 43, 2 (2018), 224–237. 
+[44] Matthew J Hertenstein, Rachel Holmes, Margaret McCullough, and Dacher 
+Keltner. 2009. The communication of emotion via touch. Emotion 9, 4 (2009), 
+566. 
+[45] Matthew J Hertenstein, Dacher Keltner, Betsy App, Brittany A Bulleit, and 
+Ariane R Jaskolka. 2006. Touch communicates distinct emotions. Emotion 6, 3 
+(2006), 528. 
+[46] Matthew J Hertenstein, Julie M Verkamp, Alyssa M Kerestes, and Rachel M 
+Holmes. 2006. The communicative functions of touch in humans, nonhuman 
+primates, and rats: a review and synthesis of the empirical research. Genetic, 
+social, and general psychology monographs 132, 1 (2006), 5–94. 
+[47] Rebecca Hibbin. 2016. The psychosocial benefts of oral storytelling in school: 
+developing identity and empathy through narrative. Pastoral Care in Education 
+34, 4 (2016), 218–231. 
+[48] Cristy Ho, Nick Reed, and Charles Spence. 2007. Multisensory in-car warning 
+signals for collision avoidance. Human factors 49, 6 (2007), 1107–1114. 
+[49] Jessica Hofmann and Sandra Russ. 2012. Pretend play, creativity, and emotion 
+regulation in children. Psychology of aesthetics, creativity, and the arts 6, 2 (2012), 
+175. 
+[50] Laura Hofmann and Nicole C. Krämer. 2022. The persuasive power of robot 
+touch. PLoS ONE 16, 5, Artikel e0249554 (2022), e0249554–1 – e0249554–30. 
+https://doi.org/10.1371/journal.pone.0249554 
+[51] Yuhan Hu and Guy Hofman. 2019. Using Skin Texture Change to Design 
+Emotion Expression in Social Robots. In 2019 14th ACM/IEEE International 
+Conference on Human-Robot Interaction (HRI). 2–10. https://doi.org/10.1109/ 
+HRI.2019.8673012 
+[52] Yuhan Hu and Guy Hofman. 2022. What Can a Robot’s Skin Be? Designing 
+Texture-Changing Skin for Human-Robot Social Interaction. J. Hum.-Robot 
+Interact. (may 2022). https://doi.org/10.1145/3532772 
+[53] Yuhan Hu, Isabel Neto, Jin Ryu, Ali Shtarbanov, Hugo Nicolau, Ana Paiva, and 
+Guy Hofman. 2022. Touchibo: Multimodal Texture-Changing Robotic Platform 
+for Shared Human Experiences. In Adjunct Proceedings of the 35th Annual ACM 
+Symposium on User Interface Software and Technology (Bend, OR, USA) (UIST ’22 
+Adjunct). Association for Computing Machinery, New York, NY, USA, Article 
+68, 3 pages. https://doi.org/10.1145/3526114.3558643 
+[54] Yuhan Hu, Zhengnan Zhao, Abheek Vimal, and Guy Hofman. 2018. Soft skin 
+texture modulation for social robotics. In 2018 IEEE International Conference 
+on Soft Robotics (RoboSoft). 182–187. https://doi.org/10.1109/ROBOSOFT.2018. 
+8404917 
+[55] Gijs Huisman. 2017. Social Touch Technology: A Survey of Haptic Technology 
+for Social Touch. IEEE Transactions on Haptics 10, 3 (2017), 391–408. https: 
+//doi.org/10.1109/TOH.2017.2650221 
+[56] Gijs Huisman and Aduén Darriba Frederiks. 2013. Towards Tactile Expres-
+sions of Emotion through Mediated Touch. In CHI ’13 Extended Abstracts 
+on Human Factors in Computing Systems (Paris, France) (CHI EA ’13). Asso-
+ciation for Computing Machinery, New York, NY, USA, 1575–1580. https: 
+//doi.org/10.1145/2468356.2468638 
+[57] Neto I., Hu Y., Correia F., Rocha F., J. Nogueira, Buckmayer K., Hofman 
+G., Nicolau. H., and Paiva A. 2023. Touchibo Github. https://github.com/ 
+IsabelCanicoNeto/Inclusion-through-a-Touch-based-Robot-. Accessed: 2023-
+12-18. 
+[58] Rebecca Isbell, Joseph Sobol, Liane Lindauer, and April Lowrance. 2004. The 
+Efects of Storytelling and Story Reading on the Oral Language Complexity and 
+Story Comprehension of Young Children. Early Childhood Education Journal 
+32, 3 (Dec. 2004), 157–163. https://doi.org/10.1023/B:ECEJ.0000048967.94189.a3 
+[59] Heekyoung Jung, Youngsuk L Altieri, and Jefrey Bardzell. 2010. Skin: designing 
+aesthetic interactive surfaces. In Proceedings of the fourth international conference 
+on Tangible, embedded, and embodied interaction. 85–92. 
+[60] Malte F. Jung, Dominic Difranzo, Solace Shen, Brett Stoll, Houston Claure, and 
+Austin Lawrence. 2020. Robot-Assisted Tower Construction—A Method to Study 
+the Impact of a Robot’s Allocation Behavior on Interpersonal Dynamics and 
+Collaboration in Groups. J. Hum.-Robot Interact. 10, 1, Article 2 (Oct. 2020), 
+23 pages. https://doi.org/10.1145/3394287 
+[61] Merel M Jung, Robert WM Boensma, Gijs Huisman, and Betsy van Dijk. 2013. 
+Touched by the storyteller: the infuence of remote touch in the context of 
+storytelling. In 2013 Humaine Association Conference on Afective Computing 
+and Intelligent Interaction. IEEE, 792–797. 
+[62] Cory D Kidd and Cynthia Breazeal. 2004. Efect of a robot on user percep-
+tions. In 2004 IEEE/RSJ international conference on intelligent robots and systems 
+(IROS)(IEEE Cat. No. 04CH37566), Vol. 4. IEEE, 3559–3564. 
+[63] Bogyeong Kim, Jaehoon Pyun, and Woohun Lee. 2018. Enhancing Storytelling 
+Experience with Story-Aware Interactive Puppet. In Extended Abstracts of the 
+2018 CHI Conference on Human Factors in Computing Systems. 1–6. 
+[64] Jacqueline Kory and Cynthia Breazeal. 2014. Storytelling with robots: Learning 
+companions for preschool children’s language development. In The 23rd IEEE 
+international symposium on robot and human interactive communication. IEEE, 
+643–648. 
+[65] Jacqueline M Kory-Westlund and Cynthia Breazeal. 2019. Assessing children’s 
+perceptions and acceptance of a social robot. In Proceedings of the 18th ACM 
+International Conference on Interaction Design and Children. 38–50. 
+[66] Iolanda Leite, Marissa McCoy, Monika Lohani, Daniel Ullman, Nicole Salomons, 
+Charlene Stokes, Susan Rivers, and Brian Scassellati. 2015. Emotional story-
+telling in the classroom: Individual versus group interaction between children 
+and robots. In Proceedings of the tenth annual ACM/IEEE international conference 
+on human-robot interaction. 75–82. 
+[67] Mike Ligthart and Khiet P Truong. 2015. Selecting the right robot: Infuence of 
+user attitude, robot sociability and embodiment on user preferences. In 2015 24th 
+IEEE International Symposium on Robot and Human Interactive Communication 
+(RO-MAN). IEEE, 682–687. 
+[68] Mike EU Ligthart, Mark A Neerincx, and Koen V Hindriks. 2020. Design patterns 
+for an interactive storytelling robot to support children’s engagement and 
+agency. In Proceedings of the 2020 ACM/IEEE international conference on human-
+robot interaction. 409–418. 
+[69] Anan Lin, Meike Scheller, Feng Feng, Michael J Proulx, and Oussama Metatla. 
+2021. Feeling Colours: Crossmodal Correspondences Between Tangible 3D 
+Objects, Colours and Emotions. In Proceedings of the 2021 CHI Conference on 
+Human Factors in Computing Systems (Yokohama, Japan) (CHI ’21). Association 
+for Computing Machinery, New York, NY, USA, Article 187, 12 pages. https: 
+//doi.org/10.1145/3411764.3445373 
+[70] Diana Löfer, Nina Schmidt, and Robert Tscharn. 2018. Multimodal expression of 
+artifcial emotion in social robots using color, motion and sound. In Proceedings 
+of the 2018 ACM/IEEE International Conference on Human-Robot Interaction. 
+334–343. 
+[71] Xin Lu, Poonam Suryanarayan, Reginald B Adams Jr, Jia Li, Michelle G Newman, 
+and James Z Wang. 2012. On shape and the computability of emotions. In 
+Proceedings of the 20th ACM international conference on Multimedia. 229–238. 
+[72] Chris Lytridis, Christos Bazinas, George A Papakostas, and Vassilis Kaburla-
+sos. 2020. On measuring engagement level during child-robot interaction in 
+education. Robotics in Education: Current Research and Innovations 10 (2020), 
+3–13. 
+[73] Shaun Alexander Macdonald, Stephen Brewster, and Frank Pollick. 2020. Elic-
+iting Emotion with Vibrotactile Stimuli Evocative of Real-World Sensations. 
+In Proceedings of the 2020 International Conference on Multimodal Interaction 
+(Virtual Event, Netherlands) (ICMI ’20). Association for Computing Machinery, 
+New York, NY, USA, 125–133. https://doi.org/10.1145/3382507.3418812 
+[74] Oussama Metatla and Clare Cullen. 2018. “Bursting the Assistance Bubble”: 
+Designing Inclusive Technology with Children with Mixed Visual Abilities. In 
+Proceedings of the 2018 CHI Conference on Human Factors in Computing Systems 
+(CHI ’18). Association for Computing Machinery, New York, NY, USA, 1–14. 
+https://doi.org/10.1145/3173574.3173920 
+[75] Oussama Metatla, Emanuela Maggioni, Clare Cullen, and Marianna Obrist. 2019. 
+"Like Popcorn": Crossmodal Correspondences Between Scents, 3D Shapes and 
+Emotions in Children. In Proceedings of the 2019 CHI Conference on Human 
+Factors in Computing Systems (CHI ’19). Association for Computing Machinery, 
+New York, NY, USA, 1–13. https://doi.org/10.1145/3290605.3300689 
+[76] Isabel Neto, Filipa Correia, Filipa Rocha, Patricia Piedade, Ana Paiva, and Hugo 
+Nicolau. 2023. The Robot Made Us Hear Each Other: Fostering Inclusive Con-
+versations among Mixed-Visual Ability Children. In Proceedings of the 2023 
+ACM/IEEE International Conference on Human-Robot Interaction. 13–23. 
+[77] Isabel Neto, Yuhan Hu, Filipa Correia, Filipa Rocha, Guy Hofman, Hugo Nicolau, 
+and Ana Paiva. [n. d.]. Conveying Emotions through Shape-changing to Children 
+with and without Visual Impairment. under revision. 
+[78] Isabel Neto, Hugo Nicolau, and Ana Paiva. 2021. Community Based Robot 
+Design for Classrooms with Mixed Visual Abilities Children. In Proceedings 
+of the 2021 CHI Conference on Human Factors in Computing Systems (CHI ’21). 
+Association for Computing Machinery, New York, NY, USA, 1–12. https://doi. 
+org/10.1145/3411764.3445135 
+[79] World Health Organization. 2022. Visual Acuity Levels. 
+"https://www.who.int/news-room/fact-sheets/detail/blindness-and-visual-
+impairment". Accessed: 2022-12-20. 
+[80] Anastasia K Ostrowski, Vasiliki Zygouras, Hae Won Park, and Cynthia Breazeal. 
+2021. Small group interactions with voice-user interfaces: exploring social 
+embodiment, rapport, and engagement. In Proceedings of the 2021 ACM/IEEE 
+International Conference on Human-Robot Interaction. 322–331. 
+[81] Fundacação para a Ciência e Tecnologia. 2020. Instituto de Engenharia de 
+Sistemas e Computadores, Investigação e Desenvolvimento em Lisboa. https: 
+//doi.org/10.54499/UIDB/50021/2020 
+[82] Fundacação para a Ciência e Tecnologia. 2020. Laboratório de Robótica e 
+Sistemas de Engenharia. https://doi.org/10.54499/UIDB/50009/2020 
+[83] Fundacação para a Ciência e Tecnologia. 2023. Enhancing Collaborative Robots 
+with Non-Verbal Dynamic Capabilities for Multiparty Teamwork. https: 
+//doi.org/10.54499/2022.00816.CEECIND/CP1713/CT0013 
+520
+Inclusion Through A Touch-Based Robot Among Mixed-Visual Ability Children 
+[84] Raul Benites Paradeda, Carlos Martinho, and Ana Paiva. 2020. Persuasion Strate-
+gies Using a Social Robot in an Interactive Storytelling Scenario. In Proceedings 
+of the 8th International Conference on Human-Agent Interaction (Virtual Event, 
+USA) (HAI ’20). Association for Computing Machinery, New York, NY, USA, 
+69–77. https://doi.org/10.1145/3406499.3415084 
+[85] Sergio M Pellis and Vivien C Pellis. 2007. Rough-and-tumble play and the 
+development of the social brain. Current directions in psychological science 16, 2 
+(2007), 95–98. 
+[86] Heather Piper and Hannah Smith. 2003. ‘Touch’in educational and child care 
+settings: dilemmas and responses. British educational research journal 29, 6 
+(2003), 879–894. 
+[87] Viva Sarah Press and Hadas Erel. 2023. Humorous Robotic Behavior as a New 
+Approach to Mitigating Social Awkwardness. In Proceedings of the 2023 CHI 
+Conference on Human Factors in Computing Systems. 1–16. 
+[88] Jussi Rantala, Katri Salminen, Roope Raisamo, and Veikko Surakka. 2013. Touch 
+gestures in communicating emotional intention via vibrotactile stimulation. 
+International Journal of Human-Computer Studies 71, 6 (2013), 679–690. 
+[89] Jussi Rantala, Katri Salminen, Roope Raisamo, and Veikko Surakka. 2013. Touch 
+gestures in communicating emotional intention via vibrotactile stimulation. 
+International Journal of Human-Computer Studies 71, 6 (2013), 679–690. https: 
+//doi.org/10.1016/j.ijhcs.2013.02.004 
+[90] Carolina Beniamina Rutta, Gianluca Schiavo, Massimo Zancanaro, and Elisa 
+Rubegni. 2020. Collaborative comic-based digital storytelling with primary 
+school children. In Proceedings of the Interaction Design and Children Conference. 
+426–437. 
+[91] Kimiko Ryokai, Michael Jongseon Lee, and Jonathan Micah Breitbart. 2009. 
+Children’s storytelling and programming with robotic characters. In Proceedings 
+of the seventh ACM conference on Creativity and cognition. 19–28. 
+[92] Sarah Sebo, Brett Stoll, Brian Scassellati, and Malte F Jung. 2020. Robots in groups 
+and teams: a literature review. Proceedings of the ACM on Human-Computer 
+Interaction 4, CSCW2 (2020), 1–36. 
+[93] Hasti Seif and Karon E. MacLean. 2013. A frst look at individuals’ afective 
+ratings of vibrations. In 2013 World Haptics Conference (WHC). 605–610. https: 
+//doi.org/10.1109/WHC.2013.6548477 
+[94] Solace Shen, Petr Slovak, and Malte F Jung. 2018. " Stop. I See a Confict 
+Happening. " A Robot Mediator for Young Children’s Interpersonal Confict 
+Resolution. In Proceedings of the 2018 ACM/IEEE international conference on 
+human-robot interaction. 69–77. 
+[95] Lynn M Shore, Amy E Randel, Beth G Chung, Michelle A Dean, Karen Hol-
+combe Ehrhart, and Gangaram Singh. 2011. Inclusion and diversity in work 
+groups: A review and model for future research. Journal of management 37, 4 
+(2011), 1262–1289. 
+[96] Ali Shtarbanov. 2021. FlowIO Development Platform–the Pneumatic “Raspberry 
+Pi” for Soft Robotics. In Extended Abstracts of the 2021 CHI Conference on Human 
+Factors in Computing Systems. 1–6. 
+[97] Gabriel Skantze. 2017. Predicting and regulating participation equality in 
+human-robot conversations: Efects of age and gender. In Proceedings of the 2017 
+ACM/IEEE International Conference on Human-robot Interaction. 196–204. 
+[98] Marina V Sokolova and Antonio Fernández-Caballero. 2015. A review on the 
+role of color and light in afective computing. Applied Sciences 5, 3 (2015), 
+275–293. 
+[99] Sichao Song and Seiji Yamada. 2017. Expressing emotions through color, 
+sound, and vibration with an appearance-constrained social robot. In 2017 
+12th ACM/IEEE International Conference on Human-Robot Interaction (HRI. IEEE, 
+2–11. 
+[100] S ter Stal. 2017. Designing an Interactive Storytelling System for Children using a 
+Smart Toy Design of a prototype to investigate the efect of emotional behaviour of 
+a toy on children’s storytelling. Master’s thesis. University of Twente. 
+[101] Sarah Strohkorb, Ethan Fukuto, Natalie Warren, Charles Taylor, Bobby Berry, 
+and Brian Scassellati. 2016. Improving human-human collaboration between 
+children with a social robot. In 2016 25th IEEE International Symposium on Robot 
+and Human Interactive Communication (RO-MAN). IEEE, 551–556. 
+[102] Sarah Strohkorb Sebo, Ling Liang Dong, Nicholas Chang, and Brian Scassellati. 
+2020. Strategies for the Inclusion of Human Members within Human-Robot 
+Teams. In Proceedings of the 2020 ACM/IEEE International Conference on Human-
+Robot Interaction. Association for Computing Machinery, New York, NY, USA, 
+309–317. 
+[103] Ming Sun, Iolanda Leite, Jill Fain Lehman, and Boyang Li. 2017. Collaborative 
+storytelling between robot and child: A feasibility study. In Proceedings of the 
+2017 Conference on Interaction Design and Children. 205–214. 
+HRI ’24, March 11–14, 2024, Boulder, CO, USA 
+[104] Juulia T Suvilehto, Enrico Glerean, Robin IM Dunbar, Riitta Hari, and Lauri 
+Nummenmaa. 2015. Topography of social touching depends on emotional bonds 
+between humans. Proceedings of the National Academy of Sciences 112, 45 (2015), 
+13811–13816. 
+[105] Cristina Sylla, Pedro Branco, Clara Coutinho, Eduarda Coquet, and David 
+Skaroupka. 2011. TOK: a tangible interface for storytelling. In CHI’11 extended 
+abstracts on human factors in computing systems. 1363–1368. 
+[106] Hamish Tennent, Solace Shen, and Malte Jung. 2019. Micbot: A peripheral 
+robotic object to shape conversational dynamics and team performance. In 2019 
+14th ACM/IEEE International Conference on Human-Robot Interaction (HRI). IEEE, 
+133–142. 
+[107] Annie Vinter, Oriana Orlandi, and Pascal Morgan. 2020. Identifcation of textured 
+tactile pictures in visually impaired and blindfolded sighted children. Frontiers 
+in Psychology 11 (2020), 345. 
+[108] Rojin Vishkaie. 2020. Designing the catbus: interactive support for early child-
+hood emotional well-being in education. In Adjunct Proceedings of the 2020 
+ACM International Joint Conference on Pervasive and Ubiquitous Computing and 
+Proceedings of the 2020 ACM International Symposium on Wearable Computers. 
+143–146. 
+[109] Torben Wallbaum, Swamy Ananthanarayan, Shadan Sadeghian Borojeni, Wilko 
+Heuten, and Susanne Boll. 2017. Towards a tangible storytelling kit for exploring 
+emotions with children. In Proceedings of the on Thematic Workshops of ACM 
+Multimedia 2017. 10–16. 
+[110] Kevin Wheldall, Kate Bevan, and Kath Shortall. 1986. A touch of reinforcement: 
+The efects of contingent teacher touch on the classroom behaviour of young 
+children. Educational Review 38, 3 (1986), 207–216. 
+[111] Graham Wilson and Stephen A. Brewster. 2017. Multi-Moji: Combining Thermal, 
+Vibrotactile ; Visual Stimuli to Expand the Afective Range of Feedback. In 
+Proceedings of the 2017 CHI Conference on Human Factors in Computing Systems 
+(Denver, Colorado, USA) (CHI ’17). Association for Computing Machinery, New 
+York, NY, USA, 1743–1755. https://doi.org/10.1145/3025453.3025614 
+[112] Cheryl Wright, Marissa L. Diener, and Jacqueline Lindsay Kemp. 2013. Sto-
+rytelling Dramas as a Community Building Activity in an Early Childhood 
+Classroom. Early Childhood Education Journal 41, 3 (May 2013), 197–210. 
+https://doi.org/10.1007/s10643-012-0544-7 
+[113] Ying Xu and Mark Warschauer. 2020. Exploring young children’s engagement 
+in joint reading with a conversational agent. In Proceedings of the interaction 
+design and children conference. 216–228. 
+[114] Steve Yohanan and Karon E. MacLean. 2011. Design and Assessment of 
+the Haptic Creature’s Afect Display. In Proceedings of the 6th International 
+Conference on Human-Robot Interaction (Lausanne, Switzerland) (HRI ’11). As-
+sociation for Computing Machinery, New York, NY, USA, 473–480. https: 
+//doi.org/10.1145/1957656.1957820 
+[115] Steven John Yohanan. 2012. The haptic creature: Social human-robot interaction 
+through afective touch. Ph. D. Dissertation. University of British Columbia. 
+[116] Yongjae Yoo, Taekbeom Yoo, Jihyun Kong, and Seungmoon Choi. 2015. Emo-
+tional responses of tactile icons: Efects of amplitude, frequency, duration, 
+and envelope. In 2015 IEEE World Haptics Conference (WHC). 235–240. https: 
+//doi.org/10.1109/WHC.2015.7177719 
+[117] Jing Yu, Liqi Zhu, and Alan M Leslie. 2016. Children’s sharing behavior in 
+mini-dictator games: The role of in-group favoritism and theory of mind. Child 
+Development 87, 6 (2016), 1747–1757. 
+[118] Cristina Zaga, Manja Lohse, Khiet P Truong, and Vanessa Evers. 2015. The 
+efect of a robot’s social character on children’s task engagement: Peer versus 
+tutor. In Social Robotics: 7th International Conference, ICSR 2015, Paris, France, 
+October 26-30, 2015, Proceedings 7. Springer, 704–713. 
+[119] Alex Wuqi Zhang, Ting-Han Lin, Xuan Zhao, and Sarah Sebo. 2023. Ice-Breaking 
+Technology: Robots and Computers Can Foster Meaningful Connections be-
+tween Strangers through In-Person Conversations. In Proceedings of the 2023 
+CHI Conference on Human Factors in Computing Systems. 1–14. 
+[120] Yiran Zhao, Yujie Tao, Grace Le, Rui Maki, Alexander Adams, Pedro Lopes, and 
+Tanzeem Choudhury. 2023. Afective Touch as Immediate and Passive Wearable 
+Intervention. Proc. ACM Interact. Mob. Wearable Ubiquitous Technol. 6, 4, Article 
+200 (jan 2023), 23 pages. https://doi.org/10.1145/3569484 
+[121] Ran Zhou, Zachary Schwemler, Akshay Baweja, Harpreet Sareen, Casey Lee 
+Hunt, and Daniel Leithinger. 2023. TactorBots: A Haptic Design Toolkit for 
+Out-of-Lab Exploration of Emotional Robotic Touch. In Proceedings of the 2023 
+CHI Conference on Human Factors in Computing Systems (Hamburg, Germany) 
+(CHI ’23). Association for Computing Machinery, New York, NY, USA, Article 
+370, 19 pages. https://doi.org/10.1145/3544548.3580799 
+521

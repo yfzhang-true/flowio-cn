@@ -1,0 +1,933 @@
+Pulling, Pressing, and Sensing with In-Flat: Transparent Touch
+Overlay for Smartphones
+Zhuoming Zhang
+zhuoming.zhang@telecom-paris.fr
+LCTI, Télécom Paris, Institut Polytechnique de Paris
+Paris, France
+Jessalyn Alvina
+jessalyn.alvina@lisn.upsaclay.fr
+Université Paris-Saclay, CNRS, Inria
+Orsay, France
+Françoise Détienne
+francoise.detienne@telecom-paris.fr
+i3 UMR 9217-CNRS, Télécom Paris, Institut Polytechnique
+de Paris, Paris, France
+Eric Lecolinet
+eric.lecolinet@telecom-paris.fr
+LCTI, Télécom Paris, Institut Polytechnique de Paris
+Paris, France
+Figure 1: In-Flat is a pressure-sensitive silicon overlay on smartphones that enables coupling between visual display and touch
+I/O. In-Flat can be used to enhance GUI interactions (a) on buttons to parameterize dynamic emojis; or (b) in games. (c) Each
+airbag can have different inflation levels, (d) e.g., enabling dynamic tangible affordances to visualize a breathing lung.
+ABSTRACT
+Smartphones’ screens are touch-sensitive and offer rich visual out-
+put capabilities, but do not allow users to control a wide range of
+pressure input nor provide rich pressure sensations. We propose
+In-Flat, an input/output pressure-sensitive overlay for smartphones.
+In-Flat consists of a transparent inflatable skin-like silicon layer that
+can be placed on the top or the back of a smartphone. As an output
+device, In-Flat offers tangible affordances and dynamic pressure
+feedback coupled with visual display. As an input device,In-Flat en-
+ables users to continuously perform a wide range of input gestures,
+notably press and pinch-and-pull gestures. Thus, In-Flat can be used
+to finely manipulate visual objects in mobile interaction or mediate
+interpersonal touch communications. In contrast to previous stud-
+ies that mostly focus on press, we investigated the performance of
+pinch-and-pull and compared it with press. Our experiment (N=12)
+showed that participants could perform pinch-and-pull (83.8%) as
+Permission to make digital or hard copies of all or part of this work for personal or
+classroom use is granted without fee provided that copies are not made or distributed
+for profit or commercial advantage and that copies bear this notice and the full citation
+on the first page. Copyrights for components of this work owned by others than ACM
+must be honored. Abstracting with credit is permitted. To copy otherwise, or republish,
+to post on servers or to redistribute to lists, requires prior specific permission and/or a
+fee. Request permissions from permissions@acm.org.
+A VI 2022, June 6–10, 2022, Frascati, Rome, Italy
+© 2022 Association for Computing Machinery.
+ACM ISBN 978-1-4503-9719-3/22/06. . . $15.00
+https://doi.org/10.1145/3531073.3531111
+well as press (84.7%), but felt having more control when performing
+pinch-and-pull. We explored the use ofIn-Flat to enable multimodal
+interaction that couples visual display and touch input/output. Par-
+ticipants appreciated this coupling as well as the touch sensation
+supplied by the In-Flat device.
+CCS CONCEPTS
+•Human-centered computing → Haptic devices.
+KEYWORDS
+Transparent Pneumatic Smartphone Overlay, Visual/Touch I/O In-
+terface, Press and Pinch-and-Pull Gestures
+ACM Reference Format:
+Zhuoming Zhang, Jessalyn Alvina, Françoise Détienne, and Eric Lecolinet.
+2022. Pulling, Pressing, and Sensing withIn-Flat: Transparent Touch Overlay
+for Smartphones. In Proceedings of the 2022 International Conference on
+Advanced Visual Interfaces (A VI 2022), June 6–10, 2022, Frascati, Rome, Italy.
+ACM, New York, NY, USA, 9 pages. https://doi.org/10.1145/3531073.3531111
+1 INTRODUCTION
+Touchscreens on smartphones offer high-resolution visual display,
+yet lack of the capabilities to generate tactile sensations that are
+often present in physical objects. While tactile illusions can be
+induced through visual cues [39], they can only influence the ex-
+pectation of how the physical objects should feel [4]. More accurate
+AVI 2022, June 6–10, 2022, Frascati, Rome, Italy Zhang et al.
+and richer tactile perceptions still require touch interactions with
+the objects. Notably, perceiving physical properties like compli-
+ance requires dynamic pressure on the object [ 5]. Soft materials
+deform under the finger’s pressure and the surface wraps around
+the fingertip, inducing more tactile innervation [ 17]. Given that
+smartphones’ screens are often flat, rigid, and made of glass, the
+pressure sensations on smartphone interactions are limited [10].
+Our goal is to augment smartphones’ visual display with rich
+touch input and output (I/O) capabilities. As an input device, the
+touch overlay should not only enable touch input gestures to inter-
+act with the visual objects displayed on the screen, but also provide
+bi-directional touch sensations: the users feel the resistance from
+the surface as the surface deforms according to the pressure level
+they apply onto it. As an output device, the users should be able
+not only to see the visual display, but at the same time also perceive
+tangible affordances and sense dynamic touch outputs. Addition-
+ally, users should be able to have controls over the touch surface
+behaviour, including setting up the compliance levels (i.e., how soft
+or stiff the touch stimuli should feel when pressured).
+While research in HCI has proposed different touch devices,
+many of them are designed to provide either input capabilities
+only [8, 14, 38], or output capabilities only [ 19, 43]. Some touch
+devices provide both I/O capabilities, but also have some limitations
+that we attempt to address in this paper. In particular, touch I/O
+devices like [13, 27] enable coupling between touch I/O and visual
+displays, however they rely on projectors to display the visual cues,
+hence reducing the mobility aspect of the device. Touch I/O devices
+that can potentially be combined with visual displays on mobile
+devices [9, 11, 22] often do not allow in-place touch interactions
+that dynamically match the visual objects displayed on the screen.
+We propose In-Flat, a pressure-sensitive overlay on smartphones
+that couples pressure-based touch I/O with visual display. In-Flat
+offers tangible affordances on the visual objects, enabling users
+to perceive visual and temporal changes and/or surface compli-
+ance levels. In-Flat also enables a variety of touch input gestures
+– not only press but also pinch-and-pull gestures. We built a pro-
+totype of In-Flat in the form of a detachable phone case with an
+inflatable silicon layer (Fig. 1c). Both the silicon layer (front part)
+and the phone case (back part) are made of transparent materials,
+preserving access to visual display. The touch I/O on each airbag
+can be controlled and captured independently, enabling dynamic
+multi-finger pressure interactions on the touch overlay.
+Our contributions are three folds. First, we propose the design
+and prototype of In-Flat, a novel touch I/O device that couples
+touch interactions with visual display on smartphones. Second,
+we contribute a fabricating approach of highly transparent and
+stretchable overlays for smartphones, enabling rich I/O interactions
+and skin-like touch sensation. Our explorations on different silicone
+materials and fluid options offer technical insights for researchers in
+touch interactions. Third, we provided empirical evidence that users
+can perform pinch-and-pull as well as press gestures on inflatable
+silicon layers with In-Flat. We compared the performance of the
+two gestures, complementing past studies on touch devices that
+mainly focused on press only [10, 13] or pinch only [31]. We discuss
+future directions and implementations for supporting the coupling
+between touch I/O and visual displays on smartphones.
+2 RELATED WORK
+2.1 Capturing pressure input gestures
+Force input (i.e., pressure) is a powerful alternative to mobile inter-
+actions as it only requires a finger and fingertip-sized interactive
+surfaces (i.e., space-efficient) [8, 10]. Past works have demonstrated
+the benefits of force input, including supporting rich and efficient
+GUI interactions such as picking values from long ordered list [8]
+or selecting parametric commands [6]. Some smartphones enables
+force input on touchscreens, for example with iPhone 6s, users can
+perform light, medium, or firm press on the screen with a pressure
+ranging from 0 to 3.3 Newtons [ 3]. Other smartphones without
+pressure sensors capture simulated force input values by calcu-
+lating the contact area size between the screen and the fingertip.
+Nevertheless, applying pressures on a flat, rigid surface limits the
+pressure sensation and the perception of complicity, as the users
+can hardly feel the surface bends according to the pressure [10].
+Past works have also explored the use of Force Sensing Resis-
+tor (FSR) to capture pressure input on smartphones. Wilson et al.
+showed that users can choose up to ten items with their fingers at
+85% accuracy with continuous visual feedback [38]. Similarly, Heo
+and Lee embedded several FSRs on the back of a smartphone to
+enable force gesture inputs like slides or drags [14]. In this case, the
+gesture recognition process considers the combination of several
+touch dimensions, including spatial movements, pressure levels,
+and the change of pressure levels over time. Elastic fabrics can also
+be used to capture force input [12, 31]. For example, Han et al. cre-
+ated an elastic touch interface with fabric and magnet field sensors,
+enabling users perform various gestures including pinch-and-pull
+[12]. Han et al. also conducted a short pilot study to better design
+the pinch-and-pull recognition process. The use of FSR and elastic
+fabrics is often limited to support touch input capabilities only.
+Another alternative is using silicons with pneumatic activations
+and air pressure sensors, as they can be inflated dynamically to gen-
+erate touch output as well [11, 13, 22]. Fruchard et al. [10] showed
+that controlling high-pressure inputs on soft surfaces (i.e., high
+complicity) takes more time and is more prone to errors compared
+to on hard surfaces, but more comfortable to perform. Silicons with
+pneumatic actuations support continuous pressure input with con-
+trollable levels of complicity (i.e., how stiff or soft the material feels
+when pressured) [13]. A longitudinal study on the use of inflatable
+silicons as a communication medium showed that users could create
+personalized touch patterns using the silicons, combining different
+pressure levels, the number of press, and temporal variations [22].
+With In-Flat, we demonstrated that inflatable silicons can be used
+to capture not only press but also pinch-and-pull gestures (Fig. 2).
+Our evaluation study complements but differs from past studies,
+in that: 1) in contrast to a short pilot done in [31], we conducted a
+systematic experiment to evaluate the performance of pinch-and-
+pull gestures; and 2) in contrast to previous evaluation studies that
+mostly focused on press gestures only [10, 11, 13], we compared
+the performance of the press gestures to that of the pinch-and-pull,
+and showed that the participants can perform both gestures well.
+2.2 Generating touch feedback
+Most smartphones already include vibration motors, hence can
+generate various tactile feedback [ 37, 41].Past works have also
+Pulling, Pressing, and Sensing with In-Flat AVI 2022, June 6–10, 2022, Frascati, Rome, Italy
+explored the possibility of embedding vibrotactile grids on the
+back of the smartphone to enable rich vibrotactile feedback for
+GUI interactions (e.g., [ 40]) or notifications (e.g., [ 2]). However,
+the expressiveness of vibrotactile sensations is limited [ 22, 43].
+Alternatively, Maiero et al. [19] explored the use of actuated pins
+on the back of the smartphone to provide tactile guidance on visual
+objects on the screen. Jang et al. [15] embedded an array of actuated
+pins on the edge of the smartphone. Aside from enabling tangible
+notifications and tactile guidance, the device can also be used as an
+input channel by creating buttons or sliders with the pins.
+To enhance touch perceptions such as sensing surface complic-
+ity, Feng et al. proposed a fabrication method of inflatable smalls
+silicon using full-range speakers [9]. The silicons can be attached
+to physical objects such as statues to provide tactile feedback on
+fingertips. Similarly, Gohlke et al. proposed an inflatable silicon
+button that can both generate touch feedback and capture touch
+input when inflated [11]. Their study showed that users can reliably
+perceive and recognize touch patterns of different inflation levels
+and total activations. Past works have also shown that inflatable sili-
+cons can also induce human-like touch sensations that can support
+interpersonal touch communications [22, 42]. Complementary but
+different from these works,In-Flat can be used to generate dynamic
+touch output patterns that augments smartphones’ visual display,
+enabling in-place tangible affordances on smartphones.
+2.3 Augmenting visual display with touch
+Augmenting touchscreens with touch feedback can increase in-
+teraction speed, reduce operating errors, and minimize visual and
+cognitive load, for example when scrolling [ 24], typing [6], and
+interacting with virtual buttons [40], due to enhanced spatial and
+temporal perceptions. Beyond enhancing GUI interactions, touch
+feedback has also been used to generate pressure sensations to
+graphical objects or images [19] and to enhance mobile communi-
+cations, for example accompanying emojis with vibrotactile pat-
+terns [37]. These tactile systems often spatially decouple the touch
+feedback from the virtual objects displayed on the screen to avoid
+occlusions and enable full access to the touchscreen capacities.
+Meanwhile, past works highlighted the benefits of spatially cou-
+pling visual and tactile feedback [13, 43], notable to generate direct
+physical feel on virtual objects. The dynamic physical buttons in
+[13] uses rear projections to couple touch I/O and visual display,
+which not only make them tangible and easier to find, but also pro-
+vide bi-directional pressure feedback as the users physically interact
+with the buttons. Sahoo et al. also used projectors on an elastic fab-
+ric surface to form a tabletop display with touch I/O capabilities
+[27]. However, using projectors to generate the visual display may
+limit the mobility of the touch device. Instead of projectors, In-Flat
+uses the smartphone’s screen as the visual display. Few papers ex-
+plored this approach and we tried to address their limitations: [20]
+uses a transparent gel overlay that turns opaque when activated,
+thus occluding the visual cues; [26] uses transparent silicon, but
+only with limited shapes and size (i.e., small buttons).
+3 IN-FLAT
+We propose In-Flat, a novel visual+touch display with inflatable
+silicon layers in the form of a phone case. In-Flat uses transpar-
+ent and translucent materials to accommodate visual display. The
+silicon layers can be installed on the back of the smartphone to
+preserve the screen’s touch input and visual output capabilities;
+or as an overlay to enhance the visual output displayed on the
+screen with in-place pressure input/output capabilities. A silicon
+layer consists of one or more airbags (e.g., 2x4 grid). Each airbag
+can capture continuous pressure input independently. As such, a
+silicon layer with multiple airbags can enable multi-finger pressure
+interactions. Each airbag can also be inflated with different amount
+of air (Fig. 1c), enabling dynamic controls over the complicity levels
+of the surface. Altogether, it creates a general-purpose visual+touch
+display with dynamic pressure I/O capabilities on smartphones.
+3.1 Rich touch input patterns
+When an airbag is inflated, the surface of the silicon stretches
+outwards and enables direct manipulations of the surface. When the
+user presses or pulls the silicon surface, the required force to deform
+the elastic silicon layer has a positive correlation to its deformation
+and has a negative correlation to the volume change. Thus, by
+measuring the air pressure change of the airbag, we can measure
+different touch forces from users and enable continuous pressure
+control. The users can then press the convex silicon surface with
+different pressure levels and temporal variations by manipulating the
+duration and the gap between presses (Fig. 2). When pressed, the
+silicon surface is stretched and the volume of the airbag decreases.
+As such, we can combine these touch input dimensions to generate
+rich touch patterns on In-Flat. Users can also pinch and pull the
+silicon surface with two fingers and have different touch patterns.
+3.2 Tangible dynamic touch output
+As the overlay is transparent, In-Flat enables visual+touch display
+with tangible feedback. When inflated, the silicon surface deforms
+according to the amount of air injected into the airbag (Fig. 1c). By
+dynamically parameterizing the inflation levels and the temporal
+variations, we can create in-place dynamic inflation effects like
+breathing (slowly inflating and deflating the airbag) or vibrating
+(inflating to a certain level first, and then switching to a series of
+inflations and deflations in a high frequency). In-Flat also enables
+skin-like touch sensations with different complicity levels. When
+Figure 2: Examples of touch input patterns with different
+pressure levels and temporal variations. (a) Pressing with
+different pressure levels. (b) A long press. (c) A combinations
+of pinch-and-pull input patterns.
+AVI 2022, June 6–10, 2022, Frascati, Rome, Italy Zhang et al.
+Figure 3: (a) The structure of In-Flat. (b) Transparent case. (c)
+Comparing resin before and after nitrocellulose coating.
+the user presses its surface, a pressure is exerted to the airbag and
+the air inside the touched airbag gets compressed. Thus, the tension
+of the silicon and the pressure difference between the airbag and the
+atmospheric pressure give a force feedback to the fingertip. Thus,
+we can control the compliance level dynamically (i.e., how soft
+or stiff the surface is when pressured), and the users can perceive
+different sensations. Altogether, In-Flat enhances both visual and
+touch perceptions of a visual object displayed on the screen.
+4 IMPLEMENTATION AND DESIGN CHOICES
+In-Flat consists of two parts: 1) the transparent screen overlay +
+transparent resin case; and 2) the inflation and pressure control. In
+this section, we describe our design and fabrication approach.
+4.1 Fabrication approach
+4.1.1 Soft and transparent overlay. Material choice. As an overlay,
+In-Flat requires materials that are easy-to-get, transparent, stretch-
+able, robust, soft, and skin-contact friendly. Different materials have
+been explored in the literature: latex [13, 22, 31], silicon [42], PE
+sheets [32], or spandix [12, 31]. Latex is robust and highly stretch-
+able, but the transparency is not high enough to allow visibility
+when placed on top of the screen. PE sheet is highly transparent,
+but non-elastic. We saw the potential of using silicons thanks to its
+stretchability, robust, diversity and bio-capability. Spandix is also
+robust and highly stretchable, and spandix fabrics can also be seen
+through. But its transparency is still limited, and the mesh structure
+of spandix fabrics does not support inflatable applications.
+Silicons are often used to induce skin-like sensations [ 22, 42].
+Thus, we explored different types of silicon to make the inflatable
+layer. Ecoflex series are highly stretchable (elongation at break:
+845% [29]) and durable, but the transparency cannot support screen
+overlay interactions (Fig. 5e). SORTA-Clear series have a high trans-
+parency (Fig. 5a), even though they are not as stretchable (elon-
+gation at break: 425% [30]) as Ecoflex series, its stretchability can
+already meet the requirements for screen overlay interaction. Ad-
+ditionally, it can also provide a skin-like touch sensation to the
+users. We chose skin-safe SORTA-Clear 18 (100% Modulus: 35psi
+[30]) as the material of the inflatable layer. We set the thickness
+of the inflation layer to 1.5mm (Fig. 4b) after exploring the elastic
+modulus of different thickness of SORTA-Clear 18 silicon.
+Composite structure. When In-Flat is placed on the smartphone,
+the deformation of the airbag should only face outwards. Thus,
+we designed a two-layer composite structure. First, we created the
+inflatable silicon layer with a 3D-printed mold. The silicon layer
+is created using a mold that printed by a PLA 3D printer. To in-
+crease the smoothness of the silicon airbag with current laboratory
+Figure 4: Composite structure of the airbags. (a) Two-layer
+structure. (b) Uni-directional inflation with 1.5mm thick sil-
+icone layer. (a) Inflation with 0.8mm thick silicone layer.
+equipment, we pasted a layer of plastic tape to the surface of the
+printed PLA mold (Fig. 5a). After that, we glued the silicon layer to
+a screen-protection glass with silicon rubber adhesive (ref: Sil-Poxy).
+As such, when the air volume changes, the airbag’s deformation
+only happens on the silicon side (i.e., outwards) (Fig. 4).
+4.1.2 Transparent case. In-Flat can also be placed on the back of the
+smartphone to enable back-of-device interactions. With this setting,
+the screen of smartphone is faced towards the rigid phone case.
+Similar to the selection of silicons, the transparency is crucial to
+ensure visibility. Thus, we fabricated a phone case using a resin 3D
+printer, with built-in air channels in the case to avoid tubes (Fig. 3c).
+We then applied a thin layer of transparent nitrocellulose coat on
+the surface of resin case to increase the transparency (Fig. 3d).
+4.1.3 Inflation medium. We can potentially inflate the grid with
+different fluids. Previous research explored different fluids for in-
+flatable touch devices, including air [ 13, 22, 42], water [18], and
+other specialty fluids [35]. In-Flat requires a high transparency level
+and high response speed, so we explored the use of water and air
+to actuate the device. Comparing these two fluids, water can be
+considered as non-compressible liquid in In-Flat pressure range,
+which lead to a high response speed. However, due to the high
+refractive index of water, the water-inflated silicon bag works as a
+plano-convex lens and deforms the content on the screen (Fig. 5c).
+Finally, we chose air as the inflation medium in our design (Fig. 5b).
+4.2 Pneumatic control
+4.2.1 Actuators. To ensure accurate inflation levels and pressure
+input recognition, we implemented a closed-loop inflation/deflation
+system for each airbag. For example, for a silicon layer with 2x4
+grid, the 8 airbags of In-Flat are actuated with a 12V DC vacuum
+pump (ref: WP36C). The inflation and deflation air flow are equally
+distributed into 2x8 flows and controlled separately by 2x8 DC
+solenoid valves (ref: CJA V08-2B05A). The solenoid valves are pow-
+ered by two 8-channel relay boards and controlled by a 16-channel
+PWM motor driver (ref: PCA9685).
+4.2.2 Pressure detection and inflation control. To enable continuous
+input, the accuracy and speed of touch input detection is crucial.
+Different technologies have been explored to detect touch [10, 33],
+Figure 5: Different fabrication methods of silicon airbags: (a)
+using SORTA-Clear 18 and fabricated with tape-covered PLA
+mold; (b) inflated with air; (c) filled with water; (d) fabricated
+with 3D printed PLA mold directly; (e) using Ecoflex 20.
+Pulling, Pressing, and Sensing with In-Flat AVI 2022, June 6–10, 2022, Frascati, Rome, Italy
+but none of these can be used in our case considering the high
+requirement of transparency of the screen overlay. To this end, we
+used air pressure to detect the touch forces (as done in previous
+works [22, 32]) and built a force-detection system with 8 air pressure
+sensors (ref: XGZP6847A) with a sample rate of 40Hz. The sensors
+are directly connected to the silicon tubes that transport the air
+to the phone case. When the user touches the airbags, they are
+deformed and the pressure changes accordingly. As the sensors
+and the airbags are communicating vessels, the air pressure stays
+the same all the time. Thus, by detecting the pressure value in the
+airbags, we can get the equivalent touch pressure indirectly. When a
+airbag is inflated to a certain level, the inflation and deflation valves
+are closed to ensure air impermeability. Furthermore, we added
+close-loop pressure control. When the current pressure is outside
+the desired value range, the inflate or deflate valve is activated
+until the targeted pressure value is obtained. The real-time pressure
+value is sent to the interface and used for pressure-related control.
+5 APPLICATION AND USE CASES
+We illustrate potential use cases that leverage In-Flat’s capabilities
+to generate in-place dynamic output, to capture rich touch input
+patterns, and to support skin-like touch perception on smartphones.
+Enhancing GUI interaction. In-Flat enables continuous pres-
+sure input, which can be mapped to GUI elements on smartphones,
+adding one additional dimension to the input channel. For example,
+In-Flat can be used for controlling the scroll bar: a pinch-and-pull
+would scroll up the page while a press would scroll it down. We can
+then map the pressure level to the speed of scrolling: the harder
+the user presses/pulls the airbag, the faster the page scrolls.
+Enhancing bimanual interaction. In-Flat can support biman-
+ual interactions when the silicon layer is put on the back of the
+device. This can be particularly useful when the users use an applica-
+tion that requires a full screen real estate. For example, productivity
+apps like Google Doc display the content (i.e., the text) and the
+keyboard, but the users also need to access the menu from time to
+time. Instead of making them go back and forth between typing and
+accessing the menu, with In-Flat, some airbags can be inflated to
+signify the available pop-up menus or widgets. As the users presses
+an airbag on the back of the smartphone, a pop-up/widget menu
+appears, and she selects the desired menu item. The pop-up menu
+disappears as soon as she releases her finger from the airbag.
+Expressive interpersonal communication.As one of the most
+important non-verbal communication channels, touch plays an es-
+sential role in interpersonal affective communication. In addition
+to the commonly-used visual and audio channels, In-Flat allows
+users to generate and send touch input patterns to each other with
+expressive skin-like sensation, as opposed to vibrations in current
+smartphones that do not resemble human-like touch [22, 42]. As an
+example, when the user is having a phone conversation by holding
+the phone against the face, In-Flat can generate pressure patterns
+such as a caress, a poke, or a vibration on the cheek to express dif-
+ferent emotions, as demonstrated in POKE [22]. If In-Flat’s silicon
+layer is placed on the back of device, when the users are having
+a video chat by holding the phone with one hand and contact the
+palm with the overlay, they can also send touch gestures like stroke,
+hit, pat, caress to each other’s palm (Fig. 6a). This functionality can
+also be used when there is no verbal communication going on.
+Parametric and tangible emojis.Past work has proposed tools
+that parameterize dynamic emojis through typing input varia-
+tions [1]. Similarly, In-Flat’s continuous pressure input can be used
+to parameterize dynamic emojis (Fig. 1a). The emoji can be sent
+along with its pressure values (i.e., visual emoji enriched with in-
+flated airbags). As such, the receivers can also dynamically interact
+with the emoji by pressing or pinching the corresponding inflated
+airbags, which will animate the visual emoji.
+Expressive tangible notifications. In-Flat can support tangi-
+ble notification systems. The tangibility increases the expressivity
+of the notification, for exampleIn-Flat displays a breathing inflation
+pattern to notify the arrival of a message, with the inflation level
+changes depending on the importance of the message. The users
+can perceive the expressive notifications from afar without reading
+what is written on the screen. Conversely, a user receiving a call
+notification can press the airbag to hang up, or pinch-and-pull to
+send a preset quick reply to the caller.
+Supporting visually-impaired users. Thanks to its tangible
+feedback, In-Flat can support eyes-free interactions, offering an
+alternative interaction channel for the visually-impaired users. Sim-
+ilar to the approach proposed by Rantala et al. [25], In-Flat can be
+used to display Braille outputs and to input Braille characters.
+Interactive games. The gaming experience could be enhanced
+by combining visual, audio, and touch feedback. For example, in
+the "catch-a-cat" game (similar to the "whack-a-mole" game), a cat
+appears at a random place and the corresponding airbag inflates
+accordingly (Fig. 6b). Users can perform press and pinch-and-pull
+gesture on the corresponding airbag. The cat will emit a pleasant
+sound on a gentle press, a scream on a pinch-and-pull, a loud sound
+and run away on a strong press. The airbags inflates or deflates
+accordingly. In-Flat can also enhance musical gaming experience
+such as drumming (Fig. 1b). The pressure level and temporal varia-
+tions can be mapped to the drum’s percussion and rhythm.In-Flat’s
+overlay can also be used as gaming console buttons (Fig.6c).
+Displaying objects with tangible properties.In-Flat provides
+tangible feedback that lets the user perceive the physical and the
+temporal property of a visual object (e.g., compliance, rhythm). For
+example, in the case of a remote medical consultation, the user
+can communicate his lung breathing via In-Flat, while the doctor
+can see the lung movement and touch the overlay to perceive the
+breathing remotely and directly with their finger (Fig. 1d).
+Figure 6: (a) Users can send each other social touch gestures
+like a pat in the palm, and the airbag of In-Flat will inflate
+accordingly. (b) Interactive game "catch-a-cat". (c) In-Flat’s
+overlay can include different shapes of airbags.
+AVI 2022, June 6–10, 2022, Frascati, Rome, Italy Zhang et al.
+6 EV ALUATION
+Considering our goal to augment smartphones’ touchscreens with
+rich touch input and output (I/O) capabilities via In-Flat interface,
+it is important to evaluate if users can perform continuous pressure
+input with In-Flat and the visual+touch output can enhance mobile
+interactions. Our goals were 1) to assess quantitatively if users can
+perform both pinch-and-pull and press input gestures with In-Flat;
+2) to probe on user perception on the coupling between touch I/O
+and visual display qualitatively. To this end, we conducted a two-
+stage study: 1) an experiment on continuous input control where
+participants played a game similar to "Flappy bird" [36]; 2) a semi-
+structured interview where participants explored four pre-designed
+demo applications of In-Flat and then shared their perceptions.
+6.1 Evaluation Design
+6.1.1 Stage 1: Controlled experiment on continuous input control.
+The experiment was a [2x6] within-participant design with one
+primary factor InputTechnique (pinch-and-pull and press) and one
+secondary factor PressureLevel (Level 1 to 6). The game was inspired
+by “Flappy bird” [36], in which the players need to control the
+movement of a bird so that it flies through a small gap between
+pipes (Fig. 7). We chose game tasks as opposed to more abstract tasks
+to highlight the visual+touch coupling and increase the ecological
+validity of the study. In our game, the bird always flies on the left
+side of the screen while the pairs of pipes move towards the bird
+with a uniform speed (80 pixels per second). The participants only
+needed to position the bird on the correct height (i.e., movement
+on y-axis): press the airbag to fly down, pinch-and-pull to fly up.
+Past studies showed that users can accurately control pressure
+input with 10±2 different levels [7, 21, 38]. Similarly, we tested 13
+pressure levels: Level 1 to 6 of press; Level 1 to 6 of pinch-and-pull;
+and Level 0 when no input gesture was captured (i.e., baseline).
+The experiment consisted of three blocks of 12 trials: BLOCK-1 of
+6 PressureLevel x 2 replications of pinch-and-pull; BLOCK-2 of 6x2
+trials of press; and BLOCK-3 of 12 mixed trials ofpinch-and-pull and
+press. The order of PressureLevel was counter balanced using Latin
+Square across participants.BLOCK-3 was always the last block. Half
+of the participants started with BLOCK-1 and the other half with
+BLOCK-2. Each participant completed 36 trials.
+6.1.2 Stage 2: Semi-structured interview on user perception. We de-
+signed and presented 3 demo applications described in Section 5 to
+participants: 1) the "catch-a-cat" game (Fig. 6b); 2) touch communi-
+cation with the silicon layer placed on the back of the smartphone
+Figure 7: The parameters of the experiment interface and
+the illustration of the targets in Stage 1.
+(Fig. 6a); and 3) dynamic visual and tangible feedback presented
+as an animated breathing lung (Fig. 1d). Finally, we prompted on
+the generalizability of In-Flat where other shapes of airbags were
+presented to the participants, and they were asked to reflect what
+kind of interaction they might have with these different shapes
+of airbags, and what other shapes of airbags they might needed
+in interaction. The shapes presented in the study were 9-button
+keyboard layout, a cross, a circle and two opposite triangles (Fig. 6c).
+6.2 Participants and Apparatus
+We recruited twelve participants (3 women, 9 men, 24-43 years old,
+median age 28.5). All participants used their right hand to interact
+with their smartphones in daily life. We used a OnePlus 5T smart-
+phone with the interface displayed full screen (on 300 x 600 pixels).
+The game and the demos were web-based apps, connected with
+In-Flat through WiFi. For each participant, the calibrated pressure
+value for maximum press, maximum pinch-and-pull, and the base-
+line pressure were recorded and used throughout the session. The
+game also logged the distance between the bird and the target red
+line. The data were measured and recorded every 25ms.
+6.3 Procedure
+Following the health protocol, participants sat behind a desk in a
+wide meeting room with opened windows, with In-Flat placed on
+the desk. We disinfected the surface of In-Flat device before each
+session. All the participants read and signed the informed consent.
+Stage 1 started with the calibration session: the participants were
+asked to perform the press and pull gesture with the maximum
+strength they will likely use in mobile interaction with the hand
+they used in their daily mobile interaction. For each gesture, we
+mapped the maximum pressure value to Level 6. The pressure value
+when no input was performed was mapped to Level 0. The mapping
+of the other levels (Level 1 to 5) was equally distributed in between
+the pressure values of Level 0 and 6. We then divided the screen’s
+height into 13 rows and mapped each pressure level to each row
+(the middle point of a row was illustrated as a grey line in Fig. 7).
+We also drew a dotted red line to give a visual guideline on the path
+the participants needed to follow (Fig. 7). After passing through the
+pair of pipes, the participants can lift their finger to rest.
+We included a training session where they could practice playing
+the game (5 minutes). In the testing session, the participants were
+asked to perform all three blocks of trials as accurately and stably
+as possible. After performing all the trials, we asked them to share
+their experience of using In-Flat as input device in this game. Stage
+1 took around 25 minutes. In Stage 2, the participants were asked
+to play around each of the demo while thinking aloud and to share
+their perception after each demo. Stage 2 took around 25 minutes.
+6.4 Measurement
+To better evaluate the user performance of each input gesture, we
+divided the target path (i.e. the dashed red line in Fig. 7) into 3 parts:
+the preparation phase (part 1), the test phase (part 2, 3 and 4) and the
+exit phase (part 5). We measured: 1) success rate, the percentage of
+successfully completed trials (i.e., the distance between the bird’s
+position and the red line is always lower than half of the bird size);
+2) accuracy, the average distance between the location of the center
+Pulling, Pressing, and Sensing with In-Flat AVI 2022, June 6–10, 2022, Frascati, Rome, Italy
+of the bird and the red line; and 3) stability, the standard deviation
+of the distance between the center of the bird and the red line. We
+then performed the statistical analysis using JMP [16] with REML
+method followed by a post-hoc analysis with Tukey HSD.
+6.5 Quantitative Results
+6.5.1 Participants performed pinch-and-pull gestures as well as
+press gestures. The success rate for press and pinch-and-pull were
+84.7% and 83.8% respectively. Given that the pinch-and-pull ges-
+tures were a relatively new interaction technique, we were sur-
+prised to find that there was no significant effect of InputTechnique
+(F1,11=0.05, p=0.82) onsuccess rate. PressureLevel (F5,55=1.36, p=0.23)
+and BlockID (F2,22=0.84, p=0.43) also did not have any significant
+effect on success rate. We also did not find any significant effect of
+InputTechnique on the input accuracy (i.e., the average distance be-
+tween the bird and the target path), neither during the preparation
+phase (F1,11=1.44, p=0.23), the test phase (F1,11=2.59, p=0.11), nor
+the exit phase (F1,11=2.43, p=0.12). Similarly, there was no signifi-
+cant effect ofInputTechnique on the input stability (i.e., the standard
+deviation of the distance) during the preparing phase (F1,11=1.32,
+p=0.25), test phase (F1,11=2.93, p=0.09) and exit phase (F1,11=1.88,
+p=0.17). This suggested that the participants could perform pinch-
+and-pull gestures as accurately and as stably as press gestures.
+We suspected there was a possibility that this result was im-
+pacted by some failed trials in which the participant gave up right
+away and released their finger(s) once the bird hit the pipe. Hence,
+we performed another analysis with the successful trials only (84%
+of total trials). The statistical analysis yielded similar results forsuc-
+cess rate and accuracy. The only difference was a significant effect
+of InputTechnique on the stability during the test phase (F1,11=21.7,
+p<0.0001). That said, the difference between the two standard devia-
+tions was rather small (only 0.25 pixels:SD P I N C H−AN D −PU LL =1.82
+pixels and SD P RES S =1.57 pixels), so we can still conclude that the
+participants performed pinch-and-pull as well as press gestures.
+6.5.2 Performing the highest level of pinch-and-pull gestures was
+more challenging. Although PressureLevel did not have a signifi-
+cant effect on success rate (F5,55=1.36, p=0.24), the success rates
+for PressureLevel=6 for both InputTechnique were lower than the
+other five levels: 76% for overall success rate, 72.2% and 80.6% for
+pinch-and-pull and press respectively. We also found a significant
+effect of PressureLevel on both the average distance and the standard
+deviation of distance during all three phases (all p<0.05). A post-hoc
+analysis with Tukey HSD revealed that Level 6 had significantly
+higher average distance (i.e., accuracy) and standard deviation of
+distance (i.e., stability) in all three phases. There might be two pos-
+sible explanations for this result: 1) As the distance the bird needs
+to travel from the baseline to the target location in Level 6 was the
+largest (Fig. 7), it required more physical preparations to perform
+the gestures, resulting in lower performance; 2) The participants
+might have performed the input gesture as intensely as possible
+to reach the top or the bottom of the screen for Level 6 as they
+knew that these trials required the largest amount of force, hence,
+reducing the accuracy and the stability.
+To summarize, given that we calibrated the maximum pressures
+(i.e., Level 6) for each gesture based on each participant’s maximum
+"comfortable" pressures, the data suggested that while they were
+Figure 8: (a) The average distance and (b) the standard devi-
+ation for all PressureLevel in all three phases.
+still able to perform successfully, the accuracy and the stability
+might be slightly compromised. This can be potentially reduced by
+imposing a better calibration session: instead of performing just
+one pressure input and record its value as the maximum pressure
+level (as done in our current experiment design), we can ask the
+participants to perform several pressure inputs and record their
+average or median value as the maximum pressure level. Their
+perception of maximum "comfortable" pressure might also change
+over time as they get more used to the interaction.
+6.5.3 More preparation was needed when the participants switched
+between pinch-and-pull and press gestures. BLOCK-1 only consisted
+of pinch-and-pull, BLOCK-2 only press, while BLOCK-3 consisted
+of both gestures in a mixed order. We found that BlockID had a
+significant effect on the average distance (F2,22=24.6, p<0.0001) and
+the standard deviation of distance (F2,22=33.6, p<0.0001) during the
+preparation phase, as well as on the standard deviation of distance
+during the exit phase (F2,22=6.32, p=0.002). A post-hoc analysis on
+the three conditions revealed that the performance was signifi-
+cantly lower for BLOCK-3 than for the other blocks. There might
+be two possible explanations. First, given that in BLOCK-3 the
+pinch-and-pull and press gestures were mixed, some participants
+might constantly switch their finger position between pinch-and-
+pull with two fingers and press with one finger, making performing
+the gesture more challenging. Second, with 12 different pressure
+levels (i.e., 6 levels each for pinch-and-pull and press) mixed within
+one block, the target level’s heights in one trial to another had a
+larger difference than BLOCK-2 and BLOCK-1 that only included 6
+levels. This implied more travelling distance when switching be-
+tween trials. Thus, the challenge to prepare the gesture was higher
+in BLOCK-3, which might lead some participants to exit the area
+earlier to prepare for the next trial.
+6.6 Qualitative Results
+6.6.1 Participants felt having more control when performing the
+pinch-and-pull gestures. Surprisingly, although the performances of
+pinch-and-pull and press were quite similar, half of the participants
+(6/12) reported that they felt that they had a better sense of control
+for pinch-and-pull. Only 2 participants felt that they could control
+the press gestures more accurately. Some participants (4/12) ex-
+plained that it was because they had more rooms to pull the airbag
+upwards with, in contrast with pressing the airbag towards the
+screen which at some point blocked their finger movement. Half of
+the participants (6/12) also mentioned that, withpinch-and-pull, the
+silicon’s elasticity provided additional sense of resistance onto their
+AVI 2022, June 6–10, 2022, Frascati, Rome, Italy Zhang et al.
+finger, and this resistance kept increasing as they pulled harder.
+In contrast, when pressing harder, the silicon surface eventually
+touched the rigid screen, so the perception became somewhat simi-
+lar to just touching the screen. That said, most participants (8/12)
+still reported that pressing the airbag increased the sense of control
+compared to touching the rigid screen directly, because the soft
+airbag deformed under pressure, consequently providing additional
+sensory cues and enabling more freedom of finger movement.
+6.6.2 Participants appreciated the coupling between visual display
+and touch I/O interactions. All 12 participants appreciated the sen-
+sation of touching theIn-Flat’s overlay. They perceived the silicon’s
+texture as "comfortable" (8/12) and the "bouncy feeling" of the airbag
+was "interactive" and "fun" (5/12). Most participants (10/12) thought
+the transparent silicon layer allowed them to see the visual display
+with no issues. More than half of participants (7/12) highly appre-
+ciated the visual effect of dynamic movement of the airbag in the
+animated breathing lung demo, and found that it "follows well the
+movement of the GIF " (6/12) and "[looks] vivid and natural " (3/12).
+Thanks to the combination of two modalities (visual+touch), they
+"can feel what [they] see " (P2) and it was " dynamic and playful "
+(P5) and " makes the phone alive " (P1,P10). The participants also
+appreciated the possibility of using different shapes of silicon layer
+including grids, buttons, and console controllers. They expressed
+willingness to use In-Flat in their daily life and proposed different
+ways of using it, for example as landmarks on the screen and help
+guiding the movement of the finger (P4) and providing full tactile
+experience when watching a movie (P7).
+7 DISCUSSION, LIMITATIONS, FUTURE
+WORK
+Improving pressure control on smartphones. Thanks to the
+high stretchability of the In-Flat’s silicon layer, users can perform
+not only press but also pinch-and-pull input gestures. To the best of
+our knowledge, previously proposed touch devices did not specifi-
+cally discuss nor compare user performance of pinch-and-pull and
+press gestures. Our evaluation with In-Flat indicated that the partic-
+ipants were able to performpinch-and-pull gestures as accurately as
+press gestures, despite the fact that they mentioned of never using
+pinch-and-pull gestures to interact with digital devices in their daily
+lives. This shows a promising opportunity to leverage inflatable
+silicon layers for rich pressure-based input capabilities.
+Reflecting on the results of our evaluation, we see different ways
+to improve pressure-based controls on inflatable silicons. We only
+tested six levels of pinch-and-pull and six levels of press. The par-
+ticipants could perform both gestures with high success rate and
+high accuracy. Fruchard et al. [10] suggested that pressure-based
+input like press on a soft surface was underestimated. Similarly, the
+performance of the pinch-and-pull gestures with In-Flat might also
+be underestimated. A future study on pinch-and-pull is needed to
+better determine its full potentials, i.e., how many levels of pinch-
+and-pull gestures can the users control reliably.
+Although statistically not different, some participants in our
+evaluation study mentioned that performing the pinch-and-pull
+gestures required more physical demands than press gestures be-
+cause the silicon’s surface was too smooth to pinch. To make the
+surface easier to pinch, we can consider using different materials
+that can induce larger frictions or fabricate the silicone to include a
+small handle that is easier to pull. However, this might compromise
+the transparency that is needed to enable clear visual display when
+put on top of the screen.
+Improving the technical implementation. The current pro-
+totype, which was conceived as a probe to experiment on the press
+and pinch-and-pull gestures and to explore applications and use
+cases, still has some limitations. First, due to the electrical insulation
+property of the silicon we used, the current In-Flat prototype does
+not support touchscreen interactions when the overlay is placed
+on top of the screen. However, researchers in material science pro-
+posed new materials that are not only stretchable and transparent,
+but also conductive [ 44, 44]. Combining In-Flat with these new
+materials would thus solve this limitation. Second, pneumatic tech-
+nology limits the mobility because of the relatively important size
+of the actuation device. This problem could be solved by adopting
+a new, more compact, pneumatic technology such as FlowIO [28].
+Moreover, because of its reduced size, this new technology may
+allow using more cells than in the current prototype.
+Exploring different inflation medium. Another interesting
+research direction would be to use other media than air to inflate
+the silicon bags. For example, we explored water-inflated silicon
+bags in Section 4. The observed plano-convex lens effect then affects
+the visual display on the screen, a feature that may be interesting
+for certain tasks, such as showing details on the screen [ 34] or
+performing fish-eye effects [23]. As participants mentioned, the
+tactile feeling (e.g. complicity/stiffness, density, temperature) could
+change with different medium, and fluids with different colors could
+be used to make the airbags work as physical filters.
+Beyond augmenting smartphones. The current design of In-
+Flat focused on smartphone interactions, but it can potentially be
+adapted to larger devices, by increasing the number of airbags. As
+some participants mentioned in the evaluation, In-Flat’s overlay
+can be designed to be detach-and-play on any device such as a
+smartwatch or a tabletop. One factor to be considered is the trade-
+off between size and mobility: the bigger the overlay is, the more
+complex pneumatic control it needs, hence, limiting its mobility.
+This may not be an issue for fixed devices like tabletops, but future
+work should address this issue for bigger mobile devices like tablets.
+8 CONCLUSION
+This paper aims to augment smartphones with touch I/O capabili-
+ties. With our fabrication approach, we produce pressure-sensitive
+silicon layers with high transparency level, enabling users to 1)
+see the visual display; 2) perceive tangible affordances when In-
+Flat’s overlay is inflated; and 3) perform continuous pressure input
+gestures. As such, we enable in-place coupling between visual ob-
+jects displayed on the smartphone and touch I/O interactions. The
+participants in our evaluation study were able to perform both
+pinch-and-pull and press gestures on In-Flat with similar perfor-
+mance. They also appreciated the fact that they could still see the
+visual display, and at the same time, perceive the dynamic tangi-
+ble affordance that enriched their visual perceptions. Our work
+demonstrates the potentials of supporting rich tangible interac-
+tions on smartphones, in particular the potential of adding in-place
+pressure-based I/O capabilities on touchscreens.
+Pulling, Pressing, and Sensing with In-Flat AVI 2022, June 6–10, 2022, Frascati, Rome, Italy
+REFERENCES
+[1] Jessalyn Alvina, Chengcheng Qu, Joanna McGrenere, and Wendy E. Mackay.
+2019. MojiBoard: Generating Parametric Emojis with Gesture Keyboards. In
+Extended Abstracts of the 2019 CHI (Glasgow, Scotland Uk) (CHI EA ’19). ACM,
+New York, NY, USA, 1–6. https://doi.org/10.1145/3290607.3312771
+[2] Jessalyn Alvina, Shengdong Zhao, Simon T. Perrault, Maryam Azh, Thijs Roumen,
+and Morten Fjeld. 2015. OmniVib: Towards Cross-Body Spatiotemporal Vibrotac-
+tile Notifications for Mobile Phones. In Proc. of the 33rd CHI (Seoul, Korea) (CHI
+’15). ACM, New York, USA, 2487–2496. https://doi.org/10.1145/2702123.2702341
+[3] Apple. 2018. UITouch - Apple Developper Documentation. https://developer.
+apple.com/documentation/uikit/uitouch. Accessed: 2022-01-10.
+[4] David Beattie, William Frier, Orestis Georgiou, Benjamin Long, and Damien
+Ablart. 2020. Incorporating the Perception of Visual Roughness into the Design
+of Mid-Air Haptic Textures. In ACM SAP ’20 (Virtual Event, USA). ACM, New
+York, NY, USA, Article 4, 10 pages. https://doi.org/10.1145/3385955.3407927
+[5] Wouter M. Bergmann Tiest. 2010. Tactual perception of material properties.Vision
+Research 50, 24 (2010), 2775–2782. https://doi.org/10.1016/j.visres.2010.10.005
+Perception and Action: Part I.
+[6] Stephen A. Brewster and Michael Hughes. 2009. Pressure-Based Text Entry for
+Mobile Devices. In Proc. of 11th MobileHCI (Bonn, Germany). ACM, New York,
+NY, USA, Article 9, 4 pages. https://doi.org/10.1145/1613858.1613870
+[7] Jared Cechanowicz, Pourang Irani, and Sriram Subramanian. 2007. Augmenting
+the mouse with pressure sensitive input. In Proc. of the SIGCHI . 1385–1394.
+[8] Christian Corsten, Simon Voelker, Andreas Link, and Jan Borchers. 2018. Use
+the Force Picker, Luke: Space-Efficient Value Input on Force-Sensitive Mobile
+Touchscreens. In Proc. of the 2018 CHI (Montreal QC, Canada) (CHI ’18). ACM,
+New York, NY, USA, 1–12. https://doi.org/10.1145/3173574.3174235
+[9] Yuan-Ling Feng, Roshan Lalintha Peiris, Charith Lasantha Fernando, and Kouta
+Minamizawa. 2018. 3D printed haptics: creating pneumatic haptic display based
+on 3D printed airbags. In International Conference on Human Haptic Sensing and
+Touch Enabled Computer Applications. Springer, 180–192.
+[10] Bruno Fruchard, Paul Strohmeier, Roland Bennewitz, and Jurgen Steimle. 2021.
+Squish This: Force Input on Soft Surfaces for Visual Targeting Tasks (CHI ’21).
+ACM, New York, NY, USA, 1–9. https://doi.org/10.1145/3411764.3445623
+[11] Kristian Gohlke, Eva Hornecker, and Wolfgang Sattler. 2016. Pneumatibles:
+Exploring Soft Robotic Actuators for the Design of User Interfaces with Pneumo-
+tactile Feedback. In Proc. of the TEI ’16 (Eindhoven, Netherlands) (TEI ’16). ACM,
+New York, NY, USA, 308–315. https://doi.org/10.1145/2839462.2839489
+[12] Jaehyun Han, Jiseong Gu, and Geehyuk Lee. 2014. Trampoline: A double-sided
+elastic touch device for creating reliefs. In Proceedings of the 27th annual ACM
+symposium on User interface software and technology . 383–388.
+[13] Chris Harrison and Scott E. Hudson. 2009. Providing Dynamically Changeable
+Physical Buttons on a Visual Display. In Proc. of the SIGCHI (Boston, MA, USA)
+(CHI ’09). ACM, USA, 299–308. https://doi.org/10.1145/1518701.1518749
+[14] Seongkook Heo and Geehyuk Lee. 2011. Force gestures: augmented touch screen
+gestures using normal and tangential force. In CHI’11 Extended Abstracts on
+Human Factors in Computing Systems . 1909–1914.
+[15] Sungjune Jang, Lawrence H. Kim, Kesler Tanner, Hiroshi Ishii, and Sean Follmer.
+2016. Haptic Edge Display for Mobile Tactile Interaction. In Proc. of the 2016
+CHI (San Jose, California, USA) (CHI ’16). ACM, New York, NY, USA, 3706–3716.
+https://doi.org/10.1145/2858036.2858264
+[16] JMP Statistical Discovery LLC. 2021. JMP-Statistical Software. https://www.jmp.
+com/en_gb/home.html [Accessed 17-August-2021].
+[17] Robert H. LaMotte. 2000. Softness Discrimination With a Tool. Journal of
+Neurophysiology 83, 4 (2000), 1777–1786. https://doi.org/10.1152/jn.2000.83.4.1777
+arXiv:https://doi.org/10.1152/jn.2000.83.4.1777 PMID: 10758090.
+[18] Lijuan Liu, Cheng Yao, Yizhou Liu, Pinhao Wang, Yang Chen, and Fangtian Ying.
+2020. FlowGlove: A Liquid-Based Wearable Device for Haptic Interaction in
+Virtual Reality. In International Conference on HCI . Springer, 316–331.
+[19] Jens Maiero, David Eibich, Ernst Kruijff, André Hinkenjann, Wolfgang Stuer-
+zlinger, Hrvoje Benko, and Gheorghita Ghinea. 2019. Back-of-Device Force
+Feedback Improves Touchscreen Interaction for Mobile Devices. EEE Trans.
+Haptics 12, 4 (Oct. 2019), 483–496. https://doi.org/10.1109/TOH.2019.2911519
+[20] Viktor Miruchna, Robert Walter, David Lindlbauer, Maren Lehmann, Regine von
+Klitzing, and Jörg Müller. 2015. GelTouch: Localized Tactile Feedback Through
+Thin, Programmable Gel. In Proc. of the 28th UIST (Charlotte, NC, USA) (UIST
+’15). ACM, New York, NY, USA, 3–10. https://doi.org/10.1145/2807442.2807487
+[21] Sachi Mizobuchi, Shinya Terasaki, Turo Keski-Jaskari, Jari Nousiainen, Matti
+Ryynanen, and Miika Silfverberg. 2005. Making an impression: force-controlled
+pen input for handheld devices. In CHI’05 extended abstracts. 1661–1664.
+[22] Young-Woo Park, Kyoung-Min Baek, and Tek-Jin Nam. 2013. The Roles of Touch
+during Phone Conversations: Long-Distance Couples’ Use of POKE in Their
+Homes. In Proc. of the SIGCHI CHI (Paris, France) (CHI ’13). ACM, New York, NY,
+USA, 1679–1688. https://doi.org/10.1145/2470654.2466222
+[23] Cyprien Pindat, Emmanuel Pietriga, Olivier Chapuis, and Claude Puech. 2012.
+JellyLens: Content-Aware Adaptive Lenses. In Proc. of the 25th Annual ACM
+Symposium on UIST (Cambridge, Massachusetts, USA) (UIST ’12). ACM, New
+York, NY, USA, 261–270. https://doi.org/10.1145/2380116.2380150
+[24] Ivan Poupyrev, Shigeaki Maruyama, and Jun Rekimoto. 2002. Ambient Touch:
+Designing Tactile Interfaces for Handheld Devices. In Proc. of the 15th Annual
+ACM Symposium on UIST (Paris, France) (UIST ’02). ACM, New York, NY, USA,
+51–60. https://doi.org/10.1145/571985.571993
+[25] J. Rantala, R. Raisamo, J. Lylykangas, V. Surakka, J. Raisamo, K. Salminen, T.
+Pakkanen, and A. Hippula. 2009. Methods for Presenting Braille Characters on a
+Mobile Device with a Touchscreen and Tactile Feedback. IEEE Transactions on
+Haptics 2, 1 (2009), 28–39. https://doi.org/10.1109/TOH.2009.3
+[26] Alex Russomanno, Zhentao Xu, Sile O’Modhrain, and Brent Gillespie. 2017. A
+pneu shape display: Physical buttons with programmable touch response. In2017
+IEEE WHC. 641–646. https://doi.org/10.1109/WHC.2017.7989976
+[27] Deepak Ranjan Sahoo, Kasper Hornbæk, and Sriram Subramanian. 2016. Table-
+Hop: An Actuated Fabric Display Using Transparent Electrodes . ACM, New York,
+NY, USA, 3767–3780. https://doi.org/10.1145/2858036.2858544
+[28] Ali Shtarbanov. 2021.FlowIO Development Platform – the Pneumatic “Raspberry Pi”
+for Soft Robotics. ACM, New York, USA. https://doi.org/10.1145/3411763.3451513
+[29] Smooth-on. 2018. Ecoflex Series. https://www.smooth-on.com/tb/files/SORTA_
+CLEAR_SERIES_TB.pdf. Accessed: 2021-10-03.
+[30] Smooth-on. 2018. SORTA-Clear Series. https://www.smooth-on.com/tb/files/
+ECOFLEX_SERIES_TB.pdf. Accessed: 2021-10-03.
+[31] Yuta Sugiura, Masahiko Inami, and Takeo Igarashi. 2012. A thin stretchable
+interface for tangential force measurement. In Proceedings of the 25th annual
+ACM symposium on User interface software and technology . 529–536.
+[32] Shan-Yuan Teng, Tzu-Sheng Kuo, Chi Wang, Chi-huan Chiang, Da-Yuan Huang,
+Liwei Chan, and Bing-Yu Chen. 2018. PuPoP: Pop-up Prop on Palm for Virtual
+Reality. In Proc. of the 31st UIST (Berlin, Germany) (UIST ’18). ACM, New York,
+NY, USA, 5–17. https://doi.org/10.1145/3242587.3242628
+[33] Marc Teyssier, Gilles Bailly, Catherine Pelachaud, Eric Lecolinet, Andrew Conn,
+and Anne Roudaut. 2019. Skin-On Interfaces: A Bio-Driven Approach for Artifi-
+cial Skin Design to Cover Interactive Devices. In Proc. of the 32nd Annual ACM
+Symposium on UIST (New Orleans, LA, USA) (UIST ’19). ACM, New York, NY,
+USA, 307–322. https://doi.org/10.1145/3332165.3347943
+[34] Soichiro Toyohara, Toshiki Sato, and Hideki Koike. 2018. Balloonygen: Extended
+Tabletop Display Embedded with Balloon-like Deformable Spherical Screen. In
+Proc. of the 24th ACM VRST (Tokyo, Japan) (VRST ’18). ACM, New York, NY, USA,
+Article 7, 5 pages. https://doi.org/10.1145/3281505.3281532
+[35] Ryusei Uramune, Hiroki Ishizuka, Takefumi Hiraki, Yoshihiro Kawahara, Sei
+Ikeda, and Osamu Oshiro. 2020. HaPouch: Soft and Wearable Haptic Display
+Devices Using Liquid-to-Gas Phase Change Actuator. In Adjunct Publication of
+the 33rd UIST (Virtual Event, USA) (UIST ’20 Adjunct). ACM, New York, NY, USA,
+53–55. https://doi.org/10.1145/3379350.3416183
+[36] Wikipedia contributors. 2021. Flappy Bird — Wikipedia, The Free Encyclope-
+dia. https://en.wikipedia.org/w/index.php?title=Flappy_Bird&oldid=1037577492
+[Online; accessed 16-August-2021].
+[37] Graham Wilson and Stephen A Brewster. 2017. Multi-moji: Combining thermal,
+vibrotactile & visual stimuli to expand the affective range of feedback. In Proc. of
+the 2017 CHI. 1743–1755.
+[38] Graham Wilson, Craig Stewart, and Stephen A. Brewster. 2010. Pressure-Based
+Menu Selection for Mobile Devices. In Proc. of the 12th International Conference
+on Mobile HCI (Lisbon, Portugal) (MobileHCI ’10). ACM, New York, NY, USA,
+181–190. https://doi.org/10.1145/1851600.1851631
+[39] Katrin Wolf and Timm Bäder. 2015. Illusion of Surface Changes Induced by
+Tactile and Visual Touch Feedback. In Proc. of the 33rd Annual ACM Conference
+Extended Abstracts (Seoul, Republic of Korea) (CHI EA ’15). ACM, New York, NY,
+USA, 1355–1360. https://doi.org/10.1145/2702613.2732703
+[40] Koji Yatani and Khai Nhut Truong. 2009. SemFeel: A User Interface with Semantic
+Tactile Feedback for Mobile Touch-Screen Devices. In Proc. of the 22nd Annual
+ACM Symposium on UIST (Victoria, BC, Canada) (UIST ’09). ACM, New York, NY,
+USA, 111–120. https://doi.org/10.1145/1622176.1622198
+[41] Yongjae Yoo, Taekbeom Yoo, Jihyun Kong, and Seungmoon Choi. 2015. Emotional
+responses of tactile icons: Effects of amplitude, frequency, duration, and envelope.
+In 2015 IEEE WHC. IEEE, 235–240.
+[42] Zhuoming Zhang, Jessalyn Alvina, Robin Héron, Stéphane Safin, Françoise Dé-
+tienne, and Eric Lecolinet. 2021. Touch without Touching: Overcoming Social
+Distancing in Semi-Intimate Relationships with SansTouch (CHI ’21). ACM, New
+York, NY, USA, 1–9. https://doi.org/10.1145/3411764.3445612
+[43] Zhuoming Zhang, Robin Héron, Eric Lecolinet, Françoise Detienne, and Stéphane
+Safin. 2019. VisualTouch: Enhancing Affective Touch Communication with Multi-
+Modality Stimulation. In 2019 ICMI (Suzhou, China) (ICMI ’19). ACM, New York,
+NY, USA, 114–123. https://doi.org/10.1145/3340555.3353733
+[44] Ying Zhou, Reiko Azumi, and Satoru Shimada. 2019. A highly durable, stretch-
+able, transparent and conductive carbon nanotube–polymeric acid hybrid film.
+Nanoscale 11, 9 (2019), 3804–3813.

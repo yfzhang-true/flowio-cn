@@ -1,0 +1,311 @@
+NugiTex: An Interactive, Afective Wearable that Informs Users of 
+a Plant’s “Comfort” Level through Haptic Cues 
+Hye Jun Youn Sailin Zhong 
+hyoun@gsd.harvard.edu sailin92@mit.edu 
+Harvard University MIT Media Lab 
+USA USA 
+University of Fribourg 
+Switzerland 
+Ali Shtarbanov Patrick Chwalek 
+alims@mit.edu chwalek@mit.edu 
+MIT Media Lab MIT Media Lab 
+USA USA 
+Figure 1: (a) NugiTex arm warmers constructed of tubular soft materials that constrict when actuated (b) Neck warmer with 
+embedded circular soft material (c) AirSpec∗, an environmental sensing device for to capture ambient temperature and humidity 
+(d) FlowIO [12], a development platform for soft robots and programmable materials for controlling the airfow of NugiTex. (e) 
+A user wearing NugiTex, AirSpec, and FlowIO. 
+ABSTRACT 
+NugiTex is a line of interactive, afective wearable garments that 
+convey the embodied experience of plants using device-initiated 
+haptic cues. The haptic cues refect a plant’s “comfort” level based on 
+proximal environmental conditions, aiming to increase awareness 
+and induce feelings of closeness, symbiosis, and empathy with the 
+This work is licensed under a Creative Commons Attribution International 
+4.0 License. 
+DIS Companion ’23, July 10–14, 2023, Pittsburgh, PA, USA 
+© 2023 Copyright held by the owner/author(s). 
+ACM ISBN 978-1-4503-9898-5/23/07. 
+https://doi.org/10.1145/3563703.3596651 
+user’s natural environment. Composed of infatable silicone and 
+non-elastic textile layers, NugiTex responds to nearby atmospheric 
+conditions such as temperature and humidity levels, which are 
+measured in real-time by AirSpec, smart eyeglasses ftted with 
+sensors to collect environmental data. Variations in temperature and 
+humidity in a room are then interpreted and translated into three 
+types of haptic cues - shrinking, hard pushing, and mild pushing -
+each a metaphorical representation of the plant’s condition. Users 
+are given these real-time haptic cues through FlowIO, a pneumatic 
+platform for controlling the airfow and pressure of soft devices. We 
+predict that the increase in awareness of natural entities through 
+interactive embodied experiences will promote the Inclusion of 
+Nature in Self (INS), and encourage pro-environmental behaviors. 
+251
+DIS Companion ’23, July 10–14, 2023, Pitsburgh, PA, USA Youn et al. 
+CCS CONCEPTS 
+• Human-centered computing → Haptic devices; Interaction 
+design theory, concepts and paradigms; HCI theory, concepts and 
+models. 
+KEYWORDS 
+Afective Device, Connectedness with Nature, Wearables, Soft robot, 
+Infatable, Embodied Experience 
+ACM Reference Format: 
+Hye Jun Youn, Sailin Zhong, Ali Shtarbanov, and Patrick Chwalek. 2023. 
+NugiTex: An Interactive, Afective Wearable that Informs Users of a Plant’s 
+“Comfort” Level through Haptic Cues. In Designing Interactive Systems 
+Conference (DIS Companion ’23), July 10–14, 2023, Pittsburgh, PA, USA. ACM, 
+New York, NY, USA, 5 pages. https://doi.org/10.1145/3563703.3596651 
+1 INTRODUCTION 
+Climate change and associated shifts in temperature and precipita-
+tion afect plant ecophysiology, reproduction, and interactions with 
+other organisms, including humans ourselves [2, 10]. Encouraging 
+pro-environmental behaviors requires unique strategies, including 
+reminding people that humans are connected to and part of nature. 
+People tend to ignore or minimize environmental problems when 
+they are not immediately observable, or when damaging efects are 
+temporally removed from causes. Allowing users to personally ex-
+perience a direct causal connection with other living beings in their 
+immediate environment can reduce perceived temporal distance 
+and engender more critical scrutiny of the efects of individual 
+behaviors. 
+1.1 Haptic and Visual Cues for Increasing INS 
+When people take on the perspective of another person, plant, or 
+animal, they often experience an increased mental overlap of the 
+self and other, which induces feelings of closeness and empathy 
+and increases helping intentions and behaviors [7]. Schultz [11] 
+introduced three levels of Inclusion of Nature in Self (INS): cognitive, 
+afective, and behavioral. The cognitive component refers to how 
+strongly a person sees nature as part of themself; the afective 
+component refers to the extent of care or concerns a person feels 
+about nature; and the behavioral component explains whether a 
+person is motivated to act in the best interests of nature. 
+Several studies have suggested that experiences within Immer-
+sive Virtual Environments (IVEs) with haptic feedback may help 
+to increase users’ INS. Within the IVE, participants adopt the per-
+spectives of other natural entities, and thereby generate feelings of 
+interconnectedness with nature (INS). Experiments with IVE have 
+explored a variety of contextual immersions and environmental 
+concerns. One IVE-based study explored the sensorimotor expe-
+rience of cutting down a tree in a virtual forest as compared to 
+mentally simulating the same experience [8]. The study found that 
+the virtual experience was more efective than mental stimulation 
+in increasing pro-environmental self-efcacy and behavior in the 
+physical, non-mediated world [1]. 
+0AirSpec is an environmental and physiological sensing wearable device extended 
+from Captivates [6], an open-source smart glasses system for in-the-wild psychophys-
+iological monitoring. Its system design is described in a submission to CHI 2023 
+Late-Breaking Work. 
+1.2 Interspecies Empathy for Encouraging 
+Pro-environmental Behaviors 
+The efect of evoking empathy for a natural object (e.g., a plant) 
+can impact the willingness to act toward protecting the environ-
+ment was identifed in previous studies [3]. In the feld of HCI, 
+plants’ natural abilities to respond to their environments are of 
+particular interest to researchers, artists, and architects for design-
+ing interspecies interactions [4], united within the topic of Human 
+Plant Interaction (HPI). Chang et al. indicated that interspecies 
+empathy through HPI has been vastly accomplished via translating 
+plant-relevant environmental signals to human-centered means 
+(e.g., written word [13], sound [9], and smiley faces [5]) but plants’ 
+true perceptual world and its link to human’s connection with na-
+ture lacks investigation [4]. They encourage HPI research to have 
+a better understanding of plants’ capabilities, preferences, as well 
+as functional properties and explore the non-human experiences 
+that communicate these sensations and signals. 
+We hypothesize that increasing the salience of nature through 
+a combination of visual and haptic experiences is a viable method 
+of fostering pro-environmental behavior. Based on the precedents 
+above, we developed two research questions: (1) Can haptic cues 
+collected from nearby plants’ environmental data promote INS?, 
+and (2) How can we increase the salience of nature through hap-
+tic experiences to foster pro-environmental behaviors (PEB)? We 
+believe that by haptically representing sensory and physical-state 
+information, NugiTex presents users with an embodied experience 
+of their nearby plant, thereby enhancing information processing 
+and positively infuencing behavior. Instead of using VR goggles 
+or other visual simulations, we developed wearable garments con-
+sisting of textile and elastomer layers to provide a sensorimotor 
+experience of plants’ comfort in the user’s nearby environment. To 
+enable a rapid collection of environmental data and control of a 
+haptic device, we connected FlowIO to AirSpec, allowing instanta-
+neous data transmission via Bluetooth. To summarize, the paper 
+presents the following contributions: 
+• Demonstration of haptic cues that encourages INS and pro-
+environmental behaviors by inducing feelings of closeness 
+and empathy toward the environment, which could increase 
+helping intentions and behaviors. 
+• Development and presentation of the fabrication process 
+for embedding elastomer layers between textile layers to 
+create intrinsically compliant and fexible smart garments 
+with pneumatic actuators. 
+• Development and presentation of an easy data transmission 
+process between atmospheric data and the pneumatic plat-
+form, eliminating the need for developing haptic controllers 
+and atmospheric sensors. 
+2 DESIGN PROCESS 
+NugiTex consists of top and bottom layers with non-elastic knitted 
+textile, and a middle layer with infatable elastomer - as shown 
+in Figure 2. A combination of material properties, textiles, and 
+basic geometric confgurations of the elastomer is used to achieve 
+the desired motion and force output. Two prototypes worn on 
+users’ arms or neck were developed to test two diferent actuated 
+behaviors - shrinking and pushing. 
+252
+NugiTex: An Interactive, Afective Wearable that Informs Users of a Plant’s “Comfort” Level through Haptic Cues DIS Companion ’23, July 10–14, 2023, Pitsburgh, PA, USA 
+Figure 2: (a) NugiTex consists of two layers of knitted textile and a silicone layer (b) fabrication of the textile layers of NugiTex 
+using a single-bed knitting machine (c) textiles with shrinking and pushing actuation behaviors. 
+2.1 Elastomer Design 
+Flexible and airtight materials such as elastomers have been utilized 
+to design infatable bladders and stifness-changing structures. The 
+design and casting process for tubular and circular-shaped elas-
+tomer designs have diferent fabrication procedures. For the tubular-
+shaped elastomer, a simple cylindrical shape with a diameter of 5 
+mm and a height of 150 mm was designed. The elastomer precursor 
+was slowly poured on the surface of the cylinder and allowed to 
+set for one hour. Then, we fipped the cylindrically shaped mold 
+with the frst elastomer layer and repeated the previous procedure. 
+The thickness of the tubular-shaped elastomer varies according to 
+curing time. As the thickness of the fnal elastomer reached 1mm, 
+we slowly separated the elastomer from the cylinder. Inspired by 
+McKibben muscles consisting of a cylindrical shell with a braided 
+mesh, the tubular-shaped elastomer was then spun with 0.5 mm 
+yarn to make it capable of radial expansion, yet inextensible at a 
+maximum threshold. 
+The circular-shaped elastomer design consists of three steps. 
+First, top and bottom mold designs for silicone casting are cre-
+ated using a 3D-modeling tool, Rhino. The bottom mold has no 
+inner pattern, and the top mold is designed with three consecutive 
+inner circles. These molds are then fabricated using an additive 
+manufacturing method of extruding PLA on a 3D printer. Second, 
+using EcoFlex 00-30 rubber, two silicone solvents are mixed in a 
+1:1 ratio, and injected into the mold, and cured for 3 to 5 hours. 
+Before the mixture is completely cured, it is vacuumed to de-gas to 
+eliminate any entrapped air in liquid rubber. Third, the elastomers 
+are slowly separated from the molds, and the top and bottom elas-
+tomers are attached by applying a thin layer of silicone solvent on 
+the intersecting part. After another 3 hours of curing, the fnalized 
+elastomer design is connected to a tube, and another end of the 
+tube is connected to the pneumatic device FlowIO. [12]. 
+2.2 Textile Design 
+A single-bed knitting machine is used to fabricate textile layers 
+of two wearable garments: an arm warmer and a neck warmer. 
+By transferring stitches to an adjacent needle using a single-eye 
+transfer tool, six lace holes (eyelets) on a neck warmer are designed 
+to simulate both gentle and hard haptic pushes from elastomers 
+patterned with six 30 mm-diameter circles. Transferring the bot-
+tom purls to stitches creates a tubular-shaped space to insert an 
+elastomer for shrinking behavior when actuated. The wearable gar-
+ments are re-ftted with a series of holes and a gap to accommodate 
+both tubular and circular-shaped infatable silicone. The elasticity 
+of the fabric allows it to change shape in response to the actuation 
+behaviors of the inner silicone layer, as shown in Figure 3. 
+3 TECHNICAL DEVELOPMENT 
+Actuation is controlled using FlowIO, a miniature, modular, pneu-
+matic development platform with a software toolkit for the control, 
+actuation, and sensing of soft robots. Relative humidity and ambient 
+temperature are collected using the SHT45 sensor on AirSpec, and 
+live data were streamed via Bluetooth to a laptop. Both AirSpec and 
+FlowIO were BLE peripherals, while the laptop acted as a central 
+interpreter to parse the environmental data, benchmark them ac-
+cording to the characteristics of the plant, and decide the resulting 
+action. The detailed mapping is shown in Figure 4. 
+Actuation occurs in response to changes in the surrounding en-
+vironment which is adjusted using heaters, humidifers, and fans. 
+Emulating the responses of plants to changing atmospheric condi-
+tions, the haptic responses of wearables are mapped as follows: In 
+temperatures above 80◦F and lower than 60% humidity, the wear-
+able garment with tubular-shaped elastomer produces shrinking 
+behavior. The shrinking haptic cue is repeated until the surrounding 
+temperature drops below 80◦F. For temperatures between 60 and 
+80◦F and humidity above 60%, the wearable produces releases the 
+air from the elastomer, but provides no haptic cues, on the assump-
+tion that this temperature range is better for the plant’s thriving. 
+When the temperature drops below 60◦F, the circular-shaped elas-
+tomer expands for 2.6 seconds and provides hard-pushing cues to 
+the user. 
+4 INTERACTION SCENARIOS 
+Thus far, we have demoed a single NugiTex prototype, allowing 
+visitors to either wear or touch the garment laying on a table. For 
+our fnal demonstration, the interaction with the haptic wearables 
+will be set up in the form of an art installation capable of accommo-
+dating two participants at once (see Figure 5). Both users will wear 
+253
+DIS Companion ’23, July 10–14, 2023, Pitsburgh, PA, USA Youn et al. 
+Figure 3: Two types of silicone molds were designed. The tubular and circular silicon layers were inserted inside two textile 
+layers. 
+(a) Mapping (b) Data transmission 
+Figure 4: Technical mapping and data transmission of NugiTex based on temperature and humidity levels of the surrounding 
+environment. 
+Figure 5: Users interacting with a NugiTex. 
+the garments with AirSpec and FlowIO in a space within the “ideal” AirSpec glasses enough time to acquire environmental data. Adjust-
+temperature and humidity range (i.e., producing no haptic cues). ments to the atmospheric conditions will then produce haptic and 
+They will then be asked to move around the 3 x 6 square meters visual feedback from each user’s garments, thereby communicating 
+area containing plants in three diferent environmental conditions information about the environmental conditions of each plant they 
+generated by a humidifer, a heater, and a fan. Users will be asked approach in real-time. 
+to spend at least 60 seconds near each plant in order to allow the 
+254
+NugiTex: An Interactive, Afective Wearable that Informs Users of a Plant’s “Comfort” Level through Haptic Cues DIS Companion ’23, July 10–14, 2023, Pitsburgh, PA, USA 
+5 CONCLUSION 
+In this paper, we have introduced and detailed the development 
+of wearable garments with elastomer actuators for humidity and 
+temperature-responsive transformable interfaces for increasing 
+connectedness with nature. Increased attention on environmental 
+issues has led researchers to explore several strategies for encourag-
+ing pro-environmental behaviors, such as recycling, energy-saving, 
+and the use of biodegradable products. We have concentrated on 
+promoting pro-environmental behavior with methods aimed at en-
+gendering users’ feelings of interconnectedness with nature (INS). 
+Advanced, responsive wearables that convey haptic and visual cues 
+can help users more readily adopt the perspectives of other natural 
+entities, thereby promoting helping intentions and behaviors. 
+ACKNOWLEDGMENTS 
+We would like to thank Professor Pattie Maes, Caitlin Morris, and 
+Abhinandan Jain for providing invaluable feedback, space, and 
+equipment, and Yoel Fink for assistance in providing space and 
+equipment to produce the fnal prototype. 
+REFERENCES 
+[1] Sun Joo Ahn. 2011. Embodied experiences in immersive virtual environments: 
+Efects on pro-environmental attitude and behavior. Stanford University. 
+[2] Antietam National Battlefelda, Kenilworth Park & Aquatic Gardens, Mono-
+cacy National Battlefeld, National Mall & Memorial Parks, and Wolf Trap 
+National Park for the Performing Arts. 2021. Plants and climate change. 
+https://www.nps.gov/articles/000/plants-climateimpact.htm 
+[3] Jaime Berenguer. 2007. The efect of empathy in proenvironmental attitudes and 
+behaviors. Environment and behavior 39, 2 (2007), 269–283. 
+[4] Michelle Chang, Chenyi Shen, Aditi Maheshwari, Andreea Danielescu, and Lining 
+Yao. 2022. Patterns and Opportunities for the Design of Human-Plant Interaction. 
+In Designing Interactive Systems Conference (Virtual Event, Australia) (DIS ’22). 
+Association for Computing Machinery, New York, NY, USA, 925–948. https: 
+//doi.org/10.1145/3532106.3533555 
+[5] Jaewon Cho, Sanghoo Park, Been Jeon, Byung-Chull Bae, and Jun-Dong Cho. 
+2015. People’s emotional responses to a plant’s emotional expression. In Proceed-
+ings of the Ninth International Conference on Tangible, Embedded, and Embodied 
+Interaction. 545–550. 
+[6] Patrick Chwalek, David Ramsay, and Joseph A. Paradiso. 2021. Captivates: A 
+Smart Eyeglass Platform for Across-Context Physiological Measurement. Proc. 
+ACM Interact. Mob. Wearable Ubiquitous Technol. 5, 3, Article 93 (sep 2021), 
+32 pages. https://doi.org/10.1145/3478079 
+[7] Jay S. Coke, C. Daniel Batson, and Katherine McDavis. 1978. Empathic mediation 
+of helping: A two-stage model. Journal of Personality and Social Psychology 36 
+(1978), 752–766. 
+[8] Sina A Klein and Benjamin E Hilbig. 2018. How virtual nature experiences can 
+promote pro-environmental behavior. Journal of Environmental Psychology 60 
+(2018), 41–47. 
+[9] Gregory Lasserre and met den Ancxt. 2011-2022. Phonofolium. http://www. 
+scenocosme.com/phonofolium_e.htm. 
+[10] Camille Parmesan and Mick E Hanley. 2015. Plants and climate change: complex-
+ities and surprises. Annals of botany 116, 6 (2015), 849–864. 
+[11] P Wesley Schultz. 2001. The structure of environmental concern: Concern for 
+self, other people, and the biosphere. Journal of environmental psychology 21, 4 
+(2001), 327–339. 
+[12] Ali Shtarbanov. 2021. FlowIO Development Platform – the Pneumatic “Raspberry 
+Pi” for Soft Robotics. In Extended Abstracts of the 2021 CHI Conference on Human 
+Factors in Computing Systems (Yokohama, Japan) (CHI EA ’21). Association for 
+Computing Machinery, New York, NY, USA, Article 479, 6 pages. https://doi. 
+org/10.1145/3411763.3451513 
+[13] Helene Steiner, Paul Johns, Asta Roseway, Chris Quirk, Sidhant Gupta, and 
+Jonathan Lester. 2017. Project Florence: A Plant to Human Experience. In Pro-
+ceedings of the 2017 CHI Conference Extended Abstracts on Human Factors in 
+Computing Systems (Denver, Colorado, USA) (CHI EA ’17). Association for Com-
+puting Machinery, New York, NY, USA, 1415–1420. https://doi.org/10.1145/ 
+3027063.3052550 
+255

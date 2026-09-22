@@ -1,0 +1,527 @@
+BiFlu2: A Miniaturized Electro-Fluidic Circuit for All-On-Board
+Control of Hydraulically-Actuated Biorobotic Organs
+Amin Hamed Lalaklo, Federica Semproni, Student Member, IEEE, Veronica Iacovacci, Member, IEEE,
+and Arianna Menciassi, Fellow, IEEE
+Abstract— This paper presents the design and implementa-
+tion of BiFlu2, a compact electro-fluidic circuit engineered for
+implantable biorobotic organs with hydraulic actuators. BiFlu2
+enables fluidic control with a limited number of components,
+i.e. two bistable 3-way valves for bidirectional fluid transfer
+and an additional one for fluid (de)multiplexing. The system is
+designed to operate with minimal power consumption, making
+it suitable for long-term operation upon implantation. The
+design incorporates an ESP32 microprocessor for wireless
+remote control, as well as pressure sensors to monitor real-time
+actuators’ performance. BiFlu2 has been tested and validated
+through simulations and experimental setups, demonstrating
+efficient hydraulic control of an artificial detrusor integrated
+with a soft artificial bladder. The experimental results show
+reliable performance, low power consumption, and effective
+actuator control for the voiding process of an artificial bladder
+provided with a hydraulic detrusor. This study highlights the
+BiFlu2 potential for use in fluidically actuated implantable
+biorobotic organs, where compact size and energy efficiency
+are critical. Refer to the supplementary video for a summary
+of our findings.
+I. INTRODUCTION
+Over the past decade, soft robotics has witnessed signifi-
+cant advancement, with different innovative designs emerg-
+ing to address various applications [1].
+In this context, among the possible actuation methods,
+fluidic actuation has become the most widely used in soft
+devices, due to safe interactions with the surroundings,
+simpler fabrication, ability to generate substantial forces
+and strokes, etc [2], [3]. This method employs pressurized
+fluids—either gases or liquids—to inflate specific sections
+of the actuator, resulting in bending or other forms of
+deformation, depending on the system’s requirements and
+design [4]. From a control perspective, these actuators often
+require dedicated electro-fluidic hardware, including multiple
+pumps, valves, and fluid sources to effectively distribute fluid
+among multiple actuators to perform the desired tasks [5]–
+[8]. While these setups enable precise control over the move-
+ment and deformation of soft structures, they also introduce
+significant challenges concerning system size, weight, and
+energy consumption [9]. These factors can limit the overall
+efficiency and practicality of the overall systems, particularly
+in applications where compactness and lightweight designs
+are essential.
+When considering the placement of soft robots based
+on fluidic actuators, inside the human body, addressing the
+All authors are with the BioRobotics Institute, Scuola
+Superiore Sant’Anna, Pontedera (Pisa), Italy. Corresponding email:
+arianna.menciassi@santannapisa.it
+Fig. 1. BiFlu2, electro-fluidic circuit for bidirectional fluidic control of
+two soft actuators.
+above-mentioned challenges becomes even more crucial.
+This is particularly true for implantable biorobotic organs
+(IBROs), a cutting-edge class of artificial organs designed
+for replacing and supporting internal organ functions. Devel-
+oping fully implantable soft robots calls for highly compact
+and efficient fluidic systems that minimize invasiveness while
+ensuring patient comfort and long lasting operation [10].
+Several advanced fluidic IBROs have been reported in the
+literature with a main focus on cardiac assistive devices and
+artificial detrusor (AD) for urinary bladder controlled void-
+ing. A bioinspired soft robotic sleeve with helical pneumatic
+actuators was designed to mimic heart muscle fibers and
+assist cardiac function as a ventricular assist device [11].
+Authors presented an artificial detrusor that uses two identi-
+cal origami-based hydraulic actuators, fully surrounding the
+natural bladder to achieve controlled voiding [12]. Our group
+exploited bellows actuators devised to constitute hydraulic
+AD to control voiding in an artificial bladder (AB) while
+reproducing detrusor functions [13], [14].
+Most of the focus in the aforementioned works has been
+on the design of actuators rather than on the electro-fluidic
+circuits necessary for controlling those actuators. As a result,
+their control systems tend to be bulky, unoptimized, and
+lack complete all-on-board integration, making them more
+suitable for bench testing than for real-world and implantable
+applications.
+The miniaturization of all-on-board electro-hydraulic cir-
+cuits presents significant engineering challenges [15]. Key
+2025 IEEE 8th International Conference on Soft Robotics (RoboSoft) | 979-8-3315-2020-5/25/$31.00 ©2025 IEEE | DOI: 10.1109/RoboSoft63089.2025.11020952
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 02:00:26 UTC from IEEE Xplore.  Restrictions apply. 
+components, such as pumps, valves, and sensors, must be
+integrated into a smaller yet reliable system that can operate
+effectively over the long term while minimizing the number
+of active components, reducing power consumption and
+increasing robustness.
+In this study, to address the shortcomings regarding the
+control of fluidic IBROs, a miniaturized electro-fluidic circuit
+hereby defined as BiFlu2, is proposed (Figure 1). Leveraging
+small bistable valves and optimally designed fluidic path-
+ways, bidirectional fluidic control of more than one actuator
+at low power is proposed. BiFlu2 is compatible with both
+pneumatically and hydraulically actuated systems, as the
+pump can be easily adjusted to accommodate the specific
+type of operation, whether gas or liquid. In this article,
+the circuit validation was performed with a hydraulic AD
+mounted on an AB prototype [13].
+The remainder of this paper is organized as follows.
+Section II presents the specifications, design, and fabrication
+of BiFlu2. Section III is dedicated to testing the BiFlu2
+with an implantable AB, including hydraulic-driven actuators
+for the voiding process. Finally, Section IV is allocated for
+conclusion and future works.
+II. MATERIALS AND METHODS
+A. Fluidic pathways design
+One of the most important aspects of fluidic control
+systems is transferring the fluid both inside and outside
+the actuators in a bidirectional manner. Most pumps on
+the market are unidirectional, providing limited options for
+bidirectional models. Furthermore, the available bidirectional
+pumps are usually bulky (e.g., with dimensions exceeding 80
+mm × 50 mm × 50 mm), and while there are some very
+small options, they generally offer extremely low flow rates,
+typically in the µl/min range [16], [17]. Thus, a simple valve-
+based design is proposed to convert unidirectional pumps
+Fig. 2. (a) Schematic for converting a unidirectional pump into a
+bidirectional pump using two 3-way valves (V1 and V2). (b) an optimized
+design of fluidic pathways based on the (a) schematic and considering one
+more 3-way valve (V3) to enable (de)multiplexing functionality.
+Fig. 3. The printed fluidic part, fabricated using VisiJet M3 Crystal,
+includes the integrated fluidic pathways, as well as designated spaces for
+the pump, electronic components, battery, and valves.
+into bidirectional ones by utilizing two three-way valves. The
+schematic illustrating the operational principles of the design
+is shown in Figure 2(a). When valve 1 (V1) is in S2 mode
+and valve 2 (V2) is in S1 mode, the pump transfers fluid
+from the reservoir to the actuator (blue lines). Conversely,
+when V1 is in S1 mode and V2 in S2 mode, fluid flows
+from the actuator to the reservoir (orange dashed lines).
+Considering the selected valves and pump, a 3-way valve
+has been utilized as a (de)multiplexer. Consequently, the final
+system design incorporates three 3-way valves, enhancing
+the overall functionality and flexibility of the fluidic control
+mechanism. The design of the fluidic pathways (Figure 2(b))
+takes into account several key factors, including the selection
+of the most direct routes, maximizing path diameter to
+enhance flow efficiency, and minimizing the overall system
+size. To achieve this, the valves have been placed as close
+to each other as possible. Subsequently, the diameter of the
+paths has been increased to the extent that no interference
+occurs between them. This led to a path diameter of 2.2 mm
+and a minimum distance between paths of 0.6 mm. Reducing
+the distance below 0.6 mm leads to path wall rupture and
+interference between the paths. In this configuration, quarter-
+bends—defined as bends in fluidic channels that change the
+flow direction by 90 degrees—have been integrated into
+the design. These bends help reduce abrupt changes that
+create turbulence and energy loss, thereby improving flow
+efficiency. By extending the fluidic pathways and adding 2-
+way or 3-way valves, the number of outputs can be increased.
+In general, n 3-way valves in the multiplexer section allow
+for n+1 outputs. This framework is adaptable to different
+sizes, depending on valve type and required dimensions.
+Moreover, the design includes additional slots to accom-
+modate the other circuit components, such as the battery and
+pump, ensuring that all necessary elements are integrated
+seamlessly. This comprehensive approach not only stream-
+lines the assembly process but also maximizes the available
+space within the system. Finally, the completed design was
+printed using VisiJet M3 Crystal, as shown in Figure 3.
+B. Hardware overview
+At the heart of BiFlu2 is a single board computer (ESP32-
+C3 Mini Development Board, Waveshare Electronics), cho-
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 02:00:26 UTC from IEEE Xplore.  Restrictions apply. 
+sen for its low power consumption (Idle mode: 0.03-0.1
+Watts), high performance, and compact size (23.5 mm × 18
+mm). It comprises two main functional blocks: the control
+block and the communication block. The control block
+executes data processing and manages the fluidic system
+operations. Meanwhile, the communication block utilizes the
+integrated Wi-Fi and Bluetooth modules for remote control
+and real-time monitoring.
+A critical component of the BiFlu2 system is the valve, as
+monostable valves typically require a continuous current to
+maintain their state, resulting in high energy consumption. To
+significantly reduce power consumption, a bistable valve was
+selected. Unlike monostable valves, bistable valves maintain
+their state (open or closed) without the need for continuous
+electrical power. This feature makes them highly energy-
+efficient. As a result, three 5 V bistable 3-way valve (LHL
+Series Latching 3-Way Control Solenoid Valve, The Lee
+Company) were chosen, each requiring only 5.5 mJ to switch
+their state. This low-energy consumption is particularly ad-
+vantageous in battery-powered systems. The valve features
+an inlet and outlet diameter of approximately 2 mm and
+supports a liquid flow rate of up to 250 ml/min.
+To control the valve states and manage the pump, two
+Dual Motor Driver Carriers (DRV8833, Texas Instruments)
+were employed. These drivers facilitate bidirectional fluid
+flow control and allow for precise pump activation. A 3.7 V
+to 5 V voltage booster has been integrated into the design
+to ensure efficient power conversion for a lithium battery
+with a capacity of 850 mAh. In addition to the valves, three
+gauge pressure sensors (ABPMRRV600MG2A3, Honeywell)
+with the I2C protocol have been incorporated to monitor the
+pressure levels within the pump and actuators. These sensors
+provide real-time data on actuator performance. Since all
+three sensors share the same I2C address, an I2C multiplexer
+(TCA9548A, Texas Instruments) was introduced to enable
+simultaneous reading from multiple sensors, ensuring effi-
+cient communication and data processing within the system.
+Finally, a compact yet powerful 5 V unidirectional water
+pump (SP 270 EC-L, Schwarzer Precision) was selected for
+the system. Despite its small size, the pump can provide high
+relative suction pressure (up to -300 mbar) and discharge
+relative pressure (up to 1000 mbar).
+C. Simulation
+In selecting an appropriate pump for the fluidic system,
+it is critical to consider the influence of pressure drop on
+the overall performance. Pressure drop arises from frictional
+losses within the fluidic pathways and changes in flow
+direction and velocity. To ensure the selected pump operates
+effectively within the system, a comprehensive simulation
+was conducted using SolidWorks software to analyze these
+pressure losses across various operating conditions. Addi-
+tionally, the simulation aimed to visualize fluid movement
+through the system under different scenarios, including flow
+from the reservoir to the actuators and vice versa.
+By evaluating the pressure drop, the simulation provides
+valuable insights into the optimality of the selected pump
+configuration. This thorough assessment not only aids in
+selecting a pump that meets the required flow rates but also
+verifies its efficient operation within the fluidic system.
+For simplicity, the pump and valves were replaced with
+straight tubing to isolate the effects of the flow path itself.
+The simulation assumed atmospheric pressure at the outlets,
+while the inlet was assigned with specified flow rates. Given
+that the pump maximum flow rate is 100 ml/min, the
+simulation was conducted for a range of flow rates between
+0 and 100 ml/min. Simultaneously, the pressure drop across
+the three identical valves was calculated using data from the
+manufacturer’s datasheet [18].
+D. Experimental test
+To characterize the BiFlu2, experiments were conducted
+in which the inlet and outlet were connected to beakers
+maintained at room temperature. This setup allowed for a
+controlled environment to evaluate the performance of the
+system. Tests were performed for durations ranging between
+1 and 5 minutes, with three repetitions per interval to ensure
+reliable results. During each test, the procedure involved first
+transferring water from the inlet to the outlet, followed by
+recording the data. Then, for the same duration, the process
+was reversed. Key performance metrics, including BiFlu2
+flow rate, pump current, water volume, differential pressure,
+and pump temperature were recorded throughout the experi-
+ment. In addition to these parameters, the temperature of the
+pump was continuously monitored to assess any variations
+that might occur during the operation.
+E. V alidation
+Following the characterization phase, the system was
+validated to ensure it met predefined criteria, including
+operational efficiency, response accuracy, stability under
+experimental testing conditions. The experiment involved
+activating the hydraulic actuators through BiFlu2 to achieve
+a target water volume of 25 ml within each balloon. This
+specific volume is essential for the effective operation of
+the actuators, enabling them to exert force on the AB and
+facilitate the voiding process [13]. Initially, the actuator
+Fig. 4. (a) Experimental setup for the artificial bladder voiding test utilizing
+hydraulically actuated balloons (artificial detrusor) via the BiFlu2 unit. (b)
+illustration of actuators operation before actuation (top) and after actuation
+(bottom) without the AB in between.
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 02:00:26 UTC from IEEE Xplore.  Restrictions apply. 
+Fig. 5. Flow simulation of the fluidic pathways using SolidWorks software to observe how water moves through the inlets and outlets and to measure
+the pressure drop. R, A1, and A2 represent connections to the reservoir, actuator 1, and actuator 2, respectively.
+was operated via BiFlu2 without direct interaction with the
+AB. Subsequently, the experiment was conducted with the
+AD mounted on the AB, which was filled with 200 ml of
+water, to enable a controlled voiding process. Throughout the
+experiment, the pressure of the actuators, bladder, and pump
+was recorded, along with the timing and volume of water
+displacement. The related experimental setup is illustrated
+in Figure 4.
+III. RESULTS
+A. Simulation
+Simulations revealed that the maximum pressure drop,
+resulting from the pump maximum flow rate of 100 ml/min,
+was 20 mbar (2000 Pa).
+The results are shown in Figure 5, when the flow rate
+is below 30 ml/min, the pressure drops across the system
+exhibit minimal variation. Specifically, at a flow rate of 30
+ml/min, the pressure drop values for the valves and the path
+are measured at 21.75 mbar and 5.21 mbar, respectively,
+resulting in a difference of 16.54 mbar. However, as the flow
+rate exceeds 30 ml/min, this difference becomes significantly
+more pronounced. For instance, at a flow rate of 80 ml/min,
+the pressure drop values rise to 317.4 mbar and 24.2 mbar,
+respectively, leading to a difference of 293.2 mbar. It clearly
+demonstrates that the pressure drop caused by the fluidic
+pathways is negligible compared to the drop across the
+valves. This indicates that the system is well-designed and
+that the fluidic path has an insignificant impact on the overall
+pressure drop.
+We assume that the pressure drop (∆P ) across the pump is
+equal to the sum of the pressure drops across the valves and
+the fluidic pathways. Since the pressure drop in the fluidic
+pathways is negligible based on the simulation, and we have
+three identical valves, we have:
+∆Ppump = 3∆Pvalves (1)
+0 20 40 60 80 100
+Flow rate (ml/min)
+0
+100
+200
+300
+400Pressure drop (mbar)
+Fluidic path
+Valves
+Fig. 6. Pressure drop across the fluidic pathways and three valves at various
+input flow rates.
+By deriving formula (1) and the relationship between flow
+rate and pressure from the valve [18] and pump datasheets
+[19], we arrive at the following equation:
+f − 100
+−0.127 = 3
+ 
+0.01f 2 + 0.38f
+
+(2)
+where f represents the flow rate. Solving equation (2)
+results in a value of 70.7 ml/min, which represents the
+predicted flow rate of the actual system under the conditions
+outlined in the simulation.
+B. Experimental test
+The trends in the parameters measured during the exper-
+iments, including the flow rate of BiFlu2, the volume of
+transferred water, pump current, and the differential pressure
+between the pump inlet and outlet, are presented in Fig-
+ure 7. The findings indicate that only minor variations were
+observed, suggesting that the pump current remained stable
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 02:00:26 UTC from IEEE Xplore.  Restrictions apply. 
+at approximately 140 mA, accompanied by a consistent
+flow rate of 68.5 ml/min, which is close to the theoretical
+value of 70.7 ml/min. The volume of transferred water
+demonstrated a linear relationship across the various time
+intervals tested. Additionally, the stable pressure differential
+of the pump throughout the experiments signifies reliable
+performance, particularly for long-term applications. This
+consistency indicates that BiFlu2 operates efficiently without
+disturbances in the hydraulic system. Notably, during the
+experiment conducted at room temperature (26 °C), the pump
+temperature remained stable, fluctuating between 26 °C and
+27 °C.
+To further evaluate the system’s operational efficiency,
+power consumption was measured. When the pump and
+valves were turned off, the integrated circuits and sensors
+consumed a current of 43 mA. During operation, each valve
+required 5.5 mJ for a brief period of 10 ms, while the pump
+itself consumed approximately 140 mA. If we disregard the
+10 ms power demand from the valves, the maximum power
+consumption of the system was calculated to be 0.66 Watts.
+However, when the valves operated simultaneously with
+other components, the total power consumption increased to
+1.21 Watts during the 10 ms operation period. With the 3.7
+V , 850 mAh battery, the system can operate continuously for
+approximately 250 minutes, taking into account a reasonable
+number of valve on/off cycles. These data indicate that
+the system exhibits very low power consumption overall,
+highlighting its efficiency during operation.
+These results demonstrate that BiFlu2 maintains a low
+power footprint, making it suitable for applications where
+energy efficiency is crucial. Its sustainable performance,
+along with a compact size and minimal temperature variation,
+further reinforces the viability of BiFlu2 as an efficient
+solution for fluidic control in fluidic IBROs.
+C. V alidation
+According to the estimated system flow rate, approxi-
+mately 25 ml of liquid could be filled within an estimated
+duration of 22 s. To assess the reliability of this estimation,
+the experiment was conducted in triplicate. For each trial,
+the actuator was first filled with water, then fully drained,
+and the expelled water was weighed. Results demonstrated a
+consistent volume of 25 ± 0.5 ml in each instance. Figure 8
+depicts the actuator’s internal pressure profiles across trials,
+indicating a peak pressure of 74 ± 1.41 mbar when the
+actuator is not in contact with the AB. However, when the
+actuator and the AB are in direct contact (Figure 4), the
+filling time increases to 48 s, with the water volume within
+each of the actuators under these conditions measured at 25.5
+±1 ml. The reason for this increase in time is a reduction in
+the system flow rate due to the increased pressure exerted
+on the actuator by the force of the filled bladder. This
+results in the internal pressure within the actuators reaching a
+maximum value of 110 ± 7 mbar when fully filled (Figure 8).
+To assess the overall efficiency and accuracy of the system
+under this situation, the voiding process was repeated three
+times. These tests demonstrated that the complete voiding of
+Fig. 7. Results from the testing of the BiFlu2 system were obtained with the
+inlet and outlet connected to beakers. Each test was conducted three times
+in both directions for durations of 1, 2, 3, 4, and 5 minutes, respectively.
+The measured parameters included flow rate (a), volume of transferred water
+(b), pump current (c), and the pressure differential between the pump’s inlet
+and outlet (d). R and A stand for reservoir and actuator respectively.
+Fig. 8. Pressure inside the balloon actuator when not in contact with
+the artificial bladder (blue) and when in contact (red). A1 and A2: pump
+activated, actuators filling, B1 and B2: pump deactivated, switching phase,
+C1 and C2: pump activated, actuators draining.
+the AB took approximately 71.5 ± 0.7 s (in line with the
+clinical requirement of less than 90 seconds) with a voiding
+efficiency of 95.9 ± 0.7%, indicating that this percentage of
+the water volume was successfully expelled during each trial.
+This performance showcases the robustness of the BiFlu2
+system in managing bladder voiding, even under suboptimal
+or high-pressure conditions, which are common in real-world
+applications.
+Comparison with the results from study [13] reveals a
+slight reduction in voiding efficiency by 3 ± 0.3% alongside
+a decrease in voiding time by 12 ± 4 s. Figure 9 presents
+the electro-fluidic units utilized in both studies, while Table 1
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 02:00:26 UTC from IEEE Xplore.  Restrictions apply. 
+Fig. 9. BiFlu2 compared to the proposed electro-hydraulic circuit in [13].
+Electronic parts mounted on the perforated board is not shown in the figure
+and will be replaced by a printed PCB, to be installed in the future, as
+shown in Figure 1.
+TABLE I
+COMPARISON BETWEEN BIFLU2 AND PROPOSED ELECTRO -HYDRAULIC
+IN [13].
+Unit/Characteristics BiFlu2 Proposed in [12]
+Size (mm) 92 × 40 × 28 140 × 100 × 90
+Weight (g) 99 446
+Power consumption (J) 40 195
+V oltage supply (V) 3.7 7.4
+Number of fluidic outputs 2 1
+offers a detailed comparison of their respective specifications.
+In this energy consumption comparison, it is assumed that
+both systems are active for one minute. It is observed that,
+alongside significant advancements in miniaturization and
+optimization, BiFlu2 has effectively controlled the voiding
+process with voiding and time parameters closely aligned
+with those reported in the study [13].
+IV. CONCLUSIONS
+In this work, we have presented BiFlu2, a novel and highly
+compact electro-fluidic circuit for all-on-board controlling
+fluidic IBROs. The system architecture with bistable 3-
+way valves minimizes power consumption, making it viable
+for long-term use in medical applications. Additionally, the
+system can be adapted for pneumatic applications since the
+valves are compatible with both liquids and gases, requiring
+only a pump modification. Experimental testing on an arti-
+ficial bladder, using balloon hydraulic actuators to control
+voiding, demonstrates BiFlu2’s effectiveness in achieving
+reliable, bidirectional fluid control with minimal thermal
+impact. Future work will focus on analyzing the pressure
+data obtained from the study to enhance the method of
+controlling the system. This analysis aims to identify patterns
+and correlations that may inform more effective control
+strategies, ultimately leading to improved system respon-
+siveness and stability. Additionally, efforts will be directed
+toward optimizing the design for implantation, potentially
+by encapsulating the device in silicone or other suitable
+materials, while also exploring its applications in other
+fluidic-driven implantable biorobotic organs. For instance,
+the system’s ability to control two actuators at the outlet
+not only facilitates the regulation of the AD but also allows
+for the simultaneous management of the bladder outlet using
+an artificial sphincter, thereby enabling a fully automated
+voiding process.
+REFERENCES
+[1] O. Yasa et al., “An Overview of Soft Robotics,” Annu. Rev. Control
+Robot. Auton. Syst., vol. 6, no. 1, Art. no. 1, May 2023.
+[2] C. Laschi, B. Mazzolai, and M. Cianchetti, “Soft robotics: Tech-
+nologies and systems pushing the boundaries of robot abilities,” Sci.
+Robot., vol. 1, no. 1, p. eaah3690, Dec. 2016.
+[3] N. W. Bartlett, K. P. Becker, and R. J. Wood, “A fluidic demultiplexer
+for controlling large arrays of soft actuators,” Soft Matter, vol. 16, no.
+25, pp. 5871–5877, 2020.
+[4] K. McDonald and T. Ranzani, “Hardware Methods for Onboard
+Control of Fluidically Actuated Soft Robots,” Front. Robot. AI, vol.
+8, p. 720702, Aug. 2021.
+[5] C. C. Johnson, D. G. Cheney, D. L. Cordon, and M. D. Killpack,
+“PneuDrive: An Embedded Pressure Control System and Modeling
+Toolkit for Large-Scale Soft Robots,” in 2024 IEEE 7th International
+Conference on Soft Robotics (RoboSoft), San Diego, CA, USA: IEEE,
+Apr. 2024, pp. 786–792.
+[6] B. J. Caasenbrood, F. E. Van Beek, H. K. Chu, and I. A. Kuling,
+“A Desktop-sized Platform for Real-time Control Applications of
+Pneumatic Soft Robots,” in 2022 IEEE 5th International Conference
+on Soft Robotics (RoboSoft), Edinburgh, United Kingdom: IEEE, Apr.
+2022, pp. 217–223.
+[7] A. Shtarbanov, “FlowIO Development Platform – the Pneumatic
+‘Raspberry Pi’ for Soft Robotics,” in Extended Abstracts of the 2021
+CHI Conference on Human Factors in Computing Systems, Yokohama
+Japan: ACM, May 2021, pp. 1–6.
+[8] A. A. Stanley, E. S. Roby, and S. J. Keller, “High-speed fluidic
+processing circuits for dynamic control of haptic and robotic systems,”
+Sci. Adv., vol. 10, no. 14, p. eadl3014, Apr. 2024.
+[9] Y . Zhang, T. Wang, W. He, and S. Zhu, “Human-Powered Master
+Controllers for Reconfigurable Fluidic Soft Robots,” Soft Robotics,
+vol. 10, no. 6, pp. 1126–1136, Dec. 2023.
+[10] A. Menciassi and V . Iacovacci, “Implantable biorobotic organs,” APL
+Bioengineering, vol. 4, no. 4, p. 040402, Dec. 2020.
+[11] E. T. Roche et al., “Soft robotic sleeve supports heart function,” Sci.
+Transl. Med., vol. 9, no. 373, p. eaaf3925, Jan. 2017.
+[12] S. Onorati, F. Semproni, L. Patern `o, G. Casagrande, V . Iacovacci,
+and A. Menciassi, “A hydraulic soft robotic detrusor based on an
+origami design,” in 2023 IEEE International Conference on Robotics
+and Automation (ICRA), London, United Kingdom: IEEE, May 2023,
+pp. 6817–6822.
+[13] L. Galassi, L. Patern `o, F. Semproni, S. Onorati, V . Iacovacci, and A.
+Menciassi, “A Soft Robotic Detrusor Based on Balloon Hydraulic Ac-
+tuators for Artificial Bladder V oiding,” in 2024 IEEE 7th International
+Conference on Soft Robotics (RoboSoft), San Diego, CA, USA: IEEE,
+Apr. 2024, pp. 609–614.
+[14] G. Casagrande, M. Ibrahimi, F. Semproni, V . Iacovacci, and A.
+Menciassi, “Hydraulic Detrusor for Artificial Bladder Active V oiding,”
+Soft Robotics, vol. 10, no. 2, pp. 269–279, Apr. 2023.
+[15] A. M. Moran et al., “An electropermanent magnet valve for the
+onboard control of multi-degree of freedom pneumatic soft robots,”
+Commun Eng, vol. 3, no. 1, p. 117, Aug. 2024.
+[16] I. Amrani, A. Cheriet, and M. Feliachi, “Design and experimental in-
+vestigation of a bi-directional valveless electromagnetic micro-pump,”
+Sensors and Actuators A: Physical, vol. 272, pp. 310–317, Apr. 2018.
+[17] A. Doll, M. Heinrichs, F. Goldschmidtboeing, H.-J. Schrag, U. T. Hopt,
+and P. Woias, “A high performance bidirectional micropump for a
+novel artificial sphincter system,” Sensors and Actuators A: Physical,
+vol. 130–131, pp. 445–453, Aug. 2006.
+[18] The Lee Company, “LHL Series Latching 3-Way Control Solenoid
+Valve.” [Online]. Available: https://www.theleeco.com/product/lhl-
+series-latching-3-way-control-solenoid-valve/.
+[19] Schwarzer Precision, “SP 270 EC-L Eccentric Diaphragm
+Pump” [Online]. Available: https://www.schwarzer.com/en/liquid-
+pumps/eccentric-diaphragm-pumps-l/sp-270-ec-l.
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 02:00:26 UTC from IEEE Xplore.  Restrictions apply. 

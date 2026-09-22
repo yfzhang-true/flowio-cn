@@ -1,0 +1,1757 @@
+Wear+Touch: An Exploration of Wearables for Vibrotactile
+Feedback During Touchscreen Input
+Mihail Terenti and Radu-Daniel Vatavu
+MintViz Lab, MANSiD Research Center, S ¸tefan cel Mare University of Suceava
+13 Universitatii, 720229 Suceava, Romania
+AR TICLE HISTOR Y
+Compiled July 9, 2024
+ABSTRACT
+Vibrotactile feedback is known to have a positive impact on the user performance
+and experience of touchscreen input. Unfortunately, not all touchscreen devices have
+built-in haptics capabilities, public displays being a notable example, while the de-
+sign options for vibrotactile feedback on conventional mobile devices, such as smart-
+phones and tablets, are still limited. In this work, we propose leveraging commodity
+wearable devices, such as smartwatches, rings, and armbands, to enable vibrotactile
+feedback as closely as possible to the touch point when the touchscreen does not
+natively support haptics, and to complement existing haptics capabilities when the
+touchscreen already features them. To this end, we introduce Wear+Touch, a set of
+four interaction techniques designed to augment touchscreen input with vibrations
+delivered through wearable devices, from substituting to complementing, extending,
+and expanding on-screen vibrotactile feedback. We demonstrate Wear+Touch with
+several practical implementations involving a large touchscreen display, smartphone,
+tablet, smartwatch, smart ring, and armband as well as a custom wearable device
+that we designed for vibrations delivered simultaneously on the user’s index finger,
+wrist, and forearm. We also report empirical results from two controlled experiments
+involving a total of 40 participants, conducted to understand the multi-faceted user
+experience of vibrotactile feedback delivered through the Wear+Touch techniques.
+In the first experiment, we reveal a favorable user experience of vibrations delivered
+on the index finger, wrist, and forearm, in this order, when the touchscreen lacks
+haptics capabilities. In the second experiment, we reveal benefits of reinforcing and
+expanding on-screen vibrations with vibrotactile feedback on the index finger, wrist,
+and arm, respectively. We use our findings to suggest future work opportunities for
+combined vibrotactile feedback involving both touchscreens and wearable devices.
+KEYWORDS
+Touch input; wearables; vibrotactile feedback; touchscreens; watches; rings;
+armbands; haptics
+1. Introduction
+Touchscreens are commonplace, from small personal devices, such as smartphones and
+tablets, to large interactive ambient displays in public places. Touchscreens maximize
+the input surface to their entire screen real-estate, while favoring visual and auditory
+content in the detriment of other feedback modalities. Among the latter, vibrotactile
+feedback is known to provide many benefits to touchscreen input in terms of both
+CONTACT Radu-Daniel Vatavu. Email: radu.vatavu@usm.ro
+The Version of Record of this manuscript has been published and 
+is available in the International Journal of Human-Computer Interaction 
+at https://doi.org/10.1080/10447318.2024.2372145
+Figure 1. Examples of Wear+Touch, where touchscreen input is augmented with complementary vibrotactile
+feedback delivered by commodity wearables. Left: a user interacts with a large touchscreen display that has
+no native support for vibrotactile feedback, but vibrations are delivered via an electronic ring on the finger
+touching the screen. Middle: a user interacts with a smartphone with native support for vibrotactile feedback,
+while a smartwatch augments on-screen with on-wrist vibrations to provide complementary information.Right:
+vibrotactile feedback provided by a smartwatch supports eyes-free touch input.
+user performance and experience (Terenti and Vatavu, 2022; Brewster et al., 2007;
+Henderson et al., 2019; Dunlop and Taylor, 2009) but, unfortunately, is not always
+available, e.g., it is not natively supported by large touchscreen displays. Although
+several technical solutions have been proposed in the scientific literature to overcome
+this drawback (Maeda et al., 2016; Krol et al., 2009; Emgin et al., 2019; Bau et al.,
+2010), the underlying technology is too complex yet for practical deployment.
+In this context, we contend that a much simpler technical solution is readily avail-
+able: using wearable devices to deliver vibrations on the user’s finger, hand, and fore-
+arm, as closely as possible to the touch point, when the touchscreen does not have
+built-in native support for vibrotactile feedback. Despite the growing adoption of wear-
+able devices, this technical solution has been little explored in the scientific community,
+either from the end user perspective (for example, to document users’ preferred lo-
+cations where to receive vibrotactile feedback on the body during touchscreen input)
+or the system perspective (such as software architecture design to enable integration
+of off-the-shelf wearable devices for enhancing touchscreen input). We suspect that
+technical advances have been limited so far in this space because of lacking scientific
+examination of design possibilities involving both wearables and touchscreen devices
+to be used conjointly for input and output, including the lack of a structured design
+space. Nevertheless, such a technical solution may prove viable for numerous applica-
+tions and interactive contexts involving both personal and public touchscreen displays.
+In this context, we make the following contributions:
+(1) We introduce Wear+Touch, a set of four interaction techniques leveraging wear-
+able devices for the finger, wrist, and forearm to deliver vibrotactile feedback
+on the arm used for touch input, as closely as possible to the touch point.
+Wear+Touch provides structure in the space of conjoint use of wearables and
+touchscreens from the perspective of the user experience (UX) of touch input
+accompanied by vibrotactile feedback. Depending on the availability of native
+2
+vibrotactile feedback capabilities in the touchscreen device, we offer a structured
+space with four design possibilities for Wear+Touch, of increasing expressive-
+ness for end users, from addition to reinforcement, extension, and expansion of
+on-screen vibrations.
+(2) We demonstrate the utility of the Wear+Touch techniques with several practi-
+cal applications and present implementations involving a variety of commodity
+devices (large touchscreen display, smartphone, tablet, smartwatch, armband,
+and smart ring) as well as demonstrations of Wear+Touch in new contexts of
+use involving a custom-designed wearable device for synchronized vibrations de-
+livered on the index finger, wrist, and forearm; see Figure 1 for representative
+photographs of a few of our demonstrative applications.
+(3) We report insights from a first experiment with a total number of twenty partic-
+ipants regarding an evaluation of the user experience of substituting on-screen
+vibrations with vibrotactile feedback delivered on the index finger, wrist, and
+forearm through a wearable. Our results reveal a favorable user experience of
+touch input compared to the implicit control condition of no vibrations, repre-
+sentative of large touchscreen displays lacking haptics capabilities, when vibro-
+tactile feedback is delivered on the finger, wrist, and forearm, in this order.
+(4) We complement our findings with insights from a second experiment involv-
+ing twenty new participants regarding the evaluation of the user experience of
+on-screen vibrations vs. vibrotactile feedback delivered using the Wear+Touch
+techniques. Our results reveal user experience benefits of reinforcing conven-
+tional on-screen vibrations with vibrations on the index finger and, respectively,
+expanding on-screen vibrations to the finger, wrist, and forearm.
+2. Related W ork
+The scope of our work is represented by wearable devices repurposed for augmenting
+touchscreen input with complementary vibrotactile feedback. Thus, we position our
+scientific and technical contributions in the context of previous research that has re-
+ported benefits in terms of the user performance and user experience of vibrotactile
+feedback accompanying touchscreen input in various contexts of use. We also overview
+prior work that has explored and designed vibrotactile feedback delivered by wearable
+devices for novel interactions involving touchscreens.
+2.1. Augmenting Touchscreen Input with Vibrotactile Feedback
+Vibrotactile feedback delivered during touchscreen input on mobile devices, such as
+smartphones and tablets, is known to reduce error rates in generic touch target acquisi-
+tion tasks (Henderson et al., 2019; Brewster et al., 2007) and improve user performance
+in specific tasks, such as text entry (Hoggan et al., 2008; Dunlop and Taylor, 2009)
+and dwell mode switching (Liao et al., 2017). Furthermore, by leveraging on-screen
+vibrotactile feedback, the mobile device can sense identification information about the
+touching fingers (Masson et al., 2017; Bianchi and Je, 2017). Vibrotactile feedback has
+also been leveraged in mobile devices to increase the accessibility of touchscreen input
+for users with visual impairments; see (Tekli et al., 2018; Tennison et al., 2020) for
+specific examples and (Grussenmeyer and Folmer, 2017; Vatavu, 2017) for reviews on
+3
+accessible touchscreen technology and mobile interaction under visual impairments.
+Unlike smartphones and tablets, however, large touchscreen devices, such as pub-
+lic interactive ambient displays (Ardito et al., 2015), do not have native support for
+vibrotactile feedback. Nevertheless, researchers have proposed various technical so-
+lutions to augment touchscreen input for large displays with vibrotactile sensations.
+For instance, Emgin et al.(2019) presented an electromechanical actuation technique
+based on piezoelectric elements for adding haptic effects to static gesture input as well
+as electrostatic actuation for dynamic gestures. Another example is Bau et al.(2010),
+who used a 3M multitouch panel, provoking a periodic variation in force between the
+finger and the screen, which was perceived by users as vibrotactile feedback at the
+touch point. Besides on-screen vibrations, other researchers have leveraged input de-
+vices conventionally used in conjunction with touchscreens, e.g., Poupyrev et al.(2004)
+introduced a haptic display for pen-based interaction, where the pen delivered vibro-
+tactile feedback. Other technology includes ultrasound for virtual displays (Monnai
+et al., 2014; Long et al., 2014), varying the viscosity of the fluid located underneath
+the display using a magnetic field (Jansen, 2010), and small electrostatic tactile dis-
+plays for virtual reality applications (Yamamoto et al., 2006), respectively.
+Despite being effective, these solutions are still too technically complex for practical
+deployment into large touchscreen displays. In this context, turning to wearable devices
+as a form of computing that has become mainstream, e.g., about one-in-five Americans
+use a smartwatch or fitness tracker as of 2020 (Vogels, 2020), may represent a more
+feasible technical approach in the short and mid term for augmenting touch input with
+vibrotactile feedback for large displays. Next, we discuss related work about wearable
+devices used for delivering vibrotactile feedback at various locations on the user’s body
+in specific contexts of use.
+2.2. Vibrotactile Feedback and Wearables
+Prior work has examined wearables for vibrotactile feedback during touchscreen input,
+but has either focused on aspects of user performance, e.g., the effect of vibrations on
+touch accuracy, or on specific applications and contexts of use, e.g., vibrations deliv-
+ered on the wrist by smartwatches. For instance, Henderson et al.(2019) compared
+the effectiveness of touch input augmented with vibrotactile feedback at the touch
+location on the screen and distal feedback delivered on the user’s non-dominant wrist
+via a smartwatch. They showed that distal vibrotactile feedback achieved similar per-
+formance characteristics in terms of time and error rate for touch target acquisition
+as under-the-finger vibrotactile feedback provided through the smartphone. The user
+experience of on-wrist vibrations has also been examined for complementing on-screen
+vibrations for cross-device tablet and smartwatch interaction scenarios (Terenti et al.,
+2024c) and for enhancing eyes-free input (Terenti et al., 2024a), respectively.
+Other researchers have explored custom wearable designs and locations for on-body
+vibrotactile feedback other than the wrist. One example is Sch¨ onauer et al.(2015),
+who evaluated the effect of vibrotactile feedback delivered on the forearm to under-
+stand aspects of user perception while performing touch and mid-air gestures. Stanke
+et al.(2020) designed both ring and wristband devices to render electromechanical
+and electrostatic vibrations on the finger and wrist, while Luzhnica and Veas(2018)
+explored vibrotactile feedback at various locations on the user’s palm for skin-reading.
+Several prototypes have been proposed in the scientific literature for on-finger tactile
+output, such as Tacttoo (Withana et al., 2018), a feel-through interface integrated in
+4
+a temporary tattoo, which delivers electro-tactile output on various body parts, in-
+cluding the fingertip; REVEL (Bau and Poupyrev, 2012), a technique that employs
+reverse electrovibration, where a weak electrical signal creates an oscillating electrical
+field around the user’s fingers; and SmartFinger (Ando et al., 2002), a tactile display
+designed for the fingernail, which enables users to feel textures while tracing fingers
+along a surface. Ubitile (Le et al., 2016), a finger-worn device for delivering vibrotac-
+tile feedback, can be used for authoring custom vibration patterns for interactions
+with tabletops. Vatavu et al.(2016) leveraged vibrations delivered through a custom
+finger-augmentation device to create the illusion of holding digital content after pick-
+ing it up from the smartphone’s touchscreen, and examined aspects of user perception
+regarding the concept of digital content as invisible, yet tangible matter. Depending
+on the chosen technology, the perceived effectiveness of haptic feedback varies ac-
+cording to specific body locations. For example, an evaluation of ultrasound haptics
+for above-device interaction (Freeman et al., 2014) revealed that haptic feedback on
+the finger was more suitable than when delivered on the wrist. However, results from
+Stanke et al.(2020) on the differences between electrotactile and vibrotactile stimula-
+tion revealed user preferences for electrotactile feedback on the wrist rather than the
+finger. Lastly, Terenti et al.(2024b) examined wearable devices for augmenting touch
+interactions with virtual displays, and reported insights about users’ preferences for
+vibrotactile feedback on the index finger compared to other locations on the arm or
+vibrations delivered through the VR controller, respectively. Vibrotactile feedback to
+augment the sensation of immersion in virtual environments through realistic touch
+interaction with virtual objects has received a lot of attention; see (Mart´ ınez et al.,
+2014; Moon et al., 2023; Zhang et al., 2023) for a few examples.
+While these technical solutions represent creative ways to leverage wearable devices,
+of various form factors and at various locations on the body, for providing vibrotactile
+feedback during touch input, they are challenging to reuse without a formalization of
+how native, on-screen and external, wearable-delivered vibrations can be combined.
+Our Wear+Touch taxonomy of cross-device vibrotactile feedback techniques, intro-
+duced in Section 3, provides such a formalization, while the demonstrative applications
+presented in Section 4 illustrate with technical engineering details how this formaliza-
+tion can be put into practice for various commodity devices. Finally, empirical results
+from our two experiments, reported in Sections 5 and 6, reveal user experience benefits
+of vibrotactile feedback delivered by wearable devices at various locations on the arm
+used for touch input.
+3. W ear+T ouch
+Based on our analysis of the scientific literature and possible combinations of haptics
+being natively supported or not available in touchscreen devices, we identify four
+distinct situations where vibrotactile feedback delivered by wearables near the location
+of the touch point, i.e., the index finger, wrist, and forearm, can accompany touchscreen
+input; see Figure 2 for an illustration.
+(1) Addition. Consider a touchscreen device that does not have a native component
+for vibrotactile feedback, i.e., the case of public interactive ambient displays. The
+role of the wearable in this case is to add vibrotactile feedback during touchscreen
+input in order to compensate for the missing modality in the touchscreen device;
+see Figure 1, left. For example, vibrotactile feedback can be delivered by an
+5
+1 the wearable reinforces,
+with the same pattern,
+the vibrotactile
+feedback delivered by
+the touchscreen display
+2
+4
+addition reinforcement
+expansion
+Wear+Touch Haptics 
+the wearable
+delivers vibrotactile
+feedback during
+user input with the
+touchscreen display
+the wearable expands,
+over a large part of the
+user's body the
+informational content
+of the vibrations from
+the touchscreen display
+touchscreen display
+wearables
+single/same vibrotactile pattern
+3 extension
+the wearable extends
+to the user's body the
+same informational
+content of the
+vibrations from the
+touchscreen display
+multiple/complementary vibrotactile patterns
+Figure 2. A taxonomy of Wear+Touch vibrotactile feedback techniques—addition, reinforcement, extension,
+and expansion —delivered in conjunction on the screen and arm by touchscreens and wearables alike.
+electronic ring worn on the finger touching the display (Le et al., 2016). Even
+though the touchscreen device cannot provide vibrotactile feedback natively, the
+ring is located reasonably close to the point where the finger makes contact with
+the touchscreen to compensate for the missing on-screen vibrations.
+(2) Reinforcement. In this case, the touchscreen device has a native module for
+vibrotactile feedback as most smartphones and tablets have. The role of the
+wearable is thus to reinforce vibrotactile feedback during touchscreen input with
+additional vibrations provided on the user’s finger, wrist, or forearm in contexts
+of use where such reinforcement is needed, such as eyes-free touch input (Wang
+et al., 2013; Jamalzadeh et al., 2023). For example, Figure 1, right shows touch-
+screen input with an in-vehicle infotainment system. Since this interaction con-
+text is mostly eyes-free, the on-screen vibrations are duplicated on the user’s
+wrist by the smartwatch to reinforce confirmation that soft button presses and
+stroke gesture have been correctly recognized by the in-vehicle system and, thus,
+prevent the driver from taking their eyes off the road.
+(3) Extension. This technique combines touchscreens that integrate native vibro-
+tactile feedback with vibrations provided by a wearable device, where the latter
+presents complementary information to the user instead of a mere reinforcement
+as in the previous technique. For example, Figure 1, middle shows a user typing a
+message in a chat application. As they type, vibrotactile feedback on the smart-
+phone accompanies each keystroke. However, when the interlocutor is typing at
+the same time, vibrations on the smartwatch notify the user accordingly with a
+different vibrotactile pattern than that provided through the smartphone.
+(4) Expansion. In this case, the touchscreen integrates native vibrotactile feedback,
+while vibrations provided by multiple wearables expand, while providing com-
+plementary information, to a larger part of the user’s body towards a stronger,
+more immersive augmentation of touchscreen interaction. For example, a smart
+ring and smartwatch are employed in conjunction to deliver a sensation of vi-
+brations expanding from the contact point on the touchscreen, where the finger
+has landed, through the finger and to the wrist. Figure 4, bottom shows a user
+wearing a custom wearable device, which we designed to deliver simultaneous vi-
+brations on the index finger, wrist, and forearm. Frequent events occurring in the
+game played on the smartphone, e.g., the snake making a turn, are accompanied
+6
+by on-screen vibrations. However, specific events, which require users’ increased
+attention to the game, such as the snake eating a harmful mushroom or the
+damage made by a bomb exploding, are accompanied by vibrations expanding
+from the screen to the finger, wrist, and forearm, in sequence.
+The Wear+Touch taxonomy introduces specialized roles for arm-localized wearable
+devices to augment touchscreen input with vibrotactile feedback delivered near the lo-
+cation of the finger making contact with the touchscreen. In this framework, vibrations
+on the finger, wrist, and forearm can be designed to simulate, replicate, supplement,
+or complement on-screen vibrotactile feedback. Such augmented touchscreen interac-
+tions can be readily implemented with off-the-shelf wearable devices, as we show in
+Section 4, making Wear+Touch technically feasible for practitioners. At the same time,
+Wear+Touch provides the necessary conceptual formalization of combined touchscreen
+and wearable models of vibrotactile feedback delivery, useful for practitioners to take
+advantage of an additional feedback layer for a variety of applications involving touch-
+screens. In this context, we complement Wear+Touch with a set of design requirements
+(DR1 to DR3) for compatible wearable devices and applications that can be employed
+to deliver combined on-screen and on-body vibrotactile feedback.
+DR1: Easy integration of compatible wearables. Wearable devices come in many
+flavors, e.g., smartwatches, fitness trackers, smartglasses, smart rings, smart ear-
+buds, and smart jewelry, with different functionalities, applications, and sup-
+porting platforms. Nevertheless, the large majority of these devices have built-in
+Bluetooth communications to share data with companion smartphone applica-
+tions, which extend their functionality in terms of configuration, data logging and
+analysis, integration with cloud services, and so forth. From this perspective, we
+define a “compatible Wear+Touch wearable” to denote any device that (i) has
+built-in Bluetooth communications and (ii) is programmable. Although we prefer
+Bluetooth communications for low energy consumption, other communications
+technology, such as Wi-Fi, could be equally employed for pairing a wearable to
+a touchscreen display and sending and receiving commands for vibrotactile feed-
+back. This design requirement specifies that Wear+Touch techniques could be
+implemented with any wearable fulfilling these two characteristics.
+DR2: Easy integration of compatible software components. Practical imple-
+mentations of Wear+Touch techniques can also benefit from software compo-
+nents, device abstractions, services, and data flows, reflective of modern software
+engineering, for integration in touchscreen applications that are augmented with
+vibrotactile feedback delivered by wearables. To this end, we define a “compati-
+ble Wear+Touch component” as any software component that enables access to
+end-users’ wearables. SDKs and APIs, such as those delivered by manufactur-
+ers of wearable devices, but also other middleware software, including general-
+purpose software architecture for interactive devices and environments (Schipor
+and Vatavu, 2023) qualify for this category.
+DR3: Easy customization of vibrotactile feedback. Developers of Wear+Touch
+applications should be able to easily specify vibrotactile feedback for compatible
+wearables and through compatible components, from simple on/off vibrations
+that provide confirmatory feedback to on-screen touches to more complex and
+meaningful vibrotactile patterns; see Terenti and Vatavu(2023) for an overview of
+vibrotactile feedback authoring tools. Also, end users should be able to configure
+which of their wearables are used to deliver vibrotactile feedback during touch-
+7
+screen interactions. A middleware on the user’s smartphone, which implements
+private and secure communications with the user’s wearables and leverages the
+Wear+Touch API, is one practical solution to implement this requirement.
+The Wear+Touch set of techniques enables multiple possibilities for designing and
+integrating touchscreen devices and wearables towards enhancing the user experience
+of touchscreen input in various applications and contexts of use. From addition to
+expansion, the complexity of the combined native, on-screen and external, wearable-
+based vibrotactile feedback increases in Wear+Touch in terms of locale (i.e., where
+vibrations are delivered with respect to the location of the touch point on the screen)
+and extent (i.e., the coverage of the user’s body receiving vibrotactile feedback and the
+number of wearables delivering feedback, respectively). The four techniques constitut-
+ing the Wear+Touch space can theoretically be implemented for any combination of
+touchscreen and wearables as long as communication is possible and the devices are
+programmable; see our design requirements. To demonstrate the technical feasibility
+of Wear+Touch, we showcase in Section 4 practical implementations involving off-the-
+shelf touchscreen devices and wearables, and report practical benefits in terms of the
+perceived experience reported by end users of Wear+Touch interactions in Sections 5
+and 6, respectively.
+4. Demonstrative Applications of W ear+T ouch
+To demonstrate the technical feasibility of Wear+Touch, we implemented several prac-
+tical applications; see Figures 1 and 4 for photographs and screenshots. For the ad-
+dition, reinforcement, and extension techniques, we employed off-the-shelf wearables.
+To demonstrate extension, which requires vibrations delivery at various locations on
+the arm, we designed a custom wearable device that delivers vibrations on the user’s
+index finger, wrist, and forearm, i.e., for an expansion effect, vibrations start on the
+finger, move to the wrist, and end on the forearm. According to design requirement
+DR1, we employed wearables featuring Bluetooth communications. Following DR2, we
+leveraged web-based technology with open standards and protocols, and chose gaming,
+text input, and eyes-free interaction as our demonstrative applications. Furthermore,
+we employed the VIREO web-based tool (Terenti and Vatavu, 2023) to author vi-
+brotactile feedback patterns for our wearable devices with metaphorical connotations
+informed by the VibViz library (Seifi et al., 2015), in relation to requirement DR 3.
+4.1. Addition: Adding Vibrotactile Feedback to a Large Display
+We implemented addition with a video game called “Catch the bees, don’t get stung,”
+which we deployed to a 46-inch Ideum Platform multitouch surface (1920×1080 pixels,
+3GHz i7-4790S CPU, running Windows); see Figure 1, left and Figure 4, top left. We
+used JavaScript for the development and ran the game in the Google Chrome web
+browser. The game shows a hive composed of hexagonal honeycomb cells, inhabited
+by bees of different colors. When a bee is touched, it is “caught,” and not shown any
+longer on the screen. The goal of the game is to catch all the bees of a given color as
+fast as possible within a time limit, while not touching the bees of other colors because
+they “sting” and, consequently, the player would loose points. The game can be played
+in single-user mode or by several users at once (the touchscreen display detects up to
+60 simultaneous touches), where each user is assigned a different bee color. Since the
+8
+The user interacts with a
+touchscreen device without
+built-in haptics capabilities.
+The touchscreen sends a request
+for vibrotactile feedback to be
+delivered through the user's
+wearable.
+The vibrotactile feedback is
+rendered on one of the
+connected wearable devices (e.g.,
+smart ring) to enhance touch
+input.
+The user interacts with a
+touchscreen device with built-
+in haptics capabilities.
+The touchscreen delivers
+vibrotactile feedback and sends a
+request for the same vibration
+pattern to be delivered through
+the user's wearable as well.
+The pattern rendered on the
+touchscreen is reproduced on
+the user’s wearable to further
+enhance the touch input
+experience.
+The user employs the
+smartphone application
+to configure available
+wearable devices for
+vibrotactile feedback.
+The user connects on the
+touchscreen application by
+scanning a QR code and
+agreeing to receive vibrotactile
+feedback through their own
+wearable devices.
+2
+reinforcement
+1
+addition
+The user interacts with a
+touchscreen device with built-in
+haptics capabilities.
+A complex vibrotactile pattern is
+distributed across several
+wearable devices.
+Each wearable device renders a part of the complex vibrotactile
+pattern.
+The user interacts with a
+touchscreen device with built-in
+haptics capabilities.
+The touchscreen delivers
+vibrotactile feedback and sends a
+request for a different vibration
+pattern to be delivered through
+the user's wearable for additional
+feedback.
+The wearable device renders a
+different vibrotactile pattern to
+further enhance the touch input
+experience and provide
+additional feedback.
+3
+extension
+4
+expansion
+Figure 3. User workflows of the Wear+Touch interaction techniques involving complementary vibrotactile
+feedback delivered through a wearable device during touchscreen input. From top to bottom: pairing between
+the touchscreen device and the middleware mobile application on the smartphone, implementation of addition
+for touchscreens lacking haptics capabilities, implementation of reinforcement with the wearable delivering the
+same vibrotactile pattern as the touchscreen device, implementation of extension with the wearable delivering
+a different vibrotactile pattern, and implementation of expansion, where the vibrotactile feedback starts from
+the screen and propagates on the arm through the finger, wrist, and forearm.
+9
+Ideum Platform touchscreen does not have native support for vibrotactile feedback,
+we used Ring Zero, 1 an electronic ring that recognizes mid-air gestures and delivers
+vibrotactile feedback in the form of simple on/off vibrations of fixed intensity.
+We developed an Android mobile application to mediate communications between
+the game running on the large touchscreen display and the smart ring. First, the
+user specifies the wearable device within the mobile application and allows receiving
+vibrotactile feedback that is triggered externally; see the workflow depicted in Figure 3,
+top. Next, the user scans a QR code available within the touchscreen application
+to link the wearable and the touchscreen. Vibration commands are sent from the
+game on the touchscreen display to the smartphone application via the WebSocket 2
+protocol, and a Bluetooth connection is used to implement communications between
+the smartphone and the Ring Zero device. For the design of vibrotactile feedback, we
+used VibViz (Seifi et al., 2015) to identify patterns associated with the words “buzz,”
+“success,” and “error,” which we then specified using the VIREO (Terenti and Vatavu,
+2023) graphical authoring tool and exported as a JavaScript file, encoding vibrations
+using Vibration API, 3 to include in our JavaScript application for the touchscreen
+display. When bees of the correct color are touched, a “bee buzz” vibration is rendered
+on the finger; see Figure 4a for a visual illustration of the vibrotactile pattern and
+its description using the mathematical formalism of the VIREO authoring tool for
+vibrotactile feedback (Terenti and Vatavu, 2023). When bees of the wrong color are
+touched, a “bee sting” vibration is delivered instead; see Figure 4b. When the user
+completes the level (all of the bees of the correct color were caught), a new hive
+configuration is presented and three more seconds are added to the user’s time limit
+as a bonus, accompanied by a cheerful vibration representing a linearly increasing
+intensity on the finger; see Figure 4c. Finally, the “game over” event, when the user
+has lost the game, is notified with a corresponding vibration pattern; see Figure 4d.
+4.2. Reinforcement: Reinforcing On-Screen Vibrotactile Feedback During
+Eyes-Free Touch Input
+We implemented reinforcement for a music player application, 4 which we deployed to
+a tablet (10-inch Samsung Galaxy Tab 4, 1.2GHz Quad-Core CPU, 1280 ×800 pixels,
+detects 10 simultaneous touches) mounted on the front panel of a car; see Figure 1,
+right and Figure 4, top middle for screenshots. The user workflow corresponding to re-
+inforcement is illustrated in Figure 3: following touch input, a command is sent from
+the touchscreen application to the wearable device to deliver vibrotactile feedback
+according to the specific touch point on the screen and the application logic. Char-
+acteristic to the reinforcement technique, on-screen vibrations are doubled with the
+same vibrotactile pattern delivered through the wearable with the purpose of providing
+confirmatory feedback of the on-screen touches. To implement communications with
+the smartwatch, we used the same Android application described in Subsection 4.1, to
+which we added a new module implementing Bluetooth communications between the
+smartphone and the smartwatch. Although we did not observe noticeable delays in
+the communications, please see Section 7 for a discussion and future work opportuni-
+ties on synchronizing on-screen and wearable-delivered vibrations for applications with
+constraints about such aspects. We implemented several stroke-gesture commands to
+1https://us.amazon.com/Ring-R001-PB02-ZERO-M-Black/dp/B00U8IX7FO
+2https://www.rfc-editor.org/rfc/rfc6455
+3https://developer.mozilla.org/en-US/docs/Web/API/Vibration_API
+4Adapted from https://github.com/Davigl/vue-music-player.
+10
+(a) bee buzz (b) bee sting
+(c) level completed (d) game over
+(e) action successful (f) volume adjusting
+(g) action error (h) gesture error
+(i) new message
+(j) interlocutor typing
+ (k) snake changes direction
+ (m) snake eats a bad fruit  (n) game over
+ (l) snake eats a good fruit
+addition
+ reinforcement extension
+expansion
+A(t)=[100 |
+0,075
+0
+ , 100e
+-20t
+|
+0,2
+0,075
+] A(t)=[e
+26t
++1|
+0,15
+0
+ , 50 |
+0,35
+0,15
+ , 50e
+5t
+|
+0,5
+0,35
+]
+A(t)= 185t+25  |
+0,4
+0
+A(t)= 90  |
+0,5
+0
+A(t)=[90 |
+0,1
+0
+ , 90 |
+0,3
+0,15
+]
+A(t)=[e
+50t
+|
+0,1
+0
+ , e
+50t
+|
+0,2
+0,1
+] A(t)= 100  |
+0,72
+0
+A(t)=[90 |
+0,1
+0
+ , 90 |
+0,225
+0,125
+ , 90 |
+0,4
+0,25
+]
+A(t)=[10e
+9t
+|
+0,3
+0
+ , 150e
+-10t
++2|
+0,6
+0,3
+]
+A(t)=[100 |
+0,1
+0
+ , 100 |
+0,25
+0,15
+ , 100 |
+0,4
+0,3
+ ,
+100 |
+0,7
+0,6
+ , 100 |
+0,85
+0,75
+ , 100 |
+1,0
+0,9
+]
+A(t)=[30e
+-35t
++50|
+0,25
+0
+ , -400t+100  |
+0,5
+0,25
+]
+A(t)=[e
+37t
+|
+0,1
+0
+ , 40e
+-40t
+|
+0,2
+0,1
+ ,
+e
+31t
+|
+0,45
+0,3
+ , 100e
+-30t
+|
+0,6
+0,45
+]
+A(t)= 60e
+-9t
+sin(30πt)+40 |
+0,6
+0
+A(t)=[1000t  |
+0,1
+0
+ , 1000t  |
+0,2
+0,1
+ , 1000t  |
+0,3
+0,2
+ ,
+1000t  |
+0,4
+0,3
+ , -1000t+100  |
+0,5
+0,4
+]
+Figure 4. Demonstrative applications for the Wear+Touch vibrotactile feedback techniques: (1) addition
+for a large touchscreen display, (2) reinforcement during eyes-free input inside the vehicle, (3) extension for
+smartphone text entry, and (4) expansion with a custom-made wearable device for the finger, wrist, and
+forearm. Note: visual representations of the vibration patterns were generated with the VIREO tool (Terenti
+and Vatavu, 2023) and their mathematical description, A(t), follows the VIREO formalism as well.
+navigate through the music file collection: swipe left and right to go to the next and
+previous music track, swipe up and down to increase and decrease the audio volume,
+and drawing a circle to switch between play and pause mode. These gesture types can
+be readily recognized with simple geometric approaches, while the gesture set can be
+easily extended with more complex gestures and more powerful stroke-gesture recog-
+nizers (Vatavu et al., 2012a; Magrofuoco et al., 2021), including algorithmic techniques
+specifically designed for low-resource platforms and devices (Vatavu et al., 2018). Fol-
+lowing each gesture command, vibrotactile feedback was delivered on the tablet, but
+also on the user’s wrist through a smartwatch (Galaxy Watch 3, 1.15GHz Dual-Core
+CPU), as a confirmation of gesture input being detected and correctly recognized.
+Just like before, we used JavaScript to implement the application and VIREO (Ter-
+enti and Vatavu, 2023) and VibViz (Seifi et al., 2015) to design and specify vibration
+11
+patterns for specific events: two short, exponentially increasing pulses (Figure 4e) for
+successfully completed actions, two vibrations of constant intensity, but different du-
+ration (Figure 4f) for errors, and so forth; see the corresponding user workflow in
+Figure 3 and the description of these vibrotactile feedback patterns in Figure 4 using
+the mathematical formalism of the VIREO authoring tool (Terenti and Vatavu, 2023).
+The specific vibration patterns are less important to our goal where we are interested
+in the technical feasibility of reinforcement using commodity digital devices. What is
+important is that the same vibration pattern is presented both on the screen and the
+user’s wrist during the reinforcement technique.
+4.3. Extension: Extending On-Screen Vibrotactile Feedback to the Wrist
+For our next demonstration, we augmented a chat application on the smartphone
+with vibrotactile feedback provided by a smartwatch (Galaxy Watch 3); see Figure 1,
+middle and Figure 4, top right for screenshots. Keystrokes on the smartphone keyboard
+are usually accompanied by gentle vibrations. To implement extension through the
+smartwatch, we considered additional information that could be delivered to the user
+while typing. To this end, we implemented two vibrotactile patterns: an exponentially
+increasing vibration, followed by an exponentially decreasing one, delivered by the
+smartwatch when the user receives a new text message while typing (Figure 4i) and,
+when the interlocutor is also typing at the same time, a different vibration pattern,
+mimicking the visual animation of the conventional three dots pulsing (Figure 4j) is
+delivered through the smartwatch. The user workflow corresponding to extension is
+illustrated in Figure 3: following touch input, a command is sent from the smartphone
+to the smartwatch device to deliver vibrotactile feedback according to the specific
+case of the interlocutor typing as well. Characteristic to the extension technique, on-
+screen vibrations are complemented with a different vibrotactile pattern delivered
+through the wearable with the purpose of providing more feedback to the user than
+available on the primary device. In this context, the vibrotactile feedback from the
+smartwatch extends the informational content provided to the user while typing a
+text message in the smartphone application. As in our previous demonstrations, we
+used HTML/CSS, JavaScript, and WebSocket for application development and the
+VIREO (Terenti and Vatavu, 2023) and VibViz (Seifi et al., 2015) tools for the design
+of vibrotactile patterns for the two devices.
+4.4. Expansion: Expanding Vibrotactile Feedback from the Screen to the
+Finger, Wrist, and Forearm
+To demonstrate expansion, we designed a custom wearable device to deliver vibrotac-
+tile feedback at various locations across the arm. The device integrated three 10mm
+DC coin vibration motors5 into a velcro band with adjustable length so that the motors
+could be affixed comfortably to the index finger, wrist, and forearm, as shown in Fig-
+ure 4, bottom left. The vibration motors were commanded by a CH340G NodeMcu V3
+board based on the ESP8266 Wi-Fi module, 6 a self contained System-on-a-Chip with
+integrated TCP/IP protocol stack, which we programmed to communicate with the
+smartphone application via the WebSocket7 protocol. We used the wearable device to
+5https://nfpshop.com/product/10mm-coin-vibration-motor-3mm-type-model-nfp-c1030
+6https://esp8266-shop.com/product/nodemcu-esp8266-esp-12e
+7https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API
+12
+augment the user experience of a classical snake game running on a smartphone with
+arm-localized vibrotactile feedback delivered according to specific game events. The
+goal of the game was to guide a continuously moving snake to collect as many points
+as possible by eating good fruits and avoiding bad ones. Each time the snake changes
+direction following touch input, a corresponding vibration (Figure 4k) is delivered on
+the smartphone. When a good fruit is eaten, a vibration pattern with a happy con-
+notation, informed using the VibViz library (Seifi et al., 2015), is played on the user’s
+finger (Figure 4l). When a bad fruit is eaten, a vibration with a negative connotation
+is delivered both on the screen and finger. Game over is notified with a strong vibra-
+tion that starts on the smartphone and continues on the finger, wrist, and forearm
+(Figure 4n); see the corresponding user workflow in Figure 3 and Figure 4 for the de-
+scription of these vibrotactile feedback patterns using the mathematical formalism of
+the VIREO authoring tool (Terenti and Vatavu, 2023). The user workflow correspond-
+ing to expansion can be summarized as follows: following touch input, a command is
+sent from the smartphone to the wearable device to deliver vibrotactile feedback that
+is being felt as propagating through the arm, from the finger to the wrist and the
+forearm, respectively. Characteristic to the expansion technique, on-screen vibrations
+are complemented with a vibrotactile pattern that is delivered through the wearable
+(or multiple wearables, depending on the implementation) on a large part of the body
+in order to expand the original capabilities of the primary device and generate a new
+sensation, of larger extent in terms of body coverage, than possible with all of the
+other Wear+Touch techniques. Just like for the extension technique, demonstrated
+in the previous subsection, expansion provides complementary vibrotactile feedback
+to that offered by the touchscreen. However, unlike extension, the use of expansion
+enables a larger part of the user’s body to receive vibrotactile feedback and, thus, has
+larger coverage and features more complex vibrotactile patterns, e.g., vibrations start
+from the screen, traverse the finger and wrist, and end on the forearm, in this order.
+In our implementation, we solved the technical aspect of synchronizing the vibrations
+delivered at different locations on the arm by our specific design involving a single
+wearable device with three actuators, but other implementations involving distinct
+wearables may need a different technical approach; see Section 7 for a discussion of
+future work in this direction, including the need for dedicated software architecture.
+4.5. Summary
+Our main goal in this section was to show how the Wear+Touch interaction techniques
+can be readily implemented for commodity wearables and touchscreen displays using
+manufacturer APIs/SDKs and conventional software technology, standards, and pro-
+tocols for the web to implement communications across the various involved devices.
+In the next two sections, we address the user experience of vibrotactile feedback deliv-
+ered away from the touch point on the user’s arm, as follows. In Section 5 we examine
+the user experience of the addition technique, where vibrotactile feedback is added to
+touchscreen displays without native, built-in haptics capabilities. In this experiment,
+we are interested in locations on the user’s arm that deliver the highest user expe-
+rience. In Section 6, we examine the user experience of all of the four Wear+Touch
+techniques—addition, reinforcement, extension, and expansion,—which we compare
+to the control condition represented by conventional on-screen vibrations.
+13
+Figure 5. Photographs of participants in our first experiment interacting with an application on a large
+touchscreen display without built-in haptics. According to the addition Wear+Touch technique, vibrotactile
+feedback accompanying touchscreen input is delivered exclusively via a wearable device (visible in these pho-
+tographs on the participants’ finger, wrist, and forearm).
+5. Experiment #1: The User Experience of Substituting On-Screen
+Vibrations with Vibrotactile F eedback Delivered Through a W earable
+Different locations on the user’s arm where vibrotactile feedback may be delivered
+through a wearable device, e.g., the index finger vs. the wrist vs. the forearm, are likely
+to determine different user experiences of touchscreen input, especially when vibrations
+come exclusively through the wearable, which is the case of theaddition technique and
+large touchscreen displays without native haptics capabilities. To gain insight into the
+characteristics of the user experience of this Wear+Touch interaction technique, where
+vibrotactile feedback is delivered on the arm but not on the touchscreen, we conducted
+a first controlled experiment involving solely the addition technique and our custom-
+made wearable device for the index finger, wrist, and forearm. The experiment was
+approved by the Ethics Committee of the University of Suceava, ref. no. 50/21.01.2022.
+5.1. Experiment design
+5.1.1. Participants
+Twenty participants, representing young adults aged between 19 and 34 years old
+(mean M=26.4 and standard deviation SD=3.6 years), were recruited for our experi-
+ment via an internal emailing list and convenience sampling. Fifteen of the participants
+self-identified as male, and five as female. Two participants reported being left-handed.
+Furthermore, all of the participants were smartphone users, six (30.0%) were also us-
+ing tablets on a regular basis, twelve (60.0%) reported using smartwatches or fitness
+trackers, and five participants (25.0%) reported using smart earbuds. A number of
+eleven participants, representing 55.0% in our sample, had the keyboard vibration
+feature turned on on their smartphones.
+14
+5.1.2. Design
+We employed a within-subjects design with one independent variable,Location, with
+four conditions: finger, wrist, and forearm, specifying locations on the arm where
+vibrotactile feedback was provided, and none, representing the control condition of
+no vibrotactile feedback. The dependent variables are represented by eight specific
+UX measures designed to capture the multiple facets of the experience of vibrotactile
+feedback delivered away from the touch point on the index finger, wrist, and forearm.
+These measures employ, in equal number, both positively and negatively connoted
+descriptors of the perceived experience with respect to the implicit baseline condition
+of no vibrations, such as depicted in the following statement “Interacting with the
+display felt more enjoyable with vibrotactile feedback than without”; see the first
+column of Table 1 for our set of UX measures representing an extension of the five UX
+measures employed by (Koskinen et al., 2008, p. 302) to evaluate vibrotactile feedback
+delivered through a mobile device. We evaluated each measure using 5-point Likert
+scales with ratings ranging from 1 (“strongly disagree”) to 2 (“disagree”), 3 (“neither
+agree nor disagree”), 4 (“agree”), and 5 (“strongly agree”), respectively, representing
+our participants’ level of agreement with the corresponding statements.
+5.1.3. Apparatus
+Based on the practical experience that we gained by designing and implementing the
+Wear+Touch techniques into various applications (see Section 4 for our demonstra-
+tions), we used HTML/CSS and JavaScript Leaflet 8 to develop a new Wear+Touch
+application for our experiment represented by an interactive map intended to be used
+on large touchscreen displays. At startup, the application zooms into one of several
+maps of cities from around the world, and shows pinpoints for specific targets in that
+city, e.g., the Museum of Contemporary Art of Barcelona; see Figure 5 for photographs
+captured in our experiment. When the user touches any of the targets, a popup window
+is displayed with a brief description, while vibrotactile feedback is delivered at various
+locations on the user’s arm through our custom wearable device (technical details are
+available in Subsection 4.4). Vibrations are delivered by each motor independently, ac-
+cording to the conditions of the experiment design (see the next subsection) for a fixed
+duration of 150 ms, a value that we determined empirically so that vibrations could
+be felt unambiguously on the index finger, wrist, and forearm, given their different
+tactile sensibilities. We ran the map application in the Google Chrome web browser
+of a large 46-inch Ideum Platform 9 touchscreen display (1920 ×1080 pixel resolution,
+12 ms touch response time, integrated CPU Intel Core i7-4790S 3.2 GHz, 16GB RAM).
+5.1.4. Task
+The participants were presented the touchscreen display and our custom wearable de-
+vice and were briefed about the specifics of the task. For each condition of Location,
+a different city map was presented and, after completing the corresponding trials, the
+participants were asked a question involving all of the targets from the map, e.g.,
+“What is the year of the oldest building?” To answer the question, the participants
+had to touch all of the targets in order to reveal their descriptions. The participants
+were allowed to touch each target multiple times. The order of the finger, wrist, and
+8https://leafletjs.com
+9https://www.ideum.com/products/touch-tables
+15
+Perceived Enjoyment1
+2
+3
+4
+5
+Finger Wrist Forearm
+Perceived Efficiency
+1
+2
+3
+4
+5
+Finger Wrist Forearm
+Perceived Confidence1
+2
+3
+4
+5
+Finger Wrist Forearm
+Perceived Integration1
+2
+3
+4
+5
+Finger Wrist Forearm
+Perceived Distractedness1
+2
+3
+4
+5
+Finger Wrist Forearm
+Perceived Difficulty
+1
+2
+3
+4
+5
+Finger Wrist Forearm
+Perceived Confusion1
+2
+3
+4
+5
+Finger Wrist Forearm
+Perceived Complexity1
+2
+3
+4
+5
+Finger Wrist Forearm
+Figure 6. User experience ratings (bars show median values) of vibrotactile feedback delivered on the finger,
+wrist, and forearm during touch input on a large display. Notes: higher values denote a better user experience
+according to the positively-connoted UX descriptors (shown in the top row, 5 represents the highest rating),
+while lower values indicate a better user experience for the negatively-connoted descriptors (bottom row, 1
+represents the lowest rating); see also Table 1 for statistical significance tests for each of these measures.
+forearm conditions of the Location independent variable was randomized per partici-
+pant. The first condition was always touch input without vibrotactile feedback (none),
+representing our baseline. The participants were allowed to spend as much time as de-
+sired with each city map until they felt confident they could answer the upcoming
+question. On average, tasks were completed in 12.2 minutes (SD=4.3) with partici-
+pants performing on average 189.1 touches (SD=44.5). At the end of the experiment,
+the participants filled out a questionnaire containing our set of eight UX measures.
+5.1.5. Statistical Analysis
+Due to the ordinal nature of our dependent variables, representing Likert-scale rat-
+ings, we report medians (Mdn) as the preferred measure of central tendency, and
+use ANOVA with the F statistic and the Aligned-Rank Transform for nonparamet-
+ric factorial analysis, implemented with the ARTool (Wobbrock et al., 2011) 10 and
+ART-C (Elkin et al., 2021) software tools. Furthermore, we use Bonferroni corrections
+for our post-hoc tests according to the number of pairwise comparisons (three in this
+experiment, representing all of the direct comparisons among the finger, wrist, and
+forearm conditions, corresponding to a significance level of p=.05 after correction).
+5.2. Results
+Figure 6 shows the median ratings of the perceived user experience of vibrotactile feed-
+back delivered on the finger, wrist, and forearm, according to the different dimensions
+evaluated in our experiment, while Table 1 highlights statistically significant effects of
+the Location independent variable on our set of eight UX measures.
+10https://cran.r-project.org/web/packages/ARTool/index.html
+16
+Table 1. Statistical significance tests for the eight UX measures used in our first experiment; see Figure 6 for
+the corresponding median ratings. Note: statistically significant effects are highlighted.
+UX measure
+Effect of Location
+main effect finger vs.
+wrist †
+finger vs.
+forearm†
+wrist vs.
+forearm†
+■ Perceived-Enjoyment Interacting
+with the display felt more enjoyable with
+vibrotactile feedback than without.
+F(2,95)=13.927,
+p<.001, η2
+p=.23
+t(95)=3.425,
+p<.005
+t(95)=5.190,
+p<.001
+t(95)=1.765,
+p=.242, n.s.
+■ Perceived-Efficiency Interacting
+with the display felt more efficient with
+vibrotactile feedback than without.
+F(2,95)=24.654,
+p<.001, η2
+p=.34
+t(95)=4.823,
+p<.001
+t(95)=6.831,
+p<.001
+t(95)=2.009,
+p=.142, n.s.
+■ Perceived-Confidence Vibrotactile
+feedback made me feel more confident
+when interacting with the display
+compared to when vibrations were absent.
+F(2,95)=14.970,
+p<.001, η2
+p=.24
+t(95)=3.586,
+p<.005
+t(95)=5.372,
+p<.001
+t(95)=1.786,
+p=.232, n.s.
+■ Perceived-Integration Touching the
+display and feeling the vibrations
+integrated well into one experience.
+F(2,95)=16.857,
+p<.001, η2
+p=.26
+t(95)=4.198,
+p<.001
+t(95)=5.573,
+p<.001
+t(95)=1.375,
+p=.517, n.s.
+■ Perceived-Distracteness Interacting
+with the display felt more distracting with
+vibrotactile feedback than without.
+F(2,95)=7.813,
+p<.001, η2
+p=.14
+t(95)=2.053,
+p=.128, n.s.
+t(95)=3.952,
+p<.001
+t(95)=1.899,
+p=.182, n.s.
+■ Perceived-Difficulty Interacting
+with the display felt more difficult with
+vibrotactile feedback than without.
+F(2,95)=3.375,
+p=.038, η2
+p=.07
+t(95)=1.995,
+p=.147, n.s.
+t(95)=2.439,
+p=.049
+t(95)=0.444,
+p=1.00, n.s.
+■ Perceived-Confusion Vibrotactile
+feedback created confusion for me when
+interacting with the display.
+F(2,95)=6.716,
+p=.002, η2
+p=.12
+t(95)=3.017,
+p<.001
+t(95)=3.311,
+p=.004
+t(95)=0.294,
+p=1.00, n.s.
+■ Perceived-Complexity Vibrotactile
+feedback was unnecessarily complex when
+interacting with the display.
+F(2,95)=1.645,
+p=.198, n.s.
+t(95)=1.807,
+p=.222, n.s.
+t(95)=0.760,
+p=1.00, n.s.
+t(95)=1.046,
+p=.894, n.s.
+† Bonferroni corrections applied for three contrasts involving all of the Location conditions.
+We found that Location had a statistically significant effect on all of the UX
+measures with effect sizes ranging from medium (η2
+p=.07 for Perceived-Difficulty)
+to large ( η2
+p=.34 for Perceived-Efficiency), except for Perceived-Complexity
+(p=.198, n.s.); see Table 1. Post-hoc contrast tests revealed statistically significant
+differences between vibrations delivered on the finger compared to vibrations on the
+wrist and forearm, but not between wrist and forearm; see the last three columns of
+Table 1. In terms of the positively-connoted descriptors of UX (first four rows of Table 1
+and the top row in Figure 6), vibrotactile feedback on the finger felt more enjoyable
+(Mdn=5), efficient (Mdn=5), and confident (Mdn=5) as well as better integrated
+(Mdn=5) compared to thewrist (Mdn=4 across all of these four measures) andforearm
+(Mdn=4, 3, 4, and 4, respectively)—all statistically significant differences at p<.005
+or p<.001. Also, the negatively-connoted descriptors revealed vibrations on the finger
+as exhibiting lower perceived distraction (Mdn=1), difficulty (Mdn=1), and confusion
+(Mdn=1) compared to the wrist (Mdn=2, 2, and 1) and forearm (Mdn=3, 2, and
+2). These findings show a better user experience, corroborated by both positively
+and negatively-connoted descriptors, as vibrotactile feedback is delivered closer to the
+touch point on the screen, i.e., on the index finger, wrist, and forearm, in this order.
+17
+Nevertheless, the median ratings are favorable across all of the UX measures employed
+in our experiment. These empirical results complement the technical feasibility of
+the addition Wear+Touch technique, which we discussed in Section 4, with practical
+benefits represented by a better user experience expected for end users.
+6. Experiment #2: The User Experience of On-Screen Vibrations and
+Vibrotactile F eedback Delivered Through a W earable
+Our first experiment revealed that vibrotactile feedback delivered through a wear-
+able improves the user experience of touch input for large touchscreen displays that
+do not have built-in haptics capabilities. Moreover, it showed that the finger, being
+closest to the touch point on the screen, is the preferred location on the arm where
+to deliver vibrotactile feedback for the implementation of the addition technique. To
+understand the relative benefits of the other Wear+Touch interaction techniques on
+the user experience of touchscreen input— addition vs. reinforcement, extension, and
+expansion,—we designed a second experiment.
+6.1. Experiment design
+6.1.1. Participants
+We recruited twenty participants representing young adults aged between 19 and 44
+years old (M=22.6, SD=6.1 years) using a similar procedure as in the first experiment
+based on an internal emailing list and convenience sampling. The age and gender struc-
+ture of the sample was similar to that from the first experiment, as follows. Fourteen
+of the participants self-identified as male and six as female, and all of the participants
+reported being right-handed. In terms of their prior experience with computer and
+digital devices, all of the participants reported regular use of smartphones and PCs,
+eight (40%) were using smartwatches or fitness trackers, and six (30%) reported using
+tablets. A number of sixteen participants, representing 80% in our sample, reported
+having the keyboard vibration feature turned on on their smartphones. None of the
+participants took part in the first experiment presented in Section 5.
+6.1.2. Design
+Similarly to the first experiment, we followed a within-subjects design with one inde-
+pendent variable, Technique, with five conditions: vibrotactile feedback on the finger
+(addition), on the touchscreen and the finger with the same vibrotactile pattern (rein-
+forcement), on the touchscreen and the finger but with different vibrotactile patterns
+(extension), vibrotactile feedback that starts on the touchscreen and propagates to
+the user’s forearm through the finger and wrist ( expansion), and the control condi-
+tion of on-screen vibrations only. We employed the same eight UX measures as in our
+first experiment to evaluate the various aspects of the user experience of vibrotactile
+feedback delivered through the Wear+Touch techniques.
+6.1.3. Apparatus
+We employed the same custom-designed wearable device used in the previous exper-
+iment to deliver vibrotactile feedback at various locations on the arm. To implement
+18
+  
+Figure 7. Photographs from the second experiment with a close-up of the setup. To implement addition,
+vibrotactile feedback was delivered solely through the wearable device. To implementreinforcement, extension,
+and expansion, vibrotactile feedback was delivered conjointly on the touchscreen and through the wearable.
+on-screen vibrations, we used a conventional smartphone (Samsung Galaxy A23, 6.6-
+inch screen, and 1080x2408 pixel resolution), which we placed in a fixed position onto
+a tabletop. We preferred this setup to that of users holding the smartphone to make
+sure that on-screen vibrations were only felt on the interactive finger, and placed the
+smartphone on a piece of Polyurethane material to reduce audio noise caused by the
+contact with the table surface; see Figure 7 for photographs from our experiment. For
+the application, we adapted the “Catch the bees, don’t get stung” game described
+in Subsection 4.1 to run on the smartphone in the form of a Progressive Web Appli-
+cation,11 and we slightly changed the gameplay to incorporate vibrotactile feedback
+for all of the four Wear+Touch techniques according to specific events in the game,
+as follows. We implemented bees of four different colors corresponding to different
+behaviors when touched, according to each of the conditions of the Technique inde-
+pendent variable. For instance, when a green colored bee is touched, it flies away from
+the hive, outside the viewport, and the user receives a short vibration (150 ms) on the
+finger only through the wearable device, corresponding to the addition technique. A
+blue colored bee also flies away from the hive upon touch, but produces synchronous
+vibrotactile feedback on the screen and on the finger (the same short pulse of 150
+ms), according to the reinforcement technique. Touching both the green and blue bees
+increases the game score. However, if the user touches two consecutive bees in a time
+interval that is shorter than one second, neither of the bees fly away and no points are
+gained. In this case, the user is altered with a short vibration on the touchscreen (100
+ms) and two short vibrations on the finger (75 ms each, separated by a 50ms-long
+pause), corresponding to the extension technique. Finally, when the user touches a
+yellow colored bee, all of the visible bees fly around chaotically while the entire hive
+shakes for a couple of seconds, during which the user receives the most expanded form
+of vibrotactile feedback that starts on the screen and propagates to the finger, wrist,
+and forearm, in this order, according to the expansion technique (150 ms pulses de-
+livered in sequence). Touching the yellow bees reduces the game score by one point.
+Finally, when the user touches a purple bee, the bee flies around without bringing any
+11https://web.dev/explore/progressive-web-apps
+19
+Perceived Enjoyment1
+2
+3
+4
+5
+Screen
+Addit.
+Reinf.
+Exten.
+Expan.
+Perceived Efficiency
+1
+2
+3
+4
+5
+Screen
+Addit.
+Reinf.
+Exten.
+Expan.
+Perceived Confidence1
+2
+3
+4
+5
+Screen
+Addit.
+Reinf.
+Exten.
+Expan.
+Perceived Integration1
+2
+3
+4
+5
+Screen
+Addit.
+Reinf.
+Exten.
+Expan.
+Perceived Distractedness1
+2
+3
+4
+5
+Screen
+Addit.
+Reinf.
+Exten.
+Expan.
+Perceived Difficulty
+1
+2
+3
+4
+5
+Screen
+Addit.
+Reinf.
+Exten.
+Expan.
+Perceived Confusion1
+2
+3
+4
+5
+Screen
+Addit.
+Reinf.
+Exten.
+Expan.
+Perceived Complexity1
+2
+3
+4
+5
+Screen
+Addit.
+Reinf.
+Exten.
+Expan.
+Figure 8. User experience ratings (bars show median values) of vibrotactile feedback delivered on the screen
+and through the four Wear+Touch techniques of addition, reinforcement, extension, and expansion. Notes:
+higher values denote a better experience according to the positively-connoted UX descriptors (shown in the
+top row, where 5 represents the highest rating), while lower values indicate a better user experience for the
+negatively-connoted descriptors (bottom row, where 1 represents the lowest rating); see also Table 2 for statis-
+tical significance tests for each of these measures.
+game point, and vibrotactile feedback (a pulse of 150 ms) is delivered through the
+touchscreen, representing our control condition.
+6.1.4. Task
+After signing the consent form, the participants were presented with our custom wear-
+able device, the video game, and the task represented by gaining as many points as
+possible during a limited game time of three minutes initially. If half of the bees re-
+mained in the hive upon expiration of game time, the hive was changed to a new
+configuration of bees and eight more seconds are added to the game time. To maxi-
+mize their score, the participants had to be fast and pay attention to the colors of the
+bees flying in the hive. On average, tasks were completed in 7.3 minutes (SD=7s) per
+participant, during which the participants performed on average 311 touches (SD=34).
+At the end of the experiment, the participants filled out our questionnaire containing
+the same set of eight UX measures as used in the first experiment.
+6.1.5. Statistical Analysis
+Since we measured the same dependent variables (ordinal, represented by Likert-scale
+ratings), we used the same statistical analysis techniques as in the first experiment
+based on ANOVA and the Aligned-Rank Transform (Wobbrock et al., 2011; Elkin
+et al., 2021); see Subsection 5.1.5 for details.
+20
+Table 2. Statistical significance tests for the eight UX measures used in our second experiment; see Figure 8
+for the corresponding median ratings. Note: statistically significant effects are highlighted.
+UX measure
+Effect of Technique
+main effect addition vs.
+on-screen†
+reinforcement
+vs. on-screen†
+extension vs.
+on-screen†
+expansion vs.
+on-screen†
+■ Perceived-Enjoyment
+Interacting with the display felt
+more enjoyable with vibrotactile
+feedback than without.
+F(4,76)=4.039,
+p=.005,
+η2
+p=.18
+t(76)=0.887,
+p=1.000, n.s.
+t(76)=2.599,
+p=.045
+t(76)=2.127,
+p=.147, n.s.
+t(76)=3.608,
+p<.005
+■ Perceived-Efficiency
+Interacting with the display felt
+more efficient with vibrotactile
+feedback than without.
+F(4,76)=4.096,
+p<.005,
+η2
+p=.18
+t(76)=2.067,
+p=.169, n.s.
+t(76)=2.984,
+p=.015
+t(76)=1.733,
+p=.348, n.s.
+t(76)=3.793,
+p<.005
+■ Perceived-Confidence
+Vibrotactile feedback made me feel
+more confident when interacting
+with the display compared to when
+vibrations were absent.
+F(4,76)=2.377,
+p=.060, n.s.
+t(76)=1.582,
+p=.471, n.s.
+t(76)=2.544,
+p=.052, n.s.
+t(76)=1.605,
+p=.451, n.s.
+t(76)=2.762,
+p=.029
+■ Perceived-Integration
+Touching the display and feeling
+the vibrations integrated well into
+one experience.
+F(4,76)=2.185,
+p=.079, n.s.
+t(76)=1.671,
+p=.396, n.s.
+t(76)=2.176,
+p=.131, n.s.
+t(76)=0.368,
+p=1.000, n.s.
+t(76)=2.253,
+p=.109, n.s.
+■ Perceived-Distracteness
+Interacting with the display felt
+more distracting with vibrotactile
+feedback than without.
+F(4,76)=2.153,
+p=.082, n.s.
+t(76)= − 0.325,
+p=1.000, n.s.
+t(76)= − 0.776,
+p=1.000, n.s.
+t(76)=0.521,
+p=1.000, n.s.
+t(76)= − 2.210,
+p=.121, n.s.
+■ Perceived-Difficulty
+Interacting with the display felt
+more difficult with vibrotactile
+feedback than without.
+F(4,76)=0.982,
+p=.423, n.s.
+t(76)= − 0.005,
+p=1.000, n.s.
+t(76)=0.272,
+p=1.000, n.s.
+t(76)=0.966,
+p=1.000, n.s.
+t(76)= − 0.984,
+p=1.000, n.s.
+■ Perceived-Confusion
+Vibrotactile feedback created
+confusion for me when interacting
+with the display.
+F(4,76)=1.445,
+p=.227, n.s.
+t(76)= − 0.805,
+p=1.000, n.s.
+t(76)= − 0.157,
+p=1.000, n.s.
+t(76)=1.485,
+p=.567, n.s.
+t(76)= − 0.188,
+p=1.000, n.s.
+■ Perceived-Complexity
+Vibrotactile feedback was
+unnecessarily complex when
+interacting with the display.
+F(4,76)=0.311,
+p=.870, n.s.
+t(76)= − 0.544,
+p=1.000, n.s.
+t(76)= − 0.095,
+p=1.000, n.s.
+t(76)=0.372,
+p=1.000, n.s.
+t(76)= − 0.562,
+p=1.000, n.s.
+† Bonferroni corrections applied for four contrasts involving the control condition of on-screen vibrations only.
+6.2. Results
+Figure 8 shows the median ratings of the user experience of vibrotactile feedback deliv-
+ered according to the four Wear+Touch techniques compared to our control condition
+of on-screen vibrations only, while Table 2 highlights statistically significant effects of
+the Technique independent variable on our set of eight UX measures.
+Overall, all of the positively-connoted UX measures had median ratings above the
+neutral level of 3 (“neither agree nor disagree”), but the four Wear+Touch tech-
+niques stayed above the median level of 4, corresponding to the “agree” response
+for the various statements about Perceived-Enjoyment, Perceived-Efficiency,
+Perceived-Confidence, and Perceived-Integration. The expansion technique
+was always rated the highest across all of the four positively-connoted UX measures,
+21
+while the integration between touching the screen and the feeling the corresponding
+vibrotactile feedback was favorably perceived with ratings above 4.5 for all of the
+conditions of the Technique independent variable; see Figure 8, top. Three of the
+negatively-connoted UX measures had median ratings below 2 (“disagree”) and 2.5
+(between “disagree” and “neither agree nor disagree”), whereas in the majority of the
+cases, the Wear+Touch techniques were rated below or equal to 2, corresponding to the
+“disagree” response for the various statements about Perceived-Distracteness,
+Perceived-Difficulty, Perceived-Confusion, and Perceived-Complexity,
+respectively; see Figure 8, bottom. These results indicate high ratings when the user ex-
+perience was characterized with positively connoted descriptors and low ratings when
+negatively connoted descriptors were used instead.
+We found that Technique had a statistically significant effect ( p<.05 )on just
+two of the positively-connoted measures, Perceived-Enjoyment and Perceived-
+Efficiency, with medium effect sizes (η2
+p=.18); see Table 2 for details. Post-hoc tests
+(Bonferroni corrections applied for four contrasts against the condition of on-screen
+vibrations only) revealed that the reinforcement and expansion techniques were sig-
+nificantly higher rated than on-screen (Mdn=4 and 5 vs. Mdn=3 for Perceived-
+Enjoyment and Mdn=4 and 4 vs. Mdn=3 forPerceived-Efficiency, respectively).
+These findings reveal a better user experience compared to on-screen vibrations only
+in terms of two of the positively-connoted UX measures, while no worse experience was
+detected in terms of the negatively-connoted measures. ThePerceived-Complexity
+measure revealed more higher ratings, but nevertheless less than the on-screen con-
+dition with no statistically significant differences ( p>.05, n.s.). Overall, these results
+show a better user experience of complementary vibrations delivered through a wear-
+able compared to the implicit control condition of no vibrotactile feedback and also
+better compared to the explicit control condition of conventional on-screen vibrations.
+7. Conclusion and F uture W ork
+We introduced Wear+Touch, a set of four interaction techniques that leverage wearable
+devices for delivering vibrotactile feedback during touchscreen input in the form of
+addition, reinforcement, extension, and expansion. We demonstrated the technical
+feasibility of Wear+Touch and reported better user experience for two specific contexts
+of use involving a large touchscreen display and a smartphone.
+Interesting future work lies ahead, such as exploring other locations on the body
+where to deliver distal vibrotactile feedback during touchscreen input, technical imple-
+mentation for more off-the-shelf wearable devices, and evaluating the user experience
+of other user groups, including older adults (Sultana and Moffatt, 2019) and chil-
+dren (Vatavu et al., 2015). For example, exploration of a diversified set of vibrotactile
+feedback patterns for various categories of wearable devices (Aiord˘ achioae et al., 2020;
+Ariza et al., 2015; Seifi and Lyons, 2016) represents one future work direction for en-
+riching interactions with touchscreen displays. Examples include smartglasses for vi-
+brotactile feedback at head level and haptic vests for targeting various locations on the
+torso, but also wearables featuring new haptic modalities (Zhu et al., 2020; Mazursky
+et al., 2021; Catan˘ a and Vatavu, 2023) and extending Wear+Touch for around-device
+interactions (McIntosh et al., 2019). Furthermore, based on prior work that examined
+user performance in conditions of distal vibrotactile feedback (Henderson et al., 2019;
+Terenti et al., 2024c), we believe that Wear+Touch can also make touchscreen inter-
+actions more accurate given the additional layer of vibrotactile feedback, an aspect to
+22
+be examined closely in future work.
+Another interesting direction for future work regards providing software support for
+implementing the Wear+Touch techniques into more practical applications, including
+for multi-user interaction scenarios. For example, we implemented our demonstrations
+of Wear+Touch as individual software applications without a unified development ap-
+proach and considering single users only. However, a dedicated software framework
+featuring abstract components, services, and data flows would be beneficial for prac-
+titioners to guide and support implementation of the Wear+Touch techniques for
+various wearable devices and platforms in the tradition of tools such as (Chi and Li,
+2015; Shtarbanov, 2021; Schipor and Vatavu, 2023). Of these software components, a
+dedicated component would be in charge of discriminating between touches belonging
+to different users, for which various techniques are available, including leveraging the
+wearable device itself (Bianchi and Je, 2017), vibration sensors (Masson et al., 2017),
+or proximity-based inference (Tanase et al., 2008). Software architecture examples that
+consider input and output through multiple devices, including wearables (Schipor and
+Vatavu, 2023; Schipor et al., 2019) and gesture recognition as a service (Vatavu et al.,
+2012b) represent a starting point for more development in multi-user collaborative in-
+teraction. Our set of design requirements for compatible wearables, APIs/SDKs, and
+types of vibrotactile feedback also represent a good starting point in this direction,
+to be extended with design requirements for multi-user interaction in collaborative
+tabletop computing (Tang et al., 2006; Morris et al., 2006).
+Technical implementation of Wear+Touch involves communications between wear-
+able devices and the touchscreen display, including communications through a mid-
+dleware mobile application, as employed for the implementation of our experiments.
+Our design requirements for compatible wearables center on Bluetooth due to low
+energy consumption, but other communications technology are technically feasible for
+Wear+Touch, according to the specific wearable platforms and available manufactuter
+APIs/SDKs. It is worth noting that any communications technology involves some de-
+lays for the delivery of vibrotactile feedback, from the moment when the command is
+sent from the touchscreen device, following a touch event, to the moment when it is re-
+ceived and implemented by the wearable. We did not find noticeable delays in our pro-
+totypes and experiments, also confirmed by high ratings ofPerceived-Integration,
+but applications with strict synchronization requirements between touch input and vi-
+brotactile output may need further scrutiny.
+Lastly, we used in this work VIREO (Terenti and Vatavu, 2023), a free web-based
+software tool for authoring vibrotactile patterns, specifically developed for implement-
+ing vibrotactile feedback for mobile and wearable devices. Future work can look at
+the development of a specialized VIREO module that would enable practitioners to
+author synchronized vibrations, delivered through different wearables, for expressive
+expansion effects that start on the screen and continue on the arm. We equally see
+interesting potential for using Wear+Touch for eyes-free interaction, as in the driv-
+ing example illustrated in Figure 1, for which further examination of combined user
+performance and user experience is recommended.
+Acknowledgements
+This work is part of a project that has received funding from the European Union’s
+Horizon 2020 research and innovation programme under the Marie Sk lodowska-Curie
+grant agreement No 860114.
+23
+Disclosure statement
+No potential competing interest was reported by the author(s).
+References
+Aiord˘ achioae, A., Gherasim, D., Maciuc, A.-I., Gheran, B.-F., Vatavu, R.-D., 2020. Addressing
+inattentional blindness with smart eyewear and vibrotactile feedback on the finger, wrist,
+and forearm. In: Proceedings of the 19th International Conference on Mobile and Ubiquitous
+Multimedia. MUM ’20. ACM, New York, NY, USA, pp. 329–331.
+URL https://doi.org/10.1145/3428361.3432080
+Ando, H., Miki, T., Inami, M., Maeda, T., 2002. SmartFinger: nail-mounted tactile display. In:
+Proceedings of the ACM SIGGRAPH Conference Abstracts and Applications. SIGGRAPH
+’02. ACM, New York, NY, USA, p. 78.
+URL https://dx.doi.org/10.1145/1242073.1242113
+Ardito, C., Buono, P., Costabile, M. F., Desolda, G., feb 2015. Interaction with large displays:
+A survey. ACM Comput. Surv. 47 (3), 1–38.
+URL https://doi.org/10.1145/2682623
+Ariza, O., Lubos, P., Steinicke, F., Bruder, G., 2015. Ring-shaped haptic device with vibro-
+tactile feedback patterns to support natural spatial interaction. In: Proceedings of the 25th
+International Conference on Artificial Reality and Telexistence and 20th Eurographics Sym-
+posium on Virtual Environments. ICAT - EGVE ’15. Eurographics Association, Goslar, p.
+175–181.
+URL https://dl.acm.org/doi/10.5555/2852313.2852337
+Bau, O., Poupyrev, I., jul 2012. Revel: Tactile feedback technology for augmented reality. ACM
+Trans. Graph. 31 (4), 1–11.
+URL https://dx.doi.org/10.1145/2185520.2185585
+Bau, O., Poupyrev, I., Israr, A., Harrison, C., 2010. TeslaTouch: electrovibration for touch
+surfaces. In: Proceedings of the 23nd Annual ACM Symposium on User Interface Software
+and Technology. UIST ’10. ACM, New York, NY, USA, p. 283–292.
+URL https://dx.doi.org/10.1145/1866029.1866074
+Bianchi, A., Je, S., 2017. Disambiguating touch with a smart-ring. In: Proceedings of the 8th
+Augmented Human International Conference. AH ’17. ACM, New York, NY, USA, pp. 1–5.
+URL https://doi.org/10.1145/3041164.3041196
+Brewster, S., Chohan, F., Brown, L., 2007. Tactile feedback for mobile interactions. In: Pro-
+ceedings of the SIGCHI Conference on Human Factors in Computing Systems. CHI ’07.
+ACM, New York, NY, USA, p. 159–162.
+URL https://doi.org/10.1145/1240624.1240649
+Catan˘ a, A.-V., Vatavu, R.-D., 2023. Fingerhints: Understanding users’ perceptions of and pref-
+erences for on-finger kinesthetic notifications. In: Proceedings of the 2023 CHI Conference
+on Human Factors in Computing Systems. CHI ’23. ACM, New York, NY, USA, pp. 1–17.
+URL https://doi.org/10.1145/3544548.3581022
+Chi, P.-Y. P., Li, Y., 2015. Weave: Scripting cross-device wearable interaction. In: Proceedings
+of the 33rd Annual ACM Conference on Human Factors in Computing Systems. CHI ’15.
+ACM, New York, NY, USA, p. 3923–3932.
+URL https://dx.doi.org/10.1145/2702123.2702451
+Dunlop, M. D., Taylor, F., 2009. Tactile feedback for predictive text entry. In: Proceedings
+of the SIGCHI Conference on Human Factors in Computing Systems. CHI ’09. ACM, New
+York, NY, USA, p. 2257–2260.
+URL https://doi.org/10.1145/1518701.1519046
+Elkin, L. A., Kay, M., Higgins, J. J., Wobbrock, J. O., 2021. An aligned rank transform proce-
+dure for multifactor contrast tests. In: Proceedings of the 34th Annual ACM Symposium on
+24
+User Interface Software and Technology. UIST ’21. ACM, New York, NY, USA, p. 754–768.
+URL https://doi.org/10.1145/3472749.3474784
+Emgin, S. E., Aghakhani, A., Sezgin, T. M., Basdogan, C., 2019. HapTable: an interactive
+tabletop providing online haptic feedback for touch gestures. IEEE Trans. on Visualization
+and Computer Graphics 25 (9), 2749–2762.
+URL https://dx.doi.org/10.1109/TVCG.2018.2855154
+Freeman, E., Brewster, S., Lantz, V., 2014. Tactile feedback for above-device gesture interfaces:
+Adding touch to touchless interactions. In: Proceedings of the 16th International Conference
+on Multimodal Interaction. ICMI ’14. ACM, p. 419–426.
+URL https://dx.doi.org/10.1145/2663204.2663280
+Grussenmeyer, W., Folmer, E., jan 2017. Accessible touchscreen technology for people with
+visual impairments: A survey. ACM Trans. Access. Comput. 9 (2), 1–31.
+URL https://dx.doi.org/10.1145/3022701
+Henderson, J., Avery, J., Grisoni, L., Lank, E., 2019. Leveraging distal vibrotactile feedback for
+target acquisition. In: Proceedings of the CHI Conference on Human Factors in Computing
+Systems. ACM, New York, NY, USA, pp. 1–11.
+URL https://doi.org/10.1145/3290605.3300715
+Hoggan, E., Brewster, S. A., Johnston, J., 2008. Investigating the effectiveness of tactile feed-
+back for mobile touchscreens. In: Proceedings of the SIGCHI Conference on Human Factors
+in Computing Systems. CHI ’08. ACM, New York, NY, USA, p. 1573–1582.
+URL https://doi.org/10.1145/1357054.1357300
+Jamalzadeh, M., Rekik, Y., Grisoni, L., Vatavu, R.-D., Volpe, G., Dancu, A., 2023. Effects
+of moving speed and phone location on eyes-free gesture input with mobile devices. In:
+Human-Computer Interaction – INTERACT 2023. Lecture Notes in Computer Science, vol
+14142. Springer, Cham, pp. 469–478.
+URL https://doi.org/10.1007/978-3-031-42280-5_30
+Jansen, Y., 2010. Mudpad: Fluid haptics for multitouch surfaces. In: Proc. of the CHI Extended
+Abstracts on Human Factors in Computing Systems. CHI EA ’10. ACM, New York, NY,
+USA, p. 4351–4356.
+URL https://dx.doi.org/10.1145/1753846.1754152
+Koskinen, E., Kaaresoja, T., Laitinen, P., 2008. Feel-good touch: finding the most pleasant
+tactile feedback for a mobile touch screen button. In: Proceedings of the 10th International
+Conference on Multimodal Interfaces. ICMI ’08. ACM, New York, NY, USA, pp. 297–304.
+Krol, L. R., Aliakseyeu, D., Subramanian, S., 2009. Haptic feedback in remote pointing. In:
+CHI ’09 Extended Abstracts on Human Factors in Computing Systems. CHI EA ’09. ACM,
+New York, NY, USA, p. 3763–3768.
+URL https://doi.org/10.1145/1520340.1520568
+Le, K.-D., Zhu, K., Kosinski, T., Fjeld, M., Azh, M., Zhao, S., 2016. Ubitile: A finger-worn
+I/O device for tabletop vibrotactile pattern authoring. In: Proceedings of the 9th Nordic
+Conference on Human-Computer Interaction. NordiCHI ’16. ACM, New York, NY, USA,
+pp. 1–4.
+URL https://dx.doi.org/10.1145/2971485.2996721
+Liao, Y.-C., Chen, Y.-C., Chan, L., Chen, B.-Y., 2017. Dwell+: Multi-level mode selection using
+vibrotactile cues. In: Proceedings of the 30th Annual ACM Symposium on User Interface
+Software and Technology. UIST ’17. ACM, New York, NY, USA, p. 5–16.
+URL https://dx.doi.org/10.1145/3126594.3126627
+Long, B., Seah, S. A., Carter, T., Subramanian, S., 2014. Rendering volumetric haptic shapes
+in mid-air using ultrasound. ACM Trans. Graph. 33 (6), 1–10.
+URL https://dx.doi.org/10.1145/2661229.2661257
+Luzhnica, G., Veas, E., 2018. Investigating interactions for text recognition using a vibrotactile
+wearable display. In: Proceedings of the 23rd International Conference on Intelligent User
+Interfaces. IUI ’18. ACM, New York, NY, USA, p. 453–465.
+URL https://dx.doi.org/10.1145/3172944.3172951
+Maeda, T., Peiris, R., Masashi, N., Tanaka, Y., Minamizawa, K., 2016. HapticAid: wearable
+25
+haptic augmentation system for enhanced, enchanted and empathised haptic experiences.
+In: SIGGRAPH ASIA 2016 Emerging Technologies. SA ’16. ACM, New York, NY, USA,
+pp. 1–2.
+URL https://doi.org/10.1145/2988240.2988253
+Magrofuoco, N., Roselli, P., Vanderdonckt, J., jul 2021. Two-dimensional stroke gesture recog-
+nition: A survey. ACM Comput. Surv. 54 (7), 1–36.
+URL https://doi.org/10.1145/3465400
+Mart´ ınez, J., Garc´ ıa, A. S., Oliver, M., Molina, J. P., Gonz´ alez, P., 2014. VITAKI: a vi-
+brotactile prototyping toolkit for virtual reality and video games. International Journal of
+Human–Computer Interaction 30 (11), 855–871.
+URL https://doi.org/10.1080/10447318.2014.941272
+Masson, D., Goguey, A., Malacria, S., Casiez, G., 2017. WhichFingers: identifying fingers on
+touch surfaces and keyboards using vibration sensors. In: Proceedings of the 30th Annual
+ACM Symposium on User Interface Software and Technology. UIST ’17. ACM, New York,
+NY, USA, p. 41–48.
+URL https://dx.doi.org/10.1145/3126594.3126619
+Mazursky, A., Teng, S.-Y., Nith, R., Lopes, P., 2021. MagnetIO: passive yet interactive soft
+haptic patches anywhere. In: Proceedings of the CHI Conference on Human Factors in
+Computing Systems. CHI ’21. ACM, New York, NY, USA, pp. 1–15.
+URL https://dx.doi.org/10.1145/3411764.3445543
+McIntosh, J., Strohmeier, P., Knibbe, J., Boring, S., Hornbæk, K., 2019. Magnetips: Combining
+fingertip tracking and haptic feedback for around-device interaction. In: Proceedings of the
+CHI Conference on Human Factors in Computing Systems. CHI ’19. ACM, New York, NY,
+USA, pp. 1–12.
+URL https://dx.doi.org/10.1145/3290605.3300638
+Monnai, Y., Hasegawa, K., Fujiwara, M., Yoshino, K., Inoue, S., Shinoda, H., 2014. Hap-
+toMime: mid-air haptic interaction with a floating virtual screen. In: Proceedings of the
+27th Annual ACM Symposium on User Interface Software and Technology. ACM, New
+York, NY, USA, p. 663–667.
+URL https://dx.doi.org/10.1145/2642918.2647407
+Moon, H. S., Orr, G., Jeon, M., 2023. Hand tracking with vibrotactile feedback enhanced
+presence, engagement, usability, and performance in a virtual reality rhythm game. Inter-
+national Journal of Human–Computer Interaction 39 (14), 2840–2851.
+URL https://doi.org/10.1080/10447318.2022.2087000
+Morris, M. R., Huang, A., Paepcke, A., Winograd, T., 2006. Cooperative gestures: multi-user
+gestural interactions for co-located groupware. In: Proceedings of the SIGCHI Conference
+on Human Factors in Computing Systems. CHI ’06. ACM, New York, NY, USA, pp. 1201–
+1210.
+URL https://doi.org/10.1145/1124772.1124952
+Poupyrev, I., Okabe, M., Maruyama, S., 2004. Haptic feedback for pen computing: Directions
+and strategies. In: CHI ’04 Extended Abstracts on Human Factors in Computing Systems.
+CHI EA ’04. ACM, New York, NY, USA, p. 1309–1312.
+URL https://dx.doi.org/10.1145/985921.986051
+Schipor, O.-A., Vatavu, R.-D., 2023. GearWheels: a software tool to support user experiments
+on gesture input with wearable devices. International Journal of Human–Computer Inter-
+action 39 (18), 3527–3545.
+URL https://dx.doi.org/10.1080/10447318.2022.2098907
+Schipor, O.-A., Vatavu, R.-D., Vanderdonckt, J., 2019. Euphoria: A scalable, event-driven
+architecture for designing interactions across heterogeneous devices in smart environments.
+Information and Software Technology 109, 43–59.
+URL https://doi.org/10.1016/j.infsof.2019.01.006
+Sch¨ onauer, C., Mossel, A., Zaiti, I.-A., Vatavu, R.-D., 2015. Touch, movement & vibration: User
+perception of vibrotactile feedback for touch and mid-air gestures. In: Proceedings of the
+15th IFIP TC.13 International Conference on Human-Computer Interaction. INTERACT
+26
+’15. Springer, Cham, pp. 165–172.
+URL https://doi.org/10.1007/978-3-319-22723-8_14
+Seifi, H., Lyons, K., 2016. Exploring the design space of touch-based vibrotactile interactions
+for smartwatches. In: Proceedings of the 2016 ACM International Symposium on Wearable
+Computers. ISWC ’16. ACM, New York, NY, USA, p. 156–165.
+URL https://doi.org/10.1145/2971763.2971783
+Seifi, H., Zhang, K., MacLean, K. E., 2015. VibViz: Organizing, visualizing and navigating
+vibration libraries. In: Proceedings of the IEEE World Haptics Conference. WHC ’15. IEEE,
+USA, pp. 254–259.
+URL http://dx.doi.org/10.1109/WHC.2015.7177722
+Shtarbanov, A., 2021. Flowio development platform - the pneumatic ”Raspberry Pi” for soft
+robotics. In: Extended Abstracts of the CHI Conference on Human Factors in Computing
+Systems. CHI EA ’21. ACM, New York, NY, USA, pp. 1–6.
+URL https://dx.doi.org/10.1145/3411763.3451513
+Stanke, D., Duente, T., Rohs, M., 2020. TactileWear: a comparison of electrotactile and vi-
+brotactile feedback on the wrist and ring finger. In: Proceedings of the 11th Nordic Con-
+ference on Human-Computer Interaction: Shaping Experiences, Shaping Society. NordiCHI
+’20. ACM, New York, NY, USA, pp. 1–13.
+URL https://dx.doi.org/10.1145/3419249.3420107
+Sultana, A., Moffatt, K., feb 2019. Effects of aging on small target selection with touch input.
+ACM Trans. Access. Comput. 12 (1), 1–35.
+URL https://doi.org/10.1145/3300178
+Tanase, C. A., Vatavu, R.-D., Pentiuc, S.-G., Graur, A., 2008. Detecting and tracking mul-
+tiple users in the proximity of interactive tabletops. Advances in Electrical and Computer
+Engineering 8 (2), 61–64.
+URL http://dx.doi.org/10.4316/AECE.2008.02011
+Tang, A., Tory, M., Po, B., Neumann, P., Carpendale, S., 2006. Collaborative coupling over
+tabletop displays. In: Proceedings of the SIGCHI Conference on Human Factors in Com-
+puting Systems. CHI ’06. ACM, New York, NY, USA, p. 1181–1190.
+URL https://doi.org/10.1145/1124772.1124950
+Tekli, J., Issa, Y. B., Chbeir, R., 2018. Evaluating touch-screen vibration modality for blind
+users to access simple shapes and graphics. International Journal of Human-Computer Stud-
+ies 110, 115–133.
+URL https://doi.org/10.1016/j.ijhcs.2017.10.009
+Tennison, J. L., Uesbeck, P. M., Giudice, N. A., Stefik, A., Smith, D. W., Gorlewicz, J. L.,
+may 2020. Establishing vibration-based tactile line profiles for use in multimodal graphics.
+ACM Trans. Appl. Percept. 17 (2), 1–14.
+URL https://dx.doi.org/10.1145/3383457
+Terenti, M., Casado-Palacios, M., Gori, M., Vatavu, R.-D., 2024a. What is the user experience
+of eyes-free touch input with vibrotactile feedback decoupled from the touchscreen? In:
+Proceedings of the CHI Conference on Human Factors in Computing Systems Extended
+Abstracts. CHI ’24 EA. ACM, New York, NY, USA, pp. 1–8.
+URL https://dx.doi.org/10.1145/3613905.3650804
+Terenti, M., Pamparau, C., Vatavu, R.-D., 2024b. The user experience of distal arm-level
+vibrotactile feedback for interactions with virtual versus physical displays. Virtual Reality
+28 (2), 1–21.
+URL https://dx.doi.org/10.1007/s10055-024-00977-2
+Terenti, M., Rupin, M., Reynal, B., Grisoni, L., Vatavu, R.-D., 2024c. The eclectic user ex-
+perience of combined on-screen and on-wrist vibrotactile feedback in touchscreen input. In:
+Proceedings of the CHI Conference on Human Factors in Computing Systems Extended
+Abstracts. CHI ’24 EA. ACM, New York, NY, USA, pp. 1–7.
+URL https://dx.doi.org/10.1145/3613905.3650835
+Terenti, M., Vatavu, R.-D., 2022. Measuring the user experience of vibrotactile feedback on
+the finger, wrist, and forearm for touch input on large displays. In: Extended Abstracts of
+27
+the 2022 CHI Conference on Human Factors in Computing Systems. CHI EA ’22. ACM,
+New York, NY, USA, pp. 1–7.
+URL https://dx.doi.org/10.1145/3491101.3519704
+Terenti, M., Vatavu, R.-D., 2023. Vireo: Web-based graphical authoring of vibrotactile feed-
+back for interactions with mobile and wearable devices. International Journal of Hu-
+man–Computer Interaction 39 (20), 4162–4180.
+URL https://dx.doi.org/10.1080/10447318.2022.2109584
+Vatavu, R.-D., 2017. Visual impairments and mobile touchscreen interaction: State-of-the-
+art, causes of visual impairment, and design guidelines. International Journal of Human-
+Computer Interaction 33 (6), 486–509.
+URL http://dx.doi.org/10.1080/10447318.2017.1279827
+Vatavu, R.-D., Anthony, L., Wobbrock, J. O., 2012a. Gestures as point clouds: a $ p recognizer
+for user interface prototypes. In: Proceedings of the 14th ACM International Conference on
+Multimodal Interaction. ICMI ’12. ACM, New York, NY, USA, pp. 273–280.
+URL https://doi.org/10.1145/2388676.2388732
+Vatavu, R.-D., Anthony, L., Wobbrock, J. O., 2018. $ q: a super-quick, articulation-invariant
+stroke-gesture recognizer for low-resource devices. In: Proceedings of the 20th International
+Conference on Human-Computer Interaction with Mobile Devices and Services. MobileHCI
+’18. ACM, New York, NY, USA, pp. 1–12.
+URL https://doi.org/10.1145/3229434.3229465
+Vatavu, R.-D., Chera, C. M., Tsai, W.-T., 2012b. Gesture profile for web services: An event-
+driven architecture to support gestural interfaces for smart environments. In: Proceedings
+of the International Joint Conference on Ambient Intelligence. AmI ’12. Springer, Berlin,
+Heidelberg, pp. 161–176.
+URL http://dx.doi.org/10.1007/978-3-642-34898-3_11
+Vatavu, R.-D., Cramariuc, G., Schipor, D. M., 2015. Touch interaction for children aged 3
+to 6 years: Experimental findings and relationship to motor skills. International Journal of
+Human-Computer Studies 74, 54–76.
+URL http://dx.doi.org/10.1016/j.ijhcs.2014.10.007
+Vatavu, R.-D., Mossel, A., Sch¨ onauer, C., 2016. Digital vibrons: Understanding users’ per-
+ceptions of interacting with invisible, zero-weight matter. In: Proceedings of the 18th In-
+ternational Conference on Human-Computer Interaction with Mobile Devices and Services.
+MobileHCI ’16. ACM, New York, NY, USA, p. 217–226.
+URL https://dx.doi.org/10.1145/2935334.2935364
+Vogels, E. A., 2020. About one-in-five americans use a smart watch or fitness tracker.
+URL https://www.pewresearch.org/fact-tank/2020/01/09/
+about-one-in-five-americans-use-a-smart-watch-or-fitness-tracker/
+Wang, Y., Yu, C., Liu, J., Shi, Y., 2013. Understanding performance of eyes-free, absolute
+position control on touchable mobile phones. In: Proceedings of the 15th International Con-
+ference on Human-Computer Interaction with Mobile Devices and Services. MobileHCI ’13.
+ACM, New York, NY, USA, p. 79–88.
+URL https://dx.doi.org/10.1145/2493190.2493215
+Withana, A., Groeger, D., Steimle, J., 2018. Tacttoo: A thin and feel-through tattoo for on-
+skin tactile output. In: Proceedings of the 31st Annual ACM Symposium on User Interface
+Software and Technology. UIST ’18. ACM, New York, NY, USA, p. 365–378.
+URL https://dx.doi.org/10.1145/3242587.3242645
+Wobbrock, J. O., Findlater, L., Gergle, D., Higgins, J. J., 2011. The aligned rank transform
+for nonparametric factorial analyses using only anova procedures. In: Proceedings of the
+SIGCHI Conference on Human Factors in Computing Systems. CHI ’11. ACM, New York,
+NY, USA, p. 143–146.
+URL https://doi.org/10.1145/1978942.1978963
+Yamamoto, A., Nagasawa, S., Yamamoto, H., Higuchi, T., 2006. Electrostatic tactile display
+with thin film slider and its application to tactile telepresentation systems. IEEE Transac-
+tions on Visualization and Computer Graphics 12 (2), 168–177.
+28
+URL https://dx.doi.org/10.1109/TVCG.2006.28
+Zhang, L., He, W., Cao, Z., Wang, S., Bai, H., Billinghurst, M., 2023. Hapticproxy: Providing
+positional vibrotactile feedback on a physical proxy for virtual-real interaction in augmented
+reality. International Journal of Human–Computer Interaction 39 (3), 449–463.
+URL https://doi.org/10.1080/10447318.2022.2041895
+Zhu, M., Memar, A. H., Gupta, A., Samad, M., Agarwal, P., Visell, Y., Keller, S. J., Colon-
+nese, N., 2020. Pneusleeve: In-fabric multimodal actuation and sensing in a soft, compact,
+and expressive haptic sleeve. In: Proceedings of the CHI Conference on Human Factors in
+Computing Systems. CHI ’20. ACM, New York, NY, USA, p. 1–12.
+URL https://dx.doi.org/10.1145/3313831.3376333
+Notes on contributors
+Mihail Terenti is a Marie Sk lodowska-Curie Early Stage Researcher at the S ¸tefan cel
+Mare University of Suceava, Romania, where he works on multimodal feedback to
+augment the user experience of touch input.
+Radu-Daniel Vatavu is a Professor of Computer Science at the S ¸tefan cel Mare
+University of Suceava, where he directs the Machine Intelligence and Information Vi-
+sualization Research Laboratory. His research interests include human-computer in-
+teraction, augmented reality, ambient intelligence, and accessible computing.
+29

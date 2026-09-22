@@ -1,0 +1,1519 @@
+Xstrings: 3D Printing Cable-Driven Mechanism for Actuation, 
+Deformation, and Manipulation 
+Jiaji Li 
+MIT CSAIL 
+Cambridge, MA, USA 
+Zhejiang University 
+Hangzhou, China 
+jiaji@mit.edu 
+Shuyue Feng 
+Zhejiang University 
+Hangzhou, China 
+shuyuefeng@zju.edu.cn 
+Maxine Perroni-Scharf 
+MIT CSAIL 
+Cambridge, MA, USA 
+max1@mit.edu 
+Yujia Liu 
+Tsinghua University 
+Beijing, China 
+l-yj22@mails.tsinghua.edu.cn 
+Emily Guan 
+Pratt Institute 
+Brooklyn, New York, USA 
+eguan12@pratt.edu 
+Guanyun Wang 
+Zhejiang University 
+Hangzhou, China 
+guanyun@zju.edu.cn 
+Stefanie Mueller 
+MIT CSAIL 
+Cambridge, MA, USA 
+stefanie.mueller@mit.edu 
+Figure 1: Four 3D-printed objects demonstrating applications of Xstrings, including (a) multi-directional tentacle manipulation, 
+(b) a claw with embedded actuation, (c) a bio-inspired lizard robot, and (d) a dynamic wall sculpture. 
+Abstract 
+In this paper, we present Xstrings, a method for designing and fabri-
+cating 3D printed objects with integrated cable-driven mechanisms 
+that can be printed in one go without the need for manual assembly. 
+Xstrings supports four types of cable-driven interactions—bend, 
+coil, screw and compress—which are activated by applying an input 
+force to the cables. To facilitate the design of Xstrings objects, we 
+present a design tool that allows users to embed cable-driven mech-
+anisms into object geometries based on their desired interactions by 
+automatically placing joints and cables inside the object. To assess 
+our system, we investigate the effect of printing parameters on the 
+strength of Xstrings objects and the extent to which the interactions 
+are repeatable without cable breakage. We demonstrate the appli-
+cation potential of Xstrings through examples such as manipulable 
+gripping, bionic robot manufacturing, and dynamic prototyping. 
+This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 
+International License. 
+CHI ’25, Yokohama, Japan 
+© 2025 Copyright held by the owner/author(s). 
+ACM ISBN 979-8-4007-1394-1/25/04 
+https://doi.org/10.1145/3706598.3714282 
+CCS Concepts 
+• Human-centered computing → Human computer interac-
+tion (HCI); Systems and tools for interaction design. 
+Keywords 
+Cable-driven Mechanism, Personal Fabrication, 3D Printing 
+ACM Reference Format: 
+Jiaji Li, Shuyue Feng, Maxine Perroni-Scharf, Yujia Liu, Emily Guan, Guanyun 
+Wang, and Stefanie Mueller. 2025. Xstrings: 3D Printing Cable-Driven 
+Mechanism for Actuation, Deformation, and Manipulation. In CHI Con-
+ference on Human Factors in Computing Systems (CHI ’25), April 26–May 
+01, 2025, Yokohama, Japan. ACM, New York, NY, USA, 17 pages. https: 
+//doi.org/10.1145/3706598.3714282 
+1 Introduction 
+Prior HCI research has focused on integrating mechanisms into 
+physical objects to enable the creation of dynamic, articulated, and 
+shape-changing structures. To achieve different types of dynamic 
+interactions, researchers have explored various mechanisms to 
+support compliant [28, 53], elastic [13, 43, 48], bi-stable [39, 61], 
+and shape-memory [32, 42] fabrication, allowing users to customize 
+dynamic devices and tangible interfaces. 
+CHI ’25, April 26–May 01, 2025, Yokohama, Japan Jiaji Li et al. 
+In parralel, cable-driven mechanisms have emerged as a corner-
+stone of modern robotics, where the delicate interplay of cables 
+to transmit forces and motions offers a unique blend of precision 
+and adaptability. Their inherent lightweight nature and flexibility 
+make them indispensable in diverse applications, ranging from 
+robotic actuation [44] to the development of intricate control sys-
+tems [46]. For instance, Nikafrooz et al. [35] designed a robotic 
+hand with cables embedded in each finger to mimic the function 
+of tendons, while Colan et al. [4] leveraged similar principles in 
+crafting advanced surgical tools. 
+Despite their advantages, cable-driven mechanisms can be inher-
+ently challenging to design for less experienced 3D-printing users. 
+Achieving a specific desired motion requires precise positioning 
+of cables and their connection points within the geometry of a 
+larger structure, as well as the careful adjustment of tension levels 
+in these cables. To streamline the design process of such complex 
+mechanisms, researchers have developed various optimization algo-
+rithms. For example, Megaro et al. [27] and Li et al. [22] introduced 
+optimization-based methods for the inverse design of cable-driven 
+kinematic chains and trees. These methods have demonstrated the 
+capability to generate a wide range of output motions, including 
+realistic character animations and the development of actuated grip-
+pers, thereby expanding the versatility and application potential of 
+cable-driven systems. 
+Although existing design tools provide optimization solutions 
+for cable layouts to achieve the desired motion of an object, the 
+fabrication of such cable-driven mechanisms remains a challenging 
+manual task. This process often involves creating numerous small 
+holes, meticulously threading cables through these holes, and tying 
+knots at precise locations, an effort that is both time-consuming 
+and labor-intensive. Furthermore, the hand-crafted nature of these 
+mechanisms poses significant challenges in achieving the precision 
+required for developing systems with accurate motion trajectories, 
+limiting reproducibility and consistency when producing identical 
+copies of the same structure. 
+Figure 2: Embedding cable-driven mechanism with the 
+Xstrings workflow. 
+To address these challenges, we present Xstrings, a method that 
+integrates cable-driven mechanisms with 3D object geometries for 
+one-step fabrication using dual-material FDM 3D printing. Xstrings 
+supports four types of cable-driven interactions—bend, screw, coil, 
+and compress—activated by input force on the cables. To simplify 
+the design process, we also present a tool that allows users to embed 
+these mechanisms into objects by automatically placing cables and 
+joints based on the desired behavior of the object. This approach 
+automates the creation of cable-driven mechanisms, without long 
+production times or manual labor, while maintaining their preci-
+sion. 
+We evaluate Xstrings through several experiments. First, we 
+measure its time-efficiency by comparing it to manual cable-driven 
+object assembly over four participants, finding that Xstrings re-
+duces assembly time by 40%. Additionally, we examine the impact 
+of printing parameters such as temperature and speed on cable 
+quality, testing maximum tensile strain and interaction repeata-
+bility. Finally, we showcase the potential applications of Xstrings 
+with a diverse set of 3D-printed examples, including dynamic fash-
+ion, bionic robotics, and interactive prototyping, highlighting how 
+Xstrings accelerates fabrication for both novice and expert users. 
+In summary, our contributions are as follows: 
+• An automated, one-step fabrication approach for 3D print-
+ing cable-driven mechanisms, by printing embedded cables, 
+objects, joints, and linkages all at once without the need for 
+manual assembly. 
+• An interactive design tool that incorporates cable-driven 
+mechanisms into a target structure by decimating it into a 
+user-defined number of links, integrating four different mo-
+tion primitives (bend, coil, screw, and compress) to approxi-
+mate the target structure, and fosters creativity, exploration, 
+and accessibility to cable-driven prints. 
+• A technical evaluation to determine how 3D printing pa-
+rameters (printing temperature, extrusion, density, and print 
+path) affect the fatigue and maximum tensile strain of the 
+printed cables. 
+• A variety of 3D-printed example applications that demon-
+strate the use of Xstrings cable-driven mechanisms, includ-
+ing gripping devices, bionic robot manufacturing, and dy-
+namic prototyping. 
+2 Related Work 
+2.1 Manipulation Method of Dynamic 
+Fabrications 
+In the field of personal fabrication, researchers have utilized digital 
+manufacturing tools to create dynamic materials capable of achiev-
+ing a wide range of movements that would typically require the 
+creation and assembly of complex mechanical structures. There are 
+two main aspects to this line of prior research: dynamic struc-
+tures, which investigates how to impart mobility to objects, and 
+actuation methods, which explores how to control the movement 
+of dynamic objects under external forces. 
+Common dynamic structures in fabrication include springs [13, 
+14], joints [23, 59], linkages [18, 19, 57], hinges [36, 53], inflatable 
+structures [47, 62], metamaterials [16, 17], and origami-based de-
+signs [33, 54]. For example, PneUI [62] achieves various deformation 
+patterns by arranging inflatable bladders in different configurations. 
+Metamaterials have been 3D printed to create mechanisms that can 
+rotate and extend, achieving effects for motion conduction and 
+linkage [12, 16, 17]. Origami, widely used in engineering, can be 
+employed to create structures that have strength values many times 
+higher than those of their constituting materials through folding 
+techniques [9]. Pop-up Print [37] uses a combination of rigid and 
+flexible materials to allow greater freedom in shaping objects, mak-
+ing it suitable for more diverse applications. 
+Xstrings: 3D Printing Cable-Driven Mechanism for Actuation, Deformation, and Manipulation CHI ’25, April 26–May 01, 2025, Yokohama, Japan 
+Building upon dynamic structures, various actuation methods 
+can be used for the precise execution of different control tasks. 
+Such methods include pneumatic actuation [29, 34, 51], hydraulic 
+actuation [30], cable-driven actuation [22, 24], and magnetic field 
+manipulation [8, 20]. For instance, FlowIO provides a rapid proto-
+typing platform for pneumatic actuation with an integrated pump 
+terminal [51], while liquid pouch motors use low-boiling-point 
+liquids (around 30°C) to achieve inflation and deflation through 
+temperature changes [34]. ConeAct uses shape memory alloys to 
+drive a flexible unit, enabling multi degree-of-freedom deforma-
+tions [24]. ZeroN leverages spatial magnetic fields to suspend a 
+small sphere mid-air and control its motion trajectory freely [20], 
+and MechCircuit employs magnets to simulate various mechanical 
+structures, such as gears and springs [8]. 
+Xstrings expands this landscape by enabling the fabrication of 
+over 30 types of print-in-place dynamic structures with the capa-
+bility for complex motions. Xstrings utilizes one of the simplest 
+actuation methods—tension applied to cables, which can be gener-
+ated by the user’s hand or programmable devices such as stepper 
+motors, to achieve these motions. Its low-cost, low-entry-barrier, 
+and automatic approach to creating dynamic structures and actu-
+ation systems opens up new design possibilities for personalized 
+manufacturing. 
+2.2 String-like Structures in 3D Printing 
+String-like structures such as hair, fibers, and cables have been 
+widely utilized by HCI researchers in fabrication to enhance the 
+physical properties of printed objects. 
+Several studies have focused on incorporating existing string-
+like materials into 3D-printed creations through post-processing 
+methods [26], significantly enhancing functionality in areas such 
+as shape transformation [25, 58], haptics [6], and sensing [40, 55]. 
+For example, Rivera et al.[45] combine 3D printing and textiles 
+to rapidly create rigid objects with embedded flexibility, as well 
+as soft materials with added functionality. Medley[3] embeds ev-
+eryday objects into 3D-printable designs to achieve a wider range 
+of material properties. PunchPrint [6] and Hybrid Basketry [65] 
+explore post-print processes where fibers are woven into printed ob-
+jects, facilitating craftsmanship and customization. Similarly, Flex-
+Truss [52] proposes a cost-effective method that integrates various 
+linear materials into 3D-printed nodes to form flexible prototypes. 
+These studies involve manual weaving as a post-processing step 
+using specific techniques, which can be challenging for ordinary 3D 
+printing enthusiasts to learn. Moreover, the production of a large 
+number of repetitive woven structures can result in significant labor 
+costs. 
+Beyond embedding traditional fiber-like materials into 3D-printed 
+objects, there is a growing interest in fabricating fiber-like struc-
+tures directly from 3D printing materials. WirePrint [31] accelerates 
+low-fidelity wireframe previews in the early stages of the design 
+process. Cilllia [38] achieves micro and fine-hair-like structures 
+for motion conduction and aesthetic purposes. To further enhance 
+the flexibility of the printing process and realize more types of 
+prototypes with hair-like structures, Extruder-Turtle [41] provides 
+a geometry library that simplifies the generation of G-code files 
+for printing on FDM printers. DefeXtiles [10] proposes employing 
+under-extrusion strings to print woven textiles. 
+While these approaches offer rich physical properties, they do 
+not result in the creation of motion systems or actuation mech-
+anisms. Xstrings instead introduces a method for creating cable-
+driven mechanism using a specially designed 3D printing approach. 
+This method enables the printing of “threaded points” (Section 3.3) 
+that are both interconnected and capable of independent movement, 
+thereby providing a vast design space. 
+2.3 Cable-Driven Mechanisms 
+Cable-driven mechanisms are fundamental in modern robotics due 
+to their versatility and lightweight properties, making them suitable 
+for diverse applications [15, 63]. Their flexibility and low weight are 
+particularly advantageous for robotic actuation [44] and complex 
+control systems [46]. 
+Despite these benefits, designing cable-driven mechanisms is 
+challenging. Achieving precise motion patterns requires careful geo-
+metric design, joint configuration, and strategic cable placement to 
+ensure adequate torque. To address these complexities, researchers 
+have developed various optimization algorithms. Megaro et al.[27] 
+introduced an inverse design method that minimizes the number 
+of cables and control forces while achieving target motions. Li 
+et al.[22] proposed an inverse design strategy for push and pick-
+and-place tasks, enabling coordinated control of multiple cables. 
+Shirafuji et al.[50] developed a method for designing non-circular 
+pulleys that regulate joint motion by adjusting wire contact points 
+to achieve specific movement ratios in robotic legs. Zhang et al.[64] 
+extended this approach by designing noncircular pulleys for task-
+defined non-linearly coupled tendon-driven actuation, allowing a 
+single motor to control multiple tendons in complex robotic sys-
+tems. 
+Although existing design tools optimize cable layouts for de-
+sired motion, fabricating cable-driven mechanisms remains labor-
+intensive. The process typically involves precise drilling, threading 
+cables through small holes, and securing knots at designated points, 
+all of which require high manual skill and are prone to errors that 
+may compromise reliability. To address these issues, the MoReCa 
+grasper employs modular, reconfigurable joints to achieve vari-
+ous functions without altering the main structure [21]. OpenRST 
+focuses on robot-assisted minimally invasive surgery (RMIS), pro-
+viding an open platform for low-cost, biocompatible robotic surgical 
+tools [4]. While these approaches improve assembly efficiency and 
+reduce manufacturing costs, they do not fundamentally resolve 
+the design and labor costs associated with cable and mechanical 
+assembly. 
+Despite the advantages of cable-driven systems, their complex 
+design and labor-intensive assembly highlight the need for automa-
+tion. Xstrings addresses this challenge by integrating 3D printing 
+into their fabrication. Through integrated manufacturing and ad-
+vanced design tools, Xstrings enhances design efficiency, eliminates 
+manual processing and assembly, and optimizes fabrication preci-
+sion. 
+CHI ’25, April 26–May 01, 2025, Yokohama, Japan Jiaji Li et al. 
+3 Xstrings METHOD 
+The creation of 3D-printed cable-driven mechanisms involves three 
+main challenges: (1) laying out the cable along the mechanism; (2) 
+integrating joints and anchors into the print to enable the desired 
+motion of the main structure when the cable is activated; and (3) 
+defining suitable 3D-printing parameters. 
+3.1 Laying Out the Cable for the Mechanism 
+To begin with, we identify the key components that need to be 
+included in an Xstrings object, referencing classic cable-driven 
+mechanisms. Typically, there are three primary components used 
+to connect a cable to a mechanical structure: (1)Anchor Points, 
+(2) Threaded Points, and (3) Exposed Points, as illustrated in 
+the example of a cable-driven finger in Fig. 3. Below, we intro-
+duce the characteristics of each component and provide a detailed 
+explanation of their corresponding manufacturing techniques in 
+Xstrings. 
+Figure 3: (a) Three types of relationships between cables and 
+mechanical components: Anchor Points, Threaded Points, 
+and Exposed Points. (b) Three types of hinge joints as 
+options: Elastic, Compliant, and Mechanical. 
+Anchor Points: A cable-driven mechanism aims to achieve precise 
+real-time control of the end effector (e.g., the fingertip) using cables. 
+Traditional methods secure cables with knots, but since 3D printers 
+cannot tie knots, we introduce an alternative anchoring method. 
+Instead, the cable endpoint is shaped into a T-anchor and embedded 
+within the surrounding material, as shown in Fig. 3. This design 
+firmly secures the cable without relying on thermal adhesion be-
+tween different 3D-printed materials, which may lead to separation 
+if bonding fails [2]. 
+Threaded Points: In cable-driven mechanisms, “Threaded Points” 
+are holes in the 3D-printed structure through which a cable slides 
+when actuated. Ensuring smooth rectilinear motion at these points 
+is a key technical challenge. Traditionally, holes are drilled, and 
+cables are manually threaded, but integrating this process into 
+layer-by-layer 3D printing introduces significant issues, primarily 
+friction and resistance between the cable and printed structure. 
+Section 3.3 presents optimized printing parameters and materials, 
+refined through G-code adjustments, to enhance cable quality and 
+minimize friction. 
+Exposed Points: To actuate a cable-driven mechanism, the cable 
+ends must be exposed for interaction. These points serve as inputs 
+where forces are transmitted along the cable to the anchored termi-
+nal, driving the mechanism. Common actuation methods include 
+manual pulling, motor-driven tensioning, and gravity. 3D printing 
+enables customization of these endpoints with terminal shapes such 
+as pull rings, spools, or solid weights to suit different interaction 
+needs. 
+3.2 3D Printing Joints for Cable-Driven 
+Mechanisms 
+To actuate a cable-driven mechanism, there must also be some form 
+of joint or compliance integrated into the larger 3D object being 
+actuated. In the following subsection, we discuss three types of 
+3D-printed joints explored in our study. 
+Elastic Joints: 3D-printed elastic joints leverage the inherent elas-
+ticity of common 3D printing materials such as TPU and TPE. One 
+approach to creating 3D-printable elastic joints is to modify certain 
+areas of a 3D object printed with an elastic material to be thinner, 
+making them capable of elastic deformation and effectively func-
+tioning as hinges. These joints can be temporarily deformed via 
+a tensing cable and, once the tension is released, return to their 
+original shape, releasing stored elastic energy without permanent 
+deformation. 
+Compliant Joints: In 3D printing, compliant joints can be created 
+by using an array of multiple thin filaments to form bridges between 
+components of a structure. The stiffness of these filaments can be 
+adjusted to achieve the desired amount of motion in the cable-
+driven mechanism [53]. Similar to elastic joints, compliant joints 
+have the advantage of simplicity, as they eliminate the need for 
+separate moving parts. These joints are particularly well-suited for 
+lightweight and compact applications. 
+Mechanical Joints: Unlike elastic and compliant joints, mechanical 
+joints rely on assembling separate, distinct moving components 
+of a structure. In the context of 3D printing, these joints can be 
+fabricated using a print-in-place technique [23], which allows for 
+the creation of mechanical linkages within a single print. These 
+mechanical joints provide robust and reliable connections between 
+components, capable of withstanding significant loads and offering 
+precise control over the movement of large printed components. 
+By exploring and combining these different types of joints, we 
+can expand the range of applications for 3D-printed cable-actuated 
+mechanical systems and tailor our printed objects to meet the spe-
+cific needs of various scenarios. 
+Xstrings: 3D Printing Cable-Driven Mechanism for Actuation, Deformation, and Manipulation CHI ’25, April 26–May 01, 2025, Yokohama, Japan 
+3.3 3D Printing Materials and Parameters for 
+Threading Cable 
+As mentioned in Section 3.1, by optimizing the print parameters and 
+materials used for FDM 3D printing, we can create high-performance 
+cable-actuated kinetic systems that exploit rectilinear motion be-
+tween the cables and the body of the printed object. The choice of 
+printing materials and printing parameters greatly affects the qual-
+ity of the cable, which in turn impacts the motion smoothness of the 
+entire kinetic system. As highlighted in Fig. 4b, we demonstrate that 
+using default printing parameters leads to issues with 3D-printed 
+cable-driven mechanisms, such as drooping and branching. Below, 
+we discuss how we address these challenges through careful se-
+lection of print materials and optimization of G-code parameters 
+before printing. 
+Figure 4: (a) A 3D-printed sample using Xstrings’ G-code 
+parameters, resulting in smooth motions of the centerpiece; 
+(b) the same sample printed with default settings, causing 
+the centerpiece to become stuck. 
+In our cable 3D printing tests, we identified three main issues 
+that can directly lead to failure modes: 
+(1) Fragile cables, where the cable itself is too fragile, leading 
+to breakage or fracture during manipulation; 
+(2) Fused materials, where the cable and mechanical compo-
+nents fuse together in undesired locations due to melting 
+during 3D printing, causing separation to become impossi-
+ble, thus preventing the cable from moving and actuating 
+the mechanism; 
+(3) Irregular shapes, where the cable exhibits irregularities 
+such as branching (a single cable into multiple threads, seen 
+in Fig.4b2), uneven thickness, or sagging, which prevent it 
+from passing through holes or result in excessive frictional 
+resistance. 
+To address these issues, we take several steps as outlined below: 
+Resilient Cable Materials: Selecting the ideal material for 3D-
+printed cables involves balancing bending-resistance and the ability 
+to withstand high tensile stress without undergoing plastic defor-
+mation or breakage. Based on filaments datasheets and printing 
+guidelines, we chose Nylon and PC as test materials due to their 
+excellent tensile properties. In practical tests, PC exhibited the high-
+est tensile strength but was prone to plastic deformation and even 
+breakage under repeated bending, making it unsuitable as a ca-
+ble material. Nylon, on the other hand, demonstrated exceptional 
+bending-resistance and maintained stability and durability under 
+repeated bending. Among different types of Nylon (carbon fiber-
+filled, glass fiber-filled, PA11, PA12 et al.), we selected Nylon 66 for 
+its superior balance of flexibility and strength, making it the most 
+suitable material for Xstrings cables. 
+Figure 5: Xstrings 3D printing strategies and parameters 
+Materials and Parameters to Avoid Fusion: We print the main 
+structure and joints using a different material than the cable to 
+prevent fusion between the cable and surrounding geometry. If 
+printed from a single material, the matching melting and solidifica-
+tion points would cause unintended bonding, making it impossible 
+to separate components and restricting cable movement. 
+To mitigate this, we select materials with sufficiently different 
+melting points [2]. We tested cable-driven mechanisms by printing 
+cables in Nylon while using PLA and TPU for the rest of the struc-
+ture. As shown in Fig. 4, these tests confirmed that cables naturally 
+separate from their surroundings due to shrinkage or minimal man-
+ual force. Our technical evaluation (Section 8) further demonstrates 
+that adjusting the material spacing to 0.4mm in the first cable layer 
+via G-Code editing, setting initial layer extrusion to 90 
+Printing Parameters for Cable Straightness: During FDM 3D 
+printing, cable sections are either suspended mid-air during extru-
+sion or rest on previously extruded layers. We observed issues such 
+as filament sagging and cable branching, where the cable splits 
+into thin filaments (Fig. 4b2). These defects hinder smooth cable 
+sliding and may obstruct passage through holes. Excessively high 
+temperatures and slow speeds exacerbate sagging and fusion, as 
+softened filament deforms under gravity. 
+To address this, we optimized 3D printing parameters through 
+experiments (Fig. 5). For the first layer, we reduced printing speed 
+to 20mm/s (default: 70mm/s) and set the bridging speed to 40mm/s 
+to balance temperature and speed, minimizing drooping. The ex-
+trusion rate was adjusted to 90 
+Evaluation: We evaluated our print parameters by comparing 
+two versions of a cable-driven mechanism consisting of a block 
+threaded with three freely sliding cables. One sample was printed 
+using Xstrings’ optimized G-Code parameters (Fig.4a), while the 
+other used default printer settings (Fig.4b). Testing confirmed that 
+our approach effectively eliminates the discussed issues, allowing 
+smooth movement of intermediate blocks along the cables and 
+providing reliable support for cable-driven mechanisms. Further 
+evaluations examine cable force limits, thermal fusion of different 
+materials, and the impact of printing parameters on cable quality 
+through various experiments. 
+CHI ’25, April 26–May 01, 2025, Yokohama, Japan Jiaji Li et al. 
+4 Motion Primitives 
+In this section, we formalize four fundamental motion primitives 
+as a foundation for automating the construction of various cable-
+driven 3D-printable mechanisms. In mechanical engineering, a 
+one-degree-of-freedom (one-DOF) pair is the most basic type of 
+mechanism that enables relative motion between two components, 
+typically classified into Revolute, Screw, and Prismatic pairs [1]. 
+In cable-driven mechanisms, a single mechanical structure often 
+integrates multiple one-DOF pairs to achieve complex motions. 
+Based on these fundamental mechanism types, we define four key 
+one-DOF motion primitives—Bend, Coil, Screw, and Compress, as 
+shown in Fig. 6. These primitives encapsulate common motion pat-
+terns found in many cable-driven systems and serve as standardized 
+building blocks for their design and fabrication. 
+We illustrate these motions on an input geometry of a rectan-
+gular cuboid with dimensions of 100mm in length (𝐿 = 100mm), 
+15mm in width (𝑊 = 15mm) augmented with cables, joints, gaps, 
+and holes that allow for actuation using cable-driven mechanisms. 
+Below, we detail the structure of these motion primitives and their 
+corresponding designs for FDM 3D printing, and show they can be 
+combined to achieve a large design space for XStrings objects. Later, 
+in the Design Tool section, we show how these primitives can be pa-
+rameterized and combined to create various different user-defined 
+cable-driven motions. 
+4.1 Bend 
+The Bend Primitive, shown in Fig. 6, comprises 𝑛 joints (in our 
+example, we set 𝑛 = 12) and a single driving cable, with each pair 
+of links allowing rotational motion between them. The rotational 
+angle at each joint is 𝜃𝑖 , which can be controlled by the size and 
+shape of the gap between the two links. We set 𝜃𝑖 = 𝜃 
+𝑛 so that the 
+total bending angle about the 𝑥 -axis 𝜃 = 𝑛
+𝑖=1 𝜃𝑖 (so in our example 
+case, 𝜃𝑖 = 15°, 𝜃 = 180°). Then, by fixing one end of the primitive 
+to the origin of the 𝑥, 𝑦, 𝑧 axes, we can calculate the position of the 
+endpoint of the bend primitive as: 
+(𝑥 , 𝑦, 𝑧) = 
+ 
+0, 𝐿 
+𝜃 · (1 − cos 𝜃 ), 𝐿 
+𝜃 · sin 𝜃 
+ 
+(1) 
+This bend primitive structure is designed using the parametric 
+design tool Grasshopper. We started the design process by gen-
+erating a single triangular prism with an internal angle of 𝜃𝑖 and 
+then duplicate them 𝑛 times in a linear array. We then use these 
+triangular prism to cut the input geometry (Boolean Difference) 
+to create 𝑛 gaps on the geometry, remaining 𝑛 + 1 links. We also 
+design a compliant bridging joint that connects each link in series, 
+enabling rotational motion through the deformation of the flexible 
+material. Finally, using the method described in Fig. 6, holes for the 
+cable within the links are generated to ensure that the cable can 
+transmit force directly to the effector’s endpoint, thereby driving 
+the motion of the entire bend primitive. 
+4.2 Coil 
+Building on the Bend Primitive, we developed a Coil Motion Prim-
+itive, as illustrated in Fig. 6, by adjusting the angles between the 
+primitive’s segments. Unlike the Bend Primitive, the gaps in the 
+Coil form an angle 𝜙 with the 𝑦-axis direction of the input geometry. 
+This causes the movement of the Coil to no longer directly align 
+with the direction of the 𝑥 -axis when actuated, but rather results in 
+a non-axis aligned helical coiling motion. As each segment bends 
+by 𝜃𝑖 , the overall shape coils along the 𝑦-axis (in this case, the y-axis 
+lines up the structure’s own helical axis). The primary parameters 
+for this coil primitive include the number of turns 𝑁 , radius 𝑟 , and 
+spring length 𝐿𝑠 . 
+(𝑥, 𝑦, 𝑧) = 
+√︁ 
+𝐿2 − (2𝜋𝑟 𝑁 )2 , 𝑟 · cos(2𝜋 𝑁 ), 𝑟 + 𝑟 · sin(2𝜋 𝑁 ) 
+ 
+(2) 
+The workflow for 3D-modeling a Coil Motion Primitive is very 
+similar to that for the Bend Primitive. We similarly use 𝑛 triangle 
+prisms to cut the input geometry. The difference is that, before 
+cutting, triangular prisms are rotated by an angle of 𝜙 , creating a 
+(90 − 𝜙 ) degree angle between the gap direction and the geometry’s 
+direction. On this basis, we then add cables and joints, which serve 
+as the driving mechanism and movable structure for the entire 
+primitive. 
+4.3 Screw 
+The Screw Primitive is structured as a spring that screws around 
+the 𝑧-axis while simultaneously shortening its length during actua-
+tion. As illustrated in Fig. 6, when the screw primitive is driven, it 
+coincides the behavior of a spring that contracts in length when 
+rotated around its own longitudinal axis. 
+The Screw Primitive consists of a continuous helical structure 
+characterized by its length 𝐿, radius 𝑟 , and extreme screw angle 𝜃 . 
+The screwing motion is defined by the angular displacement of the 
+endpoint of the structure 𝜃𝑧 around the 𝑧-axis, which causes the 
+structure to compress Δ𝑧 along its axis of rotation. As the structure 
+screws, each incremental rotation of Δ𝜃𝑧 causes a corresponding 
+reduction in length, given by 
+Δ𝑧 = 𝐿 · 
+ 
+1 − cos 
+ Δ𝜃𝑧 
+2 
+  
+(3) 
+During the screwing motion, the spring rotates around the 𝑧-axis, 
+and its position changes accordingly. The final coordinates of the 
+effect end after a total screw angle of 𝜃𝑡 are 
+(𝑥, 𝑦, 𝑧) = (0, 0, 𝐿 − Δ𝑧) (4) 
+In the design of the screw mechanism, we use 𝑛 cuboids of length 
+𝐿𝑖 to cut the input geometry so that each link is also a thin cuboid. 
+When actuated, all the links fully align with each other. Based on 
+this, we position four stiffer compliant joints in a circular array 
+around the cable as the center, with a radius 𝑟 . When the cable is 
+actuated, these joints convert the force of the links moving closer 
+together into a screwing motion, where 
+sin 𝜃𝑖 = 2 · 𝐿𝑖 
+𝑟 , 𝜃𝑧 = 
+𝑛∑︁ 
+𝑖=1 
+𝜃𝑖 (5) 
+4.4 Compress 
+The compressive structure incorporates a cable into a linear track 
+structure. We use a basic Prismatic pair with one degree of free-
+dom, allowing only sliding motion along the 𝑧-axis. By pulling the 
+cable, two links compress along the linear track, reducing its length 
+by Δ = 0.5𝐿, effectively halving its original size. 
+Xstrings: 3D Printing Cable-Driven Mechanism for Actuation, Deformation, and Manipulation CHI ’25, April 26–May 01, 2025, Yokohama, Japan 
+Figure 6: The four basic motion primitives of Xstrings: Bend, Coil, Screw and Compress. 
+5 Design Space 
+5.1 Dimensional Combination of Primitives 
+By combining these primitives in series or parallel, we can create 
+complex, adaptive 3D-printed structures tailored to specific func-
+tional requirements, demonstrating the versatility and potential of 
+cable-driven mechanisms in soft robotics and advanced manufac-
+turing. 
+Series
+ Combination 
+In a series combination, multiple primitives are connected in a 
+sequential manner and driven by a single cable. Cable actuation 
+begins from the farthest end of the mechanism and propagates 
+toward the base, causing cascading deformation along the sequence. 
+The advantage of the series combination lies in its ability to 
+achieve complex, coordinated movements with minimal control 
+input. Since only one cable is required to drive all connected primi-
+tives, the design of sequential mechanisms is more straightforward 
+and compact than that of parallel mechanisms. This approach is 
+ideal for applications requiring sequential motion of segments of 
+an object, including robotic arms, tentacle-like structures, or bio-
+inspired soft robots where precise control over motion propagation 
+is necessary (an example of this is given in Section 7.3). 
+Mathematically, the total driving force and deformation in a 
+series can be mathematically represented as 
+𝐹total = 𝐹𝑖 + 
+𝑛−1∑︁ 
+𝑖=1 
+𝐹𝑐,resistance, Δ𝐿total = 
+𝑛∑︁ 
+𝑖=1 
+Δ𝐿𝑖 (6) 
+where Δ𝐿𝑖 is the displacement of the 𝑖 -th primitive along the 𝑥 , 𝑦, 
+and 𝑧 axes, respectively. 
+An example of a series mechanism is shown in Fig. 7(a). We 
+combine seven bend primitives in series to form a long strip-shaped 
+object, where each bend primitive is capable of bending 90 degrees 
+and can bend in different directions. All these primitives are then 
+controlled by a single cable. As shown in Fig. 7b, c and d, by pulling 
+the cable, this long strip-shaped object will eventually form a square. 
+Parallel Combination 
+In a parallel combination, the main cable splits into multiple sub-
+cables, each connected to a different primitive, but all driven syn-
+chronously by a single “central” actuator. This design allows multi-
+ple sections of the mechanism to move simultaneously, providing 
+synchronized actuation across all primitives. 
+The advantage of the parallel combination lies in its ability to 
+achieve simultaneous, coordinated movements, enabling faster and 
+more responsive actuation. This method is ideal for applications 
+that require uniform or synchronized deformations, such as multi-
+fingered grippers, adaptive surface actuators, or morphing struc-
+tures. 
+The synchronization of the sub-cables can be controlled by a 
+central axis, and the relationship between the driving force and the 
+actuation can be mathematically represented as 
+𝐹total = 
+𝑚∑︁ 
+𝑗=1 
+𝐹 𝑗 , Δ𝐿total = Δ𝐿 𝑗 (7) 
+where 𝐹total is the total force applied by the main cable, 𝐹 𝑗 is the 
+force transmitted through each sub-cable, and Δ𝐿 𝑗 is the deforma-
+tion length of the 𝑗 -th primitive. 
+We demonstrate a parallel combination in Fig. 7(b). We create a 
+gripper object that consists of a handle with five bending structures 
+forming a star shape at the end. Each of the bending structures is 
+controlled by a different cable, and these five cables are connected 
+in parallel. This means that controlling the final single joining cable 
+can cause all five bending structures to deform simultaneously. As 
+shown in Fig. 7b1, b2 and b3, when this joined parallel cable is 
+pulled by hand, all five bending structures move simultaneously. 
+5.2 Hole Placement and Joint Design 
+When determining the placement of threaded points and cables 
+relative to the joints in a structure, their effect on system stiff-
+ness must be considered. If the threaded points are placed close 
+to the joints, the moment arm is shorter, requiring greater force 
+to generate the same torque, thereby increasing system stiffness. 
+Conversely, positioning the threaded points farther from the joints 
+reduces stiffness. 
+Anchor Point Placement: The placement of anchor points in-
+fluences system stiffness by altering the moment arm length. A 
+shorter moment arm requires greater force to achieve the same 
+CHI ’25, April 26–May 01, 2025, Yokohama, Japan Jiaji Li et al. 
+Figure 7: (a) A series sample designed with 7 Bend primitives, forming a cube frame when actuated; (b) A paralleled sample 
+designed with 7 Bend primitives, forming a cube frame when actuated. 
+deformation, increasing stiffness, while a longer moment arm de-
+creases stiffness. Assuming a force 𝐹𝑐 applied at the end effector, a 
+total structure length 𝐿, and a hole-to-hinge distance 𝑑 , stiffness 𝑘 
+follows the relationship: 
+𝑘 = 𝐹𝑐 
+𝛿𝑦 , 𝛿𝑦 ∝ 𝑑 
+where 𝛿𝑦 represents vertical deformation at the endpoint. Thus, 
+stiffness decreases as 𝑑 increases, meaning that placing holes farther 
+from the joints reduces system stiffness. 
+Joint Design: The stiffness of joints is determined by the spring 
+constant 𝑘𝑖 . Since the joints are in series, their equivalent stiffness 
+𝑘joints is given by: 
+1 
+𝑘joints 
+= 
+𝑛∑︁ 
+𝑖 =1 
+1 
+𝑘𝑖 
+Higher joint stiffness contributes to greater overall system stiffness, 
+making it crucial to optimize joint material and structure according 
+to design requirements. 
+Figure 8: Illustration of the Xstrings system and mechanical 
+setup. 
+The joint type determines 𝑘𝑛 and affects the total joint stiffness, 
+𝑘 𝑗𝑜𝑖𝑛𝑡 𝑠 . Elastic joints provide high stiffness with nonlinear de-
+formation under strain, enabling energy recovery after actuation. 
+Compliant joints offer moderate stiffness and predictable deforma-
+tion, ideal for lightweight, compact mechanisms. When composed 
+of multiple small bridges in parallel, the joint stiffness equals the 
+sum of the bridges’ stiffness. Mechanical joints contribute the 
+lowest stiffness. 
+Threading Hole Geometry: Threading hole geometry minimally 
+affects stiffness if the hole diameter exceeds the cable diameter. 
+Smaller holes shift 𝐹𝑐 from a point force at the end effector to a 
+distributed force along the structure, altering bending dynamics and 
+compromising the mechanism. Optimizing hole geometry ensures 
+smooth cable sliding and consistent force transmission (see Section 
+8.4). 
+5.3 Cable Shapes 
+Compared to traditional cable-driven mechanisms, the customiza-
+tion capabilities of 3D printing allow for the fabrication of cables 
+with various shapes, offering greater design flexibility. In Fig. 9, 
+we present two distinct cable shapes designed to provide haptic 
+feedback and motion control, respectively. 
+Figure 9: Two distinct cable shapes designed to provide haptic 
+feedback and motion control 
+The cable in Fig. 9a is designed in a wave-like shape. As it passes 
+through a component’s hole, each peak of the wave collides with the 
+Xstrings: 3D Printing Cable-Driven Mechanism for Actuation, Deformation, and Manipulation CHI ’25, April 26–May 01, 2025, Yokohama, Japan 
+underneath bump inside the hole, which perform a haptic feedback. 
+This design provides a segmented tactile sensation during pulling, 
+enabling users to perceive the distance of the cable actuation. 
+Inspired by the design principles of zip ties, Fig. 9b features 
+sharper angles at the bends. When pulled and engaged with the 
+underneath ratchet teeth, the cable interlocks with them, preventing 
+reverse movement. The lock can be released by moving the white 
+component downward, allowing for a uni-directional mechanism 
+that can mimic complex motions, such as a snake coiling or a hand 
+grasping. The potential design opportunities enabled by such a 
+uni-directional motion mechanism are explored in greater detail in 
+Section 7.4. 
+5.4 Embedded-Cable Actuation 
+In our regular cable-driven mechanism design, objects are actu-
+ated by pulling on or manipulating the exposed ends of the cables. 
+However, Xstrings’ integrated printing technology enables actua-
+tion methods that do not require direct manipulation of the cable 
+endings. We refer to this actuation technique as embedded-cable 
+actuation. 
+Figure 10: A sample of a 3D-printed spine with embedded 
+cable actuation, where one of the ends of the spine moves 
+when the opposite end is actuated. 
+As shown in Fig. 10, the structure contains two segments of 
+spinal-like structures on the left and right, each embedded with 
+three cables and hinge joints, forming an interlinked mechanism. 
+When the middle section is fixed in place, any deformation applied 
+to the tail end results in an opposite deformation at the head end 
+(Fig.10b and c), and vice versa. When the cable ends are exposed, 
+manually controlling the three cables separately to direct the head 
+in a specific direction or perform complex movements, such as 
+swinging or looking around, is quite counterintuitive. The struc-
+ture design enabled by Xstrings adds possibilities for more natural 
+methods of interaction with multi-axis cable-driven mechanisms 
+and provides a more efficient manufacturing approach for cable-
+driven embedded interlinked mechanisms. We will illustrate the 
+use of this technique in an application in 7.4. 
+6 Design tool 
+Xstrings software uses Rhinoceros 8 as the design environment and 
+Grasshopper as both a computational tool and an intermediary user 
+interface. In broad terms, the user workflow is as follows: input a 
+geometry for embedding cable-driven mechanism; select desired 
+primitives and define the number of segments and specify the angle 
+after deformation; set a curve as input of cable and tune the cable 
+width and shape of end; export and preview the results and generate 
+the printing file. 
+6.1 User Workflow 
+Embedding Primitives: After inputting a geometry drawn in 
+the Rhinoceros environment, users can select a primitive from our 
+library (as shown in Fig. 11). The main interface will display the 
+currently edited segment (shown in red) and the other segments 
+(shown in blue). By adjusting the sliders in the interface, users can 
+edit the bending degree and the number of segments of the actuated 
+shape. We provide some pre-tested initial values as references to 
+help users achieve some of our primitive examples. Once users 
+have implemented a primitive in a specific segment, they can add 
+new segments to achieve other primitives. In Fig. 11, the tip of the 
+tentacle is designed as a coil primitive, while the body is designed 
+with bend primitives to both left and right, respectively. 
+Figure 11: Primitives Embedding process in Xstrings system. 
+Modifying the Cable: In this step, users can specify the parameters 
+for each cable, including its shape, width, and thickness, based on 
+the estimated maximum force exerted by the objects. The Xstrings 
+system will then automatically generate a T-shaped anchor point 
+to attach the cable to the furthest end of the end effector. For the 
+threaded points, the design tool offsets the cable’s surface by 0.5mm 
+and uses a Boolean difference to create holes for all threaded com-
+ponents. This parametric modeling process maintains a 0.5mm 
+distance between the cable and the wall of the hole, reducing fric-
+tion while still providing enough control over the cable’s path 
+during manipulation. For the exposed points, we offer three types 
+of shapes: (1) Dot and (2) Ring, which are designed for manual 
+manipulation; and (3) Spool, which can be directly connected to a 
+servos and controlled electrically. 
+Printing Settings for different parts: To increase compatibility 
+and enable the integration of cable-driven mechanisms on any 
+multi-material 3D printer, we opted not to generate G-code for a 
+specific printer model. Instead, we provide parameter settings for 
+CHI ’25, April 26–May 01, 2025, Yokohama, Japan Jiaji Li et al. 
+Figure 12: Cable Modifying in Xstrings system. 
+different slicing software. We have successfully implemented this 
+functionality on three types of printers: Ultimaker S5, Ultimaker 
+3, and Bambu X1. The output files will include three separate files: 
+Main (PLA), Cable1 (Nylon), and Cable2 (Nylon). In our example, 
+“Main” represents the main body of the tentacle, “Cable1” is the first 
+layer of all cables, and “Cable2” represents the remaining layers 
+of the cables. Using the Ultimaker S5 settings as an example, the 
+“Main” part is printed with the settings recommended by the PLA 
+material supplier; “Cable1” is printed at 90% flow rate, 20mm/s 
+regular speed, and 40mm/s bridge wall speed; “Cable2” is printed at 
+20mm/s speed with a 110% flow rate. (Parameters for other FDM 3D 
+printer are provided in the appendix.) After slicing and exporting 
+the files, the print can be completed. The manipulation scenarios 
+are shown in Fig. 14. 
+6.2 Inverse Design 
+Beyond embedding basic primitives, Xstrings can manipulate elon-
+gated blocks into arbitrary 2D curves. In cable-driven robotics, 
+achieving complex curve motions often requires multi-segment 
+control systems, involving multiple motors and cable drive mecha-
+nisms connected to various positions [35, 56]. 
+Figure 13: Inverse design resulting from two different input 
+curves: (a) a spiral shape, and (b) a serpentine shape. 
+These systems are often large and require complex, labor-intensive 
+assembly processes. To simplify this, Xstrings introduces an auto-
+mated cable-driven mechanism design tool that enables users to in-
+tuitively design such mechanisms using predefined primitives. Our 
+approach abstracts away the complexities of designing individual 
+surface geometry features—such as holes and joints—by generating 
+them automatically. This allows the entire mechanism to be 3D 
+printed in a single step, streamlining the fabrication process. 
+To abstract away the tedious low-level details of cable-driven 
+mechanism design, we developed an automatic inverse design algo-
+rithm that transforms user-input curves into segmented polylines 
+to define the shape of their structure. We do this by replacing each 
+polyline with a series of blocks that are unfolded into straight strip, 
+as illustrated in Fig. 13, and connected with cables and hinge joints. 
+We use our inverse algorithm to automatically determine the 
+positions of the joints, the gap sizes and the angles. This process 
+ensures that the resulting driven shape and curvature match the 
+user’s input precisely. Fig. 13 shows two such printed strips gener-
+ated from user-defined input curves that are then converted into 
+segmented strips and laid out flat, such that when actuated they 
+deform back into the shape of the original input curve. 
+7 Applications 
+7.1 Multi-Directional Tentacle Actuation 
+As mentioned in the previous section, we utilized the design tool to 
+fabricate a controllable tentacle, which consists of 28 components 
+and is printed at the maximum diagonal length (352 mm) of the 
+3D printing platform. This mechanism incorporates three cables 
+that control the structure to bend left, coil at the tip, and bend right, 
+respectively (as shown in Fig. 14 b1, b2, and b3). 
+Figure 14: (a) A one-step-printed Xstrings tentacle in its 
+initial position. (b) Controlled movements showing the 
+tentacle’s ability to perform bend and coil motions through 
+different cable manipulation. (c) Application scenarios of 
+the tentacle manipulating and grasping objects. 
+Due to the real-time responsiveness and accuracy of cable-driven 
+tip control, the tip’s coiling action enables better interaction with 
+objects, such as grasping a pencil and wrapping a finger. The design 
+of linked joints allows for precise control of the tip’s spatial position, 
+helping it to locate and drag objects more accurately. This case 
+demonstrates how Xstrings utilizes cable-driven mechanisms in 3D-
+printed dynamic structure to achieve complex motions, providing 
+next-level control and interactivity for FDM 3D printing. 
+Xstrings: 3D Printing Cable-Driven Mechanism for Actuation, Deformation, and Manipulation CHI ’25, April 26–May 01, 2025, Yokohama, Japan 
+7.2 Bio-Inspired Lizard Robot 
+In tasks such as exploring unknown areas, environmental modeling, 
+and emergency assistance [5, 11], multiple robots can work collabo-
+ratively to quickly accomplish complex operations. However, most 
+current bio-inspired crawling robots, while having significant ad-
+vantages in traversing complex and diverse terrains [60], are limited 
+in their widespread application and mass production due to high 
+manufacturing costs and complex production processes. 
+Figure 15: (a) A print-in-place Xstrings lizard robot with 
+biomimetic locomotion. (b) The robot connected to a Micro 
+Servo Motor (SG90 9G). (c1-c2) Snapshots of the robot’s 
+motion showing its body bending and screwing. (d) The 
+structural diagram with screw and bend primitives. 
+To address this issue, we propose a low-cost bio-inspired lizard 
+robot design based on the Xstrings cable-driven mechanism, as 
+shown in Fig. 15. This robot can be actuated electronically to mimic 
+natural locomotion by alternately bending its body left and right 
+while lifting its back legs. Such movements create a shuffling motion 
+that utilizes surface friction and shifts the center of mass, propelling 
+the robot forward. The precise cable actuation enables the robot 
+to navigate narrow spaces and various terrains effectively. This 
+approach, using a print-in-place manufacturing method and eco-
+nomical components—costing only $1.90 for the motor and $0.40 
+for the printing material, provides a possible solution for mass 
+production of cable-driven mechanism. 
+7.3 Fashion and Art Design 
+3D printing has been widely embraced by artists for sculptures, 
+clothing, jewelry, and other fashion pieces. Herschel Shapiro’s static 
+wall sculptures, known for their repetitive and varied designs, have 
+garnered significant attention [49]. Xstrings extends these artistic 
+possibilities by introducing assembly-free, cable-driven movable 
+structures. 
+Using Xstrings, we designed and fabricated a dynamic wing-
+shaped sculpture (Fig. 16) that features seven parallel arrays of 
+eight curved plumes. These plumes are driven by a single cable 
+actuating eight bending primitives via a rotating disk. When the 
+disk rotates, the plumes rise from flat to upright, evoking imagery of 
+porcupine spines or bird feathers. Printed with dual-color Silk PLA 
+Filament, the plumes transition from blue to purple as they move, 
+showcasing Xstrings’ potential for creating interactive, visually 
+striking art. Beyond art, such structures could also be applied in 
+scenarios like MetaReality [7], where they enable customizable and 
+dynamic haptic feedback for VR/AR environments. Our approach 
+offers similar potential for the advancement of physical interfaces, 
+providing a rapid single-step 3D printing method that eliminates 
+the need for manual assembly and enhances the user experience. 
+Figure 16: An Xstrings dynamic sculpture, actuated with a 
+rotatable disk. 
+7.4 Claw with Embedded Actuation 
+We designed a cable-driven bird claw with an embedded actuation 
+mechanism to fully explore the Xstrings design and fabrication 
+space. This design integrates the actuator into the claw’s elbow 
+for an ultra-lightweight design, converting forces into gripping 
+motions—ideal for aerial applications. 
+Figure 17: (a) An Xstrings claw, featuring four fingers with 
+compliant joints and an elbow with a mechanical joint. 
+(b) Display of the claw fingers in open and closed positions. 
+(c) The operation of the claw grasping an object by bending 
+the elbow to drive the cable. Due to the ratchet design of the 
+cable, the claw does not release during this process. 
+CHI ’25, April 26–May 01, 2025, Yokohama, Japan Jiaji Li et al. 
+In specific, this print-in-place structure consists of four fingers, 
+each composed of five series of bending primitives connected by 
+compliant joints. The four fingers are arranged in a parallel con-
+figuration and actuated by a single cable. In addition, there is a 
+mechanical joint lower in the arm of the claw, allowing the elbow 
+of the structure to bend. This is a fully embedded, self-contained 
+mechanism (as described in Section 5.3), so instead of the user or 
+a motor directly engaging with the exposed cable, the bending of 
+the elbow itself pulls on the cable, causing the claw to grip. This 
+design allows the user to pick up and transport objects by applying 
+a single force to the elbow of the arm. Due to the ratchet design of 
+the cable shape (Section 9), the bird claw only tightens and does 
+not release during this process, ultimately achieving a firm grip on 
+the object. 
+8 Evaluation 
+8.1 Deriving the Displacement Relation 
+Between Cable Draw and End Effector 
+In this section, we evaluate the relationship between the cable draw 
+and end effector position of Xstrings objects for each of the bend, 
+coil, screw and compress primitives. To characterize the behavior 
+of each primitive, we use an experimental setup that measures how 
+the endpoint of an Xstrings object moves as we pull the cable by a 
+given distance. 
+We define the origin of our coordinate system to be at location 
+where the exposed end of the cable leaves the Xstrings structure, 
+denoted as (0, 0, 0). The starting position of the end effector is 
+denoted as (100, 0, 0). 
+Figure 18: Relationships between cable draw displacement 
+and end effector displacement. 
+To perform a single measurement, we pull the cable by our 
+increment distance Δ𝑑 . We then fix the cable’s endpoint and record 
+the 𝑥, 𝑦, 𝑧 coordinate of the end effector of the Xstrings primitive, 
+denoted as 𝐶𝑛 . After this we pull the cable by an additional Δ𝑑 and 
+repeat. This process is repeated for a total of 𝑁 steps, with the total 
+pulling length denoted as 𝐷 . The relationship can be expressed 
+formally as 
+ 𝐷 = 𝑁 · Δ𝑑, 
+𝐶𝑛 = 𝑓 (𝑛 · Δ𝑑 ), 𝑛 = 1, 2, . . . , 𝑁 . (8) 
+Using this method, we recorded the paths of the end effector for 
+four samples in the three-dimensional coordinate system, shown 
+in Fig. 18. Below, we discuss the results of this experiment for each 
+primitive. 
+Bend: We conducted experiments on the bend primitive with 
+Δ𝑑 = 0.5 mm and 𝐷 = 3.46 mm. The end effector trajectory exhib-
+ited nonlinear behavior, with displacement amplitude decreasing 
+as the cable retracted, eventually reaching a limit position. For ex-
+ample, when 𝑛 = 1, the displacement from 𝑦0 to 𝑦1 was 25.5 mm, 
+but at 𝑛 = 6, the displacement from 𝑦6 to 𝑦7 decreased to 16.5 mm. 
+Deformation was non-uniform, with the first seven joints near the 
+end effector bending more significantly, while the remaining six 
+joints remained stationary. This behavior arises from cumulative 
+gravitational forces and the elasticity of the compliant joints. 
+Coil: We conducted experiments on the coil primitive with 
+Δ𝑑 = 0.5 mm and 𝐷 = 3.34 mm, the motion was nonlinear and 
+non-uniform, similar to the bend primitive. For 𝑛 = 0 to 4, the coil 
+transitioned into a near-helical shape with a larger radius, then 
+tightened gradually for 𝑛 = 4 to 7. This tightening demonstrates 
+its use as a strip-like gripper, leveraging its gradual contraction for 
+gripping functionality. 
+Screw: In the test of the screw primitive with Δ𝑑 = 1 mm and 
+𝐷 = 4 mm, the end effector’s motion involved rotation about the 
+𝑥 -axis. To capture this, we recorded an additional parameter 𝜃 , the 
+rotation angle of the endpoint. The end-effector trajectory was 
+nonlinear, where the amount of angular rotation of the system 
+decreased for larger 𝑛, though the decrease was less than the the-
+oretical value due to joint flexibility. From 𝑛 = 0 to 𝑛 = 3, joint 
+bending partially offset the rotation, while between 𝑛 = 4 and 
+𝑛 = 5, reduced gaps between blocks lessened the bending effect. 
+Ultimately, 𝜃 reached 358◦ , closely matching the design target. 
+Compress: For the compress primitive, composed entirely of 
+mechanical sliding pairs, we used Δ𝑑 = 1 mm and 𝐷 = 5 mm. 
+As expected, the relationship between 𝑦𝑛 and 𝑛 · Δ𝑑 exhibited a 
+perfectly linear correspondence. 
+8.2 Comparison of the Time Efficiency of 
+Xstrings with Manual Assembly 
+To evaluate the efficiency of our approach, we compare the time 
+taken to produce all-in-one printed objects with printed-assembled 
+counterparts. Using the claw gripper model (Section 7.4), we divided 
+it into 19 parts for 3D printing and provided participants with an 
+assembly toolkit (Fig. 19). 
+The study involved 4 participants (2 males, 2 females) with vary-
+ing levels of experience: User 1 had extensive knowledge of 3D 
+printing assembly and cable-driven robotics; Users 2 and 3 had 
+general assembly experience but no familiarity with cable-driven 
+models; User 4 had minimal prior experience assembling manual 
+objects. 
+The manual assembly process included the following steps: 
+Xstrings: 3D Printing Cable-Driven Mechanism for Actuation, Deformation, and Manipulation CHI ’25, April 26–May 01, 2025, Yokohama, Japan 
+• Participants received a tutorial and demonstration, including 
+instructions for installing pivots, threading cables, and tying 
+knots, with a completed sample for reference. 
+• Assembly times for joints and cable threading/tightening 
+were recorded. 
+• Assistance from staff, if requested, was logged as “other” 
+time. 
+Figure 19: Time taken for the manual assembly of claw grip-
+pers and the resulting assembled objects. 
+Results and Discussion: The time analysis revealed that the con-
+ventional print-assembly approach required 1h 25min for 3D print-
+ing and an average of 1h 13min for assembly. In contrast, the 
+Xstrings method required 1h 36min for printing but eliminated 
+assembly entirely, saving 1 hour and 11 minutes, approximately 
+40% of the total time. 
+During the manual assembly process, common issues included: 
+improperly sized holes for metal pivots (Users 1, 2, 4), difficulty 
+threading cables through the thumb’s channel (Users 2, 4), and 
+knots that frequently loosened (User 4). Additionally, User 2 faced 
+challenges grasping small joint nodes due to larger fingers, leading 
+to delays. 
+The manually assembled models exhibited varied grasping pos-
+tures due to inconsistencies in knot placement and cable tension, 
+resulting in uneven grasping tightness (Users 3, 4) and poor finger 
+synchronization (Users 2, 3). Furthermore, the toolkit cables lacked 
+flexibility for implementing uni-directional grasping mechanisms. 
+In summary, the Xstrings method significantly enhances time ef-
+ficiency by eliminating manual assembly, reducing the overall time 
+required compared to the conventional print-assembly approach. It 
+also addresses issues of accuracy and consistency, mitigating the 
+impact of human error on the final product. 
+8.3 Assessing Cable Properties through 3D 
+Printing Parameter Tuning 
+To gain a comprehensive understanding of the influence of print 
+temperature and speed on the quality of embedded cables in 3D 
+printing, we conducted a series of controlled experiments to identify 
+the optimal parameters for producing high-quality cable embed-
+dings. All evaluations were conducted using printed samples, each 
+consisting of three printed cables with a width of 0.8 mm and a 
+height of 0.6 mm. These cables were subjected to different combina-
+tions of print temperatures and speeds. Print temperatures were set 
+at 240°C, 260°C, and 280°C, while print speeds varied from 10 mm/s 
+to 30 mm/s. The resulting cable quality, shown in Fig. 20, was cate-
+gorized into three levels: “Failed, ” “Defective, ” and “Optimal, ” based 
+on visual inspection and the integrity of the embedded cables. 
+Print Temperature: Print temperature plays a crucial role in de-
+termining the quality of the embedded cables. At a lower tempera-
+ture of 240°C, the quality of the cables ranged from “Defective” at 
+lower speeds (10 mm/s and 15 mm/s) to “Failed” at higher speeds 
+(20 mm/s to 30 mm/s). The optimal print temperature for achieving 
+high-quality cables was found to be 260°C. At this temperature, the 
+embedded cables demonstrated “Optimal” quality at print speeds of 
+10 mm/s to 20 mm/s. However, as the speed increased to 25 mm/s, 
+the quality decreased to “Defective, ” and at 30 mm/s, it resulted in 
+“Failed” prints. At a higher temperature of 280°C, the quality was 
+generally poor, with “Defective” observed at speeds of 10 mm/s and 
+15 mm/s, and “Failed” quality at speeds of 20 mm/s and above. 
+Figure 20: Results of cable prints with different printing pa-
+rameters. 
+Print Speed: The print speed also significantly affects cable qual-
+ity. Lower print speeds, specifically 10 mm/s and 15 mm/s, yielded 
+better results across different temperatures, particularly at 260°C 
+where the cable quality was “Optimal. ” However, as the speed in-
+creased to 20 mm/s, the prints remained “Optimal” at 260°C but 
+were “Defective” at other temperatures. Speeds of 25 mm/s and 
+30 mm/s consistently produced “Defective” or “Failed” prints across 
+all temperature settings, indicating that higher print speeds ad-
+versely impact the quality of the embedded cables. 
+Through our technical analysis, we found that the optimal com-
+bination for high-quality cable embedding is a print temperature of 
+260°C combined with a print speed between 10 mm/s and 20 mm/s. 
+Print speeds exceeding 15 mm/s, especially at temperatures lower 
+than 260°C or higher than 280°C, tend to result in lower quality or 
+failed prints. 
+8.4 Exploring the Tension Limits of Cables and 
+Systematic Stiffness 
+In this experiment, samples were fabricated using a combination 
+of Nylon and Polylactic Acid (PLA) materials through 3D printing. 
+Nylon serves as the cable, anchored at both ends within the PLA. 
+For each width, shown in Fig. 21, five samples were printed and 
+tested five times, with the resulting curves representing the average 
+of these experiments. 
+Mathematical Model: In our 3D printing setup, the minimum 
+printing path for the filament is 𝑤𝑖 = 0.4 mm, and so the width of 
+CHI ’25, April 26–May 01, 2025, Yokohama, Japan Jiaji Li et al. 
+the filament is 𝑤 = 𝑛 × 𝑤𝑖 , where 𝑛 is an integer. When 𝑛 is even, 
+the filament is formed by two passes of 3D printing, resulting in 
+a more uniform mass distribution, and the break usually occurs 
+in the middle of the filament. When 𝑛 is odd, the filament is more 
+likely to break closer to one of the endpoints due to uneven mass 
+distribution. 
+To understand the influence of width on the tensile force limit, 
+we assume the cross-section of the filament is rectangular. The 
+cross-sectional area 𝐴 can be represented as the product of the 
+filament width 𝑤 and thickness 𝑡 , with the proportional tensile 
+force limit 𝐹𝑐 is: 
+
+  
+ 
+𝐹
+𝑐 ∝ 𝑘𝑐 = 𝐸𝐴 
+𝐿 , 
+𝐴 = 𝑤 · 𝑡 . 
+(9) 
+This formula indicates that as the filament width increases, the 
+cross-sectional area also increases, allowing the filament to with-
+stand greater tensile forces. 
+Figure 21: Ultimate tensile force of cables with different 
+width from 0.4 mm to 2 mm. 
+Effect of Width on Tensile Force Limit: Experimental results 
+indicate that increasing filament width significantly enhances the 
+tensile force limit. For instance, a 2.0 mm filament withstands 2800g 
+(purple curve), while a 0.4 mm filament withstands 800g (orange 
+curve), illustrating the influence of cross-sectional area on tensile 
+strength. When 𝑛 is even, filaments typically break at the center, 
+while odd 𝑛 results in failure near endpoints, highlighting the im-
+pact of printing path and material distribution on tensile properties. 
+8.5 Fusion Test Between Different Materials 
+In this experiment, we evaluated the fusion capability between six 
+common 3D printing materials. Generally, better fusion capability 
+indicates that, in multi-material 3D printing, the materials are less 
+likely to separate from each other. Some multi-material 3D printing 
+studies attempt to enhance fusion capability to increase the strength 
+of multi-material components [2]. In contrast, we aim to identify 
+two materials with poor fusion capability to enable the printing of 
+movable threaded points in Xstrings. 
+Six common 3D printing materials were selected: Nylon, PC, 
+TPU, ABS, PETG, and PLA. Using CURA’s default settings, multi-
+material samples were printed, pairing each material with another. 
+Each 2mm-high sample consisted of 1mm of the first material and 
+1mm of the second. After cooling, attempts were made to sepa-
+rate the materials, with results categorized as: natural separation, 
+Table 1: Fusion test result of every two materials. 
+manual separation, or inseparable (breaking within one material). 
+Results show that PLA-Nylon and PC-Nylon pairs naturally sepa-
+rate, making them ideal for threading ponints of Xstrings. 
+8.6 Fatigue Limits Test of Cables 
+We used a 28BYJ-48 Step Motor to conduct a fatigue limits test on 
+the Xstring. The servo’s stepping parameter is set to 540 (out of 
+2048 per full revolution). In other words, we actuate a driving rod 
+to pull the cable along an arc of 90 degrees. The speed parameter is 
+set to 15 revolutions per minute, with each loop taking a total of 10 
+seconds: 4 seconds upward, 1 second pause, 4 seconds downward, 
+and another 1 second pause. The experiment lasted for a total of 7 
+days and 8 hours, with over 60,000 cycles, eventually breaking at 
+the connection point between the cable and the driving rod. 
+Figure 22: Fatigue limits test scenario and final breaking 
+points. 
+9 Limitations and Future Work 
+We next address the limitations within our work and explore po-
+tential directions for future research. 
+9.1 Compatibility of Xstrings with Manual 
+Modifications and Iterations 
+Xstrings provides an end-to-end manufacturing solution for cable-
+driven mechanisms while supporting manual adjustments and re-
+pairs during prototyping. Such interventions align with user intu-
+ition, fostering creativity and enabling design exploration. 
+The thermoplastic properties of PLA facilitate modifications. For 
+example, as shown in Fig. 23, a damaged cable in a tentacle proto-
+type was repaired by melting PLA with a soldering iron to create 
+a knot-compatible hole, adding a new knotting point 2 mm from 
+the original loop. These adjustments kept the prototype functional, 
+avoiding waste. Users can also close holes, reshape surfaces, or add 
+metallic components, enhancing versatility. 
+Xstrings: 3D Printing Cable-Driven Mechanism for Actuation, Deformation, and Manipulation CHI ’25, April 26–May 01, 2025, Yokohama, Japan 
+Xstrings enables efficient manufacturing while allowing users to 
+repair and adjust prototypes, extending their lifespan, improving 
+sustainability, and encouraging creative iteration. 
+Figure 23: One of a prototype’s cable is replaced with fishing 
+string by manual tinkering. 
+9.2 Only Flat-planar Cables 
+Despite Xstrings’ significant advancements in the automated inte-
+gration of cable-driven mechanisms into 3D objects, our current 
+approach is limited by the constraints of 3D printing technology. 
+Specifically, the cables in Xstrings can only be printed on the (𝑥 , 𝑦)-
+plane. This limitation stems from the extrusion process of FDM 3D 
+printers, where cables need to be printed layer by layer. Stacking 
+material along the z-axis makes the cable very fragile due to the 
+inadequate interlayer bonding strength of nylon, which is insuf-
+ficient to withstand repeated tensile forces. Thus, printing high-
+performance cable materials in three-dimensional space becomes 
+challenging. 
+As a result, our current approach restricts cable paths to the 
+printing plane to ensure the stability and precision of embedded 
+cable-driven mechanisms. Although the cable layout is planar, the 
+actuated objects can still move in multiple dimensions. Future work 
+could explore advanced multi-axis 3D printing techniques or cus-
+tomized G-code manufacturing methods to overcome this limita-
+tion, enabling more diverse and spatially complex cable-driven 
+mechanisms. 
+9.3 Generalizability to Other FDM Printers 
+The extent to which Xstrings results can be directly applied to other 
+users’ set-ups is conditional on the selection of printing material 
+and printer model. Our evaluation establishes explicit parameter 
+mapping to our 3D printer (Ultimaker and Bambu) and material 
+choice (Nylon 66, yxpolyer). Users may need to perform some 
+calibration steps to precisely align the printing parameters of their 
+specific fabrication set-up to Xstrings’s mechanical properties. 
+10 Conclusion 
+We present Xstrings, a novel approach to 3D printing cable-driven 
+mechanisms, whichh integrates cable-driven systems directly into 
+the geometry of 3D-printed objects, simplifying their fabrication 
+process. Unlike traditional methods that require labor-intensive 
+manual assembly, Xstrings automates the design and fabrication, 
+supporting four types of cable-driven interactions—bend, twist, 
+coil, and compress—using dual-material FDM 3D printing. It en-
+ables rapid prototyping and the production of complex dynamic 
+structures without the need for additional assembly. 
+Xstrings demonstrates its versatility through various applica-
+tions, such as dynamic fashion accessories, bionic robots, and adap-
+tive prototypes. The technical evaluations we present highlight 
+the effectiveness of different printing parameters in optimizing the 
+mechanical properties of the embedded cables, addressing chal-
+lenges related to tensile strain, repeatability, and material fusion. 
+The design tool we developed as part of this method facilitates 
+user-friendly integration of cable-driven mechanisms, allowing for 
+customizable designs suited to a wide range of practical applica-
+tions. 
+Overall, Xstrings presents a significant advancement in personal 
+fabrication and robotics, offering a low-cost, efficient, and scalable 
+solution for creating dynamic 3D-printed objects with integrated 
+motion capabilities. 
+References 
+[1] Cemil Bagci. 1971. Degrees of Freedom of Motion in Mechanisms. (1971). 
+[2] E Brancewicz-Steinmetz, R Valverde Vergara, VH Buzalski, and J Sawicki. 2022. 
+Study of the Adhesion Between TPU and PLA in Multi-material 3D Printing. 
+Journal of Achievements in Materials and Manufacturing Engineering 115, 2 (2022). 
+[3] Xiang ’Anthony’ Chen, Stelian Coros, and Scott E. Hudson. 2018. Medley: A 
+Library of Embeddables to Explore Rich Material Properties for 3D Printed 
+Objects. In Proceedings of the 2018 CHI Conference on Human Factors in Computing 
+Systems (Montreal QC, Canada) (CHI ’18). Association for Computing Machinery, 
+New York, NY, USA, 1–12. doi:10.1145/3173574.3173736 
+[4] Jacinto Colan, Ana Davila, Yaonan Zhu, Tadayoshi Aoyama, and Yasuhisa 
+Hasegawa. 2023. OpenRST: An Open Platform for Customizable 3D Printed 
+Cable-Driven Robotic Surgical Tools. IEEE Access 11 (2023), 6092–6105. doi:10. 
+1109/ACCESS.2023.3236821 
+[5] Micael S. Couceiro, David Portugal, and Rui P. Rocha. 2013. A Collective Robotic 
+Architecture in Search and Rescue Scenarios. In Proceedings of the 28th Annual 
+ACM Symposium on Applied Computing (Coimbra, Portugal) (SAC ’13). Associa-
+tion for Computing Machinery, New York, NY, USA, 64–69. doi:10.1145/2480362. 
+2480377 
+[6] Ashley Del Valle, Mert Toka, Alejandro Aponte, and Jennifer Jacobs. 2023. Punch-
+Print: Creating Composite Fiber-Filament Craft Artifacts by Integrating Punch 
+Needle Embroidery and 3D Printing. In Proceedings of the 2023 CHI Conference on 
+Human Factors in Computing Systems (CHI ’23). Association for Computing Ma-
+chinery, New York, NY, USA, Article 216, 15 pages. doi:10.1145/3544548.3581298 
+[7] Martin Feick, Donald Degraen, Fabian Hupperich, and Antonio Krüger. 2023. 
+Metareality: enhancing tactile experiences using actuated 3D-printed metamate-
+rials in virtual reality. Frontiers in Virtual Reality 4 (2023), 1172381. 
+[8] Shuyue Feng, Cheng Yao, Weijia Lin, Jiayu Yao, Chao Zhang, Zhongyu Jia, Lijuan 
+Liu, Masulani Bokola, Hangyue Chen, Fangtian Ying, et al. 2023. MechCircuit: 
+Augmenting Laser-Cut Objects with Integrated Electronics, Mechanical Struc-
+tures and Magnets. In Proceedings of the 2023 CHI Conference on Human Factors 
+in Computing Systems. 1–15. 
+[9] Evgueni T Filipov, Tomohiro Tachi, and Glaucio H Paulino. 2015. Origami 
+Tubes Assembled into Stiff, Yet Reconfigurable Structures and Metamaterials. 
+Proceedings of the National Academy of Sciences 112, 40 (2015), 12321–12326. 
+[10] Jack Forman, Mustafa Doga Dogan, Hamilton Forsythe, and Hiroshi Ishii. 2020. 
+DefeXtiles: 3D Printing Quasi-Woven Fabric via Under-Extrusion. In Proceedings 
+of the 33rd Annual ACM Symposium on User Interface Software and Technology 
+(UIST ’20). Association for Computing Machinery, New York, NY, USA, 1222–1233. 
+doi:10.1145/3379337.3415876 
+[11] Antonio Franchi, Luigi Freda, Giuseppe Oriolo, and Marilena Vendittelli. 2009. 
+The Sensor-based Random Graph Method for Cooperative Robot Exploration. 
+IEEE/ASME Transactions on Mechatronics 14, 2 (2009), 163–175. doi:10.1109/ 
+TMECH.2009.2013617 
+[12] Jun Gong, Olivia Seow, Cedric Honnet, Jack Forman, and Stefanie Mueller. 2021. 
+MetaSense: Integrating Sensing Capabilities into Mechanical Metamaterial. In 
+The 34th Annual ACM Symposium on User Interface Software and Technology 
+(Virtual Event, USA) (UIST ’21). Association for Computing Machinery, New 
+York, NY, USA, 1063–1073. doi:10.1145/3472749.3474806 
+[13] Liang He, Huaishu Peng, Michelle Lin, Ravikanth Konjeti, François Guimbretière, 
+and Jon E. Froehlich. 2019. Ondulé: Designing and Controlling 3D Printable 
+Springs. In Proceedings of the 32nd Annual ACM Symposium on User Interface 
+Software and Technology (New Orleans, LA, USA) (UIST ’19). Association for Com-
+puting Machinery, New York, NY, USA, 739–750. doi:10.1145/3332165.3347951 
+[14] Liang He, Xia Su, Huaishu Peng, Jeffrey Ian Lipton, and Jon E. Froehlich. 2022. 
+Kinergy: Creating 3D Printable Motion Using Embedded Kinetic Energy. In 
+Proceedings of the 35th Annual ACM Symposium on User Interface Software and 
+CHI ’25, April 26–May 01, 2025, Yokohama, Japan Jiaji Li et al. 
+Technology (Bend, OR, USA) (UIST ’22). Association for Computing Machinery, 
+New York, NY, USA, Article 69, 15 pages. doi:10.1145/3526113.3545636 
+[15] Huajie Hong, Jabran Ali, and Lei Ren. 2018. A review on topological Architec-
+ture and Design Methods of Cable-driven Mechanism. Advances in Mechanical 
+Engineering 10, 5 (2018), 1687814018774186. 
+[16] Alexandra Ion, Johannes Frohnhofen, Ludwig Wall, Robert Kovacs, Mirela Alis-
+tar, Jack Lindsay, Pedro Lopes, Hsiang-Ting Chen, and Patrick Baudisch. 2016. 
+Metamaterial Mechanisms. In Proceedings of the 29th Annual Symposium on User 
+Interface Software and Technology (Tokyo, Japan) (UIST ’16). Association for Com-
+puting Machinery, New York, NY, USA, 529–539. doi:10.1145/2984511.2984540 
+[17] Alexandra Ion, David Lindlbauer, Philipp Herholz, Marc Alexa, and Patrick Baud-
+isch. 2019. Understanding Metamaterial Mechanisms. In Proceedings of the 2019 
+CHI Conference on Human Factors in Computing Systems (Glasgow, Scotland 
+Uk) (CHI ’19). Association for Computing Machinery, New York, NY, USA, 1–14. 
+doi:10.1145/3290605.3300877 
+[18] Yunwoo Jeong, Han-Jong Kim, and Tek-Jin Nam. 2018. Mechanism Perfboard: An 
+Augmented Reality Environment for Linkage Mechanism Design and Fabrication. 
+In Proceedings of the 2018 CHI Conference on Human Factors in Computing Systems 
+(Montreal QC, Canada) (CHI ’18). Association for Computing Machinery, New 
+York, NY, USA, 1–11. doi:10.1145/3173574.3173985 
+[19] Han-Jong Kim, Yunwoo Jeong, Ju-Whan Kim, and Tek-Jin Nam. 2018. A Prototyp-
+ing Tool for Kinetic Mechanism Design and Fabrication: Developing and Deploy-
+ing M.Sketch for Science, Technology, Engineering, the Arts, and Mathematics Ed-
+ucation. Advances in Mechanical Engineering 10, 12 (Dec. 2018), 168781401880410. 
+doi:10.1177/1687814018804104 
+[20] Jinha Lee, Rehmi Post, and Hiroshi Ishii. 2011. ZeroN: Mid-air Tangible Interaction 
+Enabled by Computer Controlled Magnetic Levitation. In Proceedings of the 24th 
+annual ACM symposium on User interface software and technology. 327–336. 
+[21] Changsheng Li, Xiaoyi Gu, and Hongliang Ren. 2017. A Cable-Driven Flexible 
+Robotic Grasper With Lego-Like Modular and Reconfigurable Joints. IEEE/ASME 
+Transactions on Mechatronics 22, 6 (2017), 2757–2767. doi:10.1109/TMECH.2017. 
+2765081 
+[22] Jian Li, Sheldon Andrews, Krisztian G Birkas, and Paul G Kry. 2017. Task-based 
+Design of Cable-driven Articulated Mechanisms. In Proceedings of the 1st Annual 
+ACM Symposium on Computational Fabrication. 1–12. 
+[23] Jiaji Li, Mingming Li, Junzhe Ji, Deying Pan, Yitao Fan, Kuangqi Zhu, Yue Yang, 
+Zihan Yan, Lingyun Sun, Ye Tao, and Guanyun Wang. 2023. All-in-One Print: De-
+signing and 3D Printing Dynamic Objects Using Kinematic Mechanism Without 
+Assembly. In Proceedings of the 2023 CHI Conference on Human Factors in Com-
+puting Systems (Hamburg, Germany) (CHI ’23). Association for Computing Ma-
+chinery, New York, NY, USA, Article 689, 15 pages. doi:10.1145/3544548.3581440 
+[24] Yuyu Lin, Jesse T Gonzalez, Zhitong Cui, Yash Rajeev Banka, and Alexandra Ion. 
+2024. ConeAct: A Multistable Actuator for Dynamic Materials. In Proceedings of 
+the CHI Conference on Human Factors in Computing Systems. 1–16. 
+[25] Min Liu, Yunbo Zhang, Jing Bai, Yuanzhi Cao, Jeffrey M. Alperovich, and Karthik 
+Ramani. 2017. WireFab: Mix-Dimensional Modeling and Fabrication for 3D Mesh 
+Models. In Proceedings of the 2017 CHI Conference on Human Factors in Computing 
+Systems (Denver, Colorado, USA) (CHI ’17). Association for Computing Machinery, 
+New York, NY, USA, 965–976. doi:10.1145/3025453.3025619 
+[26] Eric MacDonald and Ryan Wicker. 2016. Multiprocess 3D Printing for Increasing 
+Component Functionality. Science 353, 6307 (2016), aaf2093. doi:10.1126/science. 
+aaf2093 arXiv:https://www.science.org/doi/pdf/10.1126/science.aaf2093 
+[27] Vittorio Megaro, Espen Knoop, Andrew Spielberg, David IW Levin, Wojciech 
+Matusik, Markus Gross, Bernhard Thomaszewski, and Moritz Bächer. 2017. De-
+signing Cable-driven Actuation Networks for Kinematic Chains and Trees. In 
+Proceedings of the ACM SIGGRAPH/Eurographics symposium on computer anima-
+tion. 1–10. 
+[28] Vittorio Megaro, Jonas Zehnder, Moritz Bächer, Stelian Coros, Markus H Gross, 
+and Bernhard Thomaszewski. 2017. A Computational Design Tool for Compliant 
+Mechanisms. ACM Trans. Graph. 36, 4 (2017), 82–1. 
+[29] Takafumi Morita, Ziyuan Jiang, Kanon Aoyama, Ayato Minaminosono, Yu Kuwa-
+jima, Naoki Hosoya, Shingo Maeda, and Yasuaki Kakehi. 2023. InflatableMod: 
+Untethered and Reconfigurable Inflatable Modules for Tabletop-sized Pneumatic 
+Physical Interfaces. In Proceedings of the 2023 CHI Conference on Human Factors 
+in Computing Systems. 1–15. 
+[30] Takafumi Morita, Yu Kuwajima, Ayato Minaminosono, Shingo Maeda, and Ya-
+suaki Kakehi. 2022. HydroMod: Constructive Modules for Prototyping Hydraulic 
+Physical Interfaces. In Proceedings of the 2022 CHI Conference on Human Factors 
+in Computing Systems. 1–14. 
+[31] Stefanie Mueller, Sangha Im, Serafima Gurevich, Alexander Teibrich, Lisa Pfis-
+terer, François Guimbretière, and Patrick Baudisch. 2014. WirePrint: 3D Printed 
+Previews for Fast Prototyping. In Proceedings of the 27th Annual ACM Sym-
+posium on User Interface Software and Technology (Honolulu, Hawaii, USA) 
+(UIST ’14). Association for Computing Machinery, New York, NY, USA, 273–280. 
+doi:10.1145/2642918.2647359 
+[32] Sachith Muthukumarana, Moritz Alexander Messerschmidt, Denys J.C. Matthies, 
+Jürgen Steimle, Philipp M. Scholl, and Suranga Nanayakkara. 2021. ClothTiles: A 
+Prototyping Platform to Fabricate Customized Actuators on Clothing using 3D 
+Printing and Shape-Memory Alloys. In Proceedings of the 2021 CHI Conference 
+on Human Factors in Computing Systems (CHI ’21). Association for Computing 
+Machinery, New York, NY, USA, 1–12. doi:10.1145/3411764.3445613 
+[33] Koya Narumi, Kazuki Koyama, Kai Suto, Yuta Noma, Hiroki Sato, Tomohiro Tachi, 
+Masaaki Sugimoto, Takeo Igarashi, and Yoshihiro Kawahara. 2023. Inkjet 4D 
+Print: Self-folding Tessellated Origami Objects by Inkjet UV Printing. ACM Trans. 
+Graph. 42, 4, Article 117 (jul 2023), 13 pages. doi:10.1145/3592409 
+[34] Koya Narumi, Hiroki Sato, Kenichi Nakahara, Young ah Seong, Kunihiko Mori-
+naga, Yasuaki Kakehi, Ryuma Niiyama, and Yoshihiro Kawahara. 2020. Liquid 
+Pouch Motors: Printable Planar Actuators Driven by Liquid-to-gas Phase Change 
+for Shape-changing Interfaces. IEEE Robotics and Automation Letters 5, 3 (2020), 
+3915–3922. 
+[35] Negin Nikafrooz and Alexander Leonessa. 2021. A Single-Actuated, Cable-Driven, 
+and Self-Contained Robotic Hand Designed for Adaptive Grasps. Robotics 10, 4 
+(2021). doi:10.3390/robotics10040109 
+[36] Yuta Noma, Koya Narumi, Fuminori Okuya, and Yoshihiro Kawahara. 2020. Pop-
+up Print: Rapidly 3D Printing Mechanically Reversible Objects in the Folded State. 
+In Proceedings of the 33rd Annual ACM Symposium on User Interface Software and 
+Technology (Virtual Event, USA) (UIST ’20). Association for Computing Machinery, 
+New York, NY, USA, 58–70. doi:10.1145/3379337.3415853 
+[37] Yuta Noma, Koya Narumi, Fuminori Okuya, and Yoshihiro Kawahara. 2020. Pop-
+up Print: Rapidly 3D Printing Mechanically Reversible Objects in the Folded State. 
+In Proceedings of the 33rd Annual ACM Symposium on User Interface Software and 
+Technology. ACM, Virtual Event USA, 58–70. doi:10.1145/3379337.3415853 
+[38] Jifei Ou, Gershon Dublon, Chin-Yi Cheng, Felix Heibeck, Karl Willis, and Hi-
+roshi Ishii. 2016. Cilllia: 3D Printed Micro-Pillar Structures for Surface Tex-
+ture, Actuation and Sensing. In Proceedings of the 2016 CHI Conference on Hu-
+man Factors in Computing Systems. ACM, San Jose California USA, 5753–5764. 
+doi:10.1145/2858036.2858257 
+[39] Athina Panotopoulou, Valkyrie Savage, and Daniel Lee Ashbrook. 2024. Threa-D 
+Printing Tunable Bistable Mechanisms. In Adjunct Proceedings of the 9th ACM 
+Symposium on Computational Fabrication (Aarhus, Denmark) (SCF Adjunct ’24). 
+Association for Computing Machinery, New York, NY, USA, Article 16, 3 pages. 
+doi:10.1145/3665662.3673272 
+[40] Huaishu Peng, François Guimbretière, James McCann, and Scott Hudson. 2016. 
+A 3D Printer for Interactive Electromagnetic Devices. In Proceedings of the 29th 
+Annual Symposium on User Interface Software and Technology (Tokyo, Japan) 
+(UIST ’16). Association for Computing Machinery, New York, NY, USA, 553–562. 
+doi:10.1145/2984511.2984523 
+[41] Franklin Pezutti-Dyer and Leah Buechley. 2022. Extruder-Turtle: A Library for 
+3D Printing Delicate, Textured, and Flexible Objects. In Sixteenth International 
+Conference on Tangible, Embedded, and Embodied Interaction. ACM, Daejeon 
+Republic of Korea, 1–9. doi:10.1145/3490149.3501312 
+[42] Katy Pieri, Bailey M. Felix, Teng Zhang, Pranav Soman, and James H. Hen-
+derson. 2023. Printing Parameters of Fused Filament Fabrication Affect Key 
+Properties of Four-Dimensional Printed Shape-Memory Polymers. 3D Printing 
+and Additive Manufacturing 10, 2 (2023), 279–288. doi:10.1089/3dp.2021.0072 
+arXiv:https://doi.org/10.1089/3dp.2021.0072 
+[43] Stefan Pillwein, Johanna Kübert, Florian Rist, and Przemyslaw Musialski. 2020. 
+Design and Fabrication of Elastic Geodesic Grid Structures. In Proceedings of the 
+5th Annual ACM Symposium on Computational Fabrication (Virtual Event, USA) 
+(SCF ’20). Association for Computing Machinery, New York, NY, USA, Article 2, 
+11 pages. doi:10.1145/3424630.3425412 
+[44] Sen Qian, Bin Zi, Wei-Wei Shang, and Qing-Song Xu. 2018. A Review on Cable-
+driven Parallel Robots. Chinese Journal of Mechanical Engineering 31, 1 (Aug. 
+2018), 66. doi:10.1186/s10033-018-0267-9 
+[45] Michael L. Rivera, Melissa Moukperian, Daniel Ashbrook, Jennifer Mankoff, and 
+Scott E. Hudson. 2017. Stretching the Bounds of 3D Printing with Embedded 
+Textiles. In Proceedings of the 2017 CHI Conference on Human Factors in Computing 
+Systems (Denver, Colorado, USA) (CHI ’17). Association for Computing Machinery, 
+New York, NY, USA, 497–508. doi:10.1145/3025453.3025460 
+[46] João Cavalcanti Santos, Marc Gouttefarde, and Ahmed Chemori. 2022. A Nonlin-
+ear Model Predictive Control for the Position Tracking of Cable-Driven Parallel 
+Robots. IEEE Transactions on Robotics 38, 4 (2022), 2597–2616. doi:10.1109/TRO. 
+2022.3152705 
+[47] Harpreet Sareen, Udayan Umapathi, Patrick Shin, Yasuaki Kakehi, Jifei Ou, Hi-
+roshi Ishii, and Pattie Maes. 2017. Printflatables: Printing Human-Scale, Func-
+tional and Dynamic Inflatable Objects. In Proceedings of the 2017 CHI Confer-
+ence on Human Factors in Computing Systems (Denver, Colorado, USA) (CHI 
+’17). Association for Computing Machinery, New York, NY, USA, 3669–3680. 
+doi:10.1145/3025453.3025898 
+[48] Christian Schumacher, Bernd Bickel, Jan Rys, Steve Marschner, Chiara Daraio, 
+and Markus Gross. 2015. Microstructures to Control Elasticity in 3D Printing. 
+ACM Trans. Graph. 34, 4, Article 136 (jul 2015), 13 pages. doi:10.1145/2766926 
+[49] Herschel Shapiro. 2022. Herschel Shapiro’s Artworks. https://www.youtube. 
+com/@HerschelShapiro. Accessed: 2024-09-15. 
+[50] Shouhei Shirafuji, Shuhei Ikemoto, and Koh Hosoda. 2016. Designing noncircular 
+pulleys to realize target motion between two joints. IEEE/ASME Transactions on 
+Xstrings: 3D Printing Cable-Driven Mechanism for Actuation, Deformation, and Manipulation CHI ’25, April 26–May 01, 2025, Yokohama, Japan 
+Me
+chatronics 22, 1 (2016), 487–497. 
+[51] Ali Shtarbanov. 2021. Flowio development platform–the pneumatic “raspberry 
+pi” for soft robotics. In Extended abstracts of the 2021 CHI conference on human 
+factors in computing systems. 1–6. 
+[52] Lingyun Sun, Jiaji Li, Yu Chen, Yue Yang, Zhi Yu, Danli Luo, Jianzhe Gu, Lining 
+Yao, Ye Tao, and Guanyun Wang. 2021. FlexTruss: A Computational Threading 
+Method for Multi-Material, Multi-Form and Multi-Use Prototyping. In Proceedings 
+of the 2021 CHI Conference on Human Factors in Computing Systems (Yokohama, 
+Japan) (CHI ’21). Association for Computing Machinery, New York, NY, USA, 
+Article 432, 12 pages. doi:10.1145/3411764.3445311 
+[53] Lingyun Sun, Jiaji Li, Junzhe Ji, Deying Pan, Mingming Li, Kuangqi Zhu, Yitao 
+Fan, Yue Yang, Ye Tao, and Guanyun Wang. 2022. X-Bridges: Designing Tunable 
+Bridges to Enrich 3D Printed Objects’ Deformation and Stiffness. In Proceedings 
+of the 35th Annual ACM Symposium on User Interface Software and Technology 
+(Bend, OR, USA) (UIST ’22). Association for Computing Machinery, New York, 
+NY, USA, Article 20, 12 pages. doi:10.1145/3526113.3545710 
+[54] Lingyun Sun, Jiaji Li, Mingming Li, Yitao Fan, Yu Chen, Deying Pan, Yue Yang, 
+Junzhe Ji, Ye Tao, and Guanyun Wang. 2021. 3DP-Ori: Bridging-Printing Based 
+Origami Fabrication Method with Modifiable Haptic properties. In Adjunct Pro-
+ceedings of the 34th Annual ACM Symposium on User Interface Software and 
+Technology (Virtual Event, USA) (UIST ’21 Adjunct). Association for Computing 
+Machinery, New York, NY, USA, 74–77. doi:10.1145/3474349.3480233 
+[55] Saiganesh Swaminathan, Kadri Bugra Ozutemiz, Carmel Majidi, and Scott E. 
+Hudson. 2019. FiberWire: Embedding Electronic Function into 3D Printed Me-
+chanically Strong, Lightweight Carbon Fiber Composite Objects. In Proceedings 
+of the 2019 CHI Conference on Human Factors in Computing Systems (Glasgow, 
+Scotland Uk) (CHI ’19). Association for Computing Machinery, New York, NY, 
+USA, 1–11. doi:10.1145/3290605.3300797 
+[56] Kazutoshi Tanaka and Masashi Hamaya. 2023. Twist Snake: Plastic table-top 
+cable-driven robotic arm with all motors located at the base link. In 2023 IEEE 
+International Conference on Robotics and Automation (ICRA). 7345–7351. doi:10. 
+1109/ICRA48891.2023.10160995 
+[57] Bernhard Thomaszewski, Stelian Coros, Damien Gauge, Vittorio Megaro, Eitan 
+Grinspun, and Markus Gross. 2014. Computational Design of Linkage-Based 
+Characters. ACM Trans. Graph. 33, 4, Article 64 (jul 2014), 9 pages. doi:10.1145/ 
+2601097.2601143 
+[58] Guanyun Wang, Tingyu Cheng, Youngwook Do, Humphrey Yang, Ye Tao, Jianzhe 
+Gu, Byoungkwon An, and Lining Yao. 2018. Printed Paper Actuator: A Low-cost 
+Reversible Actuation and Sensing Method for Shape Changing Interfaces. In 
+Proceedings of the 2018 CHI Conference on Human Factors in Computing Systems. 
+ACM, Montreal QC Canada, 1–12. doi:10.1145/3173574.3174143 
+[59] Guanyun Wang, Ye Tao, Ozguc Bertug Capunaman, Humphrey Yang, and Lin-
+ing Yao. 2019. A-Line: 4D Printing Morphing Linear Composite Structures. In 
+Proceedings of the 2019 CHI Conference on Human Factors in Computing Systems 
+(Glasgow, Scotland Uk) (CHI ’19). Association for Computing Machinery, New 
+York, NY, USA, 1–12. doi:10.1145/3290605.3300656 
+[60] Ruiqin Wang, Hao Wu, and Jian S. Dai. 2024. A Novel Bio-Inspired Quadruped 
+Crawling Robot with Movable Waist. In 2024 6th International Conference on Re-
+configurable Mechanisms and Robots (ReMAR). 218–223. doi:10.1109/ReMAR61031. 
+2024.10617730 
+[61] Yue Yang, Lei Ren, Chuang Chen, Bin Hu, Zhuoyi Zhang, Xinyan Li, Yanchen 
+Shen, Kuangqi Zhu, Junzhe Ji, Yuyang Zhang, Yongbo Ni, Jiayi Wu, Qi Wang, 
+Jiang Wu, Lingyun Sun, Ye Tao, and Guanyun Wang. 2024. SnapInflatables: 
+Designing Inflatables with Snap-through Instability for Responsive Interaction. 
+In Proceedings of the CHI Conference on Human Factors in Computing Systems 
+(Honolulu, HI, USA) (CHI ’24). Association for Computing Machinery, New York, 
+NY, USA, Article 342, 15 pages. doi:10.1145/3613904.3642933 
+[62] Lining Yao, Ryuma Niiyama, Jifei Ou, Sean Follmer, Clark Della Silva, and Hiroshi 
+Ishii. 2013. PneUI: pneumatically actuated soft composite materials for shape 
+changing interfaces. In Proceedings of the 26th annual ACM symposium on User 
+interface software and Technology. 13–22. 
+[63] Mahmoud Zarebidoki, Jaspreet Singh Dhupia, and Weiliang Xu. 2022. A review 
+of cable-driven parallel robots: Typical configurations, analysis techniques, and 
+control methods. IEEE Robotics & Automation Magazine 29, 3 (2022), 89–106. 
+[64] Wensi Zhang, Barnabas Gavin Cangan, Thomas Buchner, Alexander M Kübler, 
+Ramon Asmus, and Robert K Katzschmann. 2024. Task-defined Pulley Design 
+for Nonlinearly Coupled Tendon-driven Actuation. In 2024 IEEE 7th International 
+Conference on Soft Robotics (RoboSoft). IEEE, 220–227. 
+[65] Amit Zoran. 2013. Hybrid basketry: interweaving digital practice within con-
+temporary craft. In ACM SIGGRAPH 2013 Art Gallery (Anaheim, California) 
+(SIGGRAPH ’13). Association for Computing Machinery, New York, NY, USA, 
+324–331. doi:10.1145/2503649.2503651 
+A Printing settings for Different model of 3D 
+printer 
+Figure 24: Settings for Ultimaker 3 and S5 
+Figure 25: Settings for Bambu X1 

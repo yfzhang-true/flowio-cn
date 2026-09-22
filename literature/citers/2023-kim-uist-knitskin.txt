@@ -1,0 +1,1153 @@
+KnitSkin: Machine-Knited Scaled Skin for Locomotion 
+Jin Hee (Heather) Kim Shreyas Patil Sarina Matson 
+Hybrid Body Lab, Cornell University Hybrid Body Lab, Cornell University Hybrid Body Lab, Cornell University 
+Ithaca, New York, USA Ithaca, New York, USA Ithaca, New York, USA 
+jk2768@cornell.edu sp2544@cornell.edu sm2224@cornell.edu 
+Melissa Conroy Hsin-Liu (Cindy) Kao 
+Human Centered Design, Cornell Hybrid Body Lab, Cornell University 
+University Ithaca, New York, USA 
+Ithaca, New York, USA cindykao@cornell.edu 
+mac622@cornell.edu 
+Figure 1: KnitSkin is a bio-inspired sleeve that can traverse diverse cylindrical terrains, ranging from (a) a user’s forearm at 
+the wearable scale, to (b) tree branches and (c), (d) pipes at the environmental scale. (e) Python inspired scales are machine 
+knitted on the inside of the substrate to provide elongation for propulsion. 
+ABSTRACT 
+We present KnitSkin, a bio-inspired sleeve that can traverse diverse 
+cylindrical terrains, ranging from a user’s forearm at a wearable 
+scale, to pipes and tree branches at an environmental scale. Fab-
+ricated with a machine knitted substrate, the sleeve confgures a 
+stepped array of knitted scales that exhibit anisotropic friction. 
+Coupled with the extension of actuators enclosed in the sleeve, 
+the scales enable efective directional locomotion on cylindrical 
+surfaces with varying slopes, textures, and curvatures. KnitSkin’s 
+substrates are characterized by scales whose geometries and mate-
+rials can be fne-tuned and channels that can accommodate diverse 
+actuators. We introduce the design elements of KnitSkin in which 
+we characterize a series of substrate parameters and their resulting 
+anisotropic behaviors. In evaluating the locomotion, we examine 
+the variables associated with the surface and actuator characteris-
+tics. KnitSkin obtains diverse applications across diferent scales, 
+including wearable interfaces, industrial pipe-monitoring, to agri-
+cultural robots. 
+Permission to make digital or hard copies of all or part of this work for personal or 
+classroom use is granted without fee provided that copies are not made or distributed 
+for proft or commercial advantage and that copies bear this notice and the full citation 
+on the frst page. Copyrights for components of this work owned by others than ACM 
+must be honored. Abstracting with credit is permitted. To copy otherwise, or republish, 
+to post on servers or to redistribute to lists, requires prior specifc permission and/or a 
+fee. Request permissions from permissions@acm.org. 
+CHI ’22, April 29-May 5, 2022, New Orleans, LA, USA 
+© 2022 Association for Computing Machinery. 
+ACM ISBN 978-1-4503-9157-3/22/04. . . $15.00 
+https://doi.org/10.1145/3491102.3502142 
+CCS CONCEPTS 
+• Human-centered computing → Human computer interac-
+tion (HCI). 
+KEYWORDS 
+Machine Knitting, Smart Textiles, Mobile Robots, Wearable Robots 
+ACM Reference Format: 
+Jin Hee (Heather) Kim, Shreyas Patil, Sarina Matson, Melissa Conroy, and Hsin-
+Liu (Cindy) Kao. 2022. KnitSkin: Machine-Knitted Scaled Skin for Locomo-
+tion. In CHI Conference on Human Factors in Computing Systems (CHI ’22), 
+April 29-May 5, 2022, New Orleans, LA, USA. ACM, New York, NY, USA, 
+15 pages. https://doi.org/10.1145/3491102.3502142 
+1 INTRODUCTION 
+While interactive devices in Human-Computer Interaction (HCI) 
+have typically been static or fxed in one location, there has been in-
+creased interest in mobile devices which can change their locations. 
+This includes a range of on-body robots [12–14, 33], which can 
+climb on clothing, as well as locomotion and swarm robots [37, 62] 
+that can travel on fat ground and vertical surfaces. However, little 
+research has investigated mechanisms for climbing on cylindrical 
+surfaces. Cylindrical terrains, such as the forearm at the wearable 
+scale to pipes, lamp posts, and tree branches at the environmental 
+scale, are widely situated in our daily lives. Mobile robots that can 
+climb on these various cylindrical terrain have the potential to yield 
+new applications from health rehabilitation, industrial monitoring, 
+to urban and agricultural robots. A prime challenge has been a 
+CHI ’22, April 29-May 5, 2022, New Orleans, LA, USA Kim, et al. 
+compliant robot form factor that can conform to the geometry of a 
+cylindrical surface while propelling upward. 
+We introduce KnitSkin, an entirely soft and coordinated system 
+that can climb up underexplored cylindrical surfaces. Embodied 
+in a sleeve, the coordinated locomotion system is composed of 
+pneumatic actuators that dominate propulsion and a conformable 
+substrate that exhibits anisotropic friction via a stepped array of 
+knitted scales. The substrate can integrate a comprehensive range 
+of actuators in a minimally intrusive manner. Taking inspiration 
+from limbless locomotion often seen in earthworms and leeches, 
+the actuators linearly extend to enable global propulsion of the 
+sleeve. The fexible substrate accommodates local elongation of the 
+actuators and translates them into a globally coordinated locomo-
+tion. Mimicking the skin of certain limbless terrestrial organisms 
+such as the scale of pythons and "setae" of earthworms, the sub-
+strate features tunable attributes such as frictional “scales” to direct 
+movement and bolster propulsion. Particularly prominent in Knit-
+Skin is a simple and universal locomotion strategy: the form factor 
+that lets locomotion defy gravity by providing normal force, yet ac-
+commodating dynamic movements. With computationally tunable 
+structures, KnitSkin enjoys the freedom of integrating diverse actua-
+tors regardless of mechanism, orientation and shapes. The resulting 
+KnitSkin sleeve can crawl on cylindrical surfaces to passively adapt 
+to terrain variations without active control. 
+In this paper, we introduce the fabrication and mechanical pa-
+rameters of the knit substrates. We then evaluate the performance 
+of KnitSkin in which locomotion is expressed as a function of dif-
+ferent attributes of the substrate parameters and terrain. Drawing 
+from the results, we present various applications in which KnitSkin 
+is envisioned in a wide range of surfaces serving various purposes. 
+By enabling locomotion using soft textile-based fabrication meth-
+ods, we present a novel mode of traversal that can extend to the 
+human body, pipes or arboreal environments. Our contributions 
+include: 
+• We introduce computational knitting and linear extension 
+as a locomotion strategy to generate a sleeve-like soft robot 
+that can traverse an uncharted class of terrain: cylindrical 
+surfaces. Our soft approach is compatible with a variety of 
+terrain attributes: material, slope, and curvature. 
+• We characterize material and geometric attributes of the knit 
+substrate with regard to anisotropic friction. We evaluate 
+terrain variations as main determinants for locomotion. In 
+evaluating the locomotion, we investigate: (1) the impact of 
+terrain materials, (2) the efect of the number of actuators 
+on locomotion, and (3) the impact of terrain attributes such 
+as slope and curvature on locomotion. 
+• Building upon the results, we introduce applications of Knit-
+Skin encompassing a variety of scales and surfaces, ranging 
+from the human body, industrial pipes to arboreal environ-
+ments. 
+2 BACKGROUND AND RELATED WORK 
+2.1 Bio-Inspired Locomotion 
+Locomotion strategies in nature adopt a wide range of mechani-
+cal tactics to traverse a variety of extreme spaces. Modeling after 
+nature, attempts in robotics to navigate various uneven surfaces 
+[32, 35, 51, 71] and confned spaces [10, 28] have been enabled by 
+hardware that mimics frogs, geckos, cockroaches, or ivy vines. For 
+instance, frog feet have inspired robotic suction cups [71] which 
+can climb walls while consuming low energy. Gecko’s sticky pads 
+have led to the development of adhesive appendages [42] which 
+assist robots to climb vertically and turn at 90 degree surfaces. The 
+body motion and compressibility of cockroaches have been studied 
+in legged robots to mimic rapid locomotion in crevices. Likewise, 
+plants ofer inspirations that are unique to their growth-based nav-
+igation. For example, vines have inspired a variety of robots that 
+can navigate congested and confned spaces [10, 28, 30, 67, 68]. 
+Nonetheless, designed for on-ground operation, such technologies 
+are not known to be compatible with cylindrical surfaces, and nor 
+have they been evaluated with various terrain attributes. In the 
+limited number of studies that have proposed locomotion strategies 
+for pole-like structures, a series of discrete modules [25] or grippers 
+[36] were among popular methods to enable efective gait patterns. 
+Grippers in particular have proven robust on not only irregular tree 
+trunks [36] but even on an overhanging wall [50]. However, they 
+require rigid mechanical units for actuation. In this work we aim 
+to investigate opportunities for a soft locomotion system. 
+Most relevant to this research is the locomotion in limbless or-
+ganisms such as snakes, earthworms and caterpillars. Due to the 
+absence of appendages to support dynamic motion, these organ-
+isms have evolved to make the best use of skin and muscle. Their 
+skins stretch and shrink synchronously with the muscle movement, 
+which aids or hinders the body to protrude forward. For instance, 
+earthworms present “setae” on their skins which anchors the animal 
+in the soil and prevents backsliding. The same is true for scales in 
+snakes. Taking inspiration from snake scales, Rafsanjani et al. [52] 
+explained how adding a skin of stretchable kirigami could help soft 
+actuators crawl. Kirigami substrates coupled with fber-reinforced 
+soft actuators allowed the skin to pop up, turning isotropic friction 
+into anisotropic friction. While the stick-slip system was proven ef-
+fective on rough surfaces where the skin can enhance anchoring, it 
+ofers little applicability for the specifc terrain that we target in this 
+paper. Likewise, the segmentation of muscle in leeches, inchworms 
+and caterpillars have inspired a range of soft robots [6, 15, 63, 64]. 
+While professed as terrestrial locomotion, few advances in loco-
+motion technology in the robotic feld are scalable or applicable to 
+cylindrical terrains. As an exception, Agharese et al. [1] developed 
+a vine-inspired robot that wraps around the human arm for haptic 
+feedback. However, the tip-extending strategy is far from the no-
+tion of mobile interface. Taking inspiration from nature, KnitSkin 
+takes broad attributes of cylindrical terrain into account, laying the 
+groundwork for scalable applications from relocatable wearable 
+interfaces to industrial and agricultural robots. 
+2.2 Deformable Fabric-Based Interfaces 
+Methods to animate fabric-based interfaces have been extensively 
+studied in HCI. Diferent actuation mechanisms have been devel-
+oped to stimulate the shape-changing efects, which can be catego-
+rized into structural and local deformation. Structural deformation 
+KnitSkin: Machine-Knited Scaled Skin for Locomotion CHI ’22, April 29-May 5, 2022, New Orleans, LA, USA 
+through yarn or fber has been enabled chiefy by knitting engi-
+neered materials into the fabric [31, 55, 56]. Integration of the mate-
+rials prompts global deformation for applications in garment com-
+pression [27], heat insulation [65], or even artistic expression [60]. 
+However, with known demerits of insufcient force, irreversibility, 
+and lack of local tunability, such applications have yet to be used 
+for performing locomotion on the human body. 
+Local deformation, on the other hand, enjoys a wider variety of 
+mechanisms from SMA, bi-layer, to pneumatics. Inducing shape-
+change through SMA has been welcomed thanks to the material’s 
+compliant and compact form factor. Contrasted with the earlier 
+bracket, the material is now enclosed into local parts of the inter-
+face through sewing or couching [8, 43, 73, 74], weaving [61], 3d 
+printing [41] or layering [2]. Some applications encompass spe-
+cifc purposes from donning and dofng assistance [38], meditation 
+[22], hypotension treatment [26] to autistic spectrum therapy [16]. 
+Other applications of SMA serve a range of on-body haptic applica-
+tions [2, 23, 29, 34, 61] or rather all-around purpose [41]. Despite 
+the prominent uses in creating local transformation, SMA has not 
+been popularized for locomotion due to its lack of sufcient force 
+for propulsion and irreversibility. Alternatively, shape-change of 
+fabrics can also be achieved by stacking materials with dissimi-
+lar responsiveness to stimuli. Deformation through such bi-layer 
+compositions enjoys more complaint materials, such as flms [70] 
+and polymer composites [54]. Transformation takes place as the 
+diferential of responsive and inert materials modulates expansion 
+and contraction. While shape change through bi-morph has proven 
+to be rapid and precise, it has not been adopted for locomotion ap-
+plications due to insufcient force and slow recovery. Overcoming 
+the lack of force and slow actuation cycle, more controlled shape 
+change is yielded by combining pneumatics and fabrics. In many 
+studies, soft pneumatic actuators that are enfolded by knit fabrics 
+have demonstrated ability to bend, extend, and rotate, which aided 
+precise control hand motion. Resulting applications lent themselves 
+to efective tools for rehabilitation [11, 44–47, 49, 53, 58, 59]. Nev-
+ertheless, few pneumatic-based applications have sought purposes 
+beyond rehabilitation. While serving a diferent purpose from Knit-
+Skin, the versatile use of knits in conjunction with soft pneumatics 
+inspires our investigations. The stretchability that is unique to knit 
+textiles and no other fabric structures is an important enabling prop-
+erty for KnitSkin’s locomotion. On the whole, an ample history of 
+fabric-based shape change has demonstrated extensive utility and 
+compatibility with various materials. However, despite their ability 
+to embrace diverse materials and actuators, deformable fabrics have 
+yet to be used for locomotion technologies, to which this work aims 
+to contribute. 
+2.3 Wearable Robots for Locomotion 
+Wearable robots, which explore an alternative terrain to tabletop 
+surfaces [37, 62], bring locomotion onto the human body. While 
+some robots assist with body-location specifc tasks, such as on-
+body fabrication [9] or kinematic movement [40, 72], others are 
+mobile and able to maneuver on clothes or skin. While early work 
+has been centered on the engineering facets of cloth-climbing robots 
+[7, 24, 39], recent work has also demonstrated HCI applications 
+[12, 13, 33]. Rovables [13] and KINO [33] use magnetic wheels 
+to climb clothes, demonstrating applications from healthcare, re-
+mote communication, to fashion expression. While cloth-climbing 
+robots have enabled new interaction possibilities, attempts to move 
+directly on skin remain limited. Epidermal Robots [12] uses a skin-
+suction mechanism embedded in a legged robot to grasp and move 
+up the skin surface. However, the hardware-centric approach suf-
+fers from challenges such as sagging of skin and unreliable cup-skin 
+seal on curved body locations. Designed for the arm, Movelet [14] 
+is a motor-driven bracelet that can move up and down the arm for 
+haptic feedback. However, the weight of the device and reliance on 
+adhesive tape constrain the position of arm. 
+KnitSkin explores a “soft” approach for locomotion, especially 
+taking advantage of knit substrates which have demonstrated con-
+formability not only to curved and challenging body locations [34], 
+but even to diverse terrains in natural [21] and man-made environ-
+ments [18, 19]. 
+3 KNITSKIN 
+The overarching principle of KnitSkin’s crawling motion lies in 
+the linear extension-recovery and interfacial friction between the 
+knit substrate and underlying surface (Figure 2). Hence, the perfor-
+mance is jointly determined by the textures of cylindrical surfaces 
+and the attributes of KnitSkin interface. KnitSkin adopts actuators 
+and encloses them in channels to enable local elongation. Leverag-
+ing fexibility in the knit substrate, the local extension is in turn 
+transferred globally, elongating the entire KnitSkin structure longi-
+tudinally. Here we identify design elements of KnitSkin and their 
+role in delivering coordinated locomotion. 
+3.1 Producing Knit Substrates for Frictional 
+Anisotropy 
+The knit substrates are fabricated on a digital v-bed knitting ma-
+chine, SRY 123 SHIMA SEIKI. The knit substrates play two pri-
+mary roles in KnitSkin: (1) afording frictional anisotropy and (2) 
+serving as an enclosure for actuators. Anisotropy is a property of 
+having directional dependency. In this paper, we pursue frictional 
+anisotropy, which means the knit substrate will produce the least re-
+sistance when being pushed towards a certain direction. Frictional 
+anisotropy is also a widespread mechanism behind many natural 
+creatures: snake skin [69], bur-clad plant [5] or hairy legs of insects 
+[5], and other animals [3]. Depending on the direction of move-
+ment, angled protrusions slide smoothly or ratchet the contacting 
+surface [20]. To develop frictional anisotropy, we have engineered 
+a novel knit structure that marries yarns with conficting charac-
+teristics of stifness and elasticity. We also take advantage of the 
+vertical progression of knit in which a row knits frst followed by 
+another to form a texture in a stacked manner. KnitSkin’s substrate 
+is composed of three features: a ground layer, scales and channels. 
+Yarns with elastic properties form the ground layer while yarns 
+with high stifness and less elasticity form the scales (Figure 3). The 
+channels can be knitted with either of the two yarns. The ground 
+layer knits on the needles forming regular knit loops, whereas the 
+scales skip the needles, leaving the yarn to run freely across the 
+back of the ground layer. The scales are knitted row-wise, with the 
+scale tips stacking over the succeeding rows, creating a stepped 
+texture. While knitting on the machine, the ground yarn is put 
+CHI ’22, April 29-May 5, 2022, New Orleans, LA, USA Kim, et al. 
+Figure 2: KnitSkin composition. (a) The resulting sleeve, which confgures three channels with pleated actuators enclosed. The 
+scales are knitted on the inside. (b) The mechanics of propulsion: during extension, the scales on the side of the head slide 
+forward while the ones on the tail interlock with the surface. During recovery the scales on the tail propel while the ones on 
+the head anchor on the surface. 
+under tension as it is being stretched to knit on needles that are 
+apart. Once the knit structure is released from the needle bed, the 
+stress built up in the ground layer lets the entire structure including 
+the scales draw in. This shrinkage is larger along the rows than 
+columns, afecting a great amount of lateral fexing of scales (Figure 
+3(c)). An adequate amount of elasticity in the ground layer and 
+the stifness in the scales is crucial, as the balance between them 
+determines the angled orientation of the scales (Figure 3 (a), (b)). 
+For instance, if the scale yarn exhibits little stifness as in Figure 
+3 (b), it is prone to generating scales with a negligible curve. We 
+elaborate on each feature of the substrate below: 
+• Scales: The size, pattern, density and roughness of the scales 
+can be tuned with few constraints as long as the elasticity 
+of the ground layer and the stifness of the scales strike a 
+good balance. For instance, the size of scales can be tuned 
+by letting the scales skip more needles (Figure 4 (a)-(c)). By 
+arraying scales in straight columns such that no adjacent 
+scales are pressing them down one can expect lofty scales, 
+whereas by patterning the scales so they imbricate one can 
+obtain low-rise scales (Figure 4 (d)-(f)). Likewise changes in 
+the density (Figure 4 (g)-(i)) and the roughness of the scales 
+can contribute to the anisotropic properties of the substrate. 
+We identify detailed geometric and material parameters of 
+the scales and characterize resulting anisotropic efect in 
+later sections. 
+• Ground layer: The role of the ground is to withstand a 
+certain amount of stress during knitting. When released 
+from the needle bed, the ground pulls in the scales laterally. 
+The limited elasticity in ground yarns could result in little 
+retraction, which in turn leads to scales that are less curved. 
+When the scales are straightened up (not curved), they no 
+longer stack onto each other losing the stepped texture. One 
+can dampen the amount of pull-in by combining less elastic 
+yarns with elastic ones or enhance the extent of pull-in by 
+knitting with multiple elastic yarns. 
+• Channels: To enclose a wider variety of actuators, we ex-
+tend the tubular jacquard structure that has been demon-
+strated by Kim et al. [34]. The structure creates pouches in 
+various shapes and dimensions, however wide or thin. By 
+altering tubular jacquard, substrates can accommodate dif-
+ferent numbers of actuators in diferent shapes. Channels 
+can be constructed in conjunction with the scale and ground. 
+A variety of materials outside actuators can be tucked into 
+channels through a knitted hole, without additional eforts 
+for integration. 
+3.2 Producing Actuators for Longitudinal 
+Extension 
+KnitSkin enables locomotion through longitudinal extension of the 
+sleeve. While the substrates can accommodate a wide range of ma-
+terials, in this paper we build upon soft pneumatic actuators from 
+past literature, due to their compliance and potential portability 
+[57]. We specifcally choose soft pneumatic actuators with pleated 
+sheaths for their relatively high thrust force [66]. The pneumatic 
+actuator consists of of-the-shelf materials: inner tubing (Super-
+Soft Rubber Tubing for Air and Water, McMaster), pleated sheath 
+(Expandable Sleeving Gauze Polyester Fabric, McMaster) and cus-
+tom 3D printed fttings. The pleated sheath can be made out of an 
+expandable braided sleeve. To form pleats, the sleeve is compressed 
+axially while expanding radially. Then the sleeve undergoes heat 
+treatment to secure the pleats. The resulting pleated mesh contains 
+the radial expansion of the inner tubing, thus forcing the expansion 
+to translate axially. 
+To expand the actuators, a compressor is used with a regulated 
+output pressure of 42 psi. The compressor output is fed into the 
+actuators through a 3-way pneumatic solenoid valve. The solenoid 
+valve is fed with 12V pulses to achieve repeated expansion and 
+contraction of the actuators. The solenoid valve is connected to a 
+normally closed confguration. When the solenoid valve is supplied 
+with 12V, the air fows from the compressor to the actuators and 
+KnitSkin: Machine-Knited Scaled Skin for Locomotion CHI ’22, April 29-May 5, 2022, New Orleans, LA, USA 
+Figure 3: Knit structure to form a scaled substrate. The notation indicates that fve needles are skipped to form a scale. (a) 
+Illustrates when the scales consist nylon monoflament. The stifness of monoflament induces the curve as the ground layer 
+draws in. In contrast, scales in (b) show negligible curves due to the lack of stifness in the yarn. The scales are straightened 
+up, causing no "stepped" texture. (c) depicts the change in tension as the substrate is released from the needles post-knitting. 
+The draw-in of knit loops induces the lateral curve of the scales. 
+expands the actuators. When the solenoid valve is supplied with 
+0V, the air in the actuators is exhausted through the exhaust port 
+of the valve. The time period and the duty cycle of these 12V pulses 
+is controlled using an Arduino controller. The 5V output of the 
+Arduino is fed to a relay which switches the 12V supply to the 
+actuator. A digital pressure gauge is also connected to monitor the 
+pressure in the actuators. 
+4 KNIT SUBSTRATE PARAMETERS: TUNING 
+FRICTIONAL ANISOTROPY FOR 
+LOCOMOTION 
+One way to achieve frictional anisotrophy is to shape the surface 
+with an array of angled protuberances. A protuberance is an obstacle 
+on a surface, sometimes referred as bumps or hairs [20]. Filippov et 
+al. [20] studied how protuberances can cause diferent frictions in 
+diferent directions. The scales in the KnitSkin can be seen as an 
+array of protuberances. These protuberances have angles because 
+the scale tips stack over the scales on the succeeding rows, as 
+illustrated in Figure 2 (b). 
+Tuning granular details of the scale to examine their impact 
+on the friction can be most efectively achieved by altering the 
+parameters below. Here we lay out how the scales are formed on 
+the knitting machine, and how the two primary determinants -
+scale geometry and material - infuence the anisotropy of friction. 
+While the two parameters complement each other, we focus on 
+how geometrical parameters induce global efects across the fabric 
+while material parameters dominate the behavior of an individual 
+scale. All geometrical parameters presented below are based on a 
+5-stitch unit, except for the scale length parameter. 
+4.1 Scale Geometry Parameters 
+• Scale length: The size of a scale is determined by the number 
+of needles skipped between two ends of a scale. When a yarn 
+skips a needle, it runs across the back of the fabric instead 
+of forming a knit loop. The free strand of the yarn forms a 
+downward arch once the ground fabric is released from the 
+needle bed. The scale lengths tested in this paper are 2, 5, and 
+11 stitches, shown in Figure 4 (a)(b)(c). Note 2-stitch is the 
+smallest possible length in order for scales to curve. 
+CHI ’22, April 29-May 5, 2022, New Orleans, LA, USA Kim, et al. 
+• Global pattern: The pattern of scales infuences the behavior 
+of the substrate. In the knitting process, the scales are knitted 
+row by row. This process controls how scales are stacked 
+and which part of a scale is weighed down. When scales are 
+stacked, the tendency to roll back diminishes as the adjacent 
+scales are pressing down on them. For instance, in the zigzag 
+pattern (Figure 4 (e)), each scale is stacked under the halves of 
+two scales on the succeeding row, yielding the most balanced 
+confguration. Scales in the diagonal pattern (Figure 4 (d)) 
+leaves the right end of a scale uncompressed by adjacent 
+scales. The wavy pattern results in a less controlled array 
+from the side view (Figure 4 (f)). Note these three patterns 
+have better rollback resistance compared with the column 
+pattern used in Figure 4 (a-c), because the column pattern 
+has the least overlaps among the scales. 
+• Density: The density is defned as the distance between two 
+rows with scales. For example, a density of 1 row indicates 
+the scales are knitted every other row. Figure 4 (g), (h), and (i) 
+examine the densities of 1, 2, and 4 rows, respectively. Low 
+density yields low anisotropic friction because it exposes 
+more ground yarns, and the friction from the ground yarns 
+is uniform across all directions. 
+4.2 Scale Material Parameters 
+While the geometrical parameters afect the global behavior of the 
+substrate, the yarn material determines the characteristics of the 
+scales. Figure 5 demonstrates scales knitted with diferent types of 
+materials. Considering the stifness of the materials and their com-
+patibility with knitting machines, we chose Nylon monoflament, 
+38 AWG copper wire and silver plated multi-flament (Lumina, 65% 
+viscose, 35% metallized polyester, Silk City) for our experiments. 
+• Material roughness: The surface and cross-section of a mate-
+rial infuences the overall roughness of the substrate, which 
+in turn impacts the friction. Single flament materials such 
+as nylon monoflaments and metal wires exhibit smoother 
+surfaces; they have a solid cross-section, often in the shape 
+of a clean circle. On the contrary, multi-material yarns such 
+as silver plated multi-flament consist of a core yarn and a 
+wrapper, displaying a non-uniform cross-section. The bristly 
+surface of multi-material yarns, which are akin to the metal-
+plated ones, can also be attributed to the incoherent yarn 
+composition. Likewise, staple yarns or spun yarns which are 
+composed of fbers cut to short lengths tend to have a "fufy" 
+surface texture. However those staple yarns are deemed un-
+suited for knitting scales as they tend to lack stifness. 
+• Material rigidity: The curvature of scales is closely tied to the 
+capability of the material to store tension during and after 
+the knitting process. We observe that the scale curvature is 
+determined by the two main facets: material stifness and 
+elasticity. For instance, while the stifness of copper wire pro-
+duces some degree of curvature, the lack of elasticity makes 
+it prone to getting bent permanently without rebound (Fig-
+ure 5 (b)). Yarns with little stifness, as well as little elasticity, 
+such as Puma (80% viscose, 20% Elite, Silk City) do not get 
+stressed under knitting, thus straightening out post knit (Fig-
+ure 3 (b)). Similarly, materials with excessive stifness (e.g., 
+copper wires thicker than 34 AWG) cannot withstand the 
+stress and are likely to break during knitting. 
+4.3 Resulting Anisotropic Characteristics 
+The head-to-tail direction of the scales determines the anisotropy 
+of the substrate; it is expected to experience the most friction with 
+the movement travelling towards the tail, and the least towards 
+the opposite direction. Since scales point to the tail (Figure 2 (b)), 
+we can anticipate it will take the least amount of force to move 
+KnitSkin forward (towards the head direction) and the most force 
+to move it backwards (towards the tail). To quantify the anisotropy, 
+we defne the force ratio as the force to move KnitSkin forward, 
+over the force to move it backward. The ratio is anticipated to be 
+below 1, and the smaller the ratio, the easier for KnitSkin to move 
+towards one specifc direction (i.e., forward.) 
+To measure the force needed to move the KnitSkin towards these 
+two representative directions on a cylindrical surface, we attach 
+the initial load on one of the two ends, and increment loads until 
+displacement is observed. We frst test the material parameters 
+(nylon monoflament, 38 AWG copper wire, and silver plated multi-
+flament (Figure 5)) to identify the most suitable material. We then 
+proceed with the geometry parameters, testing the nine options in 
+Figure 4 to identify the most optimal setup. For the scale geometry 
+parameter, we test three representative options for scale length, 
+scale pattern, and scale density. We aim to provide initial charac-
+terization of how these individual factors impact the force ratio, 
+instead of an extensive full-factorial characterization. Each setting 
+is tested 5 times to account for variability. Attributes of the cylinder 
+and other experimental set up remain the same across the entire 
+experiment for consistency. 
+Our data shows that for backward force, namely when the angle 
+of the scales interlocks with the surface, greater force was required 
+regardless of materials (Table 1). Among the materials the nylon 
+monoflament recorded the greatest gap between the head (forward) 
+and tail (backward) directions. 13.6% less force was needed when the 
+slope of scales was positioned forward. While the 38 AWG copper 
+wire similarly produced less force of 11.8%, the silver plated multi-
+flament recorded the least amount of force gap of 7.2%. Following 
+the results, we chose the nylon monoflament to test the geometry 
+parameters. Of the nine geometry variations, the one that yielded 
+the greatest force gap was f (Figure 4). All nine variations indicated 
+greater force for backward displacement. From the box plot showing 
+how these force gaps were distributed throughout trials, we noticed 
+that confguration g and h have contributed to larger interquartile 
+ranges (Figure 6). This indicated that the reduced density of scales 
+may have resulted in less consistent force when pulled forward. 
+We also noticed that the density variations overall informed of an 
+insignifcant gap of medians, less than 10%, which could be a result 
+from a greater exposure of the ground yarn than pattern and scale 
+length. 
+5 LOCOMOTION EV ALUATION 
+In our preliminary characterization we investigated parameters of 
+scales and their infuence on frictional anisotropy. The objective of 
+this study is to understand the propulsion ability of KnitSkin by 
+deploying it on actual cylindrical terrains. In order for KnitSkin 
+KnitSkin: Machine-Knited Scaled Skin for Locomotion CHI ’22, April 29-May 5, 2022, New Orleans, LA, USA 
+Figure 4: Geometry parameters of scales. The notations on the bottom left corner of the cells denote the numbers and confg-
+urations of stitches to form scales. The dark background of the notation represents ground layer. Presented in each cell are 
+resulting substrates from top and side views. 
+to serve inter-scale uses it is critical to leverage its design and re-
+alize locomotion on a wide subset of cylindrical surfaces. In this 
+evaluation, we focus on how the individual factors below afect the 
+traversal distance. The interaction between the factors is thus not 
+the focus of this investigation. The traversal distance is expressed 
+as the function of actuation cycle while varying: (1) surface ma-
+terials (2) the number of actuators (3) the slope of terrain, and (3) 
+the curvature of terrain. Unless otherwise specifed we manually 
+mark the location of the tail of the interface after each cycle, while 
+recording the process through an external camera. As the duration 
+CHI ’22, April 29-May 5, 2022, New Orleans, LA, USA Kim, et al. 
+Figure 5: Material parameters of scales. With the same stitch length and pattern, varying materials afects the properties of 
+an individual scale, which in turn afects anisotropic friction. 
+Table 1: The force ratios of pulling KnitSkin forward over pulling backward under diferent materials (demonstrated in Fig-
+ure 5). A smaller ratio indicates that it is easier to move KnitSkin forward with the setup. 
+Material Parameters Ratio Material Parameters Ratio Material Parameters Ratio 
+A - Nylon monoflament 0.873 B - 38 AWG copper wire 0.881 C - Silver plated multi-flament 0.927 
+Table 2: The force ratios of pulling KnitSkin forward over pulling backward under diferent geometry parameters (demon-
+strated in Figure 4.) A smaller ratio indicates that it is easier to move KnitSkin forward with the setup. 
+Geometry Parameters Ratio Geometry Parameters Ratio Geometry Parameters Ratio 
+A - length.2stiches 0.917 D - pattern.diagonal 0.911 G - density.1row 0.994 
+B - length.8stiches 0.889 E - pattern.zigzag 0.768 H - density.2rows 0.918 
+C - length.11stiches 0.693 F - pattern.wave 0.692 I - density.4rows 0.997 
+of exhaust and intake—which comprise one actuation cycle—can 
+be desirably programmed, we take the actuation cycle as a unit for 
+travel speed. 
+5.1 Surface Materials 
+The traversal distance is the result of a variety of interfacial proper-
+ties involving the underlying surface materials and their roughness 
+[20]. In the study we aim to inspect a wide range of materials 
+through which we envision use cases of KnitSkin across various 
+applicable scales. 
+Procedure and Apparatus. During the test, we use a knitted sub-
+strate confgured with the knit pattern f from scale parameters 
+(Table 2) and nylon monoflament material, following the results 
+from the anisotropy characterization (Table 1). Three pneumatic 
+actuators are spaced evenly and integrated in the sleeve, with the 
+pressure set at 42 psi. We use the distance that the interface trav-
+els in 10 infation-then-defation cycles as our evaluation metric. 
+Each cycle involves a 3-second infation and a 1-second defation. 
+We repeat this for 10 rounds for each parameter except for terrain 
+curvature. The slope of the surface was set at 180 degrees (parallel 
+to the ground), with a diameter of 2 inches. 
+The list of surface materials evaluated includes: extruded polyvinyl 
+chloride (PVC), reinforced vinyl, steel, polyurethane laminate (PUL, 
+75% polyester, 25% polyurethane), silicone rubber, and neoprene. 
+The selected materials cover a wide range of cylindrical surfaces 
+that KnitSkin can climb on: PVC, reinforced vinyl, and steel repre-
+sent materials widely used in industrial applications; PUL, silicone 
+rubber, and neoprene are known for similar properties to human 
+skin allowing the materials to be widely used to simulate physical 
+properties of the skin [17]. 
+Prior to the evaluation, we use a proflometer (10x, Keyence 
+VK-X260 Laser-Scanning Proflometer) to scan the surface and to 
+measure the roughness (i.e., the characteristics of peaks and valleys 
+on the surface) of each material. The scanned images and the 2-
+point profles (i.e., the surface elevation and depression along a 
+straight line) are presented in (Figure 7). As conduits which are 
+extruded during fabrication, PVC and reinforced vinyl tubes present 
+horizontal textures. While both PUL and steel show recognizable 
+KnitSkin: Machine-Knited Scaled Skin for Locomotion CHI ’22, April 29-May 5, 2022, New Orleans, LA, USA 
+forward backward
+1.00 1.05 1.10 1.15 1.20 1.25
+A
+Directions
+Force (N)
+forward backward
+1.0 1.1 1.2 1.3 1.4 1.5
+B
+Directions
+Force (N)
+forward backward
+1.8 2.0 2.2 2.4 2.6
+C
+Directions
+Force (N)
+forward backward
+1.6 1.8 2.0 2.2 2.4 2.6
+D
+Directions
+Force (N)
+forward backward
+0.35 0.40 0.45 0.50 0.55
+E
+Directions
+Force (N)
+forward backward
+0.7 0.8 0.9 1.0
+F
+Directions
+Force (N)
+forward backward
+2.10 2.15 2.20 2.25 2.30 2.35 2.40
+G
+Directions
+Force (N)
+forward backward
+3.0 3.2 3.4 3.6
+H
+Directions
+Force (N)
+forward backward
+3.3 3.4 3.5 3.6 3.7
+I
+Directions
+Force (N)
+Figure 6: The distribution of force values under geometry parameters. Monoflament scales varied across diferent scale 
+lengths, global patterns and density. While the medians between the forward and backward directions across density show 
+trivial gaps, the medians of all variations indicate greater force required for the backward displacement. 
+depressions, the ones on PUL span across larger area. Neoprene 
+and silicone rubber indicate relatively shallow and small bumps. 
+We use developed inter-facial area ratio (denoted as Sdr) to quan-
+tify surface roughness [48]. The ratio is defned as the percentage 
+of the additional surface area contributed by the texture normalized 
+by the area of interest. Thus, a rough material results in a larger 
+value due to the additional area contributed by peaks and valleys. 
+Results. Materials with larger Sdr tended to be conducive to more 
+efective locomotion (Figure 7 (a)). With the exception of silicone 
+rubber, the materials with Sdr larger than 0.1 outperformed the 
+rest and helped KnitSkin travel more than 110mm in 10 cycles. The 
+results (Figure 7 (b)) showed that the KnitSkin travelled the farthest 
+distance on the PVC cylinder. While locomotion on the PUL started 
+of by outrunning the performance on the PVC, it started to slow 
+down after 3 cycles. 
+5.2 Number of Actuators 
+Procedure and Apparatus. The knitted substrate maintains the 
+pattern f from scale parameters (Table 2) and nylon monoflament 
+material (Table 1). The PVC cylinder with a diameter of 2 inches 
+is placed parallel to the ground. The number of actuators is the 
+only varying factor in this test. The possible confgurations are two, 
+three and four actuators. The actuators are spaced evenly apart 
+across the circumference of the substrate. The pressure is set at 42 
+psi, with a sequence of infation-then-defation cycles. 
+Results. Our results suggested KnitSkin travelled farther when 
+there were more actuators (Figure 8). The three- and four-actuator 
+setup travelled 1.1x and 2.4x compared with the two-actuator case. 
+Through a visual inspection during the test, we found that the 
+four-actuator setup performed much better than the other two 
+because more actuators helped transfer local extension globally. On 
+the contrary, in the two-actuator case, the substrate between the 
+actuators remained static, and the actuators were more prone to 
+buckling. This indicates that if extension was disproportionately 
+concentrated to one or two of the actuators, the local extension 
+would not transfer across the substrate. 
+5.3 Slope of Terrain 
+Procedure and Apparatus. The knitted substrate maintains the 
+pattern f from scale parameters (Table 2) and nylon monoflament 
+material (Table 1). Following the results from the previous test, four 
+pneumatic actuators are spaced evenly and integrated in the sleeve, 
+with pressure of 42 psi. We used a PVC surface, tilting the slope 
+from 20, 30 to 40 degrees. 
+Results. 
+We observed a decrease in the traversal distance when the 
+slope became steeper (Figure 9). In comparison with the 20-degree 
+slope, we observed a 30% and 50% drop in displacement with 30- and 
+40-degree tilted terrains respectively. The performance degraded 
+considerably when the terrain is tilted beyond 40 degrees. 
+5.4 Curvature of Terrain 
+Procedure and Apparatus. To evaluate if the interface can maneu-
+ver on a curved cylindrical terrain, we prepare two PVC pipes (i.e., 
+curved cylinders) bent by 45 and 90 degrees, with the same radius of 
+9.5 inches. The pipes are placed fat, lifted 3 inches from the ground. 
+We place the interface at the tangential extensions before the curve 
+(Figure 10), and test if the interface can crawl and pass the curve. 
+We manually mark the location of the head along the centerline 
+after each cycle, while recording the process through an overhead 
+camera. Similar to prior setups, the interface uses pattern f from 
+CHI ’22, April 29-May 5, 2022, New Orleans, LA, USA Kim, et al. 
+Figure 7: The efect of surface material on travel distance. (a) Demonstrates raw images of surface materials, images of the 
+materials scanned with a proflometer, and 2-points profle from left to right of the arrows. We present values of Sdr as a 
+roughness parameter. (b) Presents locomotion distances in millimeter by actuation cycles. 
+Table 2 and nylon monoflament material (Table 1). Four pneumatic 
+actuators are spaced evenly and integrated in the sleeve. In this 
+test we do not limit the actuation to 10 cycles. Instead, we seek to 
+observe how many cycles would be repeated for the interface to 
+pass the curve and enter the tangent on the other side. 
+Results. The result is expressed through manual measurement 
+(Figure 10) and as the function of actuation cycle (Figure 11). In 
+both measurements the result indicated that the interface was able 
+to maneuver through the curves. However, the distance travelled 
+per cycle was less consistent compared to the other factors. From 
+the manual measurement, it took 18 cycles for the interface to pass 
+the 90 degrees curve whereas 16 cycles were executed to pass the 
+45 degrees curve (Figure 10). On the 90 degrees curve the interface 
+maneuvered less from the 4th to 12nd cycles, whereas from the 
+12nd to 15th cycles, the interface seemed to pick up speed. On the 
+45 degrees curved terrain, the interface travelled more from the 
+7th cycle (Figure 11). Outside these two measurements, our visual 
+inspection notifed us that when the interface was passing through 
+the curved region of the 90 degrees terrain, the actuator on the 
+inner most arc extended of the cylinder axis; it did not conform to 
+the curvature during actuation but extended along the chord. This 
+created an area where few scales seemed to be in contact with the 
+terrain, which could have driven the sluggish locomotion compared 
+to that on the straight terrains. 
+KnitSkin: Machine-Knited Scaled Skin for Locomotion CHI ’22, April 29-May 5, 2022, New Orleans, LA, USA 
+Figure 8: The efect of the actuator number on travel dis-
+tance. 
+Figure 9: The efect of the slope of terrain on travel dis-
+tance. 
+Figure 10: (a), (b) Locomotion on 90 and 45 degrees curved terrain. The numbers denote the progression of locomotion cycles. 
+The intersection between the center line and the corresponding lines is where the substrate concluded a cycle. 
+6 APPLICATIONS silicone rubber and neoprene, which share the properties of human 
+skin [17]. Given its soft and knitted form, KnitSkin resembles cloth-We demonstrate applications of KnitSkin on various surfaces, from 
+ing, making it an appropriate form factor for on-body locomotion. the wearable scale to the industrial and environmental scales. We 
+In addition to the form factor, the channels’ ability to accommo-build on our insights from the evaluation section for selecting our 
+date a wide range of actuators means it can be altered to create application contexts. 
+a pocket for input sensors and output feedback modules. Taking 
+advantage of such attributes, we envision a relocatable wearable 6.1 Wearable and Relocatable Interface 
+interface that can change its location for voice input (Figure 12). In evaluating a variety of surface materials, we learned that the When the interface receives an incoming call while both of a user’s KnitSkin substrate can crawl on synthetic materials, such as PUL, 
+CHI ’22, April 29-May 5, 2022, New Orleans, LA, USA Kim, et al. 
+Figure 11: Travel distance by actuation cycle. The interface entered tangential sections of 90 degrees 45 degrees curved cylin-
+ders on the 19th and 17th cycles respectively. 
+hands are busy, the interface crawls down to the lower arm for 
+easier voice input. In this application we modify channels to enfold 
+an accelerometer for detecting the motion of both hands which 
+in turn triggers locomotion. We used an open-soure, miniaturized 
+portable compressor, FlowIO [57], to pressurize the actuators for 
+a wearable context. The FlowIO device is connected directly to 
+the actuators and is programmed to periodically infate them to 
+a predefned pressure, followed by subsequent exhaustion of the 
+air to produce the desired locomotion. While we demonstrate this 
+in the application of an everyday interaction, we envision it can 
+also be used widely for health and rehabilitation applications. Ow-
+ing to the channels that can be designed to enfold a wide range 
+of actuators and materials outside what is proposed in this paper, 
+materials such as shape memory alloy (SMA) can be integrated to 
+ofer additional functions such as compression. With the freedom 
+in channel design, one can confgure lateral channels in addition 
+to the longitudinal ones to enclose SMA along the circumference 
+of arm. The interface would climb up and down the arm to convey 
+compression on varying locations. 
+6.2 Industrial Applications 
+The programmability of the ground layer and scales afords the use 
+of diverse and unconventional materials for knitting. By knitting in 
+a strand of water soluble polyvinyl alcohol (PVA) thread to ground 
+layer, we can transform the substrate into an interface that pas-
+sively reacts to the moisture in the environment. We present an 
+application of a pipe-leakage monitoring and protection sleeve. The 
+interface can travel along the length of a pipe and reach inaccessible 
+regions, and when it gets exposed to water leaks, the PVA thread 
+Figure 12: KnitSkin, as a wearable interface carrying a mi-
+crophone, relocates to a suitable location on the arm when 
+answering a phone call. 
+dissolves and solidifes the entire substrate to stop the leak. By na-
+ture of PVA thread, the dissolution induces considerable shrinkage 
+of the substrate, resulting in a tight grip of the interface around the 
+leak location. As the interface dries it remains solid. The resulting 
+interface could serve as a temporary fx for a water leak without 
+requiring external sensing systems (Figure 13). 
+6.3 Agricultural Applications 
+We highlight how non-smooth surfaces aid locomotion for KnitSkin. 
+Complying with Filippov et al. [20] and the earlier test results from 
+Figure 7, we apply KnitSkin to surfaces with more conspicuous 
+texture. Bark-clad tree branches ofer not only an ideal condition 
+for locomotion but also a unique application space. Crawling up 
+vertical trunks and angled branches, KnitSkin can serve as a soft, 
+relocatable tree guard. KnitSkin could ofer a simplistic solution 
+KnitSkin: Machine-Knited Scaled Skin for Locomotion CHI ’22, April 29-May 5, 2022, New Orleans, LA, USA 
+Figure 13: The KnitSkin ground layer can be knitted with a 
+wide range of materials, including water soluble PV A yarn. 
+When KnitSkin travels along a pipe and becomes exposed to 
+water leaks, the PV A yarn dissolves and hardens as the yarn 
+dehydrates. The hardened surface of KnitSkin could form a 
+protective layer on the point of leakage. 
+Figure 14: By modifying channels into pockets for a portable 
+pesticide dispenser, KnitSkin can further work as an agricul-
+tural robot. 
+to common issues with existing plastic wraps, which leave a nasty 
+abrasion and can result in bark disease due to the excessive moisture 
+captured inside. The porous structure of knits lets air fow freely 
+through the substrate, while maneuvering with least damage to the 
+tree (Figure 14). Alternatively, the ground layer could be knitted 
+with insect repellent yarns [4] to protect young trees from insect 
+pests which can be harmful for the tree. If equipped with a portable 
+pesticide spray, KnitSkin could also serve as a minimally intrusive 
+pesticide dispenser that does not spread unneeded chemicals to 
+other trees. 
+7 DISCUSSION, LIMITATIONS, AND FUTURE 
+WORK 
+Evaluation. We demonstrated that KnitSkin’s efective locomo-
+tion strategy was compatible with various terrain characteristics 
+ranging from the surface materials, slope of terrain, and terrain cur-
+vature. In extending the evaluation, relations between locomotion 
+performance and other mechanical characteristics of individual 
+actuators and the fabric substrate could further be studied. This 
+could include, expressing travelled distance as a function of normal 
+force of the interface, or characterizing locomotion when actuators 
+undergo diferent actuation strains. In terms of evaluation, given 
+that it is designed as a single variate study, a multi-variate study 
+could more comprehensively explain the relations among the fac-
+tors. Finally, in contrast to the current manual approach of logging 
+travel distance, vision-based object recognition through OpenCV 
+could minimize error rate and provide more robust data. 
+Locomotion on diverse cylindrical surfaces. While KnitSkin 
+operates using inter-facial friction, which is similar to the mecha-
+nism proposed by Rafsanjani et al. [52], KnitSkin adds one more 
+crucial determinant for successful locomotion: a moderate amount 
+of normal force via a conformable knit substrate, which is deter-
+mined by the tightness of the interface. In evaluating performance, 
+our primary focus was to keep the diameter of terrain uniform 
+while having the perimeter circular to keep the two conditions 
+for locomotion—anisotrophic friction and normal force—consistent 
+throughout the traversal. However, as our applications and Supple-
+mental Material suggest, KnitSkin can absorb a moderate degree 
+of irregularities in a terrain. For example, KnitSkin can climb on a 
+cracked surface with rough textures such as tree trunk, as well as 
+moderately tapered terrains such as mannequin arm and human 
+forearm. For future work, further exploration of a helical terrain, 
+or terrains with more exaggerated bumps and depressions could 
+illuminate KnitSkin’s broader applicability. To accommodate more 
+challenging terrain geometries, KnitSkin should be designed with 
+a control system that can perceive the terrain ahead and let the 
+interface actively alter its structure. For example, KnitSkin could 
+eventually be equipped with IR sensors to detect a protrusion or 
+depression ahead. A closed-loop system, in which actuators com-
+municate through IMUs to control strain, actuation frequency and 
+exhaust/intake duration could enable locomotion against more 
+challenging terrains. Further, to realize localization of the interface, 
+acoustic beacons or odometry sensors coupled with an external 
+camera could be explored. 
+Miniaturization and improved portability. 
+For improved porta-
+bility which is especially important for wearable applications, the 
+compressor should be further miniaturized. With pressure above 30 
+psi to provide ideal strain, the existing portable compressors such 
+as FlowIO [57] or other miniature air pumps [15] are incapable 
+of providing sufcient pressure, compromising maneuverability. 
+Although KnitSkin still can actuate under a compromised level of 
+pressure, alternative actuators that can generate similar force and 
+strain in comparison to the current pleated actuators should be 
+investigated. 
+Limitations in current system. 
+KnitSkin is prone to failed per-
+formance in certain circumstances. Most importantly, due to the 
+nature of the friction mechanism, KnitSkin is incapable of changing 
+the direction of its motion during operation. It is also possible for 
+the actuation to be disrupted if the surface is characterized with 
+an excessively bumpy texture or sharp protrusions that could po-
+tentially catch or puncture the interface. It is also possible that 
+if KnitSkin were to crawl on a surface clad with fbers that are 
+aligned in a specifc direction, such as velvet or corduroy, its travel 
+distance may be afected by the direction of the fbers. Also, in 
+circumstances where the normal force of the interfaces changes 
+due to the inconsistency in the terrain diameter, performance is 
+likely to be compromised. In terms of the actuators, the rigidity of 
+the current actuators limits them from bending along the curvature 
+of a terrain could constrain locomotion on terrains with certain 
+angles. Lastly, challenges still remain in implementing KnitSkin 
+on a terrain in which either end is inaccessible. For instance, if 
+KnitSkin interface were to maneuver a tall lamp post, the interface 
+CHI ’22, April 29-May 5, 2022, New Orleans, LA, USA Kim, et al. 
+would frst have to be cut open and seamed later as it wouldn’t be 
+able to slide through the end that is out of reach. 
+8 CONCLUSION 
+We presented KnitSkin, a soft approach for generating locomotion 
+on cylindrical surfaces. We introduced the fabrication of a knitted 
+scaled skin, which consists of the ground layer, the scales which con-
+tribute to surface friction, and the channels for integrating actuators 
+for elongation. We defned the scales as the primary contributor to 
+the anisotropic friction of the substrate. We characterized geomet-
+ric and material parameters of the scales for realizing movement. 
+In evaluating locomotion, our experiments revealed the efect of 
+surface materials, the number of actuators, and terrain slope on 
+traveled distance. We also qualitatively inspected locomotion on 
+curved terrains. Drawing insights from the evaluation, we proposed 
+applications across diferent scales: wearable, industrial, and agri-
+cultural. Taking inspiration from nature, KnitSkin exemplifes the 
+versatility of machine knitting in creating a unique bio-inspired 
+substrate that enables underexplored locomotion technologies on 
+cylindrical terrains. 
+ACKNOWLEDGMENTS 
+This project was supported by a generous gift grant from Accen-
+ture Labs and the National Science Foundation under Grant# IIS-
+2047249. The authors would like to thank Andreea Danielescu, Ben 
+Greenspan, Aditi Maheshwari, Eric Gallo, and Taylor Tabb from 
+Accenture Labs for their insight and support, and members of the 
+Hybrid Body Lab for their suggestions and input. 
+REFERENCES 
+[1] Nathaniel Agharese, Tyler Cloyd, Laura H Blumenschein, Michael Raitor, Elliot W 
+Hawkes, Heather Culbertson, and Allison M Okamura. 2018. HapWRAP : Soft 
+Growing Wearable Haptic Device. (2018), 5466–5472. 
+[2] Nur Alhuda Hamdan, Adrian Wagner, Simon Voelker, Jürgen Steimle, and Jan 
+Borchers. 2019. Springlets: Expressive, fexible and silent on-skin tactile interfaces. 
+Conference on Human Factors in Computing Systems - Proceedings (2019). https: 
+//doi.org/10.1145/3290605.3300718 
+[3] Kellar Autumn and Nick Gravish. 2008. Gecko adhesion : evolutionary nanotech-
+nology. January (2008), 1575–1590. https://doi.org/10.1098/rsta.2007.2173 
+[4] bartlin1227@nantec.cn. [n.d.]. http://www.nantec.cn/eproducts_detail/id/9.html 
+[5] Holger F Bohn and Walter Federle. 2004. Insect aquaplaning : Nepenthes 
+pitcher plants capture prey with the peristome , a fully wettable water-lubricated 
+anisotropic surface. 101, 39 (2004). 
+[6] Jiawei Cao, Wenyu Liang, Qinyuan Ren, Ujjaval Gupta, Feifei Chen, and Jian 
+Zhu. 2018. Modelling and Control of a Novel Soft Crawling Robot based on a 
+Dielectric Elastomer Actuator. 1 (2018), 4188–4193. 
+[7] Guangchen Chen, Yuanyuan Liu, Ruiqing Fu, Jianwei Sun, Xinyu Wu, and Yang-
+sheng Xu. 2013. Rubbot: Rubbing on fexible loose surfaces. IEEE Interna-
+tional Conference on Intelligent Robots and Systems (2013), 2303–2308. https: 
+//doi.org/10.1109/IROS.2013.6696678 
+[8] Thomas P. Chenal, Jennifer C. Case, Jamie Paik, and Rebecca K. Kramer. 2014. 
+Variable stifness fabrics with embedded shape memory materials for wearable 
+applications. IEEE International Conference on Intelligent Robots and Systems Iros 
+(2014), 2827–2831. https://doi.org/10.1109/IROS.2014.6942950 
+[9] Youngkyung Choi, Myung Jin Kim, and Andrea Bianchi. 2020. BodyPrinter : 
+Fabricating Circuits Directly on the Skin at Arbitrary Locations Using a Wearable 
+Compact Plotter. (2020). 
+[10] Margaret M. Coad, Laura H. Blumenschein, Sadie Cutler, Javier A. Reyna Zepeda, 
+Nicholas D. Naclerio, Haitham El-Hussieny, Usman Mehmood, Jee Hwan Ryu, 
+Elliot W. Hawkes, and Allison M. Okamura. 2020. Vine Robots: Design, Teleopera-
+tion, and Deployment for Navigation and Exploration. IEEE Robotics and Automa-
+tion Magazine 27, 3 (2020), 120–132. https://doi.org/10.1109/MRA.2019.2947538 
+arXiv:1903.00069 
+[11] Fionnuala Connolly, Diana A Wagner, Conor J Walsh, and Katia Bertoldi. 2019. 
+Sew-free anisotropic textile composites for rapid design and manufacturing 
+of soft wearable robots. Extreme Mechanics Letters 27 (2019), 52–58. https: 
+//doi.org/10.1016/j.eml.2019.01.007 
+[12] Artem Dementyev, Javier Hernandez, Inrak Choi, Sean Follmer, and Joseph 
+Paradiso. 2018. Epidermal Robots: Wearable Sensors That Climb on the Skin. Pro-
+ceedings of the ACM on Interactive, Mobile, Wearable and Ubiquitous Technologies 
+2, 3 (2018), 1–22. https://doi.org/10.1145/3264912 
+[13] Artem Dementyev, Hsin Liu Cindy Kao, Inrak Choi, Deborah Ajilo, Maggie 
+Xu, Joseph A. Paradiso, Chris Schmandt, and Sean Follmer. 2016. Rovables: 
+Miniature on-body robots as mobile wearables. UIST 2016 - Proceedings of the 
+29th Annual Symposium on User Interface Software and Technology (2016), 111–120. 
+https://doi.org/10.1145/2984511.2984531 
+[14] David Dobbelstein, Evgeny Stemasov, Daniel Besserer, Irina Stenske, and Enrico 
+Rukzio. 2018. Movelet: a Self-Actuated Movable Bracelet for Positional Haptic 
+Feedback on the User’s Forearm. (2018), 33–39. https://doi.org/10.1145/3267242. 
+3267249 
+[15] Timothy Duggan, Logan Horowitz, Asena Ulug, Emilie Baker, and Kirstin Pe-
+tersen. 2019. Inchworm-inspired locomotion in untethered soft robots. Ro-
+boSoft 2019 - 2019 IEEE International Conference on Soft Robotics (2019), 200–205. 
+https://doi.org/10.1109/ROBOSOFT.2019.8722716 
+[16] Julia C. Duvall, Nicholas Schleif, Lucy E. Dunne, and Brad Holschuh. 2016. Active 
+"hugging" vest for deep touch pressure therapy. UbiComp 2016 Adjunct - Proceed-
+ings of the 2016 ACM International Joint Conference on Pervasive and Ubiquitous 
+Computing (2016), 458–463. https://doi.org/10.1145/2968219.2971344 
+[17] A. K. Dąbrowska, G.-M. Rotaru, S. Derler, F. Spano, M. Camenzind, S. 
+Annaheim, R. Stämpfi, M. Schmid, and R. M. Rossi. 2016. Materi-
+als used to simulate physical properties of human skin. Skin Research 
+and Technology 22, 1 (2016), 3–14. https://doi.org/10.1111/srt.12235 
+arXiv:https://onlinelibrary.wiley.com/doi/pdf/10.1111/srt.12235 
+[18] Manuela Farinosi and Leopoldina Fortunati. 2018. Knitting Feminist Politics : 
+Exploring a Performance in a Postdisaster City. (2018). https://doi.org/10.1177/ 
+0196859917753419 
+[19] Feeldesain. [n.d.]. Yarn bombing movement art. https://www.feeldesain.com/ 
+yarn-bombing-movement-art.html 
+[20] Alexander Filippov and Stanislav N Gorb. 2013. Frictional-anisotropy-based 
+systems in biology: structural diversity and numerical model. (2013), 1–6. https: 
+//doi.org/10.1038/srep01240 
+[21] Cyril Foiret. 2011. Suzanne Tidwell Knitted Trees. https://trendland.com/ 
+suzanne-tidwell-knitted-trees/ 
+[22] Esther Foo, Justin Baker, Crystal Compton, and Brad Holschuh. 2020. Soft robotic 
+compression garment to assist novice meditators. Conference on Human Factors 
+in Computing Systems - Proceedings (2020), 1–8. https://doi.org/10.1145/3334480. 
+3382919 
+[23] Esther W Foo, J Walter Lee, Simon Ozbek, Crystal Compton, and Brad Holschuh. 
+2019. Iterative design and development of remotely-controllable, dynamic com-
+pression garment for novel haptic experiences. In Proceedings of the 23rd Interna-
+tional Symposium on Wearable Computers. ACM, 267–273. 
+[24] Peng Geng, Jia Liu, Xinyu Wu, and Wei Feng. 2018. Clothbot β : Dynamical 
+Grasping and Climbing on Soft Cloth. (2018), 13–20. 
+[25] Gabriel Goldman and Dennis Hong. 2008. Considerations for fnding the optimal 
+design parameters for a novel pole climbing robot. Proceedings of the ASME 
+Design Engineering Technical Conference 2, PARTS A AND B (2008), 859–866. 
+https://doi.org/10.1115/DETC2008-49562 
+[26] Rachael Granberry, Julia Duvall, Lucy E. Dunne, and Bradley Holschuh. 2017. 
+An analysis of anthropometric geometric variability of the lower leg for the 
+ft & function of advanced functional garments. Proceedings - International 
+Symposium on Wearable Computers, ISWC Part F130534 (2017), 10–17. https: 
+//doi.org/10.1145/3123021.3123034 
+[27] Rachael Granberry, Kevin Eschen, Brad Holschuh, and Julianna Abel. 2019. Func-
+tionally Graded Knitted Actuators with NiTi-Based Shape Memory Alloys for 
+Topographically Self-Fitting Wearables. Advanced Materials Technologies 4, 11 
+(2019), 1900548. 
+[28] Joseph D. Greer, Tania K. Morimoto, Allison M. Okamura, and Elliot W. Hawkes. 
+2017. Series pneumatic artifcial muscles (sPAMs) and application to a soft 
+continuum robot. Proceedings - IEEE International Conference on Robotics and 
+Automation (2017), 5503–5510. https://doi.org/10.1109/ICRA.2017.7989648 
+[29] Aakar Gupta, Antony Albert Raj Irudayaraj, and Ravin Balakrishnan. 2017. Hap-
+ticClench: Investigating squeeze sensations using memory alloys. UIST 2017 -
+Proceedings of the 30th Annual ACM Symposium on User Interface Software and 
+Technology (2017), 109–117. https://doi.org/10.1145/3126594.3126598 
+[30] Elliot W. Hawkes, Laura H. Blumenschein, Joseph D. Greer, and Allison M. Oka-
+mura. 2017. A soft robot that navigates its environment through growth. Science 
+Robotics 2, 8 (2017), 1–8. https://doi.org/10.1126/scirobotics.aan3028 
+[31] Jinlian Hu, Mohammad Irfan Iqbal, and Fengxin Sun. 2020. Wool Can Be Cool: 
+Water-Actuating Woolen Knitwear for Both Hot and Cold. Advanced Functional 
+Materials 2005033 (2020), 1–9. https://doi.org/10.1002/adfm.202005033 
+[32] Kaushik Jayaram and Robert J. Full. 2016. Cockroaches traverse crevices, crawl 
+rapidly in confned spaces, and inspire a soft, legged robot. Proceedings of the 
+National Academy of Sciences of the United States of America 113, 8 (2016), E950– 
+E957. https://doi.org/10.1073/pnas.1514591113 
+KnitSkin: Machine-Knited Scaled Skin for Locomotion 
+[33] Hsin Liu Kao, Deborah Ajilo, Oksana Anilionyte, Artem Dementyev, Inrak Choi, 
+Sean Follmer, and Chris Schmandt. 2017. Exploring interactions and perceptions 
+of kinetic wearables. DIS 2017 - Proceedings of the 2017 ACM Conference on 
+Designing Interactive Systems (2017), 391–396. https://doi.org/10.1145/3064663. 
+3064686 
+[34] Jin Hee (Heather) Kim, Simone White, Melissa Conroy, and Hsin-liu Cindy Kao. 
+2021. KnitDermis : Fabricating Tactile On-Body Interfaces Through Machine 
+Knitting. 2021 (2021), 1183–1200. 
+[35] Sangbae Kim, Matthew Spenko, Salomon Trujillo, Barrett Heyneman, Daniel 
+Santos, and Mark R. Cutkoskly. 2008. Smooth vertical surface climbing with 
+directional adhesion. IEEE Transactions on Robotics 24, 1 (2008), 65–74. https: 
+//doi.org/10.1109/TRO.2007.909786 
+[36] Tin Lun Lam and Yangsheng Xu. 2011. A fexible tree climbing robot: Treebot 
+- Design and implementation. Proceedings - IEEE International Conference on 
+Robotics and Automation (2011), 5849–5854. https://doi.org/10.1109/ICRA.2011. 
+5979833 
+[37] Mathieu Le Goc, Lawrence H Kim, Ali Parsaei, Jean-Daniel Fekete, Pierre Drag-
+icevic, and Sean Follmer. 2016. Zooids: Building blocks for swarm user interfaces. 
+In Proceedings of the 29th Annual Symposium on User Interface Software and 
+Technology. 97–109. 
+[38] Jason Lin, Jasmine Zhou, and Helen Koo. 2015. Enfold: Clothing for people 
+with cerebral palsy. UbiComp and ISWC 2015 - Proceedings of the 2015 ACM 
+International Joint Conference on Pervasive and Ubiquitous Computing and the 
+Proceedings of the 2015 ACM International Symposium on Wearable Computers 
+(2015), 563–566. https://doi.org/10.1145/2800835.2801671 
+[39] Yuanyuan Liu, Xinyu Wu, Huihuan Qian, Duan Zheng, Jianquan Sun, and Yang-
+sheng Xu. 2012. System and design of Clothbot: A robot for fexible clothes 
+climbing. Proceedings - IEEE International Conference on Robotics and Automation 
+(2012), 1200–1205. https://doi.org/10.1109/ICRA.2012.6224620 
+[40] Soichiro Matsuda and Hiroshi Matsui. 2020. HandMorph : a Passive Exoskeleton 
+that Miniaturizes Grasp. (2020). 
+[41] Moritz A Messerschmidt and Denys J C Matthies. 2021. ClothTiles : A Prototyping 
+Platform to Fabricate Customized Actuators on Clothing using 3D Printing and 
+Shape-Memory Alloys. (2021). 
+[42] Michael P. Murphy and Metin Sitti. 2007. Waalbot: An agile small-scale wall-
+climbing robot utilizing dry elastomer adhesives. IEEE/ASME Transactions on 
+Mechatronics 12, 3 (2007), 330–338. https://doi.org/10.1109/TMECH.2007.897277 
+[43] Sara Nabil, Jan Kučera, Nikoletta Karastathi, David S. Kirk, and Peter Wright. 
+2019. Seamless seams: Crafting techniques for embedding fabrics with interactive 
+actuation. DIS 2019 - Proceedings of the 2019 ACM Designing Interactive Systems 
+Conference (2019), 987–999. https://doi.org/10.1145/3322276.3322369 
+[44] John Nassour and Fred Hamker. 2019. Enfolded Textile Actuator for Soft Wearable 
+Robots. (2019), 17–19. 
+[45] Rainier Natividad, Tiana Miller-jackson, and Raye Chen-hua Yeow. 2018. The 
+Exosleeve : A Soft Robotic Exoskeleton for Assisting in Activities. July (2018), 
+2–4. https://doi.org/10.13140/RG.2.2.27532.41606 
+[46] Pham H Nguyen, Student Member, and Francisco Lopez-arellano. 2019. Design 
+, Characterization , and Mechanical Programming of Fabric-Reinforced Textile 
+Actuators for a Soft Robotic Hand. (2019), 8312–8317. 
+[47] Pham Huy Nguyen and Wenlong Zhang. 2020. Design and Computational 
+Modeling of Fabric Soft Pneumatic Actuators for Wearable Assistive Devices. 
+Scientifc Reports 10, 1 (2020), 1–13. https://doi.org/10.1038/s41598-020-65003-2 
+[48] A Townsend L Pagani and P J Scott L Blunt. 2019. Introduction of a Surface 
+Characterization Parameter Sdr prime for Analysis of Re - entrant Features. 
+Journal of Nondestructive Evaluation 38, 2 (2019), 1–10. https://doi.org/10.1007/ 
+s10921-019-0573-x 
+[49] Se-Hun Park, Jaehyun Yi, DongWook Kim, Youngbin Lee, Helen Sumin Koo, and 
+Yong-Lae Park. 2019. A Lightweight, Soft Wearable Sleeve for Rehabilitation of 
+Forearm Pronation and Supination. In 2019 2nd IEEE International Conference 
+on Soft Robotics (RoboSoft). 636–641. https://doi.org/10.1109/ROBOSOFT.2019. 
+8722783 
+[50] Aaron Parness, Mathew Frost, Nitish Thatte, Jonathan P. King, Kevin 
+Witkoe, Moises Nevarez, Michael Garrett, Hrand Aghazarian, and 
+Brett Kennedy. 2013. Gravity-independent Rock-climbing Robot and 
+a Sample Acquisition Tool with Microspine Grippers. Journal of 
+Field Robotics 30, 6 (2013), 897–915. https://doi.org/10.1002/rob.21476 
+arXiv:https://onlinelibrary.wiley.com/doi/pdf/10.1002/rob.21476 
+[51] Roger D. Quinn, Alexander Boxerbaum, Luther Palmer, Hillel Chiel, Eric Diller, 
+Alexander Hunt, and Richard Bachmann. 2011. Novel locomotion via biological 
+inspiration. Unmanned Systems Technology XIII 8045, May 2011 (2011), 804511. 
+https://doi.org/10.1117/12.886413 
+CHI ’22, April 29-May 5, 2022, New Orleans, LA, USA 
+[52] Ahmad Rafsanjani, Yuerou Zhang, Bangyuan Liu, Shmuel M. Rubinstein, and 
+Katia Bertoldi. 2018. Kirigami skins make a simple soft actuator crawl. Science 
+Robotics 3, 15 (2018), 1–8. https://doi.org/10.1126/scirobotics.aar7555 
+[53] Jonathan Realmuto and Terence Sanger. 2019. A robotic forearm orthosis using 
+soft fabric-based helical actuators. In 2019 2nd IEEE International Conference 
+on Soft Robotics (RoboSoft). 591–596. https://doi.org/10.1109/ROBOSOFT.2019. 
+8722759 
+[54] Michael L Rivera and Scott E Hudson. 2020. Hydrogel-Textile Composites : 
+Actuators for Shape-Changing Interfaces. (2020), 1–9. 
+[55] Jane Scott. 2013. Hierarchy in knitted forms: Environmentally responsive textiles 
+for architecture. ACADIA 2013: Adaptive Architecture - Proceedings of the 33rd 
+Annual Conference of the Association for Computer Aided Design in Architecture 
+(2013), 361–366. 
+[56] Jane Scott. 2018. Responsive Knit: the evolution of a programmable material 
+system. DRS2018: Catalyst 4 (2018). https://doi.org/10.21606/drs.2018.566 
+[57] Ali Shtarbanov. [n.d.]. FlowIO Development Platform – the Pneumatic “ Rasp-
+berry Pi ” for Sof Robotics. ([n. d.]). 
+[58] Cole S Simpson, Allison M Okamura, and Elliot W Hawkes. 2018. Exomuscle : 
+An infatable device for shoulder abduction support. May 2017 (2018). https: 
+//doi.org/10.1109/ICRA.2017.7989785 
+[59] Saivimal Sridar, Student Member, Pham H Nguyen, Student Member, Mengjia Zhu, 
+Student Member, Quoc P Lam, and Panagiotis Polygerinos. 2017. Development 
+of a Soft-Infatable Exosuit for Knee Rehabilitation. (2017), 3722–3727. 
+[60] George K. Stylios and Taoyu Wan. 2007. Shape memory training for smart fabrics. 
+Transactions of the Institute of Measurement & Control 29, 3-4 (2007), 321–336. 
+https://doi.org/10.1177/0142331207069479 
+[61] Ruojia Sun, Ryosuke Onese, Margaret Dunne, Andrea Ling, Amanda Denham, 
+and Hsin-Liu (Cindy) Kao. 2020. Weaving a Second Skin: Exploring Opportunities 
+for Crafting On-Skin Interfaces Through Weaving. In Proceedings of the 2020 
+ACM Conference on Designing Interactive Systems (Eindhoven, The Netherlands) 
+(DIS ’20). ACM. 
+[62] Ryo Suzuki, Clement Zheng, Yasuaki Kakehi, Tom Yeh, Ellen Yi-Luen Do, Mark D 
+Gross, and Daniel Leithinger. 2019. Shapebots: Shape-changing swarm robots. In 
+Proceedings of the 32nd Annual ACM Symposium on User Interface Software and 
+Technology. 493–505. 
+[63] Yichao Tang, Qiuting Zhang, Gaojian Lin, and Jie Yin. 2018. Switchable Adhesion 
+Actuator for Amphibious. 5, 5 (2018), 592–600. https://doi.org/10.1089/soro.2017. 
+0133 
+[64] T Umedachi, V Vikas, and B A Trimmer. 2016. Softworms : the design and control 
+of non- pneumatic , 3D-printed , deformable robots Softworms : the design and 
+control of non-pneumatic , 3D-printed , deformable robots. (2016). 
+[65] Alenka Šalej Lah, Peter Fajfar, Goran Kugler, and Tatjana Rijavec. 2019. A NiTi 
+alloy weft knitted fabric for smart frefghting clothing. Smart Materials and 
+Structures 28, 6 (2019). https://doi.org/10.1088/1361-665X/ab18b9 
+[66] Zhongkui Wang, Takao Hirata, Takanori Sato, Tomoharu Mori, Masaru 
+Kawakami, and Hidemitsu Furukawa. 2021. A Soft Robotic Hand Based on 
+Bellows Actuators for Dishwashing Automation. 6, 2 (2021), 2139–2146. 
+[67] Michael B Wooten and Ian D Walker. 2015. A Novel Vine-Like Robot for In-Orbit 
+Inspection. International Conference on Environmental Systems July (2015), 1–11. 
+[68] Michael B. Wooten and Ian D. Walker. 2018. Vine-inspired continuum ten-
+dril robots and circumnutations. Robotics 7, 3 (2018). https://doi.org/10.3390/ 
+robotics7030058 
+[69] Weibin Wu, Shudong Yu, Paul Schreiber, Antje Dollmann, and Christian Lutz. 
+2020. Variation of the frictional anisotropy on ventral scales of snakes caused by 
+nanoscale steps PAPER Variation of the frictional anisotropy on ventral scales of 
+snakes caused by nanoscale steps. (2020). 
+[70] Lining Yao, Jifei Ou, Chin-yi Cheng, Helene Steiner, Wen Wang, Guanyun Wang, 
+and Hiroshi Ishii. 2015. bioLogic : Natto Cells as Nano actuators for Shape 
+Changing Interfaces. (2015), 1–10. 
+[71] Yu Yoshida and Shugen Ma. 2010. Design of a wall-climbing robot with passive 
+suction cups. 2010 IEEE International Conference on Robotics and Biomimetics, 
+ROBIO 2010 (2010), 1513–1518. https://doi.org/10.1109/ROBIO.2010.5723554 
+[72] Xudong Yu. [n.d.]. Development of Upper-limb Wearable Exoskeleton Robot. 
+([n. d.]), 434–439. 
+[73] Michelle Yuen, Arun Cherian, Jennifer C. Case, Justin Seipel, and Rebecca K. 
+Kramer. 2014. Conformable actuation and sensing with robotic fabric. IEEE 
+International Conference on Intelligent Robots and Systems Iros (2014), 580–586. 
+https://doi.org/10.1109/IROS.2014.6942618 
+[74] Michelle C. Yuen, R. Adam Bilodeau, and Rebecca K. Kramer. 2016. Active Variable 
+Stifness Fibers for Multifunctional Robotic Fabrics. IEEE Robotics and Automation 
+Letters 1, 2 (2016), 708–715. https://doi.org/10.1109/LRA.2016.2519609 

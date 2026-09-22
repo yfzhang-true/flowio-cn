@@ -1,0 +1,765 @@
+466 IEEE ROBOTICS AND AUTOMATION LETTERS, VOL. 11, NO. 1, JANUARY 2026
+Fluidic Control of Untethered Underwater
+Soft Robots
+Allyson E. Chen , Iman Adibnazari , George Nakoud, Giovanni Torres,
+and Michael T. Tolley , Senior Member , IEEE
+Abstract—Soft robots offer considerable advantages relative to
+traditional, rigid robots, including: versatility, safety, and rich
+dynamic behavior . A common approach for actuating soft robots
+is to use pumps and valves to control pressures and ﬂow rates
+through ﬂuidic channels embedded in a soft material, to cause
+desired deformations. Usually, an electronic control board carries
+the pumps, valves, and other components to control this ﬂuid ﬂow.
+Currently, many existing hydraulic control systems are designed
+with application-speciﬁc performance requirements, forcing re-
+searchers to either invest substantial time and effort into developing
+custom hardware or constrain their soft robotic systems to the
+limitations of available control platforms. To address these issues,
+we present an approach to controlling soft robots underwater
+that can be achieved with a compact, hydraulic control system.
+We demonstrate this approach with hardware design housed in
+a 3D-printable enclosure that is water-resistant up to 1 m for
+30 min. The system features three independently controlled pumps,
+each capable of reversible actuation, with a combined maximum
+pressure of 0.9 MPa and a maximum ﬂow rate of 3.6 L/min.
+Additionally, we present an approach to ﬂow sensing using onboard
+RPM sensors, which avoids adding impedance to the ﬂuid channels
+and, when combined with our direct pump drive approach, enables
+precise and simultaneous control of multiple soft actuators. This
+system offers an accessible platform to accelerate the development
+of future underwater soft robots.
+Index Terms —Soft robot applications, modeling, control, and
+learning for soft robots, soft sensors and actuators.
+I. I NTRODUCTION
+S
+OFT roboticists take inspiration from nature to design
+robots with compliant materials, leveraging embodied in-
+telligence to enhance various performance metrics (e.g., robust-
+ness, safety, efﬁciency). In particular, new robot designs are
+Received 12 July 2025; accepted 22 October 2025. Date of publication 13
+November 2025; date of current version 24 November 2025. This article was
+recommended for publication by Associate Editor J. Qu and Editor B. Mazzolai
+upon evaluation of the reviewers’ comments. This work was supported in part by
+the National Science Foundation Graduate Research Fellowship Program under
+Grant DGE-2038238 and in part by the Ofﬁce of Naval Research under Grant
+N00014-22-1-2595. (Corresponding author: Michael T. Tolley.)
+Allyson E. Chen, Iman Adibnazari, George Nakoud, and Giovanni Torres
+are with the Department of Mechanical and Aerospace Engineering, University
+of California, San Diego, CA 92093 USA (e-mail: aechen@ucsd.edu; iadibnaz
+@ucsd.edu; gnakoud@ucsd.edu; gitorres@ucsd.edu).
+Michael T. Tolley is with the Department of Mechanical and Aerospace
+Engineering, University of California, San Diego, CA 92093 USA, and also
+with the Materials Science and Engineering Program, University of California,
+San Diego, CA 92093 USA (e-mail: tolley@ucsd.edu).
+This article has supplementary downloadable material available at
+https://doi.org/10.1109/LRA.2025.3632714, provided by the authors.
+Digital Object Identiﬁer 10.1109/LRA.2025.3632714
+needed for underwater environments, for various applications
+including search-and-rescue [1], archaeology [2], deep-sea ex-
+ploration [3], and mitigating the impacts of climate change [4].
+Fortunately, there are nearly 1 million marine species to draw
+inspiration from [5], most of which have evolved adaptations
+that leverage varying material properties to achieve their goals.
+Among these adaptations, locomotion strategies stand out as key
+examples of how marine species interact with their environment
+to achieve efﬁcient movement. The most well-known method of
+movement leverages interactions between a soft body and the
+surrounding ﬂuid (e.g., between the bodies of ﬁsh and ocean
+water). Alternatively, some marine species, such as starﬁsh and
+sea cucumbers, use internal ﬂuid to transmit muscle actuation
+to their soft limbs to move across the ocean ﬂoor. Although the
+latter is not the most common actuation mode in marine species,
+for soft robots, this represents a versatile method of actuation
+that allows for fast motion and large displacements [6], [7].
+To implement bioinspired locomotion strategies in under-
+water environments, effective actuation methods are essential.
+While pneumatic systems are commonly used in soft robotics,
+they use air which is compressible, and can thus introduce
+unwanted buoyancy changes underwater, complicating control.
+In contrast, hydraulic actuation with incompressible liquids is
+better suited for underwater environments due to its more stable
+and efﬁcient force transmission [8].
+Hydraulic actuation offers advantages for underwater soft
+robots, but requires signiﬁcant design consideration for effective
+operation. Currently, hydraulic control systems for soft robots
+vary in design, ranging from tethered systems [9], [10] to un-
+tethered, application-speciﬁc systems[11], [12], [13], [14], [15],
+[16], [17]. Tethered systems typically consist of one pump and
+a set of valves connected through a long tether. These systems
+can be designed with extreme pressure and ﬂow rates that far
+exceed the system requirements and facilitate quick testing but
+introduce delays, pressure losses, and mobility restrictions as
+tether length increases [18].
+Untethered systems can overcome these limitations, but are
+often labor-intensive to design and lack the modularity necessary
+for general-purpose application [14]. Furthermore, although
+some untethered systems can meet the pressure and frequency
+requirements of many soft robots, they are typically limited to
+use cases requiring lower ﬂow rates [19].
+As such, there is currently no readily available untethered
+hydraulic control system that meets the pressure, ﬂow rate, and
+input requirements common to many soft robotic platforms.
+2377-3766 © 2025 IEEE. All rights reserved, including rights for text and data mining, and training of artiﬁcial intelligence and similar technologi es.
+Personal use is permitted, but republication/redistribution requires IEEE permission. See https://www.ieee.org/publications/rights/index. html for more information.
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 01:54:14 UTC from IEEE Xplore.  Restrictions apply. 
+CHEN et al.: FLUIDIC CONTROL OF UNTETHERED UNDERW A TER SOFT ROBOTS 467
+Fig. 1. General-use hydraulic control system for untethered operation of
+underwater soft robots. (a) Key components for ﬂuidic actuation. A power source
+provides electrical power (red line) to a ﬂuidic source, microcontroller, and
+sensors. The microcontroller sends data (green line) as control signals to the
+ﬂuidic source (pump). The microcontroller may also receive data (green lines)
+from the sensor readings from the (1) the ﬂuidic source (e.g. pressure or ﬂow
+sensors), (2) the soft actuator (e.g. using bend sensors), or both for closed-loop
+control. Finally, the ﬂuidic source pressurizes soft actuators with ﬂuid (blue line).
+(b) The control system uses a direct pump drive design to generate a wide range of
+pressures and ﬂow rates suitable for soft robot control underwater. (c) The system
+contains all necessary components to support a broad range of underwater soft
+robots, including the following capabilities: untethered operation, water resistant
+up to 1 m, and wireless communication to receive commands (d).
+This notable lack of general-purpose tools prompts researchers
+to repeatedly invest substantial time and effort in designing
+and fabricating custom-made control systems tailored to their
+speciﬁc requirements, diverting resources away from their pri-
+mary research objectives. Prior efforts in developing open-
+source, general-purpose pneumatic control systems and making
+them publicly available [20], [21] have signiﬁcantly increased
+the speed and accessibility of research efforts in soft robotics
+that require the use of pneumatic actuation [22]. However, no
+equivalent tools yet exist for hydraulically actuated soft robotic
+systems.
+In this work, we address this knowledge gap with an approach
+to controlling underwater soft robots that can be achieved with
+a compact and general-use hydraulic control system (Fig. 1(b)).
+The system includes three independently controlled pumps
+housed within a sealed enclosure, along with onboard sensors
+for ﬂow monitoring. It is designed to deliver a range of pressures
+and ﬂow rates sufﬁcient for common soft robot applications
+(Fig. 2). The system enables simultaneous control of multiple
+actuators and is intended to be adaptable to a variety of soft
+robotic platforms.
+Our primary contributions in this work include (i) an approach
+to the design and fabrication of an open-source, general-purpose
+hydraulic control system with speciﬁcations suitable for a broad
+Fig. 2. Pressure and ﬂow requirements of underwater soft robots. Underwater
+soft robots can be organized into three main categories: robots primarily focused
+on swimming (pink, [11]*, [23], [24]), walking (blue, [13], [15]), or gripping
+(green, [25], [26]). Pressure and ﬂow requirements of a single actuator in
+previous underwater soft robots are estimated based on reported values. Outlined
+triangles represent performance ranges of general-use control systems (systems
+described in previous work are colored in yellow [14], and blue [19], while our
+proposed system is colored in red). *Note: the ﬂow rate and pressure for [11]
+were derived using [27], [28].
+TABLE I
+CONTROL SYSTEM SPECIFICA TIONS
+range of soft robots, (ii) experimental characterization of our
+hydraulic control system in isolation and when driving a repre-
+sentative soft actuator underwater, (iii) non-invasive closed-loop
+control of dispensed ﬂuid volumes and ﬂow rates, and (iv) a
+demonstration of the general-use hydraulic control system to
+actuate an underwater soft robot.
+II. D
+ESIGN OF A GENERAL-PURPOSE HYDRAULIC CONTROL
+SYSTEM FOR SOFT ROBOTS
+To develop a general-purpose hydraulic control system for
+untethered operation of underwater soft robots, we aimed to
+satisfy the performance requirements posed by existing systems.
+To this end, we conducted a review of existing underwater soft
+robots reported in the literature to identify a set of necessary
+requirements for our general-use hydraulic control system. In
+this section, we discuss those requirements along with the design
+and fabrication of the system developed to satisfy them, and
+we provide a concise summary of the resulting control system
+speciﬁcations (Table I).
+A. General System Requirements
+Hydraulic control systems for soft actuators rely on several
+core components to enable effective ﬂuidic actuation (Fig.1(a)).
+Together, these components support the generation, regulation,
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 01:54:14 UTC from IEEE Xplore.  Restrictions apply. 
+468 IEEE ROBOTICS AND AUTOMATION LETTERS, VOL. 11, NO. 1, JANUARY 2026
+and monitoring of pressurized ﬂuid necessary for controlled
+actuation.
+To inform the design of our hydraulic control system, we
+surveyed existing underwater soft robots to identify common
+performance requirements for a single actuator, speciﬁcally
+pressure and ﬂow rate. We focused on systems that directly re-
+ported these metrics or provided sufﬁcient data to estimate them
+(e.g., actuation frequency and ﬂuid displacement to estimate
+ﬂow rates). From this survey, we identiﬁed a maximum pressure
+requirement of 345 kPa and a peak ﬂow rate of 1.6 L/min
+per actuator (Fig. 2). These ﬁndings served as practical design
+targets for the development of broadly applicable hydraulic
+control systems.
+B. Pump Selection and Evaluation
+Guided by the general system requirements, we evaluated sev-
+eral pump types used in ﬂuidic control for soft robots, including
+micro gear pumps, piston pumps, diaphragm pumps, centrifugal
+pumps, and peristaltic pumps [29].
+To support independent control of multiple actuators while
+minimizing mechanical complexity, we adopted a direct pump
+drive (DPD) design [13], [14]. This design eliminated the need
+for complex valving by assigning a dedicated and reversible
+pump to each ﬂuidic channel, enabling precise control of pres-
+sures and ﬂows in that channel. This DPD design reduced hard-
+ware complexity while improving responsiveness and scalability
+for multi-actuator systems.
+Informed by the DPD approach and system requirements,
+we assessed pump types based on reversibility, size, pressure
+and ﬂow rate capabilities, and submersibility. Among these,
+micro gear pumps emerged as the most suitable option, offering
+a compact form factor, bidirectional ﬂow, and the ability to
+generate pressures suitable for typical soft robotic actuation
+while maintaining moderate ﬂow rates [27]. In considering
+both performance characteristics and accessibility of available
+options for gear pumps, we selected commercially available gear
+pumps (speciﬁcally, MGD1000F-PK-V , TCS), which are fully
+submersible, reversible, and meet the critical pressure and ﬂow
+speciﬁcations deﬁned in our system requirements (Fig. 2). The
+pumps deliver peak pressures of up to 0.9 MPa
+1 and ﬂow rates
+of up to 1.2 L/min.
+C. Control System Electronics and Hardware
+To control our system, we developed a custom control board
+integrating all necessary electronic components for pump con-
+trol, power management, and sensing. The board included a cus-
+tom printed circuit board (PCB), a microcontroller (Nano Esp32,
+Arduino), a battery (3S Lipo 11.1 V 120 C 1500mAh, Ovonic),
+a sensorless electronic speed controller (ESC) (Bidirectional
+40 A Brushless ESC 2-6 s UBEC 3 A 5 V , Readytosky), and
+an RPM sensor (#HW A86060041, Hobbywing). The selected
+pumps were driven by brushless DC motors, which required
+sensorless ESCs for operation. Our custom PCB featured a
+1The reported pressure is based on the pump manufacturer’s datasheet and
+was not experimentally veriﬁed in this study.
+ﬁne-adjust step-up voltage regulator (#2890, Polou), capable of
+regulating the output voltage between 4.5 V and 20 V , enabling
+ampliﬁcation or reduction of the battery voltage supplied to the
+pumps. It also housed the microcontroller, which facilitated data
+processing and control signal generation for the ESCs that drove
+the motors in the pumps. Two onboard LED indicators signaled
+the board’s operational status: one for the output voltage and
+another for the 5 V supply to the Arduino.
+In addition to enabling pump control, the board also incor-
+porated sensing capabilities to support closed-loop operation
+of the pumps. We integrated RPM sensors to monitor motor
+speed, providing real-time feedback for each pump. This sensing
+approach enabled estimation of the ﬂow rate without introducing
+additional impedance to the ﬂuidic channels, as would have been
+the case with in-line ﬂow sensors.
+To achieve independent control of multiple ﬂuidic channels,
+our control system used three pumps, each controlled by an
+individual ESC and monitored with a dedicated RPM sensor.
+This conﬁguration enabled the control system to drive up to three
+independently controlled ﬂuidic channels, allowing actuation of
+multiple components in a given soft robotic system.
+D. Custom Enclosure Design and Manufacturing
+We designed and manufactured a custom enclosure for our
+electronics. Although various commercial enclosures are avail-
+able, they imposed limitations on size and required careful mod-
+iﬁcation to appropriately house all of the necessary components
+while remaining waterproof. Therefore, we designed a cus-
+tom, 3D-printed enclosure to minimize size, accommodate all
+necessary control system components, and support modularity,
+allowing the system to expand its number of independent control
+inputs in increments of three through the integration of additional
+modules. We designed the enclosure to be compatible with most
+consumer 3D printers and to require minimal post-processing.
+Our design focused on creating a waterproof enclosure with
+the capacity for modularity. We designed the enclosure to with-
+stand submersion up to 1 m for 30 min (as required by the
+X7 water International Protection standard), while allowing
+the enclosure to be connected to additional modules. To ad-
+dress potential failure points including the case material, the
+gasket, and the electronic connection points, we implemented
+targeted waterprooﬁng solutions. We 3D printed the case us-
+ing polylactic acid (PLA) and internally coated it with a thin
+layer of epoxy (#50240, J-B Weld), which provided a more
+uniform seal than an external coating of rubberized sealant
+spray, especially given the enclosure’s complex geometry. For a
+watertight yet accessible seal, we used a nitrile butadiene rubber
+(NBR) X-ring gasket (#90025K616, McMaster-Carr, Fig. 1(c)).
+Alternative options such as NBR O-rings, ethylene propylene
+diene monomer (EPDM) O-rings, and Viton X-rings also proved
+effective, but were signiﬁcantly more expensive or required more
+careful installation to prevent leaks. For an effective face seal,
+we targeted a compression ratio of 25-30% [30], ultimately
+achieving a 28% compression ratio maintained through latches
+along the enclosure edges and fasteners at the corners. We used
+potted cable penetrators (#BR-100991, Blue Robotics) to enable
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 01:54:14 UTC from IEEE Xplore.  Restrictions apply. 
+CHEN et al.: FLUIDIC CONTROL OF UNTETHERED UNDERW A TER SOFT ROBOTS 469
+external pump operation while keeping internal electronics dry
+(Fig. 1(c)). The enclosure featured a rectangular form factor
+to facilitate connection with additional modules, allowing for
+potential scalability.
+Internally, the enclosure included a single 3D-printed mount-
+ing plate that secured all electronic components in place
+(Fig. 1(c)). This removable plate simpliﬁed system maintenance
+by allowing quick access for microcontroller reprogramming
+and battery replacement.
+III. C HARACTERIZA TION OFPUMP AND ACTUA TOR
+PERFORMANCE USING RPM SENSOR DATA
+A. Robot Platform and Actuator Selection
+To evaluate our hydraulic control system, we selected a pre-
+viously developed soft quadruped robot with four 3D-printed
+soft legs, each comprised of three bellows actuators connected
+in parallel [31]. Each bellows actuator required an independent
+ﬂuidic input to enable controlled circular motion [32], which
+must be coordinated across the four legs to drive the robot
+forward (see [31] for detailed force and bending characterization
+of the actuator). Our control system provided three independent
+inputs, making it suited for operating one actuator and scaling up
+to all four actuators in coordinated gait control. We selected this
+platform to demonstrate our hydraulic control system’s capacity
+for multi-actuator coordination and to conduct single-actuator
+characterization experiments, evaluating control accuracy under
+various conditions. Through our analyses, we assessed both the
+untethered performance of the control system and its effective-
+ness in driving soft actuators within a robot.
+B. Pump and RPM Sensor Characterization for Non-Intrusive
+Flow Estimation
+We characterized the selected pumps using an in-line ﬂow
+sensor and an RPM sensor. The ﬂow sensor provided accu-
+rate readings when unloaded, but its low resolution limited
+effectiveness under load. Higher-resolution alternatives were
+cost-prohibitive and still required being placed in-line with each
+ﬂuid channel, adding impedance and signiﬁcantly increasing the
+footprint of the system. To address these limitations, we selected
+a compact, cost-effective RPM sensor to estimate the pump’s
+rotational velocity during operation.
+This RPM sensor offered several advantages. Unlike a ﬂow
+sensor, which must be placed in-line with the pump output and
+can introduce additional impedance to the channel, the RPM
+sensor monitors back-EMF voltages generated by the pump as it
+spins and has a much smaller (often negligible) impact compared
+to adding ﬂuidic sensors. Additionally, the RPM sensor can
+be housed inside the enclosure without extra cable penetrators,
+simplifying system integration.
+By using these sensors with a gear pump, we aimed to enable
+the estimation of the ﬂuidic volume displacement through each
+channel. In the absence of direct deformation sensors in a soft
+robot, the estimates produced by our sensing scheme can be
+coupled with quasistatic models of the soft robot’s deformation
+to enable closed-loop control. However, it is worth noting that the
+Fig. 3. Flow rate characterization and estimation using an RPM sensor.
+(a) We connected the pump,P, to an RPM sensor,S, and a 2-way valve,V.( a )T o
+verify that the RPM sensor could be used to estimate ﬂow rates, we connected
+the pump, P, to the inlet of a 2-way valve,V, with one outlet connected through a
+ﬂow sensor, FS, to ambient water, and the other outlet directly to ambient water.
+We used the former outlet to characterize the steady-state ﬂow of the pump as a
+function of PWM duty cycle (dotted line) and the latter outlet to characterize the
+steady-state rotational speed of the gear pump’s motor as a function of PWM
+duty cycle (solid line). (b) We found that a linear ﬁt could closely model the
+correspondence between ﬂow rates and RPM sensor readings.
+RPM sensors are susceptible to electrical noise, and integrating
+sensor readings to estimate volume displacements can produce
+estimates that are prone to drift in the absence of any other
+sensors in a given robot.
+Despite their limitations, we found that the RPM sensors
+effectively estimated ﬂow rates due to the direct relationship
+between RPM and ﬂow rate. Since gear pumps are positive
+displacement pumps, they displace a ﬁxed volume of ﬂuid per
+rotation, making ﬂow rate nominally proportional to RPM [27],
+[29]. To validate this, we conducted an experiment by connecting
+a ﬂow sensor to the pump to measure ﬂow rates generated when
+the pump was driven at a range of duty cycles. We then removed
+the ﬂow sensor and recorded the motor’s settling RPM at the
+same voltages, eliminating the additional load introduced by the
+in-line ﬂow sensor (Fig. 3(a)). Both the settling RPM and ﬂow
+rate measurements remained consistent under controlled condi-
+tions. Finally, plotting ﬂow rate against settling RPM conﬁrmed
+an approximately linear relationship, demonstrating that RPM
+sensing could serve as a reliable proxy for direct ﬂow rate sensing
+when direct measurement was impractical (Fig. 3(b)).
+C. Actuator Bending Response Using RPM Sensor Data
+Building on the relationship between the measured pump
+RPM and ﬂow rate, we characterized the actuator’s bending
+response by establishing a relationship between the RPM sensor
+readings and the actuator’s maximum bending angle across
+various voltages. Speciﬁcally, we used a single actuator from the
+quadruped robot introduced earlier. When the pump is unloaded,
+RPM and ﬂow rate exhibit a linear relationship. By integrating
+RPM over time, we obtained the total number of revolutions,
+which corresponded to the estimated ﬂuid displacement. Since
+each revolution contributes incrementally to ﬂuid displacement,
+and ﬂuid displacement drives actuator bending, we expected a
+direct relationship between total revolutions and bending angle.
+To validate this, we conducted an experiment to measure
+the actuator’s maximum bending angle at different voltages
+using a one-second input while simultaneously recording RPM
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 01:54:14 UTC from IEEE Xplore.  Restrictions apply. 
+470 IEEE ROBOTICS AND AUTOMATION LETTERS, VOL. 11, NO. 1, JANUARY 2026
+Fig. 4. Bending angle estimation using an RPM sensor. (a) We recorded the
+maximum bending angle of a bellows actuator after a one-second input across
+a range of input duty cycles from the microcontroller. To measure the bending
+angle, θ, of the actuator, we deﬁned a reference axis between the base and tip
+in the unactuated state. We then deﬁned a straight line between the base and
+tip in the actuator’s actuated state, and computed the angle between these two
+lines. (b) We then characterized the recorded bending angle of the actuator as a
+function of the total revolutions of the pump in the testing period and found that
+a linear ﬁt accurately modeled the bending deformation of the leg.
+sensor data. We tracked the maximum bending angle for each
+voltage using an open-source visual tracking tool (Tracker,[33])
+(Fig. 4(a)). As the actuator deformed, the pump experienced
+increased loading due to internal ﬂuid resistance and material
+stretching. This loading likely caused the actual ﬂow to decrease
+relative to the commanded input, especially at higher voltages.
+Nevertheless, because the RPM sensor directly measured the
+pump’s rotational speed, it provided an accurate estimate of net
+ﬂuid displacement, even under these non-ideal conditions. We
+observed a maximum bending angle of∼60
+◦, which corresponds
+to an expected output force of∼1.5 N as per the characterizations
+conducted in [31]. Additionally, when we plotted the integral
+of the measured RPM (total revolutions) against the maximum
+bending angle, the result was a linear relationship, conﬁrming
+that RPM-based sensing can estimate actuator deformation de-
+spite the presence of back pressure (Fig. 4(b)).
+IV . C
+ONTROL SYSTEM DESIGN AND EVA L U AT I O N
+A. Signal Filtering
+With a method for approximating ﬂow rate, ﬂuid displace-
+ment, and the actuator’s bending response based on RPM sensor
+readings, we used the RPM sensor as a non-intrusive proxy for
+ﬂow sensing to implement a closed-loop feedback system. To re-
+duce high-frequency noise and improve the output’s stability, we
+applied a ﬁrst-order Inﬁnite Impulse Response (IIR) ﬁlter [34]
+to the RPM sensor readings:
+y
+f [n]= α·y[n]+( 1 −α)·yf [n−1], (1)
+where yf [n] is the ﬁltered signal at time n, y[n] is the output
+signal at time n, and αis the smoothing factor 0 <α< 1.
+B. Closed-Loop Control Implementation
+The ﬁltered RPM data was then used in a closed-loop feedback
+system (Fig. 5), which combined a proportional feedback control
+term with a feedforward control term:
+u(t)= Kp ·e(t)+ r(t), (2)
+Fig. 5. Closed-loop control architecture for a single pump.
+Fig. 6. Tracking performance of the pump’s output response under no-load
+and loaded conditions. We recorded the rotational speed of the pump over time
+for frequencies 0.25–4 Hz given a sinusoidal reference input with amplitude
+of 7.5× 10
+3 rpm. We produced the reference signal by converting the pump’s
+input signal to a nominal RPM based off of prior characterization. Under no load
+(A-B), the pump was free-ﬂowing into a water reservoir. (A) Reference RPM
+trajectories (black) and output trajectories of pump under open-loop (blue) and
+closed-loop (green) control are shown for 0.25, 0.5, 0.75, and 1 Hz reference
+trajectories and RMSE tracking errors (B) demonstrate asymptotic behavior for
+reference trajectories from 0.25 Hz to 4 Hz. Under load (C)–(D), the pump was
+connected to an actuator as we recorded the same data as with the no load case.
+where u(t) is the control input, Kp is the gain factor, e(t) is
+the error, and r(t) is the reference signal. The error is deﬁned
+as e(t)= r(t)−y(t), where y(t) is the output signal. This
+combined approach minimized RPM errors and improved the
+system’s responsiveness to changes in the commanded input,
+ensuring improved performance across varying frequencies.
+C. Closed-Loop Performance Under No-Load Conditions
+To assess the performance of the closed-loop controller under
+no-load conditions, where the pump was free-ﬂowing, we com-
+pared its ability to track the reference signal with an open-loop
+system across a range of frequencies (Fig. 6(a)). At 0.25 Hz,
+both control systems tracked the reference fairly closely with
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 01:54:14 UTC from IEEE Xplore.  Restrictions apply. 
+CHEN et al.: FLUIDIC CONTROL OF UNTETHERED UNDERW A TER SOFT ROBOTS 471
+very minor deviations. However, as the frequency increased,
+the root-mean-square tracking error (RMSE) of the open-loop
+controller began to plateau at 0.75 Hz, unable to switch the
+pump’s direction quickly enough. In contrast, the closed-loop
+system maintained a lower overall tracking error up to operating
+frequencies of 3.5 Hz, better adhering to the sinusoidal shape of
+the reference signal (Fig.6(b)). Overall, these results highlighted
+the closed-loop control system’s effectiveness, particularly at
+lower frequencies, where it outperformed the open-loop system
+in tracking and responsiveness.
+V. I
+NTEGRA TIONWITH THE SOFT QUADRUPED ROBOT
+Following the evaluation of closed-loop performance under
+no-load conditions, we assessed the system’s behavior under
+the loading of soft actuators, with closed-loop control applied
+at the pump level. First, we evaluated the performance of the
+closed-loop controller with a single actuator from our previously
+reported soft quadruped robot [31]. Then, we assessed our
+hydraulic control system’s performance when fully integrated
+with the quadruped robot.
+A. Closed-Loop Performance Under Loading of Single Soft
+Actuator
+1) RPM Signal Tracking Analysis: To assess the closed-loop
+feedback system’s performance under loaded conditions, we
+designed an experiment where one pump was connected to
+a single actuator. We applied a sinusoidal reference input to
+the control system with an amplitude of 7.5× 10
+3 rpm across
+frequencies ranging from 0.25 Hz to 4 Hz. During each trial,
+we recorded both the reference signal and RPM sensor data for
+comparison.
+With the data collected from these experiments, we evaluated
+the closed-loop system’s performance under load by comparing
+its ability to track the reference signal with that of the open-loop
+system (Fig. 6(C)). As observed in the no-load condition, both
+control systems followed the reference closely at 0.25 Hz,
+with only minor deviations. As input frequency increased, a
+similar trend to the no-load conditions was observed, where
+the open-loop system began to plateau ﬁrst. However, under
+load, the closed-loop system also struggled to maintain the
+reference signal’s shape and the RMSE eventually plateaued
+at higher frequencies. We found that at frequencies lower than
+2 Hz the closed-loop controller consistently outperformed the
+open-loop controller. At 2 Hz and above, both systems have
+nearly identical error values (Fig. 6(D)). Overall, these results
+highlighted the closed-loop control system’s effectiveness under
+load, particularly at lower frequencies, where it outperformed
+the open-loop system in tracking and responsiveness.
+2) Signal Tracking and Physical Actuator Behavior: Having
+established the closed-loop system’s ability to track a given
+reference signal, we next examined how our controller’s perfor-
+mance translated to the actuator’s physical behavior, speciﬁcally
+its motion along a desired circular trajectory. To assess this,
+we connected each of the three bellows actuators compris-
+ing a single soft leg to independent pumps, resulting in three
+pumps collectively driving a single actuator. We then used our
+open-loop and closed-loop control strategies to track sinusoidal
+reference signals on each pump with an amplitude of 2.7× 10
+3
+rpm, a frequency of 0.25 Hz, and with relative phases of 120
+degrees.
+To compare the actuator’s behavior under each control
+scheme, we positioned it upright in a water tank and used a
+top-down camera to capture its movement along with RPM
+sensor data over time. We used the Tracker software to track
+the position of the actuator’s endpoint over time.
+Under open-loop control, discrepancies between the reference
+signal and the pump outputs led to highly distorted tracking of
+the desired circular trajectory. We found that after switching
+directions from negative to positive ﬂow, the pumps would not
+generate the required positive ﬂow quickly enough, limiting
+their ability to sufﬁciently push ﬂuid in the forward direction.
+Additionally, for pump 3, the signal also failed to reach the
+desired negative amplitude of the reference signal, preventing
+the pump from adequately pushing ﬂuid in the reverse direction
+(Fig. 7(a)). Consequently, the actuator relied on the reverse ﬂuid
+ﬂow, which limited its bending capacity and led to a smaller
+radius circle when tracking the actuator’s endpoint trajectory.
+Furthermore, the insufﬁcient reverse ﬂuid ﬂow from pump 3
+prevented its respective actuator from bending signiﬁcantly,
+causing the actuator’s endpoint to follow a diagonal path rather
+than completing a full circular motion (Fig. 7(b)). Overall, these
+issues in the open-loop control resulted in a distorted trajectory,
+with the actuator’s endpoint tracing an imperfect circle about a
+center that did not align with the central axis of the leg.
+In contrast to the open-loop system, the closed-loop control
+signiﬁcantly improved the actuator’s tracking performance, ad-
+dressing the discrepancies observed in the open-loop control and
+enhancing both signal tracking (Fig. 7(c)) and the generation of
+circular trajectories by the actuator (Fig. 7(d)). The closed-loop
+system tracked the reference signal signiﬁcantly better than the
+open-loop control system, with an average RMSE of0.59× 10
+3
+rpm compared to 1.3× 103 rpm for the open-loop system,
+representing a 54.62% reduction in error. This improved tracking
+is also visible in the physical system, where the trajectory of the
+actuator’s endpoint followed a more circular path (Fig.7(e))w i t h
+a center that was closely aligned with the central axis of the leg.
+Overall, we found that the closed-loop control system overcame
+the discrepancies observed in the performance of the open-loop
+controller, leading to more accurate tracking of the reference
+signal and a trajectory that resulted in reduced distortion and a
+more consistent radius.
+VI. C
+ONTROL SYSTEM PERFORMANCE ON QUADRUPED
+SOFT ROBOT
+After experimentally characterizing the performance of our
+hydraulic control system with a single soft leg, we integrated
+our control system into a quadruped robot to evaluate its per-
+formance in multi-actuator control (Fig. 1(d)), with closed-loop
+feedback applied at the pump level and no feedback from actu-
+ator or robot positions.
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 01:54:14 UTC from IEEE Xplore.  Restrictions apply. 
+472 IEEE ROBOTICS AND AUTOMATION LETTERS, VOL. 11, NO. 1, JANUARY 2026
+Fig. 7. Tracking performance of the pump’s output response and tip trajectory
+of the actuator. We recorded the rotational speed of three pumps over time given
+a sinusoidal reference input with amplitude of 2.7× 103 rpm, a frequency
+of 0.25 Hz, and relative phases of 120°. Reference RPM trajectories (black)
+and output trajectories of pump under open-loop (blue) are shown for all
+three pumps (a), and the corresponding tip trajectory of the actuator with the
+transient response (TR) in light blue and the steady-state response (SS) in blue
+(b). Similarly, the reference RPM trajectories and output trajectories of pump
+under closed-loop (green) are shown for all three pumps (c) along with the
+corresponding tip trajectory of the actuator with the transient response (TR) in
+light green and the steady-state response (SS) in green (d). (e) Frames of the
+actuator with the tip trajectory of the actuator under closed-loop overlaid.
+A. System Integration and Experimental Setup
+A schematic of the tubing layout from pumps to actuator
+bellows illustrates how pressurized ﬂuid was distributed to each
+leg (Fig. 8(a)), enabling coordinated actuation. The full experi-
+mental setup consisted of the robot, control computer, ﬂuid tank,
+and overhead camera (Fig.8(b)). This setup allowed for accurate
+tracking of the robot’s motion during trials.
+To facilitate real-time command transmission, we operated
+the robot via a custom web interface, with a microcontroller that
+has built-in Wi-Fi connectivity (Arduino Nano ESP32) acting as
+a server. The server hosted a web-based control panel accessible
+from any device, enabling wireless operation. Communication
+remained reliable when the robot was in shallow water or fully
+out of the water, though signal attenuation increased with depth.
+The code for the server implementation and web interface,
+Fig. 8. Untethered operation of quadruped robot using our hydraulic control
+system. (a) Schematic of tubing connections linking the control system to the
+robot’s four legs, where solid circles of a given color indicates connection to the
+same outlet of pumps P1, P2, and P3, and a crossed circle indicates connection
+to the other outlet of the same pump. (b) Experimental setup illustrating (1)
+wireless command transmission from the control device to the robot and (2)
+robot positioned in the tank during operation. (b) Key phases of the gait cycle as
+the robot walks forward under our closed-loop control scheme. (d) Trajectory of
+the robot walking across the tank recorded from a top-down view of the robot.
+along with usage details, is available in the project’s GitHub
+repository.2
+B. Gait Execution and Visualization
+To demonstrate the robot’s locomotion, we adapted a gait
+sequence from our prior soft quadruped robot study[31]. A side-
+view sequence of the robot walking through the tank (Fig. 8(c))
+highlighted key phases of the gait cycle and showed that the
+closed-loop system enabled sustained cyclic actuation sufﬁcient
+to produce forward motion. For this study, a single gait sequence
+was used to allow a controlled comparison between open-loop
+and closed-loop performance. Future work could explore alter-
+native gait sequences to further improve locomotion efﬁciency,
+trajectory repeatability, and overall walking performance.
+C. Performance Comparison
+To assess the effectiveness of the control system, we com-
+pared robot trajectories under open-loop and closed-loop control
+using position data from recorded trials (Fig. 8(d)). The robot
+2https://github.com/aechen/HydraulicControlSystem
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 01:54:14 UTC from IEEE Xplore.  Restrictions apply. 
+CHEN et al.: FLUIDIC CONTROL OF UNTETHERED UNDERW A TER SOFT ROBOTS 473
+exhibited negligible forward motion under open-loop control,
+indicating insufﬁcient coordination of actuator inputs for walk-
+ing. In contrast, closed-loop control enabled the robot to traverse
+the full tank length, achieving a walking speed of 5.69 body
+lengths per minute (0.094 BL/s).
+VII. C
+ONCLUSION
+In conclusion, we presented a compact, modular hydraulic
+control system designed for untethered underwater soft robots.
+By integrating three independently controlled pumps with on-
+board RPM sensing and a DPD approach, the system delivered
+more precise, simultaneous control of multiple actuators at
+pressure and ﬂow rates suitable for a wide range of soft robotic
+applications. Experimental validation on a quadruped soft robot
+demonstrated the system’s capability to enable untethered oper-
+ation, offering a platform to accelerate the development of future
+underwater soft robots.
+Future work could investigate improving the control system
+and overall robot performance, focusing on higher-performance
+pumps, improved sensing, and enhanced trajectory tracking.
+Potential hardware improvements include selecting new pumps
+with increased maximum pressure, ﬂow rate, and faster switch-
+ing speeds to meet future applications with requirements beyond
+those of current underwater soft robots. Additional or alternative
+sensors (e.g., bend, pressure, and ﬂow sensors) could be added
+to reduce output bias and enable closed-loop regulation at the
+actuator or robot level. Integrating these sensors would allow for
+more precise trajectory tracking and improved motion reliability,
+despite the added integration complexity and system footprint.
+Finally, leveraging the system’s modular design for scalable,
+distributed actuation could support larger or more complex soft
+robotic platforms.
+R
+EFERENCES
+[1] P . A. der Maur et al., “ROBOA: Construction and evaluation of a steerable
+vine robot for search and rescue applications,” inProc. IEEE 4th Int. Conf.
+Soft Robot., 2021, pp. 15–20.
+[2] E. T. Gulnergiz, S. Dilibal, B. Gormus, J. O. Danquah, and O. F. Emon,
+“Additively manufactured soft pneumatic gripper integrated remotely op-
+erated underwater vehicle (ROV) for grasping archeological remains,” in
+Proc. 5th Int. Congr . Hum.- Comput. Interaction, Optim. Robot. Appl. ,
+2023, pp. 01–05.
+[3] G. Li et al., “Self-powered soft robot in the mariana trench,” Nature,
+vol. 591, no. 7848, pp. 66–71, Mar. 2021.
+[4] F. Hartmann, M. Baumgartner, and M. Kaltenbrunner, “Becoming sustain-
+able, the new frontier in soft robotics,” Adv. Mater ., vol. 33, no. 19, 2021,
+Art. no. 2004413.
+[5] D. Trew Crist, J. Ausubel, and P . E. Wagoner, First census of marine life
+2010: Highlights of a decade of discovery . Washington, D.C, USA: A
+publication of the Census of Marine Life, 2010.
+[6] J. Zhang et al., “Robotic artiﬁcial muscles: Current progress and future
+perspectives,” IEEE Trans. Robot., vol. 35, no. 3, pp. 761–781, Jun. 2019.
+[7] N. El-Atab et al., “Soft actuators for soft robotic applications: A review,”
+Adv. Intell. Syst., vol. 2, no. 10, 2020, Art. no. 2000128.
+[8] R. K. Katzschmann, A. D. Marchese, and D. Rus, “Hydraulic autonomous
+soft robotic ﬁsh for 3D swimming,” in Proc. Exp. Robot., 14th Int. Symp.
+Exp. Robot., 2015, pp. 405–420.
+[9] M. Ishida, D. Drotman, B. Shih, M. Hermes, M. Luhar, and M. T. Tolley,
+“Morphing structure for changing hydrodynamic characteristics of a soft
+underwater walking robot,” IEEE Robot. Automat. Lett. , vol. 4, no. 4,
+pp. 4163–4169, Oct. 2019.
+[10] G. Chen, X. Y ang, X. Zhang, and H. Hu, “Water hydraulic soft actuators
+for underwater autonomous robotic systems,” Appl. Ocean Res., vol. 109,
+2021, Art. no. 102551.
+[11] R. K. Katzschmann, J. DelPreto, R. MacCurdy, and D. Rus, “Exploration
+of underwater life with an acoustically controlled soft robotic ﬁsh,” Sci.
+Robot., vol. 3, no. 16, 2018, Art. no. eaar3449.
+[12] J. Frame, N. Lopez, O. Curet, and E. D. Engeberg, “Thrust force character-
+ization of free-swimming soft robotic jellyﬁsh,” Bioinspiration Biomimet-
+ics, vol. 13, no. 6, Sep. 2018, Art. no. 064001.
+[13] Q. Tan et al., “Underwater crawling robot with hydraulic soft actuators,”
+Front. Robot. AI, vol. 8, 2021, Art. no. 688697.
+[14] M. A. Bell, B. Gorissen, K. Bertoldi, J. C. Weaver, and R. J. Wood, “A
+modular and self-contained ﬂuidic engine for soft actuators,” Adv. Intell.
+Syst., vol. 4, no. 1, 2022, Art. no. 2100094.
+[15] T. Paschal, M. A. Bell, J. Sperry, S. Sieniewicz, R. J. Wood, and J.
+C. Weaver, “Design, fabrication, and characterization of an untethered
+amphibious sea urchin-inspired robot,”IEEE Robot. Automat. Lett.,v o l .4 ,
+no. 4, pp. 3348–3354, Oct. 2019.
+[16] G. Chen, X. Y ang, Y . Xu, Y . Lu, and H. Hu, “Neural network-based motion
+modeling and control of water-actuated soft robotic ﬁsh,” Smart Mater .
+Struct., vol. 32, no. 1, Dec. 2022, Art. no. 015004.
+[17] S. Liu, C. Liu, Y . Liang, L. Ren, and L. Ren, “Design and control of an
+untethered robotic tuna based on a hydraulic soft actuator,” IEEE/ASME
+Trans. Mechatron., vol. 30, no. 1, pp. 623–633, Feb. 2025.
+[18] N. S. Usevitch, Z. M. Hammond, M. Schwager, A. M. Okamura, E. W.
+Hawkes, and S. Follmer, “An untethered isoperimetric soft robot,” Sci.
+Robot., vol. 5, no. 40, 2020, Art. no. eaaz0492.
+[19] D. Padovani and E. J. Barth, “Design and characterization of a miniature
+hydraulic power supply for high-bandwidth control of soft robotics,” in
+Proc. 3rd IEEE Int. Conf. Soft Robot. , 2020, pp. 345–350.
+[20] A. Shtarbanov, “Flowio development platform–the pneumatic ‘raspberry
+pi’ for soft robotics,” in Proc. Extended Abstr . CHI Conf. Hum. Factors
+Comput. Syst., 2021,pp. 1–6.
+[21] D. P . Holland, E. J. Park, P . Polygerinos, G. J. Bennett, and C. J. Walsh,
+“The soft robotics toolkit: Shared resources research design,” Soft Robot.,
+vol. 1, no. 3, pp. 224–230, 2014.
+[22] O. Kilic Afsar et al., “Omniﬁber: Integrated ﬂuidic ﬁber actuators for
+weaving movement based interactions into the ‘fabric of everyday life’,”
+in
+Proc. 34th Annu. ACM Symp. User Interface Softw. Technol. , 2021,
+pp. 1010–1026.
+[23] Q. Xia et al., “Research on ﬂexible collapsible ﬂuid-driven bionic robotic
+ﬁsh,” Ocean Eng., vol. 276, 2023, Art. no. 114203.
+[24] H. Feng, Y . Sun, P . A. Todd, and H. P . Lee, “Body wave generation for
+anguilliform locomotion using a ﬁber-reinforced soft ﬂuidic elastomer
+actuator array toward the development of the eel-inspired underwater soft
+robot,” Soft Robot., vol. 7, no. 2, pp. 233–250, 2020.
+[25] K. C. Galloway et al., “Soft robotic grippers for biological sampling on
+deep reefs,” Soft Robot., vol. 3, no. 1, pp. 23–33, 2016.
+[26] M. Wu et al., “Octopus-inspired underwater soft robotic gripper
+with crawling and swimming capabilities,” Research, vol. 7, 2024,
+Art. no. 0456.
+[27] R. K. Katzschmann, A. d. Maille, D. L. Dorhout, and D. Rus, “Cyclic
+hydraulic actuation for soft robotic devices,” in Proc. IEEE/RSJ Int. Conf.
+Intell. Robots Syst., 2016, pp. 3048–3055.
+[28] A. D. Marchese, C. D. Onal, and D. Rus, “Autonomous soft robotic
+ﬁsh capable of escape maneuvers using ﬂuidic elastomer actuators,” Soft
+Robot., vol. 1, no. 1, pp. 75–87, 2014.
+[29] I. J. Karassik et al., Pump Handbook. New Y ork, NY , USA: McGraw-Hill,
+2008.
+[30] Parker O-Ring Handbook. Orlando, FL, USA: Parker Seal Group, 1982.
+[31] D. Drotman, S. Jadhav, M. Karimi, P . de Zonia, and M. T. Tolley, “3D
+printed soft actuators for a legged robot capable of navigating unstructured
+terrain,” in Proc. IEEE Int. Conf. Robot. Automat. , 2017, pp. 5532–5538.
+[32] T. Kalisky et al., “Differential pressure control of 3D printed soft ﬂu-
+idic actuators,” in Proc. IEEE/RSJ Int. Conf. Intell. Robots Syst. , 2017,
+pp. 6207–6213.
+[33] D. Brown and A. J. Cox, “Innovative uses of video analysis,”Phys. Teacher,
+vol. 47, no. 3, pp. 145–150, Mar. 2009.
+[34] M. Bellanger and B. A. Engel, Digital Signal Processing: Theory and
+Practice. Hoboken, NJ, USA: Wiley, 2024.
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 01:54:14 UTC from IEEE Xplore.  Restrictions apply. 

@@ -1,0 +1,829 @@
+Wang  Architectural Intelligence             (2023) 2:17  
+https://doi.org/10.1007/s44223-023-00036-x
+RESEARCH ARTICLE Open Access
+© The Author(s) 2023. Open Access  This article is licensed under a Creative Commons Attribution 4.0 International License, which 
+permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the 
+original author(s) and the source, provide a link to the Creative Commons licence, and indicate if changes were made. The images or 
+other third party material in this article are included in the article’s Creative Commons licence, unless indicated otherwise in a credit line 
+to the material. If material is not included in the article’s Creative Commons licence and your intended use is not permitted by statutory 
+regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this 
+licence, visit http:// creat iveco mmons. org/ licen ses/ by/4. 0/.
+Architectural Intelligence
+Framing responsive architecture with soft 
+robots—the exploratory practice of soft 
+pneumatic robotic architectural system
+Si‑Yuan Rylan Wang1*   
+Abstract 
+Inspired by intelligent skin, this research constructs a soft pneumatic robotic architectural system based on the inter‑
+action between inflatable material agents and the human body. It aims to provide flexibly changeable scene modes 
+for dynamic inhabiting through responsive spatial performance. From the idea of the Fun Palace and the structure 
+and performance spatial methodology to the proposal of responsive/soft architecture and relevant examples such 
+as Furl and Robot Soft, the literature review provides the foundation and direction for the establishment of research 
+experiments. The research methodology is based on structure and performance, oriented to explore soft mate‑
+rial agents, link input information and output modules to realize the manifestation of human‑space interaction 
+and spatial performance and assemble the basic configuration of the system. As a result, a synergistic architectural 
+interaction system like a media center that can provide a variety of adaptive space scenes is built, which can realize 
+real‑time perception and responsive control of the interactive process, and at the same time provide richness of scene 
+performance beyond established architectural configurations, confirming the possibility of creating a behaviorally 
+responsive architecture by integrating modularly morphing spaces, AI‑sensing systems, and interaction technolo‑
+gies. This study explored responsive human settlements by expanding soft pneumatic robots in architecture. It 
+can expand to fields such as machine cognition at the input level, further realize the real‑time feedback system 
+at the output level, and can evolve with the information interconnection of urban landscapes and residential com‑
+munities in terms of spatial interaction. The work gives a convincing vision of architectural intelligence through soft 
+robotics and is expected to continue to develop and bring more inspiring innovations with its integrated methods 
+and connotations.
+Keywords Human‑space interaction, Soft robotic system, Responsive architecture, Architectural intelligence
+1  Robotic architectural system to enable flexibility 
+for dynamic living
+Currently, modern cities around the world are rapidly 
+clustering into large-scale living compounds in both 
+real and virtual ways rapidly, and people are more 
+mobile and networked than ever before. Consequently, 
+it leads to high demand for personalization and flex -
+ibility, and people can no longer be satisfied with rigid 
+and standardized housing units. A clash between the 
+mass production of architecture and the growing need 
+for customization by the individual is assessed. How -
+ever, the current building industry has not caught up 
+with this trend. People are still dwelling with solidified 
+facilities the same as in the last centuries. With new 
+technologies and the digital revolution, the needs of 
+the public, as well as the desires of an individual, can 
+be accomplished. In this direction, architectural works 
+show needed functions, provide the framework for the 
+*Correspondence:
+Si‑Yuan Rylan Wang
+siyuanwang1321@gmail.com
+1 School of Architecture and Engineering, Nanchang University, 
+Nanchang, China
+Page 2 of 16Wang  Architectural Intelligence             (2023) 2:17 
+place, and express its function at a particular occa -
+sion. Besides, with the accelerated pace of modern life 
+and the rapid development of new technologies, archi -
+tecture faces the challenge of rapidly changing sce -
+narios over time. In the new era, architecture should 
+be created as a responsive and performative structure 
+enriched with complete resources and more possibili -
+ties for civic lives. Meanwhile, as a coworking lifestyle 
+emerged with working and socializing being more flex -
+ible in place and manner, people especially the young, 
+preferred to live in open shared places. The SPRS Sys -
+tem is built to search for the solution to this situation. 
+To unleash the possibility of future architecture but 
+keep the research on an architectural scale, the system 
+is set as a home and workplace, and it is constructed to 
+create a hybrid shared space and life-working dynamics 
+by space scene changing in the living and working place 
+of freelancers and other life-work balancers.
+To manifest the target of the research problem, Some 
+survey and user research about the coworking living 
+space is conducted. Usual working environments, dissat -
+isfaction and expectations for the workplace, and expec -
+tations in the life of the users are focused on inspection. 
+From the outcomes, it is found that the users prefer more 
+adaptable functions and some personal areas, they need 
+office space to be more organized, and shared space 
+should encourage communication. It guides design goals 
+to space-saving, utilization improvement, order rebuild -
+ing of work, life, and social activities, and creating new 
+possibilities for working and career (Fig. 1).
+In the 2018 China House Vision exhibition hosted 
+by Kenya Hara, the Cross-boundaries design team 
+Fig. 1 User persona and survey outcomes based on the user research about the co‑working living space
+Page 3 of 16
+Wang  Architectural Intelligence             (2023) 2:17 
+ 
+combined with smart home design to design a per -
+sonal space called Infinite Living, which inspired SPRS 
+research inception. It introduced an intelligent skin 
+implanted into spatial structures, which can actively 
+adjust the spatial form and scene according to the 
+daily living conditions, behavioral patterns, and emo -
+tional changes of residents, as well as seasonal needs 
+in nature and the atmosphere. It is meant to re-enable 
+all restricted spaces, which can be galleries, clinics, res -
+taurants, banks, etc. It is implanted into the space floor, 
+wall, and other structures to cover almost all space sur -
+faces, the space partition is removed, and the original 
+windows are replaced by completely intelligent glass 
+walls. The intelligent skin can freely switch between 
+working mode, sports mode, entertainment mode, and 
+communication mode, creating suitable space scenes 
+and providing necessary space elements. In the case of 
+usage scenarios and space perception, the spatial skin 
+will make active adjustments, optimize the experiences, 
+allocate space resources rationally, and realize interac -
+tive spaces (Fig. 2 ).
+The intelligent skin gives a vision of deformed archi -
+tecture that can be refined through a technological 
+blueprint. Simultaneously, the emergence of interactive 
+technology and new material prompted traditional archi -
+tecture via intelligent transformation in terms of mor -
+phological property. Of note, the invention of robotic 
+soft architecture has made the morphological shift and 
+its cybernetic formula possible. Numerous research cases 
+proved that the outstanding paradigm as a soft respon -
+sive architecture via technical, functional, and actuated 
+directions had been endowed.
+Fig. 2 Crossboundaries, 2018, Infinite Living
+Page 4 of 16Wang  Architectural Intelligence             (2023) 2:17 
+This paper focuses the main research problem on the 
+intelligent dynamic living pattern, which has become 
+increasingly prominent because the impact of digitaliza -
+tion and mobility development on space use requires us 
+to explore the transformation of architectural patterns. 
+In response to the problem, a set of criteria for devel -
+oping a scheme of the soft robotic architectural system 
+focusing on responsiveness and performance, based on 
+which, relevant components are created to utilize the 
+space interaction with people through morphology-var -
+iating modules and body tracking signals; with flexibility 
+increased significantly by the incorporation of deformed 
+components, the combination of two mechanistically 
+synergistic circuits formed an interactive architecture 
+system. The cybernetic architectural system introduces 
+the intelligent traction methods that buildings can link, 
+in which the intelligent systems and interfaces designed 
+will serve as examples and clues to provide means and 
+perspectives for the application of artificial intelligence to 
+affect the built environment.
+2  Literature review: implementation of responsive 
+architecture in soft robotics
+The previous architectural research, technological prac -
+tices, and social proposals mentioned the initial architec -
+tural transformation by shifting shapes only. Essentially, 
+we focus on the structures that live according to the 
+changes in their environment. They breathe differently 
+in different conditions and make changes in accordance 
+with the environment (Lundén & Kauste,  2018). Thus, 
+they may have a little bit of their own life. The original 
+idea considers something close to an animal, namely 
+about re-establishing a relationship with architecture. 
+Among the explorations of the forerunners of this kind 
+of soft architecture, such as Archigram, Buckmin -
+ster Fuller, and Yona Friedman (Bhatia,  2013), the Fun 
+Palace conceived by Cedric Price in 1964 was almost 
+taken into practice. While developing his design for the 
+Fun Palace, he described his visions for such a place 
+(Mathews,  2006): “Old systems of learning are now 
+decayed. The new universities will be of the world and 
+in each man… The variety of activities cannot be com -
+pletely forecasted; as new techniques and ideas arise they 
+will be tried. The structures themselves will be capable of 
+changes, renewal, and destruction. If any activity defeats 
+its purpose, it will be changed (Fig.  3). ” Cedric Price 
+pointed out that in allowing for change and flexibility, it 
+is essential that the variation provided does not impose 
+a discipline that may only be valid at the time of design; 
+It is easier to allow for individual flexibility than organi -
+zational change – the expandable house; the multi-use of 
+fixed volumes; the transportable controlled environment 
+(Jencks & Karl,  2006). In this way, the concept of impro -
+visational architecture was introduced through an entity, 
+whose essence was in a continuous process of construc -
+tion, dismantling, and reassembling by permitting multi -
+ple and indeterminate uses. Gorden Pask, the technical 
+consultant of the Fun Palace committee, emphasized the 
+Fig. 3 Cedric Price, Fun Palace, sketches and notes, 1964, Cedric Price Archives, Canadian Centre for Architecture, Montreal
+Page 5 of 16
+Wang  Architectural Intelligence             (2023) 2:17 
+ 
+functions performed by human beings or human socie -
+ties and claimed that a building cannot be viewed simply 
+in isolation but as a human environment. It perpetually 
+interacts with its inhabitants by serving them and con -
+trolling their behaviors (Pask, 1969).
+New correlations in terms of the crucial relation of 
+structure with its target were developed with another the-
+ory by Herman Hertzberger. He introduced the linguistic 
+concepts of ‘competence’ and ‘performance’ addressed by 
+Chomsky to illustrate the essence of architecture (Hertz -
+berger, 2005): competence is the knowledge that a person 
+has of his or her language, while performance refers to 
+the use he or she makes of that knowledge in concrete sit-
+uations; It can indeed be established with architecture, In 
+architectural terms, competence defines a form’s capacity 
+to be interpreted, and performance, stated by the form, 
+interprets a specific situation (Fig. 4).
+All previous relevant research advocates a new kind of 
+active and dynamic architecture to permit multiple uses 
+and constantly adapt to change. It can be a network of 
+diverse events and a space of oscillation between incon -
+gruous activities simultaneously. To redefine the users, 
+the architectural space, and scenes adapting to different 
+functions and interactions of humans with space, a crea -
+tive and flexible control system is needed by the users in 
+a dynamic space pattern for various daily activities. New 
+technology such as artificial intelligence and cybernetics 
+is expected to be followed. In addition, the research on 
+material systems and soft robotics in search of an alterna-
+tive to rigidity can be accepted. As Nicholas Negroponte 
+proposed that responsive architecture or soft architec -
+ture machines during spatial design problems can be 
+explored by applying cybernetics to architecture (Negro -
+ponte, 1975). Meanwhile, by forming a new frontier of 
+kinetic design, the domain of soft robotics has created an 
+exciting and highly interdisciplinary paradigm in engi -
+neering, which provides a method for revolutionizing the 
+role of robotics in architecture.
+To date, many studies have explored the application of 
+soft robotics to architecture from various dimensions. 
+For example, researchers of the Interactive Architec -
+ture Lab designed a soft pneumatic pavilion called “Furl” 
+with cybernetic silicone-made components (Mangion 
+& Zhang, 2014). “Furl combines Electroencephalogra -
+phy (EEG) with advances in soft silicone casting of “air 
+muscles” . The introduction of soft robotics replaces the 
+mechanical principles in interactive architecture through 
+a biological paradigm. EEG allows sensing of human 
+brain functioning so that the environments begin mov -
+ing and responding to users’ very thoughts; The designed 
+components have a wide palette of deformation patterns 
+of inflation. Through the combination of soft and hard 
+architectural elements, “Furl” creates a new platform for 
+a kinetically responsive architecture that can let space 
+interact with users’ needs and adapt itself to environmen-
+tal conditions (Fig. 5).
+Compared with “Furl” which focuses more on its adap-
+tion of architectural structure, Robot No. 6 “Soft: Bal -
+ancing and Wiggling” by researchers from Princeton 
+University mainly worked on robotic responsiveness 
+and the controlling mechanism (Shi,  2018). It is a pneu -
+matic architectural robot with polyurethane airbags and 
+3D-printed joints controlled by homemade inflate-and-
+balance algorithms. The core function is to use pres -
+surized airbags to lift the weight. The sensing-feedback 
+algorithm prevents the whole thing from falling by sepa -
+rately controlling the pressure in different airbags. This 
+prototype can be applied to several real-life situations. It 
+can work as a critical component for an emergency shel -
+ter for its lightweight and fast deployment or as an addi -
+tional interface between humans and buildings that is 
+safe and responsive (Fig. 6).
+Challenging conventional design thinking about 
+adaptive architecture, these experiments outlined sug -
+gest approaches to building a soft responsive architec -
+ture. Furl focuses on the response mechanism, while 
+Robot Soft goes deep into the pneumatic system, both 
+of which provide the basis for the interactive input and 
+output vectors of experimental design. Soft responsive 
+architecture acts as a proxy for the improvisational 
+performance of architecture, enabling the theoretical 
+visions of deformed architecture through technology. 
+Through it, users and designers are in complete control 
+of the continuous communication with the machine in 
+the entire process. In this human–computer symbiosis, 
+Fig. 4 The performance change under the same structure 
+in different time zones indicates the form’s competence and its 
+different interpretation
+Page 6 of 16Wang  Architectural Intelligence             (2023) 2:17 
+architecture became a mechanism of information 
+exchange, moving beyond computer pre-configuration 
+and pre-formulation. Considering the initial experi -
+mental goal of releasing the possibility of building, the 
+background setting is the working and living space, and 
+the needs of multi-activity space and scene conversion 
+should be met according to the user portrait. Besides, 
+the referenced projects have their own limitations while 
+providing the basis, thus providing clues to the focus 
+of the experiment: The Fun Palace project inspiringly 
+advocates possibility and feedback mechanisms, despite 
+the unknown may lead to the excessive physical and 
+Fig. 5 Mangion and Zhang, 2014, Furl: Soft Pneumatic Pavilion
+Fig. 6 Shi, 2018, Robot No. 6 “Soft: Balancing and Wiggling”
+Page 7 of 16
+Wang  Architectural Intelligence             (2023) 2:17 
+ 
+computational capacity required for the construction; 
+Herman’s spatial methodology provides an overwhelm -
+ing theoretical basis for the experiment, while its spe -
+cific realization of the artificial carrier requires more 
+technical and research support; The Furl gives a good 
+focus on the sensory interaction level and realizes space 
+interaction, but it still needs to be more connected with 
+the scene and placed in the specific and long-term use 
+of the space; Robot Soft creates a specific and complete 
+mechanism of action and feedback firmly in technology 
+and structure, however, it needs to consider more ele -
+ments based on the essence of architecture than that.
+The above-related literature review provides the theo -
+retical origin and technical basis of soft architectural 
+robots and also guides the direction of future research 
+we need to do from various aspects. It is not new for 
+robots to intervene in the field of buildings, but we may 
+need to pay more attention to how and what kind of 
+results it leads to in construction. Meanwhile, although 
+the soft robotic architecture is technologically viable, the 
+inconvenience in manufacturing and excessive variates 
+need further development to accommodate the popu -
+larization and diversification of space use; One way of 
+empowering diversity is to standardize the intelligent 
+components with varying soft elements in specific-sized 
+modular and freely combine them for diverse spaces, and 
+the generated results lead to various specific architectural 
+use scenarios.
+3  Methodology based on structure 
+and performance
+To provide a shared space of hybrid functions satisfy -
+ing the compound responsive structure, this research is 
+mainly focused on the adjustability, behavioral orienta -
+tion, and performative aspect of the architectural system. 
+Spaces have been considered introverted or extroverted 
+atmospheres by categorizing them depending on the 
+diversity of activities such as connected vs closed, pri -
+vate vs open, and stable vs dynamic. To determine one’s 
+expectations for improvisational space, some interviews 
+were performed to summarize several types of scenes in 
+different modes. However, the list was not comprehen -
+sive, as the variety of activities could never be precisely 
+forecast (Fig. 7).
+3.1  The exploration of material agent
+Typically, soft robotics contains at least four parts: multi-
+material fluidic actuators, modeling of soft actuators, 
+sensing and control, and translational applications. Cre -
+ating artificial mollusks not only develops a powerful, 
+flexible material but figures out how to precisely control 
+and cleverly manufacture it. One of the major challenges 
+Fig. 7 Space scenarios adaptive to multiple activities
+Page 8 of 16Wang  Architectural Intelligence             (2023) 2:17 
+in soft robotics is finding the right material for motion 
+and sensing. When selecting the material as the system 
+agency, hardness and deformability were the first two 
+prime factors. Stiffness is related to spatial properties, 
+while deformability affects the flexibility of spatial trans -
+formations. On the balance of the architectural hardness 
+and soft deformability, in this study, inflatable silicone as 
+the material agent is chosen, and it is combined with the 
+hard plate as the architectural component (Fig.  8). These 
+programmable materials provide a vision of a future 
+where “programmable matter” and “computational mate-
+rials” shed their technology-centric prefixes and become 
+simply just “materials” (Tome, 2015).
+3.2  Inputs, outputs, and interaction
+The responsive approach to any architecture design 
+affects certain environmental conditions or users’ needs 
+in terms of simulative responses to them. This kind of 
+system works with two components, namely, the sen -
+sors, which are the input, and the actuators, which are 
+the output signal. The sensors measure real-time data 
+such as light, temperature, humidity, movement, posi -
+tion, and speed. These data are fed to the system to trig -
+ger the actuator, which performs in terms of changes in 
+its shape, color, size, position, and geometry. The main 
+medium of architecture in this cybernetic system was set 
+as the basic elements such as the smart floor, ceiling, and 
+walls. As the proxy of the morphological changes of the 
+architecture, the soft modules generate outputs to ren -
+der the performative outcomes of the different activities, 
+a unique atmosphere, and separate privacy. The kinetic 
+actuation can be collected from the scene switching (e. g. 
+reshaped lounge/partition rise up/seating zones of differ -
+ent undulating surfaces), and the output devices include 
+an actuation motor, kinetic driver, VR glasses, odor trans-
+mitter, temperature regulator, glass transparency regula -
+tor, tilt brush, music player, visual projections, and view 
+wander. The interaction input can be set by fingerprints, 
+VR waves, body temperature, sunlight, voice, panel set -
+ting, press projected spot, facial capturing, and body 
+tracking. An interactive performance can be better actu -
+ated and set into different levels by synergizing all these 
+mentioned points. It is expressed as follows: Level 1—
+Interaction in the unconscious state: Pressure controlling 
+(spontaneous deformation): Sofas and beds for sitting 
+and lying; Level 2—Interaction in transforming mode: 
+Body-pose controlling via skeleton tracking (smart defor-
+mation): Space transforms into different scenes.
+In this experiment, Level 2, the human-system inter -
+action, was further investigated. The IMU sensor was 
+used to record the tilt angle of the user’s body as input. 
+The human body posture captured by the IMU sensor is 
+defined through coding to the modular inflatable struc -
+ture. The combinations of different modules and their 
+changes proceeded to create a lively scene suitable for 
+different functions and a flexible change of life mode.
+The movements are represented on space curves com -
+ing from the phase space, which records the axes of 
+joint angles and torso location and attitude. The system 
+uses a multi-class statistical model of shape to obtain a 
+3D representation of the head and hands in a wide range 
+of viewing conditions for tracking and interpretation of 
+Fig. 8 Material fabrication
+Page 9 of 16
+Wang  Architectural Intelligence             (2023) 2:17 
+ 
+people. It makes the body gestures of the users easier to 
+capture and recognize by sensing devices and AI com -
+puters (Fig.  9). The perceiving system is set to run on an 
+intelligent computer standardized with a video camera 
+and performs stably on people with different physical 
+locations. It uses a multi-class statistical model of shape 
+to segment users from a background scene and find and 
+track people’s heads and limbs in various situations. It 
+can produce a real-time re-presentation of the users 
+for the wireless interfaces, video databases, and cod -
+ing of the system. Research by Lee Campbell and Aaron 
+Bobick on the recognition of human body motion 
+(Campbell & Bobick,  1995) and by Christopher R. 
+Wren on real-time tracking of the human body provide 
+inspiration and a foundation for the sensing system set -
+ting (Wren et al., 1996).
+The current investigations involved the construction 
+of an interactive system and its sampling by analyz -
+ing combined morphological models in diverse prede -
+signed patterns. To realize the space change of a scene 
+transformation, component modules were elaborately 
+designed in specific patterns consisting of different cal -
+culated material attributes. The components inflate into 
+conditional shapes to meet the requirements of various 
+scenes. The tilt angles of the body along 2 axes of the 
+IMU sensor using 3 left and right arm positions were 
+used as the input data (Fig.  10), and the inflatable struc -
+ture modulating in 3 m* 3 m as the material agent was 
+Fig. 9 Campbell and Bobick, 1995, Recognition of human body motion
+Fig. 10 Sensing mechanism and inputs
+Page 10 of 16Wang  Architectural Intelligence             (2023) 2:17 
+measured for the space performance output (Fig.  11). 
+This experiment’s modules are conducted at a ratio of 
+1:30.The silicone material was selected for its elasticity to 
+conform to the cambered surface, durability, and adapt -
+ability for flexible arrangement, and it can also be forged 
+tightly with other materials. The assembled architectural 
+system is displayed as a soft pneumatic robotic structure 
+(SPRS) with silicone inflatables on 3D-printed acrylic 
+plates controlled by mechanical-inflatable algorithms. 
+In addition, a set of tracheas, valves, manifolds, adapt -
+ers, connectors, circuits, Arduino boards, wires, etc., is 
+formed in the system.
+3.3  Fabrication and systemization
+Thus far, the fabrication research of soft modules includes 
+several aspects to be focused on. The manufacturing 
+procedure faces the most duration for the casting com -
+plement of the rubber after blending two raw materials, 
+since the inadequate time may not allow the downright 
+weld of the weak joints, which leaks the gas and results 
+in the inaccuracy of the experiments. The ratio of the raw 
+materials also has a sequential effect on the toughness of 
+the finished rubber, which directly influences the swelling 
+capability of the soft samples. The silicone modules were 
+connected to the inflator bump to generate the expected 
+inflation, controlling the air pressure to the modules in 
+graded amounts. This method obtains the diverse surface 
+variations of the materials. Although two samples were 
+noticed at risk of breaking the elastic extent, leading to 
+abnormal morphology at the highest level of air compres-
+sion, the variations with respect to others are negligible. 
+In addition, the results confirm that the different mor -
+phologies are the consequence of the inconsistencies in 
+the pattern, and their curvature rates and inflation sizes 
+are obtained under elaborate manipulation. The air pres -
+sure in the module determines the volume of the mor -
+phology of a specific shape and the bending orientation 
+depends on the main direction of the actuating material. 
+Meanwhile, the combination of multiple samples created 
+flexible abundant shapes of space, and it is also testimony 
+to the necessity of the initial design of variable module 
+patterns. As one part of the pneumatic interaction sys -
+tem, SPRS combines human-capturing censoring and 
+is developed through space monitoring manifestation 
+(Fig. 12).
+4  Results as a synergistic system
+All the material, interaction, and fabrication studies are 
+integrated into an interactive synergistic control system. 
+Importantly, SPRS is always dynamic, in construction, 
+changing the morphology with time. The new relation -
+ship between SPRS, "the architecture", and its architect -
+ing gives us new thoughts on the future of architecture. 
+From a broader perspective, it is more like a convergent 
+system that incorporates mechanics, electronics, graph -
+ics, learning, gesture capturing, and vocal commands, a 
+"media" center (Molly Wright Steenson, 2017).
+The control system SPRS includes two parts: the elec -
+trical circuit composed of Arduino, IMU sensor, solenoid 
+valve, and relay, and the air pipeline consisting of the 
+solenoid valve, air compressor, inflation module, etc. Fig -
+ure 8 shows the structural results obtained from it. It per-
+forms robust actuation in desired features by the digital 
+control of human interaction and the SPRS (Fig. 13).
+The current input setting is based on tangible interfaces 
+and physical interaction, which is primarily to build up 
+the fundamental logic of the interaction workflows; In 
+regard to the upper layer of the sensing framework that 
+introduces artificial intelligence such as machine learn -
+ing, the scene-switching mechanism can match human 
+activities in real-time by inserting the body tracking data 
+captured by the AI sensing devices into the cybernetic 
+interaction process (Fig. 14).
+The samples are dimension-adaptive for the common 
+functions and scenarios, providing a precise exploration 
+of the pattern design of the modules (Fig. 15).
+A quantitative analysis was applied to determine the 
+swelling behavior based on the maximum curvature of 
+the calculated levels within the considered position and 
+scale (Table 1).
+Fig. 11 Module configuration
+Page 11 of 16
+Wang  Architectural Intelligence             (2023) 2:17 
+ 
+The full volume of the “air compressor” is 500 ml, and 
+at normal temperature and pressure, the molar volume of 
+the gas is as follows:
+Thus, the number of moles is equal to the volume of the 
+gas divided by the molar volume of the gas:
+Because T = 293  K and R = 8.3  J/K, according to the 
+ideal gas law
+The pressures of module No.1 in the three modes of 
+Pressure I, Pressure II, and Pressure III are calculated as:
+Vm
+22.4L
+mol × (273 + 25)K
+273K = 24.5/mol
+n = V
+Vm
+= 0.5L
+24.5L/mol = 0.020408mol
+p = nRT /V
+p1I = 0.020408mol × 1/3 × 8.3J/K
+× 293K ÷ (0.5L × 0.804) = 0.804Pa
+p1II = 0.020408mol × 2/3 × 8.3J/K
+× 293K ÷ (0.5L × 1.357) = 1.501Pa
+Similarly, all the internal pressure information of the 
+inflatable modules can be obtained (Table 2).
+Under the same amount of inflation, different patterns 
+lead to different shapes, volumes, and pressures, thereby 
+generating different spatial shapes, sizes, and hardness. 
+Among them, Module 1 and Module 4 have the larg -
+est volume changes, which are suitable for responding to 
+large space changes; Module 3 and Module 5 are the flat -
+test, suitable for close-to-plane spaces such as tables, beds, 
+raised floors, or raised walls. Module 2 has the highest 
+height and is suitable for spatial changes that extend in one 
+direction; Module 6 has undulating shapes and the highest 
+pressure and is suitable for creating spaces with high hard-
+ness or height difference; Module 1 and Module 3 have 
+the lowest pressure and are suitable for soft architectural 
+scenes. Additionally, it should be noted that the pressure 
+change trend of the variable module is not the same under 
+different levels of inflation (within the appropriate range). 
+The pressure of Module 2 and Module 3 decreases with the 
+increase of the inflation level, and the pressure of Module 
+5 and Module 6 As the inflation level increases, the pres -
+sure of Module 1 and Module 4 first increases and then 
+p1III = 0.020408mol × 8.3J/K × 293K
+÷ (0.5L × 2.094) = 2.026Pa
+Fig. 12 System assemblage
+Page 12 of 16Wang  Architectural Intelligence             (2023) 2:17 
+Fig. 13 The control system (SPRS)
+Fig. 14 Body‑tracking inputs correspond to scenes
+Page 13 of 16
+Wang  Architectural Intelligence             (2023) 2:17 
+ 
+decreases with the inflation leveling. Therefore, the selec-
+tion of a specific inflation volume should also be consid -
+ered appropriate.
+Based on this approach, the prediction for the aver -
+age uncertainty of the model in this study slightly 
+exceeds the acceptability limit defined by the previous 
+research. Nevertheless, these results suggest that data 
+obtained using SPRS to simulate material inflation and 
+space construction can provide more information for 
+assessing the impact of performative strategies than 
+that of the traditional setting of collaging configuration. 
+Of note, it can be observed that the intermediate zone 
+created by the arrangement and combination of the 
+diverse samples is partly unexpected. There is a strik -
+ing richness noted when each of the modules forms a 
+synergic entity of the morphological space and struc -
+tural system in the adaptive intelligent SPRS for physi -
+cal interaction (Fig. 16).
+5  Discussion toward next work and architectural 
+future
+In terms of constant change, impermanence, process 
+orientation, and interchangeability aspects in impro -
+visational and responsive architecture, the research 
+Fig. 15 Sample swelling testing and morphology detection
+Table 1 Module inflation information analysis
+Table 2 Module internal pressure information analysis
+Page 14 of 16Wang  Architectural Intelligence             (2023) 2:17 
+work presented a scheme of technological realization 
+and a systematic approach for deformed architecture 
+using cybernetic robotics. In this study, the testing 
+was extended to diverse surface variations among the 
+materials, and open-ended possibilities for a series of 
+unexpected scenarios to create free-style and abundant 
+shapes of space by developing the combination of multi -
+ple samples. The mode and level of aerodynamics affect 
+the shape and scale of the space, which will correspond 
+to different scenes. Under the complete mechanism, the 
+data of human activities captured by intelligent perceiv -
+ing sensors are linked layer by layer to the space they 
+need or will need and its behavior is triggered by sen -
+sory feedback, forming a completely closed loop of spa -
+tial interaction sustainability. Based on this approach, 
+the prediction of the performance of the model allows 
+indeterminacy, and the equilibrium of the improvisa -
+tion in the activity and scene adaptability through the 
+synergistic behaviors of these samples is obtained. 
+Besides, the time-sharing, interactive computer regime 
+is introduced for the dynamic in the equilibrium. These 
+findings give a resonant envision of the future of intel -
+ligence in architectural environments and extend pneu -
+matic robotics architecture, confirming a more flexible, 
+circumstantial, and biotic facet of architecture as an 
+interactive environment.
+Although the hypotheses of the SPRS were supported 
+statistically, indeterminacy, the crux collectively pointed 
+out by this work and the relevant research seems contra -
+dictory to the cybernetics mechanism. As Astrid men -
+tioned, while material agency denotes the possibility 
+that things can act, material objects have an effect on the 
+course of action that is irreducible to direct human inter -
+vention (Oyen,  2018). Thus, the counterbalance between 
+the morphological manipulation of the cybernetic system 
+and the autonomy and randomness of space usage calls 
+for discreet consideration in human-system interaction. 
+Future work should include the following focus points. 
+The research on the fabrication and performance of the 
+soft modules on the architectural scale is to be furthered; 
+What to be mentioned gladly is, as the developments 
+require, the emergence of several integrated develop -
+ment platforms for soft robotics, such as FlowIO, ena -
+bling users to effortlessly bring to life nearly any project 
+in the soft robotics and programmable materials domains 
+(Shtarbanov,  2021). The specific performance strategy 
+of the space interaction, which relied on cybernetics 
+as a dynamic system including behavioral goals out of 
+Fig. 16 Space generation and scenario presentations
+Page 15 of 16
+Wang  Architectural Intelligence             (2023) 2:17 
+ 
+realistic flow standards, should be explored. Further -
+more, oriented on equilibrium and inclusivity, a resilient 
+control system based on feedback investigation, game 
+theory, and behavioral science can be introduced to study 
+soft architecture with long-term performative strategies.
+What’s notable is the study investigates the soft robot -
+ics architectural system by integrating multi-faceted 
+impact upon intelligent architecture in material, space, 
+interaction, fabrication, and cybernetics. As the structure 
+with its inhabitants and the interplay between them form 
+the entity of an evolving ecosystem mediated by each of 
+them, the idea of “system evolves” will lead the architect-
+ing process beyond architecture. Architecture acted as 
+the pioneer for the vision of augmenting human intelli -
+gence because of its power of building worlds. Therefore, 
+architects need to reconsider the scope of their work and 
+the responsibility for environments in the world shaped 
+by computer programs increasingly and indirectly.
+Architecting is concerned with human use, element 
+organization, construction, and also conceiving, design -
+ing, and interpretation. Architects are more trained 
+to build the order of space for its interpretative perfor -
+mance throughout time, such as setting the order of four 
+seasons, and nature will generate landscapes itself. Just 
+as an algorithm allows the program to generate outputs 
+with inputs, code is defined as the space for its capabil -
+ity to shape the environment. In this way, the physical 
+information finds a way to correspond with space per -
+formance through architecture algorithms. The SPRS 
+project is based on the transcending potential of the 
+usability of artificial intelligence and cybernetics have for 
+architecture.
+SPRS provides examples and observations in dif -
+ferent dimensions of architectural intelligence exten -
+sion through soft robotics applied in architecture. It 
+sets inputs that connect initial artificial intelligence, 
+especially the intelligent brain. The basic setting of the 
+system is body-tracking and gesture recognition, and 
+further design can be extended to visual capturing, heu -
+ristics, machine cognition, and communication systems. 
+The SPRS configured outputs of primary robotics and 
+pneumatic systems related to cybernetics, which acts 
+involving information architecture and spatial research, 
+and its ideal practice is framed on the feedback mecha -
+nism and real-time interaction system. SPRS applies 
+human–computer interaction to architecture and inte -
+grates multi-dimensional perception, multi-variable 
+analysis, and multi-level command into its responsive 
+intelligence. In addition, it can extend its practicing 
+connotation in an intelligent environment convergent 
+of spatial and informational interfaces that city and 
+architecture are to form as the carrier of information 
+and space memories. In this situation, SPRS switches 
+to different scenes to accommodate various and multi-
+variable life-conditioning by issuing commands and 
+gestures to the system. The convergence of spatial infor -
+mation makes everything interconnected, and the shap -
+ing of future communities and urban landscapes with it 
+will change the ecology of human settlements.
+6  Conclusion
+Based on the demand for flexible and dynamic liv -
+ing space, this research aims to construct a changeable 
+architecture based on soft robots. It is sensitive to the 
+environment and equipped with responsiveness, plastic -
+ity, and transient structure through innovative ideas and 
+technologies, designated “responsive architecture” or 
+“soft architecture” . In this experiment, from the human 
+data perception and feedback analysis to the responsive 
+mechanisms and the generation of spatial data, the mate -
+rial dynamic closed-loop process of humans and space 
+is digitally synchronized and created, laying a technical 
+logic foundation for the intelligent architectural system. 
+The construction of the system model starts from the 
+structure and performance, linking data of the human 
+body and each physical level of the space, thus forming an 
+interactive information base and a complete agent chain. 
+The responsiveness of the system requires the perception 
+and interpretation of human activities and their demands, 
+feedback action mechanisms timely trigger with cor -
+responding changes in space, and artificial intelligence 
+algorithm settings based on high-dimensional defini -
+tions towards the scene presentation. Although the com -
+bination of the perception system, data links, pneumatic 
+device, and space scene requires extensive cooperation 
+and deeper exploration from more artistic and technical 
+strength, the model framework established by this design 
+is rather innovative and effective in the long run.
+As information is interconnected and assembled in this 
+age, the interface between people and the environment 
+tends to be multi-layered and invisible, and the entity of 
+the building radiates the surroundings in a more flexible 
+and potential way. The soft robotic architectural system is 
+designed to simulate and prepare for the space required 
+for human dynamic living as much as it could, it is hoped 
+to expand the possible future of human settlements of 
+soft architecture through soft robots and further explore 
+the integration methods and connotations it has been 
+and can be incorporated along the way.
+Acknowledgements
+This article is developed from the author’s previous conference paper titled 
+“Soft Pneumatic Robotic Architectural System: Prefabricated Inflatable Module-
+Based Cybernetic Adaptive Space Model Manipulated Through Human-System 
+Interaction” in Hybrid Intelligence: Proceedings of the 4th International Confer‑
+ence on Computational Design and Robotic Fabrication (Wang 2023). Thanks 
+to all who helped in the origination, completion, and refinement of this work.
+Page 16 of 16Wang  Architectural Intelligence             (2023) 2:17 
+Authors’ contributions
+The author solely contributed to all the study work and approved the final 
+manuscript.
+Funding
+Not applicable.
+Availability of data and materials
+The author confirms that the data supporting the findings of this study have 
+been included in the paper as electronic supplementary materials.
+Declarations
+Ethics approval and consent to participate
+Not applicable.
+Consent for publication
+Not applicable.
+Competing interests
+The author declares that they have no competing interests.
+Received: 19 March 2023   Accepted: 18 July 2023
+References
+Bhatia, N. (2013). Crazy-Radical Soft Architecture, From The 1950s To Today | 
+#architecture #soft. fabric | ch. https:// blog. fabric. ch/ index. php?/ archi ves/ 
+2013/ 12/ 16/ C8. html. Accessed 20 March 2022.
+Campbell, L. W., & Bobick, A. F. (1995). “Recognition of human body motion 
+using phase space constraints.” Proceedings of IEEE International Confer-
+ence on Computer Vision (pp. 624–30). https:// doi. org/ 10. 1109/ ICCV. 1995. 
+466880
+Crossboundaries. (2018). Infinite Living. http:// www. cross bound aries. com/ 
+portf olio‑ item/ china‑ house‑ vision/. Accessed 3 Aug 2023.
+Hertzberger, H. (2005). Lessons for students in architecture (Vol. 1). 010 Publishers.
+Jencks, C., & Karl, K. (2006). Theories and manifestoes of contemporary architec-
+ture (2nd ed.). Wiley‑Academy.
+Lundén, E., & Kauste, J. (2018). Another Generosity. International Architecture 
+Exhibition. https:// www. lunden. co/ resea rch/ anoth er‑ gener osity/. 
+Accessed 20 March 2022.
+Mangion, F., & Zhang, B. (2014). Furl: Soft Pneumatic Pavilion. Interactive Archi‑
+tecture Lab. http:// www. inter activ earch itect ure. org/ lab‑ proje cts/ furl‑ soft‑ 
+pneum atic‑ pavil ion. Accessed 10 March 2022.
+Mathews, S. (2006). The fun palace as virtual architecture. J Archit Educ, 59(3), 
+39–48. https:// doi. org/ 10. 1111/j. 1531‑ 314X. 2006. 00032.x
+Negroponte, N. (1976). Soft architecture machines. The MIT Press. https:// doi. 
+org/ 10. 7551/ mitpr ess/ 6317. 001. 0001
+Pask, G. (1969). The Architectural Relevance of Cybernetics. Archit Design 
+Comput Design Think, 7(6), 68–77.
+Shi, J. (2018). Soft: Balancing & Wiggling. In The 23rd International Conference on 
+Computer-Aided Architectural Design Research in Asia (CAADRIA).  https:// 
+doi. org/ 10. 13140/ RG.2. 2. 17965. 54243
+Shtarbanov, A. (2021). FlowIO Development Platform –the Pneumatic “Rasp‑
+berry Pi” for Soft Robotics. Extended Abstracts of the 2021 CHI Conference 
+on Human Factors in Computing Systems. . https:// doi. org/ 10. 1145/ 34117 
+63. 34515 13
+Steenson, M. W. (2017). Architectural intelligence: how designers and archi‑
+tects created the digital landscape. The MIT Press. https:// doi. org/ 10. 7551/ 
+mitpr ess/ 10971. 001. 0001
+Tome, B. (2015). Exoskin : pneumatically augmenting inelastic materials for texture 
+changing interfaces. Massachusetts Institute of Technology.
+Van Oyen, A. (2018). Material Agency. In The Encyclopedia of Archaeological Sci-
+ences (pp. 1–5). https:// doi. org/ 10. 1002/ 97811 19188 230. sasea s0363
+Wang, S.‑Y. R. (2023). Soft Pneumatic Robotic Architectural System: Prefab‑
+ricated Inflatable Module‑Based Cybernetic Adaptive Space Model 
+Manipulated Through Human‑System Interaction. Singapore: Hybrid 
+Intelligence. https:// doi. org/ 10. 1007/ 978‑ 981‑ 19‑ 8637‑6_ 39.
+Wren, C. R., Azarbayejani, A., Darrell, T., & Pentland, A. P . (1996). Pfinder: Real‑
+time tracking of the human body. IEEE Trans Pattern Anal Mach Intell, 19(7), 
+780–785. https:// doi. org/ 10. 1109/ 34. 598236
+Publisher’s Note
+Springer Nature remains neutral with regard to jurisdictional claims in pub‑
+lished maps and institutional affiliations.

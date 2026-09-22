@@ -1,0 +1,1255 @@
+Received 11 September 2024, accepted 8 October 2024, date of publication 14 October 2024, date of current version 24 October 2024.
+Digital Object Identifier 10.1 109/ACCESS.2024.3480834
+Comparative Analysis of Evolutionary Algorithms
+for PID Controller Optimization in Pneumatic
+Soft Robotic Systems: A Simulation and
+Experimental Study
+MOSTAFA MO. MASSOUD
+AND JACQUELINE LIBBY
+ , (Member, IEEE)
+Department of Mechanical Engineering, Stevens Institute of Technology, Hoboken, NJ 07030, USA
+Semcer Center for Healthcare Innovation (CHI), Hoboken, NJ 07030, USA
+Stevens Institute for Artificial Intelligence (SIAI), Hoboken, NJ 07030, USA
+Corresponding author: Jacqueline Libby (jlibby@stevens.edu)
+ABSTRACT The control of soft elastomeric actuators via pneumatic systems presents challenges due
+to system nonlinearities and oscillatory behavior. The control of soft robotics is an underexplored field
+compared to the control of traditional robotics. This study explores evolutionary algorithms for auto-
+tuning Proportional-Integral-Derivative (PID) controllers in pneumatic soft robotics. Four optimization
+algorithms, Genetic Algorithm (GA), Particle Swarm Optimization (PSO), Simulated Annealing (SA), and
+Surrogate-Based Optimization (SBO), were employed to optimize PID parameters for pneumatic pressure
+control. Each algorithm was tested with four objective functions: Integral Absolute Error (IAE), Integral
+Time Absolute Error (ITAE), Integral Square Error (ISE), and Integral Time Square Error (ITSE). Both
+simulated and experimental studies are conducted to evaluate these algorithms using a pneumatic system
+designed with affordable on/off valves controlled by Pulse Width Modulation (PWM). Key performance
+metrics were analyzed: rise time, settling time, overshoot, peak value, and peak time. Results indicate that
+PSO and GA offer faster response times and moderate overshoot, while SA provides minimal overshoot
+at the cost of slower response times. These findings can significantly contribute to the practical control of
+pneumatic systems in soft robotics, offering insights for future optimization and application development.
+INDEX TERMS Evolutionary algorithms, soft robotics, soft elastomeric actuators, proportional-integral-
+derivative (PID) control, genetic algorithm, particle swarm optimization, simulated annealing, surrogate-
+based optimization.
+I. INTRODUCTION
+Soft robots have gained popularity across many applications
+due to their adaptability, safety, and affordability. They can
+have high rates of deformability since they are fabricated
+from compliant materials [1], making them suitable for sensi-
+tive physical human-robot interaction applications [2]. Most
+soft robots are actuated by pneumatic systems that consist of
+affordable components such as solenoid valves, diaphragm
+pumps, and pressure sensors. The benefits of pneumatics
+The associate editor coordinating the review of this manuscript and
+approving it for publication was Hassen Ouakad
+.
+include environmental friendliness, quick response times, and
+the realization of lightweight systems [1], [3], making them
+a popular choice for pneumatic actuation.
+Pneumatic pump stations that control soft actuators can
+be adapted for different projects without significant adjust-
+ments [4]. The fundamental components, such as pressure
+sources, regulators, valves, and microcontrollers, can be
+standardized and reused. Such uniformity streamlines the
+development process. It enables effective deployment across
+different applications, from medical surgeries and wearable
+technologies to movement-based systems and robotic manip-
+ulators, with the help of a single standardized hardware
+VOLUME 12, 2024
+
+ 2024 The Authors. This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 License.
+For more information, see https://creativecommons.org/licenses/by-nc-nd/4.0/ 151749
+M. M. Massoud, J. Libby: Comparative Analysis of Evolutionary Algorithms for PID Controller Optimization
+control platform. Several pneumatic control stations are
+presented as open-source hardware toolkits available to the
+soft robotics community. The most common include the
+Soft Robotics Toolkit (SRT) [4], FlowIO [5], Pneuduino [1],
+PneuSoRD [6], OpenPneu [7], and programmable air [8].
+Although many toolkits are available for pneumatic control
+of soft actuators, there is a shortage of research on feedback
+control for these systems. Only two of the aforementioned
+kits present closed-loop control as part of the open-source
+package. These include PneuSoRD [6] and OpenPneu [7],
+which used PID to control the pressure. Other authors have
+extended the functionality of these open-source packages to
+implement closed-loop control. Elgeneidy [9] used the SRT
+with PID to control an angle for a soft pneumatic actuator;
+the PID was tuned first using the Ziegler-Nichols method
+and then trial and error for fine-tuning. Khan [10] used the
+SRT with an inverse dynamics controller to control the angle
+of a soft finger actuator. Xavier [11] simulated a pneumatic
+control system similar to these common toolkits and analyzed
+the effect of a PI controller with anti-windup for the on/off
+valve, using trial and error for PI tuning. In all of these cases
+where closed-loop control is presented, the physical system
+uses mechanical PWM with on/off solenoid valves to regulate
+airflow. The on/off valves are the most common choice for
+these kits because they are lightweight and affordable.
+From the aforementioned papers that present closed-loop
+control for pneumatic systems with PWM of on/off valves,
+PI or PID algorithms are used to control the system; thus,
+it can be concluded that PID control is an acceptable
+choice for this type of system. Different methods have been
+devised to adjust PID-controlled systems’ gains, including
+trial-and-error, D-partitioning, Ziegler-Nichols, and pole
+placement [12]. Despite their broad adoption in the sector,
+traditional PID controllers have a reputation for underper-
+forming in the presence of disruptions [13]. Additionally,
+the practical application of these direct techniques demands
+an in-depth comprehension of the system and its frequency
+response, as they were designed with linear, time-invariant
+systems in mind. This necessity has prompted the adoption of
+numerous evolutionary optimization methods for fine-tuning
+the gains of PID controllers, especially in nonlinear systems
+such as those found in robotics [14], [15].
+The choice of the PID controller in this study is based
+on several vital considerations specific to the pneumatic soft
+robotic system. Despite its known disadvantages compared
+to advanced algorithms, the PID controller offers a balance
+of simplicity, ease of implementation, and sufficient control
+performance for many practical applications. PID controllers
+are extensively used in industry due to their well-understood
+design, tuning simplicity, and computational efficiency [16].
+For pneumatic soft robotic systems exhibiting inherent
+nonlinearities, compliance, and time-varying dynamics, the
+PID controller provides a practical first-line approach to
+achieving desired control objectives, such as minimizing
+rise time, settling time, and overshooting. More advanced
+algorithms, such as model predictive control (MPC) or
+adaptive control, while potentially offering superior perfor-
+mance, often require higher computational resources and
+more complex implementation, which may not be practical
+for real-time embedded control of pneumatic systems.
+Evolutionary algorithms are stochastic search methods
+that imitate natural biological evolution [17]. Ants, for
+example, use the quickest path to a food source, while
+birds use migration to reach their destinations. Researchers
+have devised computational systems to emulate the efficient
+actions of these species. These systems aim to find reliable
+solutions to intricate optimization challenges. There are sev-
+eral advantages to using evolutionary algorithms compared to
+traditional optimization algorithms. Evolutionary algorithms
+use a population of solutions instead of single-point solutions
+and use a parallelized method by simultaneously evaluating
+multiple points in the parameter space. This approach
+increases the likelihood of finding the global optimum,
+reducing the chances of getting stuck at a local optimum [18].
+Evolutionary algorithms can also handle significant opti-
+mization problems with multiple variables and resolve issues
+independently without human expertise; nonetheless, they
+may rely on human expertise when accessible [19]. Some of
+the most common evolutionary algorithms employed across
+many applications include the Genetic Algorithm (GA) [20],
+Simulated Annealing (SA) [21], Ant Colony Optimization
+(ACO) [22], Particle Swarm Optimization (PSO) [23], and
+Surrogate-Based Optimization (SBO) [24].
+This study focuses on applying evolutionary algorithms
+for tuning PID controllers in pneumatic soft robotic sys-
+tems. These systems have several challenges, such as
+inherent nonlinearities, compliance, time-varying dynamics,
+and time-delay due to air compressibility and actuator
+deformation. While traditional methods like Ziegler-Nichols
+and pole placement offer computational simplicity, they are
+primarily designed for linear, time-invariant systems and
+often fail to account for the nonlinearities, compliance, and
+time-varying dynamics inherent in pneumatic soft robotics.
+Evolutionary algorithms, by contrast, are well-suited for
+optimizing complex, nonlinear systems due to their ability to
+explore a broad solution space and avoid local optima. This
+advantage is particularly relevant in pneumatic soft robotic
+systems, where achieving optimal control requires handling
+multiple variables and constraints that evolve dynamically
+over time. Therefore, while more time-consuming, evolution-
+ary algorithms provide a more robust and flexible approach
+to tuning PID parameters in such contexts, as demonstrated
+in this study’s simulation and experimental results.
+Apart from pneumatic applications, PID parameters are
+often tuned using evolutionary algorithms. Abdelbar [12]
+tuned a cascaded PI position controller using Surrogate
+Based Optimization (SBO), Particle Swarm Optimization
+(PSO), Hybrid Genetic Pattern Search Algorithm (HGSPA),
+and Simulated Annealing (SA) algorithms. Parnianifard [25]
+proposed a surrogate-based robust simulation-optimization
+151750 VOLUME 12, 2024
+M. M. Massoud, J. Libby: Comparative Analysis of Evolutionary Algorithms for PID Controller Optimization
+approach for robust PID and Fractional-Order PID (FOPID)
+tuning for a DC motor speed. Moness [26] presented
+a surrogate-based analysis and optimization for tuning
+Fractional-Order PID (FOPID) to control the waypoint
+navigation of an Unmanned Aerial V ehicle (UA V).
+In summary, the control of pneumatic soft robotic systems
+presents significant challenges due to inherent nonlinearities,
+compliance, and time-varying dynamics. Although widely
+used, traditional PID controllers often underperform in
+nonlinear systems when tuned using conventional methods
+like Ziegler-Nichols or trial and error. There is a lack of
+robust, automated tuning approaches that can effectively
+optimize PID parameters for these pneumatic systems. This
+study addresses the gap by exploring the application of evo-
+lutionary algorithms to optimize PID controllers specifically
+for pneumatic soft robotic systems, aiming to enhance control
+performance under simulated and experimental conditions.
+The novelty of this study lies in its application and
+comprehensive comparison of four distinct evolutionary
+algorithms, GA, PSO, SA, and SBO, for PID controller
+optimization in pneumatic soft robotic systems, a relatively
+unexplored area in the field of control engineering. Unlike
+previous studies that have primarily focused on traditional
+or more rigid robotic systems, this research addresses the
+challenges of pneumatic soft robotics, such as nonlin-
+earities, time-varying dynamics, compliance, and actuator
+deformations. This work also contributes a dual evaluation
+approach by integrating both simulation and experimental
+results to validate the effectiveness of these algorithms
+under real-world conditions, which is rarely done in existing
+literature. Additionally, a systematic analysis of how different
+objective functions (IAE, ITAE, ISE, ITSE) impact the tuning
+results is presented, offering deeper insights into optimizing
+control performance for pneumatic soft robotic systems.
+By providing a comparative analysis and highlighting the
+strengths and limitations of each evolutionary algorithm
+in this specific context, this study sets a new benchmark
+for selecting and implementing optimization techniques in
+pneumatic soft robotics. This contribution is significant for
+advancing practical applications, from medical devices to
+assistive technologies, where soft robotics offers unique
+advantages.
+II. MECHATRONICS DESIGN OF THE PNEUMATIC SYSTEM
+The proposed pneumatic system is a modified version of the
+well-known Soft Robotics Toolkit (SRT). Key modifications
+include:
+• Reduction of electrical noise: The buck converters are
+replaced with individual linear power supplies because
+the switching frequency in the buck converters adds
+noise to the pressure sensor readings.
+• Reduction of mechanical oscillations: A pneumatic tank
+is added to reduce oscillations from the high-frequency
+switching of the on/off valves.
+• Motor protection: A relief valve is added to protect the
+pump from failure during over-pressurization.
+FIGURE 1. The Proposed Pneumatic System, 1) on/off Valve, 2) Relief
+Valve, 3) DC Pump, 4) MOSFET Switches, 5) ATMega2560 Microcontroller,
+6) Pressure Sensor, 7) Actuator Outputs, 8) on/off Power Switches, and 9)
+Syringe.
+The main components of the proposed pneumatic system
+are a set of on/off pneumatic valves, a relief valve, a DC
+pump, MOSFET switches, and an A TMega2560 microcon-
+troller, as shown in figure 1.
+The pressure in the system is modulated by a Pulse Width
+Modulated (PWM) signal applied to a high-speed on/off
+pneumatic valve. The system has 3/2 solenoid valves (SMC-
+VQ110U-5M), which control the pressure by high-frequency
+switching between ON and OFF states to achieve the desired
+pressure. Additionally, each valve has a pressure sensor
+(Honeywell-ASDXA VX100PGAA5) that monitors the actu-
+ator pressure. An Arduino Mega board is programmed to
+apply PID control for the pneumatic system. To protect
+the pump from failure, a relief valve, which consists of an
+on/off valve and pressure sensor, is used to open the valve
+to the atmosphere when the pressure reaches a threshold.
+The PWM signal at 50Hz from the Arduino board is used
+to change the pressure level of the actuator by changing the
+PWM duty cycle. This mechanical PWM operation of on/off
+valves provides an affordable and straightforward method
+for controlling the soft actuator pressure. Despite these
+advantages, there is the disadvantage of pressure fluctuations
+around the desired valve due to mechanical switching of the
+valves. This fluctuation happens because the valve modulates
+output pressure by pumping or releasing high-pressure air at
+the switching frequency of the PWM. As a result, a pneumatic
+tank is used to overcome this problem; a 12ml syringe is used
+as a tank in this system [9], [27]. Additionally, the average
+filter is used to smooth the oscillations.
+VOLUME 12, 2024 151751
+M. M. Massoud, J. Libby: Comparative Analysis of Evolutionary Algorithms for PID Controller Optimization
+FIGURE 2. The pneumatic circuit of the system.
+The pneumatic circuit of the system is shown in figure 2,
+which includes all the system components, including 3/2
+solenoid valves (SMC- VQ110U-5M), relief valve, pressure
+sensor (Honeywell-ASDXA VX100PGAA5), 12ml syringe,
+and actuator. In the first scenario, the pump increases pressure
+until it reaches the threshold, and then the relief valve opens
+if the 3/2 solenoid valve is closed to protect the pump from
+failure. In the second scenario, if the 3/2 solenoid valve is
+opened, the relief valve is kept closed because the pressure
+will not reach the threshold.
+Figure 3 shows the electrical analogy of the pneumatic
+circuit; the transistor Q1 (V alve Open) and transistor Q2
+(V alve Closed) refer to the pressurization and depressuriza-
+tion states. The capacitor C1 refers to the 12ml tank, which
+combines with the internal resistance in the system to make a
+Low-Pass Filter (LPF) to reduce the fluctuation level around
+the desired value. The soft actuator acts as an LPF and is,
+therefore, represented as a capacitor and resistor. Both of the
+LPF elements dampen the system and reduce the pressure
+fluctuations. For example, during pressurization (Q1: On &
+Q2: Off), the pressure is increased until the desired value.
+During depressurization (Q1: Off & Q2: On), the actuator
+pressure is decreased through the LPF resistor and capacitor.
+Just as an RC LPF dampens high-frequency switching in
+FIGURE 3. Electrical circuit analogy of the pneumatic circuit with a
+low-pass filter.
+an electrical circuit, so does the on/off valve switching in a
+pneumatic circuit dampened by the tank and actuator.
+III. OPTIMIZATION ALGORITHMS
+Four evolutionary algorithms are employed for auto-tuning
+the PID parameters: the Genetic Algorithm (GA), Particle
+Swarm Optimization (PSO), Simulated Annealing (SA), and
+Surrogate-Based Optimization (SBO). Each of these four
+optimization algorithms is implemented with four different
+objective functions to identify the optimal set of parameters
+that optimize pressure control performance. The following
+are the explanations of each optimization algorithm. The
+optimization algorithm parameters were chosen based on trial
+and error within the boundary constraints of the hardware.
+A. GENETIC ALGORITHM (GA)
+Holland et al. [20] introduced the GA in 1975. Because
+it is so effective at exploring, this metaheuristic has been
+widely used in many combinatorial optimization problems.
+The objective function within the algorithm may be used with
+various heuristics to gain problem-specific insights. In the
+GA, the parameters (the inputs to the objective function) are
+encoded within a string of genes or chromosomes. These
+chromosomes then define the solution space [28], [29]. The
+GA mimics the course of natural evolution. In biology,
+the principle of the survival of the fittest states that better
+solutions may be attained by recombination. Similarly, in the
+GA, the parameters within each chromosome are swapped
+with partner chromosomes to create offspring.
+The GA ’s flow chart is shown in Figure 4, which starts by
+defining the objective function of the optimization problem
+FIGURE 4. GA flow chart [30].
+151752 VOLUME 12, 2024
+M. M. Massoud, J. Libby: Comparative Analysis of Evolutionary Algorithms for PID Controller Optimization
+Algorithm 1 GA Pseudocode [28]
+1: Inputs: Population_size, Problem_size, P_crossover,
+P_mutation
+2: Outputs: Sbest
+3: Population ← InitializePopulation(Population_size,
+Problem_size)
+4: Evaluate the Objective Function(Population)
+5: Sbest ← GetBestSolution(Population)
+6: while StopCriterion() do do
+7: Parents ← SelectParents(Population,
+Population_size)
+8: Children ← ∅
+9: for each parent1, parent2 ∈ Parents do do
+10: Child1, Child2 ← Crossover(parent1, parent2,
+P_crossover)
+11: Children ← Mutate(Child1, P_mutation)
+12: Children ← Mutate(Child2, P_mutation)
+13: end for
+14: Evaluate the Objective Function(Children)
+15: Sbest ← GetBestSolution(Children)
+16: Population ← Replace(Population, Children)
+17: end while
+18: Return: Sbest
+TABLE 1. GA parameters.
+and then creating an initial set of chromosomes by evaluating
+the cost of each one based on the objective function.
+Secondly, the GA selects the best-performing chromosomes
+for the following solution, performs the crossover to combine
+pairs of parents to produce offspring, and performs the
+mutation process to make small changes to some offspring
+to keep genetic diversity. Finally, the GA evaluates the
+objective value of the new offspring after mutation and checks
+whether the desired criteria are met. The GA pseudocode
+and parameters are shown in Algorithm 1 and Table 1,
+respectively.
+B. PARTICLE SWARM OPTIMIZATION (PSO)
+Particle Swarm Optimization (PSO) is a metaheuristic
+method for optimization problems. Russell Eberhart and
+James Kennedy initially presented PSO in 1995 [31]. The
+algorithm is predicated on social behavior, in which particles,
+or possible solutions, interact with other particles in the
+search space to move closer to the ideal answer. Because of
+PSO’s ease of use, dependability, and efficiency, it has been
+extensively utilized in a variety of industries.
+In the natural world, many examples of swarming behavior
+include packs of hunting wolves or flocks of migrating birds.
+The members of these swarms, known as particles in PSO
+terminology, start by randomly exploring their surroundings
+before beginning to gravitate toward the discoveries made
+by other members of the swarm. These particles advance
+toward their goal by learning from their findings and the
+discoveries of the swarm while simultaneously seeking
+randomly in space and looking for signals of sustenance.
+The PSO starts with a set (or swarm) of decision variables.
+Each decision variable is a vector of the parameters that
+are being optimized. The decision variable is denoted as
+a position vector and updated using a velocity vector. The
+velocity vector is calculated based on the personal best,
+the global best, and some randomness. The personal best
+is the best value that a specific particle has reached over
+the iterations thus far. The global best is the best of all the
+personal bests across the entire swarm. In this way, each
+position vector moves in the direction of its velocity vector
+at each iteration update, gravitating towards the optimum.
+By gradual movement toward the swarm’s optimal outcome,
+the function’s global optimum is achieved [32], [33].
+The PSO’s flow chart is shown in Figure 5, which starts by
+defining the objective function of the optimization problem
+FIGURE 5. PSO flow chart [32].
+VOLUME 12, 2024 151753
+M. M. Massoud, J. Libby: Comparative Analysis of Evolutionary Algorithms for PID Controller Optimization
+Algorithm 2 PSO Pseudocode [32]
+1: Inputs: Decision V ariables, Swarm Size, Max Iterations
+2: Outputs: Global Best Solution
+3: Initialization:
+4: Define the swarm size S and the number of dimensions
+D
+5: for each particle i ∈ [1..S] do
+6: Randomly generate Xi and Vi
+7: Evaluate the objective function of Xi, denoting it as
+f (Xi)
+8: Set Pbesti = Xi and f (Pbesti) = f (Xi)
+9: end for
+10: Set Gbest = Pbest1 and f (Gbest) = f (Pbest1)
+11: for each particle i ∈ [1..S] do
+12: if f (Pbesti) < f (Gbest) then
+13: Set Gbest = Pbesti
+14: Set f (Gbest) = f (Pbesti)
+15: end if
+16: end for
+17: while t < maximum number of iterations do
+18: for each particle i ∈ [1..S] do
+19: Evaluate its velocity vi(t + 1)
+20: Update the position xi(t + 1) of the particle
+21: if f (xi(t + 1)) < f (Pbesti) then
+22: Set Pbesti = xi(t + 1)
+23: Set f (Pbesti) = f (xi(t + 1))
+24: end if
+25: if f (Pbesti) < f (Gbest) then
+26: Set Gbest = Pbesti
+27: Set f (Gbest) = f (Pbesti)
+28: end if
+29: end for
+30: t = t + 1
+31: end while
+32: Return: Gbest
+and then creates an initial set of particles with random
+positions and velocities within the solution space. Secondly,
+the PSO evaluates the objective function for each particle
+in the population to select their initial values, then updates
+each particle’s velocity and position using the PSO equations.
+Additionally, the PSO repeats the calculation of the objective
+values for each particle based on their new positions and
+updates the personal best (Pbest) and the global best (Gbest)
+if the new position is better. Finally, the PSO adjusts the
+search direction based on the updated velocities and positions
+and checks whether the desired criteria are met. Algorithm 2
+and Table 2 show the PSO pseudocode and parameters,
+respectively.
+C. SIMULATED ANNEALING (SA)
+SA is a local search technique initially used to solve a
+combinatorial optimization issue by Kirkpatrick et al. [21]
+after being proposed by Metropolis et al. [34]. SA is a
+TABLE 2. PSO parameters.
+FIGURE 6. SA flow chart.
+metaheuristic algorithm that aims to mimic the crystallization
+process of a material during cooling or annealing [35]. The
+particles move erratically when the material is heated because
+of their high kinetic energy. As the material cools, more
+particles flow in the direction that lowers the energy balance.
+Using a set of decision parameters, SA finds superior answers
+using the same methodology. SA applies a probabilistic rule
+to ascertain if the new solution will replace the previous one.
+The flow chart is shown in Figure 6, which starts by
+defining the objective function of the optimization problem
+and then creating a new candidate solution from the current
+solution. Secondly, the SA evaluates the change in energy
+and updates the stored values. Finally, the SA updates the
+temperature and checks whether it meets the desired criteria.
+The SA pseudocode and parameters are shown in Algorithm3
+and Table 3, respectively.
+D. SURROGATE BASED OPTIMIZATION (SBO)
+A class of optimization approaches known as surrogate-based
+optimization uses surrogate modeling techniques to quickly
+identify the local or global optima [24]. It is best suited
+for optimization problems where the underlying objective
+151754 VOLUME 12, 2024
+M. M. Massoud, J. Libby: Comparative Analysis of Evolutionary Algorithms for PID Controller Optimization
+TABLE 3. SA parameters.
+Algorithm 3 SA Pseudocode
+1: Inputs: Decision V ariables, Initial Temperature T0,
+Cooling Schedule, Max Iterations
+2: Outputs: Optimal Solution
+3: Initialization:
+4: Set initial temperature T = T0
+5: Randomly generate an initial solution X
+6: Evaluate the objective function f (X )
+7: Set the best solution found so far as Xbest = X and
+f (Xbest) = f (X )
+8: while stopping criteria not met do
+9: Generate a new trial solution Xnew
+10: Evaluate the objective function f (Xnew)
+11: Calculate the change in the objective function 1 =
+f (Xnew) − f (X )
+12: if 1 < 0 then
+13: Accept the new solution X = Xnew
+14: if f (Xnew) < f (Xbest) then
+15: Update the best solution found Xbest = Xnew and
+f (Xbest) = f (Xnew)
+16: end if
+17: else
+18: Accept X = Xnew with a probability equation
+19: end if
+20: Update the temperature T using the cooling schedule
+21: end while
+22: Return: Xbest and its objective function value f (Xbest)
+function is time-consuming. A surrogate model is used
+instead of the original objective function, and then global
+optimization is carried out using standard algorithms. Using
+a surrogate model reduces computing costs, which is the
+primary benefit of SBO. Furthermore, the surrogate model
+may be enhanced continually by utilizing fresh sample runs
+of the original model. Using this approach, the algorithm
+can fully leverage the knowledge from prior samples and
+minimize sample size, time-to-solution, and computing
+costs [36], [37].
+For the implementation of an SBO algorithm, this paper
+uses MA TLAB’s Surrogate optimization algorithm. The SBO
+consists of two steps. The first is a surrogate construction,
+which uses random points within the bounds and then
+evaluates the objective function at these points to construct a
+surrogate of the objective function by interpolating a radial
+basis function [36]. The key characteristic of an RBF is
+that its value depends only on the distance from a central
+point; hence, its calculation is fast. The solver starts from
+the smallest objective function value since the last surrogate
+reset in the construction stage. The solver searches for a
+minimum merit function that relates to the surrogate and the
+distance from existing search points to balance minimizing
+the surrogate and searching the space. The merit function
+is a weighted combination of the scaled surrogate and the
+scaled distance. The scaled surrogate is a normalized measure
+used in optimization algorithms. It typically transforms
+the surrogate function values into a standard range [0, 1].
+This scaling helps in comparing different surrogate values
+consistently. On the other hand, The scaled distance is used
+to measure the distance of a point x from evaluated points
+in the optimization space, normalized similarly to the scaled
+surrogate. This measure helps explore the search space more
+effectively by prioritizing points far from those already
+evaluated.
+The SBO’s flow chart is shown in Figure 7, which
+starts by defining the initial design space, surrogate model,
+and optimization criteria. Secondly, the SBO evaluates the
+objective function at the initial points to create the surrogate
+model. After that, the SBO finds the optimum of the surrogate
+model, assesses the actual objective function at the predicted
+optimum, updates the surrogate model, and checks the
+stopping criteria to stop the algorithm when the convergence
+occurs. The SBO’s pseudocode and parameters are shown in
+Algorithm 4 and Table 4, respectively.
+FIGURE 7. SBO flow chart [36].
+IV. OBJECTIVE FUNCTIONS
+Choosing the appropriate objective function (OF) is critical
+for improving the system’s pressure regulation and evaluating
+controller performance. The goal of the objective function
+in this study is to minimize the feedback error of the
+VOLUME 12, 2024 151755
+M. M. Massoud, J. Libby: Comparative Analysis of Evolutionary Algorithms for PID Controller Optimization
+Algorithm 4 SBO Pseudocode
+1: Input: Decision V ariables, Initial values, Max Iterations
+2: Output: Optimal Solution
+3: Initialize design space, surrogate model, and optimiza-
+tion criteria
+4: Generate initial sample points
+5: Evaluate the objective function at initial sample points
+6: Fit the surrogate model to the initial sample points
+(Construction Step)
+7: repeat
+8: Optimize the surrogate model to find the predicted
+optimum (Searching Step)
+9: Evaluate the objective function at the predicted
+optimum (Searching Step)
+10: Add the new sample point to the dataset
+11: Refit the surrogate model with the updated dataset
+12: until stopping criteria are met
+13: Return: the best solution found
+TABLE 4. SBO parameters.
+pressure control, guaranteeing that the system runs efficiently
+and precisely. This section examines the objective functions
+selected to evaluate the design specifications and determine
+the appropriate control settings for the system. The four
+objective functions considered are Integral Absolute Error
+(IAE), Integral Time Absolute Error (ITAE), Integral Square
+Error (ISE), and Integral Time Square Error (ITSE). These
+objective functions were chosen for this study because they
+are often employed in the literature to evaluate the efficacy of
+PID controller designs [14], [15], [18], [38].
+Here are the equations of the four objective functions:
+1) Integral Absolute Error (IAE)
+IAE =
+∫ τ
+0
+|e(t)| dt (1)
+2) Integral Time Absolute Error (ITAE)
+ITAE =
+∫ τ
+0
+t · |e(t )| dt (2)
+3) Integral Square Error (ISE)
+ISE =
+∫ τ
+0
+|e(t)|2 dt (3)
+4) Integral Time Square Error (ITSE)
+ITSE =
+∫ τ
+0
+t · |e(t )|2 dt (4)
+Due to the larger square of a critical error, the ISE
+(Integrated Square Error) penalizes substantial errors more
+than lesser ones. Significant errors are often eliminated fast
+by control systems designed to minimize ISE, while minor
+errors may remain for a long time. This objective function
+frequently results in quick rise times but with prolonged
+low-amplitude oscillation. Moreover, squaring errors may
+increase the effect of outliers, producing biased optimization
+outcomes. The IAE (Integrated Absolute Error), on the other
+hand, does not give any system response faults more weight.
+It often results in less prolonged oscillation and a slower
+response than ISE systems.
+The ITAE (Integrated Time Absolute error) is the integral
+of the absolute error multiplied by the time. Errors that occur
+later in the response are given a higher weight than those
+that occur initially. Compared to the previous two tuning
+techniques, ITAE tuning systems may settle considerably
+faster. The drawback of ITAE is that it results in systems
+with a slow response, which is required to prevent prolonged
+oscillation. By combining information from both ISE and
+ITAE, the Integral Time Square Error (ITSE) penalizes
+significant mistakes in the first transient stage. This measure
+may result in more oscillations as it balances response time
+and settling time. Squaring errors, however, can increase the
+influence of outliers, leading to skewed optimization results.
+The optimal choice for objective function varies depending
+on the application. The performance metrics discussed high-
+light distinct control characteristics; for instance, a square
+error term penalizes significant control errors more rig-
+orously than absolute error methods, prioritizing precise,
+steady-state error-free control. Thus, as a control engineer,
+selecting the most suitable metric depends on the primary
+requirements of the control problem at hand. This decision
+often prompts lively discussions, as identifying the ‘‘best
+choice’’ for a particular application is seldom straightfor-
+ward. Therefore, most researchers typically compare the four
+objective functions and choose the most suitable one for their
+specific application.
+The pseudocode in Algorithm 5 shows one call to the
+objective function, which involves M simulation loops of the
+Simulink model.
+V. PROPOSED CONTROL SCHEMA
+Figure 8 shows the nonlinear model from the system
+identification toolbox; the input to the model is the PWM
+output for the PID controller and the output from the model
+is the pressure value. The system identification process starts
+with an open loop system and then varies the plant input
+(PWM from the PID) from the upper to the lower limit
+to capture all system behaviors. The data was collected
+for 50 seconds; after that, the data was entered into the
+system identification toolbox to find a suitable model for
+151756 VOLUME 12, 2024
+M. M. Massoud, J. Libby: Comparative Analysis of Evolutionary Algorithms for PID Controller Optimization
+Algorithm 5 Pseudocode for Objective Function Used
+Within GA, PSO, SA, and SBO Algorithms
+1: Inputs: ki, kp, kd , systemSimulation (pressure feedback
+PID control loop in Simulink)
+2: Outputs: candidateV alue (candidate objective function
+value)
+3: Constants: sampleRate, duration (τ )
+4: Definitions: let m be the number of time steps from time
+0 to time τ
+5: for i = 1 to m do
+6: [currentMeasured, currentDesired]
+7: = systemSimulation(ki, kp, kd )
+8: currentCandidateError
+9: = currentMeasured − currentDesired
+10: candidateV alue
+11: = cumulative calculation (ISE, IAE, ITSE, or ITAE)
+of currentCandidateError
+12: end for
+13: Return: candidateV alue
+this data. The most suitable model for this data is a
+nonlinear model because it could capture most of the system
+behavior. A nonlinear model is selected as nonlinearities and
+time-varying dynamics characterize the pneumatic system.
+FIGURE 8. Nonlinear model for system identification shown in red within
+the overall feedback loop.
+To validate that a nonlinear model is needed for capturing
+the characteristics of this system, a linear model is also
+simulated. The same input and output of a nonlinear model
+are used to create a linear model using a second-order transfer
+function. After that, the PID controller is tuned for the transfer
+function using the root locus method, which is similar to the
+pole placement in state space. The Ziegler-Nichols method
+is unsuitable for this pneumatic system because the system
+has an overshoot. Figure 9 compares the step response of a
+transfer function and nonlinear models using the same PID
+parameter from the transfer function model. Even though
+the transfer function step response (black color) is good,
+the nonlinear model (red color) is unstable, which means
+that the PID parameters are wrong. The main reason for
+this discrepancy is that the transfer function model cannot
+capture all the system characteristics. As a result, a nonlinear
+model is used for this paper, and optimization algorithms are
+applied to tune the PID controller. The advantage of using
+the optimization algorithm in the tuning process is that they
+are suitable for linear and nonlinear models. Conversely, the
+traditional tuning methods are only appropriate for a linear
+model.
+FIGURE 9. Comparison between step response for the transfer function
+and the nonlinear model.
+Figure 10 depicts the generalized control and optimization
+scheme used to tune the PID parameters for the pneumatic
+system. The term ‘‘plant’’ refers to the system model
+generated by MA TLAB’s System Identification tools. The
+output pressure, y(t), is fed back into the input and compared
+to the desired pressure, x(t). The error signal e(t), which
+reflects the difference between x(t) and y(t), informs the
+PID controller. The PID controller attempts to reduce errors
+by altering the PID parameters. The discrete PID controller
+equation is:
+D[m] = Kp · e[m] + KI
+m∑
+i=1
+e[i] · 1ti + KD · 1em
+1tm
+(5)
+where m is the number of samples, D[m] is the pneumatic
+valve duty cycle, e[m] is the difference between the desired
+and measured values, and Kp, KI , and KD are the PID
+parameters that must be tuned.
+The goal of the optimization is to find the optimal PID
+parameters such that the error is minimized [39], [40], [41].
+The optimization is run as a nested loop. One of the four
+optimization algorithms is run (either Algorithm 1, 2, 3,
+or 4 for the GA, PSO, SA or SBO, respectively.) The
+optimization algorithm iteratively calls the objective function
+(Algorithm 5) until an optimal objective value is reached. For
+each call to the objective function, the inner loop iteratively
+calls the simulated PID control loop for that trial’s duration,
+τ . The return of the objective function is the integrated error
+value over the duration (IAE, ITAE, ISE, or ITSE). This
+return is the candidate value for the current optimization
+iteration. Once the optimization is complete, the tuned PID
+parameters are returned to the final controller for application,
+as shown in the red circle in Figure 10.
+VI. SIMULATION AND EXPERIMENTAL RESULTS
+Table 5 presents the optimized KP, KI , and KD parameters
+after running each optimization trial. Each table row is one
+of the 16 trials for all combinations of the four optimization
+algorithms (GA, PSO, SA, SBO) and the four objective
+functions (IAE, ITAE, ISE, and ITSE). After the optimization
+is completed for each of the 16 trials, the optimized KP,
+VOLUME 12, 2024 151757
+M. M. Massoud, J. Libby: Comparative Analysis of Evolutionary Algorithms for PID Controller Optimization
+FIGURE 10. Proposed control schema with optimization algorithm.
+KI , and KD parameters are then used both in simulation and
+real-world experiments to analyze the performance of the
+resulting controller.
+A. SIMULATION RESUL TS
+For each of the 16 optimization trials, the optimized
+KP, KI , and KD parameters from Table 5 are fed into
+a simulated controller with a reference input of 12 PSI.
+Table 6 summarizes the metrics for running the simulated
+controller for each of these trials. These metrics include
+the rise time, settling time, overshoot, peak pressure, and
+peak time. Figures 11, 12, 13, and 14 show the response
+curves for the four objective functions, IAE, ITAE, ISE,
+and ITSE, respectively. For each figure, the curves for the
+four optimization algorithms (GA, PSO, SA, and SBO)
+are plotted, showing the algorithms’ transient reactions to
+the 12 PSI references.
+When optimized using ISE, PSO outperforms GA with
+the shortest rising and settling durations, although with a
+more significant overshoot. SA has the longest rising and
+lowest peak and overshoot values. Although SBO has the
+most considerable overshoot, peak pressure, and settling
+time, it is somewhat in the middle regarding rising time. PSO
+surpasses others in ITSE, with the lowest rising and settling
+durations and moderate overshoot. SA increases overshoots
+far more than ISE optimization and longer rising and settling
+durations. SBO continues to show higher overshoot and peak
+values but for a much shorter rise time than SA. Regarding
+IAE, GA and PSO have almost similar outcomes concerning
+rising time and settling time, whereas PSO shows slightly
+better overshoot and peak values. SA yields the maximum
+rise time and settling time but the minimum overshoot. The
+performance of SBO is somewhat better than that of ISE and
+ITSE. ITAE-optimized PSO has the shortest rise and settling
+times, minimal overshoot, and better performance over the
+different objective functions. SA still has the highest rise
+times with minimal overshoot compared to other objective
+functions. Despite improving many parameters, SBO still
+exhibits the highest peak overshoot and pressure.
+In summary, the metrics from Table 6 and Fig-
+ures 11, 12, 13, and 14 show some interesting trends. PSO
+consistently outperforms the control output of the pneumatic
+system on most objective functions, balancing rise time,
+settling time, and overshoot. GA also does well in reducing
+overshoot and peak pressure. SA, while helpful in reducing
+overshoot, often has longer response times. SBO, despite
+some improvements, usually leads to increased overshoot and
+peak pressures. These results are consistent with Table 5,
+which shows that GA and PSO consistently have smaller
+minimized values than SA and PSO.
+B. EXPERIMENTAL RESUL TS
+The experimental results are obtained by applying the
+optimized PID parameters to control the built pneumatic
+system presented in Section II. The identical optimized KP,
+KI , and KD parameters from Table 5 that were fed into the
+simulated controller are now fed into the actual pneumatic
+system hardware.
+The system’s performance is assessed with a soft actuator
+as well as a blocked air outlet as a benchmark to analyze the
+pneumatic system without the effect of the soft actuator. The
+blocked outlet closes the output port to analyze how the pneu-
+matic system can reach and maintain the desired pressure
+without the added variability of soft actuator compliance and
+internal volume.
+Table 7 shows the responses of the blocked outlet
+experiments. The four optimization algorithms (GA, PSO,
+SA, SBO) are combined with the four objective functions
+(ISE, IAE, ITSE, and ITAE), with a system reference input
+of 12 PSI. Figures 15, 16, 17, and 18 show the response
+curves for the four objective functions, IAE, ITAE, ISE,
+and ITSE, respectively. For each figure, the curves for the
+four optimization algorithms (GA, PSO, SA, and SBO) are
+plotted.
+The GA and PSO perform similarly on the ISE objective
+function, with virtually comparable rising times ( 0.208 s)
+and settling times ( 0.716 s), although PSO has a somewhat
+more significant overshoot (21.000% vs. 20.083%). SA has a
+substantially smaller overshoot (3.750%) but a longer rising
+time (0.324 seconds). SBO has a low rising time (0.206 s) but
+a significant overshoot (31.583%).
+The ITSE objective function yields similar findings for
+GA and PSO in terms of rising time ( 0.209 s) and settling
+time ( 0.7 s), with PSO and GA having the same overshoot
+(21.000%). SA has the longest rising (0.355 s) and settling
+times (1.204 s), while SBO has the most significant overshoot
+(30.333%).
+When optimizing for IAE, GA and PSO exhibit almost the
+same properties as other objective functions. They both had
+rising times of 0.207 s and settling times around 0.72 s, with
+overshoots of a little over 21%. SA has the highest rising time
+(0.307 s) and a much longer settling time (0.850 s), whereas
+SBO has the most significant overshoot (26.083%).
+For the ITAE objective function, GA and PSO continue
+to show efficient performance with low rise and settling
+times and moderate overshoots. Additionally, the SA displays
+increased settling time compared to other objective functions
+and still has an overshoot. Lastly, the SBO exhibits the
+highest overshoot (27.083%) and a slightly better settling
+time (1.0641 s) than the IAE.
+In conclusion, GA and PSO perform similarly and
+favorably across most measures, making them ideal for
+151758 VOLUME 12, 2024
+M. M. Massoud, J. Libby: Comparative Analysis of Evolutionary Algorithms for PID Controller Optimization
+TABLE 5. PID parameters with objective function values.
+TABLE 6. Simulation response for different optimization algorithms with various objective functions.
+various control applications. SA improves overshoot control,
+albeit at the expense of response time. SBO has a more
+significant overshoot, making it unsuitable for applications
+that need precision control. Thus, the algorithm selection
+should be based on the control system’s unique performance
+needs.
+To validate the performance of the pneumatic system, the
+soft actuator test rig, shown in Figure 19, is used, and the
+same experiments are repeated. A soft pneumatic actuator
+is fabricated from Liquid Silicone Rubber. One end of the
+actuator is fixed to the test rig. The air outlet from the
+pneumatic system is connected through a tube to the soft
+actuator’s inlet adaptor. The identical optimized KP, KI , and
+KD parameters from Table 5 that were fed into the blocked
+outlet experiments and simulations are now fed into the
+experimental hardware for pneumatic control of the soft
+actuator. Table 8 shows the experimental responses of the
+soft actuator system when its PID controller is used with
+each of these parameter choices. The 16 trials are analyzed
+for the 16 combinations of optimization algorithms (GA,
+PSO, SA, and SBO) and objective functions (IAE, ITAE,
+ISE, and ITSE). For each trial, the actuator’s performance is
+evaluated using the same five metrics: rise time, settling time,
+overshoot, peak (PSI), and peak time. Figures 20, 21, 22,
+and 23 show the response curves for the four objective
+functions, IAE, ITAE, ISE, and ITSE, respectively. For each
+VOLUME 12, 2024 151759
+M. M. Massoud, J. Libby: Comparative Analysis of Evolutionary Algorithms for PID Controller Optimization
+FIGURE 11. IAE-objective-function simulation responses of various algorithms.
+FIGURE 12. ITAE-objective-function simulation responses of various algorithms.
+figure, the curves for the four optimization algorithms (GA,
+PSO, SA, and SBO) are plotted against the 12 PSI references.
+For the GA algorithm, the actuator displayed a rising time
+of roughly 0.2733 to 0.2772 seconds for various objective
+151760 VOLUME 12, 2024
+M. M. Massoud, J. Libby: Comparative Analysis of Evolutionary Algorithms for PID Controller Optimization
+FIGURE 13. ISE-objective-function simulation responses of various algorithms.
+FIGURE 14. ITSE-objective-function simulation responses of various algorithms.
+functions, with the smallest settling time of 1.0038 seconds
+for the IAE function and the longest of 1.1723 seconds
+for the ITAE function. Overshoot percentages ranged from
+19.5% to 22.9166%, peak pressures from 14.34 to 14.75 PSI,
+and peak durations of 0.5890 to 0.6190 seconds. PSO had
+a rising time of 0.2743 to 0.277 seconds, with the least
+VOLUME 12, 2024 151761
+M. M. Massoud, J. Libby: Comparative Analysis of Evolutionary Algorithms for PID Controller Optimization
+TABLE 7. Experimental response of rigid actuator for different optimization algorithms with various objective functions.
+FIGURE 15. IAE-objective-function experimental responses of various algorithms.
+settling time of 0.8976 seconds for the ITSE function and
+the longest of 6.6414 seconds for the ISE function. The
+overshoot varied from 18.5% to 20.5%, peak pressures were
+14.22 to 14.46 PSI, and peak timings were between 0.579 and
+0.619 seconds.
+SA had a longer rising time (0.3184 to 0.3867 sec-
+onds), with settling times ranging from 1.6187 seconds
+for the IAE function to 9.4586 seconds for the ITSE
+function. The lowest overshoot was 7.1666% for ISE,
+while the greatest was 22.1666% for ITSE. Peak pressures
+ranged from 12.8599 to 14.66 PSI, while peak durations
+spanned 0.7887 to 0.8286 seconds. SBO rise times ranged
+from 0.2749 to 0.2973 seconds, with settling times of
+5.2529 seconds for the ISE function and 8.987 sec-
+onds for the IAE function. The overshoot varied from
+22.1666% to 28.7499%, peak pressures were 14.66 to
+15.4499 PSI and peak durations were between 0.6589 and
+0.6789 seconds.
+151762 VOLUME 12, 2024
+M. M. Massoud, J. Libby: Comparative Analysis of Evolutionary Algorithms for PID Controller Optimization
+FIGURE 16. ITAE-objective-function experimental responses of various algorithms.
+FIGURE 17. ISE-objective-function experimental responses of various algorithms.
+The GA and PSO algorithms resulted in shorter
+rising and settling durations, whereas SA had the
+least overshoot for the ISE objective function. SBO
+demonstrated more significant overshoot percentages
+VOLUME 12, 2024 151763
+M. M. Massoud, J. Libby: Comparative Analysis of Evolutionary Algorithms for PID Controller Optimization
+FIGURE 18. ITSE-objective-function experimental responses of various algorithms.
+FIGURE 19. Soft actuator test rig.
+and longer settling times but almost constant rising
+times.
+VII. DISCUSSION
+There are some differences between the simulation and
+experimental results for the four optimization algorithms
+(Genetic Algorithm (GA), Particle Swarm Optimization
+(PSO), Simulated Annealing (SA), and Surrogate-Based
+Optimization (SBO)) with different objective functions (IAE,
+ITAE, ISE, and ITSE). For example, most experiments’ rising
+and settling times are longer than in the simulations, and the
+overshoot percentages are more significant. Many causes lead
+to these differences, including unmodeled dynamics, environ-
+mental variation, nonlinearities, unmodeled disturbances, and
+parameter uncertainties [42], [43], [44], [45]. These causes
+are enumerated below in more detail.
+1) Model Simplifications: Simulating physical systems
+using simpler models reduces computing complexity.
+These models may not represent all the nonlinearities,
+delays, and disturbances in the real system, resulting
+in differences between simulated and experimental
+results.
+2) Parameter V ariations: Modeling characteristics, includ-
+ing friction, air leakage, and valve dynamics, can be
+challenging due to their variability. These variations
+can affect the system’s rising time, settling time, and
+overshoot.
+3) Measurement Noise: Sensor and measurement device
+faults and noise are common in experimental settings.
+This noise can change observed performance and
+introduce deviations the models did not anticipate.
+For instance, the error of the pressure sensor in this
+pneumatic system, which includes all errors due to
+offset, full-scale span, pressure non-linearity, pressure
+hysteresis, repeatability, thermal effect on offset, ther-
+mal effect on span, and thermal hysteresis, can reach
+maximum until 2% of Full-Scale Span (FSS). As a
+151764 VOLUME 12, 2024
+M. M. Massoud, J. Libby: Comparative Analysis of Evolutionary Algorithms for PID Controller Optimization
+TABLE 8. Experimental response of soft actuator for different optimization algorithms with various objective functions.
+FIGURE 20. IAE-objective-function experimental responses of soft actuator for various algorithms.
+result, it is responsible for the experiment’s fluctuations
+around the steady-state value.
+4) Environmental Conditions: The temperature, humidity,
+and pressure could affect systems working with
+pneumatic elements. Most of these conditions are
+considered constant or ideal within a simulation;
+however, they might vary considerably in real-world
+applications.
+5) Control Implementation: Implementing control algo-
+rithms might cause delays and quantization effects
+due to their digital nature in controllers and actuators.
+These impacts are typically idealized or ignored in
+simulations.
+Some differences exist between the blocked air outlet and
+soft actuator experiments depicted in Table 7 and Table 8,
+respectively. The main difference exists in the settling time;
+VOLUME 12, 2024 151765
+M. M. Massoud, J. Libby: Comparative Analysis of Evolutionary Algorithms for PID Controller Optimization
+FIGURE 21. ITAE-objective-function experimental responses of soft actuator for various algorithms.
+FIGURE 22. ISE-objective-function experimental responses of soft actuator for various algorithms.
+this difference can be caused by several factors [1], [46]; the
+following are the causes that might affect the results:
+1) Energy Dissipation: Soft actuators exhibit significant
+energy dissipation due to material damping and internal
+151766 VOLUME 12, 2024
+M. M. Massoud, J. Libby: Comparative Analysis of Evolutionary Algorithms for PID Controller Optimization
+FIGURE 23. ITSE-objective-function experimental responses of soft actuator for various algorithms.
+friction. The energy dissipation can lead to prolonged
+settling times.
+2) Control Challenges: Due to the non-linear and time-
+varying properties of soft actuators, controlling the soft
+actuators is complicated, affecting the time response.
+3) Material Properties: Soft actuator is fabricated from
+elastomer. The high elasticity and damping character-
+istics of such materials can extend the settling time.
+4) Dynamic Behavior: The dynamic behavior of soft
+actuators includes deformation, which can cause delays
+in the system’s response. The ability of the soft actuator
+to bend and stretch more than rigid actuators extends
+the time needed to achieve a stable state after a
+disturbance.
+The variations in performance between the different
+evolutionary algorithms are due to the intrinsic characteristics
+of each algorithm rather than a poor choice of algorithmic
+parameter settings (Tables 1 - 4). Each algorithm has a
+different search strategy and balance between exploration
+and exploitation, leading to variations in convergence speed
+and solution quality. In order to ensure that the algorithmic
+parameters were suitable, the following steps were taken:
+1) Literature Review: Parameters were initially set based
+on established values reported in the relevant literature
+for similar optimization problems such as [12].
+2) Preliminary Trials: Several preliminary simulations
+were conducted to identify a suitable range for each
+parameter, including convergence criteria.
+3) Recommended V alues: The manual of each algorithm
+suggests some value ranges that are suitable for most
+optimization problems as tested by other researchers.
+VIII. CONCLUSION AND FUTURE WORK
+The comparative study of the PID controller for a pneumatic
+toolkit used for general soft robotics is presented. Four
+evolutionary algorithms (GA, PSO, SA, and SBO) across
+multiple objective functions (IAE, ITAE, ISE, and ITSE) are
+used for the comparison, identifying each approach’s main
+strengths and limitations in both simulated and real-world
+scenarios.
+The paper’s outcome is that GA and PSO consistently
+outperform other algorithms in balancing quick response
+times with minimal overshoot, making them particularly
+suitable for applications requiring speed and precision.
+Although the SA is slower in rise time, it showed a much
+lower overshoot with the ISE objective function in both soft
+actuator and blocked outlet real-world experiments. This is
+ideal for systems where stability is a higher priority. The
+SBO showed higher overshoots and peak pressures in most
+tests. The discrepancies observed between simulation and
+experimental results showed the obstacle of moving from
+the simulation to the real-world application; there are many
+factors for these discrepancies, such as model simplifications,
+parameter variations, measurement noise, and environmental
+conditions. Furthermore, there is a notable difference in
+the response of rigid versus soft actuators, particularly in
+VOLUME 12, 2024 151767
+M. M. Massoud, J. Libby: Comparative Analysis of Evolutionary Algorithms for PID Controller Optimization
+settling time, which resulted from many causes, such as
+energy dissipation, control challenges, material properties,
+and dynamic behavior. This observation emphasizes the
+importance of tuning and optimizing the control strategies for
+soft robotics applications.
+This research provides valuable guidance for selecting and
+implementing optimization algorithms in pneumatic control
+systems for soft robotics. It can be considered a benchmark
+for future studies, such as applying ranking algorithms
+to choose the best optimization algorithms [47] using
+different evolution optimization algorithms and applying a
+machine learning approach to improve the results. As soft
+robotics evolves, the insights acquired from this work will
+help design more efficient, responsive, and flexible control
+systems, eventually enhancing the capabilities of soft robotic
+applications across various domains.
+REFERENCES
+[1] M. S. Xavier, C. D. Tawk, A. Zolfagharian, J. Pinskier, D. Howard,
+T. Y oung, J. Lai, S. M. Harrison, Y . K. Y ong, M. Bodaghi, and
+A. J. Fleming, ‘‘Soft pneumatic actuators: A review of design, fabrication,
+modeling, sensing, control and applications,’’ IEEE Access, vol. 10,
+pp. 59442–59485, 2022.
+[2] C. Majidi, ‘‘Soft-matter engineering for soft robotics,’’ Adv. Mater .
+Technol., vol. 4, no. 2, 2019, Art. no. 1800477.
+[3] C. D. Pasquier, T. Chen, S. Tibbits, and K. Shea, ‘‘Design and
+computational modeling of a 3D printed pneumatic toolkit for soft
+robotics,’’ Soft Robot., vol. 6, no. 5, pp. 657–663, Oct. 2019.
+[4] D. P . Holland, E. J. Park, P . Polygerinos, G. J. Bennett, and C. J. Walsh,
+‘‘The soft robotics toolkit: Shared resources for research and design,’’ Soft
+Robot., vol. 1, no. 3, pp. 224–230, Sep. 2014.
+[5] A. Shtarbanov, ‘‘Flowio development platform—The pneumatic ‘rasp-
+berry PI’ for soft robotics,’’ in Proc. CHI Conf. Human Factors Comput.
+Syst. New Y ork, NY , USA: Association for Computing Machinery, 2021,
+pp. 1–6.
+[6] T. R. Y oung, M. S. Xavier, Y . K. Y ong, and A. J. Fleming, ‘‘A control and
+drive system for pneumatic soft robots: PneuSoRD,’’ in Proc. IEEE/RSJ
+Int. Conf. Intell. Robots Syst. (IROS), Sep. 2021, pp. 2822–2829.
+[7] Y . Tian, R. Su, X. Wang, N. B. Altin, G. Fang, and C. C. L. Wang,
+‘‘OpenPneu: Compact platform for pneumatic actuation with multi-
+channels,’’ inProc. IEEE/ASME Int. Conf. Adv. Intell. Mechatronics (AIM),
+Jun. 2023, pp. 765–770.
+[8] A. Shrivastava. (2024). Programmable Air. Accessed: Jun. 23, 2024.
+[Online]. Available: https://www.programmableair.com/
+[9] K. Elgeneidy, N. Lohse, and M. Jackson, ‘‘Bending angle prediction and
+control of soft pneumatic actuators with embedded flex sensors—A data-
+driven approach,’’ Mechatronics, vol. 50, pp. 234–247, Apr. 2018.
+[10] A. H. Khan, S. Li, and X. Zhou, ‘‘Dynamic manipulation of pneumatically
+controlled soft finger for home automation,’’ Measurement, vol. 170,
+Jan. 2021, Art. no. 108680.
+[11] M. S. Xavier, A. J. Fleming, and Y . K. Y ong, ‘‘Design and control of
+pneumatic systems for soft robotics: A simulation approach,’’IEEE Robot.
+Autom. Lett., vol. 6, no. 3, pp. 5800–5807, Jul. 2021.
+[12] M. Abdelbar, H. Ramadan, A. Khalil, H. Farag, M. Bahgat, O. Rabie,
+and Y . El-Shaer, ‘‘Optimization of PI-cascaded controller’s parameters for
+linear servo mechanism: A comparative study of multiple algorithms,’’
+IEEE Access, vol. 11, pp. 86377–86396, 2023.
+[13] A. F. Güven and O. Ö. Mengi, ‘‘Nature-inspired algorithms for optimizing
+fractional order PID controllers in time-delayed systems,’’ Optim. Control
+Appl. Methods, vol. 45, no. 3, pp. 1251–1279, May 2024.
+[14] S. B. Joseph, E. G. Dada, A. Abidemi, D. O. Oyewola, and
+B. M. Khammas, ‘‘Metaheuristic algorithms for PID controller parameters
+tuning: Review, approaches and open problems,’’ Heliyon, vol. 8, no. 5,
+May 2022, Art. no. e09399.
+[15] J.-H. Urrea-Quintero, J.-A. Hernández-Riveros, and N. Muñoz-Galeano,
+‘‘Optimum PI/PID controllers tuning via an evolutionary algorithm,’’ in
+PID Control for Industrial Processes, M. Shamsuzzoha, Ed., Rijeka,
+Croatia: IntechOpen, 2018, ch. 3.
+[16] A. A. Jamil, W. F. Tu, S. W. Ali, Y . Terriche, and J. M. Guerrero,
+‘‘Fractional-order PID controllers for temperature control: A review,’’
+Energies, vol. 15, no. 10, p. 3800, May 2022.
+[17] E. Elbeltagi, T. Hegazy, and D. Grierson, ‘‘Comparison among five
+evolutionary-based optimization algorithms,’’Adv. Eng. Informat., vol. 19,
+no. 1, pp. 43–53, Jan. 2005.
+[18] M. W. Iruthayarajan and S. Baskar, ‘‘Evolutionary algorithms based
+design of multivariable PID controller,’’ Exp. Syst. Appl. , vol. 36, no. 5,
+pp. 9159–9167, Jul. 2009.
+[19] P . A. Vikhar, ‘‘Evolutionary algorithms: A critical review and its future
+prospects,’’ inProc. Int. Conf. Global Trends Signal Process., Inf. Comput.
+Commun. (ICGTSPICC), Dec. 2016, pp. 261–265.
+[20] J. H. Holland, Adaptation in Natural and Artificial Systems. Ann Arbor,
+MI, USA: Univ. Michigan Press, 1975.
+[21] S. Kirkpatrick, C. D. Gelatt, and M. P . V ecchi, ‘‘Optimization by simulated
+annealing,’’ Science, vol. 220, no. 4598, pp. 671–680, May 1983.
+[22] M. Dorigo, V . Maniezzo, and A. Colorni, ‘‘Ant system: Optimization by a
+colony of cooperating agents,’’IEEE Trans. Syst., Man, Cybern., B, vol. 26,
+no. 1, pp. 29–41, Feb. 1996.
+[23] R. Eberhart and J. Kennedy, ‘‘A new optimizer using particle swarm
+theory,’’ inProc. 6th Int. Symp. Micro Mach. Human Sci., 1995, pp. 39–43.
+[24] N. V . Queipo, R. T. Haftka, W. Shyy, T. Goel, R. V aidynathan,
+and P . K. Tucker, ‘‘Surrogate-based analysis and
+optimization,’’ Prog. Aerosp. Sci., vol. 41, no. 1, pp. 1–28,
+Jan. 2005.
+[25] A. Parnianifard, M. Fakhfakh, M. Kotti, A. Zemouche, and
+L. Wuttisittikulkij, ‘‘Robust tuning and sensitivity analysis of stochastic
+integer and fractional-order PID control systems: Application of
+surrogate-based robust simulation-optimization,’’ Int. J. Numer .
+Model., Electron. Netw., Devices Fields , vol. 34, no. 2, p. 2835,
+Mar. 2021.
+[26] M. Moness, M. B. Abdelghany, K. M. Mohammed, M. Mohamed, and
+A. M. Moustafa, ‘‘Surrogate optimal fractional control for constrained
+operational service of UA V systems,’’ Drones, vol. 8, no. 4, p. 141,
+Apr. 2024.
+[27] M. Memarian, R. Gorbet, and D. Kulic, ‘‘Control of soft pneumatic finger-
+like actuators for affective motion generation,’’ in Proc. IEEE/RSJ Int.
+Conf. Intell. Robots Syst. (IROS), Sep. 2015, pp. 1691–1697.
+[28] S. Kayalvili and M. Selvam, ‘‘Hybrid SFLA-GA algorithm for an
+optimal resource allocation in cloud,’’ Cluster Comput., vol. 22, no. 2,
+pp. 3165–3173, Mar. 2019.
+[29] J. Li and W. Li, ‘‘On-line PID parameters optimization control for wind
+power generation system based on genetic algorithm,’’IEEE Access, vol. 8,
+pp. 137094–137100, 2020.
+[30] S. Goudarzi, W. H. Hassan, M. H. Anisi, and S. A. Soleymani,
+‘‘Comparison between hybridized algorithm of GA–SA and ABC, GA,
+DE and PSO for vertical-handover in heterogeneous wireless networks,’’
+S¯adhan¯a, vol. 41, no. 7, pp. 727–753, Jul. 2016.
+[31] T. M. Shami, A. A. El-Saleh, M. Alswaitti, Q. Al-Tashi, M. A. Summakieh,
+and S. Mirjalili, ‘‘Particle swarm optimization: A comprehensive survey,’’
+IEEE Access, vol. 10, pp. 10031–10061, 2022.
+[32] S. K. Kannan and U. Diwekar, ‘‘An enhanced particle swarm optimization
+(PSO) algorithm employing quasi-random numbers,’’ Algorithms, vol. 17,
+no. 5, p. 195, May 2024.
+[33] F. A. Zaini, M. F. Sulaima, I. A. W. A. Razak, N. I. Zulkafli, and
+H. Mokhlis, ‘‘A review on the applications of PSO-based algorithm in
+demand side management: Challenges and opportunities,’’ IEEE Access,
+vol. 11, pp. 53373–53400, 2023.
+[34] N. Metropolis, A. W. Rosenbluth, M. N. Rosenbluth, A. H. Teller, and
+E. Teller, ‘‘Equation of state calculations by fast computing machines,’’
+J. Chem. Phys., vol. 21, no. 6, pp. 1087–1092, Jun. 1953.
+[35] Z. M. Elgamal, N. B. M. Y asin, M. Tubishat, M. Alswaitti, and S. Mirjalili,
+‘‘An improved Harris hawks optimization algorithm with simulated
+annealing for feature selection in the medical field,’’ IEEE Access, vol. 8,
+pp. 186638–186652, 2020.
+[36] H. Gutmann, ‘‘A radial basis function method for global optimization,’’
+J. Global Optim., vol. 19, pp. 201–227, Jan. 2001.
+[37] H. Xu, T. Zhang, Y . Luo, X. Huang, and W. Xue, ‘‘Parameter
+calibration in global soil carbon models using surrogate-based opti-
+mization,’’ Geoscientific Model Develop., vol. 11, no. 7, pp. 3027–3044,
+Jul. 2018.
+151768 VOLUME 12, 2024
+M. M. Massoud, J. Libby: Comparative Analysis of Evolutionary Algorithms for PID Controller Optimization
+[38] B. Hekimoglu, ‘‘Optimal tuning of fractional order PID controller for
+DC motor speed control via chaotic atom search optimization algorithm,’’
+IEEE Access, vol. 7, pp. 38100–38114, 2019.
+[39] M. M. Gani, M. S. Islam, and M. A. Ullah, ‘‘Optimal PID tuning for
+controlling the temperature of electric furnace by genetic algorithm,’’
+Social Netw. Appl. Sci., vol. 1, no. 8, pp. 1–8, Aug. 2019.
+[40] M. M. Massoud, A. Abdellatif, and M. R. A. Atia, ‘‘Different path planning
+techniques for an indoor omni-wheeled mobile robot: Experimental
+implementation, comparison and optimization,’’ Appl. Sci., vol. 12, no. 24,
+p. 12951, Dec. 2022.
+[41] M. Massoud, A. Abdellatif, and M. R. A. Atia, ‘‘Mechatronic design and
+path planning optimization for an omni wheeled mobile robot for indoor
+applications,’’ in Proc. 31st Int. Conf. Comput. Theory Appl. (ICCTA),
+Dec. 2021, pp. 90–98.
+[42] K. D. Huang and H.-N. Nguyen, ‘‘Aspect of dynamic simulation and
+experimental research studies on hybrid pneumatic power system,’’ Int. J.
+V eh. Technol., vol. 2010, pp. 1–13, Jun. 2010.
+[43] A. Ma, H. Xiao, X. Y an, X. Kong, F. Rong, L. Zhang, and S. Zhao,
+‘‘Simulation and experimental study of a novel negative-pressure
+Flapper–Nozzle mechanism,’’ Micromachines, vol. 15, no. 1, p. 55,
+Dec. 2023.
+[44] Q. Y u, J. Zhai, Q. Wang, X. Zhang, and X. Tan, ‘‘Experimental study of a
+new pneumatic actuating system using exhaust recycling,’’ Sustainability,
+vol. 13, no. 4, p. 1645, Feb. 2021.
+[45] P . Zhang, X. Qiang, Y . Chunhao, M. Wuning, and Z. Zhendong,
+‘‘Simulation and experimental investigation of high-pressure pneumatic
+pilot-driven on/off valve with high transient performances for compressed
+air ejection,’’ Flow Meas. Instrum., vol. 94, Dec. 2023, Art. no. 102466.
+[46] X. Tang, H. Li, T. Ma, Y . Y ang, J. Luo, H. Wang, and P . Jiang, ‘‘A review of
+soft actuator motion: Actuation, design, manufacturing and applications,’’
+Actuators, vol. 11, no. 11, p. 331, Nov. 2022.
+[47] M. M. M. Hamd, A. A. H. Ibrahim, and M. R. A. Atia, ‘‘Selecting
+dynamic path planning algorithm based-upon ranking approach for omni-
+wheeled mobile robot,’’J. Adv. Res. Appl. Sci. Eng. Technol., vol. 41, no. 2,
+pp. 125–138, Mar. 2024.
+MOSTAFA MO. MASSOUD received the B.S.
+and M.S. degrees in mechanical engineering, with
+a focus on mechatronics from the Arab Academy
+for Science and Technology, Cairo, Egypt, in
+2017 and 2022, respectively. He is currently pur-
+suing the Ph.D. degree in mechanical engineering,
+with a focus on mechatronics, controls, and soft
+robotics with the Stevens Institute of Technology,
+Hoboken, NJ, USA.
+JACQUELINE LIBBY (Member, IEEE) received
+the Ph.D. degree in robotics from Carnegie
+Melon University, Pittsburgh, PA, USA, in 2019,
+with a focus on robotic perception for field
+robotic systems. She was awarded a postdoctoral
+fellowship from New Y ork University (NYU),
+from 2021 to 2023, where she collaborated with
+the NYU Tandon School of Engineering and NYU
+Langone Medical Center to conduct research in
+soft robotics for rehabilitation. She is currently
+an Assistant Professor with the Department of Mechanical Engineering,
+Stevens Institute of Technology, Hoboken, NJ, USA. She is also affiliated
+with the Stevens Semcer Center for Healthcare Innovation and the Stevens
+Institute for Artificial Intelligence. She directs the Robotic Systems for
+Health Laboratory, where her research interests include robotics for
+medical applications that involve physical human–robot interaction, soft
+robotics fabrication and control, machine learning, robotic perception, and
+mechanical design optimization.
+VOLUME 12, 2024 151769

@@ -1,0 +1,456 @@
+SymbioSinging: Robotically transposing singing experience
+across singing and non-singing bodies
+Kelsey Cotton∗
+kelseyc@kth.se
+MID, Royal Institute of Technology,
+KTH Sweden
+Ozgun Kilic Afsar∗
+ozgunk@kth.se&ozgun@mit.edu
+MID, Royal Institute of Technology,
+KTH Sweden and MIT Media Lab,
+Cambridge, USA
+Yoav Luft
+luft@kth.se
+MID, Royal Institute of Technology,
+KTH Sweden
+Priyanka Syal
+syal@kth.se
+MID, Royal Institute of Technology,
+KTH Sweden
+Fehmi Ben Abdesslem
+fehmi.ben.abdesslem@ri.se
+RISE Research Institutes of Sweden,
+Department of Computer Science,
+Sweden
+ABSTRACT
+In this paper we present our late-breaking work in leveraging a
+soft robotic fiber-based wearable system for the transposition of so-
+matic knowledge and experience within the context of singing. We
+examine how the transposition of the physical nuances of singing
+from one body to another, or multiple other bodies, is possible by
+engaging with a soma design process. We share our findings in
+the context of experience transposition, resulting in a preliminary
+prototype: a pneumatically controlled soft robotic garment—called
+ADA (short for air-driven actuator) for re-enacting felt experiences
+of singing onto the human body. We contribute with 1) our initial
+findings in transposing singing experiences between and across
+bodies, and 2) a preliminary wearable robotic garment to mediate
+intersomatic experiences of singing.
+CCS CONCEPTS
+• Applied computing → Performing arts; • Human-centred
+computing → Interface design prototyping .
+KEYWORDS
+Somaesthetic interaction design, voice, intersomatic, touch, soft
+sensors, soft actuators, movement-based HCI, closed-loop control
+ACM Reference Format:
+Kelsey Cotton, Ozgun Kilic Afsar, Yoav Luft, Priyanka Syal, and Fehmi Ben
+Abdesslem. 2021. SymbioSinging: Robotically transposing singing experi-
+ence across singing and non-singing bodies. In Creativity and Cognition
+(C&C ’21), June 22–23, 2021, Virtual Event, Italy. ACM, New York, NY, USA,
+5 pages. https://doi.org/10.1145/3450741.3466718
+∗Both authors contributed equally to this research.
+Permission to make digital or hard copies of part or all of this work for personal or
+classroom use is granted without fee provided that copies are not made or distributed
+for profit or commercial advantage and that copies bear this notice and the full citation
+on the first page. Copyrights for third-party components of this work must be honored.
+For all other uses, contact the owner/author(s).
+C&C ’21, June 22–23, 2021, Virtual Event, Italy
+© 2021 Copyright held by the owner/author(s).
+ACM ISBN 978-1-4503-8376-9/21/06.
+https://doi.org/10.1145/3450741.3466718
+1 INTRODUCTION
+In our late-breaking work, SymbioSing, we examine how the so-
+matic1 experience of singing and the bodily knowledge of the singer
+can be intersomatically2 experienced by another person—or multi-
+ple people—mediated by haptic input and output. The act of ‘experi-
+ence transposition’ mediates the audience’s experience of symbiotic
+engagement with the singer’s body. This transposition allows them
+to experience the movements that the singer generates in real-time,
+translating her changing physiology to another body. We plan to
+apply this form of physical transposition with a performance of
+a musical composition that features 3 simultaneously performing
+voices; 2 of which are pre-recorded and 1 performed live. This
+performance will be for an audience consisting of members of the
+general public, interaction design practitioners and HCI researchers,
+who presumably are not trained singers. The motivation of this
+work is to examine how the biomechanical complexities of a trained
+vocalist’s body while singing, can be intersomatically experienced
+by a non-singing body. We hypothesise, this will render a novel
+listening experience where the audience may feel themselves as
+the ones singing, even if momentarily.
+Throughout the evolution of our research, we address HCI ex-
+plorations of kinaesthetic empathy and telepresence addressing the
+communication of bodily knowledge between bodies, as well as
+across time and space. For transposing the experiential components
+of singing we started with exploring the biomechanical changes of
+our body, such as torso expansion and contraction during breath-
+ing and micro skin vibrations around the larynx and skull, while
+singing. This resulted in an initial implementation of an upper
+body garment embedded with a soft haptic I/O mechanism. This
+first prototype of an air-driven actuating garment, abbreviated to
+ADA3, features an integrated system for playback of biomechanical
+changes during singing4. This current system is specifically focused
+on breathing as the core movement material, therefore targeting
+1We use this term to refer to experiences, movement and phenomena pertaining to
+the body and mind [9]
+2We define this in line with the etymology of inter and somatic: between bodies.
+3We named this first prototype ADA, an acronym for air driven actuator. It is also an
+homage to mathematician, writer and the first reputed computer programmer Ada
+Lovelace.
+4In this first iteration, we have focused on facilitating actuation. Integration with
+sensors will form the focus of our next prototype.
+C&C ’21, June 22–23, 2021, Virtual Event, Italy Cotton and Kilic Afsar, et al.
+muscular movements in the abdominal region. Since the nature of
+these changes are often subtle and nuanced, this indicates a need
+for high fidelity sensors that can intimately interface with the body
+without majorly restricting the range of movement. Thus, to con-
+vey these nuanced movements onto another person’s body, we use
+actuators that are capable of a wide and expressive range of output
+modalities. By bringing such haptic sensations close to the skin,
+we leverage the evocative dynamic touch of the integrated gar-
+ment to mediate bilateral haptic interactions, transgressing bodily
+boundaries.
+We offer multiple preliminary research contributions across both
+artistic and scientific HCI research contexts as follows; (1) initial
+findings in transposing singing experiences across four bodies in a
+non-technology supported setting, and (2) a resulting prototype of
+an interactive upper-body garment for haptic simulation of breath-
+ing and torso movements by the integration of fluid-actuated soft
+materials with textiles. This work intersects with how creativity can
+be elicited, supported and augmented by novel methods, materials,
+and tools.
+2 RELATED WORK
+The aesthetics of touch has drawn interest in recent years [3] [15]
+[8] whether it is through touching with one’s hands [7] [22] [30]
+[12], or being touched [ 25]. The majority of research addresses
+touch on and through the hands or arms, but some explore digital
+touch to the torso [ 2] [5] [1]. For example, Delazio et al. ’s Force
+Jacket [5] uses an array of pneumatic actuators on the torso to
+produce a variety of experiences, from a light, gentle touch to a
+punch-like sensation. Similarly, Arafsha et al. ’s EmoJacket which
+conveys emotions through vibrotactile and heat feedback [1]. Addi-
+tionally, digital touch on the torso has also been used to examine
+breathing [11] [10] and to communicate touch such as hugging
+[6] [24]. In the context of musical performance, digital touch and
+telepresence is notably explored by Turchet et al. ’sMusical Haptic
+Wearable for Audience [26] and Xiao Xiao’sMirrorFugue [27] [28]
+[29]. We further draw connections to research in somatosensory
+knowledge, kinesthetic awareness [23] [14] [4] and empathy [13]
+[16].
+3 TRANSPOSING SINGING EXPERIENCE
+BETWEEN BODIES
+In our examination of touch to transpose the experience of singing
+between bodies with the ADA garment, we have engaged with
+a soma design process [ 18]. This method focuses on designing
+with and for the body [9]. The approach is based on somaesthetics
+[20] and emphasises the designer’s first person perspective at the
+meeting between technologies and bodies [ 18]. Commonly used
+soma design tactics include body mapping and facilitation of the
+movement practice by a somatic connoisseur [17]. The soma design
+method supported us in attuning our understanding of singing
+and vocal physiology [ 21], and informed the zoning of actuated
+output in the ADA garment. Further, this methodology assisted
+with uncovering how the experience of singing can be transposed
+to another person’s body through external haptic feedback.
+In a series of 6 bodywork sessions, which guided the design of
+the ADA garment, we explored intersomatic components of singing
+experiences. One of the exercises we discuss here— Singing Body,
+Listening Body (or SBLB)—examines touch as transposer of expe-
+rience. Some of the tactile outputs that we focused on in SBLB
+included skin vibrations around the laryngeal area and head (felt by
+the hands), as well as deformation and expansion of the thorax and
+abdominals. In this exercise, the Listening Body (LB) wears foam
+earplugs and noise cancelling headphones (playing white noise).
+At a start signal from the LB, the Singing Body (SB) performs a
+sung pattern comprising 3 - 5 vocal gestures. 5 The sung pattern
+is repeated for as many times as the LB requires to “hear-feel” us-
+ing their hands placed on specific regions on the SB during the
+sung pattern (Figure 1a). When the LB determines they have inter-
+nalised—or “heard-felt”—the sung pattern, they then sing it back to
+the SB.
+Reflections on Singing Body, Listening Body
+Our engagement with SBLB yielded a range of tactile findings,
+namely in regards to the regions of the body we determined were
+more “conductive” for the LB. Touching these regions with the
+hands made SB’s movements more easily understandable with re-
+spect to the type of motion occurring in the body (ie. skin vibrations
+from humming ascending and descending glissandi)6. Based on our
+findings regarding expansion, contraction and vibration during
+singing we identified the type and location of these conductive
+zones (see Figure 1b below). The first prototype of ADA focuses on
+movement of the torso during singing, based on the torso and ab-
+dominal expansion and contraction zones and their corresponding
+somatic output. (see Figure 1b).
+Figure 1: (a) 2 authors participating in the Singing Body, Lis-
+tening Body exercise. Hands are used to detect changes in
+the body during singing, (b) ‘Conductive’ Regions for poten-
+tial integration in ADA garment prototype. Image A: front
+view of body. Image B: rear view of body. Blue squares cor-
+respond to expansion, contraction and topographic change.
+Green circles correspond to skin micro vibration and intero-
+ceptive sense of voice ‘presence’.
+In one iteration of the SBLB exercise, participant 1 (P1) as LB was
+able to—with relative accuracy—reproduce the pitch content of a
+5The parameters we determined for the gestures were: a) use of ascending or descend-
+ing glissandi, b) percussive gestures, c) longer durational gestures, d) using vowels, e)
+using hummed tones f) large range of pitches (spanning approximately between 1 to 2
+octaves) and g) larger intervallic relationships between gestures.
+6A glissandi (or in singular form: glissando) is a slide from one pitch to another.
+SymbioSinging: Robotically transposing singing experience across singing and non-singing bodies C&C ’21, June 22–23, 2021, Virtual Event, Italy
+glissando sung by the SB (participant 2, the somatic connoisseur, or
+P2). P1 reflected upon the experience as a whole: “I choose to start
+somewhere, whatever that vibration kind of feels to me. ” P1’s com-
+ments indicate that, as an LB, she is kinaesthetically empathising
+with how P2’s singing feels within her body. P1 first perceives the
+sound through touching the conductive regions on P2 and there-
+after, mentally transposes this feeling into P1’s own body. Similarly,
+P2 mused that “we are discovering at different sorts of rates where
+we feel—as listeners—what’s happening in a singing body, ” echoing
+this notion of transposing another person’s actions into one’s own
+body.
+Another notable phenomenon occurred throughout the LB trans-
+position process, where the LB would place their own hand upon
+their “conductive” body regions after a repetition of the gesture.
+This emerged spontaneously when immediately after feeling par-
+ticipant 3’s (P3) sung gesture, participant 4 (P4) instinctively placed
+her hands on the same “conductive” regions on her own body. Dur-
+ing P4’s singing back of P3’s phrase, she kept her hands upon these
+conductive regions. P4’s gesture can be seen as an attempt to trans-
+pose lingering sensations she experienced from P3’s moving and
+oscillating larynx, and P4 singing those back to P3 through touching
+her own larynx. As P3 observed when he was a LB, “can I feel the
+same movement, can I do the same movement and maybe produce
+the same sounds?”. Our experiences with the SBLB exercise indi-
+cate how touch can be leveraged as a means of transposing somatic
+experiences of singing from one body to another. We used these
+findings from the SBLB exercise conducted during our bodywork
+sessions to inform the preliminary design of our first prototype,
+the ADA garment.
+4 TECHNOLOGY AND SYSTEM OVERVIEW
+4.1 Wearable Interface: Fabric I/O
+To facilitate the transposition of the somatic experience of singing
+observed in our bodywork sessions, we fabricated a novel sensing
+and actuation system composed of strain-programmable microflu-
+idic fibers and fabrics. These fluid actuated fibers—developed by
+P1—are an emerging soft robotic technology providing a modular
+and reconfigurable system for the fabrication, programming and
+control of high resolution shape-changing interfaces. The thin fiber
+actuators have strain programming capabilities. Further, they have
+unique multimodal haptic feedback capabilities, and can thus be
+configured for a highly expressive bandwidth of input and output
+motions. Their versatile I/O configurations offer an ideal system for
+intimate biosensing and haptic feedback. ADA is our first prototype
+of an actuated garment for physically simulating and transposing
+singing experiences onto another body, utilising the pneumatic
+fibrous materials. Our first iteration physically plays back breath-
+ing and torso movement onto the wearer’s body by sequenced
+compression and expansion movements. We utilised fluid actuated
+fibers, integrated within a corset-style upper body garment with 3
+separate inlay-knitted panels layered by a smocked panel and an
+active corset-cording on the back that enables robotic fitting onto
+different body shapes (Figure 2b).
+In the under bust panel (Figure 2e), an actuated fiber with con-
+traction modality is inlaid into the knitted structure. In the currently
+passive smocked panel (Figure 2c), we are anticipating to utilise
+Figure 2: First prototype of ADA (air driven actuator) gar-
+ment. a: rear view of ADA and wearable hardware unit. b:
+view of actuated back lacing. c: external view of knitted ac-
+tuating panels. d: internal view of knitted actuating panels.
+e: close view of under bust panel. f: close view of lower torso
+panel. g: front view of garment on the body. h: side view of
+garment on the body. i: unactuated lower torso panel. j: ac-
+tuated lower torso panel.
+the 3D structure of the fabric to function as an out-of-plane force
+feedback fabric form. This will facilitate the out-of-plane ‘push-
+towards and pull-backwards’ movement of the upper and lower
+abdominals by applying localised force onto the wearer’s same
+body parts. The knitted panel around the lower torso (Figure 2f) is
+similarly constructed as the under bust panel, with a contractible
+fluidic fiber inlaid to the knit.
+Future iterations of ADA will facilitate the capturing and real-
+time communication of bodily movements between a sending and
+receiving garment, as well as recording of the movement data in a
+fabric memory. Further, we plan to target the experiences of laryn-
+geal vibration with high frequency (>50Hz) actuation capability of
+the same fluidic fiber substrate.
+4.2 System Architecture
+The system control of the ADA garment is built on the open source
+electro-pneumatic platform FlowIO [19], to help us create a portable,
+compact and unobtrusive method for on-the-fly control of multiple
+garments (Figure 3). FlowIO is a miniature integrated hardware
+and software development platform for driving soft pneumatically-
+actuated devices such as the fluidic fibers. We adapted this platform
+to achieve our specific system requirements such as; (1) yielding
+high pressures (>300kPa) for actuating multiple and up to 10 meters
+long fluidic fibers, and (2) communication via Bluetooth Low Energy
+(BLE) protocol for closed-loop bidirectional wireless interaction
+between multiple integrated garments. Although we currently use
+the 5 port configuration of FlowIO, we will increase the valve termi-
+nal up to 20 ports to afford precise control of localised movements
+within the multipartite robotic garment.
+Figure 3: FlowIO-based control architecture for bidirec-
+tional interaction between 2 wearable robotic garments.
+C&C ’21, June 22–23, 2021, Virtual Event, Italy Cotton and Kilic Afsar, et al.
+5 CONCLUSION AND FUTURE WORK
+In this paper we have discussed our preliminary explorations in
+leveraging actuated textile-based haptic feedback to transpose singing
+experiences onto another person’s body. We presented our first
+prototype, ADA, that utilises fluid actuated robotic fibers to reen-
+act the experience of a singer’s biomechanical movements on the
+listener’s body. The axially morphing sections in the garment re-
+flect the localisation of breathing and muscular engagement which
+occurs during singing, forming the first layer of our explorations.
+Through ADA, we examine how touch can be utilised to transpose
+and transform experiential features of a vocal movement material
+from one person’s body to another. In future work, we will integrate
+our findings on vibration within an interactive laryngeal-wear. Fur-
+ther, we will conduct case studies with larger groups of people,
+specifically with non-singers. As the singer’s input gestures will be
+directly reenacted as actuation on the audiences’ bodies in real-time,
+we will explore complex mappings through machine learning to
+develop a more expressive range of intersomatic singing experience.
+Currently, we use machine learning algorithms to train a computer
+to recognise input gestures and map them to a predefined actuation.
+During the performance, the trained model will be fed with the
+singer’s input data and send appropriate actuations to the listening
+garments. Additional applications of AI may include the adaptation
+of output gestures to the audience garments, taking into account
+factors such as variations in body size and shape as well as the
+stages of the breathing cycle7
+REFERENCES
+[1] Faisal Arafsha, Kazi Masudul Alam, and Abdulmotaleb El Saddik. 2012. EmoJacket:
+Consumer centric wearable affective jacket to enhance emotional immersion.
+In 2012 International Conference on Innovations in Information Technology (IIT) .
+350–355. https://doi.org/10.1109/INNOVATIONS.2012.6207766
+[2] Arpit Bhatia, Dhruv Kundu, Suyash Agarwal, Varnika Kairon, and Aman Parnami.
+2021. Soma-noti: Delivering Notifications Through Under-clothing Wearables. In
+Proceedings of the 2021 CHI Conference on Human Factors in Computing Systems
+(CHI ’21). Association for Computing Machinery, New York, NY, USA, 1–8. https:
+//doi.org/10.1145/3411764.3445123
+[3] Yves Candau, Jules Françoise, Sarah Fdili Alaoui, and Thecla Schiphorst. 2017.
+Cultivating kinaesthetic awareness through interaction: Perspectives from so-
+matic practices and embodied cognition. In Proceedings of the 4th International
+Conference on Movement Computing (MOCO ’17) . Association for Computing
+Machinery, New York, NY, USA, 1–8. https://doi.org/10.1145/3077981.3078042
+[4] Jonathan Cole and Barbara Montero. 2007. Affective Proprioception. Janus Head
+9, 2 (2007), 299–317. Publisher: Trivium Publications.
+[5] Alexandra Delazio, Ken Nakagaki, Roberta L. Klatzky, Scott E. Hudson, Jill Fain
+Lehman, and Alanson P. Sample. 2018. Force Jacket: Pneumatically-Actuated
+Jacket for Embodied Haptic Experiences. InProceedings of the 2018 CHI Conference
+on Human Factors in Computing Systems (CHI ’18). Association for Computing
+Machinery, New York, NY, USA, 1–12. https://doi.org/10.1145/3173574.3173894
+[6] C. DiSalvo, F. Gemperle, J. Forlizzi, and E. Montgomery. 2003. The Hug: an explo-
+ration of robotic form for intimate communication. InThe 12th IEEE International
+Workshop on Robot and Human Interactive Communication, 2003. Proceedings.
+ROMAN 2003. 403–408. https://doi.org/10.1109/ROMAN.2003.1251879
+[7] Cathy Fang, Yang Zhang, Matthew Dworman, and Chris Harrison. 2020. Wireal-
+ity: Enabling Complex Tangible Geometries in Virtual Reality with Worn Multi-
+String Haptics. In Proceedings of the 2020 CHI Conference on Human Factors in
+Computing Systems (CHI ’20). Association for Computing Machinery, New York,
+NY, USA, 1–10. https://doi.org/10.1145/3313831.3376470
+[8] Lauren Hayes and Jessica Rajko. 2017. Towards an Aesthetics of Touch. In
+Proceedings of the 4th International Conference on Movement Computing (MOCO
+’17). Association for Computing Machinery, New York, NY, USA, 1–8. https:
+//doi.org/10.1145/3077981.3078028
+7As an example, one application would be detecting if an audience body is completing
+an opposite gesture to the singer (ie the singer is breathing out whilst an audience
+body is breathing in), in order to provide an inverse operation of the singer’s gesture.
+[9] Kristina Höök. [n.d.]. Designing with the Body . The MIT Press. https://mitpress.
+mit.edu/books/designing-body Publisher: The MIT Press.
+[10] Annkatrin Jung. 2020. ‘The Breathing Garment: Exploring Breathing-Based Inter-
+actions through Deep Touch Pressure’. Dissertation.
+[11] Annkatrin Jung, Miquel Alfaras, Pavel Karpashevich, William Primett, and
+Kristina Höök. 2021. Exploring Awareness of Breathing through Deep Touch
+Pressure. In Proceedings of the 2021 CHI Conference on Human Factors in Com-
+puting Systems (CHI ’21). Association for Computing Machinery, New York, NY,
+USA, 1–15. https://doi.org/10.1145/3411764.3445533
+[12] Anzu Kawazoe, Massimiliano Di Luca, and Yon Visell. [n.d.]. Tac-
+tile Echoes: A Wearable System for Tactile Augmentation of Objects.
+https://research.fb.com/publications/tactile-echoes-a-wearable-system-for-
+tactile-augmentation-of-objects/
+[13] Jin Hyun Kim. 2015. Kinaesthetic Empathy as Aesthetic Experience of Music. A
+Phenomenological Approach. Les Cahiers philosophiques de Strasbourg 38 (Sept.
+2015), 119–138. https://doi.org/10.4000/cps.446 ISBN: 9782868209177 Number:
+38 Publisher: Presses universitaires de Strasbourg.
+[14] Barbara Montero. 2005. Proprioception as an Aesthetic Sense. The Journal of
+Aesthetics and Art Criticism 64, 2 (April 2005), 231–242. https://doi.org/10.1111/j.
+0021-8529.2006.00244.x
+[15] Sara Price, Kerstin Leder Mackley, Carey Jewitt, Gijs Huisman, Bruna Petreca,
+Nadia Berthouze, Domenico Prattichizzo, and Vincent Hayward. 2018. Reshap-
+ing Touch Communication: An Interdisciplinary Research Agenda. In Extended
+Abstracts of the 2018 CHI Conference on Human Factors in Computing Systems
+(CHI EA ’18). Association for Computing Machinery, New York, NY, USA, 1–8.
+https://doi.org/10.1145/3170427.3170603
+[16] Dee Reynolds and Matthew Reason. 2012. Kinesthetic Empathy in Creative and
+Cultural Practices. (2012). https://www.research.manchester.ac.uk/portal/en/
+publications/kinestbetic-empathy-in-creative-and-cultural-practices(5f00cb48-
+1106-4f58-bff2-9eebd0ee6807)/export.html Publisher: Intellect Ltd.
+[17] Thecla Schiphorst. 2011. Self-evidence: applying somatic connoisseurship to
+experience design. In CHI ’11 Extended Abstracts on Human Factors in Computing
+Systems (CHI EA ’11). Association for Computing Machinery, New York, NY, USA,
+145–160. https://doi.org/10.1145/1979742.1979640
+[18] Thecla Schiphorst, Lian Loke, and Kristina Höök. 2020. Designing for Sensory
+Appreciation: Cultivating Somatic Approaches to Experience Design. InExtended
+Abstracts of the 2020 CHI Conference on Human Factors in Computing Systems
+(CHI EA ’20). Association for Computing Machinery, New York, NY, USA, 1–4.
+https://doi.org/10.1145/3334480.3375056
+[19] Ali Shtarbanov. 2021. FlowIO Development Platform - the Pneumatic "Raspberry
+Pi" for Soft Robotics. In Extended Abstracts of the 2021 CHI Conference on Human
+Factors in Computing Systems . Association for Computing Machinery, New York,
+NY, USA, 1–6. https://doi.org/10.1145/3411763.3451513
+[20] Richard Shusterman. 2008. Body Consciousness: A Philosophy of Mindfulness and
+Somaesthetics. Cambridge University Press, Cambridge. https://doi.org/10.1017/
+CBO9780511802829
+[21] Johan Sundberg. 1987. The Science of the Singing Voice . Northern Illinois Univer-
+sity Press, Dekalb, Illinois. https://www.cambridge.org/core/journals/british-
+journal-of-music-education/article/abs/science-of-the-singing-voice-
+by-johan-sundberg-dekalb-illinois-northern-illinois-university-press-
+1987-3325-216-pp-the-structure-of-singing-by-richard-miller-london-
+macmillan-1986-no-price-given-372-pp-bel-canto-the-teaching-of-the-
+classical-italian-songschools-its-decline-and-restoration-by-lucie-manen-
+oxford-university-press-1987-hard-covers-15-paperback-695-76-pp-a-basic-
+countertenor-method-by-peter-giles-london-thames-1987-no-price-given-
+128-pp/98624899A8199F74001308E20619360C Publisher: Cambridge University
+Press.
+[22] Nobuhiro Takahashi, Shinichi Furuya, and Hideki Koike. 2020. Soft Exoskeleton
+Glove with Human Anatomical Architecture: Production of Dexterous Finger
+Movements and Skillful Piano Performance. IEEE Transactions on Haptics 13,
+4 (Oct. 2020), 679–690. https://doi.org/10.1109/TOH.2020.2993445 Conference
+Name: IEEE Transactions on Haptics.
+[23] Anne Tarvainen. 2018. Singing, Listening, Proprioceiving: Some Reflections on
+Vocal Somaesthetics. Aesthetic Experience and Somaesthetics (Jan. 2018), 120–142.
+https://doi.org/10.1163/9789004361928_010 Publisher: Brill Section: Aesthetic
+Experience and Somaesthetics.
+[24] James Keng Soon Teh, Adrian David Cheok, Yongsoon Choi, Charith Lasantha
+Fernando, Roshan Lalintha Peiris, and Owen Noel Newton Fernando. 2009. Huggy
+pajama: a parent and child hugging communication system. In Proceedings of
+the 8th International Conference on Interaction Design and Children (IDC ’09) .
+Association for Computing Machinery, New York, NY, USA, 290–291. https:
+//doi.org/10.1145/1551788.1551861
+[25] Vasiliki Tsaknaki, Kelsey Cotton, Pavel Karpashevich, and Pedro Sanches. 2021.
+"Feeling the Sensor Feeling you": A Soma Design Exploration on Sensing Non-
+habitual Breathing. In Proceedings of the 2021 CHI Conference on Human Factors
+in Computing Systems (CHI ’21) . Association for Computing Machinery, New
+York, NY, USA, 1–16. https://doi.org/10.1145/3411764.3445628
+SymbioSinging: Robotically transposing singing experience across singing and non-singing bodies C&C ’21, June 22–23, 2021, Virtual Event, Italy
+[26] Luca Turchet, Travis West, and Marcelo M. Wanderley. 2020. Touching the
+audience: musical haptic wearables for augmented and participatory live music
+performances. Pers Ubiquit Comput (March 2020). https://doi.org/10.1007/s00779-
+020-01395-2
+[27] Xiao Xiao. 2011. Communicating Presence in Musical Collaboration Across Space
+and Time. Ph.D. Dissertation. Massachusetts Institute of Technology. https:
+//web.media.mit.edu/~x_x/mirrorfugue/mirrorfugue_ms_thesis.pdf
+[28] Xiao Xiao and Hiroshi Ishii. 2010. MirrorFugue: communicating hand gesture in
+remote piano collaboration. In Proceedings of the fifth international conference on
+Tangible, embedded, and embodied interaction (TEI ’11). Association for Computing
+Machinery, New York, NY, USA, 13–20. https://doi.org/10.1145/1935701.1935705
+[29] Xiao Xiao and Hiroshi Ishii. 2011. Duet for solo piano: MirrorFugue for single user
+playing with recorded performances. In CHI ’11 Extended Abstracts on Human
+Factors in Computing Systems (CHI EA ’11). Association for Computing Machinery,
+New York, NY, USA, 1285–1290. https://doi.org/10.1145/1979742.1979762
+[30] Mengjia Zhu, Amirhossein H. Memar, Aakar Gupta, Majed Samad, Priyanshu
+Agarwal, Yon Visell, Sean J. Keller, and Nicholas Colonnese. 2020. PneuSleeve:
+In-fabric Multimodal Actuation and Sensing in a Soft, Compact, and Expressive
+Haptic Sleeve. In Proceedings of the 2020 CHI Conference on Human Factors in
+Computing Systems (CHI ’20). Association for Computing Machinery, New York,
+NY, USA, 1–12. https://doi.org/10.1145/3313831.3376333

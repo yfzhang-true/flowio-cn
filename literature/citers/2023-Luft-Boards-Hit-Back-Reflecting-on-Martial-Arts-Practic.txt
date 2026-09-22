@@ -1,0 +1,1514 @@
+Boards Hit Back: Reflecting on Martial Arts Practices Through 
+Soma Design 
+Yoav Luft Pavel Karpashevich Kristina Höök 
+luft@kth.se pavelka@kth.se khook@kth.se 
+Royal Institute of Technology, KTH Royal Institute of Technology, KTH Royal Institute of Technology, KTH 
+Stockholm, Sweden Stockholm, Sweden Stockholm, Sweden 
+Figure 1: Koinry¯o shown hanging from a tree 
+ABSTRACT 
+There is an increasing interest in the HCI community in designing 
+for bodily practices. We report on a soma design process for mar-
+tial arts and the resulting artifact – an interactive wooden dummy. 
+Through a detailed account of the design process, we show how it 
+enriched and revamped the bodily practice, but also how it changed 
+the martial arts expert in the design team. Based on a phenomeno-
+logical account of his experiences, we argue that the estrangement 
+This work is licensed under a Creative Commons Attribution-Share Alike 
+International 4.0 License. 
+CHI ’23, April 23–28, 2023, Hamburg, Germany 
+© 2023 Copyright held by the owner/author(s). 
+ACM ISBN 978-1-4503-9421-5/23/04. 
+https://doi.org/10.1145/3544548.3580722 
+methods in soma design may allow practitioners engaging as soma 
+designers, to cultivate and create new artistic habits fused with 
+thought and feeling, changing themselves and their practice in 
+directions they seek. 
+CCS CONCEPTS 
+• Human-centered computing → Empirical studies in inter-
+action design. 
+KEYWORDS 
+Embodied Interaction, Design, Soma Design, Bodily Practices, Mar-
+tial Arts 
+ACM Reference Format: 
+Yoav Luft, Pavel Karpashevich, and Kristina Höök. 2023. Boards Hit Back: 
+Refecting on Martial Arts Practices Through Soma Design. In Proceedings of 
+the 2023 CHI Conference on Human Factors in Computing Systems (CHI ’23), 
+CHI ’23, April 23–28, 2023, Hamburg, Germany Luf et al. 
+April 23–28, 2023, Hamburg, Germany. ACM, New York, NY, USA, 18 pages. 
+https://doi.org/10.1145/3544548.3580722 
+1 INTRODUCTION 
+Designing for bodily activities is becoming an increasingly pop-
+ular topic in the feld of interaction design. There are interaction 
+design projects for running [46], dancing [2, 16, 35], and extreme 
+sports [56, 57]. In these works, it is clear how technology adds novel 
+experiences [57], changes existing [7] or even creates for entirely 
+novel bodily practices [43]. As with any new technology entering 
+into a pre-existing practice, changes will occur to: the practice itself; 
+those engaged in the practice; the organisations surrounding it; the 
+rules, the objectives and participants [34]. For example, the mar-
+tial arts vest designed by Chi and colleagues [7, 8] for Taekwondo 
+competitions required competitors, judges and spectators to adjust 
+their expectations and strategies. Turmo Vidal describes how yoga 
+experts changed their practice to accommodate new technology 
+she had developed [72], adapting their teaching methodology, and 
+occasionally the exercises themselves, in order to accommodate 
+the technology and its role in the practice. What we ask here goes 
+to the deeper aspects of the bodily practices – its norms and un-
+derlying aims and how those may become discernible, articulated, 
+challenged and even creatively changed in the design process. As 
+argued by Shusterman [63], there is a diference between “routine, 
+unintelligent habit” and “intelligent or artistic habit” fused with 
+thought and feeling. What we will argue here, is that soma de-
+sign methods [26, 29] may help practitioners uncover their own 
+deeply ingrained, tacit, normative habits making them attainable 
+for change. Through a detailed phenomenological account, we will 
+show how the frst author, an expert practitioner acting as soma 
+designer, changed through the design process, enabling him to 
+cultivate and create new artistic habits.. 
+The soma design process led to a tool aimed to be used in training 
+sessions – named Koinryo¯ 1. Martial arts in general and Bujinkan 
+Budo Taijutsu, practiced by the frst author, provides an engaging 
+domain for design due to its strong normative stance – prescribing 
+certain movements, principles, strategies, pedagogy, and values. 
+While we might at frst assume that this would mean that prac-
+titioners would resist change, that the norms are so strong that 
+nothing can be changed, we note instead how creative change and 
+development is encouraged in Bujinkan Budo Taijutsu. It is seen as 
+a path to improving the practice. This said, any changes need to re-
+late to the norms of the practice, harmonising with its overarching 
+philosophy. 
+In the soma design process of Koinry¯o, the tension between 
+normative expectations and movements enabled by diferent ver-
+sions of the prototype, helped the expert to uncover and articulate 
+some of the tacit norms of the martial art practice itself. As we 
+will show, the design process unearthed norms, re-enforcing some 
+while challenging others. In the end, the soma design process led 
+him to extend his repertoire of solo training exercises not only with 
+the artefact, but also without it, for example, as we will show in 
+detail below, practicing elbow locks with unbendable objects. 
+1Koinry¯ okai) shaped like a dragon clawed o (Japanese: 虎隱良) is folkloric monster (Y¯ 
+staf, illustrated in the book "Hyakki Tsurezure Bukuro" by Sekien Toriyama, 1784. 
+Figure 2 
+Our main contribution lies in the detailed, phenomenological 
+account of a bodily practice expert in a soma design process. Even 
+though bodily practice experts are often engaged with design work 
+as users, facilitators and designers, their engagement is often posi-
+tioned as contributing to designed artifact(s) to be used by others. 
+Moreover, while expert-led or autobiographical design processes re-
+ported in the literature have led to changes in participant behaviour 
+or understandings (such as in [2, 38, 57, 65, 70, 72]), they have, with 
+few notable exceptions [35, 39, 51]) not engaged with changes of 
+movement-based habits or increasing aesthetic appreciation of so-
+matic experience. We add a meticulous, detailed, description of how 
+a soma design process changed the somatic practitioner himself. 
+We argue that such a refective and creative design process could 
+be employed by bodily practice experts as a path to not only en-
+riching an established bodily practice, challenging and developing 
+its norms and practices, but also changing the experts themselves – 
+no matter whether the design outcomes becomes a standard part of 
+the practice or not. The estrangement methods and (self-) refection 
+ofered by the soma design process is thereby of relevance to those 
+who (1) want to become better experts in their own bodily practice, 
+or (2) want to improve and change their practice. 
+2 BACKGROUND 
+2.1 Soma Design 
+We base our design explorations on soma design [26, 30] – a frame-
+work that focuses on bringing the felt experience of bodily activities 
+to the foreground of awareness and using those felt experiences 
+as a resource in the design process. Soma design utilises a frst-
+person perspective and brings attention to the creative meaning-
+making that emerges during the design process. Soma design has 
+proven to be generative to designing for somatic practices, such as 
+dance [2, 15, 35], singing [11], breathing [36, 65] and yoga [72]. 
+Grounded in the pragmatist philosophy of somaesthetics [63] 
+and Sheets-Johnstone’s work in evolutionary biology [60, 61], soma 
+design adopts a non-dualistic stance towards of our lived experi-
+ence. By introducing the concept soma, Shusterman refers to "our 
+bodily subjectivity", an integrated whole where movement, emo-
+tion, thought and intercorporeality are not separable, and where 
+the subject possesses bodily, somatic intentionality and subjective 
+agency. Soma design calls for cultivating awareness and places our 
+somas centrally as the site of meaning-making when interacting 
+with technologies and the world at large. In order to cultivate so-
+matic awareness, soma design uses a variety of techniques, some of 
+them build on engaging with somatic practices such as Feldenkrais, 
+yoga, dance, and in this work, martial arts. 
+The philosophical grounding of soma design resonates well with 
+recent analysis of martial arts by philosophers and autoethnogra-
+phers. The identifcation of somaesthetics appreciation in martial arts 
+was suggested by Mullis [48], who discussed how such appreciation 
+is cultivated in both practitioners and spectators of Chinese martial 
+arts. Cohen’s "somatic codes" [10] explain the meaning-making 
+process karate practitioners engage in when learning movements. 
+The somatic codes correspond to what Sheets-Johnstone framed as 
+"somatic logos" [60]. That is, the meaning of a sequence of move-
+ments is embedded in the movements themselves – no language is 
+needed to explain them. Lastly, Pettinen [55] introduces the concept 
+Boards Hit Back: Reflecting on Martial Arts Practices Through Soma Design CHI ’23, April 23–28, 2023, Hamburg, Germany 
+Figure 2: An illustration from "Hyakki Tsurezure Bukuro" 百器徒然袋 "The Illustrated Bag of One Hundred Demons" by Sekien 
+Toriyama, 1805. 3 Demons are depicted, one of which is Koinry¯o. Smithsonian Libraries, Public Domain [68] 
+"embodied judgement" to explain how martial artists, and specif-
+cally in Bujinkan Budo¯ Taijutsu, learn to move and engage with one 
+another. Through introducing the concept embodied judgement he 
+suggests that martial movement is not acquired as an "automatic" 
+movement, but, through refexive engagement with other partic-
+ipants and contexts, practitioner will hone meaning-making and 
+somatic decision making processes that lets them judge when and 
+what to do. 
+2.2 Designing for Established Bodily Practice 
+Nylander and colleagues [53] identifed four themes in HCI research 
+on sports: design to increase bodily control and awareness; sports 
+motivation and fun; pain and discomfort; and the use of pre-existing 
+technology in sports. More recently, a 2021 literature review by 
+Turmo-Vidal and colleagues [75], mapped out the design space 
+of wearables in sports and ftness. The review grouped works by 
+topics such as: the practice used; output and input technologies; 
+social aspects of the design; and the length of the interaction. Their 
+survey, despite their primary focus on wearable devices, identi-
+fed certain aspects of the design space that are relevant to this 
+work: synchronous versus asynchronous interactions, changing 
+practices, prescribed versus non-prescribed interaction, and the 
+role of the person using the technology. In a survey from 2009, Baca 
+and colleagues [3] reviewed diferent technological advances and 
+their efect on sports. In their survey, they covered the systems for 
+performance analysis, for assisting coaches, for making judgement 
+in sport events and systems used for entertainment. They set em-
+phasis on the future systems that could facilitate novel strategies 
+and interventions – rhyming with our intentions here. 
+By instead classifying the works by their contribution towards 
+practitioners the following broad categories emerge: (1) systems 
+that are focused on improving the performance of an athlete/practitioner, 
+usually with the assistance of a coach or other expert; (2) systems 
+that are aimed at assisting in the instruction of a bodily practice; 
+CHI ’23, April 23–28, 2023, Hamburg, Germany Luf et al. 
+and (3) systems that aim to enrich, transform or reinvent the bodily 
+practice by technological intervention. 
+In the frst category, we fnd several works exploring perfor-
+mance enhancement in martial arts using technology. Benitez San-
+tiago and Miltenberger [4] explored the possibilities of using video 
+feedback to improve performance of Capoeira practitioners by 
+recording and replaying their movements for further analysis. Hämäläi-
+nen [23] explored a "video mirrors" – systems that use video record-
+ing to mirror the user – and their appropriateness for use by martial 
+artists and acrobats wishing to improve their technique using difer-
+ent interface strategies. Jeong and colleagues introduced sensors to 
+the handle of a shinai 2 with the goal of using measured pressure on 
+the handle to improve top athletes performance. Performance en-
+hancement is in focus for many design works in sports, for example 
+for skiing[42], running [52], golf [52], and strength training [54]. 
+In the second category, we fnd works that examine how artefacts 
+can be used to enhance instruction on how to perform a particu-
+lar bodily practice, often involving an instructor, but sometimes 
+by letting the end-user do it themselves. The BodyLights system, 
+designed by Turmo-Vidal and colleagues [72–74] could be used by 
+an instructor in such bodily activities as yoga and weight-lifting 
+to help practitioners visualise their posture and correct it accord-
+ing to normative expectations of the practice. Turmo-Vidal further 
+explores the use of diferent wearable systems for purpose of as-
+sisting instructors in teaching bodily practices [71]. She frames 
+it as designing for intercorporeality and focuses on interactions 
+between teachers and students, and on the use of biofeedback. As 
+another example of using technology to enhance instructions, Chu 
+and colleagues [9] used Tai-Chi, a form of a Chinese martial art, 
+as a case study for teaching physical tasks using virtual reality. 
+They compared several projections of a prerecorded teacher in the 
+VR space, including frontal, mirrored, surrounding and co-located, 
+and their afect on movement accuracy, eventually coming to the 
+conclusion that none of these techniques improve upon traditional 
+teaching Tai-Chi. 
+Finally, in the third category we fnd designs that enhance and 
+sometimes extend on the experience of practitioners of a bodily 
+practice. These includes works that use visualisation to enrich such 
+practices as skateboarding [57], martial arts [24], climbing [33], 
+trampolining [21] and dance performances [16, 35]. Haptic feedback
+was suggested by Allen d’Ávila Silveira and colleagues [2] to act 
+as a choreographer, disrupting and guiding dancers’ movement 
+in order to facilitate exploring new dance moves. Drones were 
+also explored as means to enrich and expand established bodily 
+practices such as Tai-Chi [37, 38], opera [14] and running [17, 44, 
+46]. A sensor vest was designed by Chi and colleagues [7, 8] as 
+a mean to improve upon the judgement process in Taekwondo 
+competitions, therefore enriching the experience of competitors, 
+judges and spectators. Within the "exertion games" framework [43], 
+designers have engaged with physical, exerting game play involving 
+interaction between several players inspired children games such 
+as tug-of-war [41] and sports such as rugby and boxing [45]. In 
+these designs, full-body movement capture was combined with a 
+projection in order to encourage players to interact with each other 
+2a bamboo baton used in Kendo instead of a sword 
+using brute-force, either directly [41] or through a touch sensitive 
+elastic screen [45]. 
+2.3 Expert practitioners in design 
+The core idea of participatory design [47] is that including those 
+who will be using new technology into the design process, thereby 
+leading to better design as well as empowering those who will be 
+using the tools designed. Sometimes, like in the original UTOPIA 
+project from the 1970’s [67], this means involving domain experts, 
+thriving of their expertise. Expert-led design processes [20, 76] 
+lets domain experts innovate in their feld of expertise through 
+supporting their processes. In the feld of designing for somatic 
+practices, Schiphorst and colleagues [59] propose involving somatic 
+connoisseur – an expert practitioner who helps designers to enhance 
+their somatic appreciation. Similarily, in embodied sketching [50], an 
+expert bodily practitioner helps sensitise the design team as well as 
+creating in and through the embodied practice. Expert practitioners 
+have played an important role in many soma design projects, for 
+example, in designing musical performances [11, 15] or meditative 
+experiences [65]. 
+In these projects, only a few examined the relationship between 
+the expert practitioner and the designed artefact or considered 
+how the introduction of an artefact would afect the practice or 
+the practitioner. One such examination was done by Karpashevich 
+and colleagues’ [35] describing the experiences of a ballet dancer 
+attempting to dance with their interactive ballet dress. The dancer 
+reported how the limitations and visualisations in the artefact let 
+her explore new means of expression, moving in previously "un-
+thinkable" ways. In Lie and colleagues’ [39] participatory design of 
+the SonicHoop, the expert aerial hoop dancers in the study reported 
+that the sonifcation of their movements encouraged them to ex-
+plore movements that generate interesting soundscapes, rather then 
+let the music guide their movement. Another example is Hämäläi-
+nen and colleagues [24] who projected exaggerated movements of a 
+martial arts practitioner in a game environment. In their user study, 
+practitioners using the system over a prolonged period voiced con-
+cerns that it might encourage martial artists to engage only with the 
+well-depicted movements portrayed in the game, while dismissing 
+other ones; in turn violating the norms in their martial arts style. 
+Such challenges to norms are also addressed by Chi and colleagues 
+[7, 8] who designed a wearable vest to be used in Taekwondo com-
+petitions, assisting referees in setting scores. The introduction of 
+the vest required changes in tournament rules and as consequence 
+adjustment of competitor-, referee- and spectator expectations. An-
+other example by Turmo-Vidal and colleagues [72] reported on how 
+yoga instructors changed exercises and structure of classes when 
+wearable pointing devices helped students learn better alignment 
+of diferent postures. 
+In summary, expert-led design work is both common and of-
+ten, not always, successful [22], in terms of leading to innovative 
+technology and changed practices of relevance to an established 
+bodily practice. Within the framework of soma design, the design 
+approach is shown to be transformative both for designers who 
+engage with building it [28, 64], and for the users who engaged 
+with the resulting artefacts [64]. However, none of the studies 
+reported here, have provided a detailed, phenomenological account 
+Boards Hit Back: Reflecting on Martial Arts Practices Through Soma Design CHI ’23, April 23–28, 2023, Hamburg, Germany 
+Normative Practice Disrupted Practice Prototypes
+Design Space 
+Exploration
+Low fidelity 
+prototypes
+Early prototype
+Medium fidelity 
+prototype
+Software 
+iterations
+Decomission
+Project 
+Start
+Wearables
+Time
+Figure 3: A timeline for the project, showing the temporal 
+relationships between normative practice, disrupted practice 
+(discussed in 3.2 "Exploring the Design Space for Martial 
+Arts") and the diferent prototypes. The design work and 
+both normative and disrupted practices co-existed in parallel, 
+feeding of and to each other as the project progressed. 
+of exactly how the soma design process transformed the involved 
+expert practitioners and their bodily practice. 
+3 DESIGN PROCESS 
+3.1 Methods 
+Following the example set by Beuthel and Wilde [5], the design 
+process presented here is a simplifed, linear, depiction what was a 
+non-linear, messy, back and forth process entangled with and de-
+termined by the afordances of available technologies and fnancial 
+limitations. 
+The design of Koinry¯o was done in the framework of soma de-
+sign [26] in which the designer(s) engage deeply, through all their 
+senses, with the design materials, be they physical, digital, cultural 
+or movement-based, in order to cultivate their aesthetic sensibility 
+and create innovative design. Soma designers often rely on pro-
+cesses of defamiliarising what is habitual and tacit [40] through 
+estrangement methods [78] thereby becoming sensitive to what 
+is habitual as well as what could be novel, non-habitual practices. 
+Estrangement is a disruption of the habitual way of moving, think-
+ing, or feeling. Conceptual element are taken from or added to the 
+body or the action, causing norms, traditions and other structures 
+to become unstable. This destabilization brings new experiences 
+into awareness, making them accessible for scrutiny and poten-
+tial change [27, 78]. Practically, estrangement practices interferes 
+with the habitual through asking designers to perform an action 
+"the other way around", in the non-habitual manner. This can be 
+applied both to movements, such as folding your arms the other 
+way around, or more generally to norms, ideas, thought patterns, 
+emotional responses. Estrangement calls us to challenge what is, 
+asking designers to respond diferently, act, move and feel in novel 
+ways. Exactly how to devise an estrangement experience depends 
+on the design challenge hand. In the design process described here, 
+estrangement centred on disrupting Bujinkan Budo¯ Taijutsu move-
+ment patterns, but also engaging with interactive digital and other 
+materials with the habitual Bujinkan Budo¯ Taijutsu movement pat-
+terns and observe how those challenged or changed the practice. 
+Estrangement methods, in fact, already play a signifcant role 
+in the acquisition of new movement practices, and are common in 
+many established bodily practices including martial arts [10]. 
+This design work was autobiographical [51], aimed at designing 
+for the author Yoav’s own practice – he is a 3rd Dan black belt in 
+the martial art Bujinkan Budo¯ Taijutsu. This meant that Yoav was 
+required to fnd ways to defamiliarise his own martial art practice. 
+Resonating with autobiographical design, in this work author Yoav 
+used auto-ethnographical methods, following that of Höök [25]. 
+This entailed documenting his experience with a new technology 
+or practice, grounding design process in these observations. He 
+meticulously documented his exploration of the design material in 
+short written- or voice-based notes, images and videos. The second 
+author, Pavel Karpashevich, acted as the supervisor of Yoav. Pavel 
+had previously engaged with experiences bordering between com-
+fortable and uncomfortable in soma design processes [32, 35, 36, 69]. 
+He was keen to explore martial arts as it also borders on the un-
+comfortable. Pavel had also engaged with boxing in the past. The 
+third author, Kristina Höök, has a long-standing commitment to 
+soma design [26]. Her approach to soma design is as a design re-
+search program as outlined by Redström [58]. With this project, she 
+was hoping to explore the boundaries of the program — how does 
+the rougher, harder, sometimes uncomfortable experiences lead 
+to somaesthetic engagement and appreciation? Pavel and Kristina 
+followed Yoav’s autobiographical journey, meeting several times to 
+discuss choices of materials, lessons learnt on a conceptual level, 
+and ways of engaging with Koinryo.¯ 
+3.2 Exploring the Design Space for Martial Arts 
+After discussing diferent options, author Yoav presented to the 
+team a void between individual martial art practice and training 
+with training partner, amplifed by onset of the COVID-19 pandemic 
+which limited group training. The team set as a goal to explore this 
+design space. Author Yoav engaged in a series of dedicated indi-
+vidual training sessions aimed at exploring this design space. In 
+order to defamiliarise and uncover habitual martial movements, 
+he engaged in a variety of estrangement exercises, some of which 
+were already established within Bujinkan Budo Taijutsu, while oth-
+ers were inspired by Wilde and colleagues [78]. These exercises 
+included: 1) disrupting movement of the legs, shoulders and center 
+of mass by tying the ankles or knees 30-50 centimetres apart; 2) 
+limiting the shoulder movements by afxing an elbow at a certain 
+position to the body with a wooden stick or tying the elbows to the 
+torso; 3) using weights and resistance belts to alter movements such 
+as side-stepping and punching by holding weights or connecting 
+weights to the belt to create an improvised "tail"; 4) manipulating 
+his own body, for example by pulling his own knee using a rope 
+anchored at the wall, in a manner similar to a takedown manoeuvre 
+practiced in some martial arts (see fgure 4). These exercises helped 
+to deconstruct specifc movements, for example, side-stepping was 
+deconstructed by wagging a "tail" made of weights, amplifying the 
+CHI ’23, April 23–28, 2023, Hamburg, Germany Luf et al. 
+Figure 4: "Self Takedown": exploring the sensation of having 
+own knee being pulled in a take-down manoeuvre 
+rotational force of the movement. He also highlighted what forms 
+of agency can be given to resulting artefact that would allow Yoav 
+to bring interactivity into his martial art training. 
+During the exploration phase, diferent exercises were docu-
+mented in video, images and diary entries following the example 
+of auto-ethnographical process presented by Höök [25]. These ma-
+terials were used in the later analysis of the design process and 
+outcomes. 
+These early explorations of martial arts movement explored also 
+how the natural environment can be used as a design resource [66], 
+as author Yoav trained mostly outdoors. By engaging in martial 
+arts training both indoors and outdoors, Yoav explored the expe-
+riential qualities and dynamic gestalt of the materials he engaged 
+with, such as the ruggedness of tree bark, the slipperiness of an 
+icy feld and the elastic properties of the rubber bands and young 
+tree branches. The protruding branches of fallen tree invited author 
+Yoav to consider them as indicators of imagined attacks that can 
+be moved around, attacked from below, or against. These explo-
+rations included conditioning exercises that are practiced in author 
+Yoav’s branch of Bujinkan, such as hitting a dead branch until it 
+breaks, or pulling pieces of bark from decaying logs and stumps. 
+Similar to how brick-breaking or tatami-cutting is practiced in other 
+martial arts, breaking these parishable materials provided reassur-
+ance of the practitioner’s martial prowess. Such practices cultivated 
+awareness of the impermanence of the materials used, and sparked 
+interest in the opportunities presented by using materials who can 
+be destroyed through practice. 
+3.3 Early Prototypes 
+Based on the insights from the defamiliarisation of the habitual 
+martial art routines, two diferent forms of interaction were se-
+lected as the most evocative: restricting and resisting movement in 
+grappling exercises, and attacking and defending in striking tech-
+nique exercises. These were further researched by constructing and 
+testing low-f prototypes, shown in Figure 5. 
+Restricting and resisting movement in grappling exercises was 
+explored by cardboard, elastic band and rope prototypes attached to 
+hips and arms, blocking or resisting joint movements. This was done 
+in order to simulate a) a standof with a sparring partner, in which 
+arm locks would be used as an attack technique, b) maintaining 
+balance in the situations when the legs are blocked. 
+Attacking and defending in striking technique exercises was 
+explored by using tree branches, fallen trees or a rope tied between 
+trees as makers for the possible movements of an imagined oppo-
+nent. Extending a boxing bag or a tree trunk with "arms" made 
+from wooden sticks, combining them with a d¯ogi (training jacket), 
+rope or resistance belt, allowed Yoav to explore such movements 
+as pulling, pushing, blocking, defecting and throwing; all with 
+the added "arms". Yoav experimented with free swinging pendu-
+lums, constructed from rope and weights, as well as rigid ones, 
+constructed by attaching a training sword to a stick in a cross-like 
+structure, moving in synchronisation with pendulum, or swinging 
+the pendulum and evading or blocking it on its return movement. 
+Most of these experiments were conducted outdoors utilising the 
+natural environment, embracing a Bujinkan tradition of training in 
+nature[18, 19]. 
+Through the engagements with the prototypes representing 
+grappling through movement restriction, this form of interaction 
+was discarded. The prototypes revealed that designing for this 
+particular type of movement restriction required two connected 
+bodies, as well as whole body engagement, and thus, it could not 
+be reduced to limiting movements of a single or a small group of 
+joints in just one body. 
+Therefore, the further design work was focused on the artifacts 
+that could engage in striking techniques, such as boxing bags and 
+"wooden dummies"3. Diferent ways to allow these prototypes to 
+"attack", "block" or "evade" were considered, for example by at-
+taching diferent arm- and leg-like appendages capable of diferent 
+modes of movement, such as three degrees of freedom or rota-
+tion around one or more axes, to the swinging part of the early 
+prototypes (see fgure 5, G & H, fgure 6 bottom right). 
+The cases, when the prototype swung its "arms" towards Yoav, 
+were reminiscent of an attack of a training partner and made Yoav 
+want to try out diferent blocking stances in return. The movement 
+of the whole prototype in space, especially when covering a wide 
+area, invoked a feeling of the prototype evading or engaging. 
+Engaging with the early prototypes made it clear to Yoav how 
+the actuators could be added to the interactive artifact – specifcally, 
+for manipulating the arms’ positions, as well as starting, stopping 
+and adjusting the swinging motion. 
+3.4 Martial-play 
+During diferent stages of designing and construction of the artifact, 
+Yoav engaged in a "martial-play" with it. These martial-play sessions 
+were from 3 to 8 minutes long and were a free form of training 
+involving the application of Taijutsu techniques in a playful and 
+curious manner [55]. During the fnal stages of the project, at least 
+one session per day was performed, followed by a short verbal 
+refection, were video recorded. 
+3木人桩 "Wood man post", a wooden post with arms sticking out of it used in some 
+Chinese martial arts to practice striking and blocking techniques. See fgure 7. 
+Boards Hit Back: Reflecting on Martial Arts Practices Through Soma Design CHI ’23, April 23–28, 2023, Hamburg, Germany 
+Figure 5: Various low fdelity prototypes. A & B: wearable prototype - shoulder movement limiting prototype; C: A rigid 
+pendulum; D: Pendulum with an a cross section fxed "arm"; E & F: movement limiting prototype that pulls the ankles and hips 
+together. G: Pendulum with head and body, and two arms rotating on the vertical plane; H: Same prototype, but with an added 
+"leg". 
+In addition, author Kristina, who has no martial arts background, 
+and a colleague J, who had some experience with Taijutsu, were 
+invited for a recorded interaction session with Koinry¯o, along T, 
+an expert teacher in Wing-Chun4 and his student D. The visitors 
+who were familiar with the project, consented to being recorded 
+and interviewed. There were additional sessions with the author 
+Pavel and other colleagues, which were not recorded. The work was 
+conducted during the height of the COVID-19 pandemic, therefore 
+only people who were in regular contact with author Yoav were 
+contacted. Video recordings, annotated interactions with the arte-
+fact, along with materials from earlier stages of the design process, 
+were transcribed and coded [6]. 
+4 KOINRYO¯ 
+Based on the experiments with prototypes for striking exercises, 
+Koinry¯o was built as an interactive opponent for practicing attack 
+and defense techniques. The intent was to bring the experience of 
+4A Chinese martial art that emphasise small and quick hand movements applied from 
+a short range 
+outdoor training into indoor setting, giving agency to such equip-
+ment as a wooden dummy, boxing bag or tree branch; altering their 
+traditional passive role in the training process, but without mod-
+elling its looks based on human morphology (as that would create 
+expectations that Koinry¯o would not be able to meet). 
+Koinry¯o consists of several parts, from top to bottom (see fgure 
+9, right side): a platform, a wooden shaft, pneumatic muscles, a 
+body and arms. The platform is connected to the ceiling and carries 
+the body via the shaft; pneumatic muscles that can pull the shaft 
+towards the platform and thus create a swinging movement. The 
+main body was made from a wooden log, sawed along its radial axis, 
+and hollowed to house air pumps and FlowIO [62] – a miniature 
+platform for pneumatic development. The arms were made from 
+a single forked tree branch, and are mounted on a horizontal axis 
+through the lower part of the body; they are capable of rotating 
+along their axis in the vertical frontal plane (see fgure 8). 
+Both the main body and arms are constructed from wood, forged 
+in the same area where Yoav was training. Both parts were pro-
+cessed in ways that retains their natural appearance as much as 
+CHI ’23, April 23–28, 2023, Hamburg, Germany Luf et al. 
+Figure 6: Sketches of various designs, top-down, left to right: 
+variations on the swinging weight; slacks that can become 
+stif at the hip; punches and kicks realised by a robotic arm; 
+various ways to connect a "arms" to a "body"; pendulum style 
+bodies with pneumatic muscles. 
+possible. The used natural materials contributed to the experience 
+of training outdoors and opened a dimension of fragility and imper-
+manence of the artifact. Parts of the design such as the bark were 
+deliberately left on, in order to be broken of while training, render 
+a sense of live action similar to Yoav’s training experience in the 
+forest. 
+Koinry¯o movements are controlled by three pneumatic muscles 
+made from a latex tube and a plastic sleeve [1]. Pneumatic muscles 
+were chosen for their high power density and fast actuation rate, 
+as well as their conformance to human levels of force, qualities 
+that were informed by exploring elastic bands and green, fexible 
+branches. The muscles are connected to the platform on one side 
+and to the shaft on the other. In order to increase the efective range 
+of the muscles, additional springs were added between the muscles 
+and the shaft resembling the sinews of an organic body in function. 
+Koinry¯o relies on the readings from FlowIO’s internal accelera-
+tion and gyroscopic sensors. The trunk and branches were equipped 
+with an array of capacitive sensors (four on the main body and 
+two on each arm) for sensing touch and distance to the human 
+partner. The system uses a current monitor circuit for detecting 
+resistance applied to the movement of its arms. When exploring the 
+movements of diferent versions of the prototype, the experience 
+of keeping in touch with the trunk or arms of Koinry¯o as well as 
+Figure 7: Wooden Dummy - used in Chinese martial arts. 
+Image courtesy of Wing Tsun & BJJ Academy, Stockholm, 
+Rafael Alins. 
+following its movements through touch were evocative, reminis-
+cent of following a partner or trying to feel the intentions of a 
+partner through subtle changes in their posture and balance. The 
+arms allows Koinry¯o to switch between stances: with either the 
+two branches leveled, or one branch centered at eye level while 
+the other is at midrif height, imitating the position of the hands in 
+some stances used in Taijutsu. In addition, the arms’ movements 
+Boards Hit Back: Reflecting on Martial Arts Practices Through Soma Design CHI ’23, April 23–28, 2023, Hamburg, Germany 
+Figure 8: Movements aforded by Koinry¯o: Blue arrows show 
+movement direction of the main body around a pivot at the 
+top; Red arrows show the movement of the arms. 
+are capable of generating additional torque adjusting Koinry¯o’s 
+movement trajectory such as when suddenly switching between 
+the two stances. 
+The software is designed as a set of state machines mapping 
+sensor data to state transitions in turn driving movements of the 
+arms and pneumatic muscles. The system uses hardware abstraction 
+libraries provided by FlowIO, Arduino, sensors’ manufacturers and 
+the "Embedded C++ Template Library" [77]. 
+In the fnal iteration of Koinry¯o, the software supported sev-
+eral movement profles for both pneumatic muscles and the arms: 
+movement-averse / movement-maximising behaviour for the body, 
+as well as touch-averse / touch-seeking behaviour for both arms 
+and body. In addition to the set profles, there was an adaptive 
+profle, switching behaviours at random time intervals. 
+5 RESULTS 
+All the verbal data collected during the project was transcribed, 
+coded and then analysed using thematic analysis [6] in a bottom-up 
+manner with the goal of fnding an overview of tensions between 
+Figure 9: Koinryo¯ - back side (left) and front. A. A base at-
+tached to the ceiling; B. Pneumatic muscles; C. Main body, 
+covered in weaved conductive thread; D. The arms with 
+patches of conductive thread. 
+the design process and the result. After that, the video data was re-
+visited to explore the non-verbal data, and interactions were coded 
+in top-down approach. As we were interested in phenomenological 
+accounts of how the soma design process changed Yoav and his 
+practice, any mismatches or design decisions that matches with 
+Yoav’s expectations of what martial arts training should be, in a 
+sense, uncovering underlying norms, were especially interesting 
+to analyse in detail. From the data three major themes where such 
+revelations of norms came about emerged in the anlaysis: (1) the 
+aesthetic qualities of the physical and digital materials and how those 
+harmonised, or failed to harmonise, with the martial arts norms; 
+(2) the movement qualities that emerged from the interaction with 
+Koinry¯o in line with or opposed to the norms of the practice; and 
+(3) the changes the expert went through, over time, when engaging 
+with Koinry¯o. As we will show, these experiences helped Yoav to, 
+in the end, achieve a better somaesthetic appreciation of his own 
+martial art practice. The three are a broad categorisation of where 
+the norms of the Taijutsu practice revealed itself, both in terms of 
+what certain practices entail and their underlying aims or general 
+philosophy of the practice. 
+5.1 Material Qualities for Martial Arts 
+To give a feel for the aesthetic afordances of the materials that 
+make up Koinry¯o, let us provide some accounts of how the authors 
+and the experts from the other bodily practices engaged with it. 
+CHI ’23, April 23–28, 2023, Hamburg, Germany Luf et al. 
+This reveals some of the properties and norms that the expert-
+designer had intentionally (or sometimes unintentionally) built into 
+the system. 
+Fragility and RobustnessThe martial-arts play sessions Yoav 
+performed with Koinry¯o put considerable strain on its construction: 
+parts broke or were pushed out of alignment, and diferent parts 
+of the technical set up at times became disconnected. The fragility 
+was an intentional part of the early design explorations, aiming to 
+mirror training in the woods, breaking dead branches or tearing of 
+pieces of bark. As such fragility continued to be a design resource to 
+the Koinry¯o project rendering the kind of experiences Yoav wanted 
+the system to exhibit. This should not be interpreted as if all kinds 
+of fragility were desirable. Over time, Yoav made sure to replace 
+broken parts with better ones. For example, the robustness and 
+integrity of the major "trunk" of Koinry¯o was important to maintain. 
+The main body was initially made from 3D printed plastic, but when 
+redesigned it became more durable when replaced with hollowed 
+out logs. 
+The fragility and the fact that parts kept falling of made Koinryo¯ 
+come across as a sensitive and precious construction. Guests were 
+sometimes deterred from attempting to hit, push, pull or otherwise 
+engage with it in a rough manner. For example, the guest T, expert 
+teacher in Wing-Chun, tried Chi Sau exercise 5 with Koinry¯o, but 
+without punching the artifact. When asked about it, he said he was 
+only attempting at soft training, as he was afraid that he would 
+otherwise break it. 
+Yoav found himself repeatedly encouraging participants to be 
+more afrmative and harsh in their interactions with Koinry¯o since 
+breakability was, to him, an integral part of outdoor training and 
+what he wanted to see here as well. In a video snippet where Yoav 
+is demonstrating Koinryo¯ to invited guests, he comments: "Yes, 
+it breaks. It should be breaking", demonstrating how by punching 
+Koinry¯o as if it was a boxing bag. Author Kristina noted: "When I 
+watched you interact with it I realised that we were doing it wrong. " 
+and she then went on to engage in more rough play with it, making 
+pieces of the bark fall of. 
+Here, we note a norm-related tension between Yoav’s Taijutsu 
+practice – where breaking materials are indicative of a powerful 
+technique – and everyday perception of technologies as precious, 
+costly, irreplaceable creations. 
+Care When actively used, Koinryo¯ required repeated adjust-
+ments, such as readjusting the position of the arms, reconnecting 
+springs, tightning the pneumatic tubes to stop leaks, and, in early 
+iterations, redesigning and replacing broken parts. The adjustments 
+themselves took on a form of care, requiring attention from Yoav as 
+a process of continuous improvement and adjustment. Yoav notes 
+at one time "now Koinryo¯ has some balance issues, it kinda leans 
+to the right. " This attention and care was, at time, reminiscent of 
+training with a human partner. For example, when Koinry¯o made 
+a suspicious cracking sound Yoav would immediately stop train-
+ing and examine whether some damage was made: "this sound 
+reminded me of a training partner tapping loudly 6 . " During the 
+5手 Ch¯ı Sáu (Cantonese) meaning "sticking hands" – a training exercise for close range 
+combat in Wing Chun, in which practitioners keep their forearms in contact while 
+performing techniques
+6Tapping is on the foor, your training partner and/or vocally is an established way 
+martial arts practice to signal to stop the current interaction in order to avoid injury 
+beginning of interaction, Koinryo¯ was programmed to perform 
+a sequence of movements that would show that everything was 
+working correctly. The sequence reminded Yoav of bowing and 
+taking stances which is sometimes practiced before sparring. To 
+his surprise, Yoav. found himself bowing back to Koinryo.¯ 
+Lack of strength. Both Yoav and guest participants commented 
+on Koinry¯o’s inability to generate movements that are comparable 
+in strength to that of a human sparring partner. In his notes, Yoav 
+comments on the lower force of the movements exhibited by the 
+artifact "it’s not as strong movement as I believe it should be", but at 
+the same time, the movements were more bodily engaging and less 
+predictable "[Koinry¯o] gets me to move with it and also sometimes the 
+movements surprise me". Participant D, the Wing-Sun student, also 
+commented on its unpredictability, demanding her to be pliable 
+and ’feeling’ the performed movements "to be really soft and really 
+feel, because of the randomnness of the reaction. And this is what 
+we are practicing in Chi Sau – to be really soft". T commented that 
+"Because I’m soft I can follow it. If I had not been training Wing-
+Chun the way I do, I probably couldn’t follow it as I do. [...] Because 
+probably I would have restrained it, but I am used to just follow it. ". 
+By that he emphasised the role of keeping your arms soft in Wing-
+Chun training. When Koinry¯o presented both excessive force and 
+surprising movements, it was perceived as a positive behaviour: " 
+It feels like I need to respond to it when it has a lot of force. I need to 
+get out of the way, and that’s really nice. " 
+These accounts refect diferent underlying norms in the Taijutsu 
+and Wing-Chun martial arts practices: the former emphasise foot-
+work with large steps, while the latter emphasise the use of soft 
+arms at close range. 
+Agency. Koinry¯o was designed around touch and kinaesthetic 
+sensing and the aim was that it would actively engage, sometimes 
+initiate interactions. This presented practitioners used to train with 
+a human partner or alternatively a wodden dummy, with the chal-
+lenge of understanding its (limited) agency: “When to move for-
+ward? When should I try and push forward and not only push back. ”. 
+Koinry¯o became perceived as a diferent kind of training altogether, 
+since it was actively engaging, showing some agency, something 
+which a wooden dummy would not: "I was moving to some place 
+and then I realised ‘oh no it moves back towards me!’". At the same 
+time, Koinry¯o was more predictable than a human counterpart "it is 
+more predictable than training with a human partner, it still feels very 
+passive, it’s a very passive partner. " Shaping Koinry¯o’s agency helped 
+Yoav to make tacit understanding of the role of a training partner in 
+exercise explicit. 
+In summary, the afordance of the physical and digital materi-
+als that make up Koinry¯o, resulted in a multitude of occasionally 
+contradicting experiences: it was sometimes seen as fragile, but 
+still inviting and withstanding physical force; its movements were 
+soft and lacking strength, but still at times surprisingly forceful; 
+Koinry¯o was far from replacing a living human training partner, but 
+is not a mere passive device like a boxing bag or a wooden dummy; 
+and somewhat unexpectedly it invoked a sense of care 7 similar to 
+a human martial arts training partner. While each of these tensions 
+7An important aspect of martial arts is learning how to care for your human part-
+ner [31] 
+Boards Hit Back: Reflecting on Martial Arts Practices Through Soma Design CHI ’23, April 23–28, 2023, Hamburg, Germany 
+could be explored furthered, potentially leading to continued re-
+design of Koinry¯o, in this context, we are interested in how they 
+revealed some of the norms of the practice to Yoav: the importance 
+of care for your partner; the diference between soft and rigid arms, 
+large and small footwork, and what those bodily engagement can 
+achieve in combat; how breaking branches or making bark fall of 
+in outdoors training lets him know how strong his engagement is; 
+or how the agency of the other alters movement practices. 
+5.2 Movement Qualities 
+In Bujinkan, movement norms are embedded in katas 8 – a sequence 
+of defned movements used for training purposes – and wazas 9 – 
+structured confrontation-like movement sequences practiced with 
+a partner. The kata and waza convey knowledge on how to move 
+in prescibed ways to attack or ward of an attack. But in order 
+to perform martial arts, you cannot solely rigidly move in only 
+one way. The ways katas and wazas are constructed also aim at 
+teaching more abstract principles of movements in martial arts, 
+usually through the use of henka10 which deliberately diverts from 
+the original kata and waza in order to let participants explore and 
+be challenged to, for example, maintain balance or divert the force 
+of an attack. 
+Movement sequences within the norm. Koinryo¯ was de-
+signed to be a smart, interactive boxing bag, tailored specifcally to 
+the movement norms as expressed in kata, waza, and their underly-
+ing principles of the Bujinkan Budo¯ Taijutsu practice. Koinry¯ 
+explicitly designed to aford certain kinds of movements and exer-
+o was
+cises and prevent others. For example, Koinry¯o aims to encourage 
+tai-sabaki 11 – a particular form of footwork letting practitioners 
+achieve an advantage by controlling the range, momentum and 
+balance shared with their partner. In one stage of the design pro-
+cess, Yoav noted in his diary: "It felt like I was using my legs more, 
+switching hands and switching positions more than in previous itera-
+tions [of Koinry¯o]. It is less about responding to the arms and more 
+responding [to] the body". This was a quality that he realised he 
+had been seeking in the design. To comply with the norms of the 
+practice, it was of key importance that Koinry¯o would encourage 
+footwork and not only moving of the arms. 
+Yoav continued to struggle with this aspect of the design. The 
+footwork requires both variation of height (by bending knees) and 
+variations of movement direction (to include sideways and diagonal 
+movements as well as moving forwards towards or backwards 
+away from Koinry¯o). By adjusting the control algorithm to take 
+into account both contact with Koinry¯o’s arms and its current 
+trajectory, Koinry¯o started responding with wider movements of 
+its body, encouraging Yoav to engage with the whole body rather 
+then to rely solely on the use of hands when interacting with it. 
+While the footwork required careful design alterations, Yoav was 
+pleased to see how Koinry¯o aforded other specifc recognisable kata 
+such as hi no kata 12, as well as a variety of striking techniques such 
+8型 or 形 "form" 
+9技 "technique" 
+10化 "variation" 
+11体捌 literally "body management/movement" but usually focused on the specialised 
+footwork used in a martial arts. 
+12火之型 "form of fre" – a short block with the left hand then switching legs and 
+striking with the right hand, see fgure 10 
+as shut¯ , straight punches, hooks, uppercuts, elbow strikes oken13 
+and fnger strikes without much redesign work. These movement 
+afordances were revealed to Yoav during his repeated "martial-
+play" sessions with Koinryo.¯ 
+Disabled kata and waza. Some movements that were explored 
+with early prototypes as well as in the estrangement exercises Yoav 
+did without technology, such as locks and throws, were not aforded 
+by the later iterations of the system. As for throws, Koinry¯o’s attach-
+ment to the ceiling made the actual sensation of throwing extremely 
+awkward, as Koinry¯o "resisted" in ways that no person can. This 
+revealed the importance of manipulating both your own and the 
+opponent’s balance as a single connected soma when executing a 
+throw. This "connected soma" sensation was disabled by Koinry¯o’s 
+binding to the ceiling, its limited directions of movement and its 
+light weight. 
+In some of the exploration exercises a d¯ogi 14 (or a belt) was 
+tied to a tall boxing bag. The sleeves were used for the pulling and 
+pushing movements in order to initiate a throw, while the bag was 
+kicked in the manner of swiping the opponent’s legs, see Figure 
+11. Since Koinry¯o was quite short and attached to ceiling, it only 
+extended as low as Yoav’s midrif and had no parts corresponding 
+to legs or hips. Another kind of throw, ganseki nage15, involves 
+hooking the opponents arm between the practitioner’s neck and 
+raised arm, and then throwing the opponent by lifting and twisting 
+their shoulder, see Figure 12. This kind of manoeuvre was tried 
+with an earlier prototypes of Koinry¯o, but again, the later iterations 
+of Koinry¯o and its anchoring to the ceiling allowed author Yoav. 
+to practice the setup to the throw (hooking the arm) but not the 
+lifting and twisting required to complete the throw. 
+Arm locks were also explored with the earlier prototypes, specif-
+ically two locks in which pressure is applied on the opponents 
+elbow in order to afect their shoulder, back and overall balance. 
+Surprisingly, the fact the Koinry¯o does not have bendable elbows 
+(or in fact anything resembling and elbow) created an interesting 
+opportunity. It allowed Yoav to practice both: positioning the body 
+correctly for the locks, and to apply a much higher force than with 
+a human training partner. In this respect, Koinry¯o partially aforded 
+the exercises. These exercises, though, were not attempted with the 
+later, more interactive version of Koinryo.¯ 
+Novel movement sequences. Additionally, Koinry¯o allowed 
+for novel movement sequences, which are not normally a part of 
+the Taijutsu practice. One of this movements is the synchronised 
+swinging movement, which involves lightly touching or holding 
+one or both of Koinry¯o’s arms and trying to follow its swinging 
+movement, augmented by the pneumatic muscles, until the swing-
+ing rhythm is not intentionally broken with with a throw or a strike. 
+This movement is reminiscent of some balance exercises performed 
+with a partner that are used as a preparation for throws. The other 
+movement is "wing-chun hand movement" (see fgure 13), in which 
+Yoav would wrap around one of the Koinry¯o’s arms with their hand 
+from the inside-out. This movement is not encouraged in Taijutsu, 
+as it uses only the hands of the practitioner, not engaging feet and 
+torso. There is an emphasis in Taijutsu on using the whole body as 
+a unifed structure in order to place ourselves in a more protected 
+13手刀 "sword strikes" – striking with the blade of the palm 
+14a training jacket used worn in Japanese martial arts 
+15ó投 "boulder throw" 
+CHI ’23, April 23–28, 2023, Hamburg, Germany Luf et al. 
+(a) (b) (c) 
+Figure 10: Performing narrow variation of Hi-No-Kata ("form of fre" one of Bujinkan’s fundamental katas) with Koinry¯o: (a) 
+starting position. (b) as Koinry¯o swings forward towards Yoav, Yoav moves diagonally back and right, blocking with his left 
+hand. (c) Yoav twists his body and hits Koinry¯ oken ("sword strike" with the side of the palm). o with ura-shut¯ 
+Figure 11: Osoto-geri ("greater side kick") training on a boxing 
+bag with a belt tied to it. 
+position while breaking the structure of the opponent, opening 
+them up for attacks, locks or throws. 
+Movements in disguise. Finally, certain kinds of movements, 
+facilitated by training with Koinry¯o, appeared, at frst glance, to be 
+conforming to the norms of Taijutsu, by being clearly recognisable 
+as an existing kata. On closer inspection, though, they presented 
+challenges hidden in the movements. An example of this kind of 
+Figure 12: An attempted ganseki nage ("throwing the boul-
+der") on Koinryo¯ 
+movements is depicted in Figure 14. In this sequence, you can see 
+how Yoav is switching a stance in the end of a punch in order to per-
+form another attack. This might seem as an acceptable movement, 
+but, in this transition, Yoav is exposed to Koinry¯o. The follow-up 
+attack would be done from the range in which one might be open 
+for a counter-attack – a counter-attack that Koinry¯o is incapable of 
+doing, but where a human training partner would be. Performing 
+such manoeuvres can lead to developing weaknesses in style and 
+habitual reactions. Another potential challenge lies in the timings 
+and cues ofered in the interaction: with Koinry¯o, it is possible to 
+perform a correct movement but with incorrect timing or in re-
+sponse to an incorrect "cue". For example, a common cue for an 
+upcoming attack is an opponent shifting the weight forward, or 
+turning the hip. Koinry¯o has no hips to turn or variable weight to 
+shift with, but instead it makes a loud noise from its pumps at the 
+start of a movement. This might sensitise one training with it to 
+Boards Hit Back: Reflecting on Martial Arts Practices Through Soma Design CHI ’23, April 23–28, 2023, Hamburg, Germany 
+Figure 13: And excerpt from a training session of author Yoav. performing a hand gesture that is not part of his training, and in 
+fact discouraged: Yoav’s left hand goes under Koinry¯o’s arm, then to the outside, top, inside and down again. This is a form of 
+unintentional sediment movement aforded by Koinry ¯o’s design. 
+respond to the sounds of the opponent rather then to the movement 
+of their bodies. 
+In summary, the dynamic unfoldings of Koinry¯o’s movement 
+sequences had to be repeatedly experienced and redesigned in 
+order to comply not only with specifc kata and waza, but also to 
+adhere to the underlying philosophy of the whole practice. This 
+is perhaps most clearly seen in the struggles to engage the right 
+kind of footwork. While Bujinkan Budo Taijutsu is allows and even 
+encourages variation in kata and waza, these innovations must 
+adhere to the overarching values and strategies conveyed in the 
+practice. The challenges uncovered through designing Koinryo¯ 
+brought Yoav to inquire whether they unfold when engaging with 
+more traditional training tools such as a boxing bag, as well. 
+5.3 Changing Koinryo¯ – Changing Myself 
+In this section, the pronoun "I" will be used to describe Yoav’s per-
+sonal experience. As shown through the material explorations and 
+the new movement practices arising, the soma design framework 
+provided a path to deconstruct martial art habitus, defamiliarisation 
+of the various movement practices, and ways of introducing difer-
+ent technologies and materials into the training. Here, I would like 
+to discuss how engaging in the design work, helped me to develop 
+better somaesthetic appreciation of my own martial art practice. 
+This appreciation contributed not only to improving myself as a 
+practitioner, but also made me articulate (to myself) previously 
+tacitly understood stylistic norms. The design process itself also 
+generated novel training exercises inspired by Koinry¯o that I con-
+tinued to engage in my normal training routines, even without the 
+artifact. 
+Let us start with an account of the novel training exercises, before 
+turning to how I changed my expertise and started to uncover some 
+of the norms of my practice. 
+New training exercises – inspired by Koinryo. Ideas and 
+novel movements, which were devised during the training with 
+Koinry¯o, have been added to my everyday practice and also inspired 
+novel forms of exercises. These included the use of positioned 
+branches to practice blocks, tai-sabaki16, as well as counter-attacks. 
+Another exercise inspired by the design of Koinry¯o is the use of 
+branches to practice locks – such as muso-dori, musha-dori and oni-
+kudaki as well as throws such as ganseki nage, depicted in Figure 
+15 – all of which involve an elbow lock as part of their fulcrum. By 
+placing branches in a position, where the attacking hand would be, 
+it became possible for me to practice positioning my body for the 
+lock and to apply pressure on the branch until it breaks. This, in turn, 
+16"body management", how I position myself relative to my opponent using footwork 
+allows me to practice these locks against simulated resistance with 
+a vigorousness, that I would not normally use when training with 
+a human opponent. By allowing fragility in my design, I opened up 
+to the idea of exploring it in new settings, such as the elbow locks I 
+described. 
+Improving Practice. The designed artefact and the design pro-
+cess itself, with its attention on refective practices, enabled me to 
+identify ways, in which my technique was no longer, in all parts, 
+compatible with the norms of Taijutsu. An example of that is the 
+engagement with "bad" interactions shown in Figure 14. In these 
+example, movements that had felt correct were later identifed 
+through the analytical process as transgressive to Taijutsu norms. It 
+is a principle imparted by many techniques that you either position 
+yourself at such range from the opponent that it would require them 
+to take another step to attack, or that you maintain several points 
+of contact with your opponent in order to discern your opponent’s 
+next move by tactile means. In this engagement with Koinry¯o, I did 
+neither. 
+Articulating Tacit Norms. Another form of transformation 
+spurred by the design process was a better articulation of what 
+is considered normative in the martial art. This transformation 
+was facilitated by designing prototypes that challenge the norms, 
+and then refecting on the tension generated in order to articulate 
+what norm was challenge, why it was challenged, and whether I 
+wished to accept the norm, reject it or continue challenging it. This 
+can be illustrated by the "wing-chun" hand movement – prior to 
+the design work and interaction with Koinry¯o, I would have not 
+recognised this movement as a transgression on Taijutsu norms. 
+Only by performing this movement both against passive and re-
+sponsive prototypes and refecting upon these interactions, I came 
+to recognise that it is indeed transgressive, and I came to articu-
+late why it was so, by comparison with similar non-transgressive 
+interactions. The Taijutsu norm that is being transgressed is the 
+one that constitutes that manipulation of the opponents hands and 
+posture should always be driven and supported by footwork and 
+the use of the whole body17. When exploring movements against 
+rigid arms, I was forced to use footwork in order to manipulate 
+the relative position of myself against the arm. While using soft 
+and passive arms, it was not obvious to me that I am using only 
+my hand to manipulate them. Only when combining a structure 
+that is both rigid and interactive it became apparent to me that the 
+movement is transgressive – this was due to Koinry¯o’s resistance 
+to the movement, although not strongly enough to force me to do 
+adjust my footwork. The refexive practices encouraged in soma 
+17One high ranking Bujinkan teacher uses the phrase "footwork-spinework-handwork" 
+to impart this idea on his students 
+CHI ’23, April 23–28, 2023, Hamburg, Germany Luf et al. 
+(a) (b) (c) 
+Figure 14: Performing a "bad" interaction with Koinry¯ o’s armo: a. The end of a punch. The left hand guards against Koinry¯ 
+while the right hand punches. The body is aligned to the side of Koinry¯ o to the next attack. o. b. passing in front of Koinry¯ 
+Neither left nor right hand guard Koinry¯o, but the range is still within the opponents reach and completely in front of it. c. 
+Attacking now with the left hand while the right hand guards. 
+(a) Muso-dori (b) Musha-dori (c) Oni-Kudaki 
+(d) Ganseki Nage 
+Figure 15: Four techniques that use the elbow as fulcrum: 
+(a) muso-dori¯ 無 捕 – an elbow lock that applies pressure 
+against the bending of the elbow; (b) musha-dori 武者捕 – 
+a shoulder lock that captures the opponent’s wrist beneath 
+the armpit, and pushes the elbow up; (c) oni-kudaki 鬼 – 
+similar to musha-dori, but the opponent’s forearm is manip-
+ulated with the arms; (d) ganseki nage 岩ó投 – a throw that 
+hooks the opponent’s elbow. If the opponent leaves their arm 
+straight, pressure is applied to the elbow. 
+design helped me to articulate what exactly is transgressive in the 
+movement. 
+A second example of revealing norms on several levels, is how 
+Musha-dori was enacted with Koinryo.¯ In musha-dori, the right 
+angle is forced on the opponent by capturing the opponents palm 
+behind one’s back, placing one’s hand behind the opponents elbow, 
+and through a sudden drop of one’s hips while pushing the oppo-
+nent’s elbow forward and upwards, depicted in fgure 15b. When 
+practicing this joint-lock on Koinry¯o (and on earlier prototypes), 
+the rigidness of Koinry¯o’s arm turned out to be not an obstacle, 
+but an opportunity. With Koinry¯o, I could train by applying more 
+force and doing it quicker than I would normally do with a human 
+partner. This disrupted normative movement became a starting 
+point for the new forms of training that support normative move-
+ment principles around how to apply a shoulder lock. This revealed 
+norms not only in the form of the performed movements, which 
+were disrupted in this case, but also in the functional intention of 
+these movements. In the case of musha-dori, it is forcing the elbow 
+joint to bend or break in the process. This exposes the social norms 
+of training – an agreement that I cannot hurt my training partner. 
+Koinry¯o introduced no such delimitation, combined with its appar-
+ent fragility, as well as knowing that parts can easily be replaced, it 
+was inviting and even encouraging to explore such interactions. 
+In summary, the design process of Koinryo¯ did not result in 
+just a training tool – it changed Yoav as an expert practitioner. 
+The estrangement exercises and material exploration allowed Yoav 
+to innovate his training routine with new exercises enacted by, 
+but independent, of Koinry¯o. The refective process of designing, 
+engaging and redesigning with Koinry¯o brought to foreground what 
+was previously tacit – which movements are normative, which are 
+not, and what separates them. 
+6 DISCUSSION OF RESULTS 
+As we discussed in the background above, previous research show 
+that whenever technology enters into an established bodily practice, 
+the bodily practice will change. The design account above, leading 
+Boards Hit Back: Reflecting on Martial Arts Practices Through Soma Design CHI ’23, April 23–28, 2023, Hamburg, Germany 
+to Koinry¯o, shows many instances of clashes between what is being 
+designed and the pre-existing norms of the practice. If Koinryo¯ 
+would be more regularly used as part of Bujinkan Budo Taijutsu it 
+would most likely change aspects of the practice. 
+We might argue that introducing technology into a martial arts 
+practice is not necessary or even desirable as it changes the ’purity’ 
+of the art form that otherwise does not rely on any technology. 
+At the same time, the overarching philosophy of martial arts en-
+tertains and encourages change. Martial arts practices are seen 
+as an on-going creative practice as practitioners need to develop 
+new techniques to overcome the established practices in their feld, 
+which in turn becomes the new norm which needs to be overcome 
+by new techniques. This transformation happens both in the move-
+ment patterns trained, as well as in instruments such as the set of 
+rules (in competitive martial arts), its values and basic assumptions. 
+In fact, new technologies often lead to novel martial arts forms. For 
+example, the martial arts practice named Kendo was a response to 
+introducing shinai, a wooden baton used in manner similar to a 
+sword, together with protective garments, in turn leading to the 
+development of new techniques and rules [13]. In martial arts, tech-
+nologies and novel movement patterns are not seen as breaches 
+but sought after as they may renew the practice, invigorating and 
+improving on it. 
+But our point here was not to discuss how to arrive at the per-
+fect design adhering to the underlying norms of the practice nor 
+how to make changes that would improves the practice. Instead 
+we aimed to provide a rich phenomenological account of how the 
+design process changed the expert practitioner himself. Through 
+the detailed account of his autobiographical soma design journey 
+above, it is clear how tacit norms of the practice became articulated, 
+challenged, and understood by Yoav. It involved not only under-
+standing the meaning and purpose of some particular kata, but the 
+underlying philosophy behind why that kata is trained the way 
+it is. It allowed him to deconstruct the habits he had learnt, and 
+moreover, let him device novel artistic habits. Let us turn to some of 
+the somaesthetic theories to explain and deepen our understanding 
+of Yoav’s process and why it is important. 
+6.1 Aesthetic appreciation 
+In his writings on somaesthetics Shusterman repeatedly comes 
+back to the need to disrupt habits and become more aware, discern-
+ing the diferent parts of a movement or emotion, feeling every 
+little change in your body. For example, training your breathing to 
+achieve better focus, or correcting your eating habits from what 
+is “habitual” to shape new, more refective, thoughtful movements. 
+Returning to Dewey, Shusterman [63] discusses the diference be-
+tween “routine, unintelligent habit” and “intelligent or artistic habit” 
+that is fused with thought and feeling. To Shusterman, the art of 
+somatic refection and conscious control is thus itself a “refned 
+intelligent habit emerging from and coordinating a background of 
+countless other habits that constitute the developing bundle of complex, 
+unstable, opposing attitudes, habits, impulses we call the self.” 
+What is it that we achieve if we disrupt the habitual, if we listen 
+more attentively to our own movements, discerning all the small 
+changes and processes that are involved in moving? Shusterman 
+argues that such engagement may lead to better appreciation, richer 
+bodily ways of being in the world, and deriving more pleasure and 
+beauty. In the phenomenological account above, Yoav has been 
+learning and creatively changing his body practice through the 
+meeting with a design process. He has not only expanded on his 
+repertory of possible movements, but creatively devised new ways 
+of training, new ways of moving, new experiences that improves on 
+his practice. Höök argues that this is the main contribution of soma 
+design [26]. While soma design is grounded in somaesthetics, it 
+does not rely on pre-made bodily practices, such as yoga or martial 
+arts, as a path to extending on our repertory of experience. Instead, 
+by using creative methods such as estrangement it allows us to 
+create novel movement patterns, arriving at novel experiences, 
+experiences that we may never have had before [26, 36], and, as we 
+have shown here, potentially changing the expert designer. 
+Looking back over the account of Yoav’s design journey, through 
+the estrangement methods, the meeting with the digital and phys-
+ical materials, and designing iterations of the Koinry¯o design, he 
+came to see the underlying norms and reasons for, e.g. certain kata 
+and waza. He also learnt to distinguish between changes to the 
+established practices that could improve his practice and those that 
+would break with the overarching philosophy of the practice. His 
+practice became "intelligent or artistic habit", fused with thought 
+and feeling, and his practice changed. 
+6.2 Transforming designers 
+As discussed while surveying the prior art above, experts have 
+played a signifcant role in design work done in HCI before, by 
+being a representative user [20], by being part of a user study [24], 
+by contributing their expertise to sensitising the design team [50, 
+59], or by taking a central role in the design process [11, 21, 33]. 
+However, the bodily practice of the expert and how those changes 
+through the process is often omitted, or presented as if they are an 
+unchanging, anchoring element independent of the design. Here, 
+we provided an account of how intimate engagement in design 
+work by a bodily practice expert did in fact transformed the expert 
+himself. It thereby provides another example of the transformative 
+power of soma design, previously shown for designers who are not 
+bodily-practice experts and for users [64]. 
+6.3 Limitations and Ethics 
+There are well known tensions between autobiographical design 
+and HCI practices [12] which have infuenced the design and re-
+porting of this paper. One such tension is that autobiographical 
+design cannot provide any claims of generalisability. Throughout 
+we have deliberately avoided any such generalisation. Our claim 
+is not that the design is of relevance to martial artists. Koinryo¯ 
+represents specifc needs and values of Yoav at the time: forced to 
+train by himself, and being disconnected from his training group, 
+Koinry¯o was shaped to ft these particular needs and context. In 
+fact, we are not making any knowledge claims pertaining to the 
+design as such, instead our knowledge claims concern the change 
+in Yoav and why it came about. 
+This brings us to a second tension between autobiographical 
+design and HCI research: how to verify the authenticity of reporting 
+and authorial voices. What the autobiographical voice ofers is 
+qualitative depth, and as discussed by Neustaedter and Sengers, 
+CHI ’23, April 23–28, 2023, Hamburg, Germany Luf et al. 
+this depth in reporting may reveal big efects [51]. The big efects 
+we report on here concern how norms are made explicit, changed 
+and challenged by a soma design process. 
+The tension between norms and designed artifacts present ethical 
+considerations for future designers: can we predict how our artifacts 
+going to shape future users [14]? Will they change and develop 
+their aesthetic skills in the direction they want to change? Here, 
+we claim that using soma design, and specifcally using experts as 
+designers who refect on how they are transformed by the design 
+process, can identify at least some of the tensions between their 
+practice’s norms and the designed artifact. As argued by Eriksson 
+and colleagues, self-cultivation is an ethical act in itself. Articulating 
+the tacit norms of a bodily practice is therefore a crucial step in 
+designing systems that engage with these norms – reinforcing or 
+challenging – in an ethically responsible manner. 
+7 CONCLUSIONS 
+Through a soma design process, a novel artefact, Koinry¯o, able to 
+participate and potentially enrich certain aspects of martial arts 
+training, was devised. It was designed specifcally for the Bujinkan 
+Budo Taijutsu martial art practice through an autobiographical soma 
+design process. 
+From the design of the artefact we have identifed and articulated 
+some of the requirements and limitations for future designs target-
+ing sparring in martial arts, such as the material requirements on 
+robustness, fragility, strength, responsiveness or ways of surprising 
+the user. We have also brought forth some conceptual strategies to 
+work around limitations such as emphasis on softness or cultivating 
+a relationship of care with the artefact. 
+This said, our main contribution lies in uncovering how a soma 
+design process can help expose the tacit norms of a practice and 
+thereby help expert practitioners develop their own practice. The 
+soma design process, involving a bodily practice expert who used an 
+autobiographical design process when designing Koinry¯o enriched 
+our understanding of what those norms are on a felt level rather 
+than as an abstraction. The design work proved to be generative 
+for the expert’s martial arts training even after the artefact was 
+decommissioned. Our analysis revealed how layer after layer of 
+meaning-making and inner-outer stances in the martial art practice 
+were brought to the fore, and made attainable for change. It encour-
+age Yoav to take a more refned look into any tensions between what 
+is practiced and that the novel design afords and recognise that 
+designs can simultaneously conform and challenge a movement 
+culture rather than neatly fall into one category. 
+Let us end with a quote that captures the richness of Yoav’s 
+design journey: 
+“Think that what is written down here was done just 
+for you, and do not consider simply looking at it or 
+familiarising yourself with it or imitating it. Rather, 
+you should consider these principles as thought they 
+were discovered from your own mind, and continually 
+make great eforts to make them a physical part of you. ” 
+– Miyamoto Musashi. "The Book of Five Rings".[49] 
+ACKNOWLEDGMENTS 
+This work was partially supported by the European Union (ERC, 
+Intimate Touch, 101043637). Views and opinions expressed are 
+however those of the author(s) only and do not necessarily refect 
+those of the European Union or the European Research Council. 
+Neither the European Union nor the granting authority can be held 
+responsible for them. This work was partially supported by the 
+Swedish Foundation for Strategic Research (SSF) project CHI19-
+0034 Hardware for Energy Efcient Bodynets; and the Swedish 
+Research Council project 2021-04659 Validating Soma Design. 
+REFERENCES 
+[1] A. Al-Ibadi, S. Nefti-Meziani, and S. Davis. 2017. Novel models for the extension 
+pneumatic muscle actuator performances. In 2017 23rd International Conference 
+on Automation and Computing (ICAC). 1–6. https://doi.org/10.23919/IConAC. 
+2017.8081973 
+[2] Catarina Allen d’Ávila Silveira, Ozgun Kilic Afsar, and Sarah Fdili Alaoui. 2022. 
+Wearable Choreographer: Designing Soft-Robotics for Dance Practice. In Design-
+ing Interactive Systems Conference (DIS ’22). Association for Computing Machin-
+ery, New York, NY, USA, 1581–1596. https://doi.org/10.1145/3532106.3533499 
+[3] Arnold Baca, Peter Dabnichki, Mario Heller, and Philipp Kornfeind. 2009. Ubiq-
+uitous computing in sports: A review and analysis. Journal of Sports Sciences 27, 
+12 (Oct. 2009), 1335–1346. https://doi.org/10.1080/02640410903277427 Publisher: 
+Routledge. 
+[4] Angela Benitez Santiago and Raymond G. Miltenberger. 2016. Using 
+Video Feedback to Improve Martial Arts Performance. Behavioral Inter-
+ventions 31, 1 (2016), 12–27. https://doi.org/10.1002/bin.1424 _eprint: 
+https://onlinelibrary.wiley.com/doi/pdf/10.1002/bin.1424. 
+[5] Janne Mascha Beuthel and Danielle Wilde. 2017. Wear.x: Developing Wearables 
+that Embody Felt Experience. In Proceedings of the 2017 Conference on Designing 
+Interactive Systems - DIS ’17. ACM Press, Edinburgh, United Kingdom, 915–927. 
+https://doi.org/10.1145/3064663.3064799 
+[6] Virginia Braun and Victoria Clarke. 2006. Using thematic analysis in 
+psychology. Qualitative Research in Psychology 3, 2 (Jan. 2006), 77–101. 
+https://doi.org/10.1191/1478088706qp063oa Publisher: Routledge _eprint: 
+https://www.tandfonline.com/doi/pdf/10.1191/1478088706qp063oa. 
+[7] E. H. Chi. 2005. Introducing wearable force sensors in martial arts. IEEE Perva-
+sive Computing 4, 3 (July 2005), 47–53. https://doi.org/10.1109/MPRV.2005.67 
+Conference Name: IEEE Pervasive Computing. 
+[8] Ed H. Chi, Jin Song, and Greg Corbin. 2004. "Killer App" of wearable computing: 
+wireless force sensing body protectors for martial arts. In Proceedings of the 17th 
+annual ACM symposium on User interface software and technology (UIST ’04). 
+Association for Computing Machinery, Santa Fe, NM, USA, 277–285. https: 
+//doi.org/10.1145/1029632.1029680 
+[9] Philo Tan Chua, R. Crivella, B. Daly, Ning Hu, R. Schaaf, D. Ventura, T. Camill, J. 
+Hodgins, and R. Pausch. 2003. Training for physical tasks in virtual environments: 
+Tai Chi. In IEEE Virtual Reality, 2003. Proceedings. IEEE Comput. Soc, Los Angeles, 
+CA, USA, 87–94. https://doi.org/10.1109/VR.2003.1191125 
+[10] Einat Bar-On Cohen. 2006. Kime and the Moving Body: Somatic Codes in Japanese 
+Martial Arts. Body & Society 12, 4 (Dec. 2006), 73–93. https://doi.org/10.1177/ 
+1357034X06070885 Publisher: SAGE Publications Ltd. 
+[11] Kelsey Cotton, Ozgun Kilic Afsar, Yoav Luft, Priyanka Syal, and Fehmi Ben Ab-
+desslem. 2021. SymbioSinging: Robotically transposing singing experi- ence 
+across singing and non-singing bodies.. In Proceedings of Creativity and Cognition 
+2021. ACM, Virtual Event, Italy., 5 pages. 
+[12] Audrey Desjardins and Aubree Ball. 2018. Revealing Tensions in Autobiographical 
+Design in HCI. In Proceedings of the 2018 Designing Interactive Systems Conference 
+(DIS ’18). Association for Computing Machinery, New York, NY, USA, 753–764. 
+https://doi.org/10.1145/3196709.3196781 
+[13] William Dvorine. 1979. Kendo: A Safer Martial Art. Physician and Sport Medicine 
+7, 12 (1979), 4. 
+[14] Sara Eriksson, Kristina Höök, Richard Shusterman, Dag Svanes, Carl Unander-
+Scharin, and Åsa Unander-Scharin. 2020. Ethics in Movement: Shaping and Being 
+Shaped in Human-Drone Interaction. In Proceedings of the 2020 CHI Conference 
+on Human Factors in Computing Systems (CHI ’20). Association for Computing 
+Machinery, New York, NY, USA, 1–14. https://doi.org/10.1145/3313831.3376678 
+[15] Sara Eriksson, Åsa Unander-Scharin, Vincent Trichon, Carl Unander-Scharin, 
+Hedvig Kjellström, and Kristina Höök. 2019. Dancing With Drones: Crafting 
+Novel Artistic Expressions Through Intercorporeality. In Proceedings of the 2019 
+CHI Conference on Human Factors in Computing Systems (Glasgow, Scotland 
+Uk) (CHI ’19). Association for Computing Machinery, New York, NY, USA, 1–12. 
+https://doi.org/10.1145/3290605.3300847 
+Boards Hit Back: Reflecting on Martial Arts Practices Through Soma Design CHI ’23, April 23–28, 2023, Hamburg, Germany 
+[16] Sarah Fdili Alaoui. 2019. Making an Interactive Dance Piece: Tensions in Inte-
+grating Technology in Art. In Proceedings of the 2019 on Designing Interactive 
+Systems Conference (DIS ’19). Association for Computing Machinery, New York, 
+NY, USA, 1195–1208. https://doi.org/10.1145/3322276.3322289 
+[17] Eberhard Graether and Florian Mueller. 2012. Joggobot: a fying robot as jogging 
+companion. In CHI ’12 Extended Abstracts on Human Factors in Computing Systems 
+(CHI EA ’12). Association for Computing Machinery, Austin, Texas, USA, 1063– 
+1066. https://doi.org/10.1145/2212776.2212386 
+[18] Masaaki Hatsumi. 1988. Essence of ninjutsu: the nine traditions. Contemporary 
+Books, Chicago. 
+[19] Masaaki Hatsumi. 1988. The grandmaster’s book of ninja training. Contemporary 
+Books, Chicago. 
+[20] Cornelius Herstatt and Eric von Hippel. 1992. Developing New Product Concepts 
+Via the Lead User Method: A Case Study in a "Low Tech" Field",. Journal of 
+Product Innovation Management 9 (1992), 213–221. 
+[21] Leo Holsti, Tuukka Takala, Aki Martikainen, Raine Kajastila, and Perttu Hämäläi-
+nen. 2013. Body-controlled trampoline training games based on computer vision. 
+In CHI ’13 Extended Abstracts on Human Factors in Computing Systems (CHI EA 
+’13). Association for Computing Machinery, New York, NY, USA, 1143–1148. 
+https://doi.org/10.1145/2468356.2468560 
+[22] Sampsa Hyysalo. 2010. Health Technology Development and Use (0 ed.). Routledge. 
+https://doi.org/10.4324/9780203849156 
+[23] Perttu Hämäläinen. 2004. Interactive video mirrors for sports training. In Pro-
+ceedings of the third Nordic conference on Human-computer interaction (NordiCHI 
+’04). Association for Computing Machinery, New York, NY, USA, 199–202. 
+https://doi.org/10.1145/1028014.1028044 
+[24] Perttu Hämäläinen, Tommi Ilmonen, Johanna Höysniemi, Mikko Lindholm, and 
+Ari Nykänen. 2005. Martial arts in artifcial reality. In Proceedings of the SIGCHI 
+Conference on Human Factors in Computing Systems (CHI ’05). Association for 
+Computing Machinery, Portland, Oregon, USA, 781–790. https://doi.org/10.1145/ 
+1054972.1055081 
+[25] Kristina Höök. 2010. Transferring qualities from horseback riding to design. In 
+Proceedings of the 6th Nordic Conference on Human-Computer Interaction Extending 
+Boundaries - NordiCHI ’10. ACM Press, Reykjavik, Iceland, 226. https://doi.org/ 
+10.1145/1868914.1868943 
+[26] Kristina Höök. 2018. Designing with the Body: Somaesthetic Interaction Design. 
+The MIT Press, Cambridge, Massachusetts. 
+[27] Kristina Höök, Steve Benford, Paul Tennent, Vasiliki Tsaknaki, Miquel Alfaras, 
+Juan Martinez Avila, Christine Li, Joseph Marshall, Claudia Daudén Roquet, Pedro 
+Sanches, Anna Ståhl, Muhammad Umair, Charles Windlin, and Feng Zhou. 2021. 
+Unpacking Non-Dualistic Design: The Soma Design Case. ACM Transactions on 
+Computer-Human Interaction 28, 6 (Nov. 2021), 40:1–40:36. https://doi.org/10. 
+1145/3462448 
+[28] Kristina Höök, Sara Eriksson, Marie Louise Juul Søndergaard, Marianela Ciolf Fe-
+lice, Nadia Campo Woytuk, Ozgun Kilic Afsar, Vasiliki Tsaknaki, and Anna Ståhl. 
+2019. Soma Design and Politics of the Body. In Proceedings of the Halfway to 
+the Future Symposium 2019 (HTTF 2019). Association for Computing Machinery, 
+New York, NY, USA, 1–8. https://doi.org/10.1145/3363384.3363385 
+[29] Kristina Höök, Caroline Hummels, Katherine Isbister, Patrizia Marti, Elena 
+Márquez Segura, Martin Jonsson, Florian ’Floyd’ Mueller, Pedro A.N. Sanches, 
+Thecla Schiphorst, Anna Ståhl, Dag Svanaes, Ambra Trotto, Marianne Graves 
+Petersen, and Youn-kyung Lim. 2017. Soma-Based Design Theory. In Proceedings 
+of the 2017 CHI Conference Extended Abstracts on Human Factors in Computing 
+Systems (CHI EA ’17). Association for Computing Machinery, New York, NY, USA, 
+550–557. https://doi.org/10.1145/3027063.3027082 
+[30] Kristina Höök, Martin P. Jonsson, Anna Ståhl, and Johanna Mercurio. 2016. 
+Somaesthetic Appreciation Design. In Proceedings of the 2016 CHI Conference on 
+Human Factors in Computing Systems. ACM, San Jose California USA, 3131–3142. 
+https://doi.org/10.1145/2858036.2858583 
+[31] Irena Martinkova and Jim Parry. 2016. The paradox of martial arts – safe combat. 
+Ido Movement for Culture. Journal of Martial Arts Anthropology 16, 4 (2016), 4–10. 
+https://doi.org/10.14589/ido.15.3.1 
+[32] Annkatrin Jung. 2020. Exploring Breathing-Based Interactions through Deep Touch 
+Pressure. Master’s thesis. Royal Institute of Technology (KTH), Stockholm, Swe-
+den. 
+[33] Raine Kajastila, Leo Holsti, and Perttu Hämäläinen. 2016. The Augmented Climb-
+ing Wall: High-Exertion Proximity Interaction on a Wall-Sized Interactive Surface. 
+In Proceedings of the 2016 CHI Conference on Human Factors in Computing Systems 
+(CHI ’16). Association for Computing Machinery, New York, NY, USA, 758–769. 
+https://doi.org/10.1145/2858036.2858450 
+[34] Victor Kaptelinin. 2013. Activity Theory (2nd ed.). Interaction Design Founda-
+tion. https://www.interaction-design.org/literature/book/the-encyclopedia-of-
+human-computer-interaction-2nd-ed/activity-theory 
+[35] Pavel Karpashevich, Eva Hornecker, Michaela Honauer, and Pedro Sanches. 2018. 
+Reinterpreting Schlemmer’s Triadic Ballet: Interactive Costume for Unthinkable 
+Movements. In Proceedings of the 2018 CHI Conference on Human Factors in 
+Computing Systems - CHI ’18. ACM Press, Montreal QC, Canada, 1–13. https: 
+//doi.org/10.1145/3173574.3173635
+[36] Pavel Karpashevich, Pedro Sanches, Rachael Garrett, Yoav Luft, Kelsey Cotton, 
+Vasiliki Tsaknaki, and Kristina Höök. 2022. Touching Our Breathing through 
+Shape-Change: Monster, Organic Other, or Twisted Mirror. ACM Trans. Comput.-
+Hum. Interact. 29, 3, Article 22 (feb 2022), 40 pages. https://doi.org/10.1145/ 
+3490498 
+[37] Joseph La Delfa, Mehmet Aydin Baytas, Rakesh Patibanda, Hazel Ngari, Ro-
+hit Ashok Khot, and Florian ’Floyd’ Mueller. 2020. Drone Chi: Somaesthetic 
+Human-Drone Interaction. In Proceedings of the 2020 CHI Conference on Human 
+Factors in Computing Systems (CHI ’20). Association for Computing Machinery, 
+Honolulu, HI, USA, 1–13. https://doi.org/10.1145/3313831.3376786 
+[38] Joseph La Delfa, Robert Jarvis, Rohit Ashok Khot, and Florian ’Floyd’ Mueller. 
+2018. Tai Chi In The Clouds: Using Micro UAV’s To Support Tai Chi Practice. In 
+Proceedings of the 2018 Annual Symposium on Computer-Human Interaction in Play 
+Companion Extended Abstracts (CHI PLAY ’18 Extended Abstracts). Association 
+for Computing Machinery, Melbourne, VIC, Australia, 513–519. https://doi.org/ 
+10.1145/3270316.3271511 
+[39] Wanyu Liu, Artem Dementyev, Diemo Schwarz, Emmanuel Flety, Wendy E. 
+Mackay, Michel Beaudouin-Lafon, and Frederic Bevilacqua. 2021. SonicHoop: 
+Using Interactive Sonifcation to Support Aerial Hoop Practices. In Proceedings 
+of the 2021 CHI Conference on Human Factors in Computing Systems (CHI ’21). 
+Association for Computing Machinery, New York, NY, USA, 1–16. https://doi. 
+org/10.1145/3411764.3445539 
+[40] Lian Loke and Toni Robertson. 2013. Moving and making strange: An embodied 
+approach to movement-based interaction design. ACM Transactions on Computer-
+Human Interaction 20, 1 (March 2013), 1–25. https://doi.org/10.1145/2442106. 
+2442113 
+[41] Joe Marshall, Conor Linehan, and Adrian Hazzard. 2016. Designing brutal multi-
+player video games. (May 2016). https://nottingham-repository.worktribe.com/ 
+output/790999 
+[42] F. Michahelles and B. Schiele. 2005. Sensing and monitoring professional skiers. 
+IEEE Pervasive Computing 4, 3 (July 2005), 40–45. https://doi.org/10.1109/MPRV. 
+2005.66 Conference Name: IEEE Pervasive Computing. 
+[43] Florian Mueller, Rohit Ashok Khot, Kathrin Gerling, and Regan Mandryk. 2016. 
+Exertion Games. Foundations and Trends in Human-Computer Interaction 10, 1 
+(Dec. 2016), 1–86. https://doi.org/10.1561/1100000041 
+[44] Florian Mueller and Matthew Muirhead. 2014. Understanding the design of a 
+fying jogging companion. In Proceedings of the adjunct publication of the 27th 
+annual ACM symposium on User interface software and technology (UIST’14 Ad-
+junct). Association for Computing Machinery, Honolulu, Hawaii, USA, 81–82. 
+https://doi.org/10.1145/2658779.2658786 
+[45] Florian ’Floyd’ Mueller, Martin Gibbs, Frank Vetere, Stefan Agamanolis, and 
+Darren Edge. 2014. Designing mediated combat play. In Proceedings of the 8th 
+International Conference on Tangible, Embedded and Embodied Interaction (TEI 
+’14). Association for Computing Machinery, New York, NY, USA, 149–156. https: 
+//doi.org/10.1145/2540930.2540937 
+[46] Florian ’Floyd’ Mueller and Matthew Muirhead. 2015. Jogging with a Quadcopter. 
+In Proceedings of the 33rd Annual ACM Conference on Human Factors in Computing 
+Systems (CHI ’15). Association for Computing Machinery, Seoul, Republic of 
+Korea, 2023–2032. https://doi.org/10.1145/2702123.2702472 
+[47] Michael J. Muller and Sarah Kuhn. 1993. Participatory design. Commun. ACM 
+36, 6 (June 1993), 24–28. https://doi.org/10.1145/153571.255960 
+[48] Eric C. Mullis. 2013. Martial Somaesthetics. The Journal of Aesthetic Education 47, 3 
+(2013), 96–115. https://doi.org/10.5406/jaesteduc.47.3.0096 Publisher: University 
+of Illinois Press. 
+[49] Musashi, Miyamoto, Wilson, William Scott, and Matsumoto, Michihiro. 2009. The 
+Book of Five Rings. Kodansha Intl. OCLC: 674429805, trans. Wilson, Matsumoto. 
+[50] Elena Márquez Segura, Laia Turmo Vidal, Asreen Rostami, and Annika Waern. 
+2016. Embodied Sketching. In Proceedings of the 2016 CHI Conference on Human 
+Factors in Computing Systems (CHI ’16). Association for Computing Machinery, 
+San Jose, California, USA, 6014–6027. https://doi.org/10.1145/2858036.2858486 
+[51] Carman Neustaedter and Phoebe Sengers. 2012. Autobiographical design in HCI 
+research: designing and learning through use-it-yourself. In Proceedings of the 
+Designing Interactive Systems Conference (DIS ’12). Association for Computing 
+Machinery, Newcastle Upon Tyne, United Kingdom, 514–523. https://doi.org/10. 
+1145/2317956.2318034 
+[52] Stina Nylander and Jakob Tholander. 2014. Designing for Movement: the Case 
+of Sports. In Proceedings of the 2014 International Workshop on Movement and 
+Computing (MOCO ’14). Association for Computing Machinery, Paris, France, 
+130–135. https://doi.org/10.1145/2617995.2618018 
+[53] Stina Nylander, Jakob Tholander, Florian Mueller, and Joe Marshall. 2014. HCI 
+and sports. In CHI ’14 Extended Abstracts on Human Factors in Computing Systems 
+(CHI EA ’14). Association for Computing Machinery, Toronto, Ontario, Canada, 
+115–118. https://doi.org/10.1145/2559206.2559223 
+[54] Kim Oakes, Katie A. Siek, and Haley MacLeod. 2015. MuscleMemory: identifying 
+the scope of wearable technology in high intensity exercise communities. In 
+Proceedings of the 9th International Conference on Pervasive Computing Technolo-
+gies for Healthcare (PervasiveHealth ’15). ICST (Institute for Computer Sciences, 
+CHI ’23, April 23–28, 2023, Hamburg, Germany 
+Social-Informatics and Telecommunications Engineering), Brussels, BEL, 193– 
+200. 
+[55] Katja Pettinen. 2014. Somatic Skill Transmission as Storytelling: The Role of 
+Embodied Judgment in Taijutsu Practice. PhaenEx 9, 2 (Dec. 2014), 136–155. 
+https://doi.org/10.22329/p.v9i2.4285 Number: 2. 
+[56] Sebastiaan Pijnappel and Florian Mueller. 2013. 4 design themes for skateboarding. 
+In Proceedings of the SIGCHI Conference on Human Factors in Computing Systems 
+(CHI ’13). Association for Computing Machinery, New York, NY, USA, 1271–1274. 
+https://doi.org/10.1145/2470654.2466165 
+[57] Sebastiaan Pijnappel and Florian Mueller. 2013. Copy paste skate. In CHI ’13 
+Extended Abstracts on Human Factors in Computing Systems (CHI EA ’13). As-
+sociation for Computing Machinery, New York, NY, USA, 2863–2864. https: 
+//doi.org/10.1145/2468356.2479550 
+[58] Johan Redström. 2017. Making design theory. The MIT Press, Cambridge, Mas-
+sachusetts. OCLC: ocn967727636. 
+[59] Thecla Schiphorst. 2011. Self-evidence: applying somatic connoisseurship to 
+experience design. In CHI ’11 Extended Abstracts on Human Factors in Computing 
+Systems (CHI EA ’11). Association for Computing Machinery, New York, NY, USA, 
+145–160. https://doi.org/10.1145/1979742.1979640 
+[60] Maxine Sheets-Johnstone. 2011. The Primacy of Movement: Expanded second 
+edition. John Benjamins Publishing. 
+[61] Maxine Sheets-Johnstone. 2015. The Corporeal Turn: An Interdisciplinary Reader. 
+Andrews UK Limited. 
+[62] Ali Shtarbanov. 2021. FlowIO Development Platform - the Pneumatic "Raspberry 
+Pi" for Soft Robotics. In Extended Abstracts of the 2021 CHI Conference on Human 
+Factors in Computing Systems (CHI EA ’21). Association for Computing Machinery, 
+New York, NY, USA, 1–6. https://doi.org/10.1145/3411763.3451513 
+[63] Richard Shusterman. 2008. Body Consciousness: A Philosophy of Mindfulness and 
+Somaesthetics. Cambridge University Press. 
+[64] Anna Ståhl, Madeline Balaam, Rob Comber, Pedro Sanches, and Kristina Höök. 
+2022. Making New Worlds – Transformative Becomings with Soma Design. In 
+Proceedings of the 2022 CHI Conference on Human Factors in Computing Systems 
+(CHI ’22). Association for Computing Machinery, New York, NY, USA, 1–17. 
+https://doi.org/10.1145/3491102.3502018 
+[65] Anna Ståhl, Martin Jonsson, Johanna Mercurio, Anna Karlsson, Kristina Höök, 
+and Eva-Carin Banka Johnson. 2016. The Soma Mat and Breathing Light. In 
+Proceedings of the 2016 CHI Conference Extended Abstracts on Human Factors in 
+Computing Systems (CHI EA ’16). Association for Computing Machinery, New 
+York, NY, USA, 305–308. https://doi.org/10.1145/2851581.2889464 
+[66] Anna Ståhl, Jakob Tholander, Jarmo Laaksolahti, and Elsa Kosmack-Vaara. 2017. 
+Being, Bringing and Bridging: Three Aspects of Sketching with Nature. In Pro-
+ceedings of the 2017 Conference on Designing Interactive Systems - DIS ’17. ACM 
+Press, Edinburgh, United Kingdom, 1309–1320. https://doi.org/10.1145/3064663. 
+3064764 
+[67] Yngve Sundblad. 2011. UTOPIA: Participatory Design from Scandinavia to 
+the World. In History of Nordic Computing 3 (IFIP Advances in Information and 
+Luf et al. 
+Communication Technology), John Impagliazzo, Per Lundin, and Benkt Wangler 
+(Eds.). Springer, Berlin, Heidelberg, 176–186. https://doi.org/10.1007/978-3-642-
+23315-9_20 
+[68] Sekien Toriyama. 1805. Hyakki tsurezurebukuro. Edo : Maekawa Yahei. http: 
+//archive.org/details/HyakkitsurezureV2Tori 
+[69] Vasiliki Tsaknaki, Kelsey Cotton, Pavel Karpashevich, and Pedro Sanches. 2021. 
+“Feeling the Sensor Feeling you”: A Soma Design Exploration on Sensing Non-
+habitual Breathing. In Proceedings of the 2021 CHI Conference on Human Factors 
+in Computing Systems. ACM, Yokohama Japan, 1–16. https://doi.org/10.1145/ 
+3411764.3445628 
+[70] Luca Turchet. 2018. Smart Mandolin: autobiographical design, implementation, 
+use cases, and lessons learned. In Proceedings of the Audio Mostly 2018 on Sound 
+in Immersion and Emotion (AM’18). Association for Computing Machinery, New 
+York, NY, USA, 1–7. https://doi.org/10.1145/3243274.3243280 
+[71] Laia Turmo Vidal. 2021. Designing for Intercorporeality : An Interaction Design 
+Approach to Technology-Supported Movement Learning. Doctornal Dissertation. 
+Uppsala University. http://urn.kb.se/resolve?urn=urn:nbn:se:uu:diva-452038 
+Publisher: Department of Informatics and Media. 
+[72] Laia Turmo Vidal, Elena Márquez Segura, Christopher Boyer, and Annika Waern. 
+2019. Enlightened Yoga: Designing an Augmented Class with Wearable Lights to 
+Support Instruction. In Proceedings of the 2019 on Designing Interactive Systems 
+Conference (DIS ’19). Association for Computing Machinery, New York, NY, USA, 
+1017–1031. https://doi.org/10.1145/3322276.3322338 
+[73] Laia Turmo Vidal, Elena Márquez Segura, Luis Parrilla Bel, and Annika Waern. 
+2018. Exteriorizing Body Alignment in Collocated Physical Training. In Extended 
+Abstracts of the 2018 CHI Conference on Human Factors in Computing Systems 
+(CHI EA ’18). Association for Computing Machinery, New York, NY, USA, 1–6. 
+https://doi.org/10.1145/3170427.3188685 
+[74] Laia Turmo Vidal, Hui Zhu, and Abraham Riego-Delgado. 2020. BodyLights: 
+Open-Ended Augmented Feedback to Support Training Towards a Correct Exer-
+cise Execution. In Proceedings of the 2020 CHI Conference on Human Factors in 
+Computing Systems (CHI ’20). Association for Computing Machinery, New York, 
+NY, USA, 1–14. https://doi.org/10.1145/3313831.3376268 
+[75] Laia Turmo Vidal, Hui Zhu, Annika Waern, and Elena Márquez Segura. 2021. 
+The Design Space of Wearables for Sports and Fitness Practices. In Proceedings 
+of the 2021 CHI Conference on Human Factors in Computing Systems (CHI ’21). 
+Association for Computing Machinery, New York, NY, USA, 1–14. https://doi. 
+org/10.1145/3411764.3445700 
+[76] Eric Von Hippel. 1986. Lead Users: A Source of Novel Product Concepts. Man-
+agement Science 32, 7 (1986), 791–805. http://www.jstor.org/stable/2631761 
+Publisher: INFORMS. 
+[77] John Wellbelove. 2022. Embedded Template Library. https://www.etlcpp.com/ 
+home.html 
+[78] Danielle Wilde, Anna Vallgårda, and Oscar Tomico. 2017. Embodied Design 
+Ideation Methods: Analysing the Power of Estrangement. In Proceedings of the 
+2017 CHI Conference on Human Factors in Computing Systems - CHI ’17. ACM Press, 
+Denver, Colorado, USA, 5158–5170. https://doi.org/10.1145/3025453.3025873 

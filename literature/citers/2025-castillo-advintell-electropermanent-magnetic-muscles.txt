@@ -1,0 +1,964 @@
+Electropermanent Magnetic Muscles: Power-Ef ﬁcient,
+Low-Voltage, Compact Magnetic Actuators to Power
+Wearables and Untethered Robots
+Arturo Castillo Ugalde,* Carina Carrasco, Brijesh Chavda, Thileepan Stalin,
+and Pablo Valdivia y Alvarado*
+1. Introduction
+Artiﬁcial muscles play a pivotal role in advancing robotics and
+human-machine interaction by providing actuation solutions
+that are compliant, ef ﬁcient, and capable of generating linear
+and complex motions without rigid mechanisms. [1–4] Their
+potential applications extend across wearable devices, soft robot-
+ics, and prosthetics, where attributes such as safety, portability,
+and nature-like motion are critical. [5–8]
+However, existing arti ﬁcial muscles face inherent limitations
+dictated by their underlying transduction principles. For instance,
+electrostatic actuators require high voltages, posing risks and hard-
+ware complexity;[9–11] shape memory materials suffer from low
+frequencies and poor ef ﬁciency;[12,13] and traditional ﬂexible ﬂu-
+idic actuators rely on external pumps and pneumatic reservoirs,
+making them tethered and less portable. [14–16] Overcoming these
+challenges often requires addressing funda-
+mental trade-offs inherent to their operating
+principles.
+These limitations are particularly evi-
+dent in wearable technologies, such as
+prosthetics, assistive devices, and human
+augmentation systems, where the demand
+for compact, powerful, and ef ﬁcient actua-
+tors is critical. [7,17] These systems must
+operate for extended periods while ensur-
+ing safe and reliable interaction with users
+in proximity.
+Similarly, in robotics, the need for
+energy-efﬁcient, compact, and untethered
+actuators has driven research toward new
+transducer materials that enhance both per-
+formance and autonomy.[14] This is particu-
+larly important for robots operating in con ﬁned spaces or harsh
+environments, where extended mission duration and power ef ﬁ-
+ciency are essential. [18]
+Recent advances have also broadened the landscape of artiﬁcial-
+muscle technologies beyond traditional transduction mechanisms.
+Fiber- and yarn-based actuators have achieved large reversible
+deformation and high power density by leveraging thermal or elec-
+trothermal stimulation, while liquid crystal elastomers (LCEs)
+have emerged as multistimulus materials that respond to heat,
+light, or electrical ﬁelds.[19–23] These modalities represent impor-
+tant and rapidly growing actuator classes. However, many of them
+rely on continuously applied thermally induced or environment-
+driven stimuli, such as temperature change, light absorption, or
+humidity variations, which inherently limit actuation speed, con-
+trollability, and energy efﬁciency.
+Electromagnetic actuation, while primarily utilized in motor-
+driven systems, presents an attrac tive alternative. It offers advan-
+tages such as low operating voltages, fast response, and seamless
+integration into existing technologies. Recently, ferromagnetic com-
+posites have gained attention in electromagnetic actuation for
+their ability to generate large, untethered forces. [24–27] However,
+their practical use is often limited to controlled environments where
+large magnetic ﬁeld generators are available, limiting their use in
+portable applications. As a result , solenoid- and voice coil-based
+actuators remain the most widely used solution for compact elec-
+tromagnetic actuation. These actuators have been explored across a
+range of applications, from rigid[28–30] to soft[31–34] and hybrid com-
+pliant devices,[35] demonstrating their versatility in bio-inspired
+robotics,[36,37] medical devices,[38] and soft robotic systems.[39,40]
+A. Castillo Ugalde, C. Carrasco, B. Chavda, T. Stalin, P. Valdivia y Alvarado
+Engineering Product Development
+Singapore University of Technology and Design
+Singapore 487372, Singapore
+E-mail: arturo_castillo@mymail.sutd.edu.sg; pablov@sutd.edu.sg
+The ORCID identi ﬁcation number(s) for the author(s) of this article
+can be found under https://doi.org/10.1002/aisy.202500967.
+© 2025 The Author(s). Advanced Intelligent Systems published by Wiley-
+VCH GmbH. This is an open access article under the terms of the Creative
+Commons Attribution License, which permits use, distribution and
+reproduction in any medium, provided the original work is properly cited.
+DOI: 10.1002/aisy.202500967
+Artiﬁcial muscles are essential for advancing bio-inspired robots, prosthetics, and
+wearable devices, as they enable compliant, ef ﬁcient actuation without complex
+mechanisms. Existing actuation technologies often face limitations such as high
+voltage requirements, low efﬁciency, or tethering constraints. This work introduces
+a solenoid-based actuator system utilizing soft-magnetic and hard-magnetic
+materials to achieve portable bistable actuation, reducing energy consumption by
+only requiring power during state transitions. The actuators demonstrate low-
+voltage operation, competitive stress and strain performance, and high power
+efﬁciency, making them ideal for untethered robots and wearable devices.
+Preliminary applications in a prosthetic hand and an amphibious robot highlight
+their potential in terms of low energy consumption, simplicity, and safety.
+RESEARCH ARTICLE
+www.advintellsyst.com
+Adv. Intell. Syst. 2026, 8, e202500967 e202500967 (1 of 13) © 2025 The Author(s). Advanced Intelligent Systems published by Wiley-VCH GmbH
+
+Despite these beneﬁts, electromagnetic artiﬁcial muscles, espe-
+cially solenoid- and voice coil-based designs, are limited by high
+energy consumption.[30,41] These devices typically require contin-
+uous energy input to maintain actuation, leading to signi ﬁcant
+heat generation, reduced efﬁciency, and constraints on their appli-
+cation in human-interactive systems and untethered robots.
+To address these challenges, Knaian [42] introduced electroper-
+manent magnets (EPMs) as an energy-ef ﬁcient alternative for
+electromagnetic connection systems. These devices leverage fer-
+romagnetic materials with distinct magnetic properties to estab-
+lish a bi-stable magnetic circuit. By applying brief energy pulses to
+a solenoid, these devices achieve a controlled switch between mag-
+netic attraction (EPM on) and nonmagnetic attraction (EPM off )
+states, without requiring continuous power input. This principle
+has facilitated the development of low-power electromagnetic
+latching systems used in valves,[43–45] climbing[46,47] and reconﬁg-
+urable robots,[48–50] low-speed high-torque motors, [51,52] human-
+machine interfaces,[53] and electromagnetic suction cups. [54]
+Building on this concept, this research paper proposes a
+novel solenoid-based actuator system that extends the EPM
+principle beyond latching mec hanisms to muscle-like actu-
+ation. Unlike prior applications, which primarily focused on
+static holding and switching functions, the proposed electroper-
+manent magnetic muscles (EPMM) approach integrates both
+soft-magnetic and hard-magneti c materials to actively generate
+and sustain forces between the magnets without continuous
+energy input. By leveraging this bistable magnetic interaction,
+the EPMM design enables controlled muscle-like actuation with
+minimal energy consumption, requiring power only to switch
+between attraction (contraction) and repulsion (relaxation) states.
+This innovation offers a low-voltage, compact, ef ﬁcient, and scal-
+able solution for small-scale rigid and soft robotic systems, pre-
+senting a signi ﬁcant advancement in electromagnetic actuator
+technology for untethered robotics and wearable applications.
+To validate the proposed actuator system, solenoid-wrapped
+AlNiCo magnets paired with NdFeB magnets of various com-
+mercial sizes were characterized. A systematic study on magnet
+dimensions, speciﬁcally length and diameter, in ﬂuencing attrac-
+tion and repulsion forces was conducted to determine the
+actuator’s contraction force and stress output. In addition, the
+energy required for magnetization was characterized, re ﬁning
+the switching parameters such as pulse duration and voltage,
+improving energy ef ﬁciency.
+Building on these insights, actuator arrays were implemented
+into a ﬁber arti ﬁcial muscle for tendon-driven grasping. These
+were integrated into a prosthetic hand platform, where the actua-
+tors replicated muscle-like function by pulling tendons to ﬂex
+individual ﬁngers. The design enabled safe and reliable grasping
+without continuous power input, requiring energy only to change
+states.
+To further explore the applications of the proposed actuator,
+untethered locomotion through the design of an amphibious
+robot was also demonstrated. By recon ﬁguring the actuator array
+geometry and magnet polarity, compliant mechanisms for crawl-
+ing and swimming were developed. This system demonstrated
+underwater propulsion and terrestrial locomotion with a compact
+structure using portable electronics.
+Together, these results highlight the potential of our actuator
+technology for wearable and autonomous robotic systems. The
+compact design, low-voltage operation, and energy-efﬁcient bista-
+ble behaviour offer a promising alternative to traditional arti ﬁcial
+muscles in bio-inspired applications.
+2. Results
+2.1. Actuator Working Principle
+The proposed actuation method exploits the magnetic interaction
+between two ferromagnetic compounds: a hard-magnetic mate-
+rial, Neodymium-Iron-Boron grade N35 (NIB), and a soft-
+magnetic material, Aluminum-Nickel-Cobalt grade 5 (AlNiCo),
+leveraging on its different magnetic properties to generate
+actuation.
+Ferromagnetic materials are known for their strong interac-
+tion to magnetic ﬁelds. This is due to their ability to align their
+internal magnetic domains in the direction of an external mag-
+netic ﬁeld, generating a resultant magnetization force vector on
+the material itself.
+In the case of AlNiCo grade 5 and NIB N35, while both possess
+a high remanence, which measures their ability to remain mag-
+netized after the removal of the initial magnetization ﬁeld, they
+differ signiﬁcantly in coercivity, which is a measure of the mate-
+rial ability to preserve its magnetization, in other words, its ability
+to keep its magnetic domains orientation under the in ﬂuence of
+an external magnetic ﬁeld.
+These key properties allow us to differentiate between soft-
+magnetic, hard-magnetic, and super-paramagnetic materials,
+depending on the material’s proﬁle on its demagnetization curve
+or BH curves. [24]
+By exploiting the low coercivity of AlNiCo, its magnetization
+direction was controlled by applying short electromagnetic pulses
+through a small solenoid wound around it. This resulted in con-
+trollable attraction and repulsion forces during its interaction with
+the NIB magnet, shown in Figure 1 . Building on this polarity-
+interaction-controlled actuation concept, a simple linear array of
+3 magnets was assembled. This magnetic array contracts and
+relaxes, in a bistable way, by the direction of the controlled electric
+pulse applied on its solenoid. This simple but powerful concept
+allows to decouple the device actuation force from the continuous
+energy consumption of traditional solenoids, creating a magnetic
+catch state, without the need of additional mechanisms or latches
+(see Video S1, Supporting Information).
+2.2. Characterization
+The basic unit of our magnetic arrays consists of a cylindrical
+AlNiCo magnet paired with a NIB magnet, both de ﬁned by their
+diameter ( D) and length ( L). In this study, three commercial
+AlNiCo sizes (D3L12, D5L22, and D6L25) were used; a wide vari-
+ety of off-the-shelf NIB dimensions allowed us to create 30
+unique magnet-pair con ﬁgurations. This study aimed to investi-
+gate how variations in both magnet sizes in ﬂuence the perfor-
+mance of the actuator pair and provide guidance on how these
+parameters can be adjusted to optimize actuator performance in
+terms of force, stress, strain, and ef ﬁciency.
+www.advancedsciencenews.com www.advintellsyst.com
+Adv. Intell. Syst. 2026, 8, e202500967 e202500967 (2 of 13) © 2025 The Author(s). Advanced Intelligent Systems published by Wiley-VCH GmbH
+ 26404567, 2026, 3, Downloaded from https://advanced.onlinelibrary.wiley.com/doi/10.1002/aisy.202500967, Wiley Online Library on [21/09/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+2.2.1. Optimal Magnetization Parameter
+The key to generating actuation in these devices lies in precisely
+controlling the magnetization of their low-coercivity compo-
+nents. This process is primarily governed by the strength and
+direction of the applied magnetic ﬁeld, which, in turn, depends
+on the solenoid’s electrical characteristics, design, and the power
+supply’s ability to sustain the required energy input.
+Figure 2 a shows the magnetization levels of three different
+sizes of AlNiCo magnets under varying driving voltages using
+long energy pulses. As voltage increases, the saturation curve ﬂat-
+tens, indicating that further voltage increments have little effect
+on remanent magnetization and, consequently, on the actuator ’s
+attraction force. This threshold voltage, which increases with
+magnet size, was considered the optimal magnetization voltage
+for each sample.
+Using this optimal voltage, the solenoids were subject to
+magnetization cycles with varying pulse widths, as shown in
+Figure 2b. Similarly, as pulse duration increases, the saturation
+curve ﬂattens, meaning that beyond a certain point, longer pulses
+do not signi ﬁcantly enhance remanent magnetization or attrac-
+tion force. This threshold is termed the optimal pulse width and
+is inﬂuenced by the inductive nature of the solenoid, which intro-
+duces a delay in current rise time and, consequently, in the for-
+mation of the surrounding magnetic ﬁeld.
+By leveraging these two control parameters, precise and energy-
+efﬁcient magnetization of the AlNiCo components was achieved,
+enhancing the overall ef ﬁciency of EPMM actuator systems.
+Figure 2c shows the optimal magnetization pulses for the three
+AlNiCo magnet sizes used in this study. Each pulse was applied
+using the previously determined optimal voltage and pulse width.
+The energy required for magnetization, computed as the inte-
+grated instantaneous power over the pulse time, increased with
+magnet size, measuring 28 mJ, 172 mJ, and 256 mJ, respectively.
+2.2.2. Force Characterization and Design Optimization
+The attraction force pro ﬁles of AlNiCo magnets paired with
+NIB magnets of varying lengths and diameters are shown in
+Figure 3a. As anticipated, the attraction force increases exponen-
+tially as the gap between the magnets narrows, it also scales with
+the overall size of the magnet pair. These results provide a valu-
+able reference for the design of magnetic arrays, offering insights
+into the initial attraction at various gap distances as well as the
+maximum holding force achieved at close proximity.
+Figure 3b shows the distribution of maximum attraction
+forces for magnet pairs with identical diameter but varying
+length. Across all tested diameters, the results reveal that increas-
+ing the NIB-to-AlNiCo length ratio beyond 0.5 leads to an asymp-
+totic trend, where further increases in NIB length produce
+minimal gains in attraction force. This ﬁnding is signi ﬁcant,
+as selecting an appropriate NIB length enables overall actuator
+length optimization, which directly in ﬂuences strain perfor-
+mance and weight.
+Peak forces for nine magnet pair con ﬁgurations, grouped by
+diameter, are compared in Figure 3c. The data show a clear
+Figure 1. a) Fabrication of the AlNiCo-core solenoid. b) The bistable polarity switching of the solenoid is triggered by the direction of short current pulses
+through it. c) The polarity interaction of the magnetic elements on the array creates bistable states of contraction or repulsion, that keep generati ng forces
+(F) without further energy consumption (E), until toggled by an opposite direction pulse. This magnetic array can contract and relax controllably, d em-
+onstrating the working principle of the proposed arti ﬁcial muscle actuator.
+www.advancedsciencenews.com www.advintellsyst.com
+Adv. Intell. Syst. 2026, 8, e202500967 e202500967 (3 of 13) © 2025 The Author(s). Advanced Intelligent Systems published by Wiley-VCH GmbH
+ 26404567, 2026, 3, Downloaded from https://advanced.onlinelibrary.wiley.com/doi/10.1002/aisy.202500967, Wiley Online Library on [21/09/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+correlation between larger diameters and higher maximum
+forces, with 6 mm diameter pairs exceeding 10N. This analysis
+is extended in Figure 3d by evaluating maximum stress (force per
+cross-sectional area), which reveals that magnet pairs with equal
+diameters deliver the best performance. Notably, the 5 mm pair
+achieves the highest stress, exceeding 400 MPa, comparable to
+that of natural mammalian muscle.
+The actuator ’s transduction ef ﬁciency, de ﬁned as the ratio of
+mechanical work output to electrical energy input, was evaluated
+for magnet pairs with equal NIB and AlNiCo lengths (length ratio
+of 1), as shown in Figure 3e. Higher efﬁciencies were observed in
+conﬁgurations where smaller AlNiCo magnets were paired with
+larger NIB magnets. The highest ef ﬁciency, approaching 20%,
+was achieved by the combination of the smallest AlNiCo with
+the largest NIB. This ﬁnding highlights a key design consider-
+ation: using a small, low-coercivity AlNiCo in combination with
+a large NIB magnet increases the usable magnetic gradient for a
+given electrical input to generate actuation.
+2.3. Performance Benchmarking
+To assess the relevance of the EPMM technology in the context of
+wearable and portable systems, we compiled a comparative table
+featuring three widely studied arti ﬁcial muscle technologies,
+each based on distinct transduction principles (see Table 1 ).
+These were evaluated across several performance metrics rele-
+vant to such applications.
+Most performance values were obtained from reference data
+in the literature, chosen to represent typical behavior for each
+technology. Among the metrics compared, Holding Power reﬂects
+the energy required to maintain a contracted state under load,
+without relying on external locking mechanisms. Two portability-
+related indices were also introduced: the Speciﬁc Portability Index
+(SPI) and the Volumetric Portability Index (VPI), which measure
+the ratio of active to nonactive actuation mass and volume,
+respectively. These indices serve as complementary indicators
+to commonly reported values like Work Density and Speciﬁc
+Work, which often consider only the actuator element itself
+and neglect peripheral systems (e.g., pumps, electronics) that sig-
+niﬁcantly impact the overall portability.
+To provide context, the benchmark values for natural mamma-
+lian muscle are included as a biological reference.
+The EPMM actuators demonstrate competitive performance
+across most categories. Among the nine parameters compared,
+Speciﬁc Work is the only one where this system ranks lowest
+(2.14–3.86 J Kg/C01), with values slightly below those of Peano-
+HASEL actuators. [9] This is primarily due to the high density
+of the magnetic materials used, which limits the work output
+per unit mass. However, in terms of Work Density , our actuator
+outperforms Peano-HASEL by delivering greater work output per
+unit volume (11.47 –22.47 kJ m3), bene ﬁting from a compact
+magnetic design that reduces overall actuator volume.
+In terms of stress output, the EPMM reaches 432 kPa, exceed-
+ing the reference value for natural muscle. Its achievable strain,
+ranging from 10 to 25%, is higher than that of shape memory
+Figure 2. a) Remanent magnetization of three AlNiCo magnet sizes (diameter D, length L; in millimeters) under increasing voltage, showing saturation
+behavior and identifying optimal magnetization voltage. b) Effect of pulse width on remanent magnetization using optimal voltage, highlighting th e
+optimal pulse duration for each solenoid. c) Current and voltage pro ﬁles of the optimal magnetization pulses for each magnet size, 3, 5, and
+6 mm in diameters respectively.
+www.advancedsciencenews.com www.advintellsyst.com
+Adv. Intell. Syst. 2026, 8, e202500967 e202500967 (4 of 13) © 2025 The Author(s). Advanced Intelligent Systems published by Wiley-VCH GmbH
+ 26404567, 2026, 3, Downloaded from https://advanced.onlinelibrary.wiley.com/doi/10.1002/aisy.202500967, Wiley Online Library on [21/09/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+alloys (SMA) and comparable to both Peano-HASEL actuators
+and biological muscle. Its transduction ef ﬁciency, ranging from
+6 to 21%, outperforms SMA and aligns closely with Peano-
+HASEL actuators, though it remains slightly below that of pneu-
+matic arti ﬁcial muscles (PAM) and natural muscle.
+One of the most distinctive features of EPMM systems is their
+energy ef ﬁciency during static holding tasks. Unlike SMA,
+HASEL, and PAM technologies, which typically require contin-
+uous energy input to maintain a contracted position, our actuator
+consumes zero power while holding loads under its maximum force
+limit, thanks to its bistable magnetic conﬁguration. This behavior
+provides a signi ﬁcant advantage in applications involving pro-
+longed load holding. In contrast, SMA actuators consume power
+continuously to maintain heat and sustain the actuated phase,
+Figure 3. a) Attraction force proﬁles for AlNiCo magnets paired with NIB magnets of varying diameters and lengths, showing increased force with reduced
+gap distance and larger magnet sizes. b) Maximum attraction forces for magnet pairs with equal diameters and varying lengths, revealing an asymptoti c
+trend beyond a NIB-to-AlNiCo length ratio of 0.5. c) Peak force comparison across nine magnet pair con ﬁgurations of equal length, grouped by diameter,
+indicating that larger diameters produce higher forces. d) Maximum stress (force per cross-sectional area) for the same con ﬁgurations, showing optimal
+performance for equal-diameter pairs and a peak stress of /C25400 MPa for the 5 mm pair. e) Actuator transduction ef ﬁciency for the same con ﬁgurations,
+highlighting improved performance when small AlNiCo magnets are combined with larger NIB magnets, with a maximum ef ﬁciency near 20%.
+www.advancedsciencenews.com www.advintellsyst.com
+Adv. Intell. Syst. 2026, 8, e202500967 e202500967 (5 of 13) © 2025 The Author(s). Advanced Intelligent Systems published by Wiley-VCH GmbH
+ 26404567, 2026, 3, Downloaded from https://advanced.onlinelibrary.wiley.com/doi/10.1002/aisy.202500967, Wiley Online Library on [21/09/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+while HASEL actuators suffer from leakage currents due to high-
+voltage actuation and thin dielectric membranes. PAM systems
+can achieve zero holding power only under speci ﬁc conditions,
+such as the use of check valves and assuming no air leakage
+occurs.
+Actuator mass- and volume-normalized performance, evalu-
+ated by the SPI and VPI, places EPMM actuators at the top, owing
+to minimal peripheral bulk and high work output relative to total
+system mass and volume. PAMs score lowest in SPI due to the
+large mass of its peripheral systems compared to the actuator
+light weight. SMAs scored lowest in VPI due to their small actu-
+ator volume when compared to its driving electronics for a single
+actuator case. These relative measurements should be inter-
+preted with caution, as the calculated VPI and SPI values are
+highly dependent on the overall system design, including the
+actuator size, number of units, power supply characteristics,
+and integration strategy. Consequently, they may not scale line-
+arly with actuator count or geometry changes. Details of the
+methodology used to assess these parameters are provided in
+the Supporting Information.
+2.4. Applications
+2.4.1. Wearables: Low-Power Grasping Prosthetic Hand
+To demonstrate the practical utility of the EPMM actuators, these
+were ﬁrst integrated into an open-source prosthetic hand plat-
+form.[55] The actuators extended along the forearm to replicate
+the placement of human muscles responsible for hand grasping.
+Each actuator array functioned as an arti ﬁcial muscle, contracting
+to pull a tendon routed through the prosthetic hand toﬂex a ﬁnger.
+Activation was controlled by a portable control unit ( Figure 4).
+A 3D model of the modiﬁed prosthetic hand model (Figure 4a)
+depicted four EPMM actuators, each connected to a tendon for
+individual ﬁnger control.
+The magnetic array for each arti ﬁcial muscle (Figure 4b) com-
+prises NIB and AlNiCo solenoids enclosed in a nylon-braided
+mesh that integrates the magnets into a single compliant hous-
+ing, maintains their axial alignment during polarity switching,
+and de ﬁnes their maximum separation distance (4 mm), which
+sets the actuator ’s initial contraction force. This ﬂexible mesh
+tensed during relaxation and bulged on contraction. The arti ﬁcial
+muscle array had theoretical stroke of 16 mm, corresponding to
+/C2520% strain.
+The magnetic bistability of EPMM actuators provided a key
+advantage for prosthetic applications (Figure 4c). Once contracted
+by a magnetization pulse, the actuators remained contracted
+without additional energy consumption, enabling inde ﬁnite
+grasp. The actuators also remained backdrivable, enhancing safety
+during human –device interaction (see Video S2, Supporting
+Information).
+Grasping performance was evaluated via forced-extension
+tests (see Video S3, Supporting Information) on a single muscle
+ﬁber, tendon unwrapping force measurements of the index ﬁn-
+ger, and a four- ﬁnger power-grasp test to quantify maximum
+grasping force, respectively in Figure 4d. Subsequently, the hand
+Table 1. Comparative performance table of EPMM actuators and three representative artiﬁcial muscle technologies: SMA, Peano HASEL, and PAM, along
+with natural muscle as a biological reference. Metrics include stress, strain, transduction ef ﬁciency, work density, speci ﬁc work, holding power, SPI, and
+VPI. Literature-based reference values were used to represent typical actuator and system level performance. EPMM actuators demonstrate competit ive
+performance across most metrics, with notable advantages in zero energy holding and overall system portability. See Section 1 –4, Supporting
+Information, for parameter de ﬁnitions and calculation details.
+EPMM (this work) HASEL SMA PAM Natural muscle
+Transduction family Electromagnetic Electrostatic Thermal Pneumatic Chemical
+Stress [Kpa] 432 90 –210a) 200 000g) 3,400k) 350g)
+Strain [%] 10 –25 15 –24a) 5–8g) 15k)-80l) 20–40g)
+Transduction ef ﬁciency [%] 6 –21 19 –21b) <5g) 22m) 40g)
+Actuation voltage [V] 15 –36 10 000 c) >4g) Depending on the pressure source –
+Holding power [mW] 0 0.94 –5.6d) (leakage current) 612 h) (30% duty cycle) 0 if no gas leakage –
+VPI [%] 10 5.4 e) 0.72i) 5.67n) –
+SPI [%] 32 4.5 e) 2.57i) 0.45n) –
+Speciﬁc work [J kg /C01] 3.8 4 –5a) 155–1550j) 300o) –
+Work density [kJ m /C03] 22 3.75 f) 1,000–10 000g) 500k) 8–40g)
+Note. a)Peano-HASEL and HS-Peano-HASEL values taken from Table 1 at ref. [9]. b)The Donut HASEL and Quadrant Donut HASEL ef ﬁciency values were taken as reference
+since Peano-HASEL or HS-Peano-HASEL were not available on ref. [9]. c)Actuation voltage of Peano-HASEL actuator achieving 10% strain at no load; and HS-Peano-HASEL at
+24% strain with 0.1 N load, reported on ref. [9]. d)Power drawn by Peano-HASEL actuators fabricated on Mylar and BOPP used on a prosthetic ﬁnger during holding grasp task,
+activated at 6 and 8 kV respectively, reported on ref. [56]. e)Calculated from single unit HS-Peano-HASEL from [11] considering 10% of the mass and volume of the portable 10
+channels high voltage power supply by ref. [57]. f) Computed from the actuator volume calculated at e) and its speci ﬁc power reported at ref. [11]. g)Reported at ref. [12].
+h)Calculated for a 10 cm length and 0.25 mm diameter Flexinol wire actuated at a holding 30% duty cycle of the recommended provider ’s datasheet driving values. i)Computed
+from the same actuator at h) using a TIP120 medium-power transistor. j)Computed from Work density from g) divided by Nitinol density (6.45 g cm 3). k)Reported at ref. [1].
+l)Contraction ratio reported at ref. [15]. m)Reported for McKibben muscles at isotonic conditions at ref. [58]. n)Calculated using volume and mass: origami pneumatic actuator
+at ref. [59], FlowIO portable pneumatic source and controller at [60], and a common 300 mL and 300 bar aluminum air reservoir sourced online. o)Reported for commercial
+PAM at ref. [61].
+www.advancedsciencenews.com www.advintellsyst.com
+Adv. Intell. Syst. 2026, 8, e202500967 e202500967 (6 of 13) © 2025 The Author(s). Advanced Intelligent Systems published by Wiley-VCH GmbH
+ 26404567, 2026, 3, Downloaded from https://advanced.onlinelibrary.wiley.com/doi/10.1002/aisy.202500967, Wiley Online Library on [21/09/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+was used to grasp daily-living objects without power to demon-
+strate zero-energy holding and usability (Figure 4e). A simulated
+comparison of energy consumption during a 100 mJ holding
+task against other actuation technologies highlighted EPMM
+as a highly ef ﬁcient solution for wearable devices by extending
+operational time and reducing power requirements (Figure 4f );
+further details of the computation are available in Section 5,
+Supporting Information.
+2.4.2. Underwater Locomotion: EPMM-Powered Fin
+The potential of the actuator for untethered robotic applications
+was further investigated through its use in underwater locomo-
+tion. A compliant ﬁn powered by a recon ﬁgured magnetic array
+was developed and compared to an equivalent ﬁn driven by a
+commercial micro servomotor (MG90S TowerPro, 4.8 –6.0 V,
+1.8 kg cm); see Figure 5 a.
+Figure 4. Integration of EPMM actuators into a prosthetic hand. a) CAD model showing actuator placement and tendon routing. b) Magnetic array
+conﬁguration within a nylon mesh housing. c) Demonstration of magnetic bistability enabling zero-energy holding. d) Force test of a single arti ﬁcial
+muscle (i), grasping force measurements from single (ii) and multi ﬁnger (iii) tests. e) Passive grasping of daily objects without power. f ) Energy con-
+sumption comparison with other prosthetic actuator technologies, using the holding power and ef ﬁciency values on Table 1 to compute the energy
+required to perform a 100 mJ holding task, further detail on Section 5, Supporting Information.
+www.advancedsciencenews.com www.advintellsyst.com
+Adv. Intell. Syst. 2026, 8, e202500967 e202500967 (7 of 13) © 2025 The Author(s). Advanced Intelligent Systems published by Wiley-VCH GmbH
+ 26404567, 2026, 3, Downloaded from https://advanced.onlinelibrary.wiley.com/doi/10.1002/aisy.202500967, Wiley Online Library on [21/09/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+By modifying the axial arrangement of the previous EPMM
+actuators and implementing a ﬂexure-based compliant mecha-
+nism, the system was able to generate large arching motions
+suitable for bio-inspired ﬁsh ﬁn propulsion. The actuator con ﬁg-
+uration consisted of a central AlNiCo solenoid ﬂanked by NIB
+magnets at the corners. Proper alignment of magnetic polarities,
+where the same poles of the NIB magnets faced towards the
+AlNiCo, was critical to produce the desired motion. One face
+of the AlNiCo magnet simultaneously attracted both NIB mag-
+nets, while the opposite face repelled them, as illustrated in the
+mechanical simulation in Figure 5b.
+Both the magnetic ﬁn and the servomotor ﬁn were tested
+under similar experimental conditions (see Video S4, Supporting
+Information). The magnetic array operated using single electrical
+pulses to initiate each ﬁn stroke, displacing water and producing
+motion at a natural pace. Timing of the pulses was adjusted to
+reverse the polarity at the end of each stroke, achieving continu-
+ous ﬂapping at a frequency of /C251–1.1 hertz. The energy required
+per stroke was around 170 millijoules, with energy consumed
+only during the initiation of motion, regardless of the stroke time
+duration.
+The servomotor-driven ﬁn was controlled to match the same
+ﬂapping frequency. However, unlike the magnetic system, it
+required continuous energy input throughout the full stroke,
+consuming /C25220 millijoules per cycle. Figure 5c presents the
+recorded movements of both systems during underwaterﬂapping.
+The ﬁn powered by the magnetic array demonstrated advan-
+tages not only in energy consumption, using 23% less energy per
+stroke, but also in size and weight for the full actuator embodi-
+ment, being 39% lighter and 70% smaller in volume compared to
+the servomotor setup.
+Figure 5d shows the simulated cumulative energy consump-
+tion of both systems over multiple ﬂapping cycles. These results
+emphasize the potential of the magnetic array actuator to
+enhance energy efﬁciency and extend operational time in unteth-
+ered robotic systems.
+2.4.3. Untethered Amphibian Robot
+The EPMM actuators were further evaluated for robotic locomo-
+tion by integrating them into a salamander-inspired amphibious
+robot. The fully untethered system (see Figure 6 a) comprised
+three sets of magnetic actuator arrays embedded in a ﬂexure-
+based compliant mechanism to drive the forelimbs, hindlimbs,
+and tail. All electronic components required for actuation were
+mounted directly on the mechanisms and enclosed within a
+Figure 5. Underwater locomotion using a compliant ﬁn powered by EPMM actuators. a) Comparison between magnetic array-powered ﬁn and servo-
+motor-powered ﬁn. b) Mechanical simulation of compliant ﬁn mechanism under the approximated forces created by the magnetic ﬁeld interactions,
+showing coordinated attraction and repulsion forces (left steady state, right deformation state). c) Experimental ﬂapping motion of both systems in water
+at matched frequencies. d) Simulated cumulative energy consumption over multiple ﬂapping cycles, demonstrating the improved ef ﬁciency over time of
+the magnetic array con ﬁguration.
+www.advancedsciencenews.com www.advintellsyst.com
+Adv. Intell. Syst. 2026, 8, e202500967 e202500967 (8 of 13) © 2025 The Author(s). Advanced Intelligent Systems published by Wiley-VCH GmbH
+ 26404567, 2026, 3, Downloaded from https://advanced.onlinelibrary.wiley.com/doi/10.1002/aisy.202500967, Wiley Online Library on [21/09/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+silicone pouch for waterproo ﬁng and buoyancy. The system was
+wirelessly controlled via a compact infrared receiver and remote
+control, allowing the user to switch between crawling and swim-
+ming gaits during testing.
+While the previously described ﬁn mechanism was employed
+to drive the tail, this platform enabled evaluation of an alternative
+actuator conﬁguration for terrestrial locomotion. As illustrated in
+Figure 6b, the polarity of the NIB magnets surrounding the cen-
+tral AlNiCo solenoid was arranged asymmetrically with respect to
+its longitudinal axis. This produced directional actuation forces
+that were used to mimic a crawling gait, in which one AlNiCo
+magnetic pole was pulled backward while the opposite was
+pushed forward, and vice versa.
+Figure 6c shows a time-lapse sequence of the robot transition-
+ing from crawling to swimming within a water- ﬁlled tank. The
+20 cm robot successfully crawled over the solid surface with an
+average speed of 1 cm s /C01 (0.05 body lengths per second) and
+achieved a swimming speed of 5 cm s /C01 (0.25 body lengths
+per second), completing a 1-meter track in 38 s (see Video S5,
+Supporting Information)
+Figure 6. Amphibious salamander-inspired robot powered by EPMM actuators. a) Fully untethered system with three actuator modules driving the
+forelimbs, hindlimbs, and tail. Electronics are integrated on top of the structure and sealed in a silicone pouch for waterproo ﬁng and buoyancy.
+b) Asymmetric magnetic array con ﬁguration enabling crawling motion through directional attraction and repulsion (left steady state, right deformation
+state). c) Time-lapse sequence of the robot transitioning between crawling and swimming modes in a water tank, demonstrating average crawling and
+swimming speeds of 1 cm s /C01 and 5 cm s /C01, respectively.
+www.advancedsciencenews.com www.advintellsyst.com
+Adv. Intell. Syst. 2026, 8, e202500967 e202500967 (9 of 13) © 2025 The Author(s). Advanced Intelligent Systems published by Wiley-VCH GmbH
+ 26404567, 2026, 3, Downloaded from https://advanced.onlinelibrary.wiley.com/doi/10.1002/aisy.202500967, Wiley Online Library on [21/09/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+3. Discussion
+3.1. Performance, Evaluation, and Benchmarking
+This study presents the working principle and comprehensive
+characterization of EPMM actuators. By analyzing the magneti-
+zation behavior of the soft-magnetic components, we identify
+optimal driving voltages and pulse widths that enable energy-
+efﬁcient actuation while minimizing losses. These results estab-
+lish key operational thresholds for the reliable and effective use
+of this technology.
+A detailed analysis of magnetic a ttraction forces across varying
+actuator dimensions, including length and diameter, provided
+insights into the achievable force ranges and serves as a practical
+reference for future researchers developing devices based on this
+platform. This evaluation also identiﬁed the optimal design limits
+to minimize actuator length while maximizing strain, thereby con-
+tributing to performance improvements in future implementations.
+The exploration of different geometric combinations high-
+lighted actuator con ﬁgurations that optimized force, stress, and
+transduction efﬁciency. These ﬁndings serve as design guidelines
+to support the ongoing advancement of this actuation technology.
+EPMM actuators were benchmarked against three widely used
+artiﬁcial muscle technologies, with natural muscle included as a
+biological reference. The comparison covered key performance
+metrics including stress, strain, and transduction ef ﬁciency.
+The results emphasized the importance of evaluating full-system
+characteristics, considering parameters such as mass and vol-
+ume, rather than focusing solely on actuator performance. In this
+context, pneumatic actuators demonstrated limited portability
+due to their bulky peripheral components.
+One of the key advantages of the EPMM technology is its zero-
+energy holding capability. Unlike HASEL actuators, which can
+experience leakage currents under high voltage, or SMAs, which
+require continuous heating to maintain position, EPMM actua-
+tors consume energy only during activation. This makes EPMM
+actuators well-suited for low-power tasks such as static grasping.
+Overall, the comparison highlighted the power ef ﬁciency and
+portability of EPMM actuators, demonstrating their strong poten-
+tial for wearable and untethered applications.
+3.2. Applications and Demonstrations
+To further evaluate their suitability for wearable systems, the
+actuators were integrated into a tendon-driven prosthetic hand
+model. The actuators were positioned in an arrangement analo-
+gous to that of forearm muscles and controlled ﬁnger ﬂexion
+through tendon actuation. The system operated at low voltage,
+with no risk of overheating, and demonstrated safe backdrivabil-
+ity, an important feature for human-interactive devices. The pros-
+thetic hand successfully held common daily-use objects without
+any additional energy input following the initial grasp, con ﬁrm-
+ing the potential of this technology for energy-ef ﬁcient prosthetic
+applications. Although the system was not optimized for force
+generation, initial unwrapping force measurements were prom-
+ising, and further improvements in actuator and prosthesis inte-
+gration could further enhance grasping strength.
+The calculated cumulative energy consumption during the hold-
+ing task comparison further underscored the energy advantage of
+the actuator’s catch state. However, these results should be consid-
+ered as indicative rather than absolute, as energy consumption can
+vary with system architecture and may not scale linearly across dif-
+ferent implementations.
+In the underwater locomotion experiments, the actuators
+demonstrated signiﬁcantly lower energy consumption compared
+to conventional servomotors when used in a compliant ﬁn, under
+equivalent operating conditions. Although their transmission
+mechanisms differ, both achieve comparable ﬁn kinematics
+and loading. In the EPMM-powered ﬁn, energy was required
+only at motion reversal points, with the actuator self-adapting
+to surrounding ﬂuid density regulating the stroke speed. This
+characteristic suggests that this technology can enhance energy
+efﬁciency in untethered aquatic robots, which is critical for
+extending operational time.
+In the amphibious robot, an alternative actuator con ﬁguration
+enabled polarity-controlled crawling motion using a similar mech-
+anism to that of the ﬁn. This demonstrated the versatility of the
+actuation method, with distinct gaits generated simply by rear-
+ranging magnet polarities within a consistent mechanical design.
+The robot achieved both swimming and crawling by reconﬁguring
+the actuator array, without requiring major changes in the struc-
+tural layout. The compact system, based on monolithic compliant
+mechanisms and plug-in magnetic elements, simpli ﬁes fabrica-
+tion, reduces part count, and allows rapid assembly. Its low-voltage
+requirements also support the use of standard, commercially
+available electronics, enabling straightforward integration and
+scalability.
+Collectively, these ﬁndings establish EPMM actuators as com-
+pact, low-voltage, and power-efﬁcient alternatives to conventional
+artiﬁcial muscle technologies. They offer a well-balanced perfor-
+mance pro ﬁle with notable advantages in energy ef ﬁciency and
+portability, making them highly suitable for wearable and unteth-
+ered robotic systems.
+3.3. Design Considerations, Limitations, and Reliability
+The actuation behavior of the EPMM system is inherently bistable,
+driven by the magnetic ﬁeld gradient that develops between the
+embedded magnets. Once triggered, if the actuation force is larger
+than the load, the actuator transitions gradually from the unactu-
+ated to the fully contracted state without requiring continuous
+energy input along the stroke. As a result, intermediate positions
+are not maintained unless external mechanical constraints are
+introduced. The contraction dynamics, however, can be modulated
+by environmental and resistive factors such as friction, load, or
+ﬂuid interaction. For instance, in the ﬂapping-ﬁn demonstration,
+the actuator exhibited slower contraction in water compared to
+air due to viscous resistance, despite identical control inputs.
+Maintaining intermediate states would require active magnetic sta-
+bilization, which is better suited to high-frequency electromagnet-
+based systems rather than the present low-power con ﬁguration.
+Nevertheless, the integration of multistable mechanisms, such
+as structural features that introduce intermediate energy wells
+along the actuation path combined with controlled partial magne-
+tization inputs, could enable future designs capable of achieving
+stable partial contractions.
+The stress and strain performance of the EPMM actuators
+depends on the magnetic attraction force between their elements,
+www.advancedsciencenews.com www.advintellsyst.com
+Adv. Intell. Syst. 2026, 8, e202500967 e202500967 (10 of 13) © 2025 The Author(s). Advanced Intelligent Systems published by Wiley-VCH GmbH
+ 26404567, 2026, 3, Downloaded from https://advanced.onlinelibrary.wiley.com/doi/10.1002/aisy.202500967, Wiley Online Library on [21/09/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+initial magnet spacing, and the housing or mechanism stiffness
+that guide the stroke. As detailed in the Methods, the force –
+distance characterization was obtained using single magnet pairs,
+providing an idealized view of the intrinsic magnetic behavior and
+stroke potential. When integrated into full assemblies such as the
+EPMM ﬁber muscles, additional effects including friction, geomet-
+ric constraints, and material deformation modify this response,
+resulting in more complex and reduced force–displacement behav-
+ior, as shown in the prosthetic hand tests. Overall, these coupled
+parameters deﬁne the actuator’s stroke, output stress, and energy
+efﬁciency and can be tuned to meet the demands of different
+applications.
+Repeated testing of the EPMM actuators and integrated pro-
+totypes demonstrated high reliability, with no major mechanical
+or magnetic failures in the core units. However, peripheral struc-
+tures such as the 3D-printed ﬂexure mechanisms in the ﬁn and
+salamander robots occasionally failed after extended use due to
+material fatigue and stress concentration at the bending region.
+These issues could be reduced through geometric re ﬁnement
+and improved fabrication methods. Minor wiring detachments
+were related to handling rather than operational fatigue. In con-
+trast, off-the-shelf motor drivers occasionally fail after prolonged
+use, likely due to cumulative current spikes during polarity
+switching, despite operating within their nominal transient lim-
+its. Future work will focus on designing dedicated driver circuits
+and performing systematic fatigue studies to ensure long-term
+reliability for wearable and prosthetic applications.
+3.4. Response Time and Operating Frequency
+Although the present work primarily focused on the energy ef ﬁ-
+ciency and stress and strain actuation characteristics of the EPMM
+technology, representative estimates of response time and operat-
+ing frequency were obtained from existing prototype recordings.
+The analysis shows that the typical response time ranges from
+/C2540 ms for on air unloaded actuators to about 110 ms for loaded
+or coupled to mechanisms, and 780–1000 ms for underwater, cor-
+responding to operational frequencies between 0.5 Hz and 12 Hz
+depending on design, load, and environment. These values are
+consistent with the intended application domain of the EPMM
+actuator, which emphasizes low-power, low-frequency operation
+where gradual motion or static holding is advantageous, such
+as in the wearable and bio-inspired robotic systems presented
+in this work. Higher operating frequencies could, in principle,
+be achieved by reducing the mass of moving components or
+employing higher driving currents, but such con ﬁgurations were
+considered beyond the scope of the present low-power study.
+4. Conclusion
+This study introduced and characterized novel actuator technol-
+ogy based on electro permanent magnetic interactions. Through
+a detailed investigation of magnetization behavior, optimal oper-
+ating parameters were identi ﬁed to ensure energy ef ﬁciency and
+reliable actuation. Experimental analysis of magnetic force and
+actuator geometry provided insight into performance trade-offs
+and design guidelines for future implementations.
+Benchmarking against established arti ﬁcial muscle technolo-
+gies demonstrated that EPMM actuators deliver competitive
+performance across key metrics such as stress, strain, and trans-
+duction ef ﬁciency, while offering signi ﬁcant advantages in sys-
+tem-level portability and energy consumption. Their ability to
+sustain loads without continuous power sets them apart in appli-
+cations where power ef ﬁciency is critical, such as wearable and
+untethered robotic systems.
+This potential was validated through the integration of EPMM
+actuators into two functional robotic platforms. In a prosthetic
+hand, the actuators enabled safe, low-voltage tendon-driven
+grasping with zero-energy holding. In robotic locomotion, they
+powered both swimming and crawling behaviors in an amphibi-
+ous salamander-inspired robot through simple recon ﬁguration
+of magnetic polarities. These demonstrations highlight the mod-
+ularity, compactness, and adaptability of the actuation system.
+Altogether, EPMM actuators represent a promising direction
+for the development of next-generation soft and portable robotic
+systems. Their unique combination of energy ef ﬁciency, design
+simplicity, and functional versatility offers new opportunities for
+scalable and accessible actuation solutions in wearable devices,
+assistive technologies, and autonomous untethered robots.
+5. Experimental Section
+Materials and Fabrication : Single cylindrical rods of sintered AlNiCo-5
+magnets were used as the soft-magnetic component in this study.
+Nickel-Iron-Boron (NIB) N35 magnets were utilized in various coin-
+shaped con ﬁgurations, ranging from 1 to 5 mm in thickness. These
+NIB magnets were stacked to form larger magnets in the variable-length
+characterization experiments.
+All solenoids wound around the AlNiCo magnets consisted of a single-
+layer coil covering the entire magnet length, using 0.25 mm insulated cop-
+per wire. The driving circuit for the characterization experiments was
+based on a microcontroller (ATmega328P) and an H-bridge MOSFET
+driver, which were used to control the discharge of a 1000 μF electrolytic
+capacitor connected in parallel to a voltage elevator set to the driving volt-
+age of each magnet size and supplied from 12v 2A regulator.
+Magnetization Characterization : A Tenmars TM-197 AC/DC magnetic
+ﬁeld meter was used to measure variations in the sample ’s magnetic ﬁeld.
+A custom-made, nonmagnetic ﬁxture was designed to hold both the mag-
+netometer and the samples in a ﬁxed relative position. Measurements
+were taken at a single point, approximately at the center of one of the
+magnet’s poles.
+To determine the saturation point of the AlNiCo samples, cyclic forward
+and backward magnetization was applied using pulses of increasing dura-
+tion until no further increase in the magnetic ﬁeld was observed. The
+“reset pulse ” was de ﬁned as the minimum pulse length required to fully
+magnetize the sample. This pulse was applied between each trial to return
+the sample to the previous fully magnetized state. This knockdown mag-
+netization technique prevented the sample from shifting into smaller B-H
+curve regions, where lower residual magnetization would occur.
+Magnetization Procedure: 1) The sample was secured on the ﬁeld meter
+using a nonmagnetic ﬁxture. 2) The sample was magnetized using ﬁve
+consecutive reset pulses to establish a reference ﬁeld value. 3) A magneti-
+zation pulse of duration t was applied in the opposite direction, and the
+resulting ﬁeld was recorded. 4) Steps 2 and 3 were repeated, increasing t
+gradually until no signi ﬁcant increase in magnetization was observed.
+The same procedure was performed using voltage as a variable instead
+of pulse width ( t) to explore the optimal saturation voltage.
+Force Measurement Setup : The force generated by the interaction
+between magnetized AlNiCo and NIB magnets was measured using
+an IMADA EMX motorized tensile testing machine equipped with
+www.advancedsciencenews.com www.advintellsyst.com
+Adv. Intell. Syst. 2026, 8, e202500967 e202500967 (11 of 13) © 2025 The Author(s). Advanced Intelligent Systems published by Wiley-VCH GmbH
+ 26404567, 2026, 3, Downloaded from https://advanced.onlinelibrary.wiley.com/doi/10.1002/aisy.202500967, Wiley Online Library on [21/09/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+nonmagnetic clamping ﬁxtures. An IMADA DPU-500 N load cell was used
+for all force measurements, providing a nominal range up to 500 N. Force
+and displacement were recorded simultaneously using the system ’s inte-
+grated software, with data acquisition con ﬁgured at 100 Hz.
+The AlNiCo sample was ﬁxed in the stationary clamp. The NIB sample
+was placed in the movable clamp, allowing controlled vertical movement.
+The NIB magnet was moved toward the AlNiCo sample in a collinear and
+controlled manner, while the force experienced at the load cell was con-
+tinuously recorded.
+Prosthetic Hand Fabrication and Test : The open-source prosthetic hand
+model used was Flexihand2 available in thingiverse. The main modi ﬁca-
+tion made to the design was the locking of the wrist joint and the addition
+of the arti ﬁcial muscle actuators on the extra-large forearm gauntlet. The
+hand was 3D printed using PLA, and the phalange joints were cast using
+Smooth-sil960 from smooth-on. We used nylon threads for tendons to
+attach the ﬁngers to the muscle actuators and to the gauntlet base.
+The force performance of the single muscle actuator and the unwrap-
+ping force of the single ﬁnger and power grasp of the prosthetic hand was
+performed similarly to the actuators (magnet pair) force test. For grasping
+experiments, a 3D-printed PLA cylindrical handle of 3 cm diameter was
+attached to the moving platform and load cell to be grasped by the pros-
+thesis and measure the unwrapping grasp force.
+Amphibious Robot Fabrication : The compliant mechanism of the robot
+was printed on PLA with a 0.4 mm nozzle. Two identical mechanisms were
+attached to create the crossed ﬂexor beam design and glued together using
+commercial cyanoacrylate glue. Magnets were plugged in pressﬁt, and elec-
+tronics were encapsulated on a cast dragonskin30 (smooth-on) silicon skin.
+The connection from inside the silicon skin to the magnets was securely
+sealed using Skintite silicone (Smooth-on). The volume of the skin was cal-
+culated to compensate for the weight of the full system and provide positive
+buoyancy. The system operated using a 2S LiPo battery (300 mAh), a 9–30v
+voltage regulator, two 35v 1000uf electrolytic capacitors, and 3 MOSFET
+drivers rated for 36v and 9 A. An Arduino Nano was used to control the
+system, assisted by a IR receiver and a remote control. The robot feet mech-
+anism was designed to generate an anisotropic friction during crawling,
+using a sliding PLA surface at the front tip of the foot and a small latex patch
+at the base. The foot was able tilt forward over the PLA tip during steps
+forward and fall back on the latex-covered base when dragged back.
+Supporting Information
+Supporting Information is available from the Wiley Online Library or from
+the author.
+Acknowledgements
+This research project was supported by the Singapore University of
+Technology and Design under its Decentralized GAP Funding Program,
+the Singapore Ministry of Education under its Startup Research Grant,
+and the National Research Foundation.
+Conﬂict of Interest
+The authors declare no con ﬂict of interest.
+Data Availability Statement
+The data that support the ﬁndings of this study are available from the
+corresponding author upon reasonable request.
+Keywords
+artiﬁcial muscles, bioinspired robots, magnetic actuators, untethered
+robots, wearables
+Received: August 14, 2025
+Revised: October 31, 2025
+Published online: December 9, 2025
+[1] S. M. Mirvakili, I. W. Hunter, Adv. Mater. 2018, 30, 1704407.
+[2] D. R. Higueras-Ruiz, K. Nishikawa, H. Feigenbaum, M. Shafer,
+Bioinspiration Biomimetics 2021, 17, 011001.
+[3] J. Zhang, J. Sheng, C. T. O ’Neill, C. J. Walsh, R. J. Wood, J.-H. Ryu,
+J. P. Desai, M. C. Yip, IEEE Trans. Rob. 2019, 35, 761.
+[4] C. Greco, P. Kotak, L. Pagnotta, C. Lamuta,Int. Mater. Rev.2022, 67, 575.
+[5] N. El-Atab, R. B. Mishra, F. Al-Modaf, L. Joharji, A. A. Alsharif,
+H. Alamoudi, M. Diaz, N. Qaiser, M. M. Hussain, Adv. Intell. Syst.
+2020, 2, 2000128.
+[6] M. Li, A. Pal, A. Aghakhani, A. Pena-Francesch, M. Sitti, Nat. Rev.
+Mater. 2022, 7, 235.
+[7] A. Gonzalez-Vazquez, L. Garcia, J. Kilby, P. McNair, Adv. Intell. Syst.
+2023, 5, 2200159.
+[8] J. Wang, D. Gao, P. S. Lee, Adv. Mater. 2021, 33, 2003088.
+[9] P. Rothemund, N. Kellaris, S. K. Mitchell, E. Acome, C. Keplinger, Adv.
+Mater. 2021, 33, 2003375.
+[10] N. Kellaris, V. Gopaluni Venkata, G. M. Smith, S. K. Mitchell,
+C. Keplinger, Sci. Rob. 2018, 3, eaar3276.
+[11] X. Wang, S. K. Mitchell, E. H. Rumley, P. Rothemund, C. Keplinger,
+Adv. Funct. Mater. 2020, 30, 1908821.
+[12] J. D. W. Madden, N. A. Vandesteeg, P. A. Anquetil, P. G. A. Madden,
+A. Takshi, R. Z. Pytel, S. R. Lafontaine, P. A. Wieringa, I. W. Hunter,
+IEEE J. Oceanic Eng. 2004, 29, 706.
+[13] M.-S. Kim, J.-K. Heo, H. Rodrigue, H.-T. Lee, S. Pané, M.-W. Han,
+S.-H. Ahn, Adv. Mater. 2023, 35, 2208517.
+[14] Y. Jung, K. Kwon, J. Lee, S. H. Ko, Nat. Commun. 2024, 15, 3510.
+[15] M. S. Xavier, C. D. Tawk, A. Zolfagharian, J. Pinskier, D. Howard,
+T. Young, J. Lai, S. M. Harrison, Y. K. Yong, M. Bodaghi,
+A. J. Fleming, IEEE Access 2022, 10, 59442.
+[16] R. S. Diteesawat, T. Helps, M. Taghavi, J. Rossiter, Sci. Rob. 2021, 6,
+eabc3721.
+[17] Y. Chen , Y. Yang, M. Li, E. Chen, W. Mu, R. Fisher, R. Yin, Textiles
+2021, 1, 283.
+[18] M. Kulkarni, S. Edward, T. Golecki, B. Kaehr, H. Golecki, Soft Sci.
+2025, 5, 12.
+[19] Y. Yang, Z. Shuai, J. Yan, W. Yen, W. Jianlong, H. Xiangming, Mater.
+Today 2024, 74, 167.
+[20] X. Leng, L. Liu, S. Liu, Y. Li, Y. Xiao, L. Bao, M. Zhu, Q. Zhou, T. Zhu,
+L. Xue, Z. Liu, X. Zhou, Adv. Funct. Mater. 2025, 35, 2416912.
+[21] W. He, M. Wang, G. Mei, S. Liu, A. Q. Khan, C. Li, D. Feng, Z. Su,
+L. Bao, G. Wang, E. Liu, Y. Zhu, J. Bai, M. Zhu, X. Zhou, Z. Liu, Nat.
+Commun. 2024, 15, 3485.
+[22] N. Sheng, Y. Peng, F. Sun, J. Hu, Adv. Fiber Mater. 2023, 5, 1534.
+[23] D. Lizhong, W. Xulin, R. Ming, D. Jiangtao, Int. J. Smart Nano Mater.
+2023, 14, 216.
+[24] Y. Kim, X. Zhao, Chem. Rev. 2022, 122, 5317.
+[25] M. Seong, K. Sun, S. Kim, H. Kwon, S.-W. Lee, S. C. Veerla,
+D. K. Kang, J. Kim, S. Kondaveeti, S. M. Taw ﬁk, H. W. Park,
+H. E. Jeong, Nat. Commun. 2024, 15, 7929.
+[26] Z. Yang, L. Zhang, Adv. Intell. Syst. 2020, 2, 2000082.
+[27] H. Song, H. Lee, J. Lee, J. K. Choe, S. Lee, J. Y. Yi, S. Park, J.-W. Yoo,
+M. S. Kwon, J. Kim, Nano Lett. 2020, 20, 5185.
+[28] S. Obata, Electr. Eng. Jpn. 2013, 184, 10.
+[29] C.-W. Song, S.-Y. Lee, Appl. Sci. 2015, 5, 595.
+[30] R. Shalati, K. V. Poletkin, J. G. Korvink, V. Badilita, J. Phys.: Conf. Ser.
+2018, 1052, 012047.
+[31] T. N. Do, H. Phan, T.-Q. Nguyen, Y. Visell, Adv. Funct. Mater. 2018,
+28, 1800244.
+www.advancedsciencenews.com www.advintellsyst.com
+Adv. Intell. Syst. 2026, 8, e202500967 e202500967 (12 of 13) © 2025 The Author(s). Advanced Intelligent Systems published by Wiley-VCH GmbH
+ 26404567, 2026, 3, Downloaded from https://advanced.onlinelibrary.wiley.com/doi/10.1002/aisy.202500967, Wiley Online Library on [21/09/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+[32] G. Mao, M. Drack, M. Karami-Mosammam, D. Wirthl, T. Stockinger,
+R. Schwödiauer, M. Kaltenbrunner, Sci. Adv. 2020, 6, eabc0251.
+[33] A. P. Taylor, C. Vélez Cuervo, D. P. Arnold, L. F. Velásquez-García,
+J. Microelectromech. Syst. 2019, 28, 481.
+[34] G. Shin, Y. Choi, B. Jeon, I. Choi, S. Song, Y.-L. Park, Adv. Funct.
+Mater. 2024, 34, 2302895.
+[35] M. P. Nemitz, P. Mihaylov, T. W. Barraclough, D. Ross, A. A. Stokes,
+Soft Rob. 2016, 3, 198.
+[36] N. Kohls, B. Dias, Y. Mensah, B. P. Ruddy, Y. C. Mazumdar, in 2020
+IEEE Int. Conf. on Robotics and Automation (ICRA) , IEEE, Paris,
+France, September 2020.
+[37] X. Cao, S. Xuan, S. Sun, Z. Xu, J. Li, X. Gong, ACS Appl. Mater.
+Interfaces 2021, 13, 30127.
+[38] T. G. Leah, M. D. Albayrak, K. Lorenzo, A. Susanna, S. Pranav,
+S. Hanna, D. E. Terry, R. Tommaso, Device 2024, 2, 100512.
+[39] N. Ebrahimi, C. Bi, D. J. Cappelleri, G. Ciuti, A. T. Conn, D. Faivre,
+N. Habibi, A. Ho šovský, V. Iacovacci, I. S. M. Khalil, V. Magdanz,
+S. Misra, C. Pawashe, R. Rashidifar, P. E. D. Soto-Rodriguez,
+Z. Fekete, A. Jafari, Adv. Funct. Mater. 2021, 31, 2005137.
+[40] N. Bira, P. Dhagat, J. R. Davidson,Front. Rob. AI, Review2020, 7, 588391.
+[41] N. Li, Y. Zhou, Y. Li, C. Li, W. Xiang, X. Chen, P. Zhang, Q. Zhang,
+J. Su, B. Jin, H. Song, C. Cheng, M. Guo, L. Wang, J. Liu, Nat.
+Commun. 2024, 15, 7679.
+[42] A. N. Knaian, Ph.D. Thesis, Department of Electrical Engineering and
+Computer Science, Massachusetts Institute of Technology 2010,
+[Online], https://cba.mit.edu/docs/theses/10.06.knaian.pdf.
+[43] G. Azam, A. Siamak, X. Pengfei, K. Ara, J. Mehdi, Sens. Actuators, A
+2019, 296, 316.
+[44] T. Leps, P. E. Glick, D. Ruffatto Iii, A. Parness, M. T. Tolley, C. Hartzell,
+Smart Mater. Struct. 2020, 29, 105025.
+[45] A. M. Moran, V. T. Vo, K. J. McDonald, P. Sultania, E. Langenbrunner,
+J. H. V. Chong, A. Naik, L. Kinnicutt, J. Li, T. Ranzani, Commun. Eng.
+2024, 3, 117.
+[46] T. Bandyopadhyay, R. Steindl, F. Talbot, N. Kottege, R. Dungavell,
+B. Wood, J. Barker, K. Hoehn, A. Elfes, in 2018 IEEE/RSJ Int. Conf.
+on Intelligent Robots and Systems (IROS) , IEEE, Madrid, Spain,
+January 2018.
+[47] S. Hong, Y. Um, J. Park, H.-W. Park, Sci. Rob. 2022, 7, eadd1017.
+[48] L. Zhu, D. El Baz, Mechatronics 2019, 58,9 .
+[49] K. Gilpin, A. Knaian, D. Rus, in 2010 IEEE Int. Conf. on Robotics and
+Automation, IEEE, Anchorage, AK, July 2010.
+[50] S. Hauser, M. Mutlu, A. J. Ijspeert, IEEE Rob. Autom. Lett.2020, 5, 6443.
+[51] J.-B. Chossat, A. Maslyczyk, J.-S. Lavertu, V. Duchaine, IEEE Rob.
+Autom. Lett. 2018, 3, 1751.
+[52] K. Bai, L. Zhu, M. Yuan, K.-M. Lee, Sci. China Technol. Sci.2019, 62,3 9 .
+[53] E. Strasnick, S. Follmer, presented at the Adjunct Proc. of the 29th
+Annual ACM Symp. on User Interface Software and Technology ,
+Tokyo, Japan 2016, https://doi.org/10.1145/2984751.2985728.
+[54] P. Zhang, M. Kamezaki, Z. He, H. Sakamoto, S. Sugano, IEEE Rob.
+Autom. Lett. 2021, 6, 8181.
+[55] Gyrobot, https://www.thingiverse.com/thing:380665 (accessed: 14
+August 2025).
+[56] Z. Yoder, N. Kellaris, C. Chase-Markopoulou, D. Ricken,
+S. K. Mitchell, M. B. Emmett, R. F. F. Weir, J. Segil, C. Keplinger,
+Front. Rob. AI Original Research 2020, 7, 586216.
+[57] S. K. Mitchell, T. Martin, C. Keplinger, Adv. Mater. Technol. 2022, 7,
+2101469.
+[58] B. P. Marko, A. L.-K. Kathleen, B. Philipp, P. B. Matthew, in
+Biomechatronics (Ed: B. P. Marko), Academic Press 2019, pp. 45 –79.
+[59] S. Li, D. M. Vogt, D. Rus, R. J. Wood, Proc. Natl. Acad. Sci. 2017, 114,
+13132.
+[60] A. Shtarbanov, presented at the Extended Abstracts of the 2021 CHI
+Conf. on Human Factors in Computing Systems , article no = 479
+2021, p. 6, [Online], https://doi.org/10.1145/3411763.3451513.
+[61] B. K. S. Woods, C. S. Kothera, J. Sirohi, N. M. Wereley, Smart Mater.
+Struct. 2011, 20, 105021.
+www.advancedsciencenews.com www.advintellsyst.com
+Adv. Intell. Syst. 2026, 8, e202500967 e202500967 (13 of 13) © 2025 The Author(s). Advanced Intelligent Systems published by Wiley-VCH GmbH
+ 26404567, 2026, 3, Downloaded from https://advanced.onlinelibrary.wiley.com/doi/10.1002/aisy.202500967, Wiley Online Library on [21/09/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License

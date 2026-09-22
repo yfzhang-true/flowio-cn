@@ -1,0 +1,838 @@
+2110 IEEE ROBOTICS AND AUTOMATION LETTERS, VOL. 8, NO. 4, APRIL 2023
+A High-Strength, Highly-Flexible Robotic Strap for
+Harnessing, Lifting, and Transferring Humans
+Kentaro Barhydt , Graduate Student Member , IEEE, and H. Harry Asada , Life Fellow, IEEE
+Abstract—Safely harnessing and lifting humans for transfer is
+a challenging unsolved problem for current robots because of
+the high forces and gentle interaction necessary to do so. Straps,
+however, are highly beneﬁcial for manually performing this task
+primarily because of their simultaneously high tensile strength and
+high compliant bending ﬂexibility. We propose the Robotic Strap,
+a novel concept and design for a new type of manipulator that can
+passively harness and lift humans safely as straps can, as well as
+actively articulate itself around the human into the desired harness-
+ing conﬁgurations. The passive structure is characterized by the
+high tensile strength and bending ﬂexibility of straps. The design
+consists of a hyper-articulated backbone with rolling-contact joints
+fastened by dual-pulley cord mechanisms, and soft thin McKibben
+artiﬁcial muscles embedded along its length that collectively actuate
+the joints. We present the concept, framework, realization, and
+implementation of the Robotic Strap design, as well as model and
+experimentally validate the key characteristics. The prototype has
+a tensile load capacity of 1314.0 N, a maximum joint bending
+resistance of < 0.1 Nm, and successfully demonstrated safe and
+effective harnessing and lifting of three human participants without
+any manual intervention.
+Index Terms—Soft robot materials and design, compliant joints
+and mechanisms, soft robot applications, mechanism design,
+robotic straps.
+I. I NTRODUCTION
+G
+ENTL Y holding, lifting, and transferring the entire hu-
+man body with a robotic system remains a challenging
+problem, despite extensive research and development efforts.
+Humans are heavy, delicate, deformable, and vary widely in
+shape and pose. Standard robotic manipulators and end-effectors
+cannot achieve sufﬁciently gentle human interaction while ap-
+plying the high forces needed to lift the body effectively, al-
+though many high impact tasks depend on this functionality. In
+eldercare and care of people with physical disabilities, lifting
+humans is a necessary task regularly carried out by caregivers,
+Manuscript received 16 September 2022; accepted 31 January 2023. Date of
+publication 17 February 2023; date of current version 28 February 2023. This
+letter was recommended for publication by Associate Editor G. Krishnan and
+Editor Y .-L. Park upon evaluation of the reviewers’ comments. This work was
+supported by NSK, Ltd. (Corresponding author: Kentaro Barhydt.)
+This work involved human subjects or animals in its research. Approval
+of all ethical and experimental procedures and protocols was granted by the
+Massachusetts Institute of Technology Committee on the Use of Humans as
+Experimental Subjects under Application No. 2206000693, and performed in
+line with the Helsinki.
+The authors are with the Department of Mechanical Engineering, Mas-
+sachusetts Institute of Technology, Massachusetts 02139 USA (e-mail:
+kbarhydt@mit.edu; asada@mit.edu).
+This letter has supplementary downloadable material available at
+https://doi.org/10.1109/LRA.2023.3246389, provided by the authors.
+Digital Object Identiﬁer 10.1109/LRA.2023.3246389
+Fig. 1. Robotic Strap manipulator, shown: (a) passively hanging downward
+when idle, (b) bending upward when active, (c) passively complying to and
+bearing the full weight of a human, and (d) automatically extending from a
+drum, articulating around a human, and latching its tip to harness them in a
+closed-loop conﬁguration (similar to a seat belt).
+which is both strenuous and fatiguing on their bodies. This task is
+also critical for emergency medical response, search and rescue,
+occupational therapy, ergonomic support for manual labor, and
+so forth.
+The current standard practice in eldercare is for caregivers
+to manually attach a harness to the patient or wrap their body
+with straps to securely harness and lift them [1]. Straps are
+used because they are practical for high-force human interaction.
+They can be wrapped around any human in nearly any harnessing
+conﬁguration to distribute the high load over a large contact area.
+This is enabled primarily by their simultaneously high tensile
+strength and bending ﬂexibility. However, manual handling by
+a human is required to attach straps in the appropriate conﬁgura-
+tions, which is a major bottleneck preventing fully autonomous
+human lifting and transferring with robotic systems.
+The only robots that have demonstrated safe lifting of a hu-
+man’s full body weight for transfer are the RIBA robots, a series
+of mobile robots with two 2-link arms and high-torque motors
+(> 1000 gear ratios) [2], and the Toyota Patient Transfer Assist
+robot, a mobile robot with a shifting weight-supporting platform
+that patients lie on [3]. However, these works do not address
+the secure harnessing problem. Soft robots have been shown to
+be advantageous for safe and versatile human interaction due to
+the compliance of their structures [4], [5], [6], [7]. The Big-hand
+gripper, a human-scale pneumatic gripper, has demonstrated safe
+grasping of a human and assistance of a sit-to-stand transition
+[8]. However, it has not demonstrated the ability to lift the full
+weight of a human, and has only demonstrated assisted lifting
+with the load fully supported by its metal frame, concentrated en-
+tirely onto small contact areas under the subject’s armpits. Vine
+robots are the closest example to an existing “strap-like” robot
+2377-3766 © 2023 IEEE. Personal use is permitted, but republication/redistribution requires IEEE permission.
+See https://www.ieee.org/publications/rights/index.html for more information.
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 02:23:09 UTC from IEEE Xplore.  Restrictions apply. 
+BARHYDT AND ASADA: HIGH-STRENGTH, HIGHL Y -FLEXIBLE ROBOTIC STRAP FOR HARNESSING, LIFTING, AND TRANSFERRING HUMANS 2111
+given their lightweight, compact, ﬂexible, highly-extendable,
+and steerable bodies [9]. However, fully soft designs are limited
+in their tensile load bearing capacity. Vine robots require a tip
+mount device to retract without buckling, which limits its tensile
+load capacity to 7 kg and prevents it from articulating above the
+ground [10], [11]. To the best of our knowledge, the OctArm V
+currently holds the record for the highest tensile load capacity
+demonstrated by a multi-DOF soft-robotic manipulator [12].
+The maximum load capacity of the entire manipulator is 22.43 kg
+(220 N), at which point it can only hold and cannot pull the load.
+In this letter, we present a novel concept and design for a
+Robotic Strap-like manipulator that can be actively extended,
+articulate itself around the human into the desired harnessing
+conﬁgurations, and be actively retracted to safely secure, lift, and
+suspend them above the ground. The Robotic Strap is primarily
+characterized by (1) the simultaneously high passive tensile
+strength and bending ﬂexibility inherent to straps, and (2) active
+articulation capabilities for versatile harnessing of humans. We
+also present models for the key characteristics of this design
+concept, an implementation of a full Robotic Strap manipulator,
+experimental validations of the models, and demonstrations of
+automatic and safe harnessing and lifting of humans.
+II. R OBOTIC STRAP
+A. Robotic Strap Concept
+The Robotic Strap design concept is of a manipulator with
+an actuated ‘strap-like’ structure that can articulate itself when
+active and maintain the passive strap-like behavior when idle.
+We consider a manipulator structure to be ‘strap-like’ if it is
+characterized by the fundamental physical characteristics inher-
+ent to passive straps that make them beneﬁcial for harnessing and
+lifting humans, which are their high tensile strength and high
+bending ﬂexibility. We consider a strap-like manipulator to be
+“robotic” if it can automatically extend and articulate itself
+around the body into the desired harnessing conﬁgurations. The
+tensile strength is considered sufﬁcient if the passive structure
+can suspend loads signiﬁcantly larger than the full weight of an
+average adult. The bending ﬂexibility is considered sufﬁcient
+if the passive structure (1) can compliantly conform to the
+body and sufﬁciently distribute the load along its length to
+minimize the applied pressure, and (2) has a large enough passive
+conﬁguration space to enable signiﬁcantly varied harnessing
+conﬁgurations for people of different shapes and poses. In this
+work, bending ﬂexibility is measured in terms of the structure’s
+passive bending resolution, resistance, and range of motion (i.e.
+curvature), as detailed in Section III.
+B. Minimal Design Framework
+In order to address key design issues, a simpliﬁed model is
+considered, as shown in Fig. 3. It consists of a serial chain
+backbone with zero-stiffness, minimal-friction rigid joints. As is
+typical for rigid hardware, the links and joints have a high tensile
+strength, and the joints can be easily designed to have large pas-
+sive bending ranges of motion. The serial chain is actively bent
+by linearly contracting artiﬁcial muscle actuators. As detailed
+later, thin McKibben muscles can meet the requirements of this
+application [5]. The actuators are embedded along the chain so
+that a single contracting actuator simultaneously bends every
+link it is anchored to.
+Fig. 2. Passive straps (left) are highly practical for manually harnessing and
+lifting humans safely because of their high tensile strength and high bending
+ﬂexibility. The Robotic Strap (right) has a ’strap-like’ structure with these same
+passive properties and their associated beneﬁts while also being able to actively
+articulate itself around the human for automatic harnessing. The Robotic Strap
+shown has three independent active planar bending segments and can be extended
+from and retracted into an active drum to achieve various desired harnessing
+conﬁgurations.
+Fig. 3. Schematic of a naive design representing the minimal set of features
+of the design framework.
+This chain structure resembles the hyper-articulated and con-
+tinuum manipulators studied extensively since the 70’s [13],
+[14], [15], [16]. However, its functional requirements as a
+Robotic Strap are signiﬁcantly different from those existing
+designs. First, the hyper-articulated robots are actuated with rel-
+atively heavy gearmotors that are not backdriveable and require
+large torques. This non-backdriveable property is uncharacter-
+istic to passive straps that are completely ﬂexible. The artiﬁcial
+muscle actuators used for the Robotic Strap are assumed to be
+thin enough to buckle under minimal compressive forces and
+thus add minimal bending resistance to the joints. Thus, the
+structure is completely backdriveable.
+Furthermore, the Robotic Strap differs from existing designs
+in a few other critical points, posing a different set of functional
+requirements. Cable-drive mechanisms have been widely used in
+hyper-articulated and continuum manipulators. Cables transmit
+forces generated by actuators placed at a base to individual
+joints, offsetting the actuator masses from the manipulator’s
+body. However, they create opposing tensile/compressive forces
+along the backbone, which affects its posture unless the tensile
+forces are supported by the backbone structure along the trans-
+mission line. Strap-like structures have no bending stiffness,
+and thus will buckle under any compressive forces applied by
+these transmissions, as illustrated in Fig. 4(a). Therefore, a
+fundamental guideline for the Robotic Strap design is obtained:
+the structural segment between any two adjacent points
+where compressive forces are applied must act as a single
+rigid joint. Thus, the design framework employs a serial chain
+backbone with discrete rigid joints, making it possible to bend
+the structure with compressive forces without buckling as long as
+the forces are applied only between directly adjacent links. This
+allows the backbone to simultaneously satisfy the contradicting
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 02:23:09 UTC from IEEE Xplore.  Restrictions apply. 
+2112 IEEE ROBOTICS AND AUTOMATION LETTERS, VOL. 8, NO. 4, APRIL 2023
+Fig. 4. (a) Backbone buckling schematic, (b) backbone collapsing schematic,
+(c) fully determined active structure schematic.
+requirements of having minimal passive bending resistance and
+a fully determined articulating structure (not prone to buckling).
+The second contradiction is between high bending ﬂexibility
+and the common practice of designing speciﬁc bending stiffness
+behaviors into the backbone to statically determine its structure
+with relatively few actuators. Without this stiffness, moments
+applied at a few points would not distribute over the rest of
+the backbone, causing it to collapse as illustrated in Fig. 4(b).
+Thus, separate transmissions would need to directly actuate
+every DOF, limiting the feasible passive bending resolution. To
+address this, another fundamental guideline is established: each
+actuator/transmission must directly attach to and simulta-
+neously bend every point along its corresponding backbone
+segment. This is accomplished by the uniformly contracting
+artiﬁcial muscles embedded along the backbone, as illustrated
+in Fig. 4(c). The single actuator determines the bending angle
+of every joint it is attached to, and thus the number of passive
+bending DOFs can theoretically be inﬁnitely scaled up without
+increasing the number of required actuators. This allows the
+design to satisfy the key characteristic of high bending ﬂexibility
+in terms of both the minimal bending stiffness and high passive
+bending resolution requirements, while remaining fully deter-
+mined without needing to directly actuate each passive DOF
+individually.
+The use of artiﬁcial muscles also addresses another fundamen-
+tal contradiction between the key characteristic of sufﬁciently
+high active bending resolution and the traditional method of in-
+creasing active DOFs by adding more actuators, which increases
+weight and size. Artiﬁcial muscles can be split into multiple
+muscles without adding new material (except for additional
+power/pressure lines), enabling scalable active DOFs limited
+only by the number of passive DOFs of the backbone. Addi-
+tionally, the artiﬁcial muscles are assumed to be light enough to
+avoid signiﬁcantly weighing down the backbone, enabling them
+to actuate sufﬁciently large active ranges of motion (as detailed
+later).
+While this design framework conceptually satisﬁes all of the
+key characteristics, a naive design informed by this framework
+(e.g. Fig. 3) does not address important technical requirements
+necessary to ensure it can actually feasibly achieve the de-
+sired functionality. All of these technical challenges must be
+addressed while maintaining the key characteristics to realize
+a design that can fulﬁll the Robotic Strap concept for safely
+harnessing and lifting humans.
+C. Full Design Concept
+The Robotic Strap concept was fully realized as a feasible
+manipulator design that can automatically harness and lift hu-
+mans safely by building on the minimal design framework with
+Fig. 5. Full design concept for Robotic Strap manipulator. Top: Segment of
+six joints. Bottom-left: Cord loops of dual-pulley fastening mechanism. Bottom-
+right: Interlocking grooves.
+further mechanisms and design decisions to address key tech-
+nical challenges. The full design consists of a hyper-articulated
+backbone with rolling-contact joints held together using a dual-
+pulley fastening mechanism, and a series of soft pneumatic thin
+McKibben muscles embedded along the side.
+The backbone design uses hollow rolling-contact joints in-
+stead of traditional links with pin joints because of their beneﬁts
+for weight and safe human contact. As shown in Fig. 5, rolling-
+contact joints only require the joint structure and a fastening
+mechanism to form the desired planar serial-chain backbone
+with no bending stiffness. The round geometry also creates
+a larger, safer contact area with the human than the pronged
+surface of the naive backbone link design.
+The dual-pulley fastening mechanism consists of two sets of
+inner and outer pulleys, as shown in Fig. 5. The outer-pulley
+cords shown in blue in the ﬁgure tie together adjacent outer-
+pulleys with the sash-like arrangement of a cord so that the
+pulleys may not slip. They prevent the rolling contact joints from
+sheering in the bending plane, and also prevent torsion about the
+tensile axis. The inner-pulley cords shown in green in the ﬁgure
+provide a high tensile strength resisting the joints from being
+pulled apart due to their mechanical advantage in that direction.
+The two inner-pulleys sets are also located near the opposite
+ends of the joints, and thus constrain the joints from bending
+about the axis orthogonal to the desired bending and tensile axes.
+The interlocking grooves are held together by the tensile force
+of the inner-pulley cords, and prevent the joints from sheering
+along the bending axis. This dual-pulley mechanism with the
+fastening cords enables the use of rolling-joints in the back-
+bone design while maintaining the necessary tensile strength
+and achieving the out-of-plane deﬂection resistance necessary
+for fully-determined active bending capabilities. The cords are
+assumed to have a high tensile strength and negligible bending
+stiffness. Combined with the interlocking grooves between the
+joints (Fig. 5), this cord fastening mechanism allows for minimal
+bending resistance between joints in the desired 2D bending
+plane and rigidly constrains all other translational/rotational
+DOFs.
+The use thin McKibben actuators embedded into the rolling-
+contact joints with a dual-pulley joint fastening mechanism
+meets the key technical requirements. McKibben actuators are
+a type of pneumatic artiﬁcial muscle with an inﬂatable inner
+tubing and an outer ﬁber mesh that contracts its length as its
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 02:23:09 UTC from IEEE Xplore.  Restrictions apply. 
+BARHYDT AND ASADA: HIGH-STRENGTH, HIGHL Y -FLEXIBLE ROBOTIC STRAP FOR HARNESSING, LIFTING, AND TRANSFERRING HUMANS 2113
+Fig. 6. Dual-pulley fastening mechanism inner pulley diagram with the asso-
+ciated tensile forces.
+volume expands, and are characterized by their high force-to-
+weight ratios. Thin McKibben actuators [5] are characterized by
+their small diameter and resulting high bending ﬂexibility while
+maintaining high force and contraction performance. The joints
+can be mounted to arbitrary points along its body as well, as
+explained in Section IV -A, making them ideal for the Robotic
+Strap design. Their negligibly light weight also allows them to be
+mounted directly onto the backbone without weighing it down
+signiﬁcantly, which contributes to addressing the ﬁrst and third
+technical challenges.
+III. M ODELING
+In this section, we deﬁne the relationships between the funda-
+mental metrics underlying the key characteristics of the Robotic
+Strap and their relevant design parameters.
+A. Tensile Strength
+The tensile strength of the Robotic Strap is measured as the
+maximum tensile load it can hold. The dual-pulley fastening
+mechanism is illustrated in Fig. 6, where αis the angle be-
+tween the cords and the neutral line, and Rip and R denote
+the inner pulley and joint radii, respectively. From the ﬁgure,
+sinα= Rip/R. The joints are assumed to be rigid, and changes
+in the tensile strength of the cord due to bends and knots
+are assumed negligible. The tensile strength of the dual-pulley
+fastening mechanism Tmax is given by
+Tmax =2 NpulleyTmax,cord
+√
+R2 −R2
+ip
+R (1)
+where Npulley =2 is the number of inner pulleys per single
+joint, and Tmax,cord is the tensile load capacity of cord.
+B. Passive Bending Resolution, Curvature, and Resistance
+We consider three metrics to quantify this bending ﬂexibility
+performance: passive bending resolution, curvature (i.e. range
+of motion), and resistance. The passive bending resolution is
+deﬁned as the number of passive bending DOFs within a unit
+length of the backbone, given as
+ζ=( 2R)−1. (2)
+For large joint diameters, the resolution is low, and the strap does
+not conform to small and complex geometric surface features.
+For small joint diameters, the resolution is high, and the strap
+can closely conform to small and complex geometric surface
+features, increase the contact area, and distribute force more
+uniformly.
+Fig. 7. Left: Backbone bending curvature diagram. Right: Kinematic diagram
+for joint bending angle given contracted actuator length.
+The maximum passive bending curvature is also critical for
+characterizing bending ﬂexibility because it determines how
+small and complex of surface features the structure can conform
+to. The bending kinematics of of the Robotic Strap and a pair
+of fastened joints with an idle artiﬁcial muscle are illustrated
+in Fig. 7, where l is the actuator length, RC is the radius of
+curvature,θis the angle a joint bends away from the neutral line
+AB (angle between joint frames is 2θ), and κis the curvature.
+The actuator length l is kinematically dependent on θgiven as
+l =2 R(1−sinθ) (3)
+The actuator contraction ratio deﬁned below is then related to
+the joint angle as ε=( l0 −l)/l0 =s i nθ. From the ﬁgure, we
+ﬁnd that triangles CAB and CDE are similar. Therefore,
+l
+2R = Rc −R
+Rc
+(4)
+Solving this for Rc we can ﬁnd the curvature κas
+κ= 1
+Rc
+= sinθ
+R = ε
+R (5)
+Thus, for contraction actuators (0 <l ≤2R),κ=0 whenε=0
+(l =2 R) andκ= R−1 whenε=1 (l =0 ). Given the minimum
+idle actuator compressed length lmin,p, the maximum curvature
+can be deﬁned as
+κmax = 2R−lmin,p
+2R2 = εmax,p
+R . (6)
+The design parameters relevant to the maximum passive bending
+curvature are therefore R and lmin,p. Given that idle McK-
+ibben actuators buckle and fold when compressed, lmin,p can
+be assumed to be roughly equal to the thickness of two ﬂat-
+tened actuators pressed against each other, approximated as
+lmin,p ≈2(2(ttubing +tmesh)) wheret denotes wall thickness.
+The passive bending resistance is the reaction moment exerted
+by a joint with idle actuators when bent. The Robotic Strap
+must compliantly bend under sufﬁciently low applied moments
+in order to conform to the body without generating high reaction
+forces that can concentrate the load around high curvature
+surface features. Idle thin McKibben muscles easily buckle
+under low compression forces, and thus they are completely
+backdriveable and minimally contribute to bending resistance.
+A diagram relating the joint bending momentMb to the actuator
+compressive reaction force is shown in Fig. 8(a). This relation-
+ship can be derived as
+Mb = Nafs(l)rm = Nafs(l)R cos(θ) (7)
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 02:23:09 UTC from IEEE Xplore.  Restrictions apply. 
+2114 IEEE ROBOTICS AND AUTOMATION LETTERS, VOL. 8, NO. 4, APRIL 2023
+Fig. 8. (a) Passive bending resistance diagram relating reaction moment to
+bending angle. (b) Schematic of the most demanding conﬁguration possible
+given the conﬁguration parameters RC and Lh. (c) Simple conﬁguration for
+surrounding the subject to lift vertically, parameterized by RC andLh.
+where Na is the number of actuators embedded along the
+backbone in parallel, and fs(l) is an experimentally determined
+function relating the actuator’s compressive reaction force to
+its length. Since different actuator mount designs may apply
+different bending moments to the actuators as the joints rotate,
+we assume that fs(l) describes an actuator in pure compression
+(moments applied by the mounts are negligible) to ensure that 7
+provides a worst-case upper-bound estimate of Mb for a given
+θ. Note that l is a function of θ(3), thus fs(l) is a function of
+θ. Given this model,R,fs(l), andNa are the design parameters
+relevant to the passive bending resistance.
+It is important to note that, in (7),Mb will accurately change
+with respect to changes in all the parameters except for R,
+because physically altering R will also alter the experimentally
+determined force-compression curvefs(l). Therefore, while (7)
+implies that Mb increases as R increases, the opposite can
+be concluded by modeling the actuator as a buckling column
+with ﬁxed ends. The maximum compression force of a column
+is its buckling force, which is given by Euler’s column for-
+mula, fs,max = Fbuckle = 4π2EI
+l2
+0
+. Thus Mb,max ∝Nal−2
+0 R =
+Na(2R)−2R = Na
+4 R−1, and therefore
+Mb,max ∝R−1. (8)
+C. Actuator Requirements for Active Range of Motion
+The bending actuation requirements for the desired range of
+motion are deﬁned as the maximum moment and angle the joints
+must achieve in order to reach the most demanding desired
+open-loop conﬁgurations. The Robotic Strap must be able to ac-
+tively assume desired open-loop conﬁgurations that surround the
+human body before latching its tip to close the loop and tighten
+itself around the body. We assume no external contacts/forces
+are utilized to achieve these conﬁgurations. Fig. 8(c) shows a
+simple vertical conﬁguration for surrounding a body part before
+harnessing and lifting, parameterized by the minimum number
+of geometric parameters (curvature radius RC and hanging
+length Lh) necessary to fully deﬁne the desired active range of
+motion in terms of the manipulator DOFs (curvatureκ= RC
+−1
+and full extended length from the base Lext =2 Lh +πRC ).
+For simplicity, the curvature of the bent segment is assumed to
+be constant. Fig. 8(b) shows the most demanding conﬁguration
+possible given the same values for κandLext, in that it applies
+the highest possible moment to the most proximal joint in the
+curved segment and still requires it achieve the same angle.
+The moment applied onto the most proximal joint (joint 0) by
+the extended structure can be given by
+N∑
+i=1
+M 0
+i =2 Rg
+N∑
+i=1
+⎡
+⎣mi
+i∑
+j=1
+sin
+( j∑
+k=i
+θk
+) ⎤
+⎦ (9)
+where θk is the bending angle between joint k and joint k −1,
+M 0
+i is the moment that joint i individually contributes to the
+total moment experienced by joint 0, mi is the mass of joint i
+(including the associated actuator segment length), and N is the
+total number of joints distal to joint 0 in the serial chain. Given
+the assumed constant curvature of the bending section,θk is also
+assumed constant for allk =1 ...N C , whereNC is the number
+of joints in the curved segment. Therefore, we deﬁne θk = θC
+for allk =1 ...N C andθk =0 f o ra l lf o ra l lk = NC +1 ...N ,
+and can express θC as sinθC =2 R/RC .
+The moment that the curved segment exerts onto joint 0 is
+given in terms of the design and conﬁguration parameters as
+NC∑
+i=1
+M 0
+i =2 Rg
+NC∑
+i=1
+⎡
+⎣mi
+i∑
+j=1
+sin
+(
+j · sin−1
+( R
+Rc
+)) ⎤
+⎦. (10)
+The moment exerted by the straight cantilevered section can also
+be modeled as
+N∑
+i=NC +1
+M 0
+i = g
+N∑
+i=NC +1
+[
+mi
+(
+y0
+NC +2R (i−NC )
+)]
+(11)
+where y0
+NC =2 R ∑NC
+j=1 sin(j ·θC ). Therefore, the total mo-
+ment exerted on joint 0 by the extended structure in terms of
+only the design and conﬁguration parameters is the sum of (10)
+and (11).
+M 0 =
+N∑
+i=1
+M 0
+i =
+NC∑
+i=1
+M 0
+i +
+N∑
+i=NC +1
+M 0
+i . (12)
+If all joints are assumed to have the same mass ( mi = m)
+and a uniform density along the length of the structure, then
+the moment can also be expressed analytically by modeling the
+mass distribution as a continuous beam with a constant cross
+section. The curved segment can be modeled as a quarter-ring,
+and the straight section can be modeled as a horizontal beam
+of length 2(N −N′
+C )R where NC ≈N′
+C = πRC
+4R . Thus, 10
+and 11 can be modeled analytically and summed to yield the
+analytical equation for the total moment exerted onto joint 0 by
+the extended structure, given by
+M 0 =
+(π
+2 −1
+) RC
+θc
+mg
++(N −N′
+C )mg (RC +R ( 1+N −N′
+C)). (13)
+Given the applied moment, the required actuator force at the
+desired bending angle is given by
+Fa = 1
+Na
+M 0
+R cosθC
+(14)
+where Na is the number of actuators embedded in parallel
+along the backbone and θC is given in terms of R and RC as
+sinθc =2 R/RC . To reach the desired ranges of motion, the
+actuators not only must generate sufﬁcient forces to hold the
+most demanding conﬁgurations, but also generate them at the
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 02:23:09 UTC from IEEE Xplore.  Restrictions apply. 
+BARHYDT AND ASADA: HIGH-STRENGTH, HIGHL Y -FLEXIBLE ROBOTIC STRAP FOR HARNESSING, LIFTING, AND TRANSFERRING HUMANS 2115
+Fig. 9. Active bending experiment with Robotic Strap prototype. The distal
+and middle segments were actuated at 0.3 MPa, and the proximal segment was
+actuated at 0.16 MPa. Major gridlines are spaced apart by 100 mm.
+contracted lengths l required to achieve the bending angles of
+the desired conﬁguration. The length l required for a desired
+bending angle is given by (3). Given these models, the actuator
+force and contraction requirements Fa,req andεreq for a desired
+conﬁguration are dependent on R,m, and Na.
+D. Design Trade-Offs
+These models reveal notable design trade-offs for achieving
+the desired performance relevant to the key metrics. Most involve
+the joint radius R, in that decreasing R increases the passive
+bending resolutionζand the maximum passive curvatureκmax,
+but also decreases the tensile strength Tmax and increases the
+passive bending resistance Mb,max and actuator force require-
+ments Fa,req for a desired maximum active bending curvature
+κreq,a,a ss h o w ni n (2), (6), (1), (8), and (14) respectively.
+Notably, R acts as an effective “gear ratio” between Fa and
+κreq,a, in that it provides the mechanical advantage necessary
+to generate the bending motion. These trade-offs can be func-
+tionally summarized as: a larger radius is desirable for safely
+lifting heavy objects of varying size, and smaller radius is desir-
+able for closely passively conforming to complex surfaces with
+high-curvature features. A trade-off also underlies the number of
+parallel actuatorsNa, in that increasingNa decreasesFa,req but
+also increases Mb,max. While increasing Na can also increase
+the required width of the cylindrical joint to mount them all,
+which can increase the mass, the actuator requirements still
+decrease as long as the additional actuators increase the active
+bending moment more than the added weight increases the
+opposing load.
+IV . EXPERIMENTS AND DEMONSTRA TIONS
+A. Implementation
+A 3-DOF, 1143 mm long, 0.419 kg manipulator prototype
+was developed to implement the Robotic Strap design presented
+in Section II-C, shown in Fig. 9. The backbone consists of
+3D-printed joints fastened together with 0.97 mm thick Kevlar
+threads rated to hold up to 58.97 kg each. The joints are made
+of a carbon ﬁber ﬁlled nylon ﬁlament (some with continuous
+carbon ﬁber reinforcement). Each joint is 38.1 mm in diameter
+and 56.8 mm deep with an inner pulley radius of Rip =4 .35
+mm. The manipulator consists of three independently actuated
+10-joint segments, each with four thin McKibben actuators
+Fig. 10. Left: Experimental apparatus for characterizing passive actuator
+pure compressive reaction force function fs(l), measured by compressing four
+actuators of length l0 =2 R =3 8.1 mm in parallel down to length l =1 8.1
+mm using an Instron 5969 tensile testing machine. Right: Measured passive
+actuator compression force-displacement data. fs starts to decrease around
+l0 −l ≈8 mm when the inner tube begins to buckle, and increases again around
+l0 −l ≈15 mm as the outer mesh becomes more compressed.
+Fig. 11. Theoretical actuator requirements Fa andεcalculated using 14 and 3
+for the worst-case conﬁguration with the desired conﬁguration parameters RC
+andLh givenR =1 9.05 mm, Na =4 , m =1 3.98 g.
+Fig. 12. Passive bending resistance theoretical and experimental results. Na
+denotes the number of parallel actuators mounted along the joints. The ex-
+perimental results are lower than the corresponding theoretical upper-limits,
+as expected. This implies that the moments applied on the actuators by the
+prototyped actuator mounts are not negligible, unlike in the pure compression
+assumed by fs(l) in 7.
+mounted in parallel. The actuators have an unloaded contraction
+ratio of ∼22% and a stall force of ∼20 N at 0.3 MPa. Their
+relatively low pressure and ﬂow rate requirements allow the
+manipulator to be actuated using a small pump module (e.g.
+FlowIO,< 1 kg [17]).
+Given these speciﬁcations, the theoretical tensile strength is
+Tmax = 2255.3 N (1), and the passive bending resolution is
+ζ=2 6.3 DOFs/m (2). The theoretical maximum passive cur-
+vature isκmax ≈47.5 rad/m (6) given an estimated compressed
+actuator length of lmin,p ≈3.6 mm. Given the passive actuator
+compression force-displacement functionfs(l) (determined ex-
+perimentally, as shown in Fig. 10), the theoretical upper limits
+for passive bending reaction moments at given joint angles were
+calculated using 7, as shown in Fig. 12 (Mb,max =0 .123 Nm at
+θ=0 .4 rad,Na =4 ). The actuator requirementsFa,req andεreq
+were calculated for varying values of the desired conﬁguration
+parameters RC and Lh using (14) and 3 (results shown in
+Fig. 11).
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 02:23:09 UTC from IEEE Xplore.  Restrictions apply. 
+2116 IEEE ROBOTICS AND AUTOMATION LETTERS, VOL. 8, NO. 4, APRIL 2023
+Fig. 13. (a) Backbone tensile strength experimental apparatus. (b) Passive
+bending curvature experimental apparatus (Na =4 ). The rotating joint was bent
+as far as possible until met with rigid resistance, and the angle was measured
+to determine the associated radius of curvature. (c) Passive bending resistance
+experimental apparatus ( Na =4 ). An Imada MF-2 force gauge was used to
+push the tip of the rotating joint moment arm extension and hold the joint at
+certain bending angles, and the reaction moment was calculated for each angle
+based on the measured force.
+B. Key Characteristics V alidation
+To validate the design in terms of its key characteristics,
+the tensile strength, passive bending ﬂexibility, and active self-
+articulation capability were experimentally determined.
+1) Tensile Strength: The tensile strength of the backbone was
+tested on an Instron 5969 tensile testing system, as shown in
+Fig. 13(a). The sample withstood 1314.2 N (134.0 kg) before
+breaking, with the failure point occurring at the knot for one of
+the inner pulley thread loops. Since a strap in the closed-loop
+conﬁguration splits the harnessed load between its two hanging
+sides in tension, this implies that a single Robotic Strap can
+hold up to 2628.4 N (268.0 kg). The measured tensile strength
+is 58.3% of the modeled value, most likely due to reductions
+in the Kevlar cord’s strength at the knots. Still, given that the
+average weight of adult males aged 20 and over in the United
+States is 90.6 kg (77.5 kg for females), [18] these results well
+exceed the requirements for lifting the full weight of a human.
+2) Passive Bending Flexibility: The passive bending ﬂexi-
+bility was validated by experimentally measuring the passive
+bending resolution, curvature, and resistance. The passive bend-
+ing resolution was directly measured to be ζ=2 6.25 DOFs/m,
+as expected. The maximum passive bending curvature and resis-
+tance were measured using the apparatus presented in Fig. 13(b)
+and (c), respectively.
+The maximum passive bending curvature was measured to be
+κmax,p =4 2.01 rad/m (RC,min =0 .0238 m). This is close to the
+theoretical value, although slightly lower due to approximation
+error in lmin,p. Given this result, the minimum object diameter
+the Robotic Strap can harness is 2RC,min −2R =9 .5 mm,
+which is reasonably smaller than any human body feature that
+would need to be conformed to.
+The measured passive bending resistance results are shown in
+Fig. 12. These experimental results are lower than the modeled
+upper limit results for Na =4 across their entire domain, as
+expected. This implies that the actuator mounts apply non-
+negligible bending moments onto the actuators (unlike in the
+pure compression case described by fs(l) in 7), which aligns
+with the observations made during experimentation. Thus, the
+model provides a conservative estimate for the passive bending
+resistance.
+Fig. 14. Automatic full body weight harnessing and lifting demonstration
+(participant A weighing 78.2 kg shown). With the participant seated and the
+Robotic Strap prototype hanging downward at their side, the prototype artic-
+ulated underneath the participant and hooked its tip onto the end of a linear
+actuator positioned on their other side, as shown in (a) and (b). The Robotic
+Strap was suspended by a winch and cable system that automatically lifts and
+lowers its base. Both ends of the prototype were then retracted upwards to lift
+the participant by∼350 mm, as shown in (c). The participant was suspended at
+this height for ∼15 seconds before being lowered back down onto the platform
+in the same seated position, as shown in (d).
+3) Active Self-Articulation: To validate the actuator require-
+ments model, the Robotic Strap was actuated as shown in Fig. 9
+to test whether it achieves the expected curvature given the
+expected actuator force/contraction (determined from separate
+loading tests). Given an expected actuator performance of ε=
+0.855 under a 1 kg load at 0.3 MPa, the manipulator theoretically
+should achieve a conﬁguration with a radius of curvature of at
+most RC =0 .246 m assuming a hanging length of Lh =0 m
+(based on 3, 4, and 14). Thus, a curvature diameter smaller than
+0.492 m is expected. An effective curvature diameter of ∼0.40
+m was achieved (Fig. 9), which satisﬁes the expected results.
+C. Demonstrations
+To further demonstrate the effectiveness of the Robotic Strap
+for automatically harnessing, lifting, and transferring humans
+safely, the prototype was used to: (1) harness, lift, and suspend
+the full weight of a human (outlined in Fig. 14), and (2) assist
+a chair-to-chair transfer task (outlined in Fig. 15), similar to the
+standard manual bed-to-wheelchair transfer task[1]. The second
+demonstration also illustrates the Robotic Strap’s capacity to be
+actively extended from and retracted into a drum. The proto-
+type was teleoperated in both demonstrations with a maximum
+pressure of 0.3 MPa. The ﬁrst demonstration was repeated for
+two participants A and B (78.2 kg and 63.5 kg, respectively).
+The second demonstration was performed with one participant
+C (50.3 kg). The entire study was approved by the Massachusetts
+Institute of Technology’s Internal Review Board.
+The prototype was successful in completing every step of both
+demonstrations for all participants, performed entirely automat-
+ically without any external physical intervention (aside from
+manually rotating the chair-to-chair transfer apparatus). After
+the demonstrations were completed, the participants rated the
+pain and discomfort that they experienced on a 7-point Likert
+scale (1=none, 7=unbearable). For the ﬁrst demonstration, Par-
+ticipants A and B both reported a pain level of 1 and a discomfort
+level of 2 and 3 (i.e. insigniﬁcant and easily manageable), re-
+spectively. For the second demonstration, participant C reported
+a pain level of 1 and a discomfort level of 2, and noted that the
+discomfort was from pressure being applied on their side by the
+tip latching mechanism, not from the Robotic Strap itself.
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 02:23:09 UTC from IEEE Xplore.  Restrictions apply. 
+BARHYDT AND ASADA: HIGH-STRENGTH, HIGHL Y -FLEXIBLE ROBOTIC STRAP FOR HARNESSING, LIFTING, AND TRANSFERRING HUMANS 2117
+Fig. 15. Automatic chair-to-chair transfer demonstration. With the partici-
+pant (participant C) seated facing the apparatus, the Robotic Strap prototype
+automatically extended outward from a coiled drum, as shown in (a), (b). The
+prototype then bent around the participant and attached its tip to a latch at the
+end of a linear actuator, as shown in (c). The prototype was then retracted into
+the drum while the tip was pulled inward by the linear actuator to tightly wrap
+around the participant’s back and lift them off the chair, as shown in (d). The
+apparatus structure was then manually rotated to position the participant over
+the destination chair, and then the prototype and linear actuator were extended
+to lower them into it, as shown in (e), (f). The prototype then disconnected from
+the latch and retracted back into the drum, as shown in (g), (h).
+V. C ONCLUSION
+This letter presents the concept, design, modeling, and im-
+plementation of the Robotic Strap, a new type of manipulator
+with the passive characteristics of straps and the active ability
+to articulate itself into desired harnessing conﬁgurations. The
+Robotic Strap manipulator is the ﬁrst robot to demonstrate
+automatic harnessing and lifting of a human above the ground.
+The high tensile strength and bending ﬂexibility of the design
+makes it “strap-like” because they are the primary characteristics
+that make straps beneﬁcial for safely harnessing, lifting, and
+suspending humans, in that (1) high tensile strength allows for
+load bearing capacities great enough to lift the full weight of
+the human, and (2) high bending ﬂexibility allows for the high
+passive compliance and conformity needed to safely distribute
+these large forces across the body. Future work will include
+further formalization of this design paradigm, optimizations
+for the design’s size and performance, and the development of
+autonomous control methods.
+REFERENCES
+[1] P . A. Williams, Fundamental Concepts and Skills for Nursing .N e wY o r k ,
+NY , USA:Elsevier, Feb. 2021.
+[2] T. Mukai, S. Hirano, M. Y oshida, H. Nakashima, S. Guo, and Y . Hayakawa,
+“Whole-body contact manipulation using tactile information for the
+nursing-care assistant robot RIBA,” in Proc. IEEE/RSJ Int. Conf. Intell.
+Robots Syst., 2011, pp. 2445–2451.
+[3] “TMC shows new nursing and healthcare robots in Tokyo Toyota Motor
+corporation ofﬁcial global website,” Accessed: Feb. 21, 2023. [Online].
+Available: https://global.toyota/en/detail/210795
+[4] M. Cianchetti, C. Laschi, A. Menciassi, and P . Dario, “Biomedical ap-
+plications of soft robotics,” Nat. Rev. Mater ., vol. 3, no. 6, pp. 143–153,
+Jun. 2018. [Online]. Available: http://www.nature.com/articles/s41578-
+018-0022-y
+[5] S. Kurumaya, H. Nabae, G. Endo, and K. Suzumori, “Design of thin
+McKibben muscle and multiﬁlament structure,” Sens. Actuators, A.
+Phys., vol. 261, pp. 66–74, Jul. 2017. [Online]. Available: https://www.
+sciencedirect.com/science/article/pii/S0924424716308792
+[6] O. Kilic Afsar et al., “OmniFiber: Integrated ﬂuidic ﬁber actuators
+for weaving movement based interactions into the ‘fabric of every-
+day life,” in Proc. 34th Annu. ACM Symp. User Interface Softw. Tech-
+nol., 2021, pp. 1010–1026. [Online]. Available: https://doi.org/10.1145/
+3472749.3474802
+[7] P . H. Nguyen, C. Sparks, S. G. Nuthi, N. M. V ale, and P . Polygerinos, “Soft
+poly-limbs: Toward a new paradigm of mobile manipulation for daily
+living tasks,” Soft Robot. , vol. 6, no. 1, pp. 38–53, Oct. 2018. [Online].
+Available: http://www.liebertpub.com/doi/10.1089/soro.2018.0065
+[8] C. Loh and H. Tsukagoshi, “Pneumatic big-hand gripper with slip-in tip
+aimed for the transfer support of the human body,” inProc. IEEE Int. Conf.
+Robot. Automat., 2014, pp. 475–481, ISSN:1050-4729.
+[9] E. W. Hawkes, L. H. Blumenschein, J. D. Greer, and A. M. Okamura,
+“A soft robot that navigates its environment through growth,” Sci. Robot.,
+vol. 2, no. 8, Jul. 2017, Art. no. eaan3028. [Online]. Available: http://www.
+science.org/doi/full/10.1126/scirobotics.aan3028
+[10] S.-G. Jeong et al., “A tip mount for transporting sensors and tools using
+soft growing robots,” in Proc. IEEE/RSJ Int. Conf. Intell. Robots Syst .,
+2020, pp. 8781–8788.
+[11] M. M. Coad, R. P . Thomasson, L. H. Blumenschein, N. S. Usevitch, E. W.
+Hawkes, and A. M. Okamura, “Retraction of soft growing robots without
+buckling,” IEEE Robot. Automat. Lett. , vol. 5, no. 2, pp. 2115–2122,
+Apr. 2020.
+[12] W. McMahan et al., “Field trials and testing of the OctArm continuum
+manipulator,” in Proc. IEEE Int. Conf. Robot. Automat ., 2006, pp. 2336–
+2341.
+[13] S. Hirose and Y . Umetani, “The development of soft gripper for the ver-
+satile robot hand,” Mechanism Mach. Theory, vol. 13, no. 3, pp. 351–359,
+Jan. 1978. [Online]. Available: https://www.sciencedirect.com/science/
+article/pii/0094114X78900599
+[14] J. Burgner-Kahrs, D. C. Rucker, and H. Choset, “Continuum robots for
+medical applications: A survey,” IEEE Trans. Robot. , vol. 31, no. 6,
+pp. 1261–1280, Dec. 2015.
+[15] S. Kolachalama and S. Lakshmanan, “Continuum robots for ma-
+nipulation applications: A survey,” J. Robot , vol. 2020, Jul. 2020,
+Art. no. e4187048. [Online]. Available: https://www.hindawi.com/
+journals/jr/2020/4187048/
+[16] X. Dong et al., “Development of a slender continuum robotic system for
+on-wing inspection/repair of gas turbine engines,” Robot. Comput.-Integr .
+Manuf., vol. 44, pp. 218–229, Apr. 2017. [Online]. Available: https://www.
+sciencedirect.com/science/article/pii/S0736584516300801
+[17] A. Shtarbanov, “FlowIO Development Platform–the Pneumatic “Rasp-
+berry Pi” for Soft Robotics,” in Proc. Extended Abstr . Conf. Hum. Factors
+Comput. Syst, 2021, pp. 1–6. [Online]. Available: https://doi.org/10.1145/
+3411763.3451513
+[18] C. D. Fryar, M. D. Carroll, Q. Gu, J. Afful, and C. L. Ogden, “Anthropo-
+metric reference data for children and adults : United states 2015–2018,”
+Vital Health Stat, vol. 3, no. 36, pp. 1–44, Jan. 2021. [Online]. Available:
+https://stacks.cdc.gov/view/cdc/100478
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 02:23:09 UTC from IEEE Xplore.  Restrictions apply. 

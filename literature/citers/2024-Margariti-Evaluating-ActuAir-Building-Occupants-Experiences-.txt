@@ -1,0 +1,1931 @@
+Evaluating ActuAir: Building Occupants’ Experiences of a 
+Shape-Changing Air Quality Display 
+Eleni Margariti Vasilis Vlachokyriakos 
+Open Lab, Newcastle University, United Kingdom Open Lab, Newcastle University, United Kingdom 
+e.k.margariti2@newcastle.ac.uk vasilis.vlachokyriakos1@newcastle.ac.uk 
+Abigail C Durrant David Kirk 
+Open Lab, Newcastle University, United Kingdom Open Lab, Newcastle University, United Kingdom 
+abigail.durrant@newcastle.ac.uk david.kirk@newcastle.ac.uk 
+ABSTRACT 
+With workplace buildings becoming increasingly sensor-rich en-
+vironments and amidst climate change and global pandemic pres-
+sures, there is novel opportunity for utilizing climatic data within 
+buildings for awareness and wellbeing purposes. Interaction de-
+sign research, including on large, shared-displays, rarely addresses 
+building occupants’ experiences of air quality (AQ); and to-date 
+there are no studies evaluating such interventions in the context of 
+communicating climatic data in the workplace. Responding to these 
+research gaps, three prototype-led studies were conducted with 21 
+occupants of a smart office building over June-August 2022, evalu-
+ating occupants’ experiences of a large shape- and color-changing 
+display responding to AQ data. A thematic analysis resulted in de-
+sign implications for improving shape- and color-changing displays 
+for communicating AQ data; linking biomimicry to data interpreta-
+tion. Contributing to Human-Building Interaction (HBI) research 
+in the Human-Computer Interaction (HCI) field, we provide design 
+directions for future shape-changing and responsive architectures 
+for climate awareness in smart buildings. 
+CCS CONCEPTS 
+• Human-centered computing → Human computer interaction 
+(HCI); HCI design and evaluation methods; User studies. 
+KEYWORDS 
+Workplaces, Public Displays, Empirical Study that tells us how 
+people use a system, Prototyping/Implementation 
+ACM Reference Format: 
+Eleni Margariti, Vasilis Vlachokyriakos, Abigail C Durrant, and David Kirk. 
+2024. Evaluating ActuAir: Building Occupants’ Experiences of a Shape-
+Changing Air Quality Display. In Proceedings of the CHI Conference on 
+Human Factors in Computing Systems (CHI ’24), May 11–16, 2024, Honolulu, 
+HI, USA. ACM, New York, NY, USA, 21 pages. https://doi.org/10.1145/ 
+3613904.3642396 
+This work is licensed under a Creative Commons Attribution International 4.0 License. 
+CHI ’24, May 11–16, 2024, Honolulu, HI, USA 
+© 2024 Copyright held by the owner/author(s). 
+ACM ISBN 979-8-4007-0330-0/24/05 
+https://doi.org/10.1145/3613904.3642396 
+1 INTRODUCTION 
+Design research on the experience and use of large-scale shape-
+changing displays [29, 86, 92] within the built environment is a rel-
+atively underexplored space, even amongst the Human Building In-
+teraction (HBI) [2, 42, 102], Adaptive Architecture (AA) [57, 99, 101] 
+and Soft Robotics (SF) [10, 89, 91, 98, 114] research communities. 
+Whilst the design of (soft) robotic skins for environmental con-
+trol has been possible in architecture for a few decades [60] – and 
+there are several existing prominent examples of pneumatic façade 
+systems that use these kinds of technologies [34, 55, 116] - there 
+has been very little research on how building occupants actually 
+experience such interventions, and even less research on how these 
+kinds of actuated and responsive systems might be effectively used 
+as physical displays for the purpose of communicating data to build-
+ing occupants. With workplace buildings becoming increasingly 
+sensor-rich and amidst climate change pressures, there is growing 
+interest in using environment data within buildings for awareness 
+and wellbeing purposes [64, 65]. Air Quality (AQ) measures within 
+buildings have received particular attention post-COVID-19, and 
+our own previous research [64, 65] has pointed to the desire of build-
+ing occupants to be more aware of AQ within their workplaces. 
+However, to-date, design research around large shape-changing 
+displays has barely addressed building occupants’ experiences of 
+AQ data; a few limited examples such as the ‘atmospheric interfaces’ 
+work [12, 52] help to illustrate the existing research gaps in this 
+space. 
+Seeing opportunities for innovation we decided to explore the 
+design of a novel large, configurable, shape and colour changing 
+display for communicating AQ data to occupants of a smart (work-
+place) building. The ActuAir system is a modular customizable 
+room divider heavily inspired by biomimetic concepts, which dis-
+plays AQ data through inflation and LED animations. Understand-
+ing the paucity of evaluations of such interventions we set out to 
+evaluate ActuAir through three exploratory studies during June-
+August 2022 with 21 participants, all occupants of the building. The 
+three studies included design criteria evaluation workshops with 
+12 experts; a co-creation workshop with five participants focused 
+on concepts of biomimetic feedback; interviews and a survey with 
+seven participants following a two-week installation of the display 
+in situ within the workplace. 
+
+CHI ’24, May 11–16, 2024, Honolulu, HI, USA Eleni Margariti et al. 
+The key research question driving the prototype’s installation 
+and evaluation was: How do the building occupants perceive, in-
+terpret and experience different arrangements and feedback config-
+urations of a physical biomimetic display in situ, with the purpose 
+of communicating localized AQ data? 
+Qualitative data from all studies were thematically analyzed; 
+providing insights on how the building occupants experience and 
+interpret the display, this was delivered both in absence of, and 
+in knowledge of, what it actually represents. The results of these 
+studies unpack how the building occupants perceive, interpret and 
+experience the display; their sense-making with regards to AQ 
+data; and what their expectations and aspirations are in terms of 
+configuring and using the display within the workplace. 
+Our paper makes three key contributions to HCI/HBI research: 
+1) it introduces a novel modular shape and colour-changing display 
+technology – ActuAir – designed to communicate within-building 
+climate data; 2) it unpacks building occupants’ experiences of inter-
+acting with a large shape and colour-changing configurable display, 
+presenting particular insights around how different inflation and 
+LED feedback configurations were perceived, interpreted and ex-
+perienced when communicating AQ data, through both controlled 
+and ‘in-the-wild’ deployments; and 3) we offer design suggestions 
+for future interventions that address soft, programmable and shape 
+changing physical displays in smart office buildings alongside de-
+sign agendas for research in soft robotics and actuating materials 
+for climatic awareness within the workplace. These contributions 
+to HCI/HBI research, aim to support the design of future smart 
+buildings that wish to employ large-scale soft robotic and shape-
+changing responsive architectures to engage with their occupants 
+in climatic awareness, and for broader climate considerations and 
+wellbeing purposes. 
+2 BACKGROUND 
+Research on interventions for environmental wellbeing - partic-
+ularly associated with AQ - became highly relevant during the 
+COVID-19 pandemic; with AQ awareness and control in the work-
+place becoming a pressing matter [8, 24, 59, 109]. Beyond COVID-
+19, interventions for AQ awareness are broadly relevant with the 
+building occupants’ wellbeing [113, 143], sustainability [34, 120] 
+and climate-sensitive behavior [26, 110]– i.e. within the scope of 
+technologies that foster climate awareness in the buildings with 
+the prospect of prompting building occupants to rethink human-
+climate relationships, and how their own behaviors and actions 
+can impact climate in the buildings. Within that research space, 
+relevant projects explore different forms of environmental data 
+feedback – see for instance Atmospheric Interfaces [12, 27]; Hilo, a 
+wearable notification system for indoor AND outdoor AQ in office 
+spaces [141, 142]; ambient AQ notifications in smart rooms [24]; 
+AQ route recommendations [107] etc. 
+Relevant research for data awareness in the workplace buildings 
+comes from the field of public and shared [7, 88, 123], ambient 
+[31, 44] and physical [3, 50, 132] displays; including literature on 
+adaptive [57, 101] and media architecture as display [28, 69, 127]. 
+Past works explore how ambient feedback can raise awareness 
+on environmental aspects [3, 20, 50] and support social and emo-
+tional wellbeing [43, 111]. Light has been used quite broadly in 
+workplace buildings as ambient feedback for wellbeing purposes 
+[31, 84, 135]; with projects engaging with programable light LEDs 
+such as Philips Hue [25, 82] in different scales in the buildings- see 
+Media architecture [14, 32] and LEDs for large displays [33, 48, 67]. 
+In the workplace, shape - changing displays have been employed 
+for social awareness and human-to-human interaction purposes – 
+see the broader work of Leithinger [29, 62, 73], Grønbæk [40, 41] 
+and Takashima [119]. Many of these works that address tangi-
+ble feedback [41, 73]; but rarely for climatic awareness purposes 
+[20, 88]. 
+Recent research on feedback awareness, perception and expe-
+rience in place brings theories from cognitive psychology [49, 57, 
+112, 116] and neuroscience [80] in Architecture and HBI research; 
+addressing human behavioral responses to the built environment. 
+New developments in these fields recognize the multisensory na-
+ture of spatial experience and support a more holistic and embodied 
+view than a merely visual-driven one [80]. Among the many topics 
+related to multisensory perceptual integration and embodiment, 
+the concept of hapticity was recently introduced, suggesting a piv-
+otal role of tactile perception and haptic imagery in architectural 
+appraisal [80]. Such knowledge can have specific application in 
+design research for large scale physical displays; emphasizing the 
+importance of material properties and three-dimensionality [51] to 
+address holistic (and embodied) experience. 
+Large scale data physicalizations can make building occupants 
+aware of latent aspects of climate experience – such as the expe-
+rience of AQ – through utilizing material properties [12, 20, 73]. 
+Shutters [20] is an example of physicalizing AQ data in a work-
+place building, engaging with shape change at the architectural 
+scale to communicate data. More contemporary approaches are 
+emerging such as the atmospheric interfaces agenda [12]. Material 
+data representations for AQ awareness are very limited [20]; data 
+physicalizations for climate and breathing awareness have been 
+explored as wearable [1, 136], small scale and tangible interventions 
+[12, 27, 133] – see Auxetic Breath [133] – but rarely at the level and 
+scale of an architectural interventions [20], highlighting research 
+gaps and the contribution of our current work. 
+Soft robotics and actuating materials’ research [4, 10, 98, 134] is 
+an emerging agenda within HCI design research that engages with 
+robotic systems and metamaterials that imitate living tissues heavily 
+influenced by biomimicry and biophilia [35, 83, 122, 143]; extended 
+to the design research on shape and color-changing displays – see 
+Morphino [90]. Examples of soft robotic displays include works 
+using Smart Memory Alloy (SMA) actuators [15, 20, 70], pneumatic 
+interfaces [68, 124, 125] and inflatable artifacts [11, 51, 117]. Re-
+ports on soft sensor-actuator systems include studies on haptics 
+and tangible interaction [30, 71, 74, 108]. Soft robotics often ad-
+dress modularity1 [22, 77, 134, 138]; expanding the design field of 
+modular shape changing displays [68, 74]. Modular displays pro-
+vide enhanced opportunities for user customizability [22, 77, 134], 
+addressing aspects of physical scale and dimensionality of feedback 
+in the buildings [96, 117] and creating opportunities for swarm 
+robotic behaviors [78, 103]. 
+1Modularity is a way of decomposing a big and complex system or product into small, 
+simple, independent, and manageable modular units that can be easily composed, 
+decomposed, and replaced, which can be frequently found in both nature or industrial 
+systems [138]. 
+Evaluating ActuAir CHI ’24, May 11–16, 2024, Honolulu, HI, USA 
+Biomimicry and biophilia2 are long established concepts for de-
+signing buildings [58, 63, 83, 143] with interesting extensions for 
+HCI/HBI research [81]; with recent research addressing the role 
+of innovative materials and soft robotic systems [13, 63, 83, 143] 
+in enhancing wellbeing in the built environment [83]. Relevant 
+research in adaptive architecture explores the use of soft robotics 
+in large scale; examples including pneumatic skins [37, 118] and 
+use of SMA on façade elements [15, 60]. Many works engage with 
+biophilia & biomimicry with a view to advance technology in Adap-
+tive Architecture and Building Skins in response to climate change 
+- see for instance bio-materials [128], hygroscopic materials [93], 
+and thermobimetals [115] for passive responsive building skins. In 
+the smaller scale, the use of pneumatics [51, 124, 134] and actuating 
+textiles [9, 72, 85] has manifested in works such as ActuEater [70] 
+or Auto-Inflatables [85]; contributing to aspects of biophilic design 
+in architectural furniture and interiors [13]. A relevant example 
+is NatureBot [66], a robotic shape-changing installation mediating 
+connection to nature designed based on Attention Restoration The-
+ory (ART) [66]; addressing aspects of biomimicry, biophilia and 
+swarm robotic behavior. 
+Biomimicry is in the core of the intervention we developed and 
+evaluate in this paper; in terms of design and feedback. The de-
+sign’s inspiration and development were heavily influenced by 
+natural organisms - particularly the process of breathing as CO2 
+accumulation - following a design agenda of soft robotics and ac-
+tuating materials [4, 10, 51, 98, 134] and focusing on pneumatics 
+[68, 124, 125]. Biophilia was extended beyond form factors and ma-
+terials used, defining the purpose of the intervention; which was to 
+create climatic – and specifically air quality data – awareness in the 
+workplace; fostering relationships with nature. The intervention’s 
+novelty lies not only on the biomimetic references it is based upon 
+and the utilization of a novel soft robotics agenda, but also on the 
+fact that it employs modularity and programmability/customizabil-
+ity of shape and color changing feedback to allow its appropriation 
+by the researchers for the purpose of this research (but also from 
+the building occupants). Modularity enables three dimensional-
+ity of feedback (as elements are placed in different angles) and 
+independent programmability of modules. As a result, this work 
+differentiates itself from many previous examples of large physical 
+displays – see Low-res [48] for instance where light is used in a 
+two-dimensional way - and non-modular color and shape chang-
+ing displays; and provides novel contributions on designing large 
+scale modular programmable displays for climatic awareness. The 
+broader scope of the prototype’s installation it to enhance climatic 
+awareness in the buildings through employing soft robotics; with 
+the view of engaging the building occupants into considering air 
+quality and climate in the buildings, and their wellbeing, amidst 
+broader climate change. 
+2Biophilia and biomimicry are alike in their fundamental focus on what might be 
+called ‘nature’s essential logic’ [58]. The focus of biomimicry is to advance human 
+material interests; whereas biophilia focuses on a wider range of ways people are 
+inherently inclined to attach meaning to and derive benefit from nature, and how this 
+fosters human physical and mental wellbeing [58]. Beyond merely imitating form 
+and structural properties of natural systems [143]; biomimicry has been extended to a 
+potential paradigm to guide the development of social relationships and communities 
+[58, 143]. Zhong et al. ’s review of biophilic design in architecture and it’s contributions 
+on health & wellbeing [83] and sustainability [143] addresses the link between biophilia 
+and environmental awareness in the buildings [143]. 
+Summarizing, this work contributes to limited design research 
+in ‘architecture as display’ for climate awareness with the mak-
+ing and the evaluation of a large-scale modular (biomimetic) soft 
+robotic display; addressing aspects of the building occupants’ per-
+ception, interpretation and experience of the combination of shape 
+(pneumatic) and color (light) changing feedback in place. 
+3 METHODS 
+Prototypes illustrate examples of technology in-progress [126], il-
+lustrating ideas and concepts of technology to-be [75, 87]. Through 
+their evaluation, knowledge about the prototype itself and the po-
+tential of the theoretical/technological concepts that it embodies to 
+change the future is generated [126]. In design research in HBI and 
+Adaptive Architecture, prototypes are often deployed to conduct 
+lab experiments [100], case studies and long-term deployments in 
+the wild [16, 121], aiming to generate knowledge about the proto-
+type/intervention and human behavior around it. As an example, 
+ExoBuilding [100] illustrates the deployment of a prototype (an in-
+teractive tent-like structure) and a series of controlled experiments 
+to observe aspects of human behavior based on biometrics. 
+The evaluation through deploying a physical prototype is a more 
+generative process than merely a usability evaluation [39]. Many 
+works face limitations with regards the generalizability of the re-
+sults [95] outside a controlled context, failing to address the long-
+term implications of lived-in technology in place [121, 140]. In 
+response to such methodological problems, we engaged with dif-
+ferent methods in three successive evaluation studies that were 
+led by, assisted by or focused on the prototype’s deployment. Fit-
+ting within a pragmatist methodology within design research [36], 
+methods were used in a way that fits the purpose while allowing 
+space for critical discussion [39] not predicating the exact set up 
+and content of each study but rather letting it evolve through in-
+teractions with participants. This was supported by the prototype 
+itself, which allowed for the customization of its physical arrange-
+ment and feedback utilized by the researchers while exploring how 
+the building occupants perceive, experience and interpret it. 
+3.1 The prototype: ActuAir room divider 
+Our prototype is a shape-changing modular display that physi-
+calizes changes in AQ levels in a sensory-rich workplace. The 
+workplace is an open space hosted in a five-story smart building in 
+a city in the UK which is an office, teaching and research facility; 
+with an extensive grid of environmental and occupancy sensors 
+provided for research purposes. Sensory data is logged publicly 
+via an API, allowing open access to real-time and historical (time-
+series) climatic data of different areas in the workplace (and the 
+building). Ethical approval was obtained at Newcastle University, 
+UK to use the data and conduct the studies in the building (which 
+is part of the Newcastle University building complex). 
+The prototype was built as a response to results from a series 
+of exploratory studies [64, 65]; which pointed towards physical-
+izing data that the building collects for awareness and wellbeing 
+purposes. The prime purpose of the display is to surface AQ data 
+collected, focusing on - but not limited to - CO2 measurements. 
+A key research aim through prototyping and testing the display 
+was to understand what data is important for AQ experience in the 
+CHI ’24, May 11–16, 2024, Honolulu, HI, USA Eleni Margariti et al. 
+Figure 1: A: the prototype deployed during Study 03; B: the inflatable pouches with embedded LEDs; C: hardware in the back 
+of each module: a wireless Arduino controlling a foam-sealed air pump and a valve; D: work in progress, experiments with 
+silicone thickness, thermochromic pigments and conductive materials. 
+workplace, and how this data could be represented through inflat-
+able and LED feedback to be intuitively perceived and understood 
+by the building occupants when deployed in place. For the purpose 
+of conducting this research, the prototype is highly customizable; 
+to able to evaluate different physical arrangements and feedback 
+configurations for communicating climatic data with the building 
+occupants of the workplace. 
+The prototype consists of eight custom silicone rubber pouches 
+with embedded Neopixel LED stripes, attached on eight prefab-
+ricated fabric modules (see Figure 1 B); forming a customizable 
+modular room divider (Figure 1 A). The silicone rubber pouches 
+inflate and deflate based on different AQ data levels – choosing 
+between CO2, humidity or temperature data. In the default set up, 
+the amount of inflation is proportional to the selected data stream 
+– e.g. inflation increases when CO2 increases. The inflation effect 
+is enhanced by the embedded LEDs, which obtain a green-to-red 
+color range proportionally to preset AQ levels3. LED animations 
+and gradual color transitions are manually controlled and are not 
+part of the default set up (details in supplementing materials). 
+Each module operates with a wireless Arduino connected to a 
+local web server built on Raspberry pi (Figure 1 C). The server is 
+fetching AQ data (e.g. CO2, temperature, humidity) from the build-
+ing’s API, and wirelessly communicates with the Arduinos which 
+control the air-pumps and valves for each module - e.g. the amount 
+of air pumped in and out, and the time they stay inflated or pulsing 
+– as well as the Neopixel LEDs function – e.g. LED brightness, color 
+and color animations. All electronics (e.g. Arduinos, air -pumps 
+and valves, preboards, cables) are integrated at the back in each 
+module, enabling them to act as stand-alone and in coordination 
+with other modules. 
+Being modular, the display is highly configurable; the modules 
+can easily plug in and out the existing modular infrastructure in 
+different positions, can be re-arranged and re-assembled by the 
+building occupants, be moved around and installed in other rooms 
+in the workplace. Feedback produced by each module is also highly 
+customizable, to assist with the research purpose of the display. 
+The server application provides a webpage with a control panel 
+which enables the researchers to choose different data streams – i.e. 
+CO2, humidity, and temperature - from different building sensors; 
+choose to display real time or historical data; choose which modules 
+display which data; and manipulate feedback in a modular way – i.e. 
+manually control inflation/deflation of a given module, manually 
+control LED color range and speed and repetition of animations 
+(see supplementing material). Utilizing the control panel to dynam-
+ically configure feedback, the researchers evaluate aspects of the 
+display’s perception and interpretation, such as the experience of 
+inflation as CO2, the choice of color range to represent improving 
+and deteriorating AQ; and the timing and the synchronization of 
+these inflation and LED color change. 
+Biomimicry is conceptually at the core of the design of the in-
+tervention, driving the prototype’s design and making. The form 
+of the pouches and the choice of materials was heavily inspired by 
+natural organisms (for example the Portuguese Man o’ War); the 
+metaphor of breathing– translated to inflation and deflation – is 
+key behind the conceptualization of the prototype. Apart from the 
+working prototype, the materials and other in-progress prototypes 
+were openly exhibited in the workplace; showcasing the design and 
+fabrication process, which involved experimentation with different 
+color and shape-changing materials (Figure 1 D). 
+The final prototype is a customizable, modular actuating barrier 
+providing a physicalization of data in place. It’s intended use is to 
+3RGB colors and levels in the default set up: Green: [0, 255, 0] for AQ between 400ppm 
+and 450ppm; Yellow: [255, 255, 0] for AQ between 450ppm and 500ppm; Light Orange: 
+[255, 165, 0] for AQ between 500ppm and 550ppm; Dark Orange: [255, 80, 0] for AQ 
+between 550ppm and 600ppm; Red: [255, 0, 0] for AQ>600ppm (see supplementing 
+material) 
+Evaluating ActuAir CHI ’24, May 11–16, 2024, Honolulu, HI, USA 
+Figure 2: Installations of the prototype to facilitate three evaluation studies; A: Study 01, B: Study 02, C: Study 03. In Study 01 
+a big screen was used to display a presentation and the control panel. In Study 02, a big screen was installed in the room to 
+display the video-recorded feedback scenarios. 
+raise awareness on climate – specifically AQ - in the workplace; but 
+this purposefully remains vague in some of the studies to explore 
+how the building occupants understand and use it. The broader 
+research scope of the prototype’s deployment as an intervention 
+was to build an understanding of the potential of actuating mate-
+rials and soft robotics in architecture (inspired by biomimicry) to 
+communicate climatic data; with the view on engaging the building 
+occupants in considering air quality, climate and their wellbeing in 
+the buildings. 
+3.2 Three exploratory prototype-led evaluation 
+studies 
+Three successive studies took place between June and August 2022 
+to evaluate the above display. Each study was led-by or facilitated-
+by the prototype’s installation in place; addressing feedback aware-
+ness, perception and interpretation by the building occupants as 
+described in detail below. Utilizing the display’s configurability 
+and modularity, different physical arrangements and feedback se-
+quences – i.e. shape and color change coordination - were evaluated 
+with participants. The studies overlapped with regards to what as-
+pects of the experience they explored, supporting data triangulation; 
+but they also informed each other in terms of set-up, context and 
+focus, based on key findings as described below. All the materials 
+and the final prototype itself remained publicly displayed in the 
+workplace throughout the duration of all of the studies. 
+3.2.1 Study 01 “ActuAir - Design criteria evaluation workshops” 
+was a series of design criteria workshops led by the prototype’s 
+installation in a meeting room (Figure 2 A), aiming to explore the 
+feedback perception of experts and simultaneously occupants of the 
+building in a controlled set up. Nine participants in total – building 
+occupants and design experts - participated in three hybrid work-
+shops (60 minutes in duration) during June 2022. The prototype was 
+installed in a meeting room within the workplace building, showcas-
+ing a potential (random) arrangement and feedback functionality. 
+In terms of feedback, both real-time data and historical data were 
+showcased using a non-gradual green-orange-red4 LED to repre-
+sent increasing CO2; increase was also accompanied by inflation. 
+Each workshop started with a briefing of what the intervention 
+does – i.e. displays air quality data - and how –i.e. showcasing 
+feedback control; followed by going through specific design evalu-
+ation criteria and addressing relevant questions to prompt critical 
+discussion. Criteria included a) Physical aspects of feedback - shape 
+change, color change, noise experience; b) Temporal aspects of feed-
+back – experience of the coordination between light and inflation 
+in each module and between modules; c) Spatial aspects – physical 
+positioning and arrangement; d) Configurability and user control. 
+Real-time modifications were made to feedback, to test participants’ 
+ideas. The aim of Study 01 was to unpack the promising elements 
+and existing pitfalls of the display’s materialization, and then de-
+fine the conditions for one or more deployments in the building. 
+Findings on biomimetic feedback metaphors framed the focus and 
+setup of Study 02; and findings on shape-change readability, noise 
+and color-inflation coordination informed the setup of Study 03. 
+3.2.2 Study 02 “Biomimetic Feedback co-creation workshop” was 
+a co-creation workshop facilitated by the prototype’s installation 
+in a meeting room during July 2022 (Figure 2 B). The workshop 
+(60 minutes duration) aimed to explore feedback perception and 
+interpretation in a controlled set up. Five participants explored 
+their interpretations of five video-recorded biomimetic feedback 
+configurations using the prototype (see Figure 04) to provide cues 
+on AQ readings while also experiencing the prototype installed in 
+place; inspired by key findings on biomimetic feedback in Study 
+01. After an initial showcase of all the videos and without com-
+municating the display’s purpose (to physicalize air quality data), 
+4RGB colors and levels as set in the code for Study 03 set up to favor a more gradual 
+color change. The AQ range represented by each color has shifted to a lower benchmark 
+(i.e. 550ppm), closer to the realistic CO2 measures range in the building (CO2 rarely 
+exceeded 550ppm). These included: Green: [0, 255, 0] for AQ between 400ppm and 
+420;NeonGreen: [80, 255, 0] for AQ between 420ppm and 440ppm; LightGreen: [160, 
+255, 0] for AQ between 440ppm and 460ppm; OliveGreen: [160, 165, 0] for AQ between 
+460ppm and 480ppm; LightOrange: [255, 165, 0] for AQ between 480ppm and 500ppm; 
+DarkOrange:[255, 80, 0] for AQ between 500ppm and 520ppm; Coral:[255, 30, 0] for 
+AQ between 520 and 550ppm; Red: [255, 0, 0] for AQ over 550ppm. 
+CHI ’24, May 11–16, 2024, Honolulu, HI, USA Eleni Margariti et al. 
+the participants were asked high-level questions around what data 
+was represented and how they interpreted the different feedback 
+scenarios. This was followed by a second showcase of each video 
+while communicating that air quality data is displayed; and an 
+in-depth discussion of how each configuration and feedback was 
+interpreted. Finally, the participants were asked to vote for which 
+one appealed to them the most and co-design their own modular 
+configurations using paper templates. The aim of Study 02 was to 
+explore how the shape and color change coordination of different 
+modular arrangements inspired by biomimetic metaphors is inter-
+preted; both in absence of and when knowing that air quality is 
+represented. Findings highlighted the preference of circular modu-
+lar arrangements, and the association of modules with areas in the 
+buildings and spatialized data streams; which then drove the setup 
+of Study 03. 
+3.2.3 Study 03 “ActuAir - deployment case study” was a longer-
+term case study deployment of the prototype in a public area in 
+the workplace during August 2022 (Figure 2 C); aiming to explore 
+feedback awareness and experience in-the-wild. Grounded within 
+literature on evaluating lived-in prototypes [75, 140]; the interven-
+tion was installed in the workplace and was left to operate there 
+for two (2) weeks. The deployment set up was driven by findings 
+of both Study 01 and 02. It included the choice of circular modular 
+arrangement for the deployment (Study 02); the association of each 
+module with different building areas & sensors (Study 02); the grad-
+ual green to red color range to represent CO2 increase as it was 
+interpreted intuitively and was preferred over non-gradual color 
+change (Study 01 & 02); the use of inflation when CO2 increases 
+(Study 01 & 02) using noise effectively and with precaution (Study 
+01); the positioning of the display at an angle to the main working 
+area to make shape-change more readable from multiple viewpoints 
+(Study 01). During the two-week period, the six-module circular 
+arrangement displayed CO2 data from nearby sensors; from the 
+same sensor in week 01, and from the three (3) nearest sensors in 
+week 02 which created variations on the color change pattern of 
+the modules. During week 01, an information poster next to the 
+prototype informed that it displays data from the building – not 
+explicitly stating that CO2 is displayed - and provided a QR code 
+leading to short online experience questionnaire. The poster was 
+updated during week 02 – informing that it is an air quality display. 
+The actual data sources and zones displayed were not revealed dur-
+ing the duration of the study. Data from seven building occupants 
+were collected through semi-structured interviews conducted in 
+front of the display and through the online survey. The aim of 
+Study 03 was to map aspects of shape and color changing feedback 
+experience– including materiality - in-situ; to unpack if and how 
+the circular modular arrangements are associated with localized 
+and spatialized data streams; and to evaluate if the selected color 
+and shape change (and noise) feedback raises awareness in place – 
+if it is being made aware while working in the lab, if it is distracting, 
+and how it is interpreted with regards to climate (both knowing 
+and in absence of knowing that air quality is displayed). 
+3.3 Participants 
+Participants (Table 1) were recruited from occupants of a shared 
+workspace based in the office building part of Newcastle University; 
+which is the building that these research activities (i.e. the making 
+of the prototype and the evaluation studies) were conducted. Par-
+ticipants were employees, researchers and students working in the 
+same workplace for varying amounts of time; recruited through 
+internal communication of the studies via email. For all studies we 
+accommodated to post-pandemic work life limitations5; targeting 
+to recruit people that were coming to the workplace at the time 
+of the study (as many worked mostly from home). For each study 
+different participants were chosen, to avoid being knowledgeable 
+on what the display does or biases from previous studies. For Study 
+01 (design criteria), participants were recruited following a conve-
+nience sampling method, we invited HCI researchers, designers and 
+software/hardware engineers working in the space, based on their 
+design expertise and availability. They were organised into three 
+groups based on their specialism, for conducting three workshops6. 
+For Study 02, a group of students was randomly selected; who used 
+the workspace for a specific amount of time during the studies. For 
+Study 03 (deployment case study), participants were chosen based 
+on how often and how long they were working in the building for; 
+recruiting full-time researchers and employees that work at least 
+three full-time days in the office and did not participate in Study 
+01. Participants were not incentivized to take part in the studies. 
+3.4 Data analysis and presentation 
+All workshops (Study 01 and 02) were video-recorded and tran-
+scribed using Otter.ai. In Study 03, interviews were audio recorded 
+and transcribed manually. Transcripts (all together) were quali-
+tatively analyzed using Thematic Analysis resulting in thematic 
+insights on users’ perceptions and experiences of the intervention. 
+The analysis produced themes related to physical aspects of feed-
+back – shape change, color change and noise experience; temporal 
+aspects of feedback – experience of coordination between these 
+systems in each module and between modules; spatial aspects – 
+i.e. physical positioning and arrangement in the workplace; config-
+urability and user control. Findings from all studies are presented 
+together clustered under main themes. Raw data is presented (par-
+ticipants’ quotes) to support findings; accompanied by the partici-
+pant’s number in brackets (for Study 01, the workshop number is 
+also noted). 
+4 FINDINGS 
+The following main themes presented below: 4.1. Physical and 
+spatial aspects of feedback perception; 4.2. Biomimicry, materi-
+ality and embodiment; 4.3. Feedback repetition, rhythmicity and 
+momentum; 4.4. Data use, interactivity and configurability. Key 
+findings are grouped into Design Implications (DI); which will be 
+further unpacked in Discussion. 
+5Study 01 accommodated remote participation although prioritized physical presence 
+due to the nature of the project.
+6The first group (W01) held primarily software/hardware expertise; the second (W02) 
+primarily design research; and the third (W03) a mix of software & design research. 
+Evaluating ActuAir CHI ’24, May 11–16, 2024, Honolulu, HI, USA 
+Table 1: the participants’ expertise, together with the study number they attended, their mode of attendance, and how often 
+they work in the building. 
+Participant number Study/Workshop Gender Expertise Days per week at work 
+P01 S1 W03 M Software design & research N/A 
+P02 S1 W03 - remote M Software & Hardware design N/A 
+P03 S1 W02 M HCI / User research N/A 
+P04 S1 W02 F Design research N/A 
+P05 S1 W02 - remote F Design research N/A 
+P06 S1 W02 M Design research N/A 
+P07 S1 W01 M HCI research, hardware design N/A 
+P08 S1 W01 M Software & Hardware engineering N/A 
+P09 S1 W01 M HCI / User research N/A 
+P10 S2 M N/A N/A 
+P11 S2 M N/A N/A 
+P12 S2 M N/A N/A 
+P13 S2 F N/A N/A 
+P14 S2 M N/A N/A 
+P15 S3 M N/A Full time on site 
+P16 S3 F N/A 2 days per week 
+P17 S3 M N/A 2 days per week 
+P18 S3 M N/A 3 days per week 
+P19 S3 F N/A Full time on site 
+P20 S3 F N/A Full time on site 
+P21 S3 F N/A Full time on site 
+4.1 Physical and spatial aspects of feedback 
+perception 
+DI01- Modules’ positionality key for shape-change readabil-
+ity. Results from Study 01 and 03 highlighted differences in partici-
+pants’ awareness and perception of shape-change depending on the 
+display’s physical positioning. Study 01 illustrated that the observa-
+tion angle - i.e. observing the display from a fixed front-facing point 
+of observation - can inhibit shape-change perception; “too subtle 
+(P07-W01)”; “not dramatic or extreme enough (P04-W02)”; “[. . .]to 
+create an impression and capture attention in distance (P08-W01)”. 
+These findings informed the set-up in Study 03 where the display 
+was installed vertically within a main corridor, to be approached 
+and therefore observed mostly at an angle. The fact that the build-
+ing occupants were able to approach and freely move around it in 
+Study 03 also reduced some of the difficulties with shape-change 
+readability observed in Study 01. 
+DI02- Utilizing outlines and shadows to enhance shape 
+change. Participants in Study 01 brainstormed ideas to address 
+shape-change readability issues. Some suggested attaching the in-
+flatable pouches to less-rigid components (acting as muscles to bend 
+a surface), or covering them with material features to further en-
+hance outline’s shape change; “soft bendable materials (P07-W01)”; 
+“covering them with soft materials with holes (P03-W02)”; “[. . .] with 
+geometrical properties that can create a more visible shape change 
+when inflation or deflation is actuated, changing the visible outline 
+(P08-W01)”; pointing towards using materials with geometrical 
+features that further enhance the shape change occurring during 
+inflation (Figure 3). Adding to this, In Study 01, participants sug-
+gested the use of spotlights or sidelights to “enhance the outline of 
+the inflatables and utilize their shadows as part of the experience (P08-
+W01)”, creating a more dramatic effect readable from all observation 
+points and at a distance. 
+DI03- Light defuse and pulse key for inflation perception. 
+Participants in Study 01 & 03 further acknowledged that the embed-
+ded LEDs play a key role in enhancing shape-change awareness and 
+perception; found the light defusing effect (as the pouch inflates) 
+intriguing and suggested utilizing this effect further. The coordina-
+tion of inflation and LED animations was extensively discussed by 
+participants in Study 01 with a view to better supporting inflation 
+awareness and feedback perception; with participants suggesting 
+effects such as “light pulsating when inflation has reached its maxi-
+mum (P04-W02)”; or “(the pouches) can stay semi-inflated to diffuse 
+light better (P06-W02)”. 
+DI04- Light as material In Study 03, participants’ observations 
+highlighted experiences of the color change and the aesthetic as-
+pects of inflation and materiality; with “(inflation) changing light 
+distribution (P15); and even “the color of light changes because of infla-
+tion [. . .] I think light becomes brighter when it deflates” (P16). These 
+findings – i.e. linking shape change and materiality with color 
+distribution and feedback perception – are uniquely to the field 
+of soft robotic shape changing displays; and can open up avenues 
+for exploration of the perception of these parameters (and their 
+coordination) for the purpose of communicating data in various 
+contexts. 
+DI05- Circularity and spatial data associations. Results in 
+Studies 02 and 03 illustrated how the modularity of the display (see 
+Figures 4, 5, 7) inspired thoughts of spatialized data representa-
+tions. Some participants in Study 02 perceived the circular modular 
+arrangement as representing an area in the building, linking the 
+CHI ’24, May 11–16, 2024, Honolulu, HI, USA Eleni Margariti et al. 
+Figure 3: The sketches above illustrate some of the participants’ ideas. B: ”assemble the pouches on a less-rigid surface; 
+operating as soft muscles to bend the surface (P07)”. A: ”[. . .] vertical placement of surfaces on top of the pouch, which move 
+horizontally when inflated; to make shape change more visible (P08)”. 
+Figure 4: The prototype deployed at a circular arrangement during Study 03. A and B show changes in the LED colors due to 
+changes in CO2 levels and in selected sensors during the 2-week study period. 
+overall shape of the display with a location of data streams; others 
+(Study 02) viewed each module linked to different rooms or room 
+sensors, both in circular and in non-circular arrangements (see 
+Figures 4,5, 7). These spatial relationships were extended to inter-
+preting feedback variation between modules. When modules were 
+not synchronized, they were perceived as showing different areas 
+in the building (Study 02). With regards to the circular arrange-
+ment; “My interpretation is as every module represents a room and it 
+depicts the air quality in the room over a brief period of time (P11)”; “I 
+think it’s different blocks in a building rather than rooms -like block 
+A,B,C etc. and if there is less amount of oxygen in block A, it turns 
+red and simultaneously do the others (P13)”. Intersecting modules 
+(modules on the intersections of two circular arrangements) (see 
+Figure 7 B, C) were perceived as displaying the averages between 
+the sensory readings of two areas. In the case where one (central) 
+module was behaving differently from the surrounding circular 
+ones, participants interpreted this as the ‘average AQ’ - i.e. the 
+physical middle point as the data (middle - point) average - or as 
+having different sensitivity to data. “It’s more like the outer ring 
+responds to 70% of CO2 and the inner core responds to 100% of CO2 in 
+the atmosphere. (P12)”; “It might depict the gradual rise in CO2 and 
+say 70-80% of rise in CO2 might change the color of the core. (P14)”. 
+These findings connecting modular display elements to spatial data 
+relationships can be key insights to guide the deployment of such 
+awareness displays in the context of smart buildings. 
+4.2 Biomimicry, materiality and embodiment 
+DI06- Form and material key for environmental associations. 
+As the prime aim of the display is to physicalize climatic (AQ) 
+data such as CO2, the participants discussed how well it serves 
+its purpose. Participants in all studies intuitively related to the 
+display of climatic data e.g.“[. . .] it seems it senses temperature from 
+different zones in the building. (P10)”, based on shape and broad 
+design factors such as color and material properties ‘it is green and 
+has leaf-like shapes (P15)’; “it is nice how ‘material is making light 
+diffuse[. . .] resembling something from the ocean (P15)”; “gluey tex-
+ture (P16)”. Study 03 illustrates that materiality drove participants 
+to touch the display; many felt it was pleasant or interesting to 
+Evaluating ActuAir CHI ’24, May 11–16, 2024, Honolulu, HI, USA 
+touch the ‘gluey texture (P16)’ hinting towards providing more op-
+portunities for genuinely tangible interactions and tactile feedback 
+to create embodied connections to climatic data (Figure 6). Across 
+studies, participants expressed views suggesting that the display 
+was evidently and intuitively linked with environmental data, but 
+CO2 was not necessarily an obvious connection “the design is too 
+abstract to be associated directly with CO2 representations (P04-W02); 
+‘it is too nice to visualize CO2, and it should be more ugly or extreme’ 
+(P06-W02). 
+DI07- Light and inflation coordination enhances climatic 
+associations. Participants in Study 01, inspired by the prototype’s 
+physical properties, saw the coordination of inflation and LEDs 
+(and the adoption of biomimetic metaphors) as a way to better sup-
+port feedback awareness and intuitive interpretation of the display; 
+and potentially link it better to CO2 data representations. Some 
+participants (Study 01) suggested abandoning use of the ‘traffic-
+light’ system (non-gradual green-orange-red LEDs) to represent 
+CO2 levels, in favor of using two-color or one-color representa-
+tions, gradual transitions between colors, and LED animations to 
+draw attention – e.g. light blinking or pulsating at critical mo-
+ments. Participants in Study 01 further engaged with biomimicry 
+to support their display and feedback design ideas, relating differ-
+ent feedback scenarios with natural processes; including breathing, 
+the life-cycle of corals and the CO2 accumulation by leaves: “red 
+turning to pale red and white as air quality worsens, imitating the 
+life-circle of corals (P03-W02)”; “each module represents a leaf accu-
+mulating CO2 as it inflates, turning from green to red (P06-W02)”; 
+“light could be ‘pulsating’ (i.e. fading-in and out at a regular rhythm) 
+to illustrate the rhythm of CO2 concertation, turn red and starting 
+blinking when CO2 reaches a critical level, and then stay red until 
+CO2 decreases (P06-W02)”;“the breathing metaphor [. . .] the pace of 
+breathing (LEDs pulsating) changing when CO2 levels change (P05-
+W02)”. These metaphor concepts inspired the framing of Study 
+02; they were translated in specific modular arrangements and 
+specific shape & color feedback sequences (Figure 5) which were 
+evaluated in Study 02. Key findings in Study 02 illustrate that light 
+and inflation feedback (and the synchronization of these two sys-
+tems) through different modular arrangements designed based on 
+biomimetic metaphors that address climate and CO2 accumulation 
+(or the effects of its accumulation on nature), can provide direct cues 
+for intuitive sense-making and interpretation of modular awareness 
+displays; linking the interpretation of such feedback with climatic 
+aspects and climatic deterioration (Figure 5). 
+DI08-Color drives feedback interpretation. Across studies, 
+LED color was seen as the dominant mechanism to communicate 
+both absolute (AQ measurement) and relative (AQ change) informa-
+tion, as well as rhythm of AQ change “It’s pretty straightforward: 
+Green is good, and red is bad, time to leave the room or open a win-
+dow (P12)”; “It’s green and inflated and turns red and deflates when 
+there is higher than the ideal temperature (P10)”. Inflation acted 
+as complementary mechanism for sense-making directly linked 
+with accumulation in nature (of CO2 or O2) but having a diverse 
+meaning with regards to being positive or negative. “[. . .] inflation 
+increases for representing CO2 levels (P02-W03)”; “There’s more 
+oxygen when the prototype inflates since it’s green and deflates 
+when there is more CO2 exhibiting red color. (P11)”; “It should 
+probably go the other way around [..]it would be better if the pro-
+totype gets large and makes noise when it goes red to alert the user 
+something is happening (P10)”; “Inflation indicates something pos-
+itive, whereas shrinking something negative (P15)”. In two-color 
+representations – e.g. the Coral life-cycle in Study 02- participants 
+anchored themselves around red color being ‘bad’ -e.g. high CO2 
+(see Figure 5)- which again confirmed the dominance of color in 
+feedback interpretation highlighting the green-to-red color scale 
+as the key element for sense-making; with inflation acting as an 
+accompanying aspect, further enhancing or toning-down the color 
+interpretation. 
+4.3 Feedback Repetition, Rhythmicity and 
+Momentum 
+DI09-Rhythm of feedback important for awareness. The ten-
+sions between feedback repetition, rhythmicity and momentum 
+were apparent in participants discussions (Study 01). The appro-
+priate coordination of LEDs and inflation was framed both in the 
+context of creating momentum when significant change in AQ 
+levels takes place; as well as in the context of creating a sense of 
+pacing and rhythm in the display’s operation. Participants in Study 
+01 suggested normalizing feedback intervals – mostly referring to 
+LED blinking - to create the feeling of time passing accompanied 
+with specific points of momentum. ‘The modules functioning as 
+digital digits (P01-W03)’ if arranged appropriately; ‘the circular ar-
+rangement of the modules is imitating an analogue clock (P02-W03)’; 
+“(at a circular arrangement) a repeated LED blinking at even intervals 
+(like a clock) can draw the attention to specific moments; for instance, 
+when the hour has passed and a new reading is available, or when 
+there is a significant CO2 change” (P02-W03). 
+DI10-Noise as feedback at key moments. Noise (byproduct 
+of inflation) was seen with mixed feelings by participants in all 
+studies. “I’m not sure if the prototype gives out so much sound or it’s 
+just the video, but it’ll be really disturbing if it’s the prototype. (P10)”. 
+Participants in Study 01 and Study 02 suggested that noise can be 
+an essential interesting feedback parameter to be used with caution 
+“Do you think that people will be aware of it by just seeing the colors? 
+(P14)” implying that its’ noise is essential to draw attention; “Since 
+you can’t avoid noise, use it as part of the feedback system, drawing 
+attention when it is needed (P09-W01)”; “(about noise) probably draws 
+attention to the change in the light. (P11)”. These findings further 
+pointed towards using inflation for CO2 increase and informed the 
+set up in Study 03. Inflation noise became particularly annoying 
+when displaying the time-series animations during Study 01, which 
+discouraged further discussion of displaying historical data during 
+deployment Study 03. 
+DI11- Speed of light animation linked to urgency. LED light 
+animations with varying speed, repetition and color transitions 
+were heavily suggested as ways to create rhythm and momentum in 
+the display (Study 01); which were then materialized and evaluated 
+in Study 02. Results from Study 02 illustrate that these variables – 
+e.g. speed of color transition, the color range of LED animations, 
+and repetition - are key to feedback interpretation. A gradual non-
+repeating green-to-red transition at a speed ∼30s created a clear 
+perception of slow deterioration; whereas the same animation at 
+CHI ’24, May 11–16, 2024, Honolulu, HI, USA Eleni Margariti et al. 
+Figure 5: Metaphors explained; 01: Breathing as inflation of lungs – accompanied with color change; 02 Lichens- imitating 
+the growth of lichens through consumption of O2; 03 Coral life-cycle – the death of the coral as CO2 increases; 04 Leaves 
+A- imitating leaves stomata and CO2 accumulation; 05 Leaves B – imitating leaves life cycle. Pulsating means gradual light 
+transition at a fast rate (<5sec). LED color scale used was limited in colors ranging between green and red, as it was easier 
+to interpret. Participants were exposed to the feedback sequences without knowing what data is displayed, and what is the 
+biomimetic metaphor that inspired it. 
+Evaluating ActuAir CHI ’24, May 11–16, 2024, Honolulu, HI, USA 
+Figure 6: A: short interview with P15, first week of Study 03. P15 thought that the display measures something about the 
+environment or the weather because “it is green and has leaf-like shapes [. . .] It also resembles something from the ocean (P15)”. 
+P15 found inflation interesting with regards to changing the ways the light is diffused; “the way the shape change impacts light 
+distribution is very nice (P15)”. P15 assumed that inflation communicates information about how the environment changes, 
+“inflation indicates something positive, whereas shrinking something negative (P15)”. B: short interview with P16, second 
+week of Study 03. P16 enjoyed touching the display “the feeling of the gluy texture (P16)”– hinting towards tangible feedback. 
+“green is good, and that the display might turn red at some point. I find the display pleasant, blending nicely with the space, 
+visually integrated and non-disturbing … Does light become brighter? (observed during deflation) (P16)”. P16 thought the display 
+also captures occupancy, and thought it could be a measure relevant to AQ. P16 could not make out which areas/spaces in the 
+building are represented; and suggested that more information should be provided to make it clear. 
+the speed <5s and in repetition created a sense of urgency “It feels 
+more like a ticking clock, so you have to get out (P11)” (Figure 5). 
+DI12- Feedback expectation impacts attention. The design 
+dimensions of feedback rhythmicity, predictability and variation 
+were not easy to navigate in the wild. It became apparent that 
+observations from a controlled set-up do not necessarily apply for 
+in-the-wild deployments. For instance, traffic-light color range and 
+non-gradual color change were seen as limiting in Study 01; with 
+participants expressing that gradual color change could communi-
+cate better, and that traffic light color range is over-used. On the 
+contrary, the idea of a traffic-light system was treated positively in 
+Studies 02 and 03 as it was easy to interpret and predict “I expected it 
+to turn red at some point (P21)’; while gradual color change was not 
+perceived on time from most participants in Study 03 “Did it really 
+change since last time? (P21)”; “It’s always looked green since I’ve 
+seen it. (P17)”; “Was it always yellow on some sides? (P19)”(Figure 6). 
+4.4 Data use, interactivity and configurability 
+Participants expressed the view that the display can be successfully 
+used for displaying diverse data sources in different building loca-
+tions (or regardless of the building location); as it allows flexibility 
+on how it is used, and it blends well in space ”the design is successful 
+because it has a clear how –what it does, its functionality and func-
+tional properties – but an abstract what (it is for), allowing flexibility 
+in its use participants to use it in different ways (P05-W02)’; “It blends 
+nicely with the space, visually integrated and non-disturbing (P16)”. 
+DI13-Spatial context influences data use. Results in Studies 
+01 and 02 show that the display’s location in the workplace created 
+different expectations in terms of data used and feedback configura-
+tions; as well as different speculative reactions and behaviors from 
+the side of the building occupants “(modules with) the traffic light 
+system can be meaningful outside office spaces; they can notify you if 
+the CO2 is too much (in the room), and you can choose to open the 
+window or go somewhere else (P01-W03)”; or in the meeting rooms, 
+“It will be interesting to see what people will do during the meeting if 
+AQ deteriorates, if they open a window or do a break (P08-W03)”. In 
+Study 02, participants highlighted that, when installed at a central 
+location in a circular arrangement, they expected the display to 
+function as a display of climatic data averages of the main building 
+blocks“ [at a central location] each module represents each block in 
+the building complex. [. . .] The core module in the center is for the 
+whole building complex by itself, or the average of all the (building) 
+blocks in one prototype, hence it’s placed in the center (P13)”;” This one 
+is like 3 overlapping circles representing each block in our university. 
+So the overlapping modules (the ones that belong to multiple circles) 
+could be the average of the few blocks combined (P10). ” 
+DI14-Feedback tailoring based on occupancy/ proximity 
+data. Beyond AQ and climate data, there were some ideas around 
+integrating different data-sources, including for human activity. “I 
+felt like it will be based on movement, like with motion sensors [. . .] 
+maybe you have some sensors which brighten up (the display) the more 
+you go closer and dull out the more you go farther (P11)”; “I thought the 
+display also captures occupancy, as a measure relevant to air quality 
+(P16)”; I wonder if it is just building sensors or local sensors too? I 
+don’t know, but does it know if people are nearby or even looking at 
+it (P18)”. These ideas can be interpreted as bringing more variation, 
+gamification, and interactivity (and potentially unpredictability) 
+CHI ’24, May 11–16, 2024, Honolulu, HI, USA Eleni Margariti et al. 
+Figure 7: Participants creating display configurations during Study 02; linking modules’ arrangements with spatial data & 
+building locations. A: “This is something similar to the arrangements shown on the video, but it focuses on just one building and 
+different zones in the building (P12)”. B: “This one is like 3 overlapping circles representing each block in the building. So the 
+overlapping prototypes could be the average of the few blocks combined (P10). ” C: “I’ve placed the prototypes in a circular pattern 
+and each prototype represents each block in the building complex. For example, if there is less O2 levels in this building, this will 
+turn red. The core or the prototype in the centre is for the whole building complex by itself, or the average of all the (building) 
+blocks in one prototype, hence it’s placed in the centre (P13)”. 
+to the feedback from the display; as well as strengthening human 
+– data interactions. It was suggested that motion and occupancy 
+sensors could be used to also control the overall powering of the 
+intervention; and participants also discussed their concerns around 
+energy consumption. “Out of necessity it uses electricity! (P18)” 
+DI15-Extending modularity/plug n’ play. A further line of 
+thought around strengthening user engagement included enhanc-
+ing the existing customizability of the display, designing tools to 
+allow configuration and manipulation by building occupants. The 
+existing modules are easy to move and reassemble in different 
+locations in the building; participants in Study 01 suggested mobile-
+based interaction could provide incentives for people to actively 
+use the modules and further configure the feedback as they see 
+value. Some highlighted the ability to able to select data sources 
+(Study 01 and 02) – different data sources from different building 
+locations, and potentially their averages (Study 02). “mobile inter-
+action could be encouraged to select data streams and appropriate 
+feedback features of the display – e.g. light color, intensity, duration 
+(P02-W03)”; the design of a tool that “allows to visualize your own 
+feedback patterns supporting the drag-n-drop of shapes, modify the 
+feedback (i.e. inflation, light animations) and deploy it in the physical 
+installation (P01-W03)”. Differences in perception of what data is 
+important to represent AQ were highlighted – some referring to 
+CO2 and some to O2. This also suggests potential future value in 
+user customizability of data sources. 
+5 DISCUSSION 
+The three prototype-led evaluation studies have contributed key 
+findings concerning occupants’ experiences of a large-scale shape-
+and color-changing display (RQ); a modular customizable room 
+divider inspired by biomimicry operating through soft robotic prin-
+ciples, with the purpose of communicating climatic data (AQ) in a 
+sensory-rich workplace. These findings highlight the building oc-
+cupants’ perception, interpretation and embodied experience of the 
+physical display (RQ) and climatic data in place; and their percep-
+tions of its meaningful use in the workplace. Focusing on evaluating 
+diverse modular arrangements and inflation and LED light coor-
+dination scenarios – also framed under biomimetic metaphors – 
+findings in both controlled studies (Studies 01 and 02) and in-the-
+wild (Study 03) are discussed below as design implications (DI) and 
+opportunities for future research. 
+5.1 Design implications for large-scale shape 
+and color changing displays: Light, 
+materiality and noise 
+Results (Study 01 & Study 02) highlighted the importance of co-
+ordinating inflation and LEDs, utilizing LED animations to a) to 
+support and further enhance shape change perception (DI03) - e.g. 
+in quotes on pouches staying semi-inflated (for diffusing light) and 
+using light pulsating to enhance inflation (P06-W02), the use of 
+spotlights to utilize inflation shadow outlines (P08-W01), b) create 
+momentum and draw attention to specific moments (DI03, DI11)– 
+e.g. light pulsating to enhance maximum inflation perception (P04-
+W02) and c) create a visual rhythm based on the temporal dimension 
+of climatic data (DI09)-e.g. light pulsating in regular intervals to 
+highlight time passing (P02-W03). A fourth aspect was noise, dis-
+cussed in the context of creating momentum on specific moments 
+and supporting the visual experience of shape change with au-
+ditory feedback (DI10)(P09-W01). The above aspects (which are 
+further unpacked below) could be framed as key design dimensions 
+for designing with light and inflation for large-scale, modular and 
+non-modular, shape- and color- changing displays; also extendable 
+beyond climatic data representations. 
+Evaluating ActuAir CHI ’24, May 11–16, 2024, Honolulu, HI, USA 
+Figure 8: Looking on the side and at the back of the installation (Study 03). Hardware was purposefully left exposed; contrasting 
+the smooth, bioinspired front face of the module. “Out of necessity it uses electricity! The dangling cable and all the other 
+tech mounted on the reverse is maybe very slightly ”disturbing”, but reminds us the data is similarly collected by connected tech 
+elsewhere, so I think seeing both sides is good. I am tempted to look more closely at the back (P18)”. 
+Results from Study 01 highlighted the potential for shape chang-
+ing materials to successfully provide abstract – yet intuitively un-
+derstood - visual cues for interpreting state and state change in 
+climatic (and other) data streams; when supported with appropriate 
+lighting (DI02). Participants (Study 01) referred to using ambient 
+light to enhance shape change awareness (or to create the illusion of 
+it) suggesting the use of spotlights; utilizing the produced shadows 
+of the shape outlines as part of the feedback strategy (Study 01). 
+Shadows are heavily unexplored as a feedback strategy in HBI/HCI 
+research; illustrating avenues for further design exploration. One 
+of the very few examples is Shutters [20], where natural/ambient 
+light is used to produce shadow projections to communicate visu-
+alizations driven by shape changing SMA wires; illustrating gaps 
+and emerging opportunities for design research. Results (Study 
+01) highlight the importance of feedback at-scale in the buildings’ 
+public spaces (Study 01, 02, 03) whilst remaining non-disruptive; 
+which further supports the utilization of ambient light and shadow 
+as part of climate feedback, as it is passive, calm and deployable at 
+scale within the buildings (DI02). 
+Participants’ suggestions of geometrical properties to further en-
+hance shape-changing feedback point towards the emerging space 
+of inflatable auxetics [17, 79, 133] and programmable metamaterials 
+[54, 55, 130] and their potential application in large-scale displays 
+(DI01). The work of Alexandra Ion [54, 55, 130] extends to ex-
+ploring programmable, passively-changing geometrical structures 
+and the geometry-enabled swarm behavior of artifacts; see for in-
+stance passively reconfigurable shape changing materials [106]; DIY 
+pneumatic metamaterials [22] and modular structures [55]. Such 
+examples have interesting potential for modular user-configurable 
+physical displays; acting as potential output configurations for 
+diverse climatic data sources in buildings (DI01). 
+Although LED color was the driver of sense-making amongst 
+participants; it was seen as inseparable from the inflation and the 
+material dimensions of the display (DI04). The employment of LED 
+light has many manifestations in HBI and soft robotics literature; 
+but often not discussed in the context of materiality (DI04). Results 
+illustrated that materiality enhanced the perception of light (e.g. 
+P15, Study 03); in Study 03, light obtained a ‘material’ dimension 
+itself – e.g. P16 notes the illusion of LED color changing due to ma-
+teriality and inflation. Materiality and light diffuse are intertwined 
+in architectural design, but very seldomly addressed in the context 
+of public displays (see transparency-changing glass for instance 
+[6, 132]). Li-Lo displays [104], is one of the limited works which 
+unpack ambient light use and diffuse aesthetics through a series 
+of material displays and projections in-place; highlighting more 
+potential gaps for understanding the experience of light diffuse as 
+feedback for climate and AQ change (DI06). These results point 
+towards research on material light and color emitting feedback 
+strategies; examples include the use of thermochromics [18]; as 
+well as light-emitting biomaterials – see the use of cyanobacteria 
+[38] or algae [63] in building materials. Both research avenues have 
+interesting complexities with regards to creating programmable 
+composite / biomaterials for climatic feedback purposes. 
+Noise when inflation is actuated is a novel aspect of pneumatic 
+systems, usually treated as a problem to eliminate and very rarely 
+as a feedback strategy – see projects such as PITAS [18], an attempt 
+of engineering a pneumatic metamaterial that actuates without 
+noise, and FlowIO soft robotics platform [105] which supports a 
+portable approach for pneumatics claiming to limiting noise (DI10). 
+Our findings suggest that there might be opportunities to utilize 
+noise (with caution) for large-scale public displays as part of the 
+feedback strategy. Findings in Study 03 suggest that, in public open-
+space setting, inflation noise is almost essential to attract attention 
+to specific moments of AQ change; with participants expressing 
+limited concerns about being distracted by the noise. Noise use 
+should therefore be context specific - i.e. might be unnecessary and 
+distracting in a meeting room where there is close visual proximity 
+to the display, and essential to draw attention in specific moments 
+CHI ’24, May 11–16, 2024, Honolulu, HI, USA Eleni Margariti et al. 
+Table 2: Design Implications (DI), Design Recommendations (DR) and their applicability on different types of displays 
+Design Implications Design Recommendations Type of display 
+DI01- Modules’ positionality key Allow opportunities to dynamically alter the rotation and position of Modular Shape 
+for shape change readability modules, to allow a dynamic observation angle. This is particularly Changing, Pneumatics 
+important for non-rigid pneumatics. 
+DI02- Utilizing outlines and Use pneumatic muscles combined with rigid materials to create stronger Shape Changing 
+shadows to enhance shape outline shape changes; and utilize shadows to further enhance the effect. 
+change. 
+DI03- Light defuse and pulse key We recommend an increasing light intensity (linearly or in intervals) to Shape Changing 
+for inflation perception support the readability of inflation. 
+DI04- Light as material Integrate LEDs into materials to allow varying light diffuse effects; explore Pneumatics 
+use of light-emitting materials. 
+DI05- Circularity and spatial data Circular modular arrangements were favored and associated with ‘areas’ Modular Shape 
+associations in the building. Changing, Context 
+Dependent 
+DI06- Form and material key for 
+Biological inspiration in choice of materials and forms is recommended to Modular Shape 
+environmental associations produce environmental associations; extended to use of bio-materials. Changing, Pneumatics 
+DI07- Light and inflation Use of bio-inspired animated LEDs together with inflation to enhance Modular Shape 
+coordination enhances climatic climate associations; swarm behavior pointed to data changes in different Changing, Pneumatics 
+associations rooms/areas. 
+DI08- Color drives feedback We recommend green-to-red scale as it is intuitively understood and Shape Changing 
+interpretation. supports the interpretability of pneumatic shape change. 
+DI09-The rhythm of feedback Animations too slow (>30s) were not perceived in the deployment case Broader Physical 
+important for awareness study. 
+DI10-Noise as feedback at key Noise use is not distracting in big public areas, recommended to draw Shape Changing, 
+moments attention. Pneumatics, 
+DI11- Speed of light animation Light pulsing (gradual change from no color to color at < 5s intervals) Pneumatics 
+linked to urgency repeatedly at key moments drives attention, if below <3s is interpreted as 
+urgent. 
+DI12- Feedback expectation Confirming expectations of color changing (e.g. turning red) can be key in Broader Physical 
+impacts attention maintaining interest on the display. 
+DI13-Spatial context influences We recommend providing customizable/programmable context-dependent Broader Physical 
+data use feedback scenarios. 
+DI14-Feedback tailoring based on We recommend integrating proximity data for more ‘personal’ feedback, Broader Physical 
+occupancy/ proximity data and occupancy data for energy saving. 
+DI15-Extending modularity/plug We recommend modularity extended on plug n’ play tools for digitally Modular shape 
+n’ play customizing feedback. changing 
+when installed at a public spot. Summarizing, large scale pneumatic 
+displays should subsequently allow a level of programmability for 
+utilizing noise depending on the context of deployment (DI10). 
+5.2 Modular Biomimetic feedback for climatic 
+awareness, wellbeing and sustainability 
+Results (Study 01, Study 02) highlighted that when designing modu-
+lar shape and color changing feedback, biomimicry can have a direct 
+impact on how intuitively this feedback is perceived and whether 
+it is linked with climatic (and AQ) data (DI07). The imitation of 
+natural processes related with CO2 accumulation (e.g. breathing 
+or leaves’ CO2 accumulation) or the impact of CO2 accumulation 
+in nature (e.g. the death of corals and the expansion of lichens) 
+was translated through modular arrangements and shape and color 
+change sequences in Study 02, informed by Study 01 findings. Study 
+02 results show how the above biomimetic metaphors translated in 
+modularized inflation and color feedback were intuitively linked 
+with aspects of deteriorating climate (see quotes in Figure 5). 
+Modularity expanded the possibility of the existing shape and 
+color changing system to obtain different forms at scale in the 
+buildings [56, 77, 117]; and generate different dynamic behaviors 
+between modules or groups of modules (see Figure 5, the Leaves 
+metaphor A & B for instance) while still behaving together as a 
+whole (see Figure 5, the Lichens metaphor); which can be framed 
+as swarm behavior [103]. Swarm behavior – i.e. collective mo-
+tion of independent entities – enabled by modular soft robotics is 
+an aspect of biomimetic design with some applications in kinetic 
+architecture – see Ned Kahn’s wind façade7 - rarely explored in 
+HCI/HBI research [66, 78, 103]; which can have interesting impli-
+cations on the development and interpretation of modular, soft 
+7https://nedkahn.com/portfolio/wind-veil and https://nedkahn.com/portfolio/wind-
+arbor 
+Evaluating ActuAir CHI ’24, May 11–16, 2024, Honolulu, HI, USA 
+robotic displays at large scale [77, 117, 134]. In this work, different 
+modular arrangements were presented in Study 02; with modules 
+obtaining different inflation and color change sequences either indi-
+vidually or as groups (see Figure 5) as an attempt to imitate different 
+aspects of natural organisms (DI06, DI07). Beyond associations 
+with climatic aspects such as deteriorating climate, participants 
+in Study 02 perceived different modular arrangements in direct 
+association with the spatial location of data streams and through to 
+be representing spaces/building areas and the climate data readings 
+from them– something like a physical data map of the building 
+areas. Participants in Study 02 particularly pointed to the circular 
+6-module arrangement as the most appealing, associating the circu-
+larity with the representation of an ‘area’ in the building; with some 
+replicating circular arrangements to visualize intersecting areas 
+in the buildings during the co-creation activity. Given the num-
+ber of modules fabricated and used in this study is limited; future 
+work can explore further the installation of different biomimetic 
+feedback arrangements of modular soft robotics at scale, as well as 
+how building occupants perceive them and see value in using them 
+in-situ. 
+The display was described as aesthetically pleasing (in all stud-
+ies) and that it provided distinct visual cues to interpret climatic 
+change and climatic levels. The association with specific biomimetic 
+metaphors was picked up by participants in Study 03, when partici-
+pants suggested that the display shows environmental data based 
+on its ‘leaf -like shapes (P15)’; also ‘resembling something from the 
+ocean (P15)’. These results from Study 03 showed that, beyond mod-
+ular assembly and inflation and color change coordination, primary 
+aspects contributing to the climatic interpretation of the display 
+were (as intended) the overall form factors of each module and their 
+materiality (DI06); with some expressing that it was interesting to 
+touch- ‘a gluey texture (P16)’- highlighting the possibility of embod-
+ied and haptic experience of feedback. Expanding on these findings, 
+materiality could be further explored in the context of designing 
+for climatic data displays, through further research in (material) 
+haptic and embodied experiences; and conceptually, transitioning 
+from nature imitation to nature connectedness (biophilic feedback). 
+Building on relevant literature on architecture and embodied cogni-
+tion [80, 112, 116]; material-driven feedback can extend to further 
+imitate bodily reactions and further engage embodied experience 
+of climatic data; for instance, material feedback that imitates sweat 
+[94, 129] or broadly skin – see soft robotic skin textures [46, 106] 
+- and its responses to the environment [23]. Using such material 
+feedback could also foster climate-sensitive behavior in the build-
+ings [45] – i.e. climate awareness and opportunities to rethink 
+human-climate relationships. 
+Building on relevant research on biophilic design; experiencing 
+nature can stimulate conservationist attitudes towards the natural 
+environment [58, 66, 143]; fostering climate awareness and sensi-
+tivity on how human actions impact the environment and climate 
+[66]. Along these lines, participants already highlighted concerns 
+over the installation’s energy use; questioning why it should be 
+always on (Study 03) (DI14). Responding to participants’ energy 
+concerns, reducing overall energy use of the display falls within 
+emerging visual pollution [32] and sustainability concerns driven 
+by current climate pressures. Bio-material research can support 
+the reduction of LED use in the built environment, replacing them 
+with naturally occurring light feedback [76]. Beyond LEDs, pneu-
+matic action – and broadly - shape change also requires energy; 
+with solutions such as PITAS [18] illustrating early potential of 
+composite materials – e.g. conductive silicone- to provide shape 
+and light change with less electricity while eliminating noise; yet 
+the challenge of zero energy use and self-powered displays remains 
+open. Materials used in passive climatic skins [60] have unexplored 
+potentials in design research for building interiors and physical 
+displays; for the purpose of both reducing energy use and fur-
+ther support biophilia in the workplace. Types of energy-passive 
+climate-actuated materials include thermobimetals (materials re-
+sponding to heat) [115] and hygromorphic (materials responding 
+to humidity increase) [93, 131] require significant amounts of envi-
+ronmental heat or humidity to actuate and currently have limited 
+interior applications. Contemporary advances in biomaterials for 
+architecture - see research by HBBE8 for instance– open the space 
+for using biology to produce electricity [97]; or engineer materials 
+to respond to or capture CO2 [5, 21, 47, 83, 143]. Such examples 
+can push the frontiers of color and shape change in soft robotics, 
+utilizing biochemical reactions with CO2 to improve AQ, self-power 
+and provide a naturally occurring feedback [76] – see for instance 
+the work of Goodchild-Michelman [38]. 
+Summarizing, the above results suggest that biomimicry is 
+a meaningful strategy when designing for physical climate-
+awareness displays; and its success depends on primarily form and 
+material factors; and secondarily on shape and color change coor-
+dination. Modularity plays an important role on enabling dynamic 
+visual arrangements and feedback sequences at scale - providing 
+with cues towards spatiotemporal data relationships – with the 
+potentials of swarm behavior of elements to communicate meaning 
+remaining relatively unexplored. Design research on actuating bio-
+material feedback is an emerging space for climatic displays; that 
+can potentially support both sustainability and climate regulation 
+while nurturing climate-awareness in the buildings. 
+5.3 Engineering feedback in-place: reflections 
+on architecture-as-display and behavior in 
+context. 
+Findings on how successful different shape and light feedback was 
+in terms of being brought to the occupants’ attention and awareness, 
+are discussed in the context of Studies 01 and 02 (controlled instal-
+lation) and Study 03 (deployment in-the-wild). Although successful 
+in the controlled set up with no distractions (Study 02), green-to-
+red LED animations did not engage building occupants’ peripheral 
+awareness in the wild (Study 03). Unpacking the neuroscience of 
+feedback; timing and priming – to expect feedback to change and 
+therefore anticipate it - within a relevant behavior context [46, 116], 
+impacts feedback awareness in place. Seeing the green to red color 
+range, participants were primed to expect a specific color change 
+to red when seeing green, assuming deterioration (DI08, DI12). 
+As AQ did not drop significantly during the first days of the de-
+ployment maintaining the color change within neighboring color 
+tones (Study 03), results showed participants’ attention to the dis-
+play decreased over time. The request to highlight the perception 
+of time passing through regular feedback intervals (DI09)– some 
+8http://bbe.ac.uk/the-living-room/ 
+CHI ’24, May 11–16, 2024, Honolulu, HI, USA Eleni Margariti et al. 
+referred to a clock ticking (results in Study 01, 02)- highlights the 
+need of rhythmicity in peripheral interventions, which then can 
+attract attention when it changes - becoming fast (sense of urgency, 
+Study 02) or static. 
+With regards to feedback configurations to drive occupants’ en-
+gagement in the long run, there were no straightforward answers to 
+the problem of ‘too repetitive’ and ‘too unpredictable’. Some partic-
+ipants envisioned the potential of integrating human activity data 
+to the display’s function (DI14), creating a more human-responsive 
+feedback. For instance, using proximity and occupancy sensors to 
+animate it around people’s movements in the building; creating 
+further associations between building occupants and their contri-
+bution to the room’s CO2 footprint. Reflecting on relevant research 
+on feedback and embodied cognition [80] which supports the idea 
+that the visual rhythm of the environment can affect body motion 
+(e.g., our walking pace), animated CO2 feedback that synchronizes 
+with the pace of people passing by could provide a more ‘personal’ 
+view of CO2 contributions, a more embodied feel of its change. 
+Feedback configurations that establish relationships between the 
+pace of light/inflation animations and pace of walking of people 
+approaching or passing by could significantly enhance engagement 
+with the display and hopefully create a deeper individual and col-
+lective connection to climate within the building. Finally, proximity 
+sensors respond to quotes over reducing energy use of the instal-
+lation; since it can be activated only when (enough) people are 
+around – providing further links between the amount of people in 
+the building and CO2 levels. 
+There were associations between the display’s configuration and 
+building spaces and localized building data (the CO2 data footprint 
+of indoor building areas) – e.g. participants in Study 02 interpreted 
+the circular arrangement as different building rooms or blocks 
+(DI05). In the case where one (central) module was behaving dif-
+ferently from the rest, participants interpreted this as the ‘average’ 
+or ‘middle point’ (both physically, spatially and digitally). These 
+perceptions of spatial-data analogies – e.g. the circular arrange-
+ment as a physical area; the middle module as the data (middle -
+point) average - highlight opportunities to further engage with ex-
+ploring relationships between the display’s modular arrangements 
+and spatial / data representations; to further investigate building 
+occupants’ spatial sense making and provide cues to perceive where 
+data comes from. 
+Across the studies, participants shared interpretations of what 
+the display does and shaped a collaborative understanding of its 
+feedback and use through iterative discussions. Spatial behavior 
+context further informed occupants’ expectations around the dis-
+play’s function and use in place [39], illustrated when discussing 
+how it can be used in different rooms/areas (DI13). For instance, the 
+traffic light system was suggested if using the display in and outside 
+meeting rooms; circular arrangement were favored in public areas 
+to represent CO2 levels in building blocks or rooms. These results 
+contribute to existing literature on modular, DIY and open-source 
+architecture as a collaborative instrument [12, 18], highlighting 
+the importance of designing with configurability and modularity 
+in mind, when thinking of large-scale physical climatic displays 
+and providing tools to enable occupants’ control when shaping 
+collective climatic data representations and use (DI15); creating 
+the basis for rethinking human-climate relationships through data 
+with the prospect of cultivating climate-sensitive behaviors– i.e. 
+prompting building occupants to think how their own behaviors 
+and actions relate to climate, and potential ways to offset their 
+impact (net-zero). 
+5.4 Summary: Opening the design space for soft 
+robotics for biomimetic 
+architecture-as-display under climate 
+change 
+Through mapping building occupants’ experiences of a modular 
+soft-robotic shape and color changing display of climatic (AQ) data 
+in a smart workplace building; we have brought to the fore several 
+design implications (DI) relevant to the application of soft robotics 
+in that context, also extended to the design and deployment of mod-
+ular (5.2), shape-changing (5.1) and broadly physical displays (5.3.). 
+We contribute to HBI [42] research through opening the design 
+space of modular soft robotics for large physical displays for cli-
+mate awareness; presenting existing opportunities and challenges 
+for the deployment of such interventions in smart office buildings. 
+Building upon relevant work on biomimicry and biophilic design 
+[58, 143] and large-scale soft robotics / actuating materials [98, 122] 
+; but here with a specific focus on lived-in office buildings and mod-
+ular interventions for climatic awareness, there are several areas of 
+future work which could be fruitfully explored concerning broadly 
+large scale soft robotic displays (see 1-5 below) and particularly 
+modular displays (see 6-7 below): 
+1. Further research on actuating materials in office buildings 
+to support embodied climate awareness through biomimetic 
+haptic and tangible feedback; for instance, soft robotic skin 
+textures [23, 53, 129] that imitate bodily responses to climate 
+(e.g. sweat). 
+2. Further research in biomimetic and biophilic design for phys-
+ical (architectural) displays, including bio-materials for cap-
+turing CO2 [5, 38, 93, 97] - for instance cyanobacteria [38]or 
+algae [21, 47, 76]– with a focus on nature-derived light and 
+color feedback. 
+3. Self-powered or low-energy physical climatic displays [97, 
+139]; focusing on bio- materials and mechanisms to drive 
+energy saving. 
+4. Feedback to support awareness on collective and individual 
+climate behavior; linking the display’s operation with data 
+on human activity in the building; including opening of 
+the windows, occupancy levels etc.; and the individual and 
+collective contribution to CO2. 
+5. Research on further utilizing noise in pneumatic systems as 
+part of feedback strategy – instead of suppressing it. 
+6. Further research on swarm behavior and modular feedback 
+systems to support further spatialized understanding of cli-
+matic data. 
+7. Interfaces for user control of modular displays; includ-
+ing modular robotic interfaces; that incorporate different 
+types of feedback customization and data sources selection 
+through mobile and tangible interaction. 
+Through these various proposed strands of research agenda – a 
+potential new research landscape emerges focusing on biomimetic 
+Evaluating ActuAir CHI ’24, May 11–16, 2024, Honolulu, HI, USA 
+and biophilic feedback and actuating materials/soft robotics to com-
+municate climatic data. There is much potential for developing new, 
+engaging and ultimately occupant-centered data-interactions to 
+foster climatic awareness; with the scope of creating opportunities 
+to re-consider human-climate relationships within the built envi-
+ronment, and hopefully this work helps to scaffold future work in 
+this area. 
+6 CONCLUSIONS 
+Empirical insights from three evaluations studies involving the de-
+ployment of a modular, customizable, soft-robotic display uniquely 
+contribute to the limited studies in HBI research that address the 
+experience of biomimetic feedback and soft robotics for commu-
+nicating climatic data. Focusing on evaluating a shape and color 
+changing configurable display for climatic awareness in the work-
+place, this work opens the design space of soft robotics and actuat-
+ing materials in architecture for physicalizing climatic data within 
+buildings; addressing the potential of such interventions to raise 
+awareness on AQ and broader climate in the buildings. Further 
+contributions from these studies to the field of HCI/HBI research 
+include key learnings around the potential of modular soft robotics 
+to physicalize climatic data within buildings; aspects of awareness, 
+perception and experience of biomimetic shape and color changing 
+feedback; and the prospect of such feedback to foster climate aware-
+ness in future smart buildings amidst climate change concerns. 
+7 LIMITATIONS 
+This work has limitations with regards to the prototype’s design 
+and deployment in the workplace, and the framing and scope of the 
+studies. The prototype serves primarily as an awareness technol-
+ogy and not as a behavior-change intervention; correspondingly, 
+the studies evaluate aspects of feedback awareness, perception 
+and interpretation in-place. That said, the broader scope of the 
+intervention is to inspire building occupants to reflect on their 
+relationships to climate, but it does not focus on the evaluation 
+of their behavior in relation to AQ. Broader behavioral data – e.g. 
+how the intervention changed participants’ actions and behavior 
+in daily life – are beyond the scope of this work and are subject for 
+future deployment studies. The scalability of the findings concerns 
+data-rich open plan office buildings and broadly publicly accessible 
+building space. As the studies tool place in the same building, there 
+are no insights around the integration of this prototypes in other 
+contexts such as the domestic workplace; any deployments in other 
+contexts -e.g. domestic- need re-evaluation and re-appropriation of 
+the existing technology. Other functional limitations of the display 
+and studies were a) the transfer of the biomimetic metaphors to 
+specific shape- and color-changing feedback scenarios which had 
+its own limitations; b) the fact that limited number of modules (8) 
+were made and used in the studies, which limited the size and scale 
+of the installation and the associated findings; and c) the changes 
+in data streams during the deployment case study (Study 03) were 
+often small due to hybrid working and ventilation system in place, 
+and the proportional color change was hard to notice. 
+ACKNOWLEDGMENTS 
+We thank Jan Kučera for the extensive help with the software and 
+hardware of the display and Ishwarya Suresh for co-designing 
+and co-facilitating Study 02. The final software for the display’s 
+operation has been developed by Jan Kučera. We also thank our 
+research participants for their thoughtful input. Research on this 
+project was partially funded by the EPSRC (EP/T022582/1). 
+REFERENCES 
+[1] Sara Adhitya, Beck Davis, Raune Frankjaer, Patricia Flanagan, and Zoe Mahony. 
+2016. The BIOdress: A Body-worn Interface for Environmental Embodiment. 
+In Proceedings of the TEI ’16: Tenth International Conference on Tangible, 
+Embedded, and Embodied Interaction, 627–634. https://doi.org/10.1145/2839462. 
+2856345 
+[2] Hamed S. Alavi, Elizabeth Churchill, David Kirk, Julien Nembrini, and Denis 
+Lalanne. 2016. Deconstructing human-building interaction. interactions 23, 6: 
+60–62. https://doi.org/10.1145/2991897 
+[3] Hamed S. Alavi, Himanshu Verma, Michael Papinutto, and Denis Lalanne. 2017. 
+Comfort: A Coordinate of User Experience in Interactive Built Environments. 
+In Human-Computer Interaction – INTERACT 2017, Regina Bernhaupt, Girish 
+Dalvi, Anirudha Joshi, Devanuj K. Balkrishan, Jacki O’Neill and Marco Winckler 
+(eds.). Springer International Publishing, Cham, 247–257. https://doi.org/10. 
+1007/978-3-319-67687-6_16 
+[4] Lea Albaugh, Scott Hudson, and Lining Yao. 2019. Digital Fabrication of Soft 
+Actuated Objects by Machine Knitting. In Proceedings of the 2019 CHI Confer-
+ence on Human Factors in Computing Systems, 1–13. https://doi.org/10.1145/ 
+3290605.3300414 
+[5] Khaleel I. Assaf, Abdussalam K. Qaroush, Farah M. Mustafa, Fatima Alsoubani, 
+Thomas M. Pehl, Carsten Troll, Bernhard Rieger, and Ala’a F. Eftaiha. 2019. 
+Biomaterials for CO 2 Harvesting: From Regulatory Functions to Wet Scrubbing 
+Applications. ACS Omega 4, 7: 11532–11539. https://doi.org/10.1021/acsomega. 
+9b00978 
+[6] Patrick Bader, Alexandra Voit, Huy Viet Le, PawełW Woźniak, Niels Henze, and 
+Albrecht Schmidt. WindowWall: Towards Adaptive Buildings with Interactive 
+Windows as Ubiquitous Displays. 26, 2: 42. 
+[7] Saskia Bakker. 2011. Talking tangibles: design for peripheral interaction. In 
+Proceedings of the fifth international conference on Tangible, embedded, and 
+embodied interaction - TEI ’11, 427. https://doi.org/10.1145/1935701.1935814 
+[8] Elizabeth Bales, Nima Nikzad, Nichole Quick, Celal Ziftci, Kevin Patrick, and 
+William G. Griswold. 2019. Personal pollution monitoring: mobile real-time 
+air quality in daily life. Personal and Ubiquitous Computing 23, 2: 309–328. 
+https://doi.org/10.1007/s00779-019-01206-3 
+[9] Philipp Brauner, Julia van Heek, Martina Ziefle, Nur Al-huda Hamdan, and 
+Jan Borchers. 2017. Interactive FUrniTURE: Evaluation of Smart Interactive 
+Textile Interfaces for Home Environments. In Proceedings of the 2017 ACM 
+International Conference on Interactive Surfaces and Spaces, 151–160. https: 
+//doi.org/10.1145/3132272.3134128 
+[10] Anke Brocker, Ozgun Kilic Afsar, Jose A Barreiros, Ali Shtarbanov, Kristian 
+Gohlke, and Sören Schröder. 2022. Actuated Materials and Soft Robotics Strate-
+gies for Human-Computer Interaction Design. 7. 
+[11] Anke Brocker, Jakob Strüver, Simon Voelker, and Jan Borchers. 2022. SoRoCAD: 
+A Design Tool for the Building Blocks of Pneumatic Soft Robotics. In CHI 
+Conference on Human Factors in Computing Systems Extended Abstracts, 1–7. 
+https://doi.org/10.1145/3491101.3519770 
+[12] Jessica Broscheit, Qi Wang, Susanne Draheim, and Kai von Luck. 2021. Towards 
+Atmospheric Interfaces. In Proceedings of the Fifteenth International Conference 
+on Tangible, Embedded, and Embodied Interaction, 1–7. https://doi.org/10.1145/ 
+3430524.3442458 
+[13] William D. Browning and Catherine O. Ryan. 2020. Nature Inside: A Biophilic 
+Design Guide. RIBA Publishing. https://doi.org/10.4324/9781003033011 
+[14] Glenda Amayo Caldwell and Marcus Foth. 2014. DIY media architecture: open 
+and participatory approaches to community engagement. In Proceedings of 
+the 2nd Media Architecture Biennale Conference: World Cities, 1–10. https: 
+//doi.org/10.1145/2682884.2682893 
+[15] Miguel Angel Callejas and J.I.P. Calero. 2014. Nitinol Based Actuator for Archi-
+tectural Technology in Hot Climate Countries. https://doi.org/10.13140/2.1.2912. 
+0805 
+[16] Alan Chamberlain, Andy Crabtree, Tom Rodden, Matt Jones, and Yvonne Rogers. 
+2012. Research in the wild: understanding “in the wild” approaches to design and 
+development. In Proceedings of the Designing Interactive Systems Conference, 
+795–796. https://doi.org/10.1145/2317956.2318078 
+[17] Tian Chen, Julian Panetta, Max Schnaubelt, and Mark Pauly. 2021. Bistable 
+auxetic surface structures. ACM Transactions on Graphics 40, 4: 1–9. https: 
+//doi.org/10.1145/3450626.3459940 
+CHI ’24, May 11–16, 2024, Honolulu, HI, USA Eleni Margariti et al. 
+[18] Tingyu Cheng, Jung Wook Park, Jiachen Li, Charles Ramey, Hongnan Lin, Gre-
+gory D. Abowd, Carolina Brum Medeiros, HyunJoo Oh, and Marcello Giordano. 
+2022. PITAS: Sensing and Actuating Embedded Robotic Sheet for Physical Infor-
+mation Communication. In CHI Conference on Human Factors in Computing 
+Systems, 1–16. https://doi.org/10.1145/3491102.3517532 
+[19] Kyung Yun Choi and Hiroshi Ishii. 2021. Therms-Up!: DIY Inflatables and 
+Interactive Materials by Upcycling Wasted Thermoplastic Bags. In Proceedings 
+of the Fifteenth International Conference on Tangible, Embedded, and Embodied 
+Interaction, 1–8. https://doi.org/10.1145/3430524.3442457 
+[20] Marcelo Coelho and Pattie Maes. 2009. Shutters: a permeable surface for 
+environmental control and communication. In Proceedings of the 3rd Inter-
+national Conference on Tangible and Embedded Interaction - TEI ’09, 13. 
+https://doi.org/10.1145/1517664.1517671 
+[21] Garrett M. Cole, Jonah M. Greene, Jason C. Quinn, Beth McDaniel, Lisa Kemp, 
+David Simmons, Tyler Hodges, David Nobles, Taylor L. Weiss, John McGowen, 
+and Steve McDaniel. 2023. Integrated techno-economic and life cycle assessment 
+of a novel algae-based coating for direct air carbon capture and sequestration. 
+Journal of CO2 Utilization 69: 102421. https://doi.org/10.1016/j.jcou.2023.102421 
+[22] Zhitong Cui, Shuhong Wang, Junxian Li, Shijian Luo, and Alexandra Ion. 
+2023. MiuraKit: A Modular Hands-On Construction Kit For Pneumatic Shape-
+Changing And Robotic Interfaces. In Proceedings of the 2023 ACM Designing 
+Interactive Systems Conference, 2066–2078. https://doi.org/10.1145/3563657. 
+3596108 
+[23] A. K. Dąbrowska, G.-M. Rotaru, S. Derler, F. Spano, M. Camenzind, S. Annaheim, 
+R. Stämpfli, M. Schmid, and R. M. Rossi. 2016. Materials used to simulate physical 
+properties of human skin. Skin Research and Technology 22, 1: 3–14. https: 
+//doi.org/10.1111/srt.12235 
+[24] Chi Tai Dang, Ilhan Aslan, Andreas Seiderer, and Elisabeth André. 2020. Explor-
+ing Ambient Air Quality Notifications for Smart Rooms. In Proceedings of the 
+6th EAI International Conference on Smart Objects and Technologies for Social 
+Good, 102–107. https://doi.org/10.1145/3411170.3411229 
+[25] Kadian Davis, Loe Feijs, Jun Hu, Lucio Marcenaro, and Carlo Regazzoni. 
+2016. Improving Awareness and Social Connectedness through the Social 
+Hue: Insights and Perspectives. In Proceedings of the International Sympo-
+sium on Interactive Technology and Ageing Populations - ITAP ’16, 12–23. 
+https://doi.org/10.1145/2996267.2996269 
+[26] Elham Delzendeh, Song Wu, Angela Lee, and Ying Zhou. 2017. The impact of 
+occupants’ behaviours on building energy analysis: A research review. Renew-
+able and Sustainable Energy Reviews 80: 1061–1071. https://doi.org/10.1016/j. 
+rser.2017.05.264 
+[27] Elena Fabrizi. 2014. Fiori in aria: air quality indicator. In Proceedings of the 
+2014 ACM International Symposium on Wearable Computers Adjunct Program 
+- ISWC ’14 Adjunct, 39–42. https://doi.org/10.1145/2641248.2641282 
+[28] Patrick Tobias Fischer and Eva Hornecker. 2012. Urban HCI: spatial aspects in 
+the design of shared encounters for media facades. In Proceedings of the 2012 
+ACM annual conference on Human Factors in Computing Systems - CHI ’12, 
+307. https://doi.org/10.1145/2207676.2207719 
+[29] Sean Follmer, Daniel Leithinger, Alex Olwal, Akimitsu Hogge, and Hiroshi Ishii. 
+2013. inFORM: dynamic physical affordances and constraints through shape and 
+object actuation. In Proceedings of the 26th annual ACM symposium on User 
+interface software and technology, 417–426. https://doi.org/10.1145/2501988. 
+2502032 
+[30] Jack Forman, Taylor Tabb, Youngwook Do, Meng-Han Yeh, Adrian Galvin, and 
+Lining Yao. 2019. ModiFiber: Two-Way Morphing Soft Thread Actuators for 
+Tangible Interaction. In Proceedings of the 2019 CHI Conference on Human 
+Factors in Computing Systems, 1–11. https://doi.org/10.1145/3290605.3300890 
+[31] Jutta Fortmann, Tim Claudius Stratmann, Susanne Boll, Benjamin Poppinga, 
+and Wilko Heuten. Make Me Move at Work! An Ambient Light Display to 
+Increase Physical Activity. 4. 
+[32] Marcus Foth and Glenda Amayo Caldwell. 2018. More-than-Human Media 
+Architecture. In Proceedings of the 4th Media Architecture Biennale Conference, 
+66–75. https://doi.org/10.1145/3284389.3284495 
+[33] Sven Gehring, Elias Hartz, Markus Löchtefeld, and Antonio Krüger. 2013. The 
+media façade toolkit: prototyping and simulating interaction with media façades. 
+In Proceedings of the 2013 ACM international joint conference on Pervasive 
+and ubiquitous computing, 763–772. https://doi.org/10.1145/2493432.2493471 
+[34] AmirHosein GhaffarianHoseini, Nur Dalilah Dahlan, Umberto Berardi, Ali 
+GhaffarianHoseini, and Nastaran Makaremi. 2013. The essence of future smart 
+houses: From embedding ICT to adapting to sustainability principles. Renewable 
+and Sustainable Energy Reviews 24: 593–607. https://doi.org/10.1016/j.rser.2013. 
+02.032 
+[35] Kristian Gohlke. 2017. Exploring Bio-Inspired Soft Fluidic Actuators and Sensors 
+for the Design of Shape Changing Tangible User Interfaces. In Proceedings of 
+the Eleventh International Conference on Tangible, Embedded, and Embodied 
+Interaction, 703–706. https://doi.org/10.1145/3024969.3025039 
+[36] Göran Goldkuhl. 2012. Design Research in Search for a Paradigm: Pragmatism 
+Is the Answer. In Practical Aspects of Design Science, Markus Helfert and 
+Brian Donnellan (eds.). Springer Berlin Heidelberg, Berlin, Heidelberg, 84–95.
+https://doi.org/10.1007/978-3-642-33681-2_8 
+[37] Alberto Gómez-González, Javier Neila, and Juan Monjo. 2011. Pneumatic Skins 
+in Architecture. Sustainable Trends in Low Positive Pressure Inflatable Systems. 
+Procedia Engineering 21: 125–132. https://doi.org/10.1016/j.proeng.2011.11.1995 
+[38] Isabella M. Goodchild-Michelman, George M. Church, Max G. Schubert, and 
+Tzu-Chieh Tang. 2023. Light and carbon: Synthetic biology toward new 
+cyanobacteria-based living biomaterials. Materials Today Bio 19: 100583. https: 
+//doi.org/10.1016/j.mtbio.2023.100583 
+[39] Saul Greenberg and Bill Buxton. 2008. Usability evaluation considered harmful 
+(some of the time). In Proceedings of the SIGCHI Conference on Human Factors 
+in Computing Systems, 111–120. https://doi.org/10.1145/1357054.1357074 
+[40] Jens Emil Grønbæk, Christine Linding, Anders Kromann, Thomas Fly Hylddal 
+Jensen, and Marianne Graves Petersen. 2019. Proxemics Play: Exploring the 
+Interplay between Mobile Devices and Interiors. In Companion Publication 
+of the 2019 on Designing Interactive Systems Conference 2019 Companion, 
+177–181. https://doi.org/10.1145/3301019.3323886 
+[41] Jens Emil Grønbæk, Majken Kirkegaard Rasmussen, Kim Halskov, and Marianne 
+Graves Petersen. 2020. KirigamiTable: Designing for Proxemic Transitions with 
+a Shape-Changing Tabletop. In Proceedings of the 2020 CHI Conference on 
+Human Factors in Computing Systems, 1–15. https://doi.org/10.1145/3313831. 
+3376834 
+[42] Hamed S. Alavi, Elizabeth F. Churchill, Mikael Wiberg, Denis Lalanne, Peter 
+Dalsgaard, and Ava Fatah Gen Schieck, and Yvonne Rogers. 2019. Introduction 
+to Human-Building Interaction (HBI): Interfacing HCI with Architecture and 
+Urban Design. ACM Trans. Comput.-Hum. Interact. 26, 2, Article 6 (March 2019): 
+10 pages. https://doi.org/10.1145/3309714 
+[43] Katrin Hänsel. 2016. Wearable and ambient sensing for well-being and emotional 
+awareness in the smart workplace. In Proceedings of the 2016 ACM International 
+Joint Conference on Pervasive and Ubiquitous Computing: Adjunct, 411–416. 
+https://doi.org/10.1145/2968219.2971360 
+[44] Doris Hausen, Sebastian Boring, Julia Polleti, and Andreas Butz. 2012. Exploring 
+Design and Combination of Ambient Information and Peripheral Interaction. 2. 
+[45] Carolyn Hayles and Guillermo Aranda-Mena. Well-being in vertical cities: be-
+yond the aesthetics of nature. 
+[46] Mary Hegarty. 2011. The Cognitive Science of Visual-Spatial Displays: Implica-
+tions for Design. Topics in Cognitive Science 3, 3: 446–474. https://doi.org/10. 
+1111/j.1756-8765.2011.01150.x 
+[47] Holger Heinrich, Adél Len, and Helmuth Venzmer. 2022. Investigation of façade 
+coatings containing algae-prone fillers. Pollack Periodica. https://doi.org/10. 
+1556/606.2022.00592 
+[48] Marius Hoggenmueller, Martin Tomitsch, and Alexander Wiethoff. 2018. Un-
+derstanding Artefact and Process Challenges for Designing Low-Res Lighting 
+Displays. In Proceedings of the 2018 CHI Conference on Human Factors in 
+Computing Systems, 1–12. https://doi.org/10.1145/3173574.3173833 
+[49] Christoph Hölscher, Simon J. Büchner, Tobias Meilinger, and Gerhard Strube. 
+2009. Adaptivity of wayfinding strategies in a multi-building ensemble: The 
+effects of spatial structure, task requirements, and metric information. Journal 
+of Environmental Psychology 29, 2: 208–219. https://doi.org/10.1016/j.jenvp. 
+2008.05.010 
+[50] Steven Houben, Connie Golsteijn, Sarah Gallacher, Rose Johnson, Saskia Bakker, 
+Nicolai Marquardt, Licia Capra, and Yvonne Rogers. 2016. Physikit: Data Engage-
+ment Through Physical Ambient Visualizations in the Home. In Proceedings of 
+the 2016 CHI Conference on Human Factors in Computing Systems, 1608–1619. 
+https://doi.org/10.1145/2858036.2858059 
+[51] Noura Howell, Shawn Protz, Jasmyn Byrd, Miguel Castellanos, Alexis Elkins, 
+Jessica Hall, Micah Holdsworth, Lalith Mallikeshwaran Rajagopal Sambasivan, 
+Chris Noel, Oluwarotimi Osiberu, Rushabh Patel, Dylan Scallan, Abigail Uhrich, 
+Aditya Anupam, Blaire Bosley, Rachel Donley, Sara Milkes Espinosa, Michelle 
+Ramirez, Sanjeev Nayak, Anh-Ton Tran, Yiyun Jia, and Yunfei Wang. 2022. 
+Feeling Air: Exploring Aesthetic and Material Qualities of Architectural Inflata-
+bles. In Adjunct Proceedings of the 2022 Nordic Human-Computer Interaction 
+Conference, 1–6. https://doi.org/10.1145/3547522.3557781 
+[52] Yen-Chia Hsu, Jennifer Cross, Paul Dille, Michael Tasota, Beatrice Dias, Randy 
+Sargent, Ting-Hao (Kenneth) Huang, and Illah Nourbakhsh. 2020. Smell Pitts-
+burgh: Engaging Community Citizen Science for Air Quality. ACM Transactions 
+on Interactive Intelligent Systems 10, 4: 1–49. https://doi.org/10.1145/3369397 
+[53] Yuhan Hu and Guy Hoffman. 2019. Using Skin Texture Change to Design 
+Emotion Expression in Social Robots. In 2019 14th ACM/IEEE International 
+Conference on Human-Robot Interaction (HRI), 2–10. https://doi.org/10.1109/ 
+HRI.2019.8673012 
+[54] Alexandra Ion and Patrick Baudisch. 2019. Interactive metamaterials. Interac-
+tions 27, 1: 88–91. https://doi.org/10.1145/3374498 
+[55] Alexandra Ion, Johannes Frohnhofen, Ludwig Wall, Robert Kovacs, Mirela 
+Alistar, Jack Lindsay, Pedro Lopes, Hsiang-Ting Chen, and Patrick Baudisch. 
+2016. Metamaterial Mechanisms. In Proceedings of the 29th Annual Symposium 
+on User Interface Software and Technology, 529–539. https://doi.org/10.1145/ 
+2984511.2984540 
+Evaluating ActuAir CHI ’24, May 11–16, 2024, Honolulu, HI, USA 
+[56] Hiroshi Ishii, Dávid Lakatos, Leonardo Bonanni, and Jean-Baptiste Labrune. 
+2012. Radical atoms: beyond tangible bits, toward transformable materials. 
+Interactions 19, 1: 38–51. https://doi.org/10.1145/2065327.2065337 
+[57] Nils Jäger. 2017. Interacting with adaptive architecture. interactions 24, 6: 62–65. 
+https://doi.org/10.1145/3137113 
+[58] Stephen Kellert. 2016. Biophilia and biomimicry: evolutionary adaptation of 
+human versus nonhuman nature. Intelligent Buildings International 8, 2: 51–56. 
+https://doi.org/10.1080/17508975.2014.902802 
+[59] Sunyoung Kim and Muyang Li. 2020. Awareness, Understanding, and Action: A 
+Conceptual Framework of User Experiences and Expectations about Indoor Air 
+Quality Visualizations. In Proceedings of the 2020 CHI Conference on Human 
+Factors in Computing Systems, 1–12. https://doi.org/10.1145/3313831.3376521 
+[60] Branko Kolarevic and Vera Parlac (eds.). 2015. Building dynamics: exploring 
+architecture of change. Routledge, London; New York. 
+[61] Jisun Lee and Hyunsoo Lee. PNEUMATIC SKIN WITH ADAPTIVE OPENINGS. 
+9. 
+[62] Daniel Leithinger, Sean Follmer, Alex Olwal, and Hiroshi Ishii. 2015. Shape 
+Displays: Spatial Interaction with Dynamic Physical Form. IEEE Computer 
+Graphics and Applications: 7. 
+[63] Abeer Makram. 2019. Nature-Based Framework for Sustainable Architectural 
+Design - Biomimetic Design and Biophilic Design. Architecture Research. 
+[64] Eleni Margariti. 2023. Understanding occupants’ experiences in quantified build-
+ings: results from a series of exploratory studies. 
+[65] Eleni Kallopi Margariti, Ridita Ali, Remco Benthem de Grave, David Verweij, 
+Jan Smeddinck, and David Kirk. 2021. Understanding the Experiences of Re-
+mote Workers: Opportunities for Ambient Workspaces at Home. Frontiers in 
+Computer Science 3: 673585. https://doi.org/10.3389/fcomp.2021.673585 
+[66] Sophie McDonald, David Kirk, and Nick Bryan-Kinns. 2015. Nature Bot: Ex-
+periencing Nature in the Built Environment. In Proceedings of the 2015 ACM 
+SIGCHI Conference on Creativity and Cognition, 173–176. https://doi.org/10. 
+1145/2757226.2764547 
+[67] James Miller. 2014. Media in built environments: the technologies of mediatiza-
+tion. In Proceedings of the 2nd Media Architecture Biennale Conference: World 
+Cities, 34–39. https://doi.org/10.1145/2682884.2682892 
+[68] Takafumi Morita, Ziyuan Jiang, Kanon Aoyama, Ayato Minaminosono, Yu Kuwa-
+jima, Naoki Hosoya, Shingo Maeda, and Yasuaki Kakehi. 2023. InflatableMod: 
+Untethered and Reconfigurable Inflatable Modules for Tabletop-sized Pneumatic 
+Physical Interfaces. In Proceedings of the 2023 CHI Conference on Human Fac-
+tors in Computing Systems, 1–15. https://doi.org/10.1145/3544548.3581353 
+[69] Jörg Müller, Florian Alt, Daniel Michelis, and Albrecht Schmidt. 2010. Require-
+ments and design space for interactive public displays. In Proceedings of the 
+international conference on Multimedia - MM ’10, 1285. https://doi.org/10.1145/ 
+1873951.1874203 
+[70] Sara Nabil, Aluna Everitt, Miriam Sturdee, Jason Alexander, Simon Bowen, Peter 
+Wright, and David Kirk. 2018. ActuEating: Designing, Studying and Exploring 
+Actuating Decorative Artefacts. In Proceedings of the 2018 Designing Interactive 
+Systems Conference, 327–339. https://doi.org/10.1145/3196709.3196761 
+[71] Sara Nabil, Lee Jones, and Audrey Girouard. 2021. Soft Speakers: Digital Embroi-
+dering of DIY Customizable Fabric Actuators. In Proceedings of the Fifteenth 
+International Conference on Tangible, Embedded, and Embodied Interaction, 
+1–12. https://doi.org/10.1145/3430524.3440630 
+[72] Sara Nabil and David Kirk. 2021. Decoraction: a Catalogue for Interactive 
+Home Decor of the Nearest-Future. In Proceedings of the Fifteenth International 
+Conference on Tangible, Embedded, and Embodied Interaction, 1–13. https: 
+//doi.org/10.1145/3430524.3446074 
+[73] Ken Nakagaki, Luke Vink, Jared Counts, Daniel Windham, Daniel Leithinger, 
+Sean Follmer, and Hiroshi Ishii. 2016. Materiable: Rendering Dynamic Material 
+Properties in Response to Direct Physical Touch with Shape Changing Interfaces. 
+In Proceedings of the 2016 CHI Conference on Human Factors in Computing 
+Systems, 2764–2772. https://doi.org/10.1145/2858036.2858104 
+[74] Ryosuke Nakayama, Ryo Suzuki, Satoshi Nakamaru, Ryuma Niiyama, Yoshihiro 
+Kawahara, and Yasuaki Kakehi. 2019. MorphIO: Entirely Soft Sensing and Actua-
+tion Modules for Programming Shape Changes through Tangible Interaction. In 
+Proceedings of the 2019 on Designing Interactive Systems Conference, 975–986. 
+https://doi.org/10.1145/3322276.3322337 
+[75] William Odom. 2015. Understanding Long-Term Interactions with a Slow Tech-
+nology: an Investigation of Experiences with FutureMe. In Proceedings of 
+the 33rd Annual ACM Conference on Human Factors in Computing Systems, 
+575–584. https://doi.org/10.1145/2702123.2702221 
+[76] Netta Ofer, Fiona Bell, and Mirela Alistar. 2021. Designing Direct Interactions 
+with Bioluminescent Algae. In Designing Interactive Systems Conference 2021, 
+1230–1241. https://doi.org/10.1145/3461778.3462090 
+[77] Cagdas D. Onal and Daniela Rus. 2012. A modular approach to soft robots. In 
+2012 4th IEEE RAS & EMBS International Conference on Biomedical Robotics 
+and Biomechatronics (BioRob), 1038–1045. https://doi.org/10.1109/BioRob.2012. 
+6290290 
+[78] Yuki Onishi, Kazuki Takashima, Shoi Higashiyama, Kazuyuki Fujita, and Yoshi-
+fumi Kitamura. 2022. WaddleWalls: Room-scale Interactive Partitioning System 
+using a Swarm of Robotic Partitions. In The 35th Annual ACM Symposium on 
+User Interface Software and Technology, 1–15. https://doi.org/10.1145/3526113. 
+3545615 
+[79] Jifei Ou, Zhao Ma, Jannik Peters, Sen Dai, Nikolaos Vlavianos, and Hiroshi 
+Ishii. 2018. KinetiX - designing auxetic-inspired deformable material structures. 
+Computers & Graphics 75: 72–81. https://doi.org/10.1016/j.cag.2018.06.003 
+[80] Paolo Papale, Leonardo Chiesi, Alessandra C. Rampinini, Pietro Pietrini, and 
+Emiliano Ricciardi. 2016. When Neuroscience ‘Touches’ Architecture: From Hap-
+ticity to a Supramodal Functioning of the Human Brain. Frontiers in Psychology 
+7. https://doi.org/10.3389/fpsyg.2016.00866 
+[81] Amanda Parkes and Connor Dickie. 2013. A biological imperative for interaction 
+design. In CHI ’13 Extended Abstracts on Human Factors in Computing Systems, 
+2209–2218. https://doi.org/10.1145/2468356.2468742 
+[82] Milica Pavlovic, Sara Colombo, Yihyun Lim, and Federico Casalegno. 2018. 
+Designing for Ambient UX: Case Study of a Dynamic Lighting System for a Work 
+Space. In Proceedings of the 2018 ACM International Conference on Interactive 
+Surfaces and Spaces, 351–356. https://doi.org/10.1145/3279778.3281459 
+[83] M. Pedersen Zari. 2009. An architectural love of the living: bio-inspired design 
+in the pursuit of ecological regeneration and psychological wellbeing. 293–302. 
+https://doi.org/10.2495/SDP090291 
+[84] Emylie Pereira, Silvio Kolb, Katrin Schäfers, Sebastian Schreiber, Volker Weck-
+bach, Walter Goodwin, Catherine Smith, Peter Kaiser, and Kirstin Kohler. 2016. 
+STARS: enlightenment in the office space for behavioral change. In Proceedings 
+of the 2016 ACM International Joint Conference on Pervasive and Ubiquitous 
+Computing: Adjunct, 1640–1645. https://doi.org/10.1145/2968219.2968527 
+[85] Nils-Krister Persson, Jose G. Martinez, Yong Zhong, Ali Maziz, and Edwin W. H. 
+Jager. 2018. Actuating Textiles: Next Generation of Smart Textiles. Advanced 
+Materials Technologies 3, 10: 1700397. https://doi.org/10.1002/admt.201700397 
+[86] Marianne Graves Petersen, Majken Kirkegaard Rasmussen, and Johan Trettvik. 
+2020. Affordances of Shape-Changing Interfaces: An Information Perspective 
+on Transformability and Movement. In Proceedings of the 2020 ACM Designing 
+Interactive Systems Conference, 1959–1971. https://doi.org/10.1145/3357236. 
+3395521 
+[87] James Pierce. 2014. On the presentation and production of design research 
+artifacts in HCI. In Proceedings of the 2014 conference on Designing interactive 
+systems, 735–744. https://doi.org/10.1145/2598510.2598525 
+[88] Fabio Pittarello and Lorenzo Brutti. 2019. A public tangible interface for engaging 
+and informing young citizens about climate change. In Proceedings of the 8th 
+ACM International Symposium on Pervasive Displays, 1–6. https://doi.org/10. 
+1145/3321335.3324938 
+[89] Isabel P. S. Qamar, Rainer Groh, David Holman, and Anne Roudaut. 2018. HCI 
+meets Material Science: A Literature Review of Morphing Materials for the 
+Design of Shape-Changing Interfaces. In Proceedings of the 2018 CHI Confer-
+ence on Human Factors in Computing Systems, 1–23. https://doi.org/10.1145/ 
+3173574.3173948 
+[90] Isabel P. S. Qamar, Katarzyna Stawarz, Simon Robinson, Alix Goguey, Céline 
+Coutrix, and Anne Roudaut. 2020. Morphino: A Nature-Inspired Tool for the 
+Design of Shape-Changing Interfaces. In Proceedings of the 2020 ACM Design-
+ing Interactive Systems Conference, 1943–1958. https://doi.org/10.1145/3357236. 
+3395453 
+[91] Majken K. Rasmussen, Esben W. Pedersen, Marianne G. Petersen, and Kasper 
+Hornbæk. 2012. Shape-changing interfaces: a review of the design space and 
+open research questions. In Proceedings of the SIGCHI Conference on Hu-
+man Factors in Computing Systems, 735–744. https://doi.org/10.1145/2207676. 
+2207781 
+[92] Majken K. Rasmussen, Giovanni M. Troiano, Marianne G. Petersen, Jakob G. 
+Simonsen, and Kasper Hornbæk. 2016. Sketching Shape-changing Interfaces: 
+Exploring Vocabulary, Metaphors Use, and Affordances. In Proceedings of the 
+2016 CHI Conference on Human Factors in Computing Systems, 2740–2751. 
+https://doi.org/10.1145/2858036.2858183 
+[93] Steffen Reichert, Achim Menges, and David Correa. 2015. Meteorosensitive 
+architecture: Biomimetic building skins based on materially embedded and 
+hygroscopically enabled responsiveness. Computer-Aided Design 60: 50–69. 
+https://doi.org/10.1016/j.cad.2014.02.010 
+[94] A. C. C. Rotzetter, C. M. Schumacher, S. B. Bubenhofer, R. N. Grass, L. C. Gerber, 
+M. Zeltner, and W. J. Stark. 2012. Thermoresponsive Polymer Induced Sweating 
+Surfaces as an Efficient Way to Passively Cool Buildings. Advanced Materials 
+24, 39: 5352–5356. https://doi.org/10.1002/adma.201202574 
+[95] Antti Salovaara, Antti Oulasvirta, and Giulio Jacucci. 2017. Evaluation of 
+Prototypes and the Problem of Possible Futures. In Proceedings of the 2017 
+CHI Conference on Human Factors in Computing Systems, 2064–2077. https: 
+//doi.org/10.1145/3025453.3025658 
+[96] Harpreet Sareen, Udayan Umapathi, Patrick Shin, Yasuaki Kakehi, Jifei Ou, 
+Hiroshi Ishii, and Pattie Maes. 2017. Printflatables: Printing Human-Scale, Func-
+tional and Dynamic Inflatable Objects. In Proceedings of the 2017 CHI Confer-
+ence on Human Factors in Computing Systems, 3669–3680. https://doi.org/10. 
+1145/3025453.3025898 
+CHI ’24, May 11–16, 2024, Honolulu, HI, USA Eleni Margariti et al. 
+[97] Marin Sawa, Andrea Fantuzzi, Paolo Bombelli, Christopher J. Howe, Klaus Hell-
+gardt, and Peter J. Nixon. 2017. Electricity generation from digitally printed 
+cyanobacteria. Nature Communications 8, 1: 1327. https://doi.org/10.1038/ 
+s41467-017-01084-4 
+[98] François Schmitt, Olivier Piccin, Laurent Barbé, and Bernard Bayle. 2018. Soft 
+Robots Manufacturing: A Review. Frontiers in Robotics and AI 5: 84. https: 
+//doi.org/10.3389/frobt.2018.00084 
+[99] Holger Schnädelbach. Adaptive Architecture – A Conceptual Framework. 
+[100] Holger Schnädelbach, Ainojie Irune, David Kirk, Kevin Glover, and Patrick 
+Brundell. 2012. ExoBuilding: Physiologically Driven Adaptive Architecture. 
+ACM Transactions on Computer-Human Interaction 19, 4: 1–22. https://doi. 
+org/10.1145/2395131.2395132 
+[101] Holger Schnädelbach, Nils Jäger, and Lachlan Urquhart. 2019. Adaptive Archi-
+tecture and Personal Data. ACM Transactions on Computer-Human Interaction 
+26, 2: 1–31. https://doi.org/10.1145/3301426 
+[102] Holger Schnädelbach and David Kirk (eds.). 2019. People, Personal Data and the 
+Built Environment. Springer International Publishing, Cham. https://doi.org/10. 
+1007/978-3-319-70875-1 
+[103] Melanie Schranz, Martina Umlauft, Micha Sende, and Wilfried Elmenreich. 2020. 
+Swarm Robotic Behaviors and Current Applications. Frontiers in Robotics and 
+AI 7: 36. https://doi.org/10.3389/frobt.2020.00036 
+[104] Krishna Seunarine, Dani Kalarikalayil Raju, Gethin Thomas, Suzanne K Thomas, 
+Adam Pockett, Thomas Reitmaier, Cameron Steer, Tom Owen, Yogesh Ku-
+mar Meena, Simon Robinson, Jennifer Pearson, Matt Carnie, Deepak Ran-
+jan Sahoo, and Matt Jones. 2022. Light-In-Light-Out (Li-Lo) Displays: Har-
+vesting and Manipulating Light to Provide Novel Forms of Communication. 
+In CHI Conference on Human Factors in Computing Systems, 1–15. https: 
+//doi.org/10.1145/3491102.3517730 
+[105] Ali Shtarbanov. 2021. FlowIO Development Platform – the Pneumatic “Raspberry 
+Pi” for Soft Robotics. In Extended Abstracts of the 2021 CHI Conference on 
+Human Factors in Computing Systems, 1–6. https://doi.org/10.1145/3411763. 
+3451513 
+[106] Madlaina Signer, Alexandra Ion, and Olga Sorkine-Hornung. 2021. Developable 
+Metamaterials: Mass-fabricable Metamaterials by Laser-Cutting Elastic Struc-
+tures. In Proceedings of the 2021 CHI Conference on Human Factors in Com-
+puting Systems, 1–13. https://doi.org/10.1145/3411764.3445666 
+[107] Savina Singla. 2018. Air Quality Friendly Route Recommendation System. In 
+Proceedings of the 2018 Workshop on MobiSys 2018 Ph.D. Forum, 9–10. https: 
+//doi.org/10.1145/3212711.3212717 
+[108] Ronit Slyper, Ivan Poupyrev, and Jessica Hodgins. 2010. Sensing through 
+structure: designing soft silicone sensors. In Proceedings of the fifth inter-
+national conference on Tangible, embedded, and embodied interaction, 213–220. 
+https://doi.org/10.1145/1935701.1935744 
+[109] Stephen Snow, Michael Oakley, and M.C. Schraefel. 2019. Performance by Design: 
+Supporting Decisions Around Indoor Air Quality in Offices. In Proceedings of 
+the 2019 on Designing Interactive Systems Conference, 99–111. https://doi.org/ 
+10.1145/3322276.3322372 
+[110] Stephen Snow, Michael Oakley, and m.c. schraefel. 2019. Performance by Design: 
+Supporting Decisions Around Indoor Air Quality in Offices. In Proceedings of 
+the 2019 on Designing Interactive Systems Conference, 99–111. https://doi.org/ 
+10.1145/3322276.3322372 
+[111] Jaime Snyder, Mark Matthews, Jacqueline Chien, Pamara F Chang, Emily Sun, 
+Saeed Abdullah, and Geri Gay. 2015. MoodLight: Exploring Personal and Social 
+Implications of Ambient Display of Biosensor Data. 11. 
+[112] Charles Spence. 2020. Senses of place: architectural design for the multisensory 
+mind. Cognitive Research: Principles and Implications 5, 1: 46. https://doi.org/ 
+10.1186/s41235-020-00243-4 
+[113] Karthik Srinivasan and Sudha Ram. 2016. Indoor Environmental Effects on 
+Individual Wellbeing. In Proceedings of the 6th International Conference on 
+Digital Health Conference - DH ’16, 167–168. https://doi.org/10.1145/2896338. 
+2896376 
+[114] Miriam Sturdee and Jason Alexander. 2019. Analysis and Classification of Shape-
+Changing Interfaces for Design and Application-based Research. ACM Comput-
+ing Surveys 51, 1: 1–32. https://doi.org/10.1145/3143559 
+[115] Doris Sung. DESIGNING ZERO-ENERGY BUILDING COMPONENTS WITH 
+SMART THERMOBIMETALS. 
+[116] Ann Sussman and Justin B. Hollander. 2015. Cognitive architecture: designing 
+for how we respond to the built environment. Routledge, Taylor & Francis 
+Group, New York London. 
+[117] Ryo Suzuki, Ryosuke Nakayama, Dan Liu, Yasuaki Kakehi, Mark D. Gross, and 
+Daniel Leithinger. 2020. LiftTiles: Constructive Building Blocks for Prototyp-
+ing Room-scale Shape-changing Interfaces. In Proceedings of the Fourteenth 
+International Conference on Tangible, Embedded, and Embodied Interaction, 
+143–151. https://doi.org/10.1145/3374920.3374941 
+[118] Saiganesh Swaminathan, Michael Rivera, Runchang Kang, Zheng Luo, Kadri 
+Bugra Ozutemiz, and Scott E. Hudson. 2019. Input, Output and Construction 
+Methods for Custom Fabrication of Room-Scale Deployable Pneumatic Struc-
+tures. Proceedings of the ACM on Interactive, Mobile, Wearable and Ubiquitous 
+Technologies 3, 2: 1–17. https://doi.org/10.1145/3328933 
+[119] Kazuki Takashima, Takafumi Oyama, Yusuke Asari, Ehud Sharlin, Saul Green-
+berg, and Yoshifumi Kitamura. 2016. Study and Design of a Shape-Shifting Wall 
+Display. In Proceedings of the 2016 ACM Conference on Designing Interactive 
+Systems, 796–806. https://doi.org/10.1145/2901790.2901892 
+[120] Vivian Tam, Laura Almeida, and Khoa Le. 2018. Energy-Related Occupant 
+Behaviour and Its Implications in Energy Use: A Chronological Review. Sus-
+tainability 10, 8: 2635. https://doi.org/10.3390/su10082635 
+[121] Peter Tolmie and Andy Crabtree. 2008. Deploying research technology in the 
+home. In Proceedings of the 2008 ACM conference on Computer supported 
+cooperative work, 639–648. https://doi.org/10.1145/1460563.1460662 
+[122] Deepak Trivedi, Christopher D. Rahn, William M. Kier, and Ian D. Walker. 
+2008. Soft robotics: Biological inspiration, state of the art, and future re-
+search. Applied Bionics and Biomechanics 5, 3: 99–117. https://doi.org/10.1080/ 
+11762320802557865 
+[123] Daniel Vogel and Ravin Balakrishnan. Interactive Public Ambient Displays: 
+Transitioning from Implicit to Explicit, Public to Personal, Interaction with 
+Multiple Users. 10. 
+[124] Guanyun Wang, Kuangqi Zhu, Lingchuan Zhou, Mengyan Guo, Haotian Chen, 
+Zihan Yan, Deying Pan, Yue Yang, Jiaji Li, Jiang Wu, Ye Tao, and Lingyun 
+Sun. 2023. PneuFab: Designing Low-Cost 3D-Printed Inflatable Structures for 
+Blow Molding Artifacts. In Proceedings of the 2023 CHI Conference on Human 
+Factors in Computing Systems, 1–17. https://doi.org/10.1145/3544548.3580923 
+[125] Penelope Webb, Valentina Sumini, Amos Golan, and Hiroshi Ishii. 2019. Auto-
+Inflatables: Chemical Inflation for Pop-Up Fabrication. In Extended Abstracts 
+of the 2019 CHI Conference on Human Factors in Computing Systems, 1–6. 
+https://doi.org/10.1145/3290607.3312860 
+[126] Stephan Wensveen and Ben Matthews. 2014. Prototypes and prototyping in 
+design research. In The Routledge Companion to Design Research (1st ed.), Paul 
+A. Rodgers and Joyce Yee (eds.). Routledge, 262–276. https://doi.org/10.4324/ 
+9781315758466-25 
+[127] Craig Wisneski, Hiroshi Ishii, Andrew Dahley, Matt Gorbet, Scott Brave, Brygg 
+Ullmer, and Paul Yarin. 1998. Ambient Displays: Turning Architectural Space 
+into an Interface between People and Digital Information. In Cooperative Build-
+ings: Integrating Information, Organization, and Architecture, Norbert A. Stre-
+itz, Shin’ichi Konomi and Heinz-Jürgen Burkhardt (eds.). Springer Berlin Hei-
+delberg, Berlin, Heidelberg, 22–32. https://doi.org/10.1007/3-540-69706-3_4 
+[128] Yangang Xing, Phil Jones, Maurice Bosch, Iain Donnison, Morwenna Spear, 
+and Graham Ormondroyd. 2018. Exploring design principles of biological and 
+living building envelopes: what can we learn from plant cell walls? Intelligent 
+Buildings International 10, 2: 78–102. https://doi.org/10.1080/17508975.2017. 
+1394808 
+[129] Yang Xu, Yuxing Yao, and Xiaoguang Wang. 2020. Liquid Crystal Polymeric 
+Skins “Sweat” to Provide Real-Time Drug Delivery. Matter 3, 3: 606–608. https: 
+//doi.org/10.1016/j.matt.2020.08.014 
+[130] Willa Yunqi Yang, Yumeng Zhuang, Luke Andre Darcy, Grace Liu, and Alexandra 
+Ion. 2022. Reconfigurable Elastic Metamaterials. In Proceedings of the 35th 
+Annual ACM Symposium on User Interface Software and Technology, 1–13. 
+https://doi.org/10.1145/3526113.3545649 
+[131] Lining Yao and Hiroshi Ishii. 2019. Hygromorphic living materials for shape 
+changing. In Robotic Systems and Autonomous Platforms. Elsevier, 41–57. https: 
+//doi.org/10.1016/B978-0-08-102260-3.00003-2 
+[132] Mert Yildiz and Aykut Coikun. 2019. Wwall: A Public Water Dispenser System 
+to Motivate Regular Water Intake in the Office Environment. In Companion 
+Publication of the 2019 on Designing Interactive Systems Conference 2019 
+Companion - DIS ’19 Companion, 347–352. https://doi.org/10.1145/3301019. 
+3323890 
+[133] Hye Jun Youn. 2021. AuxeticBreath: Changing Perception of Respiration. In 
+Proceedings of the Fifteenth International Conference on Tangible, Embedded, 
+and Embodied Interaction, 1–4. https://doi.org/10.1145/3430524.3444636 
+[134] Hye Jun Youn and Ali Shtarbanov. 2022. PneuBots: Modular Inflatables for 
+Playful Exploration of Soft Robotics. In CHI Conference on Human Factors in 
+Computing Systems Extended Abstracts, 1–6. https://doi.org/10.1145/3491101. 
+3514490 
+[135] Bin Yu, Jun Hu, Mathias Funk, and Loe Feijs. 2018. DeLight: biofeedback through 
+ambient light for stress intervention and relaxation assistance. Personal and 
+Ubiquitous Computing 22, 4: 787–805. https://doi.org/10.1007/s00779-018-1141-
+6 
+[136] Yin Yu. 2020. airMorphologies: A Wearable Device for Social Interaction in Air 
+Polluted Environments. In Extended Abstracts of the 2020 CHI Conference on 
+Human Factors in Computing Systems, 1–4. https://doi.org/10.1145/3334480. 
+3383165 
+[137] Andrzej Zarzycki and Martina Decker. 2019. Climate-adaptive buildings: Sys-
+tems and materials. International Journal of Architectural Computing 17, 2: 
+166–184. https://doi.org/10.1177/1478077119852707 
+[138] Chao Zhang, Pingan Zhu, Yangqiao Lin, Zhongdong Jiao, and Jun Zou. 2020. 
+Modular Soft Robotics: Modular Units, Connection Mechanisms, and Applica-
+tions. Advanced Intelligent Systems 2, 6: 1900166. https://doi.org/10.1002/aisy. 
+Evaluating ActuAir CHI ’24, May 11–16, 2024, Honolulu, HI, USA 
+201900166 
+[139] Dingtian Zhang, Jung Wook Park, Yang Zhang, Yuhui Zhao, Yiyang Wang, 
+Yunzhi Li, Tanvi Bhagwat, Wen-Fang Chou, Xiaojia Jia, Bernard Kippelen, Canek 
+Fuentes-Hernandez, Thad Starner, and Gregory D. Abowd. 2020. OptoSense: 
+Towards Ubiquitous Self-Powered Ambient Light Sensing Surfaces. Proceedings 
+of the ACM on Interactive, Mobile, Wearable and Ubiquitous Technologies 4, 3: 
+1–27. https://doi.org/10.1145/3411826 
+[140] Ce Zhong, Ron Wakkary, William Odom, Mikael Wiberg, Amy Yo Sue Chen, 
+Doenja Oogjes, Jordan White, and Minyoung Yoo. 2023. Exploring Long-Term 
+Mediated Relations with a Shape-Changing Thing: A Field Study of coMorph-
+ing Stool. In Proceedings of the 2023 CHI Conference on Human Factors in 
+Computing Systems, 1–14. https://doi.org/10.1145/3544548.3581140 
+[141] Sailin Zhong, Hamed S. Alavi, and Denis Lalanne. 2020. Hilo-wear: Exploring 
+Wearable Interaction with Indoor Air Quality Forecast. In Extended Abstracts 
+of the 2020 CHI Conference on Human Factors in Computing Systems, 1–8. 
+https://doi.org/10.1145/3334480.3382813 
+[142] Sailin Zhong, Denis Lalanne, and Hamed Alavi. 2021. The Complexity of Indoor 
+Air Quality Forecasting and the Simplicity of Interacting with It – A Case Study 
+of 1007 Office Meetings. In Proceedings of the 2021 CHI Conference on Human 
+Factors in Computing Systems, 1–19. https://doi.org/10.1145/3411764.3445524 
+[143] Weijie Zhong, Torsten Schröder, and Juliette Bekkering. 2022. Biophilic design 
+in architecture and its contributions to health, well-being, and sustainability: 
+A critical review. Frontiers of Architectural Research 11, 1: 114–141. https: 
+//doi.org/10.1016/j.foar.2021.07.006 

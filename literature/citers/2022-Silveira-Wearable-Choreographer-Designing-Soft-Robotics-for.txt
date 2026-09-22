@@ -1,0 +1,1770 @@
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Wearable Choreographer: Designing Soft-Robotics for Dance Practice 
+Catarina Allen d’Ávila Silveira 
+Université Paris-Saclay, CNRS, INRIA, LISN
+ Orsay, France 
+cads@kth.se 
+Ozgun Kilic Afsar 
+KTH Royal Institute of Technology and 
+Massachusetts Institute of Technology 
+Stockholm, Sweden 
+ozgunk@kth.se 
+Sarah Fdili Alaoui 
+Université Paris-Saclay, CNRS, INRIA, LISN 
+Orsay, France 
+saralaoui@lri.fr 
+ABSTRACT 
+In this pictorial, we describe an auto-biographical design 
+process that led to the fabrication of a soft robotic 
+wearable for lower limb movement guidance that we 
+designated Wearable Choreographer. We first explored 
+the design from a first-person perspective and then 
+shared it with four dancers. Our experiments illustrate 
+how the wearable both constrains and inspires the 
+dancers towards new ways of performing, challenging 
+them to rethink their movements. Our design inquiry 
+contributes with reflections on soft robotics that uncover 
+the challenges and prospects designers and researchers in 
+Human-Computer Interaction face when designing, 
+prototyping and experimenting with such technologies 
+for embodied interactions. 
+Author Keywords 
+wearables, soft robotics, soma design, dance, 
+autobiographical design 
+Permission to make digital or hard copies of all or part of this work for personal 
+or classroom use is granted without fee provided that copies are not made or 
+distributed for profit or commercial advantage and that copies bear this notice and 
+the full citation on the first page. Copyrights for components of this work owned 
+by others than ACM must be honored. Abstracting with credit is permitted. To 
+copy otherwise, or republish, to post on servers or to redistribute to lists, requires 
+prior specific permission and/or a fee. Request permissions from 
+Permissions@acm.org. 
+DIS '22, June 13–17, 2022, Virtual Event, Australia 
+© 2022 
+Association for Computing Machinery. 
+ACM ISBN 978-1-4503-9358-4/22/06 
+INTRODUCTION  
+C h o r e o g r a p h y , f r o m t h e G r e e k w o r d s 
+"χορεία" (circular dance) and "γραφή" (writing), is the 
+art or the practice of composing sequences of dance 
+movement and instructing dancers to them. This often 
+consists of guiding dancers through words or touch. 
+Such a practice inspired us to explore soft robotics 
+[61] to provide movement guidance through touch 
+with the goal of 
+choreographing dancers. Soft-robotics, 
+built from soft materials and often inspired by living 
+organisms, are flexible malleable material systems that 
+can adapt to their surroundings. Given their safety and 
+shape compliance, manipulating and guiding the 
+human body has emerged as a compelling application 
+of this technology. Building on previous works 
+combining dance with exoskeleton technologies 
+[10,44], we designed an embodied wearable soft robot 
+for dance practice using 
+an auto-biographical first 
+person approach. More precisely, we built a wearable 
+device, which we called Wearable Choreographer, that 
+actuates on the leg in order to prompt movement. Our 
+design is meant to generate a sensory interaction that 
+choreographs the dancer by inspiring, disrupting, 
+enriching and inviting kinaesthetic creativity into their 
+practice. In this pictorial, we describe our auto-
+biographical design process, careful to narrate the 
+design iterations that we performed and to include our 
+(mainly the first author’s) personal experiences of 
+building and testing the prototypes. We also report on 
+the results of an experiment where we shared our final 
+design with four dancers and gained knowledge on how 
+they interacted with our soft robotic system. Finally, we 
+discuss the opportunities and challenges of soft robotics 
+to provide embodied wearable interactions for dance 
+practice and performance. 
+RELATED WORK 
+Integrating wearable technologies into our everyday life 
+has become increasingly popular within the Human-
+Computer Interaction (HCI) field 
+[5,40]. Whether a 
+give
+n technology eventually aids, constricts or 
+completely transforms a certain activity is a question 
+that is explored through a multitude of experiments and 
+user studies. Irrespective of the end result, findings 
+arising from these experiences often inform us on how to 
+better design embodied interactions [19].They also 
+provide us with new 
+insights on how to integrate certain 
+technologies in different contexts and reveal individuals’ 
+propensity to wear it in their activities. 
+Systems for Supporting Dance Practise 
+When looking into technologies used for dance training 
+and practice, dancers often resort to video to learn and 
+train specific techniques or repertoires 
+[59]. Different 
+1581
+         
+           
+    
+      
+ 
+ 
+ 
+ 
+  
+         
+ 
+  
+   
+ 
+ 
+ 
+ 
+ 
+ 
+    
+ 
+      
+ 
+ 
+ 
+ 
+approaches have been explored towards enhancing 
+dance training through capturing and influencing 
+dancers’ movements [52]. These approaches often offer 
+on-screen visuals that 
+interact with the movement of 
+the body [36,54], while having users respond to such 
+visualizations [29,42], inevitably influencing their 
+movement. Other systems 
+for supporting dance training 
+allow users to segment and analyze different movement 
+sequences [13,30,54] providing them with an analytical 
+and reflexive overview 
+of their creative practice. Finally, 
+there are tools supporting dance practice that provide 
+performance feedback to the dancer meant to correct 
+their performance [21,60]. While most of these designs 
+generate useful visual 
+and timing cues, mere video 
+recordings or screen-based interactions might not inform 
+on the inner movement qualities nor the kinaesthetic 
+sensations in dance, making it an incomplete knowledge 
+transfer mechanism. Indeed, dance practice relies on 
+cultivating embodied sensations and experiences which 
+are difficult to transmit visually [3,16]. Despite the 
+diversity of dancers' 
+embodied experiences, the literature 
+in the field of HCI focuses mostly on providing screen 
+and audio based technologies to support kinesthetic 
+awareness and creativity in dance [14,25,65]. Further 
+haptic and physical 
+interactions between dancers and 
+digital artifacts remain scarce [11]. 
+Lately, there has been increased interest in going further 
+than the screen-based 
+interactions, instead focusing on 
+embodied and wearable experiences [6]. Along that path 
+came new approaches 
+to probe the dance practice with 
+external agents. Oskar Schlemmer, the creator of the 
+triadic ballet costumes in the Bauhaus movement [45], 
+pioneered an embodied approach to influencing dance. 
+Along that path, 
+studies have focused on an array of 
+embodied dancer-computer interactions, namely the 
+interaction of dancers with external automated objects 
+[26] or the use of wearable technology that both 
+acquires and prompts one’s movement [28,32,33,43]. 
+Moreover, combining haptic technology with the 
+immersive qualities of mixed reality has been shown to 
+provide effective directional cues [35,53]. 
+Findings from all these studies are few and far-apart 
+but have already 
+given us a promising scope of 
+experiments that suggest that integrating haptic 
+physical and wearable technologies into dance can 
+inspire dance practice [4,74]. However, these 
+experimentations also revealed 
+how such technologies 
+applied to creative contexts, such as dance, can be 
+disruptive and can create tensions due to their lack of 
+robustness in a studio setting, which can end up 
+hindering dancers’ practice [28]. 
+From Rigid Prosthetics to Soft Robotics  
+Due to its flexibility, lightness and adaptability, it was 
+not long until soft-robotics became part of the toolkit to 
+create wearable interactions. Different kinds of 
+actuation have been explored and while inflation 
+remains the most common, other triggers have been 
+studied [63,72] and their applications continue to grow 
+at an impressive rate [68]. One widely explored kind of 
+soft robotic structure 
+is the McKibben muscle, a 
+longitudinal muscle composed of a chamber of air 
+wrapped in an expandable outer mesh which contracts 
+in length when actuated [27]. 
+Exploring the versatility of the linear geometry found 
+in McKibben muscles, 
+research has been conducted on 
+the effects of braiding [46,49,50], weaving or knitting 
+[2,12,37,46,55,62] McKibben embedded garments, 
+providing a potential 
+seamless integration [2]. These 
+experiments aimed at 
+comparing output forces and 
+novel shapes [46]. Although there have been many 
+attempts to make 
+an upper-limb garment that controls 
+either a human arm [1,15,70,76] or hand 
+[12,24,48,66,75], there have been comparatively fewer 
+ones aiming to 
+control either the full body [9] or 
+simply the lower limbs [47,51]. 
+The majority of applications for these technologies 
+have also been, as its origin would suggest, in the field 
+of motor rehabilitation and assistive technology [68], but 
+fewer have been applied in a dance context [46,67]. 
+Our study explores the design of soft robotics that acts 
+as a choreographer 
+guiding dancers in their practice. 
+This is a novel application of said technology bringing 
+forth new opportunities for implementing wearables into 
+embodied creative practices. 
+DESIGN METHODS 
+Our design process is auto-biographical [56] and makes 
+an explicit use of the first author’s personal dance 
+practice in the design  of the prototype at every iteration 
+of the work.  The first author has over 10 years of 
+experience in dance, particularly in swing dances, both 
+solo and with a partner, as well as tap dancing.  
+We are also committed to research through design 
+methods [77]. Throughout our process, learnings were 
+made from the making. We documented and reflected on 
+how the different versions of the design provided 
+different experiences with a critical look at our design 
+choices and experiments. We implemented the learnings 
+onto newer design iterations and concepts using the 
+technology at hand [39,56]. Finally, we are also 
+committed to a somaesthetic design approach [38,40], an 
+experiential design method centered on the soma (or the 
+living sensing body). We pay acute attention to the 
+nuances of our (mainly the first author’s) lived felt 
+embodied sensorial experiences in our design [38]. 
+1582
+5CWN 
+,!:> 
+"" .; 
+i=-.... ,. 
+8 ::; 
+;;; 
+0 
+0 
+E E 
+V, 
+' e 
+E 
+' 
+E 
+...J, 
+...., 
+--:, 
+POWfR AIR 
+SOURCE PUMP 
+INfLATION 
+D 
+PLl'.:ATING-
+SAl'IPLt 2 
+-
+KNITTED OR WOVtN 
+D 
+INflll lON 
+5Al'IPL~ 5 
+-
+0111€ R WAYS 11> fll6[D 1\la\Ho •. 
+WOVfN SAMm:6 
+I I I I I I I I 
+I I I 
+I I I 
+i! I 
+I I I I I I 
+01\1€R WAYS 'fl> t11sro 1\lalHo •. 
+[ifj{f m .... a..., 
+DESIGN PROCESS 
+Playing with Soft Robotics 
+After learning about the different types of 
+soft robotic applications, I (first author) 
+was interested in embedding a soft robotic 
+system within a wearable garment. To do 
+so, I decided to focus on fiber-reinforced 
+pneumatic actuators, commonly composed 
+by an air chamber within a malleable 
+material such as silicone or latex, enclosed 
+in a flexible fiber layer. I produced three 
+different kinds of fiber reinforced 
+samples: McKibben muscles, Sewn and 
+Knitted/Woven. I started with sewn 
+samples in which I embedded silicone 
+tubing with 3mm inner diameter (ID) and 
+5mm outer diameter (OD)  between two 
+layers of textile. In theory, when inflated 
+with air, the tubing either expands in 
+diameter and contracts in length, or 
+adversely only elongates in length, 
+accommodating to whatever space has 
+been created by the stitches surrounding 
+it. Next I made use of the woven 
+properties of the textiles, hypothesising 
+how the fabrics’  flexibility and the 
+differences between knitted and woven 
+materials could influence different results.  
+Embedding a fragile silicone tubing using thread 
+proved to be a challenge, since many samples were 
+deemed unusable after the silicone was ruptured or 
+punctured and no samples were able to be inflated 
+due to major leaks and recurring damage in the 
+tubing when inflated. 
+1583
+ 
+    
+ 
+   
+ 
+ 
+ 
+, 
+POWfR 
+SOURCE 
+AIR 
+PUMP 
+MCKIBBtN MUSCLE 
+s 
+c-.. 
+N 
+SILIC.ONE TUBING----
+4( ID) - 5(0D) mm 
+INFLATION 
+( 
+~ 
+Co 
+n 
+3 
+,D,t,E uf'lr>. l IC 
+11/Blll(i 
+N 
+0 
+n 
+3 
+CONTRACTION 
+~c... 11Rf 
+0 ~ 
+~ "lP 
+u 
+u..J 
+....J 
+ILJ 
+2 DJAPHRA6M 
+Pumps 
+Next I moved on to McKibben 
+muscles which are made of 
+h o l l o w s i l i c o n e t u b i n g 
+enclosed in an outer mesh of 
+i n t e r l o c k e d e x p a n d a b l e 
+filaments. Once they are 
+inflated, they quickly contract 
+in length and are capable of 
+nearly instant and high 
+contraction forces 
+[18,46]. 
+The smaller the 
+difference in 
+the diameter between the 
+tubing and the outer mesh, the 
+bigger the contraction ratio. To 
+achieve contraction upon 
+inflation, I set different 
+p a r a m e t e r s t h r o u g h a n 
+extensive number of iterations 
+in order to minimize leakage 
+and understand our specific 
+pressure requirements. This 
+took up the majority of the 
+design process timeline. For 
+t h e i n n e r t u b i n g , I 
+experimented with latex and 
+silicone and chose for my final 
+muscle 0.5 mm thick and 5 
+mm wide silicone tubing. 
+For the expandable mesh, I used PET based, 5-8 mm, expandable 
+tub
+ular braid. I 3D printed different pneumatic fittings but 
+eventually used purchased straight reducers. To ensure minimum 
+leakage at the intersection points between the fittings and the 
+tubing, I tested zip locks, knotted string and a number of reinforcing 
+adhesives (hot glue, liquid silicone and epoxy). I chose to use zip 
+locks which were then sealed in place with epoxy. Once the leakage 
+issues were minimized to a point where the muscle was able to 
+inflate, I connected it, firstly to two 12V  miniaturized diaphragm 
+pumps (capable of 3 bars when serially assembled and 2.4 bars in 
+parallel). Later, 
+I also tested the same device using one electronic 
+tire pump (capable up to 11 bars, set at 3.8 bars as a minimum for 
+inflation). From its original length of 22 cm, the muscle contracted 
+down to 18 cm using the electronic tire pump, and to 20 cm with the 
+two diaphragm pumps. All of these choices around materials, sizes 
+and air sources were made to achieve a satisfactory trade-off 
+between achieving inflation at the lowest required pressure while 
+also having a high enough force output for our requirements. 
+1584
+    
+ 
+  
+ 
+POINTS ~ ATTAOIMEtJl 
+POWER 
+SOURC€ 
+AIR 
+PUMP 
+Furthermore, by adding mechanical restrictions the 
+final shape and movement of the muscle can be 
+influenced [46]. I simulated this by attaching it to an 
+everyday jointed structure, 
+a stapler, which resulted in 
+a bending motion upon inflation. Following that, I 
+attached the muscle to a 3D printed ball joint structure, 
+and then to my own leg. For these two last 
+experiments I simulated the exercise comparing 2 or 3 
+attachment points to gather insights on achieved 
+angles, force output, and comfort. In both of them, 
+using three attachment points provided better results: 
+the 3D printed object had a 7° higher contraction angle 
+and helped me perceive the wearable’s action 
+throughout my entire leg, giving me a higher sense of 
+connection and directionality. This later on served as 
+the functioning basis for the final wearable. 
+Considering the lack of success avoiding leakages in 
+fabrications before the McKibben muscles, I recreated 
+the earlier woven and knitted samples 5 and 6, 
+substituting the silicone tubing I had used for a 
+McKibben Muscle. With this new approach, the samples 
+finally inflated, deforming the shape of the sample as 
+desired. 
+Working 
+with both knitting and weaving led me to 
+confirm how knitted 
+textiles allow for unidirectional 
+stretch (anisotropic textiles) while woven textiles do 
+not allow for stretch in any direction (inextensible 
+textiles) [58]. Making use of their different 
+stretchability characteristics, 
+we can play with textiles 
+to influence the end shape of silicone tubing inlaid 
+between textiles. More specifically, combining an 
+anisotropic stretch textile with an inextensible textile 
+creates a bending movement upon inflation [12]. 
+Making this last 
+insight its working basis, I recreated 
+the prior sample 4, fabricating a sleeve for a jointed 
+object, using inextensible textile on the outer convex 
+side of the bend and anisotropic textile on the inner 
+concave side of the bend. This aided the bending 
+motion upon inflation. 
+1585
+    
+  
+ 
+   
+     
+      
+   
+ 
+  
+      
+  
+     
+  
+   
+   
+   
+ 
+        
+  
+      
+   
+   
+       
+       
+    
+       
+    
+     
+      
+    
+     
+Arriving at the Concept of “W  earable  
+Choreographer”  
+As a dancer myself, I saw a great potential in 
+movement prompting technologies. After getting to 
+understand both the potential and limitations of 
+soft robotics, I chose to design a prototype that 
+provides movement cues as guidance in the 
+dance practice - essentially embedding a 
+choreographer into one’s own modified garment.  
+To understand the best body actuation points, 
+where a soft robotic system could provide 
+guidance, I carried out multiple ‘Wizard of 
+Oz’ [19] experiments mimicking the effect of 
+McKibben muscles. I 
+did so by attaching strings to 
+different parts of my body and pulling on them to 
+help me understand what kind of movement or 
+sensation they might evoke when contracted, just 
+like a McKibben muscle would when inflated. 
+Having in mind both the context I aimed to design for, as well as my own dance 
+training in swing 
+and tap dancing largely focused on footwork, I decided to create a 
+wearable that could give me timing and movement cues through actuation on my leg. 
+Based on earlier experiments with McKibben muscles on legged locomotion [41], as 
+well my own 
+previous experiments using McKibben on jointed objects, I created two 
+different designs: one where muscles ran along my leg and another one where they 
+acted similarly to puppet strings. The aim of these muscle structures is to lightly 
+prompt the leg to bend, potentially providing guidance in both tempo and spatial 
+orientation. To complement the insights I gathered from the experiments I made earlier 
+placing a McKibben muscle on the back of my leg, I fabricated 2 long muscles. I 
+attached one anteriorly, connecting the knee and the hip and another one posteriorly, 
+connecting the hip and the ankle. I then actuated them with and without a middle 
+attachment, which made them run along the leg, simulating each of the design 
+alternatives. Similarly to the earlier experiment using only one muscle, I felt a stronger, 
+more generalized input by using three attachment points. 
+1586
+   
+  
+                       
+                    
+      
+    
+   
+   
+     
+  
+    
+     
+    
+   
+      
+    
+    
+        
+     
+     
+   
+      
+     
+   
+   
+          
+     
+    
+    
+    
+  
+    
+   
+    
+ 
+    
+     
+     
+    
+ 
+Assembling the W  earable  
+To assemble this wearable, I started by fabricating from 
+the 
+outset 
+three 
+almost identical double muscle bundles 
+( , and in the illustration). These muscles were 
+identical to the previous ones except they were 
+connected to the air source tubing using a Y shaped 
+pneumatic fitting. I connected the bundles to each other 
+and to my body in an adjustable exoskeleton structure 
+made of four textile bands that attach around the leg 
+using velcro, going on top or below clothing that can 
+adjust for anatomical features highly variable between 
+users. The muscles are each attached to the bands in their 
+start and end points using ziplocks sewn into the band. 
+Between these two attachments, each muscle goes 
+through an additional eyelet in another band to keep it 
+running tight along the leg. The muscle is not attached 
+to it in order to allow for height adjustment and 
+maximum contraction. The bundles were strategically 
+placed so that each one prompts a different joint in the 
+leg to bend when inflated: the hip, the knee and the 
+ankle. The choice to go for double muscle bundles 
+(consisting of two parallel identical McKibben muscles 
+powered by one single air source each) was a result of 
+experimentation and came as a compromise between a 
+higher force acquirement and bulkiness. Each muscle 
+bundle was inflated through long pneumatic tubing 
+connected to an air source to allow for a high range 
+of motion.    
+I covered the bundles in a two layer textile interface 
+using anisotropic stretch textile and inextendible textile 
+on the concave and on the convex side of each side, 
+respectively, simulating the results from sample 12, to 
+aid the bending moment. Even though through my tests 
+and iterations I could not find significant evidence of 
+this bending aid effect, I decided to incorporate them 
+regardless as I realized they also added a sense of 
+mystery and simplicity to the garment. Embedding 
+McKibben muscles directly within the weave of the 
+textiles was not implemented in this final design given 
+the goal of size adaptability for different dancers, made 
+harder through a knitted or woven garment, as well as 
+simplicity of fabrication  and replicability. 
+1587
+  
+   
+   
+       
+     
+       
+      
+     
+     
+     
+  
+    
+     
+        
+      
+     
+     
+  
+   
+      
+    
+      
+      
+     
+      
+   
+ 
+   
+      
+     
+   
+      
+          
+   
+   
+    
+     
+       
+      
+ 
+  
+     
+  
+     
+   
+  
+  
+    
+    
+Inflating the W  earable  
+In order to trigger inflation and deflation in multiple muscles 
+at any desired order and timing, a pneumatic control system is 
+needed. Such a system includes an air source, as well as a 
+valve that can orchestrate the inflation and deflation of the 
+three different muscles at variable points in time. Both the air 
+source and the valve need to be capable of enough pressure to 
+inflate the muscles. In our case, the minimum pressure 
+required to inflate the muscles is around 4 bars. I arrived at 
+this number through our iterative experiments but also based 
+on earlier findings on pneumatic actuation for lower limb 
+movement support [20,51,57]. Even though some attempts 
+have been made 
+to design toolkits that can manipulate air-
+based interactive systems like this one [64,73,78,79], there is 
+yet to exist 
+a readily available plug-and-play system that 
+allows for designers to achieve the complexities mentioned 
+above. For the air source I opted to test both an electronic tire 
+pump (up to 10.3 bars) and two 12V miniaturized diaphragm 
+pumps serially assembled (working pressure 0.7 - 2.2 bars and 
+flow rate 9-15 LPM) which I enclosed in a foam and textile 
+interface to block out noise and hide its inner workings. 
+Even though the foam case of the miniaturized pump diminished 
+its noise greatly, its pressure was still significantly lower 
+compared to the electronic tire pump. It also did not allow for 
+much control over the output pressure nor any intentional 
+variation to it. This meant that no variation in the force output 
+would be possible which I had planned to explore later and 
+observe the dancers' reactions. 
+I initially used an Arduino-based valve system to inflate and 
+deflate one single muscle [69] and moved on to search for a 
+solution that would 
+allow inflating three individual muscles 
+separately using only one air source. I came across an Arduino- 
+programmed pneumatic muscle valve from the Japanese brand 
+Koganei [80] . This valve features one inlet and five outlet ports 
+which are individually 
+controlled using manual switches. The 
+programmable Arduino logic also allowed for event scheduling of 
+different inflation sequences. I again embedded the valve into a 
+foam and textile interface leaving only the switches accessible. 
+The pressure used to test the garment varied from 2 to 5 bars 
+which was the pressure that allowed for a movement or direction 
+to be prompted but not be uncomfortably forced. 
+Because of their weight, neither the 
+valve nor the air pump are meant to be 
+worn on the body. Instead, they rest on 
+the table but are connected to the 
+wearable through 2 meters long light 
+tubes, allowing for some movement 
+freedom. This design choice also 
+allowed us to control the valve and 
+observe the reaction of the dancers 
+when sharing the wearable with them. 
+1588
+   
+ 
+      
+      
+ 
+      
+    
+ 
+  
+   
+ 
+    
+     
+   
+     
+    
+     
+     
+    
+     
+         
+     
+   
+     
+    
+   
+   
+  
+  
+     
+   
+   
+ 
+   
+    
+    
+   
+   
+            
+      
+       
+      
+     
+  
+      
+     
+   
+     
+   
+ 
+    
+   
+ 
+   
+   
+     
+      
+SHARING THE WEARABLE   
+After our auto-biographical design of a wearable soft 
+robot for dance, we chose to share it with four dancers in 
+order to gather insights on how the wearable supports 
+their practice. 
+Participants  
+These dancers were recruited within the first author’s 
+dance community to experiment the wearable. They all 
+had medium-to-advanced dancing experience ranging 
+from 4 to 15 years mainly in swing and tap dancing. 
+They had no previous experience with wearable 
+technologies in dance. 
+Additionally, we asked the participants to document 
+their embodied state through body maps [17] both 
+before and 
+after dancing with the garment. From a 
+number of words in the body maps, they were asked to 
+circle the ones they identified with and to draw or write 
+whatever else came to them as they perused through 
+their bodily sensations. These words were chosen using 
+inspiration from previous work [69] and having in 
+mind a 
+multitude of bodily sensations. They included 
+the words “asymmetric”, “nauseous”, “tired”, “light”, 
+“challenged”, “pain”, “manipulated”, “small”, 
+“big”,  “surprised”,  “soft”,  “jittery”,  “vibration”,    
+wearable. First, we asked them to close their eyes 
+and simply try and observe whatever they might feel in 
+their body as the garment is activated. For the second 
+activity, we asked them to select a music of their choice 
+and dance to it while still sharing out loud their 
+perceived bodily feelings. In the third and last activity, 
+we asked the dancers to dance with music while being 
+mindful of the garment's actuation points and react to 
+them intuitively. Following dancing, the participants 
+answered questions about how using the garment 
+affected their dancing and whether they would include 
+such technologies in their own practice. 
+Procedure  
+The whole experiment took between 30 and 45 minutes 
+in a room in the lab. Both the designer (first author) and 
+each participant went through it together which helped 
+create trust and familiarity. The participants were asked 
+to resort to the think-aloud method as they went through 
+different parts of the experiment. Given the garment's 
+subtle action, we created a pre-usage short meditation 
+routine to help participants slow down and bring focus 
+on breathing and to different body parts at  a  time.  
+“stiff”, “moved”, “balanced”, “unbalanced”, 
+“uncomfortable” and “comfortable”. Along with the 
+meditation, this helped heighten their attention to their 
+physical sensations and enter an introspective state. 
+The dancers used noise canceling earphones and 
+mufflers to not be too disturbed by the extremely loud 
+sound of the air pumps. Finally, we walked the 
+participants through three consecutive activities, each 
+lasting around 2 minutes, where they danced with the 
+Data Collection and    Analysis  
+We recorded video and audio of the entire experiment, 
+took personal notes and collected the body maps. We 
+transcribed all materials and analyzed it thematically 
+[7,34], in order to find patterns that capture how the 
+participants experienced 
+the wearable and how the 
+wearable affected their movements and embodied state. 
+1589
+ 
+    
+   
+        
+   
+  
+      
+     
+      
+     
+    
+   
+ 
+   
+  
+   
+   
+  
+   
+    
+    
+    
+     
+      
+      
+      
+     
+  
+     
+      
+ 
+    
+  
+   
+   
+    
+   
+  
+    
+    
+   
+   
+   
+      
+      
+  
+   
+    
+     
+   
+ 
+     
+  
+  
+    
+   
+   
+  
+    
+     
+  
+ 
+RESULTS  
+Our 
+results organize around three key insights on how 
+th
+e garment choreographed dancers. Firstly, the 
+dancers felt that the garment restricted and changed 
+their movements. They felt their movements 
+restricted, imposing a smaller range of motion. When 
+the wearable “pulled” them in a certain direction, it 
+was uncomfortable not to move or to try to contradict 
+it. At times they felt frozen in asymmetrical positions 
+when trying to interpret input coming from one single 
+leg. Another concern shared among the dancers was the 
+fear to damage or step on the wearable cables, 
+inherently discouraging too spontaneous or hasty 
+movements. On the other hand, when the dancers did 
+move too much, they often could not discern any input, 
+hence received no prompt. For one dancer, the loud 
+sound of the pump and all the consequently necessary 
+noise canceling gear was exceptionally distracting 
+which rendered the experience unpleasant. Overall, the 
+garment’s limitations brought frustration to the 
+participants when they noticed things such as its 
+loudness, its inaccuracy, its speed or the physical 
+boundaries that it placed on their range of motion. 
+Following the effect of restriction came a more appealing 
+aftermath: the garment inspired creativity and new 
+sensations. The dancers’ usual dance movements now 
+did not feel as natural so they had to come up with new 
+creative patterns and ways to express themselves through 
+movements. Exploring this while simultaneously trying 
+to react intuitively to the wearable unpredictable prompts 
+made the dancers realize they had to be present and 
+heighten their attention to their bodily sensations. 
+They often laughed as they went through the process of 
+reimagining their movements. The tap dancers especially 
+found it amusing to try and come up with different 
+interpretations for every actuation sequence to produce 
+different tap rhythms. All dancers described the 
+experience as fun, new and interesting and showed 
+interest in adding movement-prompting wearables to 
+their dance practice in the future. They also came up with 
+different creative solutions around improving the 
+wearable´s integration as a choreographer into their 
+individual practices. 
+Motivating the newfound creativity in these dancers 
+was their own perception of the garment as having a 
+mystic will of its own. Through the dancer's narrative 
+of the experience, the garment gained the role of a 
+choreographer wanting to challenge them into 
+producing a specific movement. The perceived agency 
+given to the wearable was also illustrated by one 
+dancer who felt that the wearable was tickling her. 
+Even though the actuation was equally random both 
+between activities and between users, each dancer 
+developed multiple theories on how the wearable 
+reacted differently to different body movements or 
+followed a different pattern in each activity. After 
+dancing with the garment, multiple dancers circled the 
+words “surprised”, “manipulated” and “challenged” to 
+describe their mood. Moreover, descriptions in the 
+interviews often hinted towards bodily manipulation 
+and a feeling of otherness. This illustrates how they 
+perceive the wearable as a choreographer acting (and 
+sometimes constraining) on their body with specific 
+directions that led them to perform in new ways.  
+1590
+  
+ 
+       
+ 
+    
+      
+     
+   
+      
+      
+    
+   
+ 
+      
+   
+    
+   
+     
+      
+    
+         
+   
+    
+    
+ 
+         
+     
+       
+    
+      
+     
+     
+DISCUSSION  
+As foreseen, our design inquiry sheds light simultaneously on 
+the promising future opportunities of soft robotics in the dance 
+practice as well as on the challenges it still presents. 
+Opportunities of Designing Soft Robotics for Dance       
+Our 
+design highlighted how soft robotics can influence, restrict 
+and inspire dancers. 
+Our experiment put the participants in a 
+novel situation where different involuntary movements in one 
+of their legs constricted the movements they would naturally 
+follow. This challenged them into a place where creativity was 
+an essential tool to dance with the wearable choreographer. 
+While no user considered the overall experience 
+uncomfortable, moments of discomfort brought novelty and 
+unpredictability to their movements. 
+Our results also show how the participants viewed the 
+wearable as an 
+entity with agency. They considered the 
+garment as a choreographer capable of transmitting complex 
+instructions that they can go along with or against. The 
+mysteriousness of its inner workings and its unpredictable 
+actions provided the dancers with a newfound thrill as they 
+navigated a novel movement guiding tool. Our results also 
+show how using a wearable robot pushes the dancers to focus 
+on an instruction provided by a bodily sensation. This made 
+them heighten their focus to their soma while moving. Going 
+through meditation and the filling out of body maps before an 
+initial activity also aided the process of looking inwards. 
+These results are to be seen in light of the fact that dancers 
+were experimenting the 
+system in a research environment 
+outside of their usual place of practice. It is likely that the 
+setup had an effect on their dancing as well as their perception 
+of the expectations placed on them [31]. All this considered, all 
+users were excited 
+about the promising integration of robotics 
+soft wearable technologies in their practice to support their 
+kinaesthetic creativity. 
+1591
+  
+ 
+      
+  
+    
+    
+   
+  
+   
+      
+    
+ 
+   
+   
+   
+    
+    
+   
+  
+ 
+      
+    
+    
+   
+     
+     
+  
+        
+  
+   
+ 
+  
+     
+   
+  
+   
+     
+   
+    
+     
+     
+   
+ 
+   
+   
+  
+  
+    
+    
+   
+ 
+  
+ 
+   
+ 
+      
+    
+    
+    
+  
+    
+     
+   
+     
+       
+   
+    
+    
+    
+        
+    
+     
+     
+    
+     
+  
+       
+  
+    
+    
+    
+ 
+    
+    
+       
+    
+    
+     
+      
+       
+  
+     
+    
+  
+ 
+    
+      
+  
+   
+ 
+Challenges  of Designing  Soft Robotics  for  
+Dance  
+In any research using novel technology, arguably one 
+of the biggest contributions to be made is an extensive 
+exploration of the capacities, opportunities and 
+challenges that such technology brings. This is 
+particularly true in the field of HCI, where designers 
+often must weigh in different technologies to 
+incorporate in their designs. Moreover, in an academic 
+setting, different deadlines and expectations depending 
+on a project’s context highlight the need for feasible 
+results and an adequate skillset found in the researcher 
+carrying it out. 
+Although soft robotics research has yielded 
+extraordinarily promising 
+results coming from people 
+with varied backgrounds, one cannot go without 
+highlighting the difficulties and frustrations that 
+working with it can bring. In this particular project a 
+number of challenges arose which molded the design 
+iteration process, the end design and the motivation of 
+every party involved. 
+While this project was aimed at being approached from 
+a somaesthetic 
+perspective, in which learnings are 
+made from bodily sensations, the initial barrier to 
+having a piece of working technology which can be 
+applied on the body made it extremely difficult to focus 
+on somatic events. In a way, one can say that this 
+technology, with such promising embodied 
+applications, can disembody the researcher throughout 
+the design process as a substantial amount of the focus 
+during design, development and fabrication relies on 
+out-of-body intrinsicate and delicate technical 
+experiments using materials. 
+When designing pneumatic systems with such high air 
+pressures as 
+the ones required in this study, very 
+specific materials, sizes, capacities and tools are 
+required. Purchasing materials can be both time 
+consuming and arduous. Often different components 
+need to be ordered or manufactured in different sizes 
+and materials from different parts of the world and 
+experimented with before reaching any working 
+assembly. All of this highly delays the fabrication time, 
+even more so when mistakes are made. We add to this 
+pictorial, as a supplementary file, a list of materials 
+and manufacturers that designers can refer to when 
+initiating a soft robotic project. 
+Designing a garment for such an expansive movement-
+based activity such as dancing often means making a 
+compromise between seamless wearability and 
+effective actuation. Particularly when considering the 
+limited status quo of silent or lightweight air sources 
+research, designers must often self fabricate their own 
+creative solutions using cutting edge technology 
+[8,22,71]. 
+Reflections on the Design Process      
+Throughout 
+our design process, a number of design 
+choices were 
+made comparing different materials, 
+shapes, sizes and their predicted outcomes. Many of 
+these were done based on the first author’s 
+experimentations or previous literature, while others 
+were born from our own somaesthetics experience of 
+the design iterations. While our final wearable already 
+presented us with interesting and promising results 
+when sharing it with other participants, we are aware 
+that there are limitations to auto-biographical design 
+approaches. Indeed our design might have favored the 
+first author’s personal take on dance by focusing for 
+example on a specific part of the body such as the legs. 
+Many different design alternatives could also be 
+implemented to bring forth further insights as well as 
+complement the participants’ overall experience. 
+Nevertheless, our results show how our wearable acted 
+as a choreographer when it prompted the dancers with 
+haptic cues sent to them at specific timings on a 
+specific part of their body which led them to make 
+precise movement choices while dancing. This 
+interplay between the dancers and the wearable is why 
+we borrow the metaphor of the choreographer to 
+describe our wearable. While the design of soft 
+robotics and its application to movement-related 
+practices are still at its debut, our specific design, as 
+hinted by our participants, provoked a range of rich 
+and deep somatic reflections on how these 
+technologies can be integrated to guide and inspire 
+people’s embodied practices, just like a choreographer 
+might do. 
+CONCLUSION  
+T
+his pictorial describes our auto-biographical 
+somaesthetic design 
+of a soft robot for lower limb 
+movement guidance that aims at providing a wearable 
+choreographer to dancers. We first present an account 
+of our process. We then describe an experiment where 
+we share our final design with four dancers. The results 
+of the experiment illustrate how the wearable 
+constrains and inspires the dancers and how it was 
+perceived as a choreographer acting on their body. 
+Finally, we discuss our process and our results in light 
+of the promising and challenging design space that soft 
+robotics open when applying such technology to dance 
+and embodied creative practices. 
+ACKNOWLEDGEMENTS  
+This 
+work was partially supported by the Agence 
+National de 
+la Recherche (ANR) grants № ANR-20-
+C E 3 3 - 0 0 0 6 - ” L i v i n g A r c h i v e : I n t e r a c t i v e 
+Do
+cumentation of Dance”. We thank all the 
+participants in our studies for their involvement. 
+1592
+REFERENCES   
+1.  Tomoki  Abe, Shoichiro Koizumi, Hiroyuki  Nabae, 
+G. Endo, and Koichi  Suzumori. 2018. Muscle  textile  
+to implement  soft  suit  to shift  balancing posture  of 
+the  body. In 2018 IEEE  International  Conference  on 
+Soft Robotics  (RoboSoft), 572–578.  
+        https://doi.org/10.1109/ROBOSOFT.2018.8405387  
+2.  Tomoki  Abe, Shoichiro Koizumi, Hiroyuki  Nabae, 
+Gen Endo, Koichi  Suzumori, Nao Sato, Michiko 
+Adachi, and Fumi  Takamizawa. 2019. Fabrication 
+of “18 Weave”  Muscles  and Their Application to 
+Soft  Power Support  Suit  for Upper Limbs  Using 
+Thin McKibben Muscle. IEEE  Robotics  and 
+Automation Letters 4, 3: 2532–2538.  
+        https://doi.org/10.1109/LRA.2019.2907433  
+3.  Sarah Fdili  Alaoui, Thecla  Schiphorst, Shannon 
+Cuyckendal, Kristin Carlson, Karen Studd, and 
+Karen Bradley. Strategies  for Embodied Design:  
+The  Value  and Challenges  of Observing Movement. 
+In Proceedings  of  ACM Creativity  and Cognition 
+2015 (C&C), Glasgow.  
+   https://doi.org/10.1145/2757226.2757238  
+4.  Camille  Baker and Kate  Sicchio. 2018. Hacking the  
+Body 2.0:  dancing between commercial  and DIY  
+wearable  technology. International  Journal  of  
+Performance  Arts  and Digital  Media  14, 1:  107– 
+120. 
+        https://doi.org/10.1080/14794713.2018.1446360  
+5.  Mary Ellen Berglund, Julia  Duvall, and Lucy E  
+Dunne. 2016. A  survey of the  historical  scope  and 
+current  trends  of wearable  technology applications. 
+In  Proceedings  of  the  2016 ACM International  
+Symposium  on Wearable  Computers  (ISWC ’16), 
+40–43. 
+        https://doi.org/10.1145/2971763.2971796  
+6.  Susanne  Bødker. 2006. When second wave  HCI 
+meets  third wave  challenges. In Proceedings  of  the  
+4th Nordic  conference  on Human-computer  
+interaction: changing roles  (NordiCHI ’06), 1–8. 
+https://doi.org/10.1145/1182475.1182476 
+7.  Virginia  Braun and Victoria  Clarke. 2006. Using 
+analysis  in psychology. Qualitative  Research in 
+Psychology 3: 77–101.  
+https://doi.org/10.1191/1478088706qp063oa  
+8.  Vito Cacucciolo, Jun Shintake, Yu Kuwajima, 
+Shingo Maeda, Dario Floreano, and Herbert  Shea. 
+2019. Stretchable pumps for soft machines. Nature     
+572, 7770: 516–519.  
+  https://doi.org/10.1038/s41586-019-1479-6  
+9.  Darwin Caldwell, Nikos  Tsagarakis, Sophia  
+Kousidou, Nelson Costa, and Ioannis  Sarakoglou. 
+2007. “Soft”  Exoskeletons  for Upper and Lower 
+Body Rehabilitation - Design, Control  and 
+Testing. I. J. Humanoid Robotics  4:  549–573. 
+https://doi.org/10.1142/S0219843607001151  
+10.  Michael  Calore. Strap on Your Exoskeleton and 
+Dance, Dance, Dance. Wired. https://www.wired. 
+com/story/ gray-area-festival-2019/  
+11.  Hector M. Camarillo-Abad, J. Alfredo Sanchez, 
+Oleg Starostenko, and Maria  Gabriela  Sandoval. 
+2019. A  basic  tactile  language  to support  leader-
+follower dancing. Journal  of  Intelligent  &  Fuzzy  
+Systems 36, 5: 5011–5022.  
+        https://doi.org/10.3233/JIFS-179047  
+12.  Leonardo Cappello, Kevin Galloway, Siddharth 
+Sanan, Diana  Wagner, Rachael  Granberry, Sven 
+Engelhardt, Florian Haufe, Jeffrey Peisner, and 
+Conor Walsh. 2018. Exploiting Textile  
+Mechanical  Anisotropy for Fabric-Based 
+Pneumatic  Actuators. Soft robotics 5.  
+        https://doi.org/10.1089/soro.2017.0076  
+13.  Kristin Carlson, Thecla  Schiphorst, and Philippe  
+Pasquier. 2011. Scuddle:  Generating Movement  
+Catalysts  for Computer-Aided Choreography. In 
+Proceedings  of  the  Second International  
+Conference on Computational Creativity, 128.  
+14.  Erin A. Carroll, Danielle  Lottridge, Celine  
+Latulipe, Vikash Singh, and Melissa  Word. 2012. 
+Bodies  in critique:  a  technological  intervention in 
+the dance production process. In Proceedings of  
+the  ACM 2012 conference  on Computer  Supported 
+Cooperative Work (CSCW ’12), 705–714.  
+https://doi.org/10.1145/2145204.2145311  
+15.  Chia-Yu Chen, Yen-Yu Chen, Yi-Ju Chung, and 
+Neng-Hao Yu. 2016. Motion Guidance  Sleeve:  
+Guiding the  Forearm  Rotation through External  
+Artificial  Muscles. In Proceedings  of  the  2016 CHI 
+Conference  on Human Factors  in Computing 
+Systems (CHI ’16), 3272–3276.  
+        https://doi.org/10.1145/2858036.2858275  
+16.  Marianela  Ciolfi  Felice, Sarah Fdili  Alaoui, and 
+Wendy E. Mackay. 2016. How  Do Choreographers  
+Craft  Dance?:  Designing for a  Choreographer-
+Technology Partnership. In Proceedings  of  the  3rd 
+International  Symposium  on Movement  and 
+Computing, 1–8.  
+        https://doi.org/10.1145/2948910.2948941  
+17.  Cari  Costanzo. 2019. Body Maps:  Reframing 
+embodied experiences  through ethnography and art. 
+In Routledge  handbook of the  medical  humanities. 
+Routledge.  
+18.  Frank Daerden and Dirk Lefeber. Pleated 
+Pneumatic  Artificial  Muscles:  actuators  for robotics  
+and automation. 11.  
+        https://doi.org/10.1109/AIM.2001.936758  
+19.  Nils  Dahlbäck, Arne  Jönsson, and Lars  Ahrenberg. 
+1993. Wizard of Oz  studies:  why and how. In 
+Proceedings  of  the  1st  international  conference  on 
+Intelligent  user  interfaces  (IUI ’93), 193–200. 
+https://doi.org/10.1145/169891.169968  
+20.  Christian Di  Natali, Ali  Sadeghi, Alessio Mondini, 
+Eliza  Bottenberg, Bernard Hartigan, Adam  De  Eyto, 
+Leonard O’Sullivan, Eduardo Rocon, Konrad 
+Stadler, Barbara  Mazzolai, Darwin G. Caldwell, and 
+Jesús  Ortiz. 2020. Pneumatic  Quasi-Passive  
+Actuation for Soft  Assistive  Lower Limbs  
+Exoskeleton. Frontiers in Neurorobotics 14.  
+        https://doi.org/10.3389/fnbot.2020.00031  
+21.  Augusto Dias  Pereira  dos  Santos, Kalina  Yacef, and 
+Roberto Martinez-Maldonado. 2017. Let’s Dance:  
+1593
+     How  to Build a  User Model  for Dance  Students  Using 
+Wearable  Technology. In Proceedings  of  the  25th 
+Conference  on User  Modeling, Adaptation and 
+Personalization (UMAP ’17), 183–191.  
+        https://doi.org/10.1145/3079628.3079673  
+22.  R. S. Diteesawat, T. Helps, M. Taghavi, and J. 
+Rossiter. 2021. Electro-pneumatic  pumps  for soft  
+robotics. Science Robotics 6, 51.  
+        https://doi.org/10.1126/scirobotics.abc3721  
+23.  Paul  Dourish. 2001. Where  the  Action Is:  The  
+Foundations of Embodied Interaction.  
+        https://doi.org/10.7551/mitpress/7221.001.0001  
+24.  Anany Dwivedi, Lucas  Gerez, Waris  Hasan, Chi-
+Hung Yang, and M. Liarokapis. 2019. A  Soft  
+Exoglove  Equipped With a  Wearable  Muscle-
+Machine  Interface  Based on Forcemyography and 
+Electromyography. IEEE  Robotics  and Automation 
+Letters ( Volume: 4, Issue: 4, Oct. 2019).  
+        https://doi.org/10.1109/LRA.2019.2925302  
+25.  Katerina  El  Raheb, Aristotelis  Kasomoulis, Akrivi  
+Katifori, Marianna  Rezkalla, and Yannis  Ioannidis. 
+2018. A  Web-based system  for annotation of dance  
+multimodal  recordings  by dance  practitioners  and 
+experts. In Proceedings  of  the  5th International  
+Conference  on Movement  and Computing  (MOCO  
+’18), 1–8. https://doi.org/10.1145/3212721.3212722  
+26.  Sara  Eriksson, Kristina  Höök, Richard Shusterman, 
+Dag Svanes, Carl  Unander-Scharin, and Åsa  
+Unander-Scharin. 2020. Ethics  in Movement:  
+Shaping and Being Shaped in Human-Drone  
+Interaction. In Proceedings  of  the  2020 CHI 
+Conference  on Human Factors  in Computing 
+Systems.  Association for Computing Machinery, 
+New  York, NY , USA, 1–14.  
+        https://doi.org/10.1145/3313831.3376678  
+27.  A. Faudzi, Nor Iskandar Azmi, Mostafa  
+Sayahkarajy, W. Xuan, and K. Suzumori. 2018. Soft  
+manipulator using thin McKibben actuator. 2018 
+IEEE/ASME  International  Conference  on Advanced 
+Intelligent Mechatronics (AIM).  
+       https://doi.org/10.1109/AIM.2018.8452698  
+28.  Sarah Fdili  Alaoui. 2019. Making an Interactive  
+Dance  Piece:  Tensions  in Integrating Technology 
+in Art. In Proceedings  of  the  2019 on Designing 
+Interactive Systems Conference  (DIS ’19),  
+        https://doi.org/10.1145/3322276.3322289  
+29.  Sarah Fdili  Alaoui, Frédéric  Bevilacqua, Bertha  
+Bermudez, and Christian Jacquemin. 2013. Dance  
+interaction with physical  model  visuals  based on 
+movement  qualities. Int. J. of  Arts  and Technology  
+6: 357–387.  
+        https://doi.org/10.1504/IJART.2013.058284  
+30.  Sarah Fdili  Alaoui, Jules  Françoise, Thecla  
+Schiphorst, Karen Studd, and Frederic Bevilacqua.  
+2017. Seeing, Sensing and Recognizing Laban 
+Movement  Qualities. In Proceedings  of  the  2017 
+CHI Conference  on Human Factors  in Computing 
+Systems (CHI ’17), 4009–4020.  
+        https://doi.org/10.1145/3025453.3025530  
+31.  Marianela  Ciolfi  Felice, Sarah Fdili  Alaoui, and 
+Wendy E. Mackay. 2021. Studying Choreographic  
+Collaboration in the  Wild. In Designing 
+Interactive  Systems  Conference  2021  (DIS  ’21), 
+https://doi.org/10.1145/3461778.3462063  
+32.  Minoru Fujimoto, Naotaka  Fujita, Yoshinari  
+Takegawa, Tsutomu Terada, and Masahiko 
+Tsukamoto. 2009. Musical  B-boying:  A  Wearable  
+Musical  Instrument  by Dancing. In Entertainment  
+Computing - ICEC 2008  (Lecture  Notes  in 
+Computer Science), 155–160.  
+        https://doi.org/10.1007/978-3-540-89222-9_17  
+33.  Minoru Fujimoto, Naotaka  Fujita, Yoshinari  
+Takegawa, Tsutomu Terada, and Masahiko  using 
+thin McKibben actuator. 2018 IEEE/ASME  using 
+thin McKibben actuator. 2018 IEEE/ASME  for a  
+Wearable  Dancing Musical  Instrument. In 2009  
+International  Symposium  on Wearable  Computers, 
+11–18. https://doi.org/10.1109/ISWC.2009.22  
+34.  Greg Guest, Kathleen MacQueen, and Emily  
+Namey. Applied Thematic  Analysis.  
+        https://dx.doi.org/10.4135/9781483384436  
+35.  K. Hachimura, H. Kato, and H. Tamura. 2004. A  
+prototype  dance  training support  system  with 
+motion capture  and mixed reality technologies. In 
+RO-MAN 2004. 13th IEEE  International  Workshop 
+on Robot  and Human Interactive  Communication 
+(IEEE Catalog No.04TH8759), 217–222.  
+        https://doi.org/10.1109/ROMAN.2004.1374759  
+36.  Lise  Hansen and Andrew  Morrison. 2014. 
+Materializing Movement-Designing for Movement-
+based Digital  Interaction. International  Journal  of  
+Design 8: 29–42.  
+37.  Tatsuhiro Hiramitsu, Koichi  Suzumori, Hiroyuki  
+Nabae, and Gen Endo. 2018. Experimental  
+Evaluation of Cloth-like  Mechanisms  Made  of 
+Artificial  Muscles. Journal  of  Japan Society  for  
+Design Engineering advpub.  
+        https://doi.org/10.14953/jjsde.2018.2823  
+38.  Kristina  Höök. 2018. Designing with the  Body:  
+Somaesthetic  Interaction Design. MIT  Press, 
+Cambridge, MA, USA.  
+39.  Kristina  Höök, Baptiste  Caramiaux, Cumhur Erkut, 
+Jodi  Forlizzi, Nassrin Hajinejad, Michael  Haller, 
+Caroline  Hummels, Katherine  Isbister, Martin 
+Jonsson, George  Khut, Lian Loke, Danielle  
+Lottridge, Patrizia  Marti, Edward Melcer, Florian 
+Müller, Marianne  Petersen, Thecla  Schiphorst, 
+Elena  Márquez  Segura, Anna  Ståhl, and Helena  
+Tobiasson. 2018. Embracing First-Person 
+Perspectives  in Soma-Based Design. Informatics  5:  
+8. https://doi.org/10.3390/informatics5010008  
+40.  Kristina  Höök, Martin P. Jonsson, Anna  Ståhl, and 
+J o h a n n a  M e r c u r i o . 2 0 1 6 . S o m a e s t h e t i c  
+Appreciation Design. In Proceedings  of  the  2016 
+CHI Conference on Human Factors in Computing   
+41.  Koh Hosoda, Christian Rode, Tobias  Siebert, Bram  
+Vanderborght, Maarten Weckx, and D. Lefeber. 
+2017. Chapter 8 - Actuation in Legged Locomotion. 
+In Bioinspired Legged Locomotion, Maziar A. 
+Sharbafi and André Seyfarth (eds.). Butterworth-
+1594
+        Heinemann, 563–622. h 
+        ttps://doi.or
+g/10.1016/B978-0-12-803766-9.00011-7  
+42.  Stacy Hsueh, Sarah Fdili  Alaoui, and Wendy E. 
+Mackay. 2019. Understanding Kinaesthetic  
+Creativity in Dance. In Proceedings  of  the  2019 
+CHI Conference  on Human Factors  in Computing 
+Systems (CHI ’19), 1–12.  
+        https://doi.org/10.1145/3290605.3300741  
+43.  U. Huzaifa, C. Bernier, Z. Calhoun, G. Heddy, C. 
+Kohout, B. Libowitz, A. Moenning, J. Ye, C. 
+Maguire, and A. LaViers. 2016. Embodied 
+movement  strategies  for development  of a  core-
+located actuation walker. In 2016 6th IEEE  
+International  Conference  on Biomedical  Robotics  
+and Biomechatronics (BioRob), 176–181.  
+        https://doi.org/10.1109/BIOROB.2016.7523618  
+44.  Elizabeth Jochum, Louis-Philippe  Demers, Bill  
+V orn, Evgenios  Vlachos, Paul  McIlvenny, and 
+Pirkko Raudaskoski. 2018. Becoming Cyborg:  
+Interdisciplinary Approaches  for Exoskeleton 
+Research.  
+        https://doi.org/10.14236/ewic/EV AC18.40  
+45.  Pavel  Karpashevich, E. Hornecker, M. Honauer, and 
+Pedro Sanches. 2018. Reinterpreting schlemmer’s  
+Triadic  Ballet  :  Interactive  costume  for unthinkable  
+movements. In Proceedings  of  the  2018 CHI 
+Conference  on Human Factors  in Computing 
+Systems  
+https://doi.org/10.1145/3173574.3173635  
+46.  Ozgun Kilic  Afsar, Ali  Shtarbanov, Hila  Mor, Ken 
+Nakagaki, Jack Forman, Karen Modrei, Jeong 
+Seoung Hee, Klas  Hjort, Hook Kristina, and Hiroshi  
+Ishii. OmniFiber:  Integrated Fluidic  Fiber Actuators  
+for Weaving Movement-based Interactions  into the  
+‘Fabric  of Everyday Life’. I n Proceedings  of  
+UIST’21 The  34th Annual  ACM Symposium  on User  
+Interface Software and Technology  
+        https://doi.org/10.1145/3472749.3474802  
+47.  Jinsoo Kim, Giuk Lee, Roman Heimgartner, 
+Dheepak Arumukhom Revi, N. Karavas,  
+   D. 
+Nathanson, I. Galiana, A. Eckert-Erdheim, Patrick 
+Murphy, D. Perry, N. Menard, D. Choe, P. 
+Malcolm, and C. Walsh. 2019. Reducing the  
+metabolic  rate  of walking and running with a  
+versatile, portable exosuit. Science.  
+        https://doi.org/10.1126/science.aav7536  
+48.  Shoichiro Koizumi, Te-Hsin Chang, Hiroyuki  
+Nabae, Gen Endo, Koichi  Suzumori, Motoki  Mita, 
+Kimio Saitoh, Kazutoshi  Hatakeyama, Satoaki  
+Chida, and Yoichi  Shimada. 2020. Soft  Robotic  
+Gloves  with Thin McKibben Muscles  for Hand 
+Assist  and Rehabilitation. In 2020 IEEE/SICE  
+International  Symposium  on System  Integration 
+(SII), 93–98.  
+        https://doi.org/10.1109/SII46433.2020.9025832  
+49.  Shoichiro Koizumi, Shunichi  Kurumaya, Hiroyuki  
+Nabae, G. Endo, and K. Suzumori. 2018. Braiding 
+Thin McKibben Muscles  to Enhance  Their 
+Contracting Abilities. IEEE  Robotics  and 
+Automation Letters.  
+        https://doi.org/10.1109/LRA.2018.2851025  
+50.  Shunichi  Kurumaya, Hiroyuki  Nabae, Gen Endo, 
+and Koichi  Suzumori. 2019. Active  Textile  
+Braided in Three  Strands  with Thin McKibben 
+Muscle. Soft Robotics 6, 2: 250–262.  
+         https://doi.org/10.1089/soro.2018.0076  
+51.  Shunichi  Kurumaya, Koichi  Suzumori, Hiroyuki  
+N a b a e , a n d S h u i c h i  Wa k i m o t o . 2 0 1 6 . 
+Musculoskeletal  lower-limb robot  driven by 
+multifilament  muscles. ROBOMECH  Journal  3,   
+1: 18. https://doi.org/10.1186/s40648-016-0061-3  
+52.  Lian Loke  and Toni  Robertson. 2013. Moving and 
+making strange:  An embodied approach to 
+movement-based interaction design.  Transactions  
+on Computer-Human Interaction (TOCHI) 20. 
+https://doi.org/10.1145/2442106.2442113  
+53.  Pedro Lopes, Sijing You, Alexandra  Ion, and 
+Patrick Baudisch. 2018. Adding Force  Feedback 
+to Mixed Reality Experiences  and Games  using 
+Electrical Muscle Stimulation. In Proceedings of  
+   the  2018 
+ CHI Conference  on Human Factors  in 
+Computing Systems (CHI ’18), 1–13.  
+        https://doi.org/10.1145/3173574.3174020  
+54.  Diego S  Maranan, Sarah Fdili  Alaoui, Thecla  
+Schiphorst, Philippe  Pasquier, Pattarawut  Subyen, 
+and Lyn Bartram. 2014. Designing for Movement:  
+Evaluating Computational  Models  Using LMA  
+Effort  Qualities. 991–1000. In Proceedings  of   the  
+32Nd Annual  ACM Conference  on Human Factors  
+in Computing Systems  
+        https://doi.org/10.1145/2556288.2557251  
+55.  Ali  Maziz, Alessandro Concas, Alexandre  Khaldi, 
+Jonas  Stalhand, Nils-Krister Persson, and Edwin 
+Jager. 2017. Knitting and weaving artificial  
+muscles. Science  Advances 3: e1600327.  
+        https://doi.org/10.1126/sciadv.1600327  
+56.  Carman Neustaedter and Phoebe  Sengers. 2012. 
+Autobiographical  design:  what  you can learn from  
+designing for yourself. Interactions  19, 6:  28–33. 
+https://doi.org/10.1145/2377783.2377791  
+57.  Min Pan, Chenggang Yuan, Xianrong Liang, 
+Tianyun Dong, Tao Liu, Junhui  Zhang, Jun Zou, 
+Huayong Yang, and Chris  Bowen. Soft  Actuators  
+and Robotic  Devices  for Rehabilitation and 
+Assistance. Advanced Intelligent  Systems  n/a, n/a:  
+2100140. https://doi.org/10.1002/aisy.202100140  
+58.  Samuel  Poincloux. 2019. Knit  and stretch. Physics   
+World 32, 1: 30–33.  
+        https://doi.org/10.1088/2058-7058/32/1/26  
+59.  Jean-Philippe  Rivière, Sarah Fdili  Alaoui, Baptiste  
+Caramiaux, and Wendy E. Mackay. 2019. Capturing 
+Movement  Decomposition to Support   Learning and 
+Teaching in Contemporary Dance. Proceedings  of  
+the  ACM on Human-Computer  Interaction 3 , 
+CSCW: 86:1-86:22.  
+        https://doi.org/10.1145/3359188  
+60.  Lorenzo A. Rossi, Shengrong Yin, and Omprakash 
+Gnawali. 2020. Challenges  in measuring partner 
+dancing skills  via  wearable  accelerometers. In 
+Proceedings of the 6th ACM Workshop on Wearable 
+1595
+   Systems  and Applications  (WearSys  ’20), 19–24. 
+https://doi.org/10.1145/3396870.3400013  
+61.  Daniela  Rus  and Michael  T. Tolley. 2015. Design, 
+fabrication and control  of soft  robots. Nature  521, 
+7553: 467–475.  
+        https://doi.org/10.1038/nature14543  
+62.  Vanessa  Sanchez, C. Walsh, and R. Wood. 2020. 
+Textile  Technology for Soft  Robotic  and 
+Autonomous  Garments, in Advanced Functional  
+MaterialsV olume 31, Issue 6,   
+        https://doi.org/10.1002/adfm.202008278  
+63.  Danial  Sangian. New  types  of McKibben artificial  
+muscles. PhD  Thesis, University of Wollongong.  
+64.  Ali  Shtarbanov. 2021. FlowIO  Development  
+Platform:  the  Pneumatic   Raspberry Pi  for Soft  
+Robotics. In Extended Abstracts  of  the  2021 CHI 
+Conference  on Human Factors  in Computing 
+Systems. Association for Computing Machinery, 
+New  York, NY , USA, 1–6.  
+        https://doi.org/10.1145/3411763.3451513  
+65.  Vikash Singh, Celine  Latulipe, Erin Carroll, and 
+Danielle  Lottridge. The  choreographer’s  notebook. 
+Proceedings  of  the  8th ACM conference  on 
+Creativity and cognition.  
+       https://doi.org/10.1145/2069618.2069653  
+66.  N. Takahashi, H. Takahashi, and H. Koike. 2019. 
+Soft  Exoskeleton Glove  Enabling Force  Feedback 
+for Human-Like  Finger Posture  Control  with 20 
+Degrees of Freedom.  
+        https://doi.org/10.1109/WHC.2019.8816142  
+67.  Nobuhiro Takahashi, Shinichi  Furuya, and Hideki  
+Koike. 2020. Soft  Exoskeleton Glove  with Human 
+Anatomical  Architecture:  Production of Dexterous       
+Finger Movements  and Skillful  Piano Performance. 
+IEEE  Transactions on Haptics PP: 1–1.  
+        https://doi.org/10.1109/TOH.2020.2993445  
+68.  Carly Thalman and Panagiotis  Artemiadis. 2020. A  
+review  of soft  wearable  robots  that  provide  active  
+assistance:  Trends, common actuation methods,  
+    fabrication, and applications. Wearable  Technologies  
+1. h 
+        ttps://doi.org/10.1017/wtc.2020.4  
+69.  Vasiliki  Tsaknaki, Kelsey Cotton, Pavel  
+Karpashevich, and Pedro Sanches. 2021. Feeling 
+the  Sensor Feeling you   :  A  Soma  Design 
+Exploration on Sensing Non-habitual  Breathing. 
+In Proceedings  of the  2021 CHI Conference  on 
+Human Factors  in Computing Systems. 
+Association for Computing Machinery, New  York, 
+NY , USA, 1–16.  
+        https://doi.org/10.1145/3411764.3445628  
+70.  Martin Tschiersky, Edsko E. G. Hekman, Dannis  
+M. Brouwer, Just  L. Herder, and Koichi  Suzumori. 
+2020. A  Compact  McKibben Muscle  Based 
+Bending Actuator for Close-to-Body Application 
+in Assistive  Wearable  Robots. In IEEE  Robotics  
+and Automation Letters, 3042–3049.  
+        https://doi.org/10.1109/UKSim.2015.49  
+71.  Michael  Wehner, Michael  T. Tolley, Yiğit  Mengüç, 
+Yong-Lae  Park, Annan Mozeika, Ye  Ding, Cagdas  
+Onal, Robert  F. Shepherd, George  M. Whitesides, 
+and Robert  J. Wood. 2014. Pneumatic  Energy 
+Sources  for Autonomous  and Wearable  Soft  
+Robotics. Soft Robotics 1, 4: 263–274.  
+        https://doi.org/10.1089/soro.2014.0018  
+72.  Jiaqing Xiong, Jian Chen, and Pooi  See  Lee. 
+2021. Functional  Fibers  and Fabrics  for Soft  
+Robotics, Wearables, and Human–Robot  Interface. 
+Advanced Materials 33, 19: 2002640.  
+        https://doi.org/10.1002/adma.202002640  
+73.  XYZAidan. Aerobox - a  Soft  Robotics  Control  
+System. Instructables.  
+  h t t p s : / / w w w . i n s t r u c t a b l e s . c o m / A e r o b o x - A - S o f t -
+Robotics-Control-System/  
+74.  Chang-Ming Yang, Jwu-Sheng Hu, Ching-Wen 
+Yang, Chih-Chung Wu, and Narisa  Chu. 2011. 
+Dancing game  by digital  textile  sensor, 
+accelerometer and gyroscope. In 2 011 IEEE  
+International Games Innovation Conference  
+        (IGIC), 121–123.  
+        https://doi.org/10.1109/IGIC.2011.6115112  
+75.  H. K. Yap, J. Lim, Fatima  A. Nasrallah, J. Goh, and 
+Raye  C. H. Yeow. 2015. A  soft  exoskeleton for hand 
+assistive  and rehabilitation application using 
+pneumatic  actuators  with variable  stiffness. 2015 
+IEEE  International  Conference  on Robotics  and 
+Automation (ICRA).  
+        https://doi.org/10.1109/ICRA.2015.7139889  
+76.  Mengjia  Zhu, Amirhossein H. Memar, Aakar Gupta, 
+Majed Samad, Priyanshu Agarwal, Yon Visell, Sean 
+J. Keller, and Nicholas  Colonnese. 2020. 
+PneuSleeve:  In-fabric  Multimodal  Actuation and 
+Sensing in a  Soft, Compact, and Expressive  Haptic  
+Sleeve. In Proceedings  of the  2020 CHI Conference  
+on Human Factors  in Computing Systems  (CHI 
+’20), 1–12.  
+        https://doi.org/10.1145/3313831.3376333  
+77.  John Zimmerman, Jodi  Forlizzi, and Shelley 
+Evenson. 2007. Research through design as  a  
+method for interaction design research in HCI. In 
+Proceedings  of the  SIGCHI Conference  on Human 
+Factors  in Computing Systems  (CHI ’07), 493–502. 
+https://doi.org/10.1145/1240624.1240704  
+78.  Programmable  Air. Programmable  Air. https:// 
+www.programmableair.com  
+79.  Soft Robotics  Toolkit.  
+        https://softroboticstoolkit.com/home  
+80. ⼈⼯筋⾁  Pneumuscle  PMCシリーズ. MIRAI事業
+部. https://www.mirai-projects.com/pneumuscle-
+pmc 
+1596

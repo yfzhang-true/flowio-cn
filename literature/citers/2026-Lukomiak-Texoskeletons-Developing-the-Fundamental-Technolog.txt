@@ -1,0 +1,1283 @@
+Advanced Functional Materials
+www.afm-journal.de
+RESEARCHARTICLE
+Texoskeletons:DevelopingtheFundamentalTechnologies
+forCreatingIntelligentSoftRoboticClothingWith
+Integrated1DSensorsandActuators
+AmyLukomiak1 RameeshBulathsinghala2 JackVarga1 ShuxinMeng2 KalanaMarasinghe3 ImaadRefai1
+BiyonFernando2 AmitkumarPatel2 ChamikaM.Halloluwa-Arachchige 2 CarlosOliveira3 ArashM.Shahidi 3
+ZahraRahemtulla3 AlexanderTurner4 ZiyunDing5 BernardX.W.Liew 6 AndyKerr7 EzioPreatoni8
+TheoHughes-Riley3 IsharaDharmasena2 PasinduLugoda1,9
+1DepartmentofEngineering,NottinghamTrentUniversity,Nottingham,UK 2SchoolofMechanical,ElectricalandManufacturingEngineering,
+LoughboroughUniversity,Loughborough,UK 3AdvancedTextilesResearchGroup,NottinghamSchoolofArtandDesign,NottinghamTrentUniversity,
+Nottingham,UK 4SchoolofComputerScience,JubileeCampus,UniversityofNottingham,Nottingham,UK 5SchoolofEngineering,Universityof
+Birmingham,Birmingham,UK 6SchoolofSport,RehabilitationandExerciseSciences,UniversityofEssex,Colchester,Essex,UK 7BiomedicalEngineering,
+UniversityofStrathclyde,Glasgow,UK 8DepartmentForHealth,UniversityofBath,Bath,UK 9DepartmentofOrthopaedicsandMusculoskeletalScience,
+DivisionofSurgery&InterventionalScience,Stanmore,UK
+Correspondence:IsharaDharmasena( R.I.Dharmasena@lboro.ac.uk) PasinduLugoda( p.lugoda@ucl.ac.uk)
+Received:20January2026 Revised:13April2026 Accepted:22April2026
+Keywords:electronictextiles |exoskeletons|smarttextiles |softrobotics |textilesensors |triboelectricsensors |wearablerobotics
+ABSTRACT
+Traditional wearable exoskeletons rely on rigid structures, which limit comfort, flexibility, and everyday usability. This work
+introducesthefundamentaltechnologiestocreatethefirstsoft,lightweight,intelligenttextile-basedexoskeletons(Texoskeletons)
+builtusing1Dsensorsandactuators.Thisnewapproachensuresthatthetextilesmaintainmostofitsconformabilityandallows
+thedevicestobepositionedanywhereonthebody.Twodifferentstructuralarchitecturesofpneumatic1Dactuatorsareevaluated:
+single-material and two-material actuators. The two-material actuators display intrinsic bending behavior and perform better
+whenpositionedwithinknittedtextiles,whilesingle-materialactuatorsdeliversuperiorliftingperformance.Whenthreeofthese
+actuators are grouped within the textile, they lift loads exceeding 300 g. Additionally, the Texoskeleton comprises of novel 1D
+triboelectricsensorstocaptureusermovements.Aftertrainingamachinelearningalgorithm,the1Dtriboelectricsensorsclassify
+wrist flexion–extension, ulnar–radial deviation, supination, and pronation with an accuracy of 85.71%. A wrist-worn prototype
+Texoskeletonsleeveincorporating14actuatorsand4sensorsiscreatedtodemonstratethedevice’slightweightandwearability.This
+technologyhasthepotentialtorevolutionizepersonalizedrehabilitation,immersivetraining,andhuman–machineinteraction,
+pavingthewayforintelligenteverydayclothingthatadaptstousermovementsandneedsinreal-time.
+1 Introduction
+Wearable exoskeletons have a wide range of applications across
+various fields, including healthcare (post-stroke, musculoskele-
+tal, and sports rehabilitation), entertainment (VR/AR, film, and
+gaming), education and training (deafblind communication,
+remote interaction, and immersive extended reality learning),
+defence (realistic training environments), and space (mitigating
+musculoskeletal degradation) [1–4]. Among these applications,
+rehabilitationpresentsanidealusecasethatalignsperfectlywith
+Thisisanopenaccessarticleunderthetermsofthe CreativeCommonsAttribution License,whichpermitsuse,distributionandreproductioninanymedium,providedthe
+originalworkisproperlycited.
+©2026TheAuthor(s). AdvancedFunctionalMaterials publishedbyWiley-VCHGmbH
+AdvancedFunctionalMaterials ,2026;36:e75714
+https://doi.org/10.1002/adfm.75714
+1of15
+
+the need for unobtrusive and comfortable wearable exoskele-
+ton technologies. According to the World Health Organization
+(WHO), one in three people globally could benefit from reha-
+bilitation [5]. The WHO’sRehabilitation 2030: A Call for Action
+highlightsthatthisneedisexpectedtogrowinthecomingyears,
+drivenbyongoingchangesinglobalhealthtrendsandarapidly
+ageingsociety[ 5].Rehabilitationisvitalformanypatients,partic-
+ularlythoserecoveringfromchronicmusculoskeletalconditions
+and neurological disorders[6–8]. The demand for rehabilitation
+far outstrips the limited healthcare access provided by outdated
+modelsofdelivery,whichdependonsupervisionfromspecialist
+staff.TheWHOrecommendscommunity-baseddeliveryofreha-
+bilitation to maximize access. Technological solutions offer an
+equitablewaytodothis.
+Technology in the form of hard exoskeletons has been used
+for wearable applications [9–12]. Hard exoskeletons can deliver
+large forces but are bulky, inefficient, and uncomfortable to
+wear [13]. Soft exoskeletons overcome these issues but are
+hinderedbysizeconstraintsandnon-seamlessdeviceintegration
+methods, impacting their wearability [14–19]. The proximity of
+textilestothehumanbodymakesthemwell-suitedforcollecting
+physiological and behavioral data and providing personalized
+supportandresistancetowearers,makingthemidealforcreating
+wearable exoskeletons. Textile-based exoskeleton systems, like
+those pioneered by the Harvard Biodesign Lab [20, 21]a n d
+the University of Bristol’s “right trousers,” [4, 22] often employ
+sensorsandactuatorsofsignificantsize(centimeterrange).This
+can affect both the textile’s ability to conform to shapes and its
+overallvisualappeal.Table 1presentsaselectionoftextile-based
+exoskeletonsdevelopedinrecentyears.
+People typically wear clothing for the majority of the day. Due
+to this, electronic textiles are becoming increasingly popular
+and have been used in applications ranging from personalized
+healthcaretoentertainment[ 23–30].Integratingelectronicfunc-
+tionality into textile fabrics is challenging due to the size of the
+electronicsandthedifferencesinmechanicalpropertiesbetween
+these two materials [31]. Textiles can bend, drape, and shear,
+capabilitiesthat3Delectroniccomponentslack.Incontrast,other
+optionslikeintegrating2Dfilm-basedelectronicswithtextilescan
+offer high flexibility but typically along only one axis, limiting
+their ability to mimic textile behavior [32]. This impacts both
+the textile’s comfortability and wearability, while also requiring
+extrastepsinthetextilemanufacturingprocesstointegratethese
+components. 1D cylindrical-shaped fiber form factors reduce
+the negative impact on the textile’s flexibility by allowing for
+greaterbendinginthedirectionperpendiculartothefibers[ 32].
+Integrating electronic functionality into a fiber has stimulated a
+newresearchandtechnologyfield[ 33–38].Converting1Dstruc-
+tures/yarns/fibers into actuators and sensors would streamline
+manufacturingprocessesandimprovethetextile’svisualappeal.
+While these 1D structures produce less forces than traditional
+rigidexoskeletons,theyallowseamlessintegrationintoclothing,
+enablingflexiblesensorandactuatorplacementacrossthebody.
+Their design also supports layering multiple units to increase
+forceoutputifrequired.Currentstate-of-the-art1Dactuatorsare
+unable to monitor and intelligently adjust their forces to meet
+the wearer’s needs [39, 40]. A combination of 1D actuators and
+1Dsensorshasneverbeenusedintandemtobuildconformable
+textileexoskeletons.
+Ouraimwastobuildatextileexoskeleton(Texoskeleton)system
+thatintelligentlyrespondstousermovementsandneeds,offering
+customizedresistanceorassistancethroughintegrated1Dsensors
+and 1D actuators. In this paper, we demonstrate the function-
+ality of the fundamental technologies that are the foundations
+towardbuildingthissystem.Todemonstratethefeasibilityofthe
+technologywebuiltawrist-wornTexoskeletonsleeve,integrating
+1D actuators and 1D sensors. We developed and tested novel
+pneumatic 1D actuators using various materials and fabrication
+methods, along with textile structures for providing movement
+assistance or resistance. For the Texoskeleton’s sensing system,
+a new 1D triboelectric sensor was developed. The 1D sensor’s
+performancewasevaluatedthroughausertrial,whereamachine
+learning algorithm was employed to classify wrist movements,
+including flexion-extension, ulnar-radial deviation, supination,
+andpronation.
+2 Results
+Thetextileyarn-basedexoskeleton(Texoskeleton)consistsof1D
+actuatorscapableofprovidingassistanceorresistance,anda1D
+sensingsystemcomprisingof1Dtriboelectricsensors(Figure 1).
+2.1 1DActuators
+The 1D actuators were created using commercially available
+silicones.Siliconeswerechosenfortheactuatorsduetotheirbio-
+compatibility, high stretchability, and ease of fabrication. These
+actuatorshadanoutsidediameterof4.96 ±0.12mm,alengthof
+146.0±0.9mm,andaweightof3.92 ±0.04g.Herein,twomain
+actuator types were developed; Single-material actuators that
+provideassistanceorresistanceonlywhenintegratedintospecific
+textilestructuresthatenablebending,andtwo-materialactuators
+thatexhibitintrinsicbending,allowingthemtofunctionwithin
+awiderrangeoftextileconfigurations.
+2.1.1 Single-Material1DActuatorDesign
+The single-material 1D actuators were created using a single
+silicone layer. For them to provide controlled and targeted
+support,positioningthemwithintextilestructuresisconsidereda
+suitablestrategy.Cappelloetal.positionedsingle-materialpneu-
+matic bladders within two layers of fabrics with different strain
+propertiestocreatebendingtextiles[ 43].Here,theyrecommend
+combining a restraining fabric with a unidirectional stretchable
+fabricforfabricatingthebendabletextile.Usingthesamestrategy,
+acut-and-sewtypetextilestructurewasfabricatedwhereamicro-
+Nyloncharmeuse(whitematerialshowninFigure 2a)wasused
+astherestrainingmaterial,andaweftknittedpolyester/elastane
+mixwitha7:3ratio(pinkmaterialshowninFigure 2a)wasused
+as the single directional stretch material. The charmeuse fabric
+was a woven fabric with a satin weave, which locks its threads
+in place, producing a stiff fabric that suits the operation as the
+restrainingfabric.Ontheotherhand,theweftknittedstructure
+controls the stretch direction (unidirectional stretch), and the
+incorporationofelastaneprovidesexcellentstretchintheselected
+direction. The 1D actuators were inserted between the two of
+these fabrics within sewn channels. VideoS1demonstrates the
+2of15 AdvancedFunctionalMaterials ,2026
+ 16163028, 2026, 60, Downloaded from https://advanced.onlinelibrary.wiley.com/doi/10.1002/adfm.75714, Wiley Online Library on [21/09/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+TABLE 1 Therecentdevelopmentswithtextile-basedexoskeletons.
+Refs.
+Elementsize
+(mm) Actuator Sensor Textilestructure AI Functionality
+[41] Actuator
+diameter-cm
+range
+Pneumaticactuator-
+Heat-sealable
+Ripstopfabricwith
+zeroairpermeability
+throughstitcheson
+thefabric
+— Forearmbandswere
+madeof
+double-layered
+fabric
+— Assistpronation
+andsupination
+motionsof
+forearm
+[42] Actuator-Air
+channel
+width-77mm,
+anouter
+diameter-
+115mm
+Pneumaticactuator-
+inextensiblewoven
+fabricenclosingan
+inflated
+Thermoplastic
+polyurethane(TPU)
+bladder
+— Sleeveismadefrom
+anextensibleknit
+— ElbowFlexion
+Assistance
+[43] Actuator-
+Thickness-
+0.038mm.
+width-30mm.
+Pneumaticactuator-
+bladderfabricatedby
+laser-cutting
+rectangleshapesout
+ofthermoplastic
+elastomer
+— Bladderwasinserted
+intothetextileshell.
+Textileshellcreated
+bysewingstretch
+andstrain-limiting
+materialtogether
+Assistwithfinger
+flexionand
+extension
+[44] Actuatorwidth
+=60mm,and
+height =
+22.86mm.
+Pneumaticactuator-
+TPUcoatednylon
+fabriciscutintothe
+desiredgeometries
+— TheTPUsheetsare
+usedtobondthe
+knitfabricandthe
+wovenfabric
+reinforcements,
+whilecoatingthe
+knitfabricsubstrate
+tomakeitairtight
+— —
+[45] Actuator
+width- >1cm
+Pneumaticactuator-
+TPUfilmand
+laminatedwitha
+high-strengthfiber
+materialonthe
+surfacetoforma
+reinforcedbladder
+structure.
+Athinfilmsensor
+tomeasurethe
+Extrusion
+pressure
+Arectangular
+channelwas
+designedonthe
+devicetoinserta
+nylonbelt.Both
+endsofthenylon
+beltwereconnected
+toawearablecarrier.
+— Elbowmovement
+andwrist
+extension,flexion,
+ulnarandradial
+deviation.
+[46] Actuator-
+20–25mm
+diameter
+circles
+Pneumaticactuator
+-Latexbladder
+— Aplaincottonweave
+forthebottombase
+oftheactuatoranda
+cottonmixwith
+elastaneyarn
+integratedtothe
+weftofthefabricfor
+thetoplayer
+— Fingerflexion
+[47] Actuator-
+width–15mm
+Thermallydriven
+actuators—TPU
+bladder,Heating
+elementisa
+stainless-steel
+threadsheater
+Resistivetextile
+sensors-U-shaped
+region,hybrid
+stretchable
+conductiveyarns.
+Seamlessknitted
+structurewithfused
+chamberwhile
+positioningthe
+heatingelementin
+thelowerpocket.
+— Industrialrobot
+handfinger
+bending
+[48] Diameter-cm
+range
+Pneumatic
+actuators-sealed
+bladdersmadefrom
+Strechlon200film
+— Allsampleswere
+knitonaV-bed
+knittingmachine
+— Testingknit
+structures
+(Continues)
+AdvancedFunctionalMaterials ,2026 3of15
+ 16163028, 2026, 60, Downloaded from https://advanced.onlinelibrary.wiley.com/doi/10.1002/adfm.75714, Wiley Online Library on [21/09/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+TABLE 1 (Continued)
+Refs.
+Elementsize
+(mm) Actuator Sensor Textilestructure AI Functionality
+This
+work
+1DActuator
+and
+triboelectric
+sensor–
+diameter-4.96
+±0.12mm.
+Weight-3.92±
+0.04g.
+Twotypesof
+pneumatic1D
+actuatorsmadeof
+siliconetested.One
+withintrinsic
+bendingcapabilities
+1Dtriboelectric
+sensors
+Cut-and-sew
+Texoskeletonsleeve
+designwithchannels
+forthe1Ddevices.
+✓ Detectand
+classifywrist
+movements
+(flexion-
+extension,ulnar
+deviation-radial
+deviation,
+supinationand
+pronation)while
+alsobeingableto
+deliverforces
+fromspecific
+regionsofthe
+wrist.
+FIGURE 1 TheTexoskeletonconceptandthetwo1Dtechnologiesemployedinitsdevelopment.
+real-time bending of the cut-and-sew fabric as the pneumatic
+actuatorsareactivated,whereasFigure 2aillustratesthebending
+capabilityofactuatoryarnswithinacut-and-sewfabric.
+For the single material actuators, two different silicone types
+Ecoflex 0030 (Smooth-on, PA, USA) and Dragon Skin 10 Slow
+(Smooth-on, PA, USA), were tested for creating the single-layer
+tubes. Various concentrations of additives were used to further
+vary the Shore hardness of these silicones. Table2. outlines the
+varioussingle-material1Dactuatorstested.TheYoung’smodulus
+ofthevarioussiliconeandadditivecombinationsispresentedin
+Figure2b.DragonSkinexhibitedthehighestYoung’smodulusof
+0.935± 0.174 MPa, while Ecoflex 0030 demonstrated the lowest
+at0.260±0.023MPa.TheYoung’smodulusofothersiliconeand
+additivecombinationsfellbetweenthesetwoextremes.
+A burst test was conducted to assess the failure point of the 1D
+actuators. Here, the internal air pressure of the actuator was
+measuredtorecordtheburstingpoint.Theburstingpressuresfor
+theEcoflex,Ecoflex1%thickener,DragonSkin,DragonSkin5%
+thinner and Dragon Skin 10% thinner 1D actuators were 51.81±
+3.48 kPa, 62.70± 1.46 kPa, 148.47± 5.93 kPa, 130.59± 2.41 kPa,
+and 117.78± 5.92 kPa, respectively. Five different samples were
+tested for each material combination. Bursting measurements
+fromarepresentativeactuatorforeachofthesiliconeandadditive
+combinationsaregiveninFigure 2c.HigherYoung’smodulusin
+the silicone layer (Figure2b) correlates with increased bursting
+pressure. It was interesting to note that the 1D actuators did
+not rupture at their respective bursting pressure when inte-
+grated within the cut-and-sew fabric structure, as illustrated in
+FigureS1.
+Lift tests were used in the literature for testing the performance
+of soft actuators in textiles [48, 49]. Therefore, a lift test was
+conducted to measure the forces that can be generated by
+the fabric containing the 1D actuators. In this study, three 1D
+actuators were positioned within the previously mentioned cut-
+and-sew textile structure. The cut-and-sew textile had a 50 mm
+width and 150 mm length. The actuators were laid flat on a
+pegboardwiththeunidirectionalstretchablefabricfacingdown,
+to simulate the tubes lying flat against the skin. Then weights
+of 100, 200, and 300 g were hung at the end of the fabric.
+Measurement intervals were chosen based on the burst test
+results.Ecoflex-basedmaterialsweremeasuredat0.5sintervals
+4of15 AdvancedFunctionalMaterials ,2026
+ 16163028, 2026, 60, Downloaded from https://advanced.onlinelibrary.wiley.com/doi/10.1002/adfm.75714, Wiley Online Library on [21/09/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+FIGURE 2 Performanceofthesingle-material1Dactuators.(a)Whenpneumaticallyactuatedwithinatextilestructurecomprisedofarestraining
+fabricandsingle-stretchfabric,single-material1Dactuatorsexhibitabendingdeformation.(b)Young’smodulusofthedifferentsiliconemater ialsused
+formakingthesingle-material1Dactuator.(c)Theburstingtestconductedonthedifferentsingle-material1Dactuators.(d–f)Showcasestheabil ityof
+thedifferentsingle-material1Dactuatorstoliftdifferentweightsrangingfrom100to300g.(g)Cyclicperformanceofarepresentativesingle-ma terial
+1DactuatorcreatedusingDragonSkinwith5%thinner.
+for4s,whereasthedragonskin-basedmaterialsweremeasured
+in1sintervalsfor8s.Figure 2d–fshowstheresultsfordifferent
+1D actuators. The purely Dragon Skin samples could not lift
+200 and 300 g weights with the provided air pressure. These
+samples require a more powerful pump, which consumes more
+power,makingitlesssuitableforwearableapplications.Ecoflex
+and Ecoflex 1% thickener samples lifted the weights faster and
+thereforegeneratedagreaterforcethantheothersamples.
+To be suitable for wearable applications, the 1D actuators
+must exhibit sufficient durability to withstand numerous actu-
+ation cycles. The cyclic fatigue testing results presented in
+AdvancedFunctionalMaterials ,2026 5of15
+ 16163028, 2026, 60, Downloaded from https://advanced.onlinelibrary.wiley.com/doi/10.1002/adfm.75714, Wiley Online Library on [21/09/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+TABLE 2 Thevarioustypesofsiliconeandadditivecombinationstestedforthesingle-material1Dactuators.Thepercentagesforadditiveswere
+calculatedbytotalweight.
+Name Material Thinner Thickener
+Ecoflex Ecoflex0030 — —
+Ecoflex1%thickener Ecoflex0030 — 1%offumedsilica
+thixotropicpowder
+(Aerosil,Easy
+CompositesLtd,
+Stoke-on-Trent,UK)
+DragonSkin DragonSkin10Slow — —
+DragonSkin5%
+thinner
+DragonSkin10Slow 5%Siliconerubberthinningfluid
+(BentlyAdvanceMaterials,
+Kidderminster,UK)
+—
+DragonSkin10%
+thinner
+DragonSkin10Slow 10%Siliconerubberthinningfluid —
+Figure S2 indicate that the Ecoflex and Ecoflex 1% thickener
+samplesexhibitedsignificantlylowerfatiguelife,failingafter615
+and 181 cycles, respectively. These findings suggest that these
+materialsmaybelesssuitableforapplicationsrequiringrepeated
+actuation. Furthermore, preliminary experiments demonstrated
+thathigherthickenerconcentrationsinEcoflexleadtoafurther
+reduction in the cyclic repeatability of the 1D actuators. In
+contrast,theDragonSkin,DragonSkin5%thinner,andDragon
+Skin10%thinnerdemonstratedsuperiorfatigueresistance,with-
+standing2028,1719,and1631cycles,respectively.Arepresentative
+cyclictestforDragonskin5%thinnerisgiveninFigure 2g.
+Dragon Skin 5% thinner and Dragon Skin 10% thinner are the
+most suitable materials for the single-material 1D actuators,
+demonstrating the best combination of mechanical robustness
+andactuationcapability(Figure 2).Nonetheless,single-material
+1D actuators exhibit limited design flexibility, requiring inte-
+gration into specific textile architectures, such as those com-
+prising a restraining fabric and a single-stretch material. These
+single-material actuators are unable to generate the required
+bending moments when integrated into arbitrary textile struc-
+tures. As exemplified in FigureS3, the 1D actuator stretches
+rather than bending within a knitted structure, even with
+a rib/jersey intended to promote bending. Bending actuators
+are better suited for wearable systems as they generate per-
+pendicular forces that align more naturally with human joint
+kinematics[50].
+2.1.2 Two-Material1DActuatorDesign
+The two-material 1D actuators were engineered to exhibit
+intrinsic bending capability, independent of the supporting tex-
+tile architecture. This allows greater flexibility in Texoskeleton
+design,enablingintegrationacrossdiversetextileconfigurations.
+Adetailedexplanationoftheworkingmechanismsofthesingle-
+material and two-material 1D actuators is illustrated in Note
+S1and Figure S4. Here, two different types of silicone were
+utilized to create these actuators. The top layer was fabricated
+using Dragon Skin 10 slow, and the lower layer was created
+using a silicone with a shore hardness of 45A (Smooth-Sil 945,
+Smooth-on, PA, USA). Smooth-Sil 945 was chosen due to the
+Shore hardness of this material being in the medium soft range
+of the Shore Durometer scale. An uninflated two-material 1D
+actuator is displayed in Figure3a. This design enables bending
+toward the side of the stiffer and more restraining Smooth-Sil
+945 silicone. This is shown in Figure3b. This two-material 1D
+actuatorpositionedwithintherib/jerseyknitdesign,isdisplayed
+in Figure3c. The fabric bends when the actuator is inflated, as
+showninFigure 3d.
+Table 3 lists the different types of two-material 1D actuators
+tested.TheburstingpressuresfortheSmooth-Sil945withDragon
+Skin, Smooth-Sil 945 with Dragon Skin 5% thinner, Smooth-
+Sil 945 with Dragon Skin 10% thinner were 189.64± 22.41 kPa,
+175.01±19.18 kPa, and 158.16±13.04 kPa, respectively. Bursting
+measurements from a representative two-material 1D actuator
+for each of the silicone and additive combinations are given in
+Figure3e.Subsequently,alifttest,similartothoseperformedon
+single-material1Dactuators,wasconducted.Forthisexperiment,
+threeunitsoftwo-materialactuatorswerepositionedwithinthe
+two-layer cut-and-sew fabric. A 300 g weight was used for this
+lift test. The experiment results given in Figure3fdemonstrate
+that the two-material actuators built using the Smooth-Sil 945
+with Dragon Skin 10% thinner demonstrate the highest lifting
+capability.Themaximumliftachievedbythetwo-materialactu-
+ators was 46.0% lower than that achieved by the single-material
+Dragon Skin 10% samples positioned within the same two-layer
+cut-and-sewfabric.
+While much of this article has focused on using a cut-and-sew
+method for combining two textile layers, computerized knitting
+offers an alternative solution for the creation of textiles. As an
+automatedprocess,thisallowsfortherepeatablemanufacturing
+of samples, simplifying the production process. Earlier studies
+have shown that pneumatic bending in textiles is achieved by
+embeddingactuatorsbetweenlayerswithdifferingstretchprop-
+erties; greater extensibility on one side causes bending toward
+the less extensible side [43]. By tailoring the materials used, the
+functionality of the textile actuator can be optimized. Further,
+thisisimportantforunderstandingthedesignrulesforcreating
+textile actuators of this kind, as in certain applications, there
+6of15 AdvancedFunctionalMaterials ,2026
+ 16163028, 2026, 60, Downloaded from https://advanced.onlinelibrary.wiley.com/doi/10.1002/adfm.75714, Wiley Online Library on [21/09/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+FIGURE 3 Performanceofthetwo-material1Dactuators.(a)Theuninflated 1Dtwo-materialactuatoriscomposedofDragonSkinononeside,
+servingasthestretchablelayer,andastifferSmooth-Sil945ontheother,actingastherestraininglayer.(b)Uponinflation,theDragonSkinlayer expands,
+causing the actuator to bend toward the more rigid Smooth-Sil 945 layer. (c) The uninflated actuator is embedded within a knitted fabric structure.
+(d) When the embedded actuator is inflated, it induces bending in the fabric. (e) The bursting test conducted on the two-material 1D actuators.
+(f) Showcases the ability of the two-material 1D actuators to lift a mass of 300 g, once it is positioned within a cut-sew fabric. (g) This demonstrates
+thecapabilityofthetwo-materialactuatortolifta300gmasswhenintegratedintovariousknittedstructures.Imagesoftherib/jerseystructure( sample
+9)andaspacerstructure(sample10).
+may be limitations in the types of materials that can be used.
+Twodistinctknittedconfigurationswereassessed:onefeaturinga
+combinationofplainandribstructuresonoppositesides(sample
+9),wheretheribknitdemonstratedlowerstretchabilitycompared
+to the plain knit; and a series of spacer structures (samples 10–
+14),withtheirspecificdesignsdescribedinNote S2andshownin
+FigureS5.
+TheSmooth-Sil945withDragonSkin10%thinnertwo-material
+actuators, which showcased the best performance within the
+AdvancedFunctionalMaterials ,2026 7of15
+ 16163028, 2026, 60, Downloaded from https://advanced.onlinelibrary.wiley.com/doi/10.1002/adfm.75714, Wiley Online Library on [21/09/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+TABLE 3 The various types of silicone and additive combinations tested for the two-material 1D actuators. The percentages for additives were
+calculatedbytotalweight.
+Name Lowerlayermaterial Top layer material Toplayerthinner
+Smooth-Sil945withDragonSkin Smooth-Sil945 DragonSkin10slow —
+Smooth-Sil945withDragonSkin5%thinner Smooth-Sil945 DragonSkin10slow 5%Siliconerubberthinningfluid
+Smooth-Sil945withDragonSkin10%thinner Smooth-Sil945 DragonSkin10slow 10%Siliconerubberthinningfluid
+cut-and-sew fabric, was then tested within different knit struc-
+tures. Here, the performance of the actuators to lift a 300 g
+weight was evaluated. The results in Figure3gindicate that the
+two-material actuators embedded in the knit samples were less
+effective in lifting the weight compared to when the actuators
+were integrated into the cut-and-sew sample. However, com-
+pared to single-material actuators, the two-material actuators
+exhibitedmarkedlyimprovedperformancewhenintegratedinto
+knitted structures. FigureS6presents an experiment in which
+a single-material actuator was positioned within two knitted
+configurations:therib/jerseystructure(sample9)andthespacer
+structure (sample 10). The single-material actuator was unable
+to lift a 300 g load in either configuration. In contrast, the two-
+material actuator, when positioned within the spacer structure
+(sample10),achievedaverticaldisplacementof5.33 ±3.09mm
+whileliftingthesameload.
+ResultsofthecyclictestindicatethatSmooth-Sil945withDragon
+Skin, Smooth-Sil 945 with Dragon Skin 5% thinner, Smooth-
+Sil 945 with Dragon Skin 10% thinner actuators can withstand
+7140,2820,and431cycles,respectively.TheSmooth-Sil945with
+Dragon Skin, Smooth-Sil 945 with Dragon Skin 5% were able to
+withstandmorecyclesthanthesingle-materialactuators(Figure
+S2). Notably, the durability of the Smooth-Sil 945 with Dragon
+Skin10%wassignificantlylowerthananticipated,potentiallydue
+toinconsistenciesinthemanualmixingoftheDragonSkinwith
+the10%siliconethinnermixture.Moreover,itwasobservedthat
+theburstlocationwasthesameforallthetubestested.
+2.2 1DSensingSystem
+Texoskeleton’s sensing system comprised of 1D triboelectric
+nanogenerator (TENG) sensors to assess the movements. The
+triboelectricsensorsweredesignedandevaluatedforwristmove-
+ment classification (flexion-extension, radial-ulnar deviation,
+supination,andpronation)usingamachinelearningalgorithm.
+Herein,TENGsensorsweredesignedwithaflexible,stretchable
+architecture to facilitate comfort, accuracy, and unobtrusive
+sensing,andtheself-poweredoperationofthesesensorshelpsto
+simplify the system complexity and operation. Furthermore, to
+simplify the manufacturability and reduce the costs, the TENG
+designutilizedanidenticalsiliconetubedesignasthe1Dactuator
+as its external triboelectric element, which was then integrated
+withamodifiedtextileyarnplacedatitscore,whichactedasthe
+inner triboelectric element. Having identical outer surfaces and
+dimensionsofthe1Dsensorsand1Dactuatorsarealsointended
+tosupportthedesignandintegrationprocessoftheTexoskeleton.
+The fabrication process of the 1D triboelectric sensor using
+the aforementioned core-sheath yarn structure is depicted in
+Figure4a.Thecorecomponentwasamodifiedtextileyarndesign,
+consisting of a silver-plated high-conductive polyamide (nylon
+6,6) yarn (Shieldex 235/36 2-ply HC) with a resistivity of 80
+Ω/m,whichactedastheelectrodeofthe1Dtriboelectricsensor.
+Thiswascoateduniformlyandconformallywithathermoplastic
+polyurethane (TPU) layer, creating the positive triboelectric
+surface. The outer sheath of the 1D triboelectric sensor, which
+acted as the negative triboelectric surface, was fabricated using
+Ecoflex 0030, in the form of a hollow cylindrical sleeve, using
+the same method that was used to create the 1D actuator
+yarns in Section2.1.1. The core yarn was then inserted into the
+cylindricaloutersleeve,creatingthecore-sheath1Dtriboelectric
+sensor.
+Within this sensor design, the difference in diameter between
+the core yarn and the outer sleeve created a gap between the
+innersurfaceoftheoutersheath(Ecoflex),andtheoutersurface
+of the inner core (TPU) (FigureS7a). When the 1D triboelectric
+sensor is subjected to deformations such as stretching/releasing
+orbending,theoutercoreandtheinnersheathsurfacescontact
+each other, triboelectrically charging these surfaces. Therefore,
+theTPUlayergetspositivelychargedandtheEcoflexsurfacegets
+negatively charged (FigureS7b). Furthermore, the electrode is
+connected to a ground plane (a conductive patch), through an
+electrical measurement unit. During its use, the deformation of
+this yarn changes the gap between these two charged surfaces
+(FigureS7b–e).Theresultantchangeintheelectricfieldsinduces
+a potential difference between the electrode and the ground,
+resultingintheoutputgenerationofthe1Dtriboelectricsensor.
+To assess the durability of the 1D triboelectric yarn sensor, a
+cyclic compression test was performed. Herein, the yarn was
+subjected to repeated compression-decompression cycles (up to
+a total of 3000 cycles). As shown in FigureS8, the yarn was
+able to withstand over 3000 compression-decompression cycles
+withoutanynoticeabledegradationofitsoutputsorthephysical
+structure.
+The performance of the 1D triboelectric sensor was evaluated
+underdifferentmotionprofilesofthewrist,includingextension-
+flexion,radialdeviation-ulnardeviation,pronation,andsupina-
+tion.Duringinitialsensorcalibration,the1Dtriboelectricsensor
+wasmountedlengthwiseonthedorsalsideofthehand,ranging
+from the base of the middle finger to the forearm. For example,
+Figure 4bshows images of the mounted sensor, starting from
+the default hand position, followed by the extension-flexion
+movementsoftheforearm.
+Then,eachofthefourwristmovementswasrepeated,withtwo
+consecutive cycles for each movement, to identify movement
+patterns. The resultant voltage signals are shown in Figure4c,
+indicating distinct amplitudes and waveform shapes for the
+8of15 AdvancedFunctionalMaterials ,2026
+ 16163028, 2026, 60, Downloaded from https://advanced.onlinelibrary.wiley.com/doi/10.1002/adfm.75714, Wiley Online Library on [21/09/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+FIGURE 4 1Dtriboelectricsensoranditscharacterization.(a)Schematicofthecore-sheath1Dtriboelectricsensor,(b)Photographsshowingthe
+sensor mounted on the hand and wrist postures during calibration for (i) default position, (ii) extension, and (iii) flexion. (c) Voc output signals for
+fourwristmotiontypes(extension-flexion,radial-ulnardeviation,clockwise-rotation,andanticlockwiserotation),withtwoconsecutivecyc lesforeach
+movement.(d)Interactivefilteringtoolshowingrawsignal,cutofffilter,andhysteresisfilterforpulseextraction(e)1DCNNarchitectureused forgesture
+classification(f)Trainingandtestloss/accuracycurvesandconfusionmatrixoftheCNNmodel.
+AdvancedFunctionalMaterials ,2026 9of15
+ 16163028, 2026, 60, Downloaded from https://advanced.onlinelibrary.wiley.com/doi/10.1002/adfm.75714, Wiley Online Library on [21/09/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+different movement types. Following this identification, each
+motion type was repeated for 20 cycles, and the output patterns
+were recorded. The same procedure was repeated for four able-
+bodied participants (two males, two females) with no history
+of wrist injury. The ethical approval for the testing process was
+obtained through Loughborough University under the project
+title Textile-based Wearable Sensing System for Human Motion
+Monitoring(ProjectID-22028).Aftercollectingtheraw1Dtribo-
+electricsensorfromtheparticipants,acustominteractivefiltering
+toolwasdevelopedtosegmentthecontinuoustime-seriessignals
+intoindividualgesturepulsesbasedonthesignal-to-noiseratio.
+Figure4ddemonstratesanexampleuseofthistool,depictingthe
+raw signal with threshold overlay, and the processing through a
+binary cutoff filter and a hysteresis-based filter. Further details
+onthefunctionalityofthecustominteractivetoolareprovidedin
+Section4.5.
+A 1D Convolutional Neural Network (CNN) was implemented
+usingPyTorchtoclassifytheextractedgesturepulses.TheCNN
+was selected because the convolutional kernels are inherently
+robust to temporal shifts and local distortions in the gesture
+signals, enabling effective feature extraction from noisy time-
+series data that simpler classifiers cannot achieve. The model
+architecture, illustrated in Figure4e, is further illustrated in
+Section 4.5. The training and testing loss and accuracy curves,
+shown in Figure4f, demonstrate a consistent reduction in loss
+and an increase in accuracy over time, indicating that the
+model was learning effectively without signs of overfitting. The
+confusion matrix further supports this by showing that most
+predictions align with the true labels across all four gesture
+classes. Overall, the trained model achieved a test accuracy of
+85.71%, demonstrating its ability to reliably distinguish the four
+gestureclassesfromthe1Dtriboelectricsensorsignalswithgood
+accuracy and repeatability. It was alsointerestingtonotice that,
+iftheclockwiseandanti-clockwiserotationsareclassifiedinthe
+same category, the accuracy of the model increases to 95.74%,
+signalingthatthesimilarityofthefeaturesofthetwomovements
+affectsthemodelaccuracy(seeNote S3andFigures S9andS10).
+2.3 DesignoftheSmartTexoskeletonSleeve
+One of the major application areas for this technology will be
+home-based rehabilitation. For instance, in conditions such as
+lateralelbowtendinopathy(tenniselbow),patientsaretypically
+prescribed exercises like wrist extension in three sets of ten
+repetitions per day, although the exact training volume is often
+modified according to individual pain levels and functional
+capacity [51]. To ensure that the proposed Texoskeleton sys-
+tem can operate for periods exceeding 90 days under typical
+rehabilitation usage. In our design, we decided to use the two-
+materialSmoothSil945with5%DragonSkinthinner1Dactuator
+architecture,alongside1Dtriboelectricsensors.Theauthorsnote,
+however,thatcyclicdurabilitymeasurementsalonecannotfully
+represent performance in realworld operating environments,
+where the actuators must dynamically deliver variable levels of
+mechanicalassistance.
+The same cut-and-sew fabric structure that showed superior
+performance in the actuator experiments was used to construct
+the Texoskeleton sleeve shown in Figure5a. Channels were
+incorporated into the Texoskeleton sleeve to house the actuator
+and sensing yarns in designated positions. This design enabled
+easy removal of the 1D devices, allowing for separate recycling
+of the 1D structures and fabric components, as well as straight-
+forward replacement of any faulty 1D devices. To evaluate the
+functionality of the integrated actuators and sensors within the
+textile sleeve, a preliminary proof of concept experiment was
+performed. In this setup, the Texoskeleton sleeve was mounted
+ontoasiliconehand.Apressuresensor(GD03b,UneoInc.,New
+TaipeiCity,Taiwan)waspositionedonthedorsalsideofthehand,
+andthesleeve’sembedded1Dactuatorwasaligneddirectlyabove
+this sensor. A 1D triboelectric sensor was placed in an adjacent
+channel. The actuator was subjected to repeated inflation and
+deflation cycles of five seconds each, with the corresponding
+signals recorded in Figure5b,c. The results indicate that actu-
+ator inflation produces a measurable pressure response in both
+sensingelements,demonstratingthattheintegrated1Dactuators
+are capable of delivering forces to the underlying structure.
+Therefore, these findings validate the fundamental operation of
+thesystem,representinganinitialevaluation.
+The sleeve contains 14 1D Smooth-Sil 945 with Dragon Skin
+5%thinnertwo-materialactuators,four1Dtriboelectricsensors.
+Video S2illustrates wrist movements, including extension, flex-
+ion,ulnardeviation,radialdeviation,supination,andpronation,
+performed while wearing the Texoskeleton sleeve. The sleeve
+conformstothewristduringthemovements.Avideoofsomeof
+thepneumaticactuatorsbeingactivatedinthesleeveisshownin
+VideoS3.
+3 Discussion
+Wepresentanovelapproachfordesigningwearableexoskeletons
+by embedding 1D cylindrical-shaped devices directly within
+textiles, allowing actuators and sensors to be positioned across
+variousregionsofthebody.Thismethodofconstructingexoskele-
+tons ensures that the textiles conformability is not significantly
+impacted by the added electronics. Moreover, the Texoskele-
+ton design with dedicated channels for 1D devices supports
+easy replacement of malfunctioning components and simplifies
+the recycling process. This paper introduces the first textile
+exoskeleton sleeve prototype constructed using 1D actuators
+and sensors. The 1D triboelectric sensors integrated into the
+Texoskeleton sleeve can accurately classify wrist movements,
+including extension-flexion, ulnar-radial deviation, supination,
+and pronation. Meanwhile, the embedded 1D actuators can
+providecontrolledforcesatspecificregionsofthewrist.
+Results indicate that the 1D actuator performance is highly
+dependentonbothmaterialcompositionandtextilearchitecture.
+Single-material actuators showed superior lifting capabilities
+when embedded in cut-and-sew fabrics. In contrast, the two-
+materialactuatorsprovideintrinsicbendingbehaviorthatisinde-
+pendent of the surrounding textile and demonstrate enhanced
+liftingperformancewhenembeddedwithinknittedfabrics.This
+inherent capability affords greater design flexibility and enables
+theuseofawidervarietyoftextilematerialsinthedevelopmentof
+Texoskeletonsystems.Overall,thesefindingsconfirmthatalign-
+ing1Dactuatoryarndesignwiththeoutertextilearchitectureis
+essentialforachievingoptimalfunctionalperformance.
+10of15 AdvancedFunctionalMaterials ,2026
+ 16163028, 2026, 60, Downloaded from https://advanced.onlinelibrary.wiley.com/doi/10.1002/adfm.75714, Wiley Online Library on [21/09/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+FIGURE 5 PrototypeTexoskeletonsleeveintegrating1Dtwo-materialactuator sand1Dtriboelectricsensors,alongwithpreliminaryexperimental
+results.(a)PrototypeTexoskeletonsleeve.(b,c)Representativemeasurementsrecordedfromthepressuresensorandthe1Dtriboelectricsensord uring
+theinflationanddeflationofatwo-material1Dactuator.
+Theintegrationofthese1DsensorsintotheTexoskeletonsleeve
+prototypehighlightsthefeasibilityofcreatinglightweight,unob-
+trusivewearablesystemscapableofbothactuationandsensing.
+The novel 1D triboelectric yarns, while mounted on the hand,
+achieved a classification accuracy of 85.71% for distinct wrist
+movements.Thissuggeststhattheproposedtriboelectricsensors
+offer a fully soft material-based, lightweight, and highly flexible
+sensingsolutionthatcanbefurtheroptimizedtoimprovesignal
+fidelityandrobustness.
+Despite these promising results, several limitations and chal-
+lenges remain. The size and bulk of the interface electron-
+ics, including air pumps and connectors, pose a challenge
+for making these devices more wearable. Recent literature
+includes electropneumatic circuits that have been developed
+specifically for wearable use cases [52], and adopting some
+of these existing platforms could be beneficial for future Tex-
+oskeletons. Additionally, the user trial in this paper involved
+only a small number of participants, which limits the gen-
+eralizability of the results. Hence, future work is needed
+on larger user groups. In addition, more extensive quantita-
+tive and qualitative evaluation is required, including assess-
+ments using a biofidelic hand and controlled volunteer tri-
+als to examine wearability, delivered support, and achiev-
+able resistance levels. Comprehensive testing under realistic
+wear conditions will also be critical to fully characterize
+longterm device performance, stability, and reliability during
+everydayuse.
+Our overarching aim is to build a system that will utilize
+everydayclothingtomonitormovementsofindividualsandoffer
+personalizedresistance/assistanceforhome-basedrehabilitation
+exercises and activities required in daily living. To achieve
+this, the Texoskeleton must intelligently interpret user motion
+and dynamically adjust the level of resistance or assistance it
+provides. In this work, we successfully laid the foundation and
+introducedtwofundamentaltechnologies;1Dactuatoryarnsand
+1D sensor yarns, which seamlessly integrate with clothing to
+achieve this aim, leading toward intelligent textile exoskeletons
+(Texoskeletons) that are soft, lightweight, and capable of per-
+sonalized assistance. Texoskeletons could reshape a wide range
+of industries, and their role in personalized rehabilitation is
+especially promising. They offer a practical option for people
+who have limited access to professional rehabilitative care. To
+furtherenhancetheTexoskeletonforrehabilitation,technologies
+such as 1D accelerometer yarns and 1D temperature sensing
+yarns demonstrated in our previous work [53, 54], can also be
+incorporated.
+4 Methods
+4.1 Fabricationof1DActuators
+Threedifferentsiliconetypeswithvaryingshorehardnessvalues
+were used for creating the 1D actuators: Ecoflex 0030, Dragon
+Skin 10 Slow and Smooth-Sil 945. All the 1D actuators were
+fabricatedbyplacingasteelrodwithadiameter1.524 ±0.005mm
+(Carbon Steel ER70S-2 1/16, Welding Partners, UK), into a
+prefabricatedtwo-partmoldandfillingitwiththeliquidsilicone
+mixture.Aftermixingthematerial,itwasplacedintoavacuum
+chamber for 10 min to prevent the formation of air bubbles.
+The liquid mixture was then injected into a mold. Once the
+silicone had cured, the 1D actuators were demolded. The steel
+rod was then removed from the structure, creating the hollow
+1D actuators. The two-part mold is shown in FigureS11.T h e
+siliconelayeroftheseyarnswasfabricatedusingvarioussilicone
+typeswithdifferentYoung’smodulus.Thefollowingsectionwill
+discussthedifferentmethods,materials,additives,andquantities
+tested.
+AdvancedFunctionalMaterials ,2026 11of15
+ 16163028, 2026, 60, Downloaded from https://advanced.onlinelibrary.wiley.com/doi/10.1002/adfm.75714, Wiley Online Library on [21/09/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+4.1.1 Single-Material1DActuatorDesign
+The single-material 1D actuators were created using a single
+silicone material. Two different silicone types Ecoflex 0030 and
+DragonSkin10Slow,weretestedforcreatingthesingle-material
+actuators.Various concentrations of additives were usedtovary
+theShorehardnessofthesesilicones,asillustratedinTable 2in
+Section2.1.1.
+4.1.1.1 Ecoflex with No Additives (Ecoflex). This 1D
+actuator was created using Ecoflex 0030. Equal parts of Ecoflex
+0030PartAandPartBweremanuallymixedanddegassed.The
+degassedmixturewasinjectedintothetwo-partmetalmold.
+4.1.1.2 Ecoflex 0030 with Fumed Silica Thixotropic
+Powder(Ecoflex1%Thickener). Here,1%thixotropicpowder,
+calculated by total weight, was mixed with Ecoflex 0030. The
+thixotropic powder was manually mixed with part A of Ecoflex
+for 10 min. Thereafter, Ecoflex Part B was added and manually
+stirred for a further 10 min. The mixture was then injected into
+themoldusingthesameprocedureaspreviouslydescribed.
+4.1.1.3 DragonSkin10Slow(DragonSkin). Equalparts
+ofDragonSkin10SlowPartAandPartBweremanuallymixed
+and degassed. The degassed mixture was injected into the two-
+partmetalmoldusingthesameprocedureasbefore.
+4.1.1.4 DragonSkin10SlowwithSiliconeThinner. Two
+differentpercentagesofsiliconethinnerweretested5%( Dragon
+Skin5%thinner )and10%( DragonSkin10%thinner ).These
+percentageswerecalculatedbytotalweight.Siliconethinnerwas
+mixedwithDragonskinpartAandmanuallystirredfor10min.
+Afterwards,PartBwasaddedandstirredforafurther10min.The
+mixturewastheninjectedintothemoldusingthesameprocedure
+aspreviouslydescribed.
+4.1.2 Two-Material1DActuatorDesign
+Thelowerlayeroftheactuatorwasfabricatedfirstbymixingthe
+harder Smooth-Sil 945 mixture and then placed into a vacuum
+chamberfor10mintopreventtheformationofairbubbles.The
+liquid Smooth-Sil 945 mixturewas injected onto the back of the
+mold.WhentheSmooth-Sil945siliconewasstillslightlyset,the
+DragonSkinmixturewasinjectedintothemoldusingthesame
+procedurementionedintheprevioussection.Thedifferenttypes
+ofsiliconeandadditivecombinationstestedforthetwo-material
+1DactuatoraregiveninTable 3.
+4.2 FabricationoftheTextileCovers
+4.2.1 Cut-and-SewTextileCovers
+The 1D actuators were inserted into a prefabricated rectangular
+sleeve, with dimensions of length 150 mm and width 10 mm.
+ThesleevewassewnonaSilverCrestSNM33B1(Lidl,Neckarsulm,
+Germany)sewingmachine.Thissleeveconsistsoftwomaterials,
+the upper material is a power-net (72% polyester, 28% Elastane,
+Simplex Knitting, Beeston, UK), and the lower material is a
+micro lock-knit (100% Nylon, Simplex Knitting, Beeston, UK).
+The materials were sewn with a 30WT (50s/3) weighted thread
+(100% cotton, Empress Mills, Colne, UK). After the insertion of
+theactuators,thesleeveformedacylindricalshape,witha1mm
+gap between channels. The external edges of the sleeves have a
+5mmseamallowancethatiszigzaggedclosed.
+4.2.2 KnittedTextileCovers
+The 1D actuators were inserted into a fabricated rectangular
+frame with a tubular knit strap, with dimensions of a length
+of 150 mm and a width of 10 mm. The knitted strap was
+manufactured using a Shima Seiki SWG091N.15-gauge knitting
+machine(ShimaSeiki,Tokyo,Japan),usingfluidyarn(1PLY,2%
+E l a s t a n e ,7 %N y l o n ,9 1 %V i s c o s e ,Y e o m a n ,L e i c e s t e rU K ) .T h e
+sleevehadanupperstructurethatwasribbed,rangingfrom4 ×4
+throughto10 ×10,andthelowerstructurewasasingularjersey
+knit. The structures formed a cylindrical design following the
+insertionofthe1Dactuators.Thesleevehasa1mmgapbetween
+channels. Fabrication of the knitted spacers is illustrated in
+NoteS2.
+4.3 TestingMethodsofthe1DActuators
+4.3.1 Tensile Tests
+To examine the mechanical influence of the different silicone
+membranes with the additives, agreed test standards were
+adapted. Dumbbell-shaped specimens, prepared in compliance
+with ISO 37:2017-1, were subjected to uniaxial tensile testing
+using ASTM D412-16(2021) and BS ISO 5893:2002 standards.
+Although these standards have since been superseded by ISO
+37:2024 and ISO 5893:2019, respectively, the testing procedures
+implemented in this study remain consistent with the updated
+versions. Specimens were clamped using ‘method A’ with a
+25mmgrip-to-gripseparationoftheclampingjaws,anda0.05N
+preloadwassettoremoveslackfromthespecimen.Atestspeed
+of 50mm/min was maintained for the experiment. All uniaxial
+specimens in each group were tested to failure in extension.
+A Zwick Roell Z2.5 (Ulm, Germany) tensile testing machine
+was used for the testing. Tensile tests were performed on five
+dumbbell-shaped samples of each silicone and silicone additive
+combination.
+4.3.2 BurstTests
+The burst tests were conducted using a VN-T1-12 V mini air
+pump(10L/min,YouChengIndustrialCo.Ltd.,Jiangsu,China)
+and a ABPDANV015PGSA3 pressure sensor (Honeywell Gauge
+Pressure Sensor, RS Components Ltd, UK). One end of the 1D
+actuator was connected to the air pump using 3 mm Silicone
+flexibletubes(SaintGobainVersilic,RSComponentsLTD,UK),
+and the other end was connected to the pressure sensor. A 12 V
+power supply powered the air pump, and an Arduino Mega
+(Arduino Mega 2560 Rev3, Arduino, Monza, Italy) powered the
+pressuresensor.TheArduinowasalsousedtocollectdatafrom
+the sensor. For every type of 1D actuator evaluated in the burst
+tests, a sample size of five actuators was used, and the mean
+measurementsarepresentedintheresultssection.
+12of15 AdvancedFunctionalMaterials ,2026
+ 16163028, 2026, 60, Downloaded from https://advanced.onlinelibrary.wiley.com/doi/10.1002/adfm.75714, Wiley Online Library on [21/09/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+4.3.3 LiftingTests
+Forthelifttest,anylonbraidedcord(NylonBraidedCord1.2mm,
+the trimming shop, Cheshunt, UK) of 30 mm was sewn onto
+the end of the textile covers being tested, and weights of 100,
+200, and 300 g were hung on the fabric. In the case of the
+1D actuators, they were connected to 3 mm silicone flexible
+tubes (Saint Gobain Versilic, RS Components LTD, UK). These
+tubes were then connected to a Y-shaped pneumatic connector,
+whichprovidedconnectionstobothanabsolutepressuresensor
+(MPX2200AP-ND,NXPUSAInc.,Eindhoven,Netherlands)and
+a 10 W, 10 L/min air pump (VN-T1-12 V, You Cheng Industrial
+Co. Ltd., Jiangsu, China) was utilized to provide air for the
+three1Dactuators.Theairpumpwaspoweredusinganexternal
+12 V power supply, and the pressure sensor was powered using
+an external 6 V power supply. A digital multimeter (Keithley
+DMM6500 6.5 Digit Multimeter, TEKTRONIX, INC, Bracknell,
+UK)wasusedtoacquirethesensormeasurements.Airflowinto
+the1DactuatorswascontrolledbyanArduinoMega,BC337NPN
+transistor, and three-way solenoid valves (6 V Air Valve with 2-
+pin JST PH Connector, the PI hut). For each time interval, the
+1Dactuatorswereinflatedforthatgiventime,andtheheightthe
+weightsreachedwasmeasured.Then,theactuatorsweredeflated
+andinflatedagainforthenextinterval.Theheightatwhichthe
+weightswereliftedwasmeasuredusingavisualguideandaCCD
+camera (60 frames per second, 4000× 3000 pixels resolution).
+Thisexperimentalprocedurewasreplicatedthreetimesforeach
+actuatortypeandtextilestructure,andtheaveragemeasurements
+arereportedintheresults.
+4.3.4 CyclicTests
+Cyclic tests used a setup like the lift test, but without weights.
+The 1D actuators were inflated for 0.9 s and then deflated for
+another0.9susingtheVN-T1-12Vminiairpump.Measurements
+from the MPX2200AP-ND pressure sensor were captured using
+anArduinoMega.Threedifferentactuatorsweretestedforeach
+1D actuator type, and the measurements of the best-performing
+actuatorarepresentedintheresults.
+4.4 1DTriboelectricSensorInitial
+Characterization
+The initial electrical characterization (calibration) of the tribo-
+electric yarn was performed using a Keithley 6514 electrometer
+(using methods similar to our previous work) [55, 56], where
+the open-circuit voltage (Voc) of the 1D triboelectric sensor was
+evaluatedunderdifferentmotionprofilesofthewrist.
+Thecyclictestforthetriboelectric1Dyarnsensorwasperformed
+bymountingtheyarnonastationaryplatformandsubjectingit
+to repeated compression-decompression cycles (for up to 3000
+cycles) using a bespoke high-precision triboelectric nanogen-
+erator characterization setup, which was introduced using our
+previous work [37, 57]. Herein, a maximum contact force of
+20 N was applied during the compression phase. The electrical
+outputs from the 1D yarn were obtained using a Keithley 6514
+electrometer.
+4.5 CustomInteractiveFilteringToolandthe
+MachineLearningAlgorithmforthe1D
+TriboelectricSensor
+The custom interactive filtering tool provided a graphical inter-
+facewithadjustablethreshold(h)andtemporalrange(d),where
+the user could iteratively tune the parameters to accurately
+detectpulseboundaries(Figure 4d).Oncethedesiredparameters
+were set, the tool automatically identified rising and falling
+edges in the filtered signal to mark pulse start and end points.
+These cutoff points were subsequently used to construct a
+labeled pulse database. Each pulse segment was extracted from
+its original time series and associated with its corresponding
+gestureclass(extension-flexion,radialdeviation-ulnardeviation,
+pronation, and supination). To ensure uniform input size, all
+pulses were resampled to a fixed length of 200 samples and
+normalized. This curated dataset was then split into training
+and testing subsets with an 80/20 ratio while preserving class
+distribution.
+The model architecture of the 1D CNN (Figure4e), consisted of
+four sequential convolutional blocks (Conv1D→BatchNorm →
+ReLU →MaxPool →Dropout)followedbythreefullyconnected
+layers, designed to capture temporal features from the pulse
+signalsandmapthemtothefourgestureclasses.Duringtraining,
+the network was optimized using the Adam optimizer with a
+learning rate scheduler over 100 epochs and evaluated on a
+held-outtestset.
+4.6 PreliminaryExperimentUsing1DActuators
+and1DSensorsintheTexoskeletonSleeve
+The silicone hand model for this experiment was made using
+50% Ecoflex 0030 and 50% Smooth-Sil 945. The two-material 1D
+actuatorwaspneumaticallyactuatedusingaVNT112Vairpump
+in combination with threeway solenoid valves. Pressure sensor
+data were acquired using an Arduino Mega, while signals from
+the 1D triboelectric sensor were recorded using a Keithley 6514
+digitalelectrometer.
+AuthorContributions
+P.L., I.D., Z.D., B.L., A.K., and E.P. conceptualized the development
+of textile-based exoskeletons and secured the grant that supported
+this research. A.L., J.V., and I.R. designed and fabricated the one-
+dimensional (1D) actuators and conducted related experiments. A.L.
+and K.M. assembled the final Texoskeleton sleeve prototype, inte-
+grating both actuators and sensor. R.B., S.M., C.M.H., A.P., and B.F.
+developed and tested the 1D triboelectric sensors, with B.F. further
+designing the machine learning algorithms for wrist movement clas-
+sification. K.M. prepared the manuscript figures, while C.O. created
+the knitted textiles used in testing. A.M.S. performed mechanical test-
+ing to determine the Young’s modulus of various silicones. T.H.R.
+contributed expertise on the knitted textile development. A.T. pro-
+vided guidance on machine learning aspects of the project. P.L., A.L.,
+and I.D. wrote the manuscript, with all other authors contribut-
+ing to its editing and revision. P.L. and I.D. supervised the overall
+project. All authors discussed the results and provided feedback on the
+manuscript.
+AdvancedFunctionalMaterials ,2026 13of15
+ 16163028, 2026, 60, Downloaded from https://advanced.onlinelibrary.wiley.com/doi/10.1002/adfm.75714, Wiley Online Library on [21/09/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+Acknowledgements
+TheauthorswouldliketosincerelythankNataliaDantasfortheinvalu-
+able contribution as a technical knitwear specialist and the assistance
+withtheknittedsamples.TheauthorswouldliketothankIainMitchell
+for designing and building the mould used in this project, and Richard
+Armforthevaluablesupportduringtheinitialmoulddesignphase.
+Funding
+This work was financially supported by an EPSRC Rehab Technology
+Network(EP/W000679/1)workshopgrant.Theworkwasalsosupported
+by the Royal Academy of Engineering under the Research Fellow-
+ship scheme (RF∖202021∖20∖252), Royal Society NSFC International
+Exchanges Cost Share grant (IEC∖NSFC∖223116), and Loughborough
+UniversityViceChancellor’sResearchCluster“SuS-Tex”.
+ConflictsofInterest
+Theauthorsdeclarenoconflictsofinterest.
+DataAvailabilityStatement
+The data that support the findings of this study are available from the
+correspondingauthoruponreasonablerequest.
+References
+1.S. Luo, M. Jiang, S. Zhang, et al., “Experiment-free Exoskeleton
+Assistance via Learning in Simulation,”Nature 630 (2024): 353–359,
+https://doi.org/10.1038/s41586-024-07382-4.
+2.O. Mubin, F. Alnajjar, N. Jishtu, B. Alsinglawi, and A. Al Mahmud,
+“Exoskeletons with Virtual Reality, Augmented Reality, and Gamifi-
+cation for Stroke Patients′ rehabilitation: Systematic Review,”JMIR
+rehabilitationandassistivetechnologies 6(2019):12010.
+3.V. Tanwar, V. Anand, P. Aggarwal, M. Kumar, and G. R. Kumar,
+“RevolutionizingMilitaryTraining:aComprehensiveReviewofTactical
+andTechnicalTrainingthroughAugmentedReality,VirtualReality,and
+Haptics,” in 2024 IEEE 9th International Conference for Convergence
+inTechnology(IEEE,2024),1–5,https://doi.org/10.1109/I2CT61223.2024.
+10543615.
+4.E. Pulvirenti, R. S. Diteesawat, H. Hauser, and J. Rossiter, “Towards
+a Soft Exosuit for Hypogravity Adaptation: Design and Control of
+Lightweight Bubble Artificial Muscles,” in 2022 IEEE 5th International
+ConferenceonSoftRobotics(IEEE,2022),651.
+5.Rehabilitation 2030, https://www.who.int/initiatives/rehabilitation,
+2030.
+6.X.M.Xu,E.Vestesson,L.Paley,etal.,“TheEconomicBurdenofStroke
+Care in England, Wales and Northern Ireland: Using a National Stroke
+RegistertoEstimateandReportPatient-levelHealthEconomicOutcomes
+in Stroke,”European Stroke Journal3( 2 0 1 7 ) :8 2 – 9 1 ,https://doi.org/10.
+1177/2396987317746516.
+7.“WHO EMRO | Stroke, Cerebrovascular accident | Health topics,”
+https://www.emro.who.int/health-topics/stroke-cerebrovascular-
+accident/index.html.
+8.L. Baumbach, W. Feddern, B. Kretzler, A. Hajek, and H. H.
+König,“Cost-EffectivenessofTreatmentsforMusculoskeletalConditions
+Offered by Physiotherapists: a Systematic Review of Trial-Based Eval-
+uations,”Sports Medicine—Open10 (2024): 38,https://doi.org/10.1186/
+s40798-024-00713-9.
+9.D. H. de la Iglesia, A. S. Mendes, G. V. González, D. M. Jiménez-
+Bravo, J. F. de, and P. Santana, “Connected Elbow Exoskeleton System
+forRehabilitationTrainingBasedonVirtualRealityandContext-Aware,”
+Sensors20(2020):858,https://doi.org/10.3390/s20030858.
+10.K.Ghonasgi,R.Mirsky,N.Bhargava,A.M.Haith,P.Stone,andA.D.
+Deshpande,“KinematicCoordinationsCaptureLearningduringhuman–
+exoskeleton Interaction,”Scientific Reports13 (2023): 10322,https://doi.
+org/10.1038/s41598-023-35231-3.
+11.P. Slade, M. J. Kochenderfer, S. L. Delp, and S. H. Collins,
+“Personalizing Exoskeleton Assistance While Walking in the Real
+World,”Nature 610 (2022): 277–282,https://doi.org/10.1038/s41586-022-
+05191-1.
+12.J. Lee, K. Kwon, I. Soltis, et al., “Intelligent Upper-limb Exoskeleton
+Integrated with Soft Bioelectronics and Deep Learning for Intention-
+drivenAugmentation,”npjFlexibleElectronics 8(2024):11.
+13.H. Fritz, D. Patzer, and S. S. Galen, “Robotic Exoskeletons for
+ReengaginginEverydayActivities:Promises,Pitfalls,andOpportunities,”
+Disability and Rehabilitation41 (2017): 560–563,https://doi.org/10.1080/
+09638288.2017.1398786.
+14.L. Cappello, J. T. Meyer, K. C. Galloway, et al., “Assisting Hand
+Function after Spinal Cord Injury with a Fabric-based Soft Robotic
+Glove,” Journal of NeuroEngineering and Rehabilitation15 (2018): 59,
+https://doi.org/10.1186/s12984-018-0391-x.
+15.M.Pan,C.Yuan,X.Liang,etal.,“SoftActuatorsandRoboticDevices
+forRehabilitationandAssistance,” AdvancedIntelligentSystems 4(2022):
+2100140,https://doi.org/10.1002/aisy.202100140.
+16.S.Kokubu,Y.Wang,P.E.TortósVinocour,etal.,“Evaluationoffiber-
+reinforcedModularSoftActuatorsforIndividualizedSoftRehabilitation
+Gloves,”Actuators11(2022):84.
+17.T.Bützer,O.Lambercy,J.Arata,andR.Gassert,“FullyWearableActu-
+atedSoftExoskeletonforGraspingAssistanceinEverydayActivities,” Soft
+Robotics8(2021):128.
+18.K. Schaffer, Y. Ozkan-Aydin, and M. M. Coad, “Soft Wrist Exosuit
+ActuatedbyFabricPneumaticArtificialMuscles,” IEEETransactionson
+Medical Robotics and Bionics6 (2024): 718–732,https://doi.org/10.1109/
+TMRB.2024.3385795.
+19.J.Shi,S.A.Abad,A.Menciassi,K.Althoefer,andH.A.Wurdemann,
+“MiniaturisedSoftManipulatorswithReinforcedActuationChamberson
+theSub-centimetreScale,”in2024IEEE7thInternationalConferenceon
+SoftRobotics(IEEE,2024),157–164.
+20.P.Polygerinos,Z.Wang,K.C.Galloway,R.J.Wood,andC.J.Walsh,
+“Soft Robotic Glove for Combined Assistance and at-home Rehabilita-
+tion,”Robotics and Autonomous Systems73 (2015): 135–143,https://doi.
+org/10.1016/j.robot.2014.08.014.
+21.J.Kim,F.Porciuncula,H.D.Yang,etal.,“SoftRoboticAppareltoAvert
+FreezingofGaitinParkinson’sDisease,” NatureMedicine 30(2024):177–
+185,https://doi.org/10.1038/s41591-023-02731-8.
+22. R .S .D i t e e s a w a t ,T .H e l p s ,M .T a g h a v i ,a n dJ .R o s s i t e r ,
+“Characteristic Analysis and Design Optimization of Bubble Artificial
+Muscles,” Soft Robotics 8 (2021): 186–199,https://doi.org/10.1089/soro.
+2019.0157.
+23.N. Gupta, H. Cheung, S. Payra, et al., “A Single-fibre Computer
+EnablesTextileNetworksandDistributedInference,” Nature639(2025):
+79–86.
+24.C. du Pasquier, L. Tessmer, I. Scholl, et al., “Haptiknit: Distributed
+StiffnessKnittingforWearableHaptics,” ScienceRobotics 9,no.97(2024),
+https://doi.org/10.1126/scirobotics.ado3887.
+25.Y. Zhang, J. Fu, Y. Ding, et al., “Thermal and Moisture Manag-
+ing E-Textiles Enabled by Janus Hierarchical Gradient Honeycombs,”
+Advanced Materials 36 (2024): 2311633,https://doi.org/10.1002/adma.
+202311633.
+26.S.Pyo,J.Lee,K.Bae,S.Sim,andJ.Kim,“RecentProgressinFlexible
+TactileSensorsforHuman-InteractiveSystems:fromSensorstoAdvanced
+Applications,”AdvancedMaterials 33(2021):2005902,https://doi.org/10.
+1002/adma.202005902.
+27.W. Chen, Z. Wang, L. Wang, and X. Chen, “Smart Chemical
+Engineering-BasedLightweightandMiniaturizedAttachableSystemsfor
+AdvancedDrugDeliveryandDiagnostics,” AdvancedMaterials 34(2022):
+2106701,https://doi.org/10.1002/adma.202106701.
+14of15 AdvancedFunctionalMaterials ,2026
+ 16163028, 2026, 60, Downloaded from https://advanced.onlinelibrary.wiley.com/doi/10.1002/adfm.75714, Wiley Online Library on [21/09/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+28.A.Libanori,G.Chen,X.Zhao,Y.Zhou,andJ.Chen,“SmartTextiles
+forPersonalizedHealthcare,” NatureElectronics 5(2022):142–156,https://
+doi.org/10.1038/s41928-022-00723-z.
+29.J. Shi, S. Liu, L. Zhang, et al., “Smart Textile-Integrated Microelec-
+tronicSystemsforWearableApplications,” AdvancedMaterials 32(2020):
+1901958,https://doi.org/10.1002/adma.201901958.
+30.H.W.Choi,D.W.Shin,J.Yang,etal.,“SmartTextileLighting/Display
+SystemwithMultifunctionalFibreDevicesforLargeScaleSmartHome
+andIoTApplications,” NatureCommunications 13(2022):814.
+31.B. Wang and A. Facchetti, “Mechanically Flexible Conductors for
+Stretchable and Wearable E-Skin and E-Textile Devices,”Advanced
+Materials31(2019):1901408,https://doi.org/10.1002/adma.201901408.
+32.S. Kwon, Y. H. Hwang, M. Nam, et al., “Recent Progress of Fiber
+ShapedLightingDevicesforSmartDisplayApplications—AFibertronic
+Perspective,”Advanced Materials32 (2020): 1903488,https://doi.org/10.
+1002/adma.201903488.
+33.G. Loke, T. Khudiyev, B. Wang, et al., “Digital Electronics in Fibres
+Enable Fabric-based Machine-learning Inference,”Nature Communica-
+tions12(2021):3317,https://doi.org/10.1038/s41467-021-23628-5.
+34.S. Lin, W. Yang, X. Zhu, et al., “Triboelectric Micro-flexure-sensitive
+fiberElectronics,” NatureCommunications 15(2024):2374.
+35.C. Dang, Z. Wang, T. Hughes-Riley, et al., “Fibres—Threads
+of Intelligence—Enable a New Generation of Wearable Systems,”
+Chemical Society Reviews53 (2024): 8790–8846,https://doi.org/10.1039/
+D4CS00286E.
+36.H. Liu, Y. Shi, Y. Pan, Z. Wang, and B. Wang, “Sensory Interactive
+FibersandTextiles,” npjFlexibleElectronics 9(2025):23.
+37.D. G. Dassanayaka, R. L. Bulathsinghala, B. T. R. Bulathsinghala, G.
+Lanarolle, N. D. Wanasekara, and R. D. I. G. Dharmasena, “Optimising
+FundamentalKnittingParametersforWearableTriboelectricNanogener-
+ators,”NanoEnergy 126(2024):109688,https://doi.org/10.1016/j.nanoen.
+2024.109688.
+38.K.R.S.Gunawardhana,N.D.Wanasekara,K.G.Wijayantha,andR.D.
+I.Dharmasena,“ScalableTextileManufacturingMethodsforFabricating
+Triboelectric Nanogenerators with Balanced Electrical and Wearable
+Properties,”ACS Applied Electronic Materials4 (2022): 678–688,https://
+doi.org/10.1021/acsaelm.1c01095.
+39.O. Kilic Afsar, A. Shtarbanov, and H. Mor, “Integrated Fluidic fiber
+Actuators for Weaving Movement Based Interactions into the ‘Fabric of
+EverydayLife’,”inThe34thAnnualACMSymposiumonUserInterface
+SoftwareandTechnology(ACMDigitalLibrary,2021),1010–1026.
+40.M. Yang, J. Wu, W. Jiang, et al., “Bioinspired and Hierarchically
+Textile-Structured Soft Actuators for Healthcare Wearables,”Advanced
+Functional Materials 33 (2023): 2210351,https://doi.org/10.1002/adfm.
+202210351.
+41.S. H. Park, J. Yi, D. Kim, Y. Lee, H. S. Koo, and Y. L. Park,
+“A Lightweight, Soft Wearable Sleeve for Rehabilitation of Forearm
+Pronation and Supination,” in 2019 2nd IEEE International Conference
+on Soft Robotics (RoboSoft) (IEEE, 2019), 636–641,https://doi.org/10.
+1109/ROBOSOFT.2019.8722783.
+42.H. Young, L. Gerez, and T. Cole, “Air Efficient Soft Wearable
+RobotforHigh-TorqueElbowFlexionAssistance,”inIEEEInternational
+ConferenceonRehabilitationRobotics(IEEE,2023),1–6, https://doi.org/
+10.1109/ICORR58425.2023.10304679.
+43.L. Cappello, K. C. Galloway, S. Sanan, et al., “Exploiting Textile
+Mechanical Anisotropy for Fabric-based Pneumatic Actuators,”Soft
+Robotics5(2018):662–674.
+44.P. H. Nguyen and W. Zhang, “Design and Computational Modeling
+of Fabric Soft Pneumatic Actuators for Wearable Assistive Devices,”
+ScientificReports 10(2020):9638.
+45.X.Chen,S.Zhang,K.Cao,C.Wei,W.Zhao,andJ.Yao,“Development
+of a Wearable Upper Limb Rehabilitation Robot Based on Reinforced
+SoftPneumaticActuators,” ChineseJournalofMechanicalEngineering 35
+(2022),https://doi.org/10.1186/s10033-022-00749-6.
+46.C. Suulker, S. Skach, and K. Althoefer, “Soft Robotic Fabric Actu-
+ator with Elastic Bands for High Force and Bending Performance in
+Hand Exoskeletons,”IEEE Robotics and Automation Letters7( 2 0 2 2 ) :
+10621–10627,https://doi.org/10.1109/LRA.2022.3194883.
+47.I.A.K.Ahmed,M.S.Cetin,K.Ozlem,A.TuncayAtalay,G.Ince,and
+O.Atalay,“FromKnittingTechnologytoRobotics:UntetheredThermally
+Actuated Textile Exoskeleton for Dexterity Applications,”Advanced
+Science12(2025):09870,https://doi.org/10.1002/advs.202509870.
+48.V. Sanchez, K. Mahadevan, G. Ohlson, et al., “3D Knitting for
+Pneumatic Soft Robotics,”Advanced Functional Materials 33 (2023):
+2212541,https://doi.org/10.1002/adfm.202212541.
+49.K.Kim,K.H.Cho,H.S.Jung,etal.,“DoubleHelixTwistedandCoiled
+SoftActuatorfromSpandexandNylon,” AdvancedEngineeringMaterials
+20(2018):20,https://doi.org/10.1002/ADEM.201800536.
+50.Y. Li, Y. Wang, S. Yuan, and Y. Fei, “Design, Modeling, and Control
+ofaNovelSoft-rigidKneeJointRobotforAssistingMotion,” Robotica42
+(2024):817–832,https://doi.org/10.1017/S0263574723001777.
+51.J.M.Day,A.M.Lucado,andT.L.Uhl,“AComprehensiveRehabili-
+tation Program for Treating Lateral Elbow Tendinopathy,”International
+Journal of Sports Physical Therapy14 (2019): 818–829,https://doi.org/10.
+26603/ijspt20190818.
+52.A. Shtarbanov, “FlowIO Development Platform – the Pneumatic
+“Raspberry Pi” for Soft Robotics,” in Extended Abstracts of the 2021
+CHIConferenceonHumanFactorsinComputingSystems(ACMDigital
+Library,2021),https://doi.org/10.1145/3411763.3451513.
+53.P. Lugoda, S. C. Hayes, T. Hughes-Riley, et al., “Classifying Gait
+Alterations Using an Instrumented Smart Sock and Deep Learning,”
+IEEE Sensors Journal 22 (2022): 23232–23242,https://doi.org/10.1109/
+JSEN.2022.3216459.
+54.P.Lugoda,J.C.Costa,C.Oliveira,etal.,“FlexibleTemperatureSensor
+Integration into E-Textiles Using Different Industrial Yarn Fabrication
+Processes,”Sensors20(2019):73,https://doi.org/10.3390/s20010073.
+55.R.L.Bulathsinghala,S.Meng,B.E.King,I.M.Nassiuma,P.Kinnell,
+andR.D.I.G.Dharmasena,“SpatialEngineeringofTextileThreadsfor
+all-textile Embroidered Triboelectric Nanogenerators,”NanoEnergy 146
+(2025):111510,https://doi.org/10.1016/j.nanoen.2025.111510.
+56.R.L.Bulathsinghala,J.H.B.Deane,andR.D.I.G.Dharmasena,“The
+Distance-DependentElectricFieldTheoryforSlidingModeTriboelectric
+Nanogenerators,”AdvancedEnergyMaterials 15(2025):2403853,https://
+doi.org/10.1002/aenm.202403853.
+57.R. D. I. G. Dharmasena and K. G. U. Wijayantha, “Theoretical and
+Experimental Investigation into the Asymmetric External Charging of
+TriboelectricNanogenerators,”NanoEnergy 90(2021):106511,https://doi.
+org/10.1016/j.nanoen.2021.106511.
+SupportingInformation
+AdditionalsupportinginformationcanbefoundonlineintheSupporting
+Informationsection.
+SupportingFile1:adfm75714-sup-0001-SuppMat.docx.
+SupportingFile2:adfm75714-sup-0002-VideoS1.MP4.
+SupportingFile3:adfm75714-sup-0003-VideoS2.MP4.
+SupportingFile4:adfm75714-sup-0004-VideoS3.MP4.
+AdvancedFunctionalMaterials ,2026 15of15
+ 16163028, 2026, 60, Downloaded from https://advanced.onlinelibrary.wiley.com/doi/10.1002/adfm.75714, Wiley Online Library on [21/09/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License

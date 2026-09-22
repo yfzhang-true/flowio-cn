@@ -1,0 +1,1169 @@
+THEME ARTICLE: PERVASIVE COMPUTING IN SPACE
+From UbiComp to Universe —Moving
+Pervasive Computing Research Into Space
+Applications
+Ariel Ekblaw, Juliana Cherston, Fangzheng Liu, Irmandy Wicaksono , Don Derek Haddad, Valentina Sumini, and
+Joseph A. Paradiso , Responsive Environments Group, MIT Media Lab, Cambridge, MA, 02139, USA
+Humanity’s burgeoning crewed and uncrewed presence in space is creating
+increasing opportunity for ideas and approaches gestated for terrestrial use to be
+adapted and deployed in space applications. To illustrate this from the perspective
+of the Pervasive Community, this article overviews a selection of recent and
+ongoing space-oriented projects in the MIT Media Lab ’s Responsive Environments
+Group, and chronicles the roots that most of them had in our prior Pervasive
+Computing research program. These projects involve wearables, smart fabrics,
+sensor networks, cross-reality systems, pervasive/reactive displays, microrobots,
+responsive space habitat interiors, and self-assembling systems for in-space
+infrastructure. Many of them have been tested in zero-gravity and suborbital ﬂights,
+on the International Space Station, or will be deployed during an upcoming lunar
+mission. Assessed together, this portfolio of work points forward to the broad role
+that some of the tenets of Pervasive Computing (e.g., novel sensing technologies,
+“smart materials,” and best-in-class modern HCI infrastructure) will play in our
+near-term space future. This work marks an important in ﬂection point in the space
+industry, where academic research experiments are rapidly maturing —on the scale
+of months, not years —to inﬂuence the products, tools, and human experiences in
+low earth orbit and beyond.
+A
+s humans and the engineered systems they
+construct venture increasingly into space in
+upcoming years, they will bring and send
+along the technologies that evolved with them on
+Earth. Space technology has become associated in
+the popular imagination with engineering pushed to
+extreme lengths to solve very dif ﬁcult problems, gen-
+erally with custom solutions that engage limited
+numbers of systems and users. The technologies
+developed for space applications are assumed to be
+esoteric and particular, thought as a driver for techni-
+cal advance rather than vice-versa (witness, for exam-
+ple, integrated circuits, which found their ﬁrst heavy
+exploitation in the Apollo program and went on to
+transform the electronic industry 1). Since the original
+Space Race of the 1960s and 1970s, however, comput-
+ing technologies and applications have advanced
+enormously in terrestrial applications, and we have
+seen profound impact, especially in areas where
+humans contact computation, such as human –com-
+puter interfaces, pervasive computing, and the Inter-
+net of Things. This transformation is spreading to
+spacecraft; for example, the maze of switches and
+controllers dominating 1960s manned capsules and
+the Space Shuttle cabin recently yielding to an array
+of touchscreens in the SpaceX Dragon.
+Astronauts on the Space Station rely on laptops
+they bring from Earth for much of their work rather
+than running on computers embedded in the space-
+craft. For example, the station ’s ﬂight and systems
+control computers tend to be locked into the earlier
+processor generations because of the rigor of fault-
+tolerance and space quali ﬁcation as well as restric-
+tions put on code that can run on them, hence
+1536-1268 /C2232023 IEEE
+Digital Object Identiﬁer 10.1109/MPRV.2023.3242667
+Date of publication 15 March 2023; date of current version 14
+June 2023.
+April-June 2023 Published by the IEEE Computer Society IEEE Pervasive Computing 27Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 02:44:36 UTC from IEEE Xplore.  Restrictions apply. 
+commercial terrestrial computers (albeit they still
+require some quali ﬁcation for outgassing, safety con-
+siderations, etc.) can be signi ﬁcantly more capable.
+Looking forward, especially as more people work in
+space over the upcoming decades, the transformative
+technologies under development in the Pervasive
+Computing research community (such as elucidated
+in the sections that follow) that people on Earth are
+increasingly living with, will ﬁnd ample application in
+space.
+For the last 25 years, the Responsive Environments
+Group at the MIT Media Lab has focused much of its
+research around aspects of Ubiquitous and Pervasive
+Computing. However, playing host to the MIT Media
+FIGURE 1. Smart textiles for space. (a) SpaceSkin with electronics (left/center) and passive sample ﬂying outside the Space Sta-
+tion [right], (b) under TVAC Test, and (c) conceptual layout for SpaceSkin strips with opposing tactile actuators for the “Sensory
+Conductor” in a spacesuit arm. Peristaltic Suit layout (d) and working prototype during 0 –G test ﬂight.
+28 IEEE Pervasive Computing April-June 2023
+PERVASIVE COMPUTING IN SPACE
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 02:44:36 UTC from IEEE Xplore.  Restrictions apply. 
+Lab’s Space Exploration Initiative over the lastﬁve years
+has provided us an impetus to pivot many of our Ubi-
+comp projects into space applications. Indeed, as our
+Space Initiative and other opportunities have provided a
+regular “conveyor” of opportunity2 to run experiments
+on periodic zero-G parabolic ﬂights, suborbital rockets,
+Space Station deployment, and even impending delivery
+to the Lunar Surface, ideas we have gestated within the
+Pervasive Computing Framework have been pushed
+into actual space-related test and deployment. With
+increasing interest in the Pervasive Community toward
+space applications (e.g., the SpaceCHI workshop3 start-
+ing a couple of years ago, which some of us have partici-
+pated in setting up), the evolution of pervasive projects
+into space is of increasing relevance. Accordingly, this
+article traces several research threads and projects in
+our group boosted from their UbiComp roots into Space
+application and deployment. Table 1 summarizes the
+key works introduced in this review, and Figure 4
+includes a conceptual image of a space habitat leverag-
+ing several of these capabilities.
+ELECTRONIC TEXTILES,
+WEARABLE SYSTEMS, AND
+SURFACE DIAGNOSTICS
+Dating to the 1960s, spacesuits, at least in terms of
+their monitoring and control capability, were predeces-
+sors to wearable computers. 4 These ideas came back
+to Earth, as wearable systems and smart apparel
+became a tenet of Pervasive Computing decades
+later.5 Our group has been working at the integration of
+computation, sensing, and fabric/material for the last
+two decades in what we call Sensate Media ,6 which
+bears promise for a variety of space applications. As
+we have progressed from designing ﬁxed sensor nodes
+on rigid substrates to dynamic nodes on conformal
+surfaces, and sensing capability of fabric has improved
+with better-integrated electronics, 7 it becomes
+increasingly of interest to consider the fundamental
+properties of the material in relation to its operating
+context. Hence, we have moved increasingly toward
+resilient textiles, inert silicones, and eventually more
+exotic substrates as we develop such pervasive media.
+This evolution is important in designing for the harsh
+space environment, where atomic oxygen erosion, radi-
+ation, hypervelocity micrometeoroid impacts, and
+extreme thermal cycling all wear on external systems.
+The International Space Station (ISS) currently
+depends upon gas leak sensors, external robotic arms,
+extravehicular space walks, and visual observation
+for locating damage caused by debris. Indeed, in
+August 2018, the Russian segment of the ISS began to
+slowly depressurize. Suspicious of penetrative debris
+impact, astronauts searched for external holes from
+the cupola using zoom lenses and binoculars, repre-
+senting the state of affairs when it comes to damage
+detection on the ISS.
+We have redesigned a habitat ’s protective thermal
+blanket to simultaneously operate as a dense sensate
+skin by weaving a variety of piezoelectric ﬁbers (which
+respond to impact shock) and plasma sensing electro-
+des (which detect charge created by high-velocity
+impacts) into standard white “Beta Cloth ” spacecraft
+wrap,8,9 shown in Figure 1(a). Following an impact
+event, the skin would localize (and ideally character-
+ize) damage and strategically summon optical or other
+kinds of imaging free- ﬂying or crawling nodes for fur-
+ther appraisal. This aerospace architecture emulates
+the coordinated nature of a biological pain response
+in the sense that we re ﬂexively mitigate uncertainty in
+what is felt on our skin by summoning the attention of
+our eyes.
+ACCORDINGLY, THIS ARTICLE TRACES
+SEVERAL RESEARCH THREADS AND
+PROJECTS IN OUR GROUP BOOSTED
+FROM THEIR UBiCOMP ROOTS INTO
+SPACE APPLICATION AND
+DEPLOYMENT.
+In contrast to typical electronic textile projects in
+the HCI community, such an augmented fabric sensor
+system designed for the extravehicular space environ-
+ment must eventually undergo shock/vibration testing
+(for launch survival), thermal vacuum testing (for
+robustness to the relevant space environment), and
+ground characterization (to justify launch in the ﬁrst
+place). Pictured in Figure 1(b) are two fabric swatches
+undergoing thermal vacuum testing ahead of launch
+to the Space Station ’s exterior walls, where one of
+them is currently residing and taking data.
+Once such sensate space-ready materials are
+designed and well understood, they can also be consid-
+ered for other applications. In this case, we have been
+building out a conceptual framework called a “sensory
+conductor,” in which this skin would serve as a robust
+exterior to pressurized spacesuits and map external
+stimuli to the wearer ’s biological skin. In other words,
+this enables astronauts to feel through the walls of their
+extravehicular spacesuits. A basic scheme is shown in
+Figure 1(c) and described by Payra et al.,10 which details
+April-June 2023 IEEE Pervasive Computing 29
+PERVASIVE COMPUTING IN SPACE
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 02:44:36 UTC from IEEE Xplore.  Restrictions apply. 
+preliminary tests. This work is still at the stage of a con-
+ceptual demonstration with partial prototypes.
+Sensate vests for monitoring cardiovascular perfor-
+mance and respiration have been under development in
+the wearables community since the late 1990s and
+although they continually improve with technology,
+some have already been productized. Applications in
+space health suggest prophylactic actuation as well,
+since prolonged exposure to microgravity induces
+various acute health risks, including muscular, vestibu-
+lar, and cardiovascular dysfunctions.11 Without the inﬂu-
+ence of gravity, bodily ﬂuid hydrostatic pressure
+gradients vanish, and blood distribution shifts from the
+astronaut’s legs toward their upper body. Providing con-
+tinuous medical monitoring and intervention for astro-
+nauts throughout their journey in microgravity and after
+their return to Earth is, therefore, imperative. Along with
+exercising machines, compression systems such as
+TABLE 1. Outline of projects presented in this article.
+Project Long-term Vision Phase of development Key technical or conceptual
+challenge
+Electronic Textile
+Enhanced
+Thermal Blanket
+Fabric walls of spacecraft can
+track damage and sense
+interstellar dust impact
+Demonstrated impactor
+sensitivity thresholds using
+ground-based accelerators.
+Sensor performance maintained
+following 15-month LEO
+exposureperiod
+Improve mechanical resilience
+of ﬁber sensors to thermal
+cycling and ambient vibration/
+charge.
+SpaceTouch Astronauts will vividly feel touch
+and texture through walls of
+pressurized suits
+Conceptual prototype Sleek integration between
+interior and exterior suit layers
+Peristaltic Suit Wearable telemedicine system
+and real-time intervention for
+cardiovascular deconditioning
+and microgravity adaptation.
+Demonstrated in a zero-gravity
+ﬂight to study the effects of
+microgravity and active
+compression to various
+physiological markers.
+Miniaturization of skin-contact
+hardware and their seamless
+integration into a spacesuit.
+SpaceShoe Intelligent dynamic foot
+restraint that enables walking
+on ferromagnetic surfaces.
+Early electromagnet- based sole
+retroﬁt tested in zero-gravity
+ﬂight.
+Adopt electropermanent
+magnets w. intelligent controller
+to anticipate gait, and low-mass
+attachment surfaces.
+SpaceHuman Controllable appendage for
+dynamic hands-free grappling.
+Pneumatic soft-robotic version
+2.0 tested in zero- gravity ﬂight.
+Develop automatic/guided
+higher speed grappling control.
+AstroAnt A swarm of AstroAnts build a
+dynamic extra- vehicle sensor
+network for space station,
+gateway, Lunar rovers, etc. The
+AstroAnt swarm can help with
+inspections and diagnostic
+sensing with different sensor
+payloads.
+Finished design and tests of the
+proof-of-concept on four
+parabolic ﬂights, and ﬁnished
+design, development and tests of
+a ﬂight hardware unit for lunar
+surface testing in 2023/2024.
+Efﬁcient energy harvesting
+approaches, accurate tracking
+techniques, and mobility on
+nonmagnetic materials.
+TESSARAE Scaling humanity ’s presence in
+orbit through autonomously
+self- assembling space
+infrastructure
+Prototype hardware, code, and
+mission conops (Concept of
+Operations) tested successfully
+on two parabolic ﬂights, one
+suborbital launch, and two ISS
+missions
+Transitioning hardware
+electronics and controls from
+test-prototypes to the ﬁrst
+human-scale tiles for self-
+assembly of a human-rated
+space station.
+LunarWSN Build wide-spanning Wireless
+Sensor Networks (WSNs) on the
+Lunar surface to study
+properties of regolith in areas-of-
+interest and do long-term Lunar
+environment monitoring.
+Finished design and tests of the
+proof-of-concept.
+Lunar dust impact on solar
+energy harvesting and long-
+term operation in shadowed
+areas.
+Cross-Reality
+Mission
+Operations
+Represent all aspects, assets,
+and players in space operations
+through diverse mixed reality
+immersion
+Developed for terrestrial
+environments and demonstrated
+using a variety of rovers with data
+from simulated missions
+Reﬁne frameworks for scalable
+presence and human/robot
+control at various delays.
+Mediated
+Atmospheres In
+Space
+Automatically adapt the
+sensorial environments of long-
+term space-farers to keep them
+focused and restored.
+Demonstrated in terrestrial
+rooms—conceptual “pods” for
+space applications designed,
+prototyped, and exhibited.
+Prototype realistic MA pods and
+habitats, test in space analog
+missions.
+30 IEEE Pervasive Computing April-June 2023
+PERVASIVE COMPUTING IN SPACE
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 02:44:36 UTC from IEEE Xplore.  Restrictions apply. 
+orthostatic intolerant and passive antigravity skinsuits
+have been commonly used as countermeasures.12 How-
+ever, these garments do not adapt to the astronauts'
+physiological and physical changes and cannot exert
+controllable pressure throughout the body. Inspired by
+the Peristalsis phenomena, which is the propagation of
+contraction and relaxation of muscles in our gastroin-
+testinal tract, we have developed the Peristaltic (PS)
+Suit [see Figure 1(d) and (e)] by embedding soft, textile-
+based actuators and sensors into an intravehicular
+activity garment with miniaturized and wireless
+sensing-actuation control hardware. 13,14 It consists of
+an array of air pouches that can be individually con-
+trolled for dynamic pressure or compression gradients
+across the body through a wearable, compact, and
+light-weight pneumatic system.15,16 It is also equipped
+with multiple wireless skin-contact compression pres-
+sure sensors, inertial-measurement units, and physio-
+logical sensors that constantly measure heart rate,
+respiration, blood pulse transit time, temperature, and
+blood oxygenation level of the wearer. Incorporating
+both sensing and actuation systems enables us to
+FIGURE 2. Dynamic astronaut restraint systems: SpaceHuman (a) tail linkage skeleton, (b) deployed with active pneumatics dur-
+ing 0–G test ﬂight; and active magnetic outsole, (c) in prep, and (d) during 0 –G Test Flight.
+April-June 2023 IEEE Pervasive Computing 31
+PERVASIVE COMPUTING IN SPACE
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 02:44:36 UTC from IEEE Xplore.  Restrictions apply. 
+perform closed-loop intervention and study the direct
+inﬂuence of active compression on various physiologi-
+cal markers.
+The PS-Suit platform can not only allow remote diag-
+nostics and better regulation of cardiovascular health
+and body ﬂuids of astronauts, but also augment their
+physical training through active muscle compression,
+plus provide emotional support and physical feedback
+through embodied haptic transfer, as well as monitor
+and prevent other microgravity adaptation health risks
+such as osteoporosis, skeletal muscle atrophy, spatial
+disorientation, and motion sickness. The design and
+control framework of the PS-Suit will also be applicable
+in other health, rehabilitation, or soft robotics applica-
+tions not only in outer space, but also on the Earth in the
+form of hyper-gravity(G) suits, athletic or lymphedema
+compression garments, shapewear and corsets for exo-
+skeletons, and surgical tourniquets. Wearable telemedi-
+cine systems integrated into spacewear will ultimately
+help preserve and maintain astronauts ’ and space
+explorers’ health and well-being seamlessly and com-
+fortably during and after long-term spacefaring or lunar
+or other low-gravity operations.
+For most crewed operations, it is crucial to anchor
+an astronaut properly in zero-gravity —especially if
+both hands are involved in a task, without proper
+attachment, one hand is often dedicated to holding on
+to a rail or handle. Current solutions include tethering
+astronauts to ﬁxtures or attaching to foot restraints.
+As our group has a long and early history of developing
+shoes equipped with wireless sensors for electronic
+dance and gait analysis, 17 or outﬁtted with power gen-
+erating elements for energy harvesting,18 it is only natu-
+ral that we had turned our attention again to shoes, but
+here prototyping a favorite fantasy of science ﬁction,
+the magnetic boot. Although passive magnetic boots
+are commercially available (e.g., for roo ﬁng) and some
+variations have been suggested for spacecraft, 19 more
+conventional restraint systems have proved practical
+and adequate for current space work. With new devel-
+opments in space operations involving more people in
+larger habitats, the time is ripe for developing new
+adaptive astronaut restraint systems, and as improved
+magnets and more control options have become avail-
+able, we have revisited this idea. Our initial proof-of-
+concept design is an outsole retro ﬁt using standard
+FIGURE 3. AstroAnt MicroRover for Spacecraft Inspection. (a) standardized rover set, (b) customized set with diverse sensing,
+diagnostic and servicing capabilities, (c) 0 –G testing atop various surfaces, and (d) AstroAnt designed for deployment atop the
+Lunar Outpost Rover—bottom view showing thermal sensor, space-quali ﬁed motors, and magnetic wheels.
+32 IEEE Pervasive Computing April-June 2023
+PERVASIVE COMPUTING IN SPACE
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 02:44:36 UTC from IEEE Xplore.  Restrictions apply. 
+double-sided Velcro strips to strap on different types of
+shoes, regardless of their size, with two powerful
+remotely-actuated ﬂat electromagnets (WF-P70/9,
+rated at 12 V DC each, capable of maintaining 250 N
+stiction while activated) that pull against a thin mag-
+netic steel strip ﬁxed to the spacecraft “ﬂoor.” We have
+recently tested a very early prototype [Figure 2(c) and
+(d)] on a zero-gravity ﬂight, and are re ﬁning our design
+to use energy-saving electropermanent magnets (that
+are only pulsed for release) and will feature an auto-
+matic mode driven by sensors that anticipate that a
+foot is pulling up to actuate its release, adapting gait
+prediction techniques that researchers are pursuing in
+smart robotic prosthetic limbs.20
+Another approach that we have explored to
+securing astronauts involves a strap-on robotic
+appendage. These have been explored before in HCI,
+for example, as extra assistive arms. 21 But in our
+case, the seahorse ’s unique tail structure provided
+inspiration for the overall biomimetic design that we
+adopted. Indeed, among all the marine creatures
+that use their tail for swimming, seahorses make par-
+ticular use of their ﬂexible and resilient tail to grasp
+objects in their environment. Our prototype, Space-
+Human 2.0 ,22 s h o w ni nF i g u r e2(a) and (b),i saw e a r -
+able soft-robotic additive prosthetic that can move
+around the body to grasp objects and handles in
+microgravity through an object tracking camera, pro-
+tecting the wearer from injuries that might occur
+while ﬂoating in a con ﬁned habitat, while providing
+an adaptable and kinematically stable base. Space-
+Human 2.0 , has been developed via different compu-
+tational design methods, and tested at a basic level
+(without active tracking) in different gravity condi-
+tions (microgravity, lunar gravity, and Martian grav-
+ity) on two Zero-G ﬂights [see Figure 2(b)]. Through
+36 pneumatic actuators speci ﬁcally designed to be
+shape-changing and bend along a reinforcing rib of
+the material, astronauts and space tourists can use
+SpaceHuman to cling to useful surfaces inside orbital
+housings. The augmentation of human performance
+through wearable soft-robotics solutions could be
+integrated with fashion aspects of spacesuit design
+and the architectural aspects of responsive habitat
+interior design. Adapting the tail to vacuum opera-
+tion would require more robust materials or a
+mechanical approach.
+MICROROVERS AND SWARMS
+Inspired by the “Selﬁe Drone, ” a conceptual design
+where a drone resting on your wrist would ﬂy up to take
+a “selﬁe” photo then return to its perch, 23 we began
+thinking about how robotic systems could fuse with
+Wearables. This enquiry resulted in the development of
+our Rovables microrobots, which were designed to tra-
+verse clothing to serve a variety of novel user-interface
+functions.24 The Rovables design was subsequently
+adapted to serve a series of space projects starting
+with a version that would traverse a net anchored to a
+microgravity object of interest (such as an asteroid).
+The net provides a stable infrastructure that would
+allow robotic assets to reliably move to particular loca-
+tions in order to conduct exploration and other opera-
+tions. We have also made and tested initial prototypes
+of autonomous grapplers located at several points
+around the net that could grab onto surface features
+and thus help to anchor it there.25
+After preliminary development, aspects of this
+project pivoted into a related space application
+through the NASA Tech Flights program —e.g., travers-
+ing the outside of spacecraft to determine vehicle
+integrity and assess any potential damage. Tradition-
+ally, when damage or an exterior anomaly is assumed,
+a camera (perhaps on a robotic arm) or astronaut on
+an EVA would be dispatched to investigate. EVAs are
+complex and risky operations, however, and cameras
+are limited in what they can assess, and may not have
+access to the entire spacecraft.
+Robots have long been used for on-orbit servicing,
+such as Canadarm 2 and the ERA systems 26 that ser-
+viced the International Space Station. Platforms that
+apply robotic systems to implement on-orbit serving
+have recently been designed and/or tested, such as
+the OSAM-1 (On-orbit Servicing, Assembly, and
+Manufacturing 1) for on-orbit assembly, manufacture,
+and refuel, 27 and MEV-1 (Mission Extension Vehicle 1)
+for repositioning satellites. 28 The on-orbit service pro-
+vided by these platforms can extend satellites' life-
+spans. Most of these robotic systems are ﬁxed, large,
+and cost-intensive platforms. The motion of these
+heavy and bulky robotic systems are coupled into the
+base platforms, which makes the dynamic and kinetics
+analysis of the system more complicated during on-
+orbit service. 29 Smaller, autonomous robots can pro-
+vide better mobility and greater functional ﬂexibility,
+such as inspecting narrow spaces that are not acces-
+sible or hard-to-reach for human astronauts or large
+robotic systems. Building on the knowledge we
+obtained from our Rovables project, we expanded the
+applications of the miniature rolling robotic swarm to
+space—which we term AstroAnt.
+The AstroAnt [Figure 3(a)] is a miniature robotic
+swarm aimed at servicing the outside surface of a
+spacecraft or systems working on planetary surfaces,
+such as rovers or landers, for inspection and
+April-June 2023 IEEE Pervasive Computing 33
+PERVASIVE COMPUTING IN SPACE
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 02:44:36 UTC from IEEE Xplore.  Restrictions apply. 
+diagnostic tasks. With magnetic wheels, the robots
+can attach to ferromagnetic surfaces.
+Four zero-gravity ﬂights have been conducted to
+test their mobility (speed and obstacle- overcoming
+ability) and sensing capabilities in microgravity environ-
+ments through the NASA Tech Flights (REDDI) program.
+During these ﬂights [Figure 3(c)], the mobility mecha-
+nism enabled the robot to reach/C24 8 cm/s on low-carbon
+FIGURE 4. TESSARAE test tile, circuitry (top left) and in active deployment on a 0 –G ﬂight (top right); and on the International
+Space Station (middle); conceptual view (bottom) of the interior of an assembled structure depicting several Space Initiative
+projects, including some described here, in action.
+34 IEEE Pervasive Computing April-June 2023
+PERVASIVE COMPUTING IN SPACE
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 02:44:36 UTC from IEEE Xplore.  Restrictions apply. 
+sheet steel, aluminum sheets with magnetic paint, and
+beta cloth simulant (in this case, with the use of a mag-
+netic pinch roller on the opposite side of the beta cloth,
+as in the original fabric-traversing Rovables). In a zero-
+gravity environment, the robots can round a corner of
+70/C14 in pitch, which ensures that they can overcome
+ramps and corners enroute to an area-of-interest on the
+external surface of spacecrafts, rovers, or landers.
+With a modular design, each AstroAnt robot can
+carry different sensor payloads, which can be tailored
+based on different inspection tasks and diagnostic
+missions [see Figure 3(b)]. The sensor payloads we
+developed include a visual camera for optical inspec-
+tions, a thermopile for contactless temperature mea-
+surement, a thermal camera to obtain a thermal map
+of an area-of- interest, and an eddy current sensor for
+metal ﬂaw detection.
+Built on this work, we designed another model of
+the AstroAnt robot that will be sent to the Lunar
+south pole with Intuitive Machines and Lunar Out-
+post as early as 2023. This microrobot will be work-
+ing on the MAPP1 rover ’s top surface, which is the
+radiator of the rover ’s thermal system. Equipped
+with a thermopile on the bottom [Figure 3(d)], the
+robot can make contactless temperature measure-
+ments of the radiator and help monitor the perfor-
+mance of the thermal system.
+Although there are some improvements needed,
+such as better tracking mechanisms, building a mesh
+network for multihop communications within the
+swarm, and viable energy-harvesting approaches, the
+AstroAnt robots have promising potential to support
+future deep space exploration.
+AUTONOMOUS ROBOTICS AND
+SELF-ASSEMBLY FOR SPACE
+HABITATS
+Cooperative and recon ﬁguring robot swarms have
+been used in various projects related to the Pervasive
+Community,30,31,32 and it is only natural that space-
+craft exploit this capability. We already see the begin-
+nings of this with dynamic spacecraft docking and
+ensemble control. 33,34 Our TESSERAE (Tessellated
+Electromagnetic Space Structures for the Exploration
+of Reconﬁgurable, Adaptive Environments) Project35,36
+builds on this tradition via self-assembly of large space
+habitats from discrete smart tiles that can be
+launched in a compact ﬂat stack, thereby ﬁtting into
+existing spacecraft fairings. This endeavor anticipates
+the need for modular, recon ﬁgurable infrastructure in
+orbit—from self-assembling habitats, to parabolic mir-
+rors, to dynamically evolving multiunit satellite buses.
+The TESSERAE project charts a multiyear research
+effort to study, characterize, simulate, prototype, and
+test quasi-stochastic self-assembly in microgravity
+environments. The component tiles are tuned to
+autonomously self-assemble into a particular geome-
+try—in our initial prototypes [see Figure 4(a)], we have
+focused on the buckminsterfullerene (20 hexagonal
+tiles, 12 pentagonal tiles). During assembly, tiles auton-
+omously assess their bonding status and can separate
+and rejoin via applying current pulses to magnetic
+joints, to form a more perfect target geometry. Each
+tile, at minimum, includes a rigid outer shell, responsive
+sensing and control code for bonding diagnosis, wire-
+less communication via Bluetooth Low Energy mod-
+ules (supporting both mesh and central-station
+conﬁgurations), electropermanent magnets for dynam-
+ically controllable bonding actuation, and an on-board
+power management system. TESSERAE hardware has
+ﬂown on two parabolic ﬂights [see Figure 4(b)], one sub-
+orbital ﬂight, and two ISS missions [CRS20 and Ax1 —
+Figure 4(c)] and is currently being spun out of the MIT
+Media Lab for habitat-scale applications.37
+WE ALREADY SEE THE BEGINNINGS
+OF THIS WITH DYNAMIC SPACECRAFT
+DOCKING AND ENSEMBLE CONTROL.
+The “TESSERAE” name and multitile structure
+hearken to the small, colored tiles used in Roman
+mosaics, where many standard pieces, or “tesserae,”
+interlock to form a larger creation. We make this refer-
+ence to ancient history when designing an artifact of
+our space exploration future to tie architectural ele-
+ments together across scales and across millennia. We
+aim for TESSERAE to function as multiuse, low-cost
+orbiting modules that supply a critical space infrastruc-
+ture for the next generation of zero gravity habitats,
+science labs, staging areas for on-surface exploration,
+and more. TESSERAE should be thought of as ﬂexible
+and reconﬁgurable modules to aid in both small-scale,
+agile mission operations and grand-scale, iteratively
+expanding space architecture. Our mission concept
+focuses on supporting LEO, Lunar and Mars opera-
+tions, with dual-use orbit and surface capability:
+› Tiles are packed ﬂat and condensed for launch;
+› Tiles are released after orbit insertion to quasi-
+stochastically self-assemble into the target
+geometry, while ﬂoating in microgravity;
+April-June 2023 IEEE Pervasive Computing 35
+PERVASIVE COMPUTING IN SPACE
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 02:44:36 UTC from IEEE Xplore.  Restrictions apply. 
+› Once assembled, the structure can be recon ﬁg-
+ured on demand (e.g., where a berthing port tile
+was needed yesterday, a cupola tile can be
+replaced tomorrow);
+› Tiles can be disassembled entirely, packed ﬂat
+again in an EDL (Entry, Descent and Landing)
+vehicle, and then deployed and “snap-assem-
+bled” with astronaut assists on the lunar or Mar-
+tian surface.
+Multiple, interlocking TESSERAE can serve as a
+larger-volume orbiting base (e.g., “MOSAIC”: Mars
+Orbiting Self-Assembling Interlocking Chambers), in
+addition to supporting the coming waves of space tou-
+rists and space hotels in low Earth orbit.
+SENSOR NETWORKS—
+EXPLORATION SENSING IN
+EXTERIOR EXTREME
+ENVIRONMENTS
+Our group has been designing, building, deploying, and
+using a variety of terrestrial sensor networks for 25
+years, and we have explored a host of wearable, smart/
+responsive buildings, and environmental sensing appli-
+cations with them. 38 The large, outdoor, multimodal,
+low-power wireless sensor network (WSN) that we
+designed for deployment at Tidmarsh Farms, 39 a for-
+mer cranberry bog that has been transformed into a
+wetland wildlife sanctuary, inspired us to evolve differ-
+ent kind of node suitable for lunar deployment. 40 Tak-
+ing a modular, conﬁgurable approach, such as we used
+for wearables in the early 2000s, 41 this node has the
+form factor of a CubeSat (although is only 1/8 the size:
+5 /C2 5 /C2 5c m—Figure 5 left) and is designed to be ballis-
+tically “shot” out of a launcher on a rover or lander to
+access lunar terrain that the main platform (such as a
+single high-cost rover or lander) cannot reach (e.g.,
+rockpiles, craters, etc.)—Figure 5 right. After the nodes
+are deployed to the lunar surface, they establish a WSN
+(which we term LunarWSN) with hardware redundancy
+that can reduce the chance of failure.
+Each node is equipped with wireless communica-
+tion and wireless ranging capability. On each side of
+the cubic sensor node, there is a wireless communica-
+tion antenna, a wireless ranging antenna, and solar
+cells to guarantee powering, functionality, and wire-
+less connection with a communication relay or other
+sensor nodes, regardless of landing orientation. After
+the nodes are deployed from a rover or lander, they
+can be localized and set up as an expandable WSN.
+With a modular design, each sensor node can carry dif-
+ferent sensor payloads for collecting desired scienti ﬁc
+data simultaneously from multiple locations. Although
+other sensing systems were explored, 40 the exemplary
+functional LunarWSN node of Figure 5 is equipped
+with electrode probes and an impedance convertor to
+study the character of the Lunar regolith, where we
+suspect the existence of water ice.
+WSN technology can play an important role in
+future in situ planetary exploration,42 providing meter-
+scale spatial sampling that aids in better understand-
+ing of dynamic phenomena.
+CONNECTION TO VIRTUAL
+ENVIRONMENTS
+Although virtual and augmented reality have had
+some exploratory use in space mission formulation,
+for example, with the design and veri ﬁcation of the
+Perseverance Rover and other projects at JPL and
+other NASA centers, 43 the frontiers of mixed reality
+hold enormous potential for near-future hybrid mis-
+sion operations.
+Since 2004, our group has explored various ways
+spatially tagged sensor information is rendered in
+FIGURE 5. Lunar wireless sensor node, working prototype (left) and conceptual ballistic deployment from a rover (right).
+36 IEEE Pervasive Computing April-June 2023
+PERVASIVE COMPUTING IN SPACE
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 02:44:36 UTC from IEEE Xplore.  Restrictions apply. 
+virtual worlds, making “Digital Twins ” that allow users
+to explore a real environment by navigating engaging
+“Cross-Reality” analogies.44 These culminated in our
+DoppelLab45 and DoppelMarsh 39 experiences that
+enable real-time browsing of multimodal sensor data
+via animations, sensor-driven music, and streaming
+audio in virtually rendered analogs of our Media Lab
+building and the Tidmarsh Sanctuary [e.g., Figure 6(a)],
+respectively. The terrain in Doppelmarsh is generated
+by LiDAR measurements collected in 2012 by the United
+States Geological Survey (USGS) at the real site and
+imported into a custom software developed with the
+Unity game engine. Real time and cached sensor data
+from the ﬁeld are stored in a PostgresQL database and
+streamed within the virtual landscape through Chain-
+API,46 our custom hypermedia web service based on
+the REST architecture that serves JSONþHAL and Web-
+Sockets on demand. DoppelMarsh supported over a
+dozen projects (see http://tidmarsh.media.mit.edu), and
+as it ran openly online for many years, it was experi-
+e n c e db ym a n yu s e r s—we know of several who would
+just leave it running to enjoy the aesthetic connection
+to the sanctuary. This suggests another way to connect
+the general public to space and places where most will
+never go, namely by aesthetically/artistically interpret-
+ing space-related data streams into ambient or immer-
+sive experiences that people can enjoy.
+In collaboration with the Human Systems Lab
+(HSL) in MIT ’s Aero/Astro dept and NASA Ames
+researchers, we are exploring moving these concepts
+into space mission ops, where various assets (rovers,
+sensors, orbital platforms, and even AIs) and person-
+nel distributed across vast distances, diverse time
+delays, and different degrees of immersion need to
+blend together. 47 Our current efforts in virtual space
+presence focus on two applications of human –robot-
+ics interaction. The ﬁrst simulates a virtual space ana-
+log containing a digital-twin 3D model of a four
+wheeled rover (provided by Rover Robotics), deployed
+in a 60 /C2 32 sq. ft room that is mirrored by an artistic
+rendering of a lunar environment built with the Unity
+game engine [Figure 6(b)]. The user interface and inter-
+action follow a real-time strategy (RTS) game-like view,
+giving the user the ability to control a virtual model of
+FIGURE 6. (a) Virtual “Rover” control panel run in Doppelmarsh, showing real-time sensor data. (b) VR mission planning for lunar
+rover. (c) AR overlay of laser ranging data from Spot walking robot.
+April-June 2023 IEEE Pervasive Computing 37
+PERVASIVE COMPUTING IN SPACE
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 02:44:36 UTC from IEEE Xplore.  Restrictions apply. 
+the rover from within the lunar environment by setting
+waypoints. The virtual rover will follow the path set by
+the waypoints, while keeping track of previous traver-
+ses through a color scheme reference. In the second
+experiment, a SPOT quadrapod, provided by Boston
+Dynamics, was deployed in an outdoor rocky seashore
+environment [see Figure 6(c)]. The robot was aug-
+mented with a Velodyne LiDAR and a custom multi-
+purpose 3D-printed payload, which served as a
+container for swapping various data-collection cam-
+eras and devices (currently a 360 /C14 video camera, and
+higher resolution LiDAR scanners). As seen in Figure 6,
+the sensor data can appear as a video overlay and in
+the UNITY visualization environment.
+MULTISENSORY INTERIOR
+EXPERIENCES
+In this era of Internet of Things, smart buildings will
+increasingly become partners, where they can change
+properties to dynamically suit their users by leveraging
+context and information coming from wearable and in
+situ sensors. We have realized several projects in this
+area, including our Mediated Atmospheres systems,
+that explore how indoor terrestrial environments can
+respond to occupant’s physiology and affect their cog-
+nition by sensing multimodal signals (including activity
+level, heart rate, breathing rate, posture, electrodermal
+activity, skin temperature, and facial gestures) and
+controlling lighting, projected images/video, ambient
+sound, and even air ﬂow and smell to keep them in a
+high focus-restoration state. 48,49 This concept has
+attracted interest for long-duration space ﬂight, where
+a variety of stressors could cause crew members to
+experience complex psychological challenges that will
+likely become more severe as the mission progresses
+and exposes astronauts to situations of extreme sen-
+sory deprivation and loneliness. 50 Moreover, deep
+space settings might increase the general reduction
+of stimuli and monotony inside the space habitat,
+since it is an entirely arti ﬁcial closed-loop environ-
+ment.51 To compensate, perhaps the spacecraft can
+FIGURE 7. Mediated Atmospheres in Space: Top Right, the VR Astropod, a conceptual design for a compact, private immersive
+facility in space (in collaboration with SEI member Tamalee Basu). Top Left, different views of the Tidmarsh Living Observatory
+Portal prototype with live video projections (middle images). Bottom, artistic impression of the fully developed Portal in operation.
+38 IEEE Pervasive Computing April-June 2023
+PERVASIVE COMPUTING IN SPACE
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 02:44:36 UTC from IEEE Xplore.  Restrictions apply. 
+transform its presentation in accordance with the
+state of the astronaut. We have focused explicitly
+here on compact pods and customization of individual
+habitat modules, where an astronaut can essentially
+ﬂoat inside a reactive audio/video display or personal-
+ized enclosure module.
+Mediated Atmospheres in Space conceives a new
+experience for space mission workspaces that can
+self-regulate on the basis of an occupant ’s activities
+and perceived affect in a closed-loop fashion. This
+type of workspace can instantly adapt to users ’
+requests and/or their affective state, and trade, for
+example, the engaging focus of a library with the liber-
+ating sensation of a stroll through the forest. The
+responsive controller relies on ubiquitous, nonintru-
+sive sensing of the occupant ’s activity, work habits,
+and physiological or behavioral reaction to environ-
+mental changes. Building on data from realistic work
+scenarios, it has been possible to create personalized
+occupant response models for appropriate multimedia
+response. Dynamic control presents an opportunity to
+synchronize the workspace experience with the ever-
+changing requirements of today ’s workers and future
+space explorers.
+We have prototyped such an experience
+(Figure 7)i nt h e Tidmarsh Living Observatory Por-
+tal,52 which is a compact, individual multisensory
+experience that generates an immersive physical
+real-time telepresence into the enchanting natural
+Tidmarsh wetland by recreating visuals, smells, and
+sounds representative of the site, and streaming live
+data as well as past recorded data, thereby also
+allowing travel across time. For maximizing immer-
+sion, the overall experien ce is tailored for a single
+user and lasts for a minimum of three minutes, up
+to half an hour. Leveraging projected graphics or
+embedded large displays, it avoids the constraints
+and disorientation that VR goggles can produce. The
+architectural design of the pavilion is based on a
+human-centered design approach inspired by the
+idea of recreating an indivi dual Tidmarsh ecosystem
+wherever the Portal is going to be located. Inside
+such a cocoon, astronauts will feel protected and
+transported into restoring terrestrial environments
+such as this natural wetland, where they will be able
+to adopt their own stress –relief activities, like medi-
+tation, reading, or relaxing, while being immersed in
+the beauty of nature.
+CONCLUSION
+In the bright dawn of this new space age, unprece-
+dented opportunities abound to deploy and test
+ideas in space. However, to appropriate Heinlein,
+“Space is a Harsh Mistress, ” a demanding environ-
+ment that has always required and encouraged
+wide-ranging technical advance and adaptation. Yet,
+as people go into space, they will be transformed by
+the technology they bring along. The revolutions
+that the UbiComp/Pervasive/IoT axis bring about on
+Earth will usher a change in the human (e.g., affect-
+ing perception, cognition, even identity as we are
+increasingly connected and augmented by AI). This
+will be de ﬁning for future spacefarers who will rely
+on, or even more crucially , be transformed by this
+technological backbone. it is not yesterday ’sa s t r o -
+naut that will go out there ... And as a research
+group grounded in Pervasive Computing, we have
+been delighted to crack open a few views into this
+quickly moving future and expose new pathways
+toward Pervasive space implementation.
+ACKNOWLEDGMENTS
+The authors would like to thank: the MIT Space Explora-
+tion Initiative for supporting research development and
+ﬂight opportunities for these projects; the NASA Transla-
+tional Institute for Space Health (TRISH) for funding sup-
+port; the NASA “Tech Flights ” (REDDI) program for
+funding support and four parabolic ﬂights that provided
+t h eb r i d g et ot a k eRovablesfrom terrestrial, to micrograv-
+ity, to lunar applications; the NASA-funded RESOURCE
+project supporting our analog mission research and asso-
+ciated collaborators at NASA Ames. They also thank the
+support of the MIT Media Lab Consortia and collaborators
+across the Responsive Environments Group, including Ali
+Shtarbanov, alums Artem Dementyev and Ara Knaian,
+plus others at the Media Lab and MIT AeroAstro Human
+Systems Lab (particularly Ferrous Ward and Cody Paige).
+REFERENCES
+1. C. Fishman, “How NASA gave birth to modern
+computing—And gets no credit for it, ” FastCompany,
+Jun. 03, 2019. [Online]. Available: https://www.
+fastcompany.com/90362753/how-nasa-gave-birth-to-
+modern-computing-and-gets-no-credit-for-it
+2. A. Ekblaw Into the Anthropocosmos: A Whole Space
+Catalog from the MIT Space Exploration Initiative .
+Cambridge, MA, USA: MIT Press, 2021.
+3. P. Pataranutaporn et al., “SpaceCHI: Designing human-
+computer interaction systemsf o rs p a c ee x p l o r a t i o n ,” in
+Proc. CHI Conf. Hum. Factors Comput. Syst.,2 0 2 1 ,p p .1–6.
+4. N. De Monchaux, Spacesuit: Fashioning Apollo.
+Cambridge, MA, USA: MIT Press, 2011.
+April-June 2023 IEEE Pervasive Computing 39
+PERVASIVE COMPUTING IN SPACE
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 02:44:36 UTC from IEEE Xplore.  Restrictions apply. 
+5. Bar ﬁeld, W. and Caudell, T., Eds., Fundamentals of
+Wearable Computers and Augmented Reality . NJ, NJ,
+USA: Lawrence Erlbaum Associates, 2001.
+6. J. A. Paradiso, J. Lifton, and M. Broxton, “Sensate
+media—Multimodal electronic skins as dense sensor
+networks,” BT Technol. J., vol. 22, no. 4, pp. 32 –44, 2004.
+7. I. Wicaksono, J. Cherston, and J. A. Paradiso,
+“Electronic textile gaia: Ubiquitous computational
+substrates across geometric scales,” IEEE Pervasive
+Comput., vol. 20, no. 3, pp. 18 –29, Jul.–Sep. 2021.
+8. J. Cherston and J. A. Paradiso, “The smartly dressed
+spacecraft: Wrapped in sensor-rich electronic textiles,
+space structures could double as scientiﬁc instruments,”
+IEEE Spectr.,v o l .5 8 ,n o .1 2 ,p p .3 0–37, Dec. 2021.
+9. J. Cherston et al., “Large-area electronic skins in
+space: Vision and pre ﬂight characterization for ﬁrst
+aerospace piezoelectric e-textile,” in Proc. Sensors
+Smart Structures Technol. Civil, Mech., Aerosp. Syst. ,
+2020, Art. no. 11379.
+10. S. Payra, I. Wicaksono, J. Cherston, C. Honnet, V.
+Sumini, and J. A. Paradiso, “Feeling through
+spacesuits: Application of space-resilient E-Textiles
+to enable haptic feedback on pressurized
+extravehicular suits, ” in P r o c .I E E EA e r o s p .C o n f .,
+2021, pp. 1 –12.
+11. K. Tanaka, N. Nishimura, and Y. Kawai, “Adaptation to
+microgravity, deconditioning, and countermeasures,”
+J. Physiol. Sci., vol. 67, no. 2, pp. 271 –281, 2017.
+12. J. M. Waldie and D. J. Newman, “A gravity loading
+countermeasure skinsuit,” Acta Astronautica, vol. 68,
+no. 7/8, pp. 722 –730, 2011.
+13. I. Wicaksono, A. Shtarbanov, R. Slater, E. Ranade, and
+J. Paradiso, “Peristaltic (PS) suit: Active bioelectronic
+sensing-compression spacesuit for microgravity
+adaptation and cardiovascular deconditioning,” in
+Proc. ASCEND, 2022, p. 4208.
+14. I. Wicaksono et al., “A tailored, electronic textile
+conformable suit for large-scale spatiotemporal
+physiological sensing in vivo, ” NPJ Flexible Electron.,
+vol. 4, no. 1, pp. 1 –13, 2020.
+15. I. Wicaksono et al., “3DKnITS: Three-dimensional
+digital knitting of intelligent textile sensor for activity
+recognition and biomechanical monitoring,” in Proc.
+IEEE Med. Biol. Soc. Conf. , 2022, pp. 2448 –2454.
+16. A. Shtarbanov, “FlowIO development Platform–the
+pneumatic ‘Raspberry pi’ for soft robotics,” in Proc.
+Extended Abstr. CHI Conf. Hum. Factors Comput. Syst. ,
+2021, pp. 1–6.
+17. J. A. Paradiso, K. Hsiao, A. Benbasat, and Z. Teegarden,
+“Design and implementation of expressive footwear, ”
+IBM Syst. J., vol. 39, no. 3-4, pp. 511 –529, Oct. 2000.
+18. N. S. Shenck and J. A. Paradiso, “Energy scavenging
+with shoe-mounted piezoelectrics,” IEEE Micro, vol. 21,
+no. 3, pp. 30 –42, May–Jun. 2001.
+19. A. W. Hanger and A. A. Rosener, “Final analysis/design
+and prototype construction of a selected mobility and
+restraint device,” Martin Marietta NASA, Tech.
+Rep. MCR-69-513, Nov. 1969.
+20. J. Markowitz and H. Herr, “Human leg model predicts
+muscle forces, states, and energetics during walking, ”
+PLoS Comput. Biol., vol. 5, no. 12, May 2016,
+Art. no. e1004912.
+21. S. Leigh, K. Parekh, T. Denton, W. S. Peebles, M. H.
+Johnson, and P. Maes, “Morphology extension kit: A
+modular robotic platform for customizable and
+physically capable wearables,” in Proc. ACM TEI, 2018,
+pp. 11–18.
+22. V. Sumini, M. Muccillo, J. Milliken, A. Ekblaw, and J.
+Paradiso, “SpaceHuman: A soft robotic prosthetic for
+space exploration,” in Proc. CHI Late-Breaking Work,
+2020, pp. 1–8.
+23. S. Das, “Selﬁes take ﬂight with nixie wearable drone, ”
+CNET, Nov. 09, 2014. [Online]. Available: https://www.
+cnet.com/tech/mobile/selﬁes-take-ﬂight-with-nixie-
+wearable-drone/
+24. A. Dementyev et al., “Rovables: Miniature on-body
+robots as mobile wearables, ” in Proc. 29th
+Annu. Symp. User Interface Softw. Technol. ,2 0 1 6 ,
+pp. 111 –120.
+25. J. Cherston and J. A. Paradiso, “Space webs as
+infrastructure for crawling sensors on low gravity
+bodies,” in Proc. 31st Annu. AIAA/USU Conf. Small
+Satellites, 2017, Art. no. SSC17-P2-03.
+26. A. Flores-Abad, O. Ma, K. Pham, and S. Ulrich, “A review
+of space robotics technologies for on-orbit servicing, ”
+Prog. Aerosp. Sci., vol. 68, pp. 1 –26, 2014.
+27. M. A. Shoemaker, M. Vavrina, D. E. Gaylor, R. Mcintosh,
+M. Volle, and J. Jacobsohn, “OSAM-1 decommissioning
+orbit design,” in Proc. AAS/AIAA Astrodynamics
+Specialist Conf., 2020, Art. no. 345.
+28. N. T. Redd, “Bringing satellites back from the dead:
+Mission extension vehicles give defunct spacecraft a
+new lease on life-[News], ” IEEE Spectr., vol. 57, no. 8,
+pp. 6–7, Aug. 2020.
+29. A. Flores-Abad, O. Ma, K. Pham, and S. Ulrich, “A review
+of space robotics technologies for on-orbit servicing, ”
+Prog. Aerosp. Sci., vol. 68, pp. 1 –26, 2014.
+30. K. Nakagaki, A. Dementyev, S. Follmer, J. A. Paradiso,
+and H. Ishii, “ChainFORM: A linear integrated modular
+hardware system for shape changing interfaces, ” in
+Proc. 29th Annu. Symp. User Interface Softw. Technol. ,
+2016, pp. 87–96.
+40 IEEE Pervasive Computing April-June 2023
+PERVASIVE COMPUTING IN SPACE
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 02:44:36 UTC from IEEE Xplore.  Restrictions apply. 
+31. M. Rubenstein, A. Cornejo, and R. Nagpal,
+“Programmable self- assembly in a thousand-robot
+swarm,” Science, vol. 345, no. 6198, pp. 795 –799,
+2014.
+32. P. R. Wurman, R. D. D ’Andrea, and M. Mountz,
+“Coordinating hundreds of cooperative, autonomous
+vehicles in warehouses,” AI Mag., vol. 29, no. 1, 2008,
+Art. no. 251.
+33. A. S. Otero, A. Chen, D. W. Miller, and M. Hilstad,
+“SPHERES: Development of an ISS laboratory for
+formation ﬂight and docking research,” in Proc. IEEE
+Aerosp. Conf., 2002, p. 1.
+34. N. Howard and H. D. Nguyen, “Magnetic capture
+docking mechanism,” U.S. Patent 7,815,149, 2010.
+35. A. C. Ekblaw, “Self-aware self-assembly for space
+architecture: Growth paradigms for in-space
+manufacturing,” Ph.D. dissertation, Massachusetts
+Inst. Technol., Cambridge, MA, USA, 2020.
+36. A. Ekblaw, A. Prosina, D. Newman, and J. Paradiso,
+“Space habitat reconﬁgurability: TESSERAE platform
+for self-aware assembly,” in Proc. 30th IAA Symp.
+Space Soc., 2019, Art. no. 0481.
+37. R. Zisk, “Ariel Ekblaw explains the future of
+space stations, ” FastCompany, Jul. 08, 2022.
+[Online]. Available: https://www.fastcompany.com/
+90767147/ariel-ekblaw-explains-the-future-of-space-
+stations
+38. J. Paradiso, “Our extended sensoria—How humans will
+connect with the Internet of Things, ” in Proc. Next
+Step, Exponential Life, Open Mind Collection , 2016,
+pp. 48–75.
+39. B. Mayton et al., “The networked sensory landscape:
+Capturing and experiencing ecological change across
+scales,” Presence, Teleoperators Virtual Environ.,
+vol. 26, no. 2, pp. 182 –209, May 2017.
+40. F. Liu, A. Ekblaw, and J. A. Paradiso, “LunarWSN
+node—A Wireless sensor network node designed for
+in-situ lunar water ice detection, ” in Proc. Small Satell.
+Conf., 2022, Art. no. 481.
+41. A. Y. Benbasat and J. A. Paradiso, “A compact
+modular wireless sensor system, ” in Proc. 4th Int.
+IEEE/ACM Conf. Inf. Process. Sensor Netw. , 2005,
+pp. 415 –415.
+42. P. Rodrigues et al., “Space wireless sensor networks
+for planetary exploration: Node and network
+architectures,” in Proc. NASA/ESA Conf. Adaptive
+Hardware Syst., 2014, pp. 180 –187.
+43. C. Donalek et al., “Immersive and collaborative data
+visualization using virtual reality platforms, ” in Proc.
+IEEE Int. Conf. Big Data , 2014, pp. 609 –614.
+44. J. Lifton, M. Laibowitz, D. Harry, N. W. Gong, M. Mittal,
+and J. A. Paradiso, “Metaphor and manifestation—
+Cross reality with ubiquitous sensor/actuator
+networks,” IEEE Pervasive Comput. Mag., vol. 8, no. 3,
+pp. 24–33, Jul.–Sep. 2009.
+45. G. Dublon et al., “DoppelLab: Tools for exploring and
+harnessing multimodal sensor network data, ” in Proc.
+IEEE Sensors, 2011, pp. 1612 –1615.
+4 6 . S .R u s s e l la n dJ .A .P a r a d i s o ,“Hypermedia APIs for
+sensor data: A pragmatic approach to the web
+of things, ” in Proc. ACM Mobiquitous , 2014,
+pp. 30 –39.
+47. C. A. Paige, D. Newman, D. D. Haddad, F. Ward, and T.
+Piercy, “Lunar instrument data integration into the
+virtual reality mission simulation system for decision
+making and situational awareness,” in Proc. 50th Int.
+Conf. Environ. Syst., 2021, pp. 12 –15.
+48. N. Zhao, A. Azaria, and J. A. Paradiso, “Mediated
+atmospheres: A multimodal mediated work
+environment, ” in Proc. ACM Interactive, Mobile,
+Wearable Ubiquitous Technol. , 2017, pp. 31:1 –31:23.
+49. N. Zhao, E. C. Kodama, and J. A. Paradiso, “Mediated
+atmosphere table (MAT): Adaptive multimodal media
+system for stress restoration,” IEEE Internet Things J.,
+vol. 9, no. 23, pp. 23614 –23625, Dec. 2022.
+50. T. M. Fraser, “The intangibles of habitability during long
+duration space missions.” Accessed: May 18, 2020.
+[Online]. Available: https://ntrs.nasa.gov/archive/nasa/
+casi.ntrs.nasa.gov/19680017230.pdf
+51. S. H €auplik-Meusburger and S. Bishop, “Chapter 7,
+space habitats and habitability: Designing for isolated
+and conﬁned environments on earth and in space, ” in
+Space and Society Series, D. A. Vakoch, Ed., Europe,
+Switzerland: Springer, 2021.
+52. V. Sumini et al., “Tidmarsh living observatory portal: A
+multi-sensory experience option reconnecting
+astronauts with nature during space exploration, ” in
+Proc. SpaceCHI 2.0 Workshop, 2022, Art. no. 480.
+ARIEL EKBLAW is the director of the MIT Space Exploration
+Initiative and the founding CEO of Aurelia Institute, a hybrid
+space architecture research institute and venture incubation
+studio. Her research work and the labs she leads build toward
+future habitats and space stations in orbit around the Earth,
+Moon, and Mars. Ekblaw received her B.S. degree in physics,
+mathematics, and philosophy from Yale University and her
+Ph.D. at the MIT Media Lab, working with the Responsive
+Environments Group. Contact her at aekblaw@mit.edu.
+April-June 2023 IEEE Pervasive Computing 41
+PERVASIVE COMPUTING IN SPACE
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 02:44:36 UTC from IEEE Xplore.  Restrictions apply. 
+JULIANA CHERSTON received her Ph.D. degree from the
+Responsive Environments Group, MIT Media Lab, Cambridge,
+MA, 02139, USA. Her research has encompassed multifunc-
+tional space structures, sensate textiles for space applica-
+tions, and novel space-based scienti ﬁc detector systems.
+Contact her at cherston@mit.edu.
+FANGZHENG LIU is with MIT Media Lab, Cambridge, MA,
+02139, USA. Liu received his second master ’s degree in digital
+communication and multimedia from MIT Media Lab, where
+his thesis focused on building a Lunar Wireless Sensor Net-
+work by using wireless sensor nodes that can be ballistically
+deployed from a rover, lander, or even dropped by a low- ﬂy
+satellite. Contact him at fzliu@mit.edu.
+IRMANDY WICAKSONO is currently working toward his Ph.D.
+degree in media arts and sciences as a research assistant at the
+Responsive Environments Group, MIT Media Lab, Cambridge, MA,
+02139, USA. He is currently seamlessly embedding functional devi-
+ces into soft materials and the fabric of everyday life to develop
+electronic textiles in various forms, for deployment in areas like
+wearables, building interiors, andspacesuits, and for applications
+ranging from health and well-being, biomechanics, space explora-
+tion, human–computer interaction, to the interactive arts. Contact
+him at irmandy@mit.edu.
+DON DEREK HADDAD is currently working toward his Ph.D.
+degree in the MIT Media Lab ’s Responsive Environments
+Group, Cambridge, MA, 02139, USA. His research focuses on
+the intersection of the real, the imaginary, and the virtual
+through an interdisciplinary approach, incorporating ﬁelds
+such as mixed and virtual reality, human robotics interaction
+(HRI), and space exploration. He is currently developing and
+exploring ideas related to scalable presence (ranging from
+immersion to peripheral awareness) and dynamic representa-
+tion of humans, arti ﬁcial intelligence, robots, and sensor net-
+works in hybrid real/virtual environments, in collaboration
+with organizations such as Boston Dynamics, MIT AeroAstro,
+and NASA. Contact him at ddh@mit.edu.
+VALENTINA SUMINI is a visiting professor with Politecnico di
+Milano, 20133, Milan, Italy, where she developed and lectures
+in the course “Architecture for Human Space Exploration. ”
+Her space architecture research focuses on inventing new
+computational design methods for multiperformance habi-
+tats, soft-robotic prosthetics to enhance mobility and dexter-
+ity in microgravity, and construction techniques using in situ
+resources. Contact her at vsumini@mit.edu.
+JOSEPH A. PARADISO is the Alexander W. Dreyfoos (1954)
+professor in media arts and sciences at the MIT Media Lab,
+Cambridge, MA, 02139, USA, where he directs the Responsive
+Environments Group and serves as the associate academic
+head. Before joining Media Lab, he developed spacecraft con-
+trol and sensor systems at Draper Laboratory and high-energy
+physics detectors at CERN Geneva and ETH Zurich. His cur-
+rent research explores how sensor networks augment and
+mediate human experience, interaction and perception. Para-
+diso received his Ph.D. degree in physics from MIT. He is a
+senior member of the IEEE and AIAA, and a member of the
+APS and Sigma Xi. He is the corresponding author of this arti-
+cle. Contact him at paradiso@media.mit.edu.
+42 IEEE Pervasive Computing April-June 2023
+PERVASIVE COMPUTING IN SPACE
+Authorized licensed use limited to: Universita degli Studi di Genova. Downloaded on September 22,2026 at 02:44:36 UTC from IEEE Xplore.  Restrictions apply. 

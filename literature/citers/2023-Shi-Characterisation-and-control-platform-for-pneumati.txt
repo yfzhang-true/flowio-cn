@@ -1,0 +1,2960 @@
+Characterisation and control platform for
+pneumatically driven soft robots: Design and applications
+Jialei Shi 1, Wenlong Gaozhang 1, Hanyu Jin 1, Ge Shi 1 and Helge A. Wurdemann 1
+Abstract— Driven by performance criteria and requirements
+from specific applications in healthcare for instance, the soft
+robotics community have created a huge amount of different
+designs for pneumatically actuated soft robots. The assessment
+with regards to these criteria usually involves a full charac-
+terisation of the soft robotic system. In order to support these
+efforts during the prototyping phase and standardise assessment
+procedures, a physical platform is described in this paper
+that allows to gain essential insights into the characterisation
+and validation of control algorithms for pneumatically driven
+soft robots. The platform can be connected to a Matlab
+Graphical User Interface allowing to send pressure values as
+well as record and plot data, and, hence, it is able to actuate
+and characterise main features of soft robots, such as the
+kinematics/dynamics, stiffness and force capability. The user
+can chose between two control units including the NI USB-6341
+and Arduino Due. These components facilitate implementing
+and validating control algorithms using different tools, e.g.,
+Matlab/Simulink. To demonstrate the feasibility and function-
+alities of our platform, three soft robotic systems have been
+analysed. We present characterisation results for a variable
+stiffness joint, the kinematics results during the inflation of an
+elastic membrane and the validation of an open-loop control
+strategy for a soft continuum robot.
+I. I NTRODUCTION
+Fluidically driven soft robotic manipulators can offer high
+flexibility and dexterity, a light-weight design and vari-
+able stiffness capability [1], [2]. Many robotic devices are
+pneumatically or hydraulically actuated pressurising cavities
+within soft material structures resulting in shape changes,
+e.g., ballooning, elongation or bending [3]. These type of
+robots have show benefits for various applications, e.g.,
+for pick-and-place operations using soft grippers [4], for
+surgical interventions using soft robotic tools [5], [6], for
+rehabilitation using exoskeletons [7] and for industry using
+collaborative robots made of soft links and joints [8], [9].
+These prototypes have been created with regards to the
+application’s requirements, that have led to a variety of
+design methods, e.g., for inflatable manipulators or mem-
+branes [10], fibre-reinforcement structures [11], [12] and hy-
+brid rigid-soft mechanisms [13]. To facilitate the prototyping
+and development process of these pneumatically driven soft
+robots, efforts towards generating standardised hardware and
+This work is supported by the Springboard Award of the Academy
+of Medical Sciences (grant number: SBF003-1109), the Engineering
+and Physical Sciences Research Council (grant numbers: EP/R037795/1,
+EP/S014039/1 and EP/V01062X/1), the Royal Academy of Engineering
+(grant number: IAPP18-19 \264), the UCL Dean’s Prize, UCL Mechanical
+Engineering, and the China Scholarship Council (CSC).
+1J. Shi, W. Gaozhang, H. Jin, G. Shi and H.A. Wurdemann are with the
+Department of Mechanical Engineering, University College London, UK.
+h.wurdemann@ucl.ac.uk
+0-3.3V
+24 V
+GND
++
+-
+0-10.003V
+6.8 k
+470 k
+GND
+3.3 k
+1 uf
+GND
+2 k
+PWM (0~100%)
+0-3.3V
++
+-
+0-10V
+6.8 k
+470 k
+GND
+3.3 k
+1 uf
+GND
+2 kPWM1 
+(0~100%)
+6.8 k
+470 k
+GND
+GND
++
+-
+1 uf
+PWM2 
+(0~100%)
+LM358AN
+24V
+2 k
+Out1
+Out2
+3.3 k
+0-3.3V
++
+-
+0-10V
+6.8 k
+470 k
+GND
+3.3 k
+1 uf
+GND
+2 kPWM1 
+(0~100%)
+6.8 k
+470 k
+GND
+GND
++
+-
+1 uf
+PWM2 
+(0~100%)
+LM358AN
+24V
+2 k
+Out1
+Out2
+3.3 k
+Digital to analog module
+…...220 V AC
+Main swith
+Shutdown 
+button
+Pneumatic 
+pump 
+AC-DC converter
+Mean Well TP-150 series
+AC-DC converter
+Mean Well TP-150 series
+DAQ-Board
+A & D Signal [pressure regulator, pressure sensor etc.]
+Real-Time Control Unit
+A & D Signal 
+[pressure regulator, 
+pressure sensor etc.]
+Experimental Bench
+Environment
+•
+•
+•Post-
+•N/A
+•Future works
+•N/A
+•Future works
+•System Brain
+•Integrate, process, publish all necessary signals
+•Visualization and virtual simulation(if necessary)
+•Integrate other ROS -based robotics systems.
+•Analog  and digital signals acquisition
+•16 analog input ports(or 8 pairs 
+differential analog input port)
+•2 analog output ports
+•24 digital I/O ports
+counting pluses
+generate PWM signals
+•Test bench with necessary sensors
+DAQ-Board
+A & D Signal [pressure regulator, pressure sensor etc.]
+Real-Time Control Unit
+A & D Signal 
+[pressure regulator, 
+pressure sensor etc.]
+Experimental Bench
+Environment
+•
+•
+•Post-
+•N/A
+•Future works
+•N/A
+•Future works
+•System Brain
+•Integrate, process, publish all necessary signals
+•Visualization and virtual simulation(if necessary)
+•Integrate other ROS -based robotics systems.
+•Analog  and digital signals acquisition
+•16 analog input ports(or 8 pairs 
+differential analog input port)
+•2 analog output ports
+•24 digital I/O ports
+counting pluses
+generate PWM signals
+•Test bench with necessary sensorsPower 
+light
+5V, 12V
+ 24 V
+Power supply (12V)
+USB ports
+Fuse
+Platform architecture 
+0-3.3V
+PWM control signal
+ 24 V
+…...
+Aurora control unit
+Tracking system
+Aurora control unit
+Tracking system
+Inlet pressure Regulator 1 Regulator 2
+3/2-way pressure regulators
+Exhaust
+Exhaust
+3.3 k 6.7 k
+3.3 k 6.7 k
+…...
+GND
+3.3 k 6.7 k
+3.3 k 6.7 k
+…...
+GND
+Voltage divider
+Feedback analog signal
+0-10V 0-10V
+Outlet pressure 1
+Outlet pressure 2
+Laptop
+Control units
+Force measurment
+NI USB 6341 
+Arduino DUE
+Selective
+IIT-F/T 17
+Ethernet
+F
+F
+x
+x
+Weight
+Original pose
+Original pose
+Linear actuator
+Deflected pose
+Deflected pose
+(a)       (b)
+Pulley Force 
+sensor
+bF
+Force sensor
+Soft robot
+3.3 k
+GND GND
+3.3 k
+(Pull-down 
+Resistor)
+(Pull-down 
+Resistor)
+D2D3
+0 0.5 1 1.5 2
+Time [s]
+0 0.5 1 1.5 20 0.5 1 1.5 2
+Time [s]
+0 0.5 1 1.5 2
+1
+0 0.5 1 1.5 2
+1
+0.5
+Time [s]
+-40 -20 0 20 40-40
+-20
+0
+20
+40
+-40 -20 0 20 40 -40 -20 0 20 40
+ x [mm]  x [mm]  x [mm]
+ y [mm]Pressure [bar]
+(a) (b) (c)
+(d) (e) (f)
+P1 P2 P3 P1 P2 P3 P1 P2 P3
+Arduino 
+Due
+Arduino 
+Due RobotRobot
+Desired 
+trajectory
+Desired 
+trajectory
+Inverse 
+kinematics
+Inverse 
+kinematics
+SimulinkSimulink
+dy
+Command
+Pressure
+Command
+Pressure
+AuroraAurora
+Connected
+IO
+Connected
+IO Actuation 
+pressure
+Actuation 
+pressure
+PlatformPlatform Position 
+tracking
+0 0.5 1 1.5 2 2.5 30
+10
+20
+30
+40
+50
+
+0 0.5 1 1.5 2 2.5 3
+0
+5
+10
+15
+20
+25
+30
+35
+40
+45
+50
+data1
+data2
+data3
+data4
+Forward direction
+Backward direction
+(a)
+(b)
+Pressure [bar]
+Bending angle [  ]o
+10 8 6 4 2 00
+100
+200
+300
+400
+500
+0 0.5 1 1.50
+5
+10
+15
+20 Forward direction
+Backward direction
+bF
+Pressure [bar]
+Force [N]
+0 0.5 1 1.50
+5
+10
+15
+20 Forward direction
+Backward direction
+bF
+Pressure [bar]
+Force [N]Torque [ N.mm ]
+Variation of the bending angle [  ]oVariation of the bending angle [  ]o
+o49.8N.mm/k =
+o42.7N.mm/k =
+
+(c)
+Characterisation floor
+Electronics floors
+0 0.5 1 1.5 2
+Time [s]
+0 0.5 1 1.5 20 0.5 1 1.5 2
+Time [s]
+0 0.5 1 1.5 2
+1
+0 0.5 1 1.5 2
+1
+0.5
+Time [s]
+-40 -20 0 20 40-40
+-20
+0
+20
+40
+-40 -20 0 20 40 -40 -20 0 20 40
+ x [mm]  x [mm]  x [mm]
+ y [mm]Pressure [bar]
+(a) (b) (c)
+(d) (e) (f)
+P1 P2 P3 P1 P2 P3 P1 P2 P3
+Simulink Time [s]
+0 0.5 1 1.5 2
+1
+0 0.5 1 1.5 2
+1
+0.5
+-40
+-20
+0
+20
+40
+ y [mm]
+Pressure [bar]
+P1 P2 P3
+-40 -20 0 20 40
+ x [mm]
+-40
+-20
+0
+20
+40
+ y [mm]
+-40 -20 0 20 40
+ x [mm]
+(a) (b)
+0 0.5 1 1.5 2
+0.5Pressure [bar]
+1
+P1 P2 P3
+(c) (d)
+-40
+-20
+0
+20
+40
+ y [mm]
+-40 -20 0 20 40
+ x [mm]
+0 0.5 1 1.5 2
+0.5Pressure [bar]
+1
+(e) (f)
+P1 P2 P3
+Simulink Time [s]
+Simulink Time [s]
+3rd floor:  for robot character-
+isation, e.g., kinematics and 
+stiffness.
+2nd floor: for low-voltage 
+components, e.g., Arduino board.
+Mounting plate for 
+soft robotic systems.
+1st floor: for high-voltage 
+components, e.g., AC-DC converter.
+Arduino 
+Due
+Arduino 
+Due
+Desired 
+trajectory
+Desired 
+trajectory
+Inverse 
+kinematics
+Inverse 
+kinematics
+SimulinkSimulink
+dy
+Command
+Pressure
+Command
+Pressure
+Connected
+IO
+Connected
+IO Actuation 
+pressure
+Actuation 
+pressure
+PlatformPlatform Position 
+tracking
+RobotRobot
+Desired trajectoryDesired trajectory
+Inverse 
+kinematics
+Inverse 
+kinematics
+SimulinkSimulink
+dy
+Command
+Pressure
+Command
+Pressure
+Connected
+IO mode
+Connected
+IO mode
+Actuation 
+pressure
+Actuation 
+pressure
+PlatformPlatform
+Position 
+tracking
+Arduino DueArduino Due
+NDI AuroraNDI Aurora Data recording
+Fig. 1. Physical platform for actuation, characterisation (e.g., kinematics,
+stiffness and force identification), control implementation and validation of
+pneumatically driven soft robotic system. The platform consists of three
+floors covering high-voltage components, DC components and characteri-
+sation space. The CAD drawing in Fig. 4 gives a detailed view.
+software tools have emerged. One example is the prominent
+’Soft Robotics Toolkit’ [14].
+The initial step of creating a physical soft robotic prototype
+concerns the fabrication technique. Aiming at providing
+and generalising a design paradigm for creating fluidically
+driven robots, a fabrication recipe is presented in [3]. Some
+challenges in the state-of-the-art method of manufacturing
+soft robotic systems remain, including enhancing the man-
+ufacturing accuracy and consistency [15]. Any kinematic
+change and dynamic behaviour results from the change in
+input air pressure. Hence, the development of soft robotic
+systems have not only focused on the robot design but also on
+valves and pressure regulators, that form essential actuation
+components. Advancements in actuation systems include
+the Programmable-Air platform [16], PneumaticBox [17],
+Penuduino [18], addressable regulators [19], OpenPneu [20]
+and FlowIO [21]. For instance, the recently launched FlowIO
+aims to supply air actuation through a miniaturised, portable
+and self-contained system. A desktop-size actuation system
+has been developed in [22], which can be used for real-time
+control applications. The device is compatible with MAT-
+LAB/Simulink. Similarly, a control and drive system (Pneu-
+SoRD) for soft robots is presented in [23], to control the
+pressure using on-off and proportional valves via Simulink
+or LabVIEW. Furthermore, interdisciplinary research has
+focussed on pressurised fluids by using chemical means [24],
+purposed mechanisms [25] and soft materials [26].
+In addition to the hardware development, frameworks
+for kinematics/dynamics modelling and control algorithms
+have been created. Examples include the piecewise constant
+curvature and the Cosserat rod model [27], [28]. Based
+on these models, (openly accessible) software tools have
+been proposed and are available to the soft robotics com-
+munity [29]. For instance, the Simulation Open Framework
+Architecture (SOFA) has been created, which can deliver
+physical simulation and real-time control for soft robots us-
+ing Finite Element Method (FEM) [30]. Further frameworks
+include SoRoSim based on Matlab achieving modelling and
+control of soft or hybrid rigid-soft robotic systems based on
+the geometric variable strain model [31]. Sorotoki is a Matlab
+toolbox that offers the ability to design, model, and control
+soft robots, using the FEM and geometric theory [32]. To
+allow users to customise design parameters for bellow soft
+pneumatic bending actuators, a Matlab toolbox was designed
+in [33], which can generate CAD files and then simulate the
+actuators’ performance using analytical or FEM models.
+Overall, tremendous advances have been made in shar-
+ing tools for soft robot manufacturing and fabrication, on
+pneumatic actuation systems, modelling and control algo-
+rithms. The available packages have significantly supported
+soft robotic development, in addition to, motivating relevant
+research. On the other hand, Joshi and Paik [34] have made
+progress towards a platform to characterise forces of a soft
+manipulator. However, a combined physical testing platform,
+which consists of an actuation system and, at the same time,
+which is able to fully characterise the performance of soft
+robotic systems during the prototyping process, could be
+beneficial to validate modelling and control algorithms.
+In this paper, we present the design of a characterisation
+platform, which includes air pressure actuation, evaluation
+of kinematics/dynamics, stiffness/compliance and force ca-
+pability, as well as control validation, for pneumatically
+actuated soft robotic systems. The feasibility of our plat-
+form is demonstrated through the analysis of a number
+of soft robotic prototypes. In particular, we first discuss
+required functionalities of our platform to characterise soft
+robotic systems. We then present the physical platform and
+detail its structure and design. A graphical user interface
+(GUI) is designed to facilitate the usage of the platform.
+Finally, we provide three showcase studies, including the
+characterisation of soft inflatable membranes, a rigid-soft
+pneumatic-driven joint, and inverse kinematics control of a
+soft continuum robot. The design of the platform and related
+Simulink examples are accessible via the GitHub repository:
+https://github.com/ucl-robotics-ai/test-platform-soft-robotics.
+This remainder of the paper is structured as follows: The
+requirements of the proposed platform for soft robotic sys-
+tems characterisation are discussed in Section II. Section III
+describes the platform design, including the hardware, i.e.,
+structure and electronic design, and the software, a GUI
+toolbox for robot characterisation. Section IV then reports
+on three use cases demonstrating the feasibility of the
+platform. The discussion and conclusions are then presented
+in Section V.
+0-3.3V
+24 V
+GND
++
+-
+0-10.003V
+6.8 k
+470 k
+GND
+3.3 k
+1 uf
+GND
+2 k
+PWM (0~100%)
+e.g., 0-
+3.3V +
+-
+0-10V
+6.8 k
+470 k
+GND
+3.3 k
+1 uf
+GND
+2 k
+PWM1 
+(0~100%)
+6.8 k
+470 k
+GND
+GND
++
+-
+1 uf
+PWM2 
+(0~100%)
+LM358AN
+24V
+2 k
+Out1
+Out2
+3.3 k
+e.g., 0-
+3.3V +
+-
+0-10V
+6.8 k
+470 k
+GND
+3.3 k
+1 uf
+GND
+2 k
+PWM1 
+(0~100%)
+6.8 k
+470 k
+GND
+GND
++
+-
+1 uf
+PWM2 
+(0~100%)
+LM358AN
+24V
+2 k
+Out1
+Out2
+3.3 k
+Digital to analog module
+…...220 V AC
+Main swith
+Shutdown 
+button
+Pneumatic 
+pump 
+AC-DC converter
+Mean Well TP-150 series
+AC-DC converter
+Mean Well TP-150 series
+DAQ-Board
+A & D Signal [pressure regulator, pressure sensor etc.]
+Real-Time Control Unit
+A & D Signal 
+[pressure regulator, 
+pressure sensor etc.]
+Experimental Bench
+Environment
+•
+•
+•Post-
+•N/A
+•Future works
+•N/A
+•Future works
+•System Brain
+•Integrate, process, publish all necessary signals
+•Visualization and virtual simulation(if necessary)
+•Integrate other ROS -based robotics systems.
+•Analog  and digital signals acquisition
+•16 analog input ports(or 8 pairs 
+differential analog input port)
+•2 analog output ports
+•24 digital I/O ports
+counting pluses
+generate PWM signals
+•Test bench with necessary sensors
+DAQ-Board
+A & D Signal [pressure regulator, pressure sensor etc.]
+Real-Time Control Unit
+A & D Signal 
+[pressure regulator, 
+pressure sensor etc.]
+Experimental Bench
+Environment
+•
+•
+•Post-
+•N/A
+•Future works
+•N/A
+•Future works
+•System Brain
+•Integrate, process, publish all necessary signals
+•Visualization and virtual simulation(if necessary)
+•Integrate other ROS -based robotics systems.
+•Analog  and digital signals acquisition
+•16 analog input ports(or 8 pairs 
+differential analog input port)
+•2 analog output ports
+•24 digital I/O ports
+counting pluses
+generate PWM signals
+•Test bench with necessary sensorsPower 
+light
+5V, 12V
+ 24 V
+Power supply (12V)
+USB ports
+Fuse
+Platform architecture 
+e.g., 0-
+3.3V
+PWM control signal
+ 24 V
+…...
+Aurora control unit
+Tracking system
+Aurora control unit
+Tracking system
+Inlet pressure Regulator 1 Regulator 2
+3/2-way pressure regulators
+Exhaust
+Exhaust
+3.3 k 6.7 k
+3.3 k 6.7 k
+…...
+GND
+3.3 k 6.7 k
+3.3 k 6.7 k
+…...
+GND
+Voltage divider
+Feedback analog signal
+0-10V 0-10V
+Outlet pressure 1
+Outlet pressure 2
+Laptop
+Control units
+Force measurment
+NI USB 6341 
+Arduino DUE
+Selective
+IIT-F/T 17
+Ethernet
+F
+F
+x
+x
+Weight
+Original pose
+Original pose
+Linear actuator
+Deflected pose
+Deflected pose
+(a)        (b)
+Pulley Force 
+sensor
+Fig. 2. Stiffness measurement demonstrated on a soft robotic manipulator
+applying (a) a pulling and (b) a pushing force. The force F results in a
+displacement or deflection x along the force direction.
+II. R EQUIREMENTS FOR CHARACTERISATIONS OF SOFT
+ROBOTS
+This section highlights the requirements for the charac-
+terisation of soft robotic systems, e.g., with regards to the
+kinematics/dynamics, stiffness and force capability. Theses
+considerations then guide the platform design.
+A. Kinematics, Dynamics and Motion Tracking
+Motion tracking is of paramount importance for the kine-
+matic/dynamic characterisation and control of soft robots.
+This data is essential for evaluating robot’s performance dur-
+ing prototyping stages and implementing control strategies,
+e.g., for curvature [28] or task space regulation [35]. The
+actuation variables and robot motion needs to be monitored.
+Motion tracking can be achieved using 3D tracking systems
+(e.g., by OptiTrack) or electromagnetic trackers (e.g., by
+Northern Digital Inc. (NDI)). For instance, a 6-DoF sensor
+from the NDI Aurora magnetic tracking system can provide
+both position and orientation information.
+B. Stiffness/Compliance Identification
+Compliant materials used to fabricate soft robotic systems
+provide flexibility and adaptability. Understanding the stiff-
+ness of soft robots is critical for the robot’s design, e.g.,
+determining suitable materials and morphology for targeted
+applications. To quantify the value of softness, stiffness or
+the inverse, compliance, is often determined. As this value
+depends on force and displacement measurements, a load
+cell could either push or pull at different locations of a soft
+robot (e.g., at a manipulator’s tip), as shown in Fig. 2.
+A pulling force could be used to achieve stiffness identi-
+fication (see Fig. 2(a)). A tendon is attached to the tip of a
+0-3.3V
+24 V
+GND
++
+-
+0-10.003V
+6.8 k
+470 k
+GND
+3.3 k
+1 uf
+GND
+2 k
+PWM (0~100%)
+0-3.3V +
+-
+0-10V
+6.8 k
+470 k
+GND
+3.3 k
+1 uf
+GND
+2 kPWM1 
+(0~100%)
+6.8 k
+470 k
+GND
+GND
++
+-
+1 uf
+PWM2 
+(0~100%)
+LM358AN
+24V
+2 k
+Out1
+Out2
+3.3 k
+0-3.3V +
+-
+0-10V
+6.8 k
+470 k
+GND
+3.3 k
+1 uf
+GND
+2 kPWM1 
+(0~100%)
+6.8 k
+470 k
+GND
+GND
++
+-
+1 uf
+PWM2 
+(0~100%)
+LM358AN
+24V
+2 k
+Out1
+Out2
+3.3 k
+Digital to analog module
+…...220 V AC
+Main swith
+Shutdown 
+button
+Pneumatic 
+pump 
+AC-DC converter
+Mean Well TP-150 series
+AC-DC converter
+Mean Well TP-150 series
+DAQ-Board
+A & D Signal [pressure regulator, pressure sensor etc.]
+Real-Time Control Unit
+A & D Signal 
+[pressure regulator, 
+pressure sensor etc.]
+Experimental Bench
+Environment
+•
+•
+•Post-
+•N/A
+•Future works
+•N/A
+•Future works
+•System Brain
+•Integrate, process, publish all necessary signals
+•Visualization and virtual simulation(if necessary)
+•Integrate other ROS -based robotics systems.
+•Analog  and digital signals acquisition
+•16 analog input ports(or 8 pairs 
+differential analog input port)
+•2 analog output ports
+•24 digital I/O ports
+counting pluses
+generate PWM signals
+•Test bench with necessary sensors
+DAQ-Board
+A & D Signal [pressure regulator, pressure sensor etc.]
+Real-Time Control Unit
+A & D Signal 
+[pressure regulator, 
+pressure sensor etc.]
+Experimental Bench
+Environment
+•
+•
+•Post-
+•N/A
+•Future works
+•N/A
+•Future works
+•System Brain
+•Integrate, process, publish all necessary signals
+•Visualization and virtual simulation(if necessary)
+•Integrate other ROS -based robotics systems.
+•Analog  and digital signals acquisition
+•16 analog input ports(or 8 pairs 
+differential analog input port)
+•2 analog output ports
+•24 digital I/O ports
+counting pluses
+generate PWM signals
+•Test bench with necessary sensorsPower 
+light
+5V, 12V
+ 24 V
+Power supply (12V)
+USB ports
+Fuse
+Platform architecture 
+0-3.3V
+PWM control signal
+ 24 V
+…...
+Aurora control unit
+Tracking system
+Aurora control unit
+Tracking system
+Inlet pressure Regulator 1 Regulator 2
+3/2-way pressure regulators
+Exhaust
+Exhaust
+3.3 k 6.7 k
+3.3 k 6.7 k
+…...
+GND
+3.3 k 6.7 k
+3.3 k 6.7 k
+…...
+GND
+Voltage divider
+Feedback analog signal
+0-10V 0-10V
+Outlet pressure 1
+Outlet pressure 2
+Laptop
+Control units
+Force measurment
+NI USB 6341 
+Arduino DUE
+Selective
+IIT-F/T 17
+Ethernet
+F
+F
+x
+x
+Weight
+Original pose
+Original pose
+Linear actuator
+Deflected pose
+Deflected pose
+(a)        (b)
+Pulley Force 
+sensor
+bF
+Force sensor
+Soft robot
+3.3 k
+GND GND
+3.3 k
+(Pull-down 
+Resistor)
+(Pull-down 
+Resistor)
+D2D3
+Fig. 3. Example of a blocked force identification setup. The tip of the
+robot is locally constrained when the robot is actuated. The force Fb can be
+measured by a force sensor.
+Kinematics/dynamics
+Stiffness identification
+Force measurement
+Tracker
+Pully
+Force 
+sensor
+Weight
+Field 
+generator
+Pressure regulators
+Arduino Due
+DAC circuit board
+Terminal 
+blocks
+Aurora sensor unit
+AC-DC 
+converter
+USB-6431
+Aurora control unit
+Circuit breaker
+1st floor
+2nd floor
+3rd floor
+A variable stiffness 
+joint
+A continuum 
+robot
+Fig. 4. Detailed hardware structure of our characterisation and control platform. The platform is able to validate kinematics/dynamics models through
+motion tracking, identify stiffness and measure blocked forces as discussed in Section II (as shown on the left hand side). The first floor includes an
+AC-DC converter, circuit breaker, the multifunction I/O device USB-6431, and the Aurora control uni. The second floor is made of the DAC cicuit board,
+Arduino Due, terminal blocks and pressure regulators. The third floor includes the field generator of the Aurora magnetic tracking system and a mounting
+plate for soft robotic systems. The CAD files are available in the GitHub repository.
+soft robot on the one side and pulled by a calibrated weight
+in the other side. In this case, any friction and measurement
+errors of the force could be mitigated. The displacement x
+would need to be monitored by tracking devices.
+When measuring the stiffness by a pushing force (see
+Fig. 2(b)), a force transducer is mounted on a linear rail [8] or
+robotic arm [36] exerting a force on the soft robot resulting in
+a displacement x. This method has been extensively applied
+to characterise soft robotic manipulators [3], [36]. It is worth
+mentioning that any friction between the robot and sensor is
+inevitable. In particular, when the measured force values are
+relatively small [37], any unexpected friction force errors
+could significantly influence readings. In comparison, the
+stiffness identification by pulling forces might have higher
+accuracy compared with pushing forces, which can be ad-
+vantageous for stiffness or compliance model validation [38].
+C. Force Identification
+For robots that physically interact with the environment, it
+would be beneficial to understand the soft robot’s behaviour
+when contact forces are exerted [3], [4]. In this case, the
+blocked force can be used to describe the force capability of
+the robot. To achieve this, a force sensor could be added to
+constrain the robot’s tip in a certain pose. The robot might
+deform generating an interaction force. The force sensor
+could measure, e.g., this blocked force at the tip.
+In summary, the functionality of our characterisation plat-
+form should include the above mentioned features. Our
+platform should be able to accommodate the characterisation
+of various soft robotic systems.
+III. S YSTEM OVERVIEW AND PLATFORM DESIGN
+Following the identification of the desired features in
+Section II, this section will present the details on the design
+of the platform and its interface. The overall structure of the
+platform is shown in Fig. 4, with its electrical architecture
+shown in Fig. 5. The platform can be connected to a GUI
+toolbox for robot characterisation (see Fig. 6).
+A. Hardware Overview and Design
+The platform contains: six proportional valves (Camozzi
+K8P) to regulate pneumatic air pressure; an electromagnetic
+tracking system (NDI Aurora) to monitor the position and
+orientation of a robot; a force/torque (F/T) sensor (IIT-FT17)
+to achieve force identification; electronic circuits to regulate
+proportional valves; a control unit (i.e., a USB-6341 and an
+Arduino Due) and a 220V AC power supply to power the
+platform. The multifunction I/O device USB-6341 (National
+Instruments) and an Arduino Due form the control unit,
+which can be selected based on the application. The Arduino
+Due has a 32-bit 84MHz processor, 512 KB flash memory,
+up to 12 PWM outputs and 12 analogue inputs (12-bit).
+On the other hand, the USB-6341 offers high frequency
+acquisition (up to 500 k Sample/s) and is equipped with up
+to 16 analogue inputs and 24 digital outputs (including 4
+PWM ports).
+The high-voltage (220V AC) and low-voltage (≤ 24V DC)
+components are positioned on different floors to ensure elec-
+trical safety. The top floor is designed for accommodating
+different characterisation setups (as described in Section II).
+The structure of the platform can be divided into:
+0-3.3V
+24 V
+GND
++
+-
+0-10.003V
+6.8 k
+470 k
+GND
+3.3 k
+1 uf
+GND
+2 k
+PWM (0~100%)
+0-3.3V
++
+-
+0-10V
+6.8 k
+470 k
+GND
+3.3 k
+1 uf
+GND
+2 kPWM1 
+(0~100%)
+6.8 k
+470 k
+GND
+GND
++
+-
+1 uf
+PWM2 
+(0~100%)
+LM358AN
+24V
+2 k
+Out1
+Out2
+3.3 k
+0-3.3V
++
+-
+0-10V
+6.8 k
+470 k
+GND
+3.3 k
+1 uf
+GND
+2 kPWM1 
+(0~100%)
+6.8 k
+470 k
+GND
+GND
++
+-
+1 uf
+PWM2 
+(0~100%)
+LM358AN
+24V
+2 k
+Out1
+Out2
+3.3 k
+Digital to analog module
+…...220 V AC
+Main swith
+Shutdown 
+button
+Pneumatic 
+pump 
+AC-DC converter
+Mean Well TP-150 series
+AC-DC converter
+Mean Well TP-150 series
+DAQ-Board
+A & D Signal [pressure regulator, pressure sensor etc.]
+Real-Time Control Unit
+A & D Signal 
+[pressure regulator, 
+pressure sensor etc.]
+Experimental Bench
+Environment
+•
+•
+•Post-
+•N/A
+•Future works
+•N/A
+•Future works
+•System Brain
+•Integrate, process, publish all necessary signals
+•Visualization and virtual simulation(if necessary)
+•Integrate other ROS -based robotics systems.
+•Analog  and digital signals acquisition
+•16 analog input ports(or 8 pairs 
+differential analog input port)
+•2 analog output ports
+•24 digital I/O ports
+counting pluses
+generate PWM signals
+•Test bench with necessary sensors
+DAQ-Board
+A & D Signal [pressure regulator, pressure sensor etc.]
+Real-Time Control Unit
+A & D Signal 
+[pressure regulator, 
+pressure sensor etc.]
+Experimental Bench
+Environment
+•
+•
+•Post-
+•N/A
+•Future works
+•N/A
+•Future works
+•System Brain
+•Integrate, process, publish all necessary signals
+•Visualization and virtual simulation(if necessary)
+•Integrate other ROS -based robotics systems.
+•Analog  and digital signals acquisition
+•16 analog input ports(or 8 pairs 
+differential analog input port)
+•2 analog output ports
+•24 digital I/O ports
+counting pluses
+generate PWM signals
+•Test bench with necessary sensorsPower 
+light
+5V, 12V
+ 24 V
+Power supply (12V)
+USB ports
+Fuse
+Platform architecture 
+0-3.3V
+PWM control signal
+ 24 V
+…...
+Aurora control unit
+Tracking system
+Aurora control unit
+Tracking system
+Inlet pressure Regulator 1 Regulator 2
+3/2-way pressure regulators
+Exhaust
+Exhaust
+3.3 k 6.7 k
+3.3 k 6.7 k
+…...
+GND
+3.3 k 6.7 k
+3.3 k 6.7 k
+…...
+GND
+Voltage divider
+Feedback analog signal
+0-10V 0-10V
+Outlet pressure 1
+Outlet pressure 2
+Laptop
+Control units
+Force measurment
+NI USB 6341 
+Arduino DUE
+Selective
+IIT-F/T 17
+Ethernet
+F
+F
+x
+x
+Weight
+Original pose
+Original pose
+Linear actuator
+Deflected pose
+Deflected pose
+(a)        (b)
+Pulley Force 
+sensor
+bF
+Force sensor
+Soft robot
+3.3 k
+GND GND
+3.3 k
+(Pull-down 
+Resistor)
+(Pull-down 
+Resistor)
+D2D3
+Fig. 5. Connection architecture of the platform. AC power and inlet pressure are provided from external supplies. Data transmission between the laptop
+and the platform is achieved via USB and Ethernet. Both the Arduino Due and USB-6341 can be selected as the control unit, depending on specific
+applications.
+The first floor includes components in need of 220V
+AC power, i.e., the NDI Aurora, F/T sensor and USB-
+6341. In additional, an AC-DC converter (Mean Well TP-
+150D, 154 W) provides 5V (2 ∼20A), 12V (0 ∼1 A) and
+24V (0.4 ∼4A) DC voltage for low-voltage DC electronics.
+Protection circuits, including a emergency shutdown button
+(Schneider Harmony XB5) and over-current fuse (Allen
+Bradley 1492-SPM, 6A), are embedded to ensure safety.
+The second floor is dedicated to low-voltage (≤ 24V DC)
+electronic circuits. Six pressure regulators can be used to
+control and monitor chamber pressures within soft robotic
+systems (0 ∼3 bar, 6 L/min). Pressurised air is supplied to
+the regulators by a HYUNDAI HY5508 compressor. The
+regulators are controlled by a 0 ∼10V analogue voltage,
+which are converted from PWMs generated by the Ar-
+duino Due or USB-6341. To achieve Digital-to-Analogue
+Conversion (DAC), the PWM is first filtered by a resistor-
+capacitor (RC) circuit (time constant τ =2 ms). The output is
+then amplified by non-inverting Op-Amps (Texas Instruments
+LM358AN/NOPB, dual supplies). The amplifier gain ka
+depends on the voltage levels of the control units, e.g., ka is
+3.03 for the Auduino Due (shown in Fig. 5) and 2 for the
+USB-6341. For each PWM output port, a pull-down resistor
+(3.3 k Ω) is connected to have a default zero output when
+there is no PWM output value. As such, the PWM duty is
+proportional to the converted analogue signal and used to
+control the pressure regulators. The pressure regulators can
+also monitor the pressure via an analogue output (0 ∼ 10V).
+It is worth mentioning that the feedback voltage needs to be
+processed by a voltage divider to make it compatible for the
+Arduino Due. Details of the electrical design can be found
+in Fig. 5. All wire connections are integrated through screw
+clamp terminal blocks.
+The third floor is used to achieve the evaluation and
+characterisation of soft robots, e.g., kinematics/dynamics,
+stiffness and force identification. For motion tracking, the
+field generator of the NDI Aurora electromagnetic tracking
+system is located at the bottom of the floor to provide
+an electromagnetic domain, so the system can track the
+robot motion by attached trackers. The force sensor can be
+positioned to achieve a force-related identification.
+B. Communication Interface and GUI Toolbox Design
+The platform provides the opportunity for versatile pro-
+gramming and communication interfaces. All devices are
+connected to a host computer via USB and Ethernet. The
+software package LabVIEW, for instance, is compatible with
+the NI USB-6341 providing mature libraries to facilitate
+programming. In addition, MATLAB’s DAQ toolbox can be
+connected to the NI devices through embedded MATLAB
+libraries. Compared to the USB-6341, the Arduino Due
+offers more flexibility and advantageous, e.g., for self-defined
+serial port communication. It either can be programmed
+using Arduino code or a third-party software provider, e.g.,
+MATLAB/Simulink, with Arduino support packages. This is
+beneficial for real-time control implementation and tuning
+parameters in a cost-efficient and convenient way.
+To facilitate the characterisation of soft robotic systems
+in line with the discussions in Section II, a user-friendly
+GUI toolbox has been designed in the Matlab. A snapshot is
+shown in Fig. 6(a). The architecture of the GUI is presented
+in Fig. 6(b). In this GUI, users need to first select different
+modes/functions (see Fig. 6(a)) from the main setting page,
+based on the characterisation requirements. Three sub-pages
+are designed to achieve different functions and save the
+results. In particular, these functions include:
+Mode Selection
+Sensor initialization
+Input pressure setting
+Send the pressure  
+Stiffness Identification
+Motion tracking Stiffness identification
+(a) (b)
+Force Identification
+Motion tracking
+Setting input
+✓ Pressure monitor and recording
+✓ Position and orientation recording 
+✓ Data saving
+✓ Pressure monitor and recording
+✓ Force monitor and recording
+✓ Data saving
+✓ Pressure monitor and recording
+✓ Stiffness calculation 
+GUI toolbox for characterisation Functions of the GUI toolbox
+Fig. 6. The design of the GUI toolbox for robot characterisations. (a) Snapshots of the main page for setting, with the motion recording and stiffness
+identification examples shown at the bottom. (b) The architecture of the GUI. The source codes for the GUI can be downloaded from the GitHub repository.
+1) Chamber actuation: In this mode, a user is able to test
+the robotic system using default (e.g., sine-wave, step)
+or user-defined pressure inputs. Pressure values can be
+controlled and monitored.
+2) Position tracking (in line with Section II-A): This
+mode is for kinematics/dynamics evaluation. After an
+actuation pressure value has been inserted, the corre-
+sponding results can be recorded and saved.
+3) Stiffness identification (in line with Section II-B): The
+change in displacement can be measured and recorded
+by the tracking system for an applied known load. As
+such, the stiffness is calculated.
+4) Force identification (in line with Section II-C): In this
+mode, the force capability is identified..
+IV. C HARACTERISATION EXAMPLES OF SOFT ROBOTIC
+SYSTEMS
+Three soft robotic systems are used as use cases to demon-
+strate the platform’s functionality. A stiffness-controllable
+joint, an inflatable membrane and a soft continuum robot
+are analysed and characterised.
+A. Characterisation for a Stiffness-controllable Joint
+The first use case involves a variable stiffness joint for
+collaborative robots achieving inherently safe human-robot
+interaction. The joint is made of two elements: a rigid central
+hinge, and two silicone chambers with fibre reinforcement
+located on two sides of the hinge. The pressure difference
+between two chambers results in the robot to bend clockwise
+or anti-clockwise. At the same time, the antagonistic actua-
+tion of the two chambers can be used to change the stiffness
+of the joint.
+The characterisation of the joint’s bending angle, output
+force and variable stiffness capability was conducted using
+our platform. When identifying the bending angle and stiff-
+ness, the variable stiffness joint was mounted upside down
+onto the plate on the third floor of the platform. A 6-DOF
+aurora tracker was attached at the tip of the joint to measure
+the variation of the bending angle. When identifying the force
+generation, the joint was mounted with the force sensor, onto
+the same plate of the platform (see Fig. 4).
+Fig. 7 shows the results from the GUI toolbox. In Fig. 7(a),
+the loading (red curve) and unloading (blue curve) bending
+behaviour of the joint is recorded when it was linearly
+actuated from 0 to 3 bar pressure. The maximum bending
+angle reaches around 45 ◦. It is observed the hysteresis of
+the loading and unloading curves is non-negligible, e.g., the
+maximum angle difference of the two curves is 9.1 ◦, i.e.,
+20.5% with respect to the maximum bending angle. The
+results for the blocked force measurements are shown in
+Fig. 7(b). Again the loading and unloading curve is plotted.
+The test results that the joint can achieve around 19 N output
+force when it was actuated by 1.5 bar air pressure, and the
+hysteresis is barely observed. Lastly, the platform can also
+be used to evaluate the stiffness of the joint. In this case,
+two stiffness values have been generated by the following
+chamber combinations: 0.1/0.46 bar and 0.35/0.65 bar. Both
+0-3.3V
+24 V
+GND
++
+-
+0-10.003V
+6.8 k
+470 k
+GND
+3.3 k
+1 uf
+GND
+2 k
+PWM (0~100%)
+0-3.3V
++
+-
+0-10V
+6.8 k
+470 k
+GND
+3.3 k
+1 uf
+GND
+2 kPWM1 
+(0~100%)
+6.8 k
+470 k
+GND
+GND
++
+-
+1 uf
+PWM2 
+(0~100%)
+LM358AN
+24V
+2 k
+Out1
+Out2
+3.3 k
+0-3.3V
++
+-
+0-10V
+6.8 k
+470 k
+GND
+3.3 k
+1 uf
+GND
+2 kPWM1 
+(0~100%)
+6.8 k
+470 k
+GND
+GND
++
+-
+1 uf
+PWM2 
+(0~100%)
+LM358AN
+24V
+2 k
+Out1
+Out2
+3.3 k
+Digital to analog module
+…...220 V AC
+Main swith
+Shutdown 
+button
+Pneumatic 
+pump 
+AC-DC converter
+Mean Well TP-150 series
+AC-DC converter
+Mean Well TP-150 series
+DAQ-Board
+A & D Signal [pressure regulator, pressure sensor etc.]
+Real-Time Control Unit
+A & D Signal 
+[pressure regulator, 
+pressure sensor etc.]
+Experimental Bench
+Environment
+•
+•
+•Post-
+•N/A
+•Future works
+•N/A
+•Future works
+•System Brain
+•Integrate, process, publish all necessary signals
+•Visualization and virtual simulation(if necessary)
+•Integrate other ROS -based robotics systems.
+•Analog  and digital signals acquisition
+•16 analog input ports(or 8 pairs 
+differential analog input port)
+•2 analog output ports
+•24 digital I/O ports
+counting pluses
+generate PWM signals
+•Test bench with necessary sensors
+DAQ-Board
+A & D Signal [pressure regulator, pressure sensor etc.]
+Real-Time Control Unit
+A & D Signal 
+[pressure regulator, 
+pressure sensor etc.]
+Experimental Bench
+Environment
+•
+•
+•Post-
+•N/A
+•Future works
+•N/A
+•Future works
+•System Brain
+•Integrate, process, publish all necessary signals
+•Visualization and virtual simulation(if necessary)
+•Integrate other ROS -based robotics systems.
+•Analog  and digital signals acquisition
+•16 analog input ports(or 8 pairs 
+differential analog input port)
+•2 analog output ports
+•24 digital I/O ports
+counting pluses
+generate PWM signals
+•Test bench with necessary sensorsPower 
+light
+5V, 12V
+ 24 V
+Power supply (12V)
+USB ports
+Fuse
+Platform architecture 
+0-3.3V
+PWM control signal
+ 24 V
+…...
+Aurora control unit
+Tracking system
+Aurora control unit
+Tracking system
+Inlet pressure Regulator 1 Regulator 2
+3/2-way pressure regulators
+Exhaust
+Exhaust
+3.3 k 6.7 k
+3.3 k 6.7 k
+…...
+GND
+3.3 k 6.7 k
+3.3 k 6.7 k
+…...
+GND
+Voltage divider
+Feedback analog signal
+0-10V 0-10V
+Outlet pressure 1
+Outlet pressure 2
+Laptop
+Control units
+Force measurment
+NI USB 6341 
+Arduino DUE
+Selective
+IIT-F/T 17
+Ethernet
+F
+F
+x
+x
+Weight
+Original pose
+Original pose
+Linear actuator
+Deflected pose
+Deflected pose
+(a)       (b)
+Pulley Force 
+sensor
+bF
+Force sensor
+Soft robot
+3.3 k
+GND GND
+3.3 k
+(Pull-down 
+Resistor)
+(Pull-down 
+Resistor)
+D2D3
+0 0.5 1 1.5 2
+Time [s]
+0 0.5 1 1.5 20 0.5 1 1.5 2
+Time [s]
+0 0.5 1 1.5 2
+1
+0 0.5 1 1.5 2
+1
+0.5
+Time [s]
+-40 -20 0 20 40-40
+-20
+0
+20
+40
+-40 -20 0 20 40 -40 -20 0 20 40
+ x [mm]  x [mm]  x [mm]
+ y [mm]Pressure [bar]
+(a) (b) (c)
+(d) (e) (f)
+P1 P2 P3 P1 P2 P3 P1 P2 P3
+Arduino 
+Due
+Arduino 
+Due RobotRobot
+Desired 
+trajectory
+Desired 
+trajectory
+Inverse 
+kinematics
+Inverse 
+kinematics
+SimulinkSimulink
+dy
+Command
+Pressure
+Command
+Pressure
+AuroraAurora
+Connected
+IO
+Connected
+IO Actuation 
+pressure
+Actuation 
+pressure
+PlatformPlatform Position 
+tracking
+0 0.5 1 1.5 2 2.5 30
+10
+20
+30
+40
+50
+
+0 0.5 1 1.5 2 2.5 3
+0
+5
+10
+15
+20
+25
+30
+35
+40
+45
+50
+data1
+data2
+data3
+data4
+Loading direction
+Unloading direction
+(a)
+(b)
+Pressure [bar]
+Bending angle [  ]o
+10 8 6 4 2 00
+100
+200
+300
+400
+500
+0 0.5 1 1.50
+5
+10
+15
+20
+bF
+Pressure [bar]
+Force [N]
+0 0.5 1 1.50
+5
+10
+15
+20
+bF
+Pressure [bar]
+Force [N]Torque [ N.mm ]
+Variation of the bending angle [  ]oVariation of the bending angle [  ]o
+o49.8N.mm/k =
+o42.7N.mm/k =
+
+(c)
+Characterisation floor
+Electronics floors
+0 0.5 1 1.5 2
+Time [s]
+0 0.5 1 1.5 20 0.5 1 1.5 2
+Time [s]
+0 0.5 1 1.5 2
+1
+0 0.5 1 1.5 2
+1
+0.5
+Time [s]
+-40 -20 0 20 40-40
+-20
+0
+20
+40
+-40 -20 0 20 40 -40 -20 0 20 40
+ x [mm]  x [mm]  x [mm]
+ y [mm]Pressure [bar]
+(a) (b) (c)
+(d) (e) (f)
+P1 P2 P3 P1 P2 P3 P1 P2 P3
+Simulink Time [s]
+0 0.5 1 1.5 2
+1
+0 0.5 1 1.5 2
+1
+0.5
+-40
+-20
+0
+20
+40
+ y [mm]
+Pressure [bar]
+P1 P2 P3
+-40 -20 0 20 40
+ x [mm]
+-40
+-20
+0
+20
+40
+ y [mm]
+-40 -20 0 20 40
+ x [mm]
+(a) (b)
+0 0.5 1 1.5 2
+0.5Pressure [bar]
+1
+P1 P2 P3
+(c) (d)
+-40
+-20
+0
+20
+40
+ y [mm]
+-40 -20 0 20 40
+ x [mm]
+0 0.5 1 1.5 2
+0.5Pressure [bar]
+1
+(e) (f)
+P1 P2 P3
+Simulink Time [s]
+Simulink Time [s]
+3rd floor:  for robot character-
+isation, e.g., kinematics and 
+stiffness.
+2nd floor: for low-voltage 
+components, e.g., Arduino board.
+Mounting plate for 
+soft robotic systems.
+1st floor: for high-voltage 
+components, e.g., AC-DC converter.
+Arduino 
+Due
+Arduino 
+Due
+Desired 
+trajectory
+Desired 
+trajectory
+Inverse 
+kinematics
+Inverse 
+kinematics
+SimulinkSimulink
+dy
+Command
+Pressure
+Command
+Pressure
+Connected
+IO
+Connected
+IO Actuation 
+pressure
+Actuation 
+pressure
+PlatformPlatform Position 
+tracking
+RobotRobot
+Desired trajectoryDesired trajectory
+Inverse 
+kinematics
+Inverse 
+kinematics
+SimulinkSimulink
+dy
+Command
+Pressure
+Command
+Pressure
+Connected
+IO mode
+Connected
+IO mode
+Actuation 
+pressure
+Actuation 
+pressure
+PlatformPlatform
+Position 
+tracking
+Arduino DueArduino Due
+NDI AuroraNDI Aurora Data recording
+Loading direction
+Unloading direction
+Fig. 7. Characterisation results for the variable stiffness joint. (a) Kinemat-
+ics identification. (b) Force generation identification. (c) Variable stiffness
+analysis for two pressure combinations.
+pressure combinations result in the same bending angle of
+20◦. The results in Fig. 7(c) show that the joint can achieve
+an increase in stiffness from 42.7 N.mm/ ◦ to 49.8 N.mm/ ◦,
+by changing the pressure combination.
+B. Measurement of Inflation Height of an Elastic Membrane
+The inflation of soft elastic membrane is common in
+soft robots [10] and haptics [39]. In order to return desired
+deformations or force responses from an elastic membrane
+0p
+Undeformed
+(a) (b)
+0 0.02 0.04 0.06 0.08
+Pressure[bar]
+0
+4
+8
+12
+16 Model Result
+50g Load
+100g Load
+Inflation Height [mm]
+0h
+10kPa
+2kPa
+(c
+Fig. 8. Results for an inflation of a circular elastic membrane with constant
+load of 50g and 100g.
+under a certain pressure, the characterisations of membranes
+are required for specific applications. Our designed platform
+is able to analyse this behaviour. The elastic membrane has
+been fixed to the characterisation floor and pressurised for
+characterising the relationship between pressure and inflation
+height. During the experiment, a load of 50g and 100g
+were exerted to the membranes. The inflation height h0 of
+the pressurised membrane has been monitored using the
+Aurora tracker as well as the applied pressure values. Hence,
+the relationship between the inflation height and actuation
+pressure has been identified under different load conditions.
+Fig. 8 shows the results of characterising a circular elastic
+membrane with a load of 50g in red colour and 100g in blue
+colour. The figure reports on the standard deviation and also
+compares the experimental data with a computational model.
+The curves suggest a highly linear behaviour for pressure vs
+height between 0 and 0.1 bar pressure.
+C. Inverse Kinematics Control for a Soft Continuum Robot
+For the third use case, a soft robotic manipulator is
+mounted to our platform. The manipulator is made of a cylin-
+drical silicone body with three fibre-reinforced chamber pairs
+that can be pneumatically pressurised. Applying pressure in
+one or two chamber pairs will lead to bending behaviour;
+pressurisation of all chambers simultaneously will achieve
+elongation [40]. The cross-sectional geometry of the robot
+used in our experiment is the same as Type-1 robot reported
+in [37]. The diameter of the robot is 14.5mm and the length
+is 60 mm.
+To analyse a control implementation, Simulink is used for
+open-loop inverse kinematics control based on the Cosserat
+rod model. The spatial configuration of the robot’s backbone,
+including the displacement vector p(s) and the rotation
+matrix R(s), can be differentiated with respect to the curve
+length s, where ∂ (·)/∂s denoted by (·),s. Eqn. (1) yields.
+p,s(s) = R(s)v(s), R,s = R(s) ˆu(s), (1)
+where v(s) is the local strain vector and u(s) is the local
+curvatures and torsion. In addition, the derivatives of force
+n(s) and moment m(s) can be described by (2).
+n,s(s) = fe(s) + fP(s), m,s(s) = − ˆp,sn(s) −le(s) +lP(s), (2)
+0-3.3V
+24 V
+GND
++
+-
+0-10.003V
+6.8 k
+470 k
+GND
+3.3 k
+1 uf
+GND
+2 k
+PWM (0~100%)
+0-3.3V
++
+-
+0-10V
+6.8 k
+470 k
+GND
+3.3 k
+1 uf
+GND
+2 kPWM1 
+(0~100%)
+6.8 k
+470 k
+GND
+GND
++
+-
+1 uf
+PWM2 
+(0~100%)
+LM358AN
+24V
+2 k
+Out1
+Out2
+3.3 k
+0-3.3V
++
+-
+0-10V
+6.8 k
+470 k
+GND
+3.3 k
+1 uf
+GND
+2 kPWM1 
+(0~100%)
+6.8 k
+470 k
+GND
+GND
++
+-
+1 uf
+PWM2 
+(0~100%)
+LM358AN
+24V
+2 k
+Out1
+Out2
+3.3 k
+Digital to analog module
+…...220 V AC
+Main swith
+Shutdown 
+button
+Pneumatic 
+pump 
+AC-DC converter
+Mean Well TP-150 series
+AC-DC converter
+Mean Well TP-150 series
+DAQ-Board
+A & D Signal [pressure regulator, pressure sensor etc.]
+Real-Time Control Unit
+A & D Signal 
+[pressure regulator, 
+pressure sensor etc.]
+Experimental Bench
+Environment
+•
+•
+•Post-
+•N/A
+•Future works
+•N/A
+•Future works
+•System Brain
+•Integrate, process, publish all necessary signals
+•Visualization and virtual simulation(if necessary)
+•Integrate other ROS -based robotics systems.
+•Analog  and digital signals acquisition
+•16 analog input ports(or 8 pairs 
+differential analog input port)
+•2 analog output ports
+•24 digital I/O ports
+counting pluses
+generate PWM signals
+•Test bench with necessary sensors
+DAQ-Board
+A & D Signal [pressure regulator, pressure sensor etc.]
+Real-Time Control Unit
+A & D Signal 
+[pressure regulator, 
+pressure sensor etc.]
+Experimental Bench
+Environment
+•
+•
+•Post-
+•N/A
+•Future works
+•N/A
+•Future works
+•System Brain
+•Integrate, process, publish all necessary signals
+•Visualization and virtual simulation(if necessary)
+•Integrate other ROS -based robotics systems.
+•Analog  and digital signals acquisition
+•16 analog input ports(or 8 pairs 
+differential analog input port)
+•2 analog output ports
+•24 digital I/O ports
+counting pluses
+generate PWM signals
+•Test bench with necessary sensorsPower 
+light
+5V, 12V
+ 24 V
+Power supply (12V)
+USB ports
+Fuse
+Platform architecture 
+0-3.3V
+PWM control signal
+ 24 V
+…...
+Aurora control unit
+Tracking system
+Aurora control unit
+Tracking system
+Inlet pressure Regulator 1 Regulator 2
+3/2-way pressure regulators
+Exhaust
+Exhaust
+3.3 k 6.7 k
+3.3 k 6.7 k
+…...
+GND
+3.3 k 6.7 k
+3.3 k 6.7 k
+…...
+GND
+Voltage divider
+Feedback analog signal
+0-10V 0-10V
+Outlet pressure 1
+Outlet pressure 2
+Laptop
+Control units
+Force measurment
+NI USB 6341 
+Arduino DUE
+Selective
+IIT-F/T 17
+Ethernet
+F
+F
+x
+x
+Weight
+Original pose
+Original pose
+Linear actuator
+Deflected pose
+Deflected pose
+(a)       (b)
+Pulley Force 
+sensor
+bF
+Force sensor
+Soft robot
+3.3 k
+GND GND
+3.3 k
+(Pull-down 
+Resistor)
+(Pull-down 
+Resistor)
+D2D3
+0 0.5 1 1.5 2
+Time [s]
+0 0.5 1 1.5 20 0.5 1 1.5 2
+Time [s]
+0 0.5 1 1.5 2
+1
+0 0.5 1 1.5 2
+1
+0.5
+Time [s]
+-40 -20 0 20 40-40
+-20
+0
+20
+40
+-40 -20 0 20 40 -40 -20 0 20 40
+ x [mm]  x [mm]  x [mm]
+ y [mm]Pressure [bar]
+(a) (b) (c)
+(d) (e) (f)
+P1 P2 P3 P1 P2 P3 P1 P2 P3
+Arduino 
+Due
+Arduino 
+Due RobotRobot
+Desired 
+trajectory
+Desired 
+trajectory
+Inverse 
+kinematics
+Inverse 
+kinematics
+SimulinkSimulink
+dy
+Command
+Pressure
+Command
+Pressure
+AuroraAurora
+Connected
+IO
+Connected
+IO Actuation 
+pressure
+Actuation 
+pressure
+PlatformPlatform Position 
+tracking
+0 0.5 1 1.5 2 2.5 30
+10
+20
+30
+40
+50
+
+0 0.5 1 1.5 2 2.5 3
+0
+5
+10
+15
+20
+25
+30
+35
+40
+45
+50
+data1
+data2
+data3
+data4
+Forward direction
+Backward direction
+(a)
+(b)
+Pressure [bar]
+Bending angle [  ]o
+10 8 6 4 2 00
+100
+200
+300
+400
+500
+0 0.5 1 1.50
+5
+10
+15
+20 Forward direction
+Backward direction
+bF
+Pressure [bar]
+Force [N]
+0 0.5 1 1.50
+5
+10
+15
+20 Forward direction
+Backward direction
+bF
+Pressure [bar]
+Force [N]Torque [ N.mm ]
+Variation of the bending angle [  ]oVariation of the bending angle [  ]o
+o49.8N.mm/k =
+o42.7N.mm/k =
+
+(c)
+Characterisation floor
+Electronics floors
+0 0.5 1 1.5 2
+Time [s]
+0 0.5 1 1.5 20 0.5 1 1.5 2
+Time [s]
+0 0.5 1 1.5 2
+1
+0 0.5 1 1.5 2
+1
+0.5
+Time [s]
+-40 -20 0 20 40-40
+-20
+0
+20
+40
+-40 -20 0 20 40 -40 -20 0 20 40
+ x [mm]  x [mm]  x [mm]
+ y [mm]Pressure [bar]
+(a) (b) (c)
+(d) (e) (f)
+P1 P2 P3 P1 P2 P3 P1 P2 P3
+Simulink Time [s]
+0 0.5 1 1.5 2
+1
+0 0.5 1 1.5 2
+1
+0.5
+-40
+-20
+0
+20
+40
+ y [mm]
+Pressure [bar]
+P1 P2 P3
+-40 -20 0 20 40
+ x [mm]
+-40
+-20
+0
+20
+40
+ y [mm]
+-40 -20 0 20 40
+ x [mm]
+(a) (b)
+0 0.5 1 1.5 2
+0.5Pressure [bar]
+1
+P1 P2 P3
+(c) (d)
+-40
+-20
+0
+20
+40
+ y [mm]
+-40 -20 0 20 40
+ x [mm]
+0 0.5 1 1.5 2
+0.5Pressure [bar]
+1
+(e) (f)
+P1 P2 P3
+Simulink Time [s]
+Simulink Time [s]
+3rd floor:  for robot character-
+isation, e.g., kinematics and 
+stiffness.
+2nd floor: for low-voltage 
+components, e.g., Arduino board.
+Mounting various 
+soft robots onto the 
+plate.
+1st floor: for high-voltage 
+components, e.g., AC-DC converter.
+Arduino 
+Due
+Arduino 
+Due
+Desired 
+trajectory
+Desired 
+trajectory
+Inverse 
+kinematics
+Inverse 
+kinematics
+SimulinkSimulink
+dy
+Command
+Pressure
+Command
+Pressure
+Connected
+IO
+Connected
+IO Actuation 
+pressure
+Actuation 
+pressure
+PlatformPlatform Position 
+tracking
+RobotRobot
+Desired trajectoryDesired trajectory
+Inverse 
+kinematics
+Inverse 
+kinematics
+SimulinkSimulink
+dy
+Command
+Pressure
+Command
+Pressure
+Connected
+IO mode
+Connected
+IO mode
+Actuation 
+pressure
+Actuation 
+pressure
+PlatformPlatform
+Position 
+tracking
+Arduino DueArduino Due
+NDI AuroraNDI Aurora Data recording
+Fig. 9. Control scheme of implementing the inverse kinematics to the
+platform using Simulink.
+where fe(s) and le(s) are the distributed external force
+and moment. fP(s) and lP(s) are the distributed force and
+moment resulting from pressurisation. More details can be
+found in [29]. A linear constitutive material model is adopted
+to relate n(s),m(s) to v(s),u(s) yielding in (3).
+n(s) = R(s)Kse(v(s) − [0,0,1]T ),m(s) = R(s)Kbtu(s), (3)
+where Kse contains the shear and elongation stiffness, and Kbt
+contains the bending and torsion stiffness [27]. To achieve
+trajectory tracking, the shooting method is used. The initial
+guess g(0) is set as in (4).
+g(0) = [n(0),m(0),P1,P2,P3], (4)
+where n(0) and m(0) are the force and moment at the
+base, and P1,P2,P3 are the desired actuation pressure in
+three chambers. When the robot has no interaction with the
+environment, the boundary conditions are as written in (5).
+n(L)b = Fb
+P , m(L)b = mb
+P, p(L) = yd, (5)
+where superscript b denotes the body frame. As such, Fb
+P and
+mb
+P are the force and moment written in the body frame and
+resulting from the pressurisation. yd is the desired position.
+The inverse kinematics is achieved by integrating (1) and (2)
+based on the initial condition (4). The levenberg-marquardt
+optimisation can update the initial guess until the boundary
+condition in (5) satisfies.
+Simulink is used to implement the inverse kinematics
+The command pressure is sent to the platform via an
+USB port. Simulink runs in the Connected IO mode. The
+control scheme is shown in Fig. 9. Figs. 10(a), (c) and
+(e) show the tracking results for circle, rectangle and heart
+shapes recorded by the Aurora magnetic tracking system.
+Figs. 10(b), (d) and (f) report the collected corresponding
+actuation pressure. Desired information, e.g., position and
+actuation pressure values, can be recorded for further anal-
+ysis. Apart from the control implementation, it is worth
+mentioning that the characterisation showcases for this ma-
+nipulator can also be found in [37] for kinematics, and [41]
+for dynamics.
+V. C ONCLUSIONS
+This paper presents the design of a physical platform
+supporting the actuation, characterisation and control im-
+plementation/validation for pneumatically driven soft robotic
+systems. Firstly, we summarised the functionality require-
+ments for the characterisation of soft robots with regards to
+their kinematics/dynamics, force and stiffness identification.
+To fulfil these functions, we described the structure and
+electronics design of the platform in detail. At the same
+time, a Matlab GUI toolbox has been created to facilitate
+and streamline a soft robot’s characterisation process. The
+functionality of the platform was validated by three use
+cases, including the characterisation of a variable stiffness,
+hybrid rigid-soft joint, an elastic membrane and the inverse
+kinematics control implementation of a soft continuum robot
+via Simulink.
+0-3.3V
+24 V
+GND
++
+-
+0-10.003V
+6.8 k
+470 k
+GND
+3.3 k
+1 uf
+GND
+2 k
+PWM (0~100%)
+0-3.3V
++
+-
+0-10V
+6.8 k
+470 k
+GND
+3.3 k
+1 uf
+GND
+2 kPWM1 
+(0~100%)
+6.8 k
+470 k
+GND
+GND
++
+-
+1 uf
+PWM2 
+(0~100%)
+LM358AN
+24V
+2 k
+Out1
+Out2
+3.3 k
+0-3.3V
++
+-
+0-10V
+6.8 k
+470 k
+GND
+3.3 k
+1 uf
+GND
+2 kPWM1 
+(0~100%)
+6.8 k
+470 k
+GND
+GND
++
+-
+1 uf
+PWM2 
+(0~100%)
+LM358AN
+24V
+2 k
+Out1
+Out2
+3.3 k
+Digital to analog module
+…...220 V AC
+Main swith
+Shutdown 
+button
+Pneumatic 
+pump 
+AC-DC converter
+Mean Well TP-150 series
+AC-DC converter
+Mean Well TP-150 series
+DAQ-Board
+A & D Signal [pressure regulator, pressure sensor etc.]
+Real-Time Control Unit
+A & D Signal 
+[pressure regulator, 
+pressure sensor etc.]
+Experimental Bench
+Environment
+•
+•
+•Post-
+•N/A
+•Future works
+•N/A
+•Future works
+•System Brain
+•Integrate, process, publish all necessary signals
+•Visualization and virtual simulation(if necessary)
+•Integrate other ROS -based robotics systems.
+•Analog  and digital signals acquisition
+•16 analog input ports(or 8 pairs
+differential analog input port)
+•2 analog output ports
+•24 digital I/O ports
+counting pluses
+generate PWM signals
+•Test bench with necessary sensors
+DAQ-Board
+A & D Signal [pressure regulator, pressure sensor etc.]
+Real-Time Control Unit
+A & D Signal 
+[pressure regulator, 
+pressure sensor etc.]
+Experimental Bench
+Environment
+•
+•
+•Post-
+•N/A
+•Future works
+•N/A
+•Future works
+•System Brain
+•Integrate, process, publish all necessary signals
+•Visualization and virtual simulation(if necessary)
+•Integrate other ROS -based robotics systems.
+•Analog  and digital signals acquisition
+•16 analog input ports(or 8 pairs
+differential analog input port)
+•2 analog output ports
+•24 digital I/O ports
+counting pluses
+generate PWM signals
+•Test bench with necessary sensorsPower 
+light
+5V, 12V
+ 24 V
+Power supply (12V)
+USB ports
+Fuse
+Platform architecture 
+0-3.3V
+PWM control signal
+ 24 V
+…...
+Aurora control unit
+Tracking system
+Aurora control unit
+Tracking system
+Inlet pressure Regulator 1 Regulator 2
+3/2-way pressure regulators
+Exhaust
+Exhaust
+3.3 k 6.7 k
+3.3 k 6.7 k
+…...
+GND
+3.3 k 6.7 k
+3.3 k 6.7 k
+…...
+GND
+Voltage divider
+Feedback analog signal
+0-10V 0-10V
+Outlet pressure 1
+Outlet pressure 2
+Laptop
+Control units
+Force measurment
+NI USB 6341 
+Arduino DUE
+Selective
+IIT-F/T 17
+Ethernet
+F
+F
+x
+x
+Weight
+Original pose
+Original pose
+Linear actuator
+Deflected pose
+Deflected pose
+(a)       (b)
+Pulley Force 
+sensor
+bF
+Force sensor
+Soft robot
+3.3 k
+GND GND
+3.3 k
+(Pull-down 
+Resistor)
+(Pull-down 
+Resistor)
+D2D3
+0 0.5 1 1.5 2
+Time [s]
+0 0.5 1 1.5 20 0.5 1 1.5 2
+Time [s]
+0 0.5 1 1.5 2
+1
+0 0.5 1 1.5 2
+1
+0.5
+Time [s]
+-40 -20 0 20 40-40
+-20
+0
+20
+40
+-40 -20 0 20 40 -40 -20 0 20 40
+ x [mm]  x [mm]  x [mm]
+ y [mm]Pressure [bar]
+(a) (b) (c)
+(d) (e) (f)
+P1 P2 P3 P1 P2 P3 P1 P2 P3
+Arduino 
+Due
+Arduino 
+Due RobotRobot
+Desired 
+trajectory
+Desired 
+trajectory
+Inverse 
+kinematics
+Inverse 
+kinematics
+SimulinkSimulink
+dy
+Command
+Pressure
+Command
+Pressure
+AuroraAurora
+Connected
+IO
+Connected
+IO Actuation 
+pressure
+Actuation 
+pressure
+PlatformPlatform Position 
+tracking
+0 0.5 1 1.5 2 2.5 30
+10
+20
+30
+40
+50
+
+0 0.5 1 1.5 2 2.5 3
+0
+5
+10
+15
+20
+25
+30
+35
+40
+45
+50
+data1
+data2
+data3
+data4
+Forward direction
+Backward direction
+(a)
+(b)
+Pressure [bar]
+Bending angle [  ]o
+10 8 6 4 2 00
+100
+200
+300
+400
+500
+0 0.5 1 1.50
+5
+10
+15
+20 Forward direction
+Backward direction
+bF
+Pressure [bar]
+Force [N]
+0 0.5 1 1.50
+5
+10
+15
+20 Forward direction
+Backward direction
+bF
+Pressure [bar]
+Force [N]Torque [ N.mm ]
+Variation of the bending angle [  ]oVariation of the bending angle [  ]o
+o49.8N.mm/k =
+o42.7N.mm/k =
+
+(c)
+Characterisation floor
+Electronics floors
+0 0.5 1 1.5 2
+Time [s]
+0 0.5 1 1.5 20 0.5 1 1.5 2
+Time [s]
+0 0.5 1 1.5 2
+1
+0 0.5 1 1.5 2
+1
+0.5
+Time [s]
+-40 -20 0 20 40-40
+-20
+0
+20
+40
+-40 -20 0 20 40 -40 -20 0 20 40
+ x [mm]  x [mm]  x [mm]
+ y [mm]Pressure [bar]
+(a) (b) (c)
+(d) (e) (f)
+P1 P2 P3 P1 P2 P3 P1 P2 P3
+Simulink Time [s]
+0 0.5 1 1.5 2
+1
+0 0.5 1 1.5 2
+1
+0.5
+-40
+-20
+0
+20
+40
+ y [mm]
+Pressure [bar]
+P1 P2 P3
+-40 -20 0 20 40
+ x [mm]
+-40
+-20
+0
+20
+40
+ y [mm]
+-40 -20 0 20 40
+ x [mm]
+(a) (b)
+0 0.5 1 1.5 2
+0.5Pressure [bar]
+1
+P1 P2 P3
+(c) (d)
+-40
+-20
+0
+20
+40
+ y [mm]
+-40 -20 0 20 40
+ x [mm]
+0 0.5 1 1.5 2
+0.5Pressure [bar]
+1
+(e) (f)
+P1 P2 P3
+Simulink Time [s]
+Simulink Time [s]
+Fig. 10. Results for the inverse kinematics implementation. The Aurora
+tracking system records the different trajectories of (a) a circular, (c) a
+rectangular and (e) a heart shape. The recorded control pressure values are
+plotted in (b), (d) and (f). This Simulink example can be downloaded from
+the GitHub repository.
+In line with efforts of the soft robotic community to
+support the design of soft robotic systems, e.g., in [16]–
+[19], [21] and the development of the modelling and control
+algorithms from [30]–[33], the combination of our platform
+with a GUI toolbox provides a solution to characterise soft
+robots’ performances during the prototyping stage and to
+further build a validation bridge between the development of
+modelling algorithms and robot prototyping. The design is
+made freely available to potentially support the soft robotics
+community. In this sense, we focused on the functionality of
+the platform and aimed to build in off-the-shelf components
+to standardise the list of components and ensure the stability
+of the system.
+In future, we aim to advance the capability of our plat-
+form through integration into the Robot Operating System.
+Furthermore, we will make the use of the remaining available
+I/Os and increase the controllable pneumatic channels.
+REFERENCES
+[1] D. Rus and M. T. Tolley, “Design, fabrication and control of soft
+robots,” Nature, vol. 521, no. 7553, pp. 467–475, 2015.
+[2] J. Peters, E. Nolan, M. Wiese, M. Miodownik, S. Spurgeon, A. Arezzo,
+A. Raatz, and H. A. Wurdemann, “Actuation and stiffening in
+fluid-driven soft robots using low-melting-point material,” in 2019
+IEEE/RSJ International Conference on Intelligent Robots and Systems
+(IROS), 2019, pp. 4692–4698.
+[3] A. D. Marchese, R. K. Katzschmann, and D. Rus, “A recipe for soft
+fluidic elastomer robots,” Soft robotics, vol. 2, no. 1, pp. 7–25, 2015.
+[4] Sachin, Z. Wang, and S. Hirai, “Analytical modeling of a soft Pneu-
+Net actuator subjected to planar tip contact,” IEEE Transactions on
+Robotics, pp. 1–14, 2022.
+[5] H. Abidi, G. Gerboni, M. Brancadoro, J. Fras, A. Diodato,
+M. Cianchetti, H. Wurdemann, K. Althoefer, and A. Menciassi,
+“Highly dexterous 2-module soft robot for intra-organ navigation in
+minimally invasive surgery,” The International Journal of Medical
+Robotics and Computer Assisted Surgery , vol. 14, no. 1, p. e1875,
+2018.
+[6] K.-W. Kwok, H. Wurdemann, A. Arezzo, A. Menciassi, and K. Althoe-
+fer, “Soft robot-assisted minimally invasive surgery and interventions:
+Advances and outlook,” Proceedings of the IEEE , vol. 110, no. 7, pp.
+871–892, 2022.
+[7] P. Polygerinos, Z. Wang, K. C. Galloway, R. J. Wood, and C. J.
+Walsh, “Soft robotic glove for combined assistance and at-home
+rehabilitation,” Robotics and Autonomous Systems , vol. 73, pp. 135–
+143, 2015.
+[8] A. Stilli, H. A. Wurdemann, and K. Althoefer, “A novel concept for
+safe, stiffness-controllable robot links,” Soft Robotics , vol. 4, no. 1,
+pp. 16–22, 2017.
+[9] J. Fras, Y . Noh, H. Wurdemann, and K. Althoefer, “Soft fluidic
+rotary actuator with improved actuation properties,” in 2017 IEEE/RSJ
+International Conference on Intelligent Robots and Systems (IROS) .
+IEEE, 2017, pp. 5610–5615.
+[10] N. Herzig, J. Jones, E. Perez-Guagnelli, and D. D. Damian, “Model
+and validation of a highly extensible and tough actuator based on
+a ballooning membrane,” in 2021 IEEE International Conference on
+Robotics and Automation (ICRA) , 2021, pp. 11 961–11 967.
+[11] K. Suzumori, S. Iikura, and H. Tanaka, “Applying a flexible microactu-
+ator to robotic mechanisms,” IEEE Control Systems Magazine, vol. 12,
+no. 1, pp. 21–27, 1992.
+[12] F. Connolly, P. Polygerinos, C. J. Walsh, and K. Bertoldi, “Mechanical
+programming of soft actuators by varying fiber angle,” Soft Robotics,
+vol. 2, no. 1, pp. 26–32, 2015.
+[13] L. Lin, F. Zhang, L. Yang, and Y . Fu, “Design and modeling of a hybrid
+soft-rigid hand exoskeleton for poststroke rehabilitation,”International
+Journal of Mechanical Sciences , vol. 212, p. 106831, 2021.
+[14] D. P. Holland, C. Abah, M. Velasco-Enriquez, M. Herman, G. J.
+Bennett, E. A. Vela, and C. J. Walsh, “The soft robotics toolkit:
+Strategies for overcoming obstacles to the wide dissemination of soft-
+robotic hardware,” IEEE Robotics & Automation Magazine , vol. 24,
+no. 1, pp. 57–64, 2017.
+[15] F. Schmitt, O. Piccin, L. Barb ´e, and B. Bayle, “Soft robots manufac-
+turing: A review,” Frontiers in Robotics and AI , vol. 5, p. 84, 2018.
+[16] Programmable-Air. Last visited: 10-10-2022. [Online]. Available:
+https://www.programmableair.com/
+[17] PneumaticBox CAPE - A system for real-time pneumatic control.
+Last visited: 10-10-2022. [Online]. Available: https://www.robotics.tu-
+berlin.de/menue/software tutorials/pneumaticbox/
+[18] Penuduino Toolkit. Last visited: 10-10-2022. [Online]. Available:
+http://pneuduino.org/toolkit/
+[19] J. W. Booth, J. C. Case, E. L. White, D. S. Shah, and R. Kramer-
+Bottiglio, “An addressable pneumatic regulator for distributed control
+of soft robots,” in 2018 IEEE International Conference on Soft
+Robotics (RoboSoft). IEEE, 2018, pp. 25–30.
+[20] Y . Tian, R. Su, X. Wang, N. B. Altin, G. Fang, and C. C. Wang,
+“OpenPneu: Compact platform for pneumatic actuation with multi-
+channels,” arXiv preprint arXiv:2209.11318 , 2022.
+[21] A. Shtarbanov, “FlowIO development platform–the pneumatic “Rasp-
+berry Pi” for soft robotics,” in Extended Abstracts of the 2021 CHI
+Conference on Human Factors in Computing Systems , 2021, pp. 1–6.
+[22] B. J. Caasenbrood, F. E. van Beek, H. K. Chu, and I. A. Kuling, “A
+desktop-sized platform for real-time control applications of pneumatic
+soft robots,” in 2022 IEEE 5th International Conference on Soft
+Robotics (RoboSoft), 2022, pp. 217–223.
+[23] T. R. Young, M. S. Xavier, Y . K. Yong, and A. J. Fleming, “A
+control and drive system for pneumatic soft robots: Pneusord,” in 2021
+IEEE/RSJ International Conference on Intelligent Robots and Systems
+(IROS). IEEE, 2021, pp. 2822–2829.
+[24] C. D. Onal, X. Chen, G. M. Whitesides, and D. Rus, “Soft mobile
+robots with on-board chemical pressure generation,” in Robotics
+Research. Springer, 2017, pp. 525–540.
+[25] N. Napp, B. Araki, M. T. Tolley, R. Nagpal, and R. J. Wood, “Simple
+passive valves for addressable pneumatic actuation,” in 2014 IEEE
+International Conference on Robotics and Automation (ICRA). IEEE,
+2014, pp. 1440–1445.
+[26] S. Wang, L. He, and P. Maiolino, “Design and characterization of a
+3d-printed pneumatically-driven bistable valve with tunable charac-
+teristics,” IEEE Robotics and Automation Letters , vol. 7, no. 1, pp.
+112–119, 2022.
+[27] D. C. Rucker and R. J. Webster III, “Statics and dynamics of
+continuum robots with general tendon routing and external loading,”
+IEEE Transactions on Robotics , vol. 27, no. 6, pp. 1033–1044, 2011.
+[28] C. Della Santina, R. K. Katzschmann, A. Bicchi, and D. Rus, “Model-
+based dynamic feedback control of a planar soft robot: Trajectory
+tracking and interaction with the environment,” The International
+Journal of Robotics Research , vol. 39, no. 4, pp. 490–513, 2020.
+[29] J. Till, V . Aloi, and C. Rucker, “Real-time dynamics of soft and
+continuum robots based on cosserat rod models,” The International
+Journal of Robotics Research , vol. 38, no. 6, pp. 723–746, 2019.
+[30] C. Duriez, “Control of elastic soft robots based on real-time finite
+element method,” in 2013 IEEE International Conference on Robotics
+and Automation (ICRA) , 2013, pp. 3982–3987.
+[31] A. T. Mathew, I. M. B. Hmida, C. Armanini, F. Boyer, and F. Renda,
+“SoRoSim: A MATLAB toolbox for hybrid rigid-soft robots based on
+the geometric variable-strain approach,” IEEE Robotics Automation
+Magazine, pp. 2–18, 2022.
+[32] B. Caasenbrood, “Sorotoki - a soft robotics toolkit for MATLAB,”
+https://github.com/BJCaasenbrood/SorotokiCode, 2020.
+[33] Y . Yao, L. He, and P. Maiolino, “A simulation-based toolbox to
+expedite the digital design of bellow soft pneumatic actuators,” in
+2022 IEEE 5th International Conference on Soft Robotics (RoboSoft) ,
+2022, pp. 29–34.
+[34] S. Joshi and J. Paik, “Multi-DoF force characterization of soft ac-
+tuators,” IEEE Robotics and Automation Letters , vol. 4, no. 4, pp.
+3679–3686, 2019.
+[35] O. Fischer, Y . Toshimitsu, A. Kazemipour, and R. K. Katzschmann,
+“Dynamic task space control enables soft manipulators to perform
+real-world tasks,” Advanced Intelligent Systems , p. 2200024, 2022.
+[36] T. Ranzani, M. Cianchetti, G. Gerboni, I. D. Falco, and A. Menciassi,
+“A soft modular manipulator for minimally invasive surgery: Design
+and characterization of a single module,” IEEE Transactions on
+Robotics, vol. 32, no. 1, pp. 187–200, 2016.
+[37] J. Shi, W. Gaozhang, and H. A. Wurdemann, “Design and characteri-
+sation of cross-sectional geometries for soft robotic manipulators with
+fibre-reinforced chambers,” in2022 IEEE 5th International Conference
+on Soft Robotics (RoboSoft) , 2022, pp. 125–131.
+[38] K. Oliver-Butler, J. Till, and C. Rucker, “Continuum robot stiffness
+under external loads and prescribed tendon displacements,” IEEE
+Transactions on Robotics , vol. 35, no. 2, pp. 403–419, 2019.
+[39] G. Shi, A. Palombi, Z. Lim, A. Astolfi, A. Burani, S. Campagnini,
+F. G. Loizzo, M. L. Preti, A. M. Vargas, E. Peperoni et al., “Fluidic
+haptic interface for mechano-tactile feedback,” IEEE transactions on
+Haptics, vol. 13, no. 1, pp. 204–210, 2020.
+[40] J. Fra ´s, J. Czarnowski, M. Macia ´s, J. Gł ´owka, M. Cianchetti, and
+A. Menciassi, “New STIFF-FLOP module construction idea for im-
+proved actuation and sensing,” in 2015 IEEE international conference
+on robotics and automation (ICRA) . IEEE, 2015, pp. 2901–2906.
+[41] A. Shariati, J. Shi, S. Spurgeon, and H. A. Wurdemann, “Dy-
+namic modelling and visco-elastic parameter identification of a fibre-
+reinforced soft fluidic elastomer manipulator,” in 2021 IEEE/RSJ
+International Conference on Intelligent Robots and Systems (IROS) ,
+2021, pp. 661–667.

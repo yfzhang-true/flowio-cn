@@ -1,0 +1,1286 @@
+InflatableMod: Untethered and Reconfigurable Inflatable
+Modules for Tabletop-sized Pneumatic Physical Interfaces
+Takafumi Morita
+The University of Tokyo
+Tokyo, Japan
+morita@xlab.iii.u-tokyo.ac.jp
+Ziyuan Jiang
+The University of Tokyo
+Tokyo, Japan
+jiang@xlab.iii.u-tokyo.ac.jp
+Kanon Aoyama
+The University of Tokyo
+Tokyo, Japan
+aoyama@xlab.iii.u-tokyo.ac.jp
+Ayato Minaminosono
+Shibaura Institute of Technology
+Tokyo, Japan
+nb20108@shibaura-it.ac.jp
+Yu Kuwajima
+Shibaura Institute of Technology
+Tokyo, Japan
+nb21105@shibaura-it.ac.jp
+Naoki Hosoya
+Shibaura Institute of Technology
+Tokyo, Japan
+hosoya@sic.shibaura-it.ac.jp
+Shingo Maeda
+Tokyo Institute of Technology
+Tokyo, Japan
+maeshin@shibaura-it.ac.jp
+Yasuaki Kakehi
+The University of Tokyo
+Tokyo, Japan
+kakehi@iii.u-tokyo.ac.jp
+Figure 1: InflatableMod. (A) InflatableMod consists of Phase-change Control Module and Pouch Module, (B) Linear liquid-to-gas
+phase change actuator control, (C) Reconfigurable inflatable lump, (D) Dynamically arrangeable inflatable stand, (E) Silent
+biomimetic soft actuator.
+ABSTRACT
+Inflatable systems have been attracting attention in the field of
+interaction design. Conventional tabletop-sized pneumatic systems
+tend to be complex because they require bulky and noisy equipment.
+Therefore, several liquid-to-gas phase change actuators that use va-
+porization have been proposed. But these actuators have problems
+with controllability, reusability, and reconfigurability. In this study,
+we propose InflatableMod, novel inflatable modules based on the
+efficient control of liquid-to-gas phase change actuators. These are
+designed with a compact circuit that has a liquid transfer function
+to feed the required amount of low-boiling-point liquid into the
+pouch and a heating function to inflate the pouch by the volume
+change. This approach allows for a compact, silent, and unteth-
+ered inflatable system. It is also possible to create an untethered
+and reconfigurable multi-inflatable system because each module is
+synchronized. In this paper, we propose the design of the modules,
+evaluate their performance, and present application scenarios.
+Permission to make digital or hard copies of part or all of this work for personal or
+classroom use is granted without fee provided that copies are not made or distributed
+for profit or commercial advantage and that copies bear this notice and the full citation
+on the first page. Copyrights for third-party components of this work must be honored.
+For all other uses, contact the owner/author(s).
+CHI ’23, April 23–28, 2023, Hamburg, Germany
+© 2023 Copyright held by the owner/author(s).
+ACM ISBN 978-1-4503-9421-5/23/04.
+https://doi.org/10.1145/3544548.3581353
+CCS CONCEPTS
+• Human-centered computing → Interactive systems and
+tools.
+KEYWORDS
+Programmable Materials, Inflatables, Multi-inflatables, Pneumatic,
+Liquid-to-gas Phase Change Actuators, Electrohydrodynamics.
+ACM Reference Format:
+Takafumi Morita, Ziyuan Jiang, Kanon Aoyama, Ayato Minaminosono, Yu
+Kuwajima, Naoki Hosoya, Shingo Maeda, and Yasuaki Kakehi. 2023. Inflat-
+ableMod: Untethered and Reconfigurable Inflatable Modules for Tabletop-
+sized Pneumatic Physical Interfaces. In Proceedings of the 2023 CHI Con-
+ference on Human Factors in Computing Systems (CHI ’23), April 23–28,
+2023, Hamburg, Germany. ACM, New York, NY, USA, 15 pages. https:
+//doi.org/10.1145/3544548.3581353
+1 INTRODUCTION
+Shape-changing interfaces have long attracted attention because
+they can dynamically change the shape of substantial objects. Vari-
+ous studies on shape-changing interfaces have their roots in tan-
+gible [42] or organic user interfaces [21]. They draw on expertise
+from various disciplines. Recent developments on shape-changing
+interfaces are not only in the field of HCI but also in engineer-
+ing, architecture, behavioral science, design, and many other fields,
+CHI ’23, April 23–28, 2023, Hamburg, Germany Morita et al.
+including comprehensive studies of grand challenges [4] or affor-
+dances [34].
+Particularly, inflatable shape-changing interfaces have the ad-
+vantage of being freely changeable in volume. Various inflata-
+bles have been proposed, ranging from general-purpose inter-
+faces [28, 32, 40, 53] with dynamic shape changes to specific applica-
+tions [1, 19, 22, 30, 41] such as haptic sensation, portable mobility, or
+soft robotics. In addition, shape-changing interfaces [10, 14, 16, 45–
+48, 54] that construct structures using multiple inflatables have
+been proposed as high-potential applications because they enable
+more complex shape changes by increasing the number of inflatable
+bladders.
+However, there are still many challenges for inflatables in prac-
+tical applications. Conventional pneumatic systems usually use air
+compressors for large-sized systems and commercial pneumatic
+pumps for tabletop-sized systems as the drive source. Both require
+external equipment as a drive source to feed air through tubing
+and are not self-contained systems. Most of these drive sources
+are noisy. In addition, most previous studies use active valves for
+pneumatic control, which further increases the drive noise on top
+of the drive source. Furthermore, the conventional multi-inflatable
+system requires separate tubing and active valves for each bladder
+to allow air to flow in and out of each inflatable. These extra setups
+make the entire system bulky and complex, limiting the layout of
+the placement.
+Several liquid-to-gas phase change actuators [3, 17, 18, 27, 29, 50],
+which utilize the volume change that occurs during the vaporization
+process, have been proposed in recent years. These actuators are
+not bulky owing to the absence of tubing, and can be driven silently
+and flexibly. However, most existing liquid-to-gas phase change
+actuators are made from small flat pouches, and three-dimensional
+pouches such as cubes are rarely made due to heating efficiency
+challenges. Furthermore, it is difficult to control heating by phase
+change. It is limited to discrete on/off states, either fully operational
+or fully stationary, making it difficult to inflate programmatically
+to the middle states. Additionally, the module can be used only
+a limited number of times. Reconfigurability also needs to be im-
+proved because the design cannot be changed once the liquid is
+filled in advance. Thus, there are still many challenges in order to
+utilize liquid-to-gas phase change actuators in practical inflatable
+applications.
+In this paper, we propose InflatableMod, novel inflatable mod-
+ules based on the efficient control of liquid-to-gas phase change
+actuators. These are designed with a compact circuit that has a
+liquid transfer function and a heating function. InflatableMod con-
+sists of Phase-change Control Module and Pouch Module. The
+Phase-change Control Module generates liquid flow and feeds a
+low-boiling-point liquid into the Pouch Module. The temperature of
+the liquid is controlled by a Peltier device, which causes the Pouch
+Module to inflate by the volume change of the phase change. We
+also utilize electrohydrodynamic (EHD) pumps [5–7, 9, 15, 24, 33],
+based on the EHD phenomenon [35, 36, 38], for the pump function
+to generate liquid flow because of their ability to drive quite silently.
+In addition, it has a high degree of freedom of placement and can
+be embedded into objects in different shapes. The EHD phenom-
+enon generates liquid flow when a high voltage is applied to a
+dielectric liquid. Using an EHD pump, the liquid flow is generated
+simply by placing an electrode in the liquid and applying a voltage,
+eliminating the need for mechanical moving parts. Furthermore,
+by feeding only the required amount of low-boiling-point liquid
+into the Pouch Module and then efficiently controlling the heat-
+ing, the previously-mentioned drawbacks of existing liquid-to-gas
+phase change actuators can be mitigated and resolved. This feature
+enables the creation of inflatable systems of various shapes and
+sizes by liquid-to-gas phase change, as well as control in the middle
+range. In addition, as each module is wirelessly synchronized, it is
+possible to create a multi-inflatable system in which each inflatable
+structure is untethered and can be reconfigured for placement. This
+allows inflatables to be placed anywhere without having to con-
+sider the location of tubing and valves, eliminating the limitation
+of the module layout and system complexity that have been the
+challenges for multi-inflatables.
+In this study, we present the module design, evaluate the perfor-
+mance of InflatableMod as an inflatable system, and show the possi-
+ble application scenarios. The core novelty of this paper lies in the
+first exploration of the novel inflatable approach in tabletop-sized
+inflatables free from extra device requirements, tubing constraints,
+and noises. In summary, we contributed:
+(1) An efficient liquid-to-gas phase change control that silently
+inflates three-dimensional pouches for tabletop-sized inflat-
+ables.
+(2) A liquid-to-gas phase change control that changes an inflat-
+able’s volume continuously by feeding the pouch only with
+the required amount of liquid.
+(3) Design and fabrication pipeline of InflatableMod that allow
+for easy replication.
+(4) A technical evaluation of performance and quietness as an
+inflatable system.
+(5) Novel application scenarios enabled by silent, untethered,
+and reconfigurable inflatables.
+2 RELATED WORK
+2.1 Pneumatic Shape-Changing Interfaces
+Pneumatic shape-changing interfaces have been actively studied in
+various fields, mainly in object deformation and tactile feedback,
+owing to their advantage of freely changing volume.
+Various interfaces with dynamic shape changes have been
+proposed, ranging from versatile to application-specific. Various
+general-purpose methods are available. PneUI [53] has several pneu-
+matic prototypes that render curvature, volume, and texture. Aero-
+Morph [32] proposed a textile-based design space that could be
+folded into various shapes using multiple heat-sealing methods.
+Printflatables [40] is a design and fabrication system for human-
+scale, functional and dynamic inflatable objects. MorphIO [28] com-
+bines inflatable modules with built-in deformation sensing to pro-
+vide soft actuators with interactions. Various studies have been con-
+ducted on specific applications. For use in mobility, poimo [30, 41],
+a portable and inflatable mobility device with a mechanism made
+of a mass-producible material called drop-stitch fabric, has been
+proposed. Artificial muscles using air pressure have also been pro-
+posed, woven into fabric [19] and applied to muscles with various
+characteristics and shapes [ 1]. OmniFiber [ 22] is proposed as a
+InflatableMod: Untethered and Reconfigurable Inflatable Modules for Tabletop-sized Pneumatic Physical Interfaces CHI ’23, April 23–28, 2023, Hamburg, Germany
+soft-wire-based material system for designing motion-based inter-
+actions for on-body and on-object applications. Several toolkits
+have also been released in recent years to lower the barrier of en-
+try for handling gases. Some of the best-known ones are The Soft
+Robotics Toolkit [20], Pneuduino [31, 37], Programmable Air [2],
+MorpheesPlug [23], and FlowIO [44], which have been a great help
+in pneumatic prototyping.
+As mentioned above, various pneumatic interfaces have been
+proposed. As the drive source, air compressors are used for pneu-
+matic modules in larger-sized pneumatics systems [8, 10, 32, 40, 45,
+46, 48, 53], while commercial pneumatic pumps such as diaphragm
+pumps are often used for tabletop-sized ones [14, 22, 28, 47, 54]. The
+toolkits [2, 20, 23, 31, 37, 44] described above also use commercially
+available pneumatic pumps. Air compressors are large and loud.
+Commercial pumps usually use solenoid valves and active valves,
+making the pump noisy as well. In terms of inflatable interfaces,
+noises tend to be distracting and irritating to users and affect user
+experience. To address these challenges of tabletop-sized inflatables,
+we present a novel approach to inflatables that does not require
+external equipment and is driven with no noise.
+2.2 Multi-Inflatable Shape-Changing Interfaces
+There are not only single-inflatable shape-changing interfaces but
+also multi-inflatable shape-changing interfaces that use multiple
+inflatable structures. Multi-inflatable shape-changing interfaces
+allow for more complicated shape change by increasing the number
+of inflatable bladders; therefore, a study with high potential for
+application has been proposed.
+TilePop [48], which consists of cubic airbags arranged in a 2D
+array with a folding structure, is an interface for whole-body inter-
+actions in virtual reality. Similarly, LiftTiles [45, 46] are building
+blocks for prototyping room-scale shape-changing interfaces uti-
+lizing an array of inflatable actuators. The Force Jacket [ 10] has
+26 airbags mounted on the jacket, presenting complex tactile feed-
+back throughout the upper body. COLORISE [14] is a display that
+can deform and change the color of objects arranged on pixels by
+stretching an elastomer membrane under air pressure. PuPoP [47]
+is a lightweight pneumatic shape-proxy interface worn on the palm
+and uses one or more inflatables to represent handheld objects in
+a VR environment. Bubble [ 54] is a wearable device that allows
+one to grasp objects by attaching multiple inflatable units to the
+fingers. Layer by Layer [16] introduces a layer-driven design for
+soft surfaces that enables the production of dynamic, discretely
+actuated surfaces at multiple scales.
+Thus, various multi-inflatable shape-changing interfaces have
+been proposed for room-scale applications, virtual reality, and hu-
+man interaction. However, tubing and active valves are required
+for each inflatable structure to move air in and out of each in-
+flatable separately when driving multi-inflatables. The need for
+considering the location of tubes and valves limits the freedom
+in inflatables’ location allocation and system’s layout design. Al-
+though many challenges remain for multi-inflatable systems, few
+previous studies have addressed them. PneuSeries [ 8] alleviates
+layout constraints in a multi-inflatable structure with bidirectional
+check valves that passively regulate airflow into and out of adja-
+cent inflatables. Some toolkits [2, 20, 23, 31, 37, 44] mentioned in
+Section 2.1 expand the system and use the pneumatic drive source
+as a multi-channel. However, the former [ 8] has limitations on
+the sequential inflation order of each inflatable and does not allow
+synchronized control of all inflatables. Those toolkits that use the
+pneumatic drive source as a multi-channel system require tubes and
+valves for each inflatable structure. Hence, it remains a complicated
+and limited multi-inflatable system.
+To address these challenges of tabletop-sized multi-inflatables,
+we introduce a novel approach to multi-inflatables that is untethered
+by tubing and allows simultaneous control and free placement of
+each inflatable structure.
+2.3 Liquid-to-gas Phase Change Actuators
+Liquid-to-gas phase change actuators utilize the volume change
+of the vaporization. Various types of liquid-to-gas phase change
+actuators have been proposed, ranging from engineering research
+to applied use.
+Some engineering researches have been conducted. A flexible
+thin actuator, which is an encircling actuator consisting of a plastic
+sheet, a low boiling point liquid, and a flexible heater, is proposed [3].
+Flexibility is achieved using a flexible heater composed of a func-
+tional liquid with carbon nanotubes [ 50]. Moreover, there is an
+electric phase-change actuator [27], which is a printable fluid actu-
+ator controlled by an inkjet-printed electric heater. Liquid Pouch
+Motors [29] is a family of printable soft actuators that consist of
+one or more gas-tight bladders filled with a low-boiling-point liq-
+uid. Laser Pouch Motors [ 18] has been proposed as a method to
+evaporate small amounts of low-boiling-point liquid using heating
+by laser projection. Micro Elastic Pouch Motors [17] is elastically
+deformable and miniaturized soft actuators that use liquid-to-gas
+phase change, in which a low-boiling-point liquid is enclosed in
+an elastic rubber pouch. Several applied uses have also been pro-
+posed. milliMorph [25] proposes a design space and manufacturing
+system for creating millimeter-scale fluid chambers and channels.
+Smart Thermally Actuating Textiles [39] are smart textiles that can
+shrink or expand in response to temperature. Hapouch [51, 52] is
+a wearable tactile display device that uses a liquid-to-gas phase
+change actuator and a Peltier device.
+Although various liquid-to-gas phase change actuators have
+been proposed, there are still practical challenges. Most existing
+liquid-to-gas phase change actuators are made in small flat pouches,
+and few three-dimensional pouches such as cubes are made. Pre-
+cise inflation of 3D pouches is a challenge because the speed of
+vaporization and efficient heating methods must be considered.
+Furthermore, heating control to vaporize is difficult to achieve the
+desired volume, even if a closed-loop feedback is applied to achieve
+the targeted temperature. Therefore, vaporazation control is lim-
+ited to only discrete on/off states, and it is challenging to control
+at intermediate states. Because of the difficulty of volume control,
+previous works have been conducted using only one liquid-to-gas
+phase change actuator, and simultaneous control over multiple
+actuators has rarely been possible. In liquid-to-gas phase change
+actuators, a low-boiling-point liquid called Novec 7000[11] is com-
+monly used. However, Novec usually contains dissolved air that
+gradually evaporates into the pouch over time. Since the air cannot
+escape from the pouch, the Pouch Module inflates over time after
+CHI ’23, April 23–28, 2023, Hamburg, Germany Morita et al.
+repeated use, raising the issue of reusability. There is also an issue
+of reconfigurability. Conventional liquid-to-gas phase change ac-
+tuators require the pouch to be filled with liquid in advance and
+inflates only corresponding to the fixed amount of liquid contained
+in the pouch. In the sight of fabrication, once the liquid is encapsu-
+lated and sealed in a pouch, it is difficult to adjust the inflatable’s
+design afterward.
+Hence, we propose efficient phase change control methods to re-
+alize continuous control of liquid-to-gas phase change actuators in
+three-dimensional pouches. Furthermore, the InflatableMod solves
+the aforementioned issues of reusability and reconfigurability, since
+the pouches can be freely attached or detached.
+3 INFLATABLEMOD
+In this section, we describe the system overview of Inflatable-
+Mod, the efficient phase-change control method, and the deflation
+method.
+3.1 System Overview
+InflatableMod consists of inflatable modules for tabletop-sized pneu-
+matic physical interfaces that can be silently driven and freely
+placed. InflatableMod was designed based on the following require-
+ments for use as versatile pneumatic physical interfaces:
+• It can be driven as a compact, untethered, self-contained
+module in a simple system configuration that operates with-
+out needing bulky, heavy, and noisy equipment.
+• It can be designed to be reconfigurable with inflatables of
+various shapes and sizes.
+• It can be used repeatedly and can control inflatables in inter-
+mediate states.
+• Multiple modules can be controlled wirelessly at the same
+time.
+As shown in Fig. 2, InflatableMod consists of Phase-change Con-
+trol Module and Pouch Module. The Phase-change Control Module
+has a liquid transfer function to generate liquid flow and feed low-
+boiling-point liquid into the Pouch Module and a liquid heating
+function to drive the liquid-to-gas phase change efficiently. The
+Pouch Module is a bladder that can be fabricated and inflated into
+various shapes and sizes depending on the application.
+The operation of the inflatable system with the InflatableMod is
+conducted in six steps, as shown in Fig. 3. First, (A) a low-boiling-
+point liquid is injected into a small tank inside the Phase-change
+Control Module. Thereafter, (B) the Pouch Module and the Phase-
+change Control Module are attached together. (C) The inflatable
+system is then operated remotely using simple GUI software on a
+smartphone. (D) The liquid heating function of the Phase-change
+Control Module is then driven to heat the reservoir dish of the Pouch
+Module. Next, (E) the liquid transfer function is driven to feed the
+low-boiling-point liquid at an efficient timing to the reservoir dish
+of the Pouch Module that has just been heated. These operational
+flows allow the Pouch Module to be inflated by volume change on
+vaporization. InflatableMod uses Novec 7000 [ 11] with a boiling
+point of 34◦C as the low-boiling-point liquid.
+Thus, the ability to drive inflatables with such a simple process
+allows them to be used in a highly versatile manner.
+Figure 2: InflatableMod supports Phase-change Control Mod-
+ule and Pouch Module. Pouch Module have a variety of
+shapes and sizes, depending on the applications.
+Figure 3: Six step process to operate an inflatable system with
+InflatableMod: (A) inject Novec 7000 into the tank of Phase-
+change Control Module, (B) connect the Pouch Module to the
+Phase-change Control Modules, (C) control the system with
+simple GUI software, (D) heat the reserving dish of Pouch
+Module, (E) feed low-boiling-point liquid into the Pouch
+Module, (F) inflate the Pouch Module.
+3.2 Efficient Phase-change Control Method
+We describe an efficient phase-change control method, one of the
+features of InflatableMod. InflatableMod proposed new approaches
+by introducing a geometric structure that facilitates heat transfer
+and heating control that promotes liquid vaporization.
+3.2.1 Reservoir dish’s geometric structure that facilitates heat trans-
+fer. As shown in the left of Fig. 4, most of the existing liquid-to-gas
+phase change actuators heat the low-boiling-point liquid contained
+in a pouch from the pouch surface. Therefore, the heating efficiency
+of the liquid is poor because some surfaces are not directly heated
+by the low-boiling-point liquid. Many approaches to heating have
+been attempted, including flexible heaters, silver nanoinks, and
+lasers, but few pouch designs have considered the surface of the
+liquid to be heated. In contrast, we prepared a reservoir dish such
+that the liquid is placed only at the heated point, as shown in the
+right of Fig. 4. This allows efficient heat to be provided to the liquid,
+InflatableMod: Untethered and Reconfigurable Inflatable Modules for Tabletop-sized Pneumatic Physical Interfaces CHI ’23, April 23–28, 2023, Hamburg, Germany
+which vaporizes faster, as there is no place for the liquid to settle
+but at the heated point.
+Furthermore, the reservoir dish repeatedly vaporizes the liquid
+for inflation and receives liquefied gas that flows back into the dish
+along insides of the pouch. Only the reservoir dish and the Peltier
+device need to face z-dir, but the other parts can be placed in any
+orientation, including wall-mounted.
+Figure 4: Approach to structural geometry that facilitates
+heat transfer. (Left) Conventional general pouch shape.
+(Right) proposed pouch shape utilizing a reservoir dish.
+3.2.2 Heating control that promotes liquid vaporization. Moreover,
+we present an approach for heating control that promotes liquid
+vaporization. InflatableMod does not require a low-boiling-point
+liquid to be contained in the pouch in advance. It can feed only
+the necessary amount of low-boiling-point liquid into the pouch,
+speeding up the vaporization process. As shown in Fig. 5, a typical
+method is first to store the liquid in a reservoir dish and then heat it;
+however, this method takes time for all liquid to be heated since the
+volume of liquid per heating surface is large. Therefore, as shown
+in Fig. 6, by slowly dropping the low-boiling-point liquid onto the
+heating surface, the volume per heating surface is significantly
+reduced, and the liquid vaporizes immediately after dropping. In
+the first cycle, a small amount of the liquid is fed into the reservoir
+dish before heating to avoid damaging the Peltier device. If the
+Peltier device is heated with no liquid, the temperature difference
+between the heating and cooling surfaces will be too large, and
+the device will break down. Therefore, it is necessary to first feed
+a small amount of liquid into the reservoir dish as a heat sink for
+the Peltier device. From the second cycle, there is always liquid on
+the heated reservoir dish, so there is no risk of failure due to dry
+heating.
+These two approaches described in 3.2.1 and 3.2.2 improve the
+operation speed by increasing the efficiency of the vaporization
+process. Furthermore, this allows the liquid-to-gas phase change to
+be used in three-dimensional pouches, which has been difficult in
+the past.
+3.2.3 Backflow prevention for programmable check valves with liq-
+uid transfer function. The major role of liquid transfer control in
+Figure 5: A common control method: It is to first store a low-
+boiling-point liquid in a reservoir dish and then heat.
+Figure 6: Proposed control method: The volume of liquid
+per heating surface is significantly reduced, by dropping the
+low-boiling-point liquid little by little against the heating
+surface.
+InflatableMod is also discussed here. The liquid transfer control
+delivers liquid to the reservoir dish and significantly contributes
+as a programmable check valve. The InflatableMod delivers the
+required amount of low-boiling-point liquid to the Pouch Module,
+which is then heated to cause a liquid-to-gas phase change that
+inflates the pouch. However, because there is a flow path to feed
+the liquid into the pouch, simply heating the pouch causes the gas
+to flow back when it vaporizes. Therefore, to prevent backflow, the
+pump is not turned off during heating but is driven at a pressure
+below the threshold for pushing liquid into the reservoir dish, as
+shown in Fig. 5 and 6. The output power of the check valve can be
+changed dynamically according to the pouch size and the amount of
+liquid to be injected. The EHD pump can prevent backflow without
+using a mechanical check valve.
+3.3 Deflation Method
+InflatableMod has two major deflation methods. The first method
+is deflation which uses a phase change from gas to liquid. This
+deflation method is shown in Fig. 7. The inflation flow is briefly
+CHI ’23, April 23–28, 2023, Hamburg, Germany Morita et al.
+described below (a-1~5). First, from the initial state (a-1), the low-
+boiling-point liquid is poured into Pouch Module (a-2,3). Then, the
+backflow prevention control described in 3.2.3 is activated. Because
+the liquid pushed by the EHD Pump continuously stays in the
+channel connecting the tank and the pouch, the air cannot escape
+from the Pouch Module. This is considered as a pseudo-closed-valve
+state (a-4): the liquid in the channel functions as a stopper of the
+imaginary valve for sealing the gas inside. The low-boiling-point
+liquid is heated from the surface of the Pouch Module to induce
+a phase change and inflates the pouch (a-5). After the heating for
+inflation is stopped, the backflow prevention control is kept active
+for deflation operation (a-6). The inside of the pouch keeps the
+pseudo-close-valve state, and deflation occurs due to the volume
+change caused by the gas-to-liquid phase change.
+The second method is deflation which uses self-weight and neg-
+ative pressure. Fig. 8 shows the second deflation method. The infla-
+tion flow is described (b-1~5). This is the same as the first method
+(a-1~5). The first step is to attach a self-weight, such as butterfly
+wings shown in application 6.4, to the Pouch Module. Then, the
+liquid is returned to the Pump Unit with the backflow prevention
+turned off (b-6). Since the liquid no longer blocks the path that the
+air in the Pouch Module escapes, the inside of the pouch becomes
+a pseudo-open-valve state. The Pouch Module is first subjected to
+negative pressure and then to a release state in which no pressure
+is applied. Therefore, the self-weight causes the pouch to deflate in
+a short time. At this time, the gas inside the pouch escapes through
+the ventholes in the Phase-change Control Module’s Pump Unit.
+This method deflates quickly and has a high affinity for represent-
+ing kinetic motion. The actual deflation time is determined by the
+weight of the self-weight and the size of the Pouch Module. The
+heavier the self-weight or smaller the Pouch Module, the shorter
+the deflation time. In the biomimetic actuator shown in application
+6.4, the self-weight of the butterfly wings is 8 g and the volume of
+the Pouch Module is approximate 25 mm x 40 mm x 10 mm. The
+deflation time in this case is approximately 10 seconds. Even if the
+pouch runs low on liquid after repeated deflation operations, it can
+be used repeatedly by simply filling it again from the tank in the
+Pump Unit of the Phase-change Control Module (b-2,3).
+Figure 7: The pipeline of deflation method using a phase
+change from gas to liquid.
+4 DESIGN AND FABRICATION PROCESS
+In this section, we summarize the design and fabrication process
+of each module. Subsequently, we describe the untethered and
+reconfigurable multi-inflatable design and user interface.
+Figure 8: The pipeline of deflation method using self-weight
+and negative pressure.
+4.1 Phase-change Control Module
+This subsection first describes the principle of the quiet pump func-
+tion and then introduces the system design of the Phase-change
+Control Module.
+4.1.1 Principle of Silent Pump Function Utilizing EHD Pump. In-
+flatableMod utilizes EHD pumps, which are characterized by their
+lightweight and quietness. Among the types of EHD pumps, we
+adopt EHD pumps with comb-shaped electrodes that produce stable
+pressure and flow rate. The mechanism diagram in Fig. 9 explains
+the operating principle of the EHD pump. Comb-shaped electrodes
+are placed in a dielectric liquid so that the two electrodes, positive
+and negative, face each other. Then, by applying a high voltage to
+these electrodes, an electric field is generated between them. As a
+result of this generated electric field, the dielectric liquid is ionized
+and moved to the electrode side of the opposite charge, resulting
+in a swimming phenomenon. This generated electric field ionizes
+the dielectric liquid. As ions move from cathode to anode of the
+electrodes, a liquid flow is generated. With this technology, liquid
+flow can be generated without mechanical parts and is used in this
+system as a lightweight and quiet pump.
+Figure 9: Mechanism diagram of EHD phenomenon at comb-
+shaped electrodes layout.
+4.1.2 System Design of Phase-change Control Module. Fig. 10
+shows the system design of the Phase-change Control Module.
+The Phase-change Control Module consists of two units: the Pump
+Unit, which contains the EHD pump, and the Control Unit, which
+has both a high-voltage control function to drive the Pump Unit and
+a liquid heating function. During operation, a low-boiling-point
+liquid is filled in the tank of the Pump Unit, and the Control Unit
+applies a high voltage of 1 - 5 kV to generate liquid flow with the
+EHD pump. The Control Unit then controls the liquid heating for
+the liquid-to-gas phase change. The Control Unit and Pump Unit are
+electrically bonded by magnets so that the amount of low-boiling-
+point liquid in the tank can be adjusted based on the application.
+The design allows for handy replacement.
+InflatableMod: Untethered and Reconfigurable Inflatable Modules for Tabletop-sized Pneumatic Physical Interfaces CHI ’23, April 23–28, 2023, Hamburg, Germany
+Figure 10: System design of the Phase-change Control Mod-
+ule.
+4.1.3 Electronic Implementation of Control Unit. There is a descrip-
+tion of how the Phase-change Control Module is implemented
+electronically in the Control Unit. The Adafruit QT Py is used as
+the microcontroller, and the ATSAMD21E18 is used as the main
+processor, allowing for a compact configuration and the use of the
+generic Arduino development environment. The high voltage ap-
+plied to the EHD pump is controlled using an ultra-miniature high
+voltage DC to DC converter, UMHV0550 (HVM Technology, Inc.).
+A Peltier device is used to control the liquid-to-gas phase change
+because of the short rising time in heating. Round-shaped Peltier
+elements (TEC1-050031026) and square-shaped Peltier elements
+(TEC1-07103) are mainly used for freedom of placement. The radio
+function uses the nRF24L01+ (Nordic Semiconductors) 2.4 GHz
+radio described above. A 2-cell lithium polymer battery is used for
+the power supply because of its small size and power efficiency.
+The Control Unit is sufficiently small to fit in the palm of the hand
+( 20 mm × 50 mm × 15 mm ).
+4.1.4 Fabrication Process of Pump Unit. The Pump Unit is based
+on the Pump Module of HydroMod [26], which was presented as
+constructive modules for hydraulic prototyping. The Pump unit of
+the proposed InflatableMod is designed to be extended to a built-in
+small tank. It consists of six layers: a Kapton sheet as the foundation,
+copper tape for the comb-shaped electrodes that cause the EHD
+phenomenon, a neodymium magnet as the connection with the
+Control unit, a VHB sheet as the flow path, an acrylic plate to
+protect the flow path, and a small tank that contains low-boiling-
+point liquid. For the connection to the Pouch Module, a silicon
+tube with high sealing performance and easy handling is used.
+Therefore, the Pouch Module can be reconfigurable according to
+the application. The Pump unit is also sufficiently small to fit in the
+palm ( 22 mm × 50 mm × 20 mm ).
+Figure 11: Structure of Pump unit in Phase-change Control
+Module.
+4.2 Pouch Module
+In this subsection, we introduce the basic structure and fabrication
+process of the reusable Pouch Module.
+4.2.1 System Design of Pouch Module. Fig. 12 shows the system
+design of the Pouch Module. The Pouch Module receives a low-
+boiling-point liquid from the Phase-change Control Module through
+an acrylic rod. A reservoir dish is connected to the pouch for ef-
+ficient vaporization. Because the Phase-change Control Module
+heats directly under the reservoir dish and the liquid is constrained
+inside the reservoir, highly efficient vaporization is realized.
+Figure 12: System design of the Pouch Module.
+4.2.2 Fabrication Process of Foldable Pouch. InflatableMod can
+drive three-dimensional pouches in various sizes and shapes with
+the same system; therefore, the pouch fabrication process is pre-
+sented here. Pouches are fabricated from 0.75 mm PE sheet because
+it is a lightweight and inexpensive material with excellent impact re-
+sistance. The PE sheets are processed with a laser cutter(VLS3.60DT)
+to produce pouches of various shapes based on geometry nets. The
+processed PE sheet is then folded and sealed using a heat sealer (HS-
+300). Some examples of the relationship between the pre-assembly
+geometry net and the post-assembly pouches are shown in Fig. 13.
+A hole is drilled in the PE sheet of the same size as the reservoir dish
+for attachment to the reservoir dish. The regular polyhedron is used
+for the Pouch Module in InflatableMod as a versatile shape because
+CHI ’23, April 23–28, 2023, Hamburg, Germany Morita et al.
+the shape after assembly will be the same no matter which side the
+reservoir dish is attached to. Because the reservoir dish is fabricated
+from acrylic sheets, an off-the-shelf adhesive consisting mainly of
+silylated urethane resin, which can bond acrylic and polyethylene,
+is used.
+Figure 13: Fabrication of polyhedral pouches: development
+view and assembly drawing. Polyhedral pouches are used as
+a versatile shape because the shape after assembly will be
+the same no matter which side the reservoir dish is attached
+to.
+4.3 Untethered and Reconfigurable
+Multi-inflatable Design
+This subsection describes a wireless network that enables unteth-
+ered and reconfigurable multi-inflatable systems.
+4.3.1 Layout configure of multi-inflatable system. As shown in
+the left of Fig. 14, most existing multi-inflatable systems require
+a tube and an active valve for each inflatable structure to inflate
+separately. This makes the tubes and valves bulky and limits the
+location of the inflatables in the layout. In addition, because large
+air compressors or conventional pneumatic pumps are usually used
+as the driving source, the overall system tends to take up large
+spaces. To eliminate these challenges, InflatableMod enables an
+untethered multi-inflatable system, as shown in the right of Fig. 14.
+By embedding a low-power multi-connected wireless design,
+each inflatable system using InflatableMod can be synchronized.
+This allows for an untethered multi-inflatable system. Conventional
+multi-inflatable control was synchronized by attaching tubes and
+connectors to each pouch, which limited the layout and raised
+concerns about leakage between the connections of each inflatable.
+In contrast, InflatableMod can be reconfigured to freely change its
+placement because it synchronizes individual inflatables wirelessly.
+This also eliminates the need to consider leakage between each
+inflatable connection. Furthermore, in a multi-inflatable system,
+each inflatable is driven independently, so there are no restrictions
+in controlling any inflatable. In other words, when using multi-
+inflatable with 𝑛 inflatables, the number of 2𝑛 states can be created
+in one step from a state where all pouches are deflated.
+Figure 14: Layout configuration of the multi-inflatable sys-
+tem. (Left) Layout of a conventional multi-inflatable system.
+(Right) Layout of the proposed multi-inflatable system with
+InflatableMod.
+4.3.2 System design of wireless communication. Fig. 15 shows the
+system design of wireless communication. The control signal is
+sent from user equipment, such as smartphones, to the base station.
+The data is then aggregated at the base station and sent to each
+InflatableMod. This mechanism allows each module to be easily
+controlled from a smartphone. Wi-Fi is used as the communication
+between the user equipment and the base station. Communication
+between the base station and each module uses a proprietary radio
+protocol based on nRF24L01+ for low power consumption, low
+latency, and multiple connections. The nRF24L01+ can program-
+matically control output power to suit the application. Even when
+transmitting at 0 dBm, the highest output state, it consumes only
+about 12 mA. This is lower power consumption than that of a sin-
+gle LED. It can also generate networks arranged in a tree topology,
+allowing up to 3125 modules to communicate in both directions,
+so there is no limit to the number of inflatables in the wireless
+function.
+4.4 User Interface
+For the user interface of InflatableMod, we describe the GUI func-
+tions below.
+InflatableMod: Untethered and Reconfigurable Inflatable Modules for Tabletop-sized Pneumatic Physical Interfaces CHI ’23, April 23–28, 2023, Hamburg, Germany
+Figure 15: System design of wireless communication for the
+untethered and reconfigurable multi-inflatable system.
+The GUI is designed to be intuitive and controlled from a smart-
+phone as user equipment. Assuming no hardware dependency, this
+GUI software is implemented using an IoT platform called Blynk.
+Fig. 16 shows the GUI screen that controls InflatableMod. The
+GUI consists of three main functions. (a)The first is an individual
+pump calibration function that sets the upper limit of voltage ap-
+plicable to the pump in each InflatableMod. (b)The second is an
+individual pump operation function of each InflatableMod. (c)The
+third is an individual heating operation function of each Inflatable-
+Mod. When using it, users can determine the maximum voltage
+of each pump, and then drive any pump at the desired output as
+needed. Then, operate the heating function when inflating any mod-
+ule. The UI design allows visual control of pump output and heating
+output from 0 to 100%. In Fig. 16, 8 modules can be controlled, but
+the number of modules can be increased or decreased as desired.
+Figure 16: InflatableMod GUI: (a) individual pump calibration
+function, (b) individual pump operation function, and (c)
+individual heating operation function.
+5 EV ALUATION
+In this section, we describe the evaluation of the basic performance
+of the inflatable system using InflatableMod, as well as the evalua-
+tion of the quietness and continuous operation time, which are the
+features of InflatableMod.
+5.1 Inflating Size
+InflatableMod can dynamically vaporize the required amount of low-
+boiling-point liquid, which allows inflating control in the middle
+range. The relationship between the volume of the injected low-
+boiling-point liquid and the volume of gas after the phase change is
+presented in Fig. 17. In this experiment, Novec 7000 with a boiling
+point of 34◦C was used as the low-boiling-point liquid. This result
+indicated that the gas volume increased linearly with the amount
+of Novec 7000 injected. The pouch did not reach its expansion
+limit in all the experimented trials. Thus, InflatableMod can create
+an inflating size in the intermediate state. Further, even when the
+pouch is fully inflated, the changes in volume can dynamically
+control the stiffness of the pouch surface, thereby expanding the
+possibilities for application.
+Figure 17: Relationship between volume of injected low-
+boiling-point liquid and volume of gas after the phase
+change.
+5.2 Inflating Time
+For the relationship between inflating time, we conducted experi-
+ments by comparing three different methods. The first method is to
+heat the low-boiling-point liquid in a pouch from outside the pouch
+by a Peltier device, similar to existing liquid-to-gas phase change
+actuators. The second method involves storing a low-boiling-point
+liquid in a reservoir dish and heating the reservoir dish directly
+using a Peltier device. This method is proposed method 1. The third
+method is to add drops of low-boiling-point liquid in addition to
+the second method. The third method uses a reservoir dish as in
+the second method, and low-boiling-point liquid is dripped into
+the dish little by little. This method is proposed method 2. In this
+experiment, Novec 7000 was used as the low-boiling-point liquid.
+A comparison of the inflating time results from these three meth-
+ods is shown in Fig. 18. Five measurements were taken for each of
+the three approaches when the injection of low-boiling-point liquid
+was 0.6 ml and 1 ml, respectively, and the results are shown as
+box-and-whisker plots. These results shows that the inflating time
+can be reduced by arranging the reservoir dish so that the liquid
+is placed only at the heating point. In addition to this approach,
+it has also been established that dropping the low-boiling-point
+liquid slightly reduces the volume of the liquid per heated surface,
+CHI ’23, April 23–28, 2023, Hamburg, Germany Morita et al.
+resulting in faster vaporization. This novel approach of structural
+geometry and heating control alleviates one of the difficulties of
+conventional liquid-to-gas phase change actuators, namely, the
+operating speed.
+Figure 18: Relationship between three phase-change methods
+and inflating time.
+Moreover, it is also indicated that the inflating time is indepen-
+dent from the number of inflatables because each inflatable is driven
+separately. The inflating time depends on the capacity of each indi-
+vidual pouch module.
+This result indicates that the inflating time does not increase
+with the number of inflatables when creating multi-inflatables. As
+the system is highly scalable, it has significant potential for various
+applications.
+5.3 Deflation Time
+As described in 3.3, there are two major deflation methods. The
+first is deflation using phase change from gas to liquid, and the
+second is deflation using self-weight and negative pressure. Here,
+we analyze the deflation time of these two methods. For the first
+type of deflation using phase change, the time from the inflated
+state to the deflated state was about 20 minutes. The experiment
+uses a Pouch Module of approximately 43 mm cubic in size at a
+room temperature of 20°C. For the second type of deflation using
+self-weight and negative pressure, as shown in the application of
+the biomimetic actuator, the self-weight causes the pouch to deflate
+in a short period of time. The actual deflation time is determined
+by the weight of the self-weight and the size of the Pouch Module.
+Based on these results, the proposed InflatableMod can be used
+in two ways. One is to deflate slowly, and the other is to deflate
+immediately, depending on the application.
+5.4 Silent Performance
+We evaluate how quiet the InflatableMod is compared to conven-
+tional pneumatic systems that use air compressors or pneumatic
+pumps. We measure the noise level of InflatableMod during the
+phase change when the module creates a liquid flow. Each measure-
+ment was performed in a room with a noise level of approximately
+35 dB.
+When the InflatableMod was driven, no change in noise level oc-
+curred. Generally, the standard for silent notation is 35 dB; therefore,
+there is no noise when the InflatableMod is driven. Subsequently,
+the noise level was measured when the air was released from an
+air compressor maintained at 0.3 MPa. The noise level was approx-
+imately 56 dB when releasing air and about 70 dB when the air
+compressor stored compressed air in the air tank. This noise level
+is comparable to the interior of a passenger car or the chirping
+of cicadas, and it can be considered quite noisy. Furthermore, the
+driving noise of a tube pump (G328) and a diaphragm pump (R385),
+which are commonly used as compact and palm-sized pumps for
+tabletop-sized pneumatic systems, were measured to be approxi-
+mately 55 dB and 56 dB, respectively. The above results indicate
+that the existing pneumatic system has a high noise level when
+driven.
+Based on these results, the InflatableMod has a high potential for
+applications in quiet environments and as biomimetic actuators.
+5.5 Continuous Mobile Operation Time
+We evaluated how long the InflatableMod could run on battery
+power. The InflatableMod uses a 2-cell lithium polymer battery.
+We experimented with the time when the EHD pump and Peltier
+element were running; therefore, the voltage did not fall below
+3.0-3.2 V per cell to avoid over-discharging. The running time with
+a 2-cell 250mAh lithium polymer battery was approximately 24
+min, 34 min with a 2-cell 360 mAh lithium polymer battery, and
+1h and 11 min with a 2-cell 600 mAh lithium polymer battery. The
+actual time required to inflate once using InflatableMod is as shown
+in the results of Section 5.2, so it can be inflated many times and is
+sufficient for mobile use. This result indicates that InflatableMod
+can be driven standalone for a long time. Therefore, they can be
+used in a mobile environment and increase application’s versatility.
+6 APPLICATIONS
+There are a number of situations that can only be realized with
+InflatableMod. In this section, we present four application scenarios
+using InflatableMod.
+6.1 Reconfigurable Inflatable Lamp
+Many existing pneumatic systems are not designed to be disassem-
+bled frequently; therefore, once the system is assembled, it takes a
+lot of time to reconfigure it. It is also challenging to rebuild existing
+liquid-to-gas phase change actuators once the liquid is sealed in-
+side the pouch. InflatableMod can be used to create reconfigurable
+inflatable objects. InflatableMod is divided into Phase-change Con-
+trol Module and Pouch Module so that users can freely change the
+shape of the Pouch Module.
+Based on the above features, Fig. 19 shows a reconfigurable
+inflatable lamp that inflates and lights up and can be freely changed
+in shape according to user’s mood. It is suitable for use in quiet
+places such as libraries or bedrooms. Furthermore, the inflatable
+lamp takes advantage of the long-time deflation feature of the phase
+change from gas to liquid. Application scenarios can be envisioned,
+InflatableMod: Untethered and Reconfigurable Inflatable Modules for Tabletop-sized Pneumatic Physical Interfaces CHI ’23, April 23–28, 2023, Hamburg, Germany
+such as studying until the inflatable lamp deflates, like a physical
+timer that adapts to the natural environment. It can be used in quiet
+work and living situations, such as a light for studying or for a nap.
+Figure 19: Reconfigurable inflatable lamp. (A) Pouch mod-
+ules come in a variety of shapes and sizes. (B) Various in-
+flatable objects can be created dynamically by replacing the
+Pouch Module reconfigurably. (C) (D) Reconfigurable inflat-
+able lamp inflates and lights up.
+6.2 Continuous data physicalization on a map
+Fig. 20 shows continuous inflatable data physicalization on a map.
+It is possible for the user to arrange multiple InflatableMod in any
+two-dimensional array and cover them with a map sheet. This
+allows the map to be visualized in 2.5 dimensions by inflating mul-
+tiple InflatableMod to match the altitude of each terrain. It further
+shows the advantage of InflatableMod, which allows inflation in
+intermediate states. A pouch can be inflated to the desired volume
+by feeding low-boiling-point liquid into it. Users can decide where
+to place the InflatableMod and how much volume to inflate. As
+a result, it is easy to visualize other maps in 2.5 dimensions. In
+addition to being able to be used repeatedly, this application could
+potentially be used as an educational tool in the future.
+Figure 20: Continuous data physicalization on a map. (A)
+Multiple InflatableMod are placed in any two-dimensional
+location. (B) Cover with a map sheet. (C) By inflating multi-
+ple InflatableMod for each terrain altitude, the map can be
+visualized in 2.5 dimensions.
+6.3 Dynamically Arrangeable Inflatable Stand
+Fig. 21 shows a dynamic arrangement inflatable stand. This inflat-
+able stand consists of a small modular robot, toio [49], attached to
+the underside of the InflatableMod. Therefore, each module can be
+moved dynamically, and can be used with the advantage of being
+untethered by tubing and can be placed anywhere. Scattered mod-
+ules gather together in response to the size of various objects to
+generate an inflatable stand. Since it is combined with the modular
+function, it can be dynamically generated as a stand for objects of
+various sizes by arranging each module. Furthermore, the inflat-
+able structure maintains its softness, so it can be used for many
+objects, including fragile items such as wine glasses or precision
+machineries. The internal air pressure of the pouch also depends on
+the pressure of the EHD pump; the InflatableMod pouch pressure
+is about 8 kPa maximum per pouch, and the output intensity can
+be controlled. By combining several numbers of InflatableMod, the
+load is distributed and can withstand loads of much more than
+8 kPa.
+Figure 21: Dynamically arrangeable inflatable stand. (A) Each
+module moves dynamically. (B) Each module arranges dy-
+namically. (C) (D) InflatableMod becomes inflatable stands
+that adapt to the size of different objects.
+6.4 Silent Biomimetic Soft Actuator
+Fluid-based actuators are often used as biomimetic actuators owing
+to their soft motion characteristics. However, those general pneu-
+matic systems are often noisy, which hinders soft motion. Existing
+liquid-to-gas phase change actuators have problems driving soft
+actuators because they are limited in the size of inflation and cannot
+be controlled in continuous states. The proposed biomimetic soft
+actuator using InflatableMod can operate silently and untethered,
+enabling the expression of movements unique to living organisms.
+Therefore, it is very compatible with biomimetic actuators.
+Fig. 22 shows a silent biomimetic soft actuator made using In-
+flatableMod. It expresses the soft movement of a butterfly. Because
+the actuator is driven silently, it does not interfere with the natural
+movement of the butterfly. When the wings of a butterfly rise, they
+move slowly in conjunction with inflation, and when the wings of
+a butterfly fall, they move quickly in conjunction with deflation
+using their self-weight and negative pressure. Here, the butterfly’s
+wings are the self-weight. This inflection of the movement of the
+wings creates the reality of the butterfly’s wing movement.
+CHI ’23, April 23–28, 2023, Hamburg, Germany Morita et al.
+Figure 22: Silent biomimetic soft actuator. (A) The wings of a
+butterfly rise of inflation. (B) The wings of a butterfly rise of
+deflation using self-weight and passive pressure.
+7 DISCUSSION
+In this section, we first describe the durability of the InflatableMod,
+then the safety of using high voltage and dielectric liquids in the
+proposed system, followed by a summary of leakage for liquids
+and gases. Finally, the limitations and future work of the proposed
+system are presented.
+7.1 How Long Will It Last
+InflatableMod consists of a Phase-Change Control Module and
+Pouch Module. The Pouch Module, which inflates into various
+shapes, is reconfigurable. Therefore, even if the pouch is damaged,
+it can be used repeatedly by easily replacing the Pouch Module. For
+the EHD pump used in the Pump Unit of the Phase-Change Control
+Module, metallic materials are more suitable than non-metallic
+electrodes for the electrode material in terms of operational stability
+and lifetime[7]. Therefore, we used copper as the electrode material
+because of its high availability and ease of fabrication. The EHD
+pump of the proposed system fabricated with copper electrodes can
+operate continuously for hours. Once the pump is fabricated, it can
+be used for months. Even if the EHD pump is damaged, it can be
+replaced since the Control Unit and the Pump Unit are connected by
+magnets. This implies that the entire system can be used repeatedly
+without having to be rebuilt.
+7.2 Safety of the Proposed System Utilizing
+High Voltage and Dielectric Liquid
+When designing new interfaces, it is essential to consider their
+effects on the human body. The proposal deals with high voltage
+and dielectric liquids for driving EHD pumps and liquid-to-gas
+phase changes. The safety aspects of each component are described
+here.
+First, this proposal uses high voltages of 1-5 kV to drive the EHD
+pump, but there is little danger to the human body from electric
+shock. Symptoms of electric shock are not caused by voltage but by
+the amount of current that flows through the body and the location
+where it flows. According to Matsusada Precision, a manufacturer of
+high-voltage equipment, 1-5 mA is the same level of shock as static
+electricity, and 50 mA or more may cause death if the current is
+energized. The UMHV0550 Ultra-Miniature High Voltage DC to DC
+Converter used in this proposal has a maximum output current of
+100 µA, which is safe enough. Considering safety not only from the
+power supply but also from the EHD pump, the current generated
+by the EHD pump is small in principle because the charge 𝑋 −
+injected from the electrode is extremely small. Therefore, touching
+the applied voltage poses no risk to the human body. Furthermore,
+the proposed module is designed such that the electrodes are not
+exposed, providing sufficient protection against electric shocks.
+This topic is also discussed in HydroMod for hydraulic prototyping
+with EHD pumps [26].
+Additionally, Novec 7000 was used in the proposed system as
+the dielectric liquid injected into the EHD pump for the liquid-to-
+gas phase change. According to 3M, which manufactures and sells
+Novec, it has no effect on the human body, even if it evaporates
+and leaks into the air.
+7.3 Protection against Liquid and Gas Leakage
+Measures against leakage are significant in the production of in-
+flatable structures. If leakage frequently occurs at a certain point,
+the structure cannot function adequately as an inflatable. This pro-
+posal addresses liquid leakage in the Pump Unit and gas leakage
+in the Pouch Modules. First, VHB was used as the material for the
+flow paths in the pump, where liquid flows and leakage is likely to
+occur. VHB is made of acrylic resin with high weather resistance
+and excellent sealing properties; therefore, even if it is used many
+times, the adhesive strength will hardly deteriorate, and it is un-
+likely to suffer from liquid leakage. In addition, the acrylic material
+was sealed using a solvent-type adhesive for acrylic resin plastics.
+Next, to prevent air leakage, the Pouch Module folds polyethylene
+sheets and wraps them with a heat sealer to prevent air bubbles
+from entering the adhesive surface. Therefore, a pouch can be used
+without worrying about air leakage.
+7.4 Distinction over Tabletop-Sized Inflatable
+System Using Conventional Pneumatic
+Micropump
+In 2.1 and 2.2 we discussed the positioning and contributions of
+InflatableMod compared to existing pneumatic systems. Inflatable-
+Mod solves the challenge of tabletop-sized inflatables in that it
+requires no external equipment, is untethered by tubing, and is
+silently driven as a self-contained module. However, pneumatic
+micropumps can also be considered as a pneumatically silent drive
+method. Therefore, this section summarizes the distinctions be-
+tween InflatableMod and micropumps. We recognize that pneu-
+matic micropumps are quiet. We also acknowledge that the phase
+change technique is less energy-efficient than micropumps because
+it requires heating. However, micropumps have the challenge of
+being tethered by tubing, which makes the entire system bulkier.
+Taking the mp6 series (Bartels Mikrotechnik GmbH) as an exam-
+ple, pneumatic micropumps can generally be driven in only one
+direction. Therefore, to drive the flow in both directions to inflate
+and deflate, a flow path design using one pump and four active
+valves or two pumps and two active valves is required, as shown
+in Fig. 23. This increases the number of tubing and connections in
+the flow path, making the entire system complex and bulky. Fur-
+thermore, while the micropump alone would drive silently, using
+an active valve would generate driving noise. Also, micropumps
+are generally very expensive: the mp6-gas+ (Bartels Mikrotechnik
+GmbH) [43], which is also used by omnifiber [22], costs as much as
+approximately e400 per one pump. If we used micropumps for each
+unit of the six multi-inflatables, such as the application in 6.3, it
+InflatableMod: Untethered and Reconfigurable Inflatable Modules for Tabletop-sized Pneumatic Physical Interfaces CHI ’23, April 23–28, 2023, Hamburg, Germany
+would cost e2400, which is not easy for anyone to handle. From the
+above, the InflatableMod has unique advantages over micropumps
+as tabletop-sized inflatables because it is easy to handle without
+being limited by tubing.
+Figure 23: System configuration for using pneumatic microp-
+umps. (Illustrated by the authors according to the datasheet
+of the mp6 micropump [43])
+7.5 Limitation & Future Work
+We confirmed that the untethered and reconfigurable inflatable
+systems using InflatableMod are well suited for various situation,
+but we also discovered some limitations that we will address in
+future work.
+7.5.1 Deflation time. The proposed system uses a phase change
+approach. Therefore, the deflation time when using phase change
+from gas to liquid is longer than the conventional pneumatic system.
+Though deflation using self-weight and negative pressure improves
+deflation time, here we discuss a solution for deflation time using
+phase change. This can be solved by implementing a cooling func-
+tion in the system. In general, a Peltier device’s heating and cooling
+surfaces are reversed in principle when the polarity of the applied
+voltage is changed. Therefore, we would like to consider a cooling
+function that does not increase the size of the entire system by
+using only the existing Peltier device in an H-bridge circuit with
+MOSFETs instead of using a supplementary cooling element.
+7.5.2 Requirement of an upward position of InflatableMod. As men-
+tioned briefly in 3.2.1, InflatableMod has a limitation in that it has
+to face upward. If users want to use InflatableMod in a wearable,
+it would be limited to something that is basically in an upward
+position, such as placing it on the shoulder. Therefore, in order to
+enable wearable use that involves intensive movements, we would
+like to consider a new reservoir dish design that prevents liquids
+from spilling even if the reservoir dish is tilted, such as a check
+valve inside the reservoir dish that allows gases to pass through
+but not liquids, as future work.
+7.5.3 Adjustment of drive temperature. In this proposal, Novec 7000
+with a boiling point of 34◦C was used; however, depending on the
+application, it may be necessary to drive at different temperatures.
+Therefore, using Novec 7100[12], which has a boiling point of 61◦C,
+or Novec 7300[13], which has a boiling point of 98◦C, in the Novec
+series, the drive temperature can be changed to the respective tem-
+perature. Because the boiling point can be simultaneously adjusted
+by mixing the two liquids, the drive temperature can be determined
+according to the application.
+7.5.4 Interactivity. Because the main focus of this study was on
+shape-changing in inflatable structures, little consideration was
+given to methods of sensing user input. We believe that the use of
+embedded touch sensors or other devices attached to the inflatable
+structures will improve the interactivity of the user experience. In
+addition, we would like to consider the use of HMDs in conjunction
+with VR spaces. This would provide soft feedback that cannot be
+experienced with mechanical tactile senses, and enable mobile use.
+7.5.5 User study. This paper did not conduct a user study. As a next
+step, we will plan a workshop that includes researchers, designers,
+and public users. Additionally, we will explore new ways of using
+multi-inflatable systems now that they can be placed freely on
+the layout. Furthermore, we will discover new ways of using the
+inflatable system, such as using it as a new ideation tool, because it
+is possible to reconfigure inflatable objects.
+8 CONCLUSION
+In this paper, we proposed InflatableMod, novel inflatable modules
+based on the efficient control of liquid-to-gas phase change actu-
+ators, designed with a compact circuit that has a liquid transfer
+function and a heating function. This modular design enables com-
+pact, silent, and untethered inflatable systems, solving the problems
+of existing tabletop-sized pneumatic systems that are bulky, heavy,
+and noisy. In addition, because the locations of tubing and valves no
+longer need to be considered, the layout restrictions that were con-
+sidered difficult with multi-inflatable systems can be significantly
+alleviated. Furthermore, the drawbacks of conventional liquid-to-
+gas phase change actuators, such as controllability, operation speed,
+reusability, and reconfigurability, have been mitigated and resolved.
+Furthermore, we evaluated the performance of the inflatable system
+and presented novel application scenarios. InflatableMod could be
+the next step to breaking some new ground in inflatable technology.
+In the wake of this paper, we hope that various inflatables will
+become part of our daily lives.
+ACKNOWLEDGMENTS
+We appreciate Ryo Suzuki, Koya Narumi and Changyo Han for
+their generous advice and feedback on this paper. This work was
+supported by JSPS KAKENHI Grant Number JP21H04882, Japan.
+REFERENCES
+[1] Tomoki Abe, Shoichiro Koizumi, Hiroyuki Nabae, Gen Endo, Koichi Suzumori,
+Nao Sato, Michiko Adachi, and Fumi Takamizawa. 2019. Fabrication of “18
+Weave” Muscles and Their Application to Soft Power Support Suit for Upper
+Limbs Using Thin McKibben Muscle. IEEE Robotics and Automation Letters 4, 3
+(2019), 2532–2538. https://doi.org/10.1109/LRA.2019.2907433
+[2] Programmable Air. 2021. Retrieved August 27, 2021 from https://www.
+programmableair.com/.
+[3] Tetsuya Akagi, Shujiro Dohta, Shinsaku Fujimoto, Yasuyuki Tsuji, and Yuto
+Fujiwara. 2015. Development of Flexible Thin Actuator Driven by Low Boiling
+Point Liquid. International Journal of Materials Science and Engineering (01 2015),
+55–59. https://doi.org/10.12720/ijmse.3.1.55-59
+CHI ’23, April 23–28, 2023, Hamburg, Germany Morita et al.
+[4] Jason Alexander, Anne Roudaut, Jürgen Steimle, Kasper Hornbæk, Miguel
+Bruns Alonso, Sean Follmer, and Timothy Merritt. 2018. Grand Challenges in
+Shape-Changing Interface Research. Association for Computing Machinery, New
+York, NY, USA, 1–14. https://doi.org/10.1145/3173574.3173873
+[5] P. Atten and J. Seyed-Yagoobi. 2003. Electrohydrodynamically induced dielectric
+liquid flow through pure conduction in point/plane geometry. IEEE Transactions
+on Dielectrics and Electrical Insulation 10, 1 (2003), 27–36. https://doi.org/10.1109/
+TDEI.2003.1176555
+[6] Vito Cacucciolo, Hiroyuki Nabae, Koichi Suzumori, and Herbert Shea. 2020.
+Electrically-Driven Soft Fluidic Actuators Combining Stretchable Pumps With
+Thin McKibben Muscles. Frontiers in Robotics and AI 6 (2020), 146. https:
+//doi.org/10.3389/frobt.2019.00146
+[7] Vito Cacucciolo, Jun Shintake, Yu Kuwajima, Shingo Maeda, Dario Floreano, and
+Herbert Shea. 2019. Stretchable pumps for soft machines. Nature 572, 7770 (2019),
+516–519. https://doi.org/10.1038/s41586-019-1479-6
+[8] Yu-Wen Chen, Wei-Ju Lin, Yi Chen, and Lung-Pan Cheng. 2021.PneuSeries: 3D
+Shape Forming with Modularized Serial-Connected Inflatables . Association for
+Computing Machinery, New York, NY, USA, 431–440. https://doi.org/10.1145/
+3472749.3474760
+[9] J Darabi and K Ekula. 2003. Development of a chip-integrated micro cooling
+device. Microelectronics Journal 34, 11 (2003), 1067–1074. https://doi.org/10.
+1016/j.mejo.2003.09.010
+[10] Alexandra Delazio, Ken Nakagaki, Roberta L. Klatzky, Scott E. Hudson, Jill Fain
+Lehman, and Alanson P. Sample. 2018. Force Jacket: Pneumatically-Actuated
+Jacket for Embodied Haptic Experiences . Association for Computing Machinery,
+New York, NY, USA, 1–12. https://doi.org/10.1145/3173574.3173894
+[11] 3M Novec 7000 engineered fluid. 2022. Retrieved March 9, 2022 from
+https://multimedia.3m.com/mws/media/121372O/3m-novec-7000-engineered-
+fluid-tds.pdf.
+[12] 3M Novec 7100 engineered fluid. 2022. Retrieved March 10, 2022
+from https://multimedia.3m.com/mws/media/104167O/3mtm-novectm-7100dl-
+engineered-fluid.pdf.
+[13] 3M Novec 7300 engineered fluid. 2022. Retrieved March 10, 2022 from
+https://multimedia.3m.com/mws/media/338713O/3m-novec-7300-engineered-
+fluid.pdf.
+[14] Juri Fujii, Takuya Matsunobu, and Yasuaki Kakehi. 2018. COLORISE: Shape- and
+Color-Changing Pixels with Inflatable Elastomers and Interactions. InProceedings
+of the Twelfth International Conference on Tangible, Embedded, and Embodied
+Interaction (Stockholm, Sweden) (TEI ’18). Association for Computing Machinery,
+New York, NY, USA, 199–204. https://doi.org/10.1145/3173225.3173228
+[15] Emmanouil D Fylladitakis, Michael P Theodoridis, and Antonios X Moronis. 2014.
+Review on the history, research, and applications of electrohydrodynamics. IEEE
+Transactions on Plasma Science 42, 2 (2014), 358–375.
+[16] Jesse T. Gonzalez and Scott E. Hudson. 2022. Layer by Layer, Patterned Valves
+Enable Programmable Soft Surfaces.Proc. ACM Interact. Mob. Wearable Ubiquitous
+Technol. 6, 1, Article 12 (mar 2022), 25 pages. https://doi.org/10.1145/3517251
+[17] Seiya Hirai, Tatsuho Nagatomo, Takefumi Hiraki, Hiroki Ishizuka, Yoshihiro
+Kawahara, and Norihisa Miki. 2021. Micro Elastic Pouch Motors: Elastically
+Deformable and Miniaturized Soft Actuators Using Liquid-to-Gas Phase Change.
+IEEE Robotics and Automation Letters 6, 3 (2021), 5373–5380. https://doi.org/10.
+1109/LRA.2021.3075102
+[18] Takefumi Hiraki, Kenichi Nakahara, Koya Narumi, Ryuma Niiyama, Noriaki Kida,
+Naoki Takamura, Hiroshi Okamoto, and Yoshihiro Kawahara. 2020. Laser Pouch
+Motors: Selective and Wireless Activation of Soft Actuators by Laser-Powered
+Liquid-to-Gas Phase Change. IEEE Robotics and Automation Letters 5, 3 (2020),
+4180–4187. https://doi.org/10.1109/LRA.2020.2982864
+[19] Tatsuhiro Hiramitsu, Koichi Suzumori, Hiroyuki Nabae, and Gen Endo. 2019.
+Experimental Evaluation of Textile Mechanisms Made of Artificial Muscles. In
+2019 2nd IEEE International Conference on Soft Robotics (RoboSoft) . 1–6. https:
+//doi.org/10.1109/ROBOSOFT.2019.8722802
+[20] Donal Holland, Colette Abah, Marielena Velasco Enriquez, Maxwell Herman,
+Gareth Bennett, Emir Vela, and Conor Walsh. 2017. The Soft Robotics Toolkit:
+Strategies for Overcoming Obstacles to the Wide Dissemination of Soft-Robotic
+Hardware. IEEE Robotics & Automation Magazine PP (02 2017), 1–1. https:
+//doi.org/10.1109/MRA.2016.2639067
+[21] David Holman and Roel Vertegaal. 2008. Organic User Interfaces: Designing
+Computers in Any Way, Shape, or Form. Commun. ACM 51, 6 (jun 2008), 48–55.
+https://doi.org/10.1145/1349026.1349037
+[22] Ozgun Kilic Afsar, Ali Shtarbanov, Hila Mor, Ken Nakagaki, Jack Forman, Karen
+Modrei, Seung Hee Jeong, Klas Hjort, Kristina Höök, and Hiroshi Ishii. 2021.
+OmniFiber: Integrated Fluidic Fiber Actuators for Weaving Movement Based Inter-
+actions into the ‘Fabric of Everyday Life’. Association for Computing Machinery,
+New York, NY, USA, 1010–1026. https://doi.org/10.1145/3472749.3474802
+[23] Hyunyoung Kim, Aluna Everitt, Carlos Tejada, Mengyu Zhong, and Daniel Ash-
+brook. 2021. MorpheesPlug: A Toolkit for Prototyping Shape-Changing Interfaces.
+In Proceedings of the 2021 CHI Conference on Human Factors in Computing Systems
+(Yokohama, Japan) (CHI ’21). Association for Computing Machinery, New York,
+NY, USA, Article 101, 13 pages. https://doi.org/10.1145/3411764.3445786
+[24] Yu Kuwajima, Hiroki Shigemune, Vito Cacucciolo, Matteo Cianchetti, Cecilia
+Laschi, and Shingo Maeda. 2017. Active suction cup actuated by ElectroHydro-
+Dynamics phenomenon. IEEE International Conference on Intelligent Robots and
+Systems 2017-Septe, September (2017), 470–475. https://doi.org/10.1109/IROS.
+2017.8202195
+[25] Qiuyu Lu, Jifei Ou, João Wilbert, André Haben, Haipeng Mi, and Hiroshi
+Ishii. 2019. MilliMorph – Fluid-Driven Thin Film Shape-Change Materials
+for Interaction Design. In Proceedings of the 32nd Annual ACM Symposium
+on User Interface Software and Technology (New Orleans, LA, USA) (UIST ’19).
+Association for Computing Machinery, New York, NY, USA, 663–672. https:
+//doi.org/10.1145/3332165.3347956
+[26] Takafumi Morita, Yu Kuwajima, Ayato Minaminosono, Shingo Maeda, and Ya-
+suaki Kakehi. 2022. HydroMod : Constructive Modules for Prototyping Hy-
+draulic Physical Interfaces. In Proceedings of the 2022 CHI Conference on Hu-
+man Factors in Computing Systems (New Orleans, LA, USA) (CHI ’22). Asso-
+ciation for Computing Machinery, New York, NY, USA, Article 393, 14 pages.
+https://doi.org/10.1145/3491102.3502096
+[27] Kenichi Nakahara, Koya Narumi, Ryuma Niiyama, and Yoshihiro Kawahara. 2017.
+Electric phase-change actuator with inkjet printed flexible circuit for printable
+and integrated robot prototyping. In2017 IEEE International Conference on Robotics
+and Automation (ICRA). 1856–1863. https://doi.org/10.1109/ICRA.2017.7989217
+[28] Ryosuke Nakayama, Ryo Suzuki, Satoshi Nakamaru, Ryuma Niiyama, Yoshihiro
+Kawahara, and Yasuaki Kakehi. 2019. MorphIO: Entirely Soft Sensing and Actua-
+tion Modules for Programming Shape Changes through Tangible Interaction. In
+Proceedings of the 2019 on Designing Interactive Systems Conference (San Diego,
+CA, USA) (DIS ’19). Association for Computing Machinery, New York, NY, USA,
+975–986. https://doi.org/10.1145/3322276.3322337
+[29] Koya Narumi, Hiroki Sato, Kenichi Nakahara, Young ah Seong, Kunihiko Mori-
+naga, Yasuaki Kakehi, Ryuma Niiyama, and Yoshihiro Kawahara. 2020. Liquid
+Pouch Motors: Printable Planar Actuators Driven by Liquid-to-Gas Phase Change
+for Shape-Changing Interfaces. IEEE Robotics and Automation Letters 5, 3 (2020),
+3915–3922. https://doi.org/10.1109/LRA.2020.2983681
+[30] Ryuma Niiyama, Hiroki Sato, Kazzmasa Tsujimura, Koya Narumi, Young ah Seong,
+Ryosuke Yamamura, Yasuaki Kakehi, and Yoshihiro Kawahara. 2020. Poimo:
+Portable and Inflatable Mobility Devices Customizable for Personal Physical Char-
+acteristics. Association for Computing Machinery, New York, NY, USA, 912–923.
+https://doi.org/10.1145/3379337.3415894
+[31] Jifei Ou, Felix Heibeck, and Hiroshi Ishii. 2016. TEI 2016 Studio: Inflated Curiosity.
+In Proceedings of the TEI ’16: Tenth International Conference on Tangible, Embedded,
+and Embodied Interaction (Eindhoven, Netherlands) (TEI ’16). Association for
+Computing Machinery, New York, NY, USA, 766–769. https://doi.org/10.1145/
+2839462.2854119
+[32] Jifei Ou, Mélina Skouras, Nikolaos Vlavianos, Felix Heibeck, Chin-Yi Cheng,
+Jannik Peters, and Hiroshi Ishii. 2016. AeroMorph - Heat-Sealing Inflatable
+Shape-Change Materials for Interaction Design. In Proceedings of the 29th Annual
+Symposium on User Interface Software and Technology (Tokyo, Japan) (UIST ’16).
+Association for Computing Machinery, New York, NY, USA, 121–132. https:
+//doi.org/10.1145/2984511.2984520
+[33] Ahmed Ould El Moctar, Nadine Aubry, and John Batton. 2003. Electro-
+hydrodynamic micro-fluidic mixer. Lab on a Chip 3, 4 (2003), 273–280. https:
+//doi.org/10.1039/b306868b
+[34] Marianne Graves Petersen, Majken Kirkegaard Rasmussen, and Johan Trettvik.
+2020. Affordances of Shape-Changing Interfaces: An Information Perspective on
+Transformability and Movement. Association for Computing Machinery, New
+York, NY, USA, 1959–1971. https://doi.org/10.1145/3357236.3395521
+[35] William F. Pickard. 1963. Ion Drag Pumping. I. Theory. Journal of Applied Physics
+34, 2 (1963), 246–250. https://doi.org/10.1063/1.1702592
+[36] William F. Pickard. 1963. Ion Drag Pumping. II. Experiment. Journal of Applied
+Physics 34, 2 (1963), 251–258. https://doi.org/10.1063/1.1702593
+[37] Pneuduino. 2021. Retrieved August 27, 2021 from https://pneuduino.org/.
+[38] Axel Richter and Hermann Sandmaier. 1990. An electrohydrodynamic microp-
+ump. In IEEE Proceedings on Micro Electro Mechanical Systems, An Investigation of
+Micro Structures, Sensors, Actuators, Machines and Robots. IEEE, New York, NY,
+USA, 99–104.
+[39] Vanessa Sanchez, Christopher Payne, Daniel Preston, Jonathan Alvarez, James
+Weaver, Aslı Atalay, Mustafa Boyvat, Daniel Vogt, Robert Wood, George White-
+sides, and Conor Walsh. 2020. Smart Thermally Actuating Textiles.Advanced Ma-
+terials Technologies 5 (07 2020), 2000383. https://doi.org/10.1002/admt.202000383
+[40] Harpreet Sareen, Udayan Umapathi, Patrick Shin, Yasuaki Kakehi, Jifei Ou, Hi-
+roshi Ishii, and Pattie Maes. 2017. Printflatables: Printing Human-Scale, Func-
+tional and Dynamic Inflatable Objects. In Proceedings of the 2017 CHI Confer-
+ence on Human Factors in Computing Systems (Denver, Colorado, USA) (CHI
+’17). Association for Computing Machinery, New York, NY, USA, 3669–3680.
+https://doi.org/10.1145/3025453.3025898
+[41] Hiroki Sato, Young ah Seong, Ryosuke Yamamura, Hiromasa Hayashi, Katsuhiro
+Hata, Hisato Ogata, Ryuma Niiyama, and Yoshihiro Kawahara. 2020. Soft yet
+Strong Inflatable Structures for a Foldable and Portable Mobility. In Extended
+Abstracts of the 2020 CHI Conference on Human Factors in Computing Systems
+InflatableMod: Untethered and Reconfigurable Inflatable Modules for Tabletop-sized Pneumatic Physical Interfaces CHI ’23, April 23–28, 2023, Hamburg, Germany
+(Honolulu, HI, USA) (CHI EA ’20). Association for Computing Machinery, New
+York, NY, USA, 1–4. https://doi.org/10.1145/3334480.3383147
+[42] Orit Shaer and Eva Hornecker. 2010. Tangible User Interfaces: Past, Present, and
+Future Directions. Foundations and Trends® in Human–Computer Interaction 3,
+1–2 (2010), 4–137. https://doi.org/10.1561/1100000026
+[43] Data sheet mp6 micropump. 2022. Retrieved December 13, 2022 from https:
+//www.servoflo.com/images/PDF/mp6_micropumps_datasheet.pdf.
+[44] Ali Shtarbanov. 2021. FlowIO Development Platform – the Pneumatic “Raspberry
+Pi” for Soft Robotics. Association for Computing Machinery, New York, NY, USA.
+https://doi.org/10.1145/3411763.3451513
+[45] Ryo Suzuki, Ryosuke Nakayama, Dan Liu, Yasuaki Kakehi, Mark D. Gross, and
+Daniel Leithinger. 2019. LiftTiles: Modular and Reconfigurable Room-Scale Shape
+Displays through Retractable Inflatable Actuators. In The Adjunct Publication
+of the 32nd Annual ACM Symposium on User Interface Software and Technology
+(New Orleans, LA, USA) (UIST ’19). Association for Computing Machinery, New
+York, NY, USA, 30–32. https://doi.org/10.1145/3332167.3357105
+[46] Ryo Suzuki, Ryosuke Nakayama, Dan Liu, Yasuaki Kakehi, Mark D. Gross, and
+Daniel Leithinger. 2020. LiftTiles: Constructive Building Blocks for Prototyping
+Room-Scale Shape-Changing Interfaces. In Proceedings of the Fourteenth Interna-
+tional Conference on Tangible, Embedded, and Embodied Interaction (Sydney NSW,
+Australia) (TEI ’20). Association for Computing Machinery, New York, NY, USA,
+143–151. https://doi.org/10.1145/3374920.3374941
+[47] Shan-Yuan Teng, Tzu-Sheng Kuo, Chi Wang, Chi-huan Chiang, Da-Yuan Huang,
+Liwei Chan, and Bing-Yu Chen. 2018. PuPoP: Pop-up Prop on Palm for Virtual
+Reality. In Proceedings of the 31st Annual ACM Symposium on User Interface
+Software and Technology (Berlin, Germany) (UIST ’18). Association for Computing
+Machinery, New York, NY, USA, 5–17. https://doi.org/10.1145/3242587.3242628
+[48] Shan-Yuan Teng, Cheng-Lung Lin, Chi-huan Chiang, Tzu-Sheng Kuo, Liwei
+Chan, Da-Yuan Huang, and Bing-Yu Chen. 2019. TilePoP: Tile-Type Pop-up
+Prop for Virtual Reality. In Proceedings of the 32nd Annual ACM Symposium
+on User Interface Software and Technology (New Orleans, LA, USA) (UIST ’19).
+Association for Computing Machinery, New York, NY, USA, 639–649. https:
+//doi.org/10.1145/3332165.3347958
+[49] Toio. 2022. Retrieved August 30, 2022 from https://toio.io/.
+[50] Yasuyuki Tsuji, Shujiro Dohta, Tetsuya Akagi, and Yuto Fujiwara. 2016. Analysis
+of Flexible Thin Actuator Using Gas–Liquid Phase-Change of Low Boiling Point
+Liquid. Vol. 345. 67–73. https://doi.org/10.1007/978-3-319-17314-6_9
+[51] Ryusei Uramune, Hiroki Ishizuka, Takefumi Hiraki, Yoshihiro Kawahara, Sei
+Ikeda, and Osamu Oshiro. 2020. HaPouch: Soft and Wearable Haptic Display
+Devices Using Liquid-to-Gas Phase Change Actuator. InAdjunct Publication of the
+33rd Annual ACM Symposium on User Interface Software and Technology (Virtual
+Event, USA) (UIST ’20 Adjunct). Association for Computing Machinery, New York,
+NY, USA, 53–55. https://doi.org/10.1145/3379350.3416183
+[52] Ryusei Uramune, Hiroki Ishizuka, Takefumi Hiraki, Yoshihiro Kawahara, Sei
+Ikeda, and Osamu Oshiro. 2022. HaPouch: A Miniaturized, Soft, and Wearable
+Haptic Display Device Using a Liquid-to-Gas Phase Change Actuator.IEEE Access
+10 (2022), 16830–16842. https://doi.org/10.1109/ACCESS.2022.3141385
+[53] Lining Yao, Ryuma Niiyama, Jifei Ou, Sean Follmer, Clark Della Silva, and Hiroshi
+Ishii. 2013. PneUI: Pneumatically Actuated Soft Composite Materials for Shape
+Changing Interfaces. In Proceedings of the 26th Annual ACM Symposium on
+User Interface Software and Technology (St. Andrews, Scotland, United Kingdom)
+(UIST ’13). Association for Computing Machinery, New York, NY, USA, 13–22.
+https://doi.org/10.1145/2501988.2502037
+[54] Xinlei Zhang, Ali Shtarbanov, Jiani Zeng, Valerie K. Chen, V. Michael Bove,
+Pattie Maes, and Jun Rekimoto. 2019. Bubble: Wearable Assistive Grasping
+Augmentation Based on Soft Inflatables. In Extended Abstracts of the 2019 CHI
+Conference on Human Factors in Computing Systems (Glasgow, Scotland Uk)
+(CHI EA ’19). Association for Computing Machinery, New York, NY, USA, 1–6.
+https://doi.org/10.1145/3290607.3312868

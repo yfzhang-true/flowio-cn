@@ -1,0 +1,1266 @@
+Mona Safari, monasafari@ocadu.ca  
+Kate Hartman, khartman@ocadu.ca  
+Nicholas Puckett, npuckett@ocadu.ca
+Faculty of Arts & Science, OCAD University, 
+Toronto, Canada
+The video demo is available 
+in the Supplementary Materials.
+DIS ‘25, July 5–9, 2025, Funchal, Portugal
+© 2025 Copyright is held by the owner/author(s). Publication rights licensed 
+to ACM.
+ACM ISBN 979-8-4007-1485-6/25/07…
+https://doi.org/10.1145/3715336.3735440
+SOFT OBJECTS
+Prototyping for Tactile Interpersonal Communication
+ABSTRACT
+Sensory perception plays a fundamental role in how 
+we interpret and relate to people and our environment. 
+While verbal communication dominates much of our 
+interaction, nonverbal forms, such as haptics, present 
+alternatives for connection. This pictorial investigates 
+the potential of haptic interaction through an iterative 
+prototyping process, culminating in SYMBIONT—a pair 
+of bioinspired soft robotic objects designed for affective 
+tactile communication across distances or in shared 
+spaces. 
+SYMBIONT emerges from three prototypes—HiPalm, 
+EmoLink, and OctoTouch—each exploring different 
+dimensions of tactile expression. The final design 
+enables users to engage in tactile communication 
+through embedded bend and pressure sensors paired 
+with actuators that pulse, vibrate, and curl. 
+The prototyping approach integrates metaphorical 
+frameworks, biomorphic aesthetics, and biomimetic 
+behavior. Methods include sketch-based ideation, 
+annotated portfolios, and Research through Design, all 
+contributing to developing a responsive tactile system. 
+This research explores how such mediums might 
+enhance physical presence and open new possibilities 
+for tactile, bioinspired, and sensory communication 
+systems.
+AUTHORS KEYWORDS
+Tactile Communication; Interpersonal Communication; 
+Affective Communication; Haptics; Sensory Design; Soft 
+Robotics; Biomorphic; Biomimicry; Design by Metaphor; 
+Research through Design; Iterative Prototyping; 
+Annotated Portfolio.
+CSS CONCEPTS
+• Human-centered computing → Human computer
+interaction (HCI); Interaction devices; Haptic devices.
+1 INTRODUCTION
+This research aims to develop a bioinspired soft robotic 
+object to augment tactile interpersonal communication. 
+Focusing on design process and implementation, this 
+pictorial explores how a soft robot  might facilitate 
+tactile, metaphorical interpersonal communication 
+and emotional sharing between distant or co-located 
+individuals.
+SYMBIONT emerges from an iterative prototyping 
+process involving three earlier prototypes: HiPalm, 
+EmoLink, and OctoTouch. Each contribute uniquely—
+HiPalm explores soft robotic actuation for affective 
+feedback [55], EmoLink establishes interaction logic and 
+component selection, and OctoTouch refines biomorphic 
+aesthetics, sensory elements, and the communication 
+protocol later implemented in SYMBIONT. This design-
+oriented process emphasizes tactile experiences with 
+SYMBIONT’s soft body, with metaphor playing a key role 
+in shaping touch patterns and design’s name. 
+SYMBIONT references the concept of symbiosis—a 
+prolonged coexistence between organisms [70]—and 
+aligns with the metaphor of commensalism, where one 
+entity benefits without harming the other. In this sense, 
+SYMBIONT serves as a physical medium that augments 
+human-to-human communication through touch.
+The following questions guide this research:
+1. What design elements contribute to developing
+soft robotic objects for affective interpersonal
+communication?
+2. How can iterative prototyping and interdisciplinary
+methods, including Research through Design (RtD) and
+Annotated Portfolio, contribute to developing object-
+based tactile systems for affective interpersonal
+communication?
+send
+recieve
+send
+recieve
+331
+2 BACKGROUND AND RELATED STUDIES
+2.1. Emotions through Haptics and Tactile Interaction
+In human social communication and interaction, 
+emotions play a crucial role [36], and touch alone, which 
+is an essential component of the human haptic system, 
+can effectively convey distinct emotions such as anger, 
+fear, and disgust [28, 27, 17].
+Substantial research has been conducted on how touch 
+communicates affection. Because touch is our most 
+emotional channel [59] and it plays an important role in 
+communication [29], it is capable of conveying a wide 
+range of emotions including love, gratitude, anger, and 
+sympathy [53].
+Many literature reviews focus on specific affective 
+purposes, such as affective health or self-reporting of 
+emotions [68]. Much of haptics and tactile platform 
+research focuses on market-driven or academic 
+research tailored for hapticians [56], which improves 
+task efficiency [32], distinguishes shapes and textures 
+[10], grasps virtual objects [2], augments auditory and 
+visual feedback [58], and allows sensory substitution 
+[66].
+In contrast, this pictorial diverges from this line by 
+exploring object-based tactile systems, where physical 
+form, texture, motion, and metaphor contribute to a more 
+open-ended, interpretive affective communication.
+Haptic feedback is essential for mediating touch in the 
+absence of physical proximity. Its emotional and sensory 
+qualities contribute to creating experiences that deeply 
+engage and captivate audiences [67]. 
+Research on the emotional benefits of haptic 
+technology—such as regulating heart rate with tactile 
+biofeedback [8], breathing guidance device [3], tangible 
+affective interaction for self-report of emotions [22], and 
+interactive technologies for emotion regulation training 
+[54]—demonstrate its potential to enhance emotional 
+well-being. Expanding on these, this work explores 
+object-based interpersonal communication through 
+tactile interaction without physical interaction between 
+users.
+2.2. From Wearable to Object in Affective Communica-
+tion
+It has been widely explored how affective haptic 
+communication can be achieved using wearable 
+technologies focusing on modalities such as vibration 
+[47], compression [21], warmth [44], and breathing 
+rhythms [39] in order to simulate social touch. They 
+are commonly embedded in garments [45], wristbands 
+[25], and other wearables and accessories and serve 
+as a means of enhancing emotional expression and 
+presence.
+By evoking specific sensory and affective responses, 
+this rapid progress in haptic technology has been able to 
+provide richer, more effective, and more organic tactile 
+feedback [48]. Studies have shown that certain types of 
+actuation can influence feelings of relaxation and safety, 
+such as gentle pressure [6, 26, 35] or synchronized 
+breathing movements [3, 4, 9] .
+Although these affective systems have offered valuable 
+insight into embodied emotion and tactile interaction 
+(some related works mentioned earlier), they are 
+most commonly realized through body-mounted 
+configurations—numerous examples are detailed 
+in [64]—especially in the context of interpersonal 
+communication, emotional regulation, and remote 
+presence.
+However, the present research explores an object-
+based soft robotic medium that aims to evoke affect 
+through metaphor, dynamic motion, bioinspiration, and 
+sensory design. This approach explores how tactile 
+communication can emerge through interaction with a 
+shared object—shifting the site of affective engagement 
+from the body to a pair of objects and offering new 
+possibilities for mediating interpersonal communication.
+2.3. Bioinspired Soft Robotics through, Metaphorical and 
+Sensory Design
+Soft robotics consists of compliant materials with 
+elastic moduli similar to soft biological tissues [7, 
+50], is defined by its morphology, material properties, 
+control systems, and interactions with the environment 
+[37]. This study uses soft robotics to explore tangible 
+interfaces for human interaction, augmenting tactile 
+communication through lifelike interaction.
+Exploring tactile communication objects in the 
+early stages of design thinking. These sketches 
+reflect ideas for interpersonal communication 
+using touch-based gestures such as holding, 
+squeezing, and pressing, developed alongside the 
+review of related literature.
+332
+2.3.1. Aesthetics: Biomorphic in Morphology
+In interaction design, aesthetics aim to explain users’ 
+aesthetic perception through feelings, cognitive 
+processes, and physical design feature [40]. They often 
+convey social and cultural meanings through materials 
+and forms [51].
+Devices influence human responses, as noted by 
+Verbeek [65], with aesthetic interactions stimulating 
+imagination and rethinking interactive systems to 
+accomplish different goals [44, 42].
+According to Wilson’s biophilia hypothesis [24], humans 
+are inclined to focus on life and lifelike processes due to 
+evolution, and it has also been shown that biomorphic 
+design can positively influence health and well-being 
+[33].
+In the context of affective haptic devices, form 
+factor and materiality contribute significantly to their 
+effectiveness [64]. In addition to stimulus type (e.g., 
+thermal, vibrotactile, or pressure), tactile sensations are 
+also influenced by the device’s physical characteristics, 
+such as texture, shape, and softness [62]. Furthermore, 
+devices with human-like or organic forms, such as 
+abstract hands or soft breathing robots, were perceived 
+as more intuitive and natural to use [11].
+In accordance with this notion, aesthetic qualities are 
+strongly associated with the human experience and 
+it profoundly influences our perceptions of trust [46]. 
+According to the researchers [11], soft biomorphic 
+prototypes are more appealing for emotional and 
+physical health, balancing organic and geometric 
+elements to meet specific needs.
+2.3.2. Behavior: Biomimetic and Metaphor
+In soft robotics, natural organisms’ adaptability and 
+efficiency are utilized, using and mimicking their 
+morphology and biomechanical characteristics to 
+create new dynamic behaviors [38], aiming to enhance 
+human-robot interaction [45]. Using such designs, 
+robots can move, respond, and interact in more lifelike 
+ways, enhancing the adaptability, robustness, and safety 
+of robots designed for human interaction [38], fostering 
+more user engagement.
+In design metaphors, unfamiliar objects are associated 
+with familiar objects with similar characteristics 
+to explain complex ideas [13] concisely. Sensory 
+experiences can metaphorically help us understand 
+many abstract concepts [14], allowing us to interact 
+effectively with an object [42]. Thus, by integrating 
+sensory experiences into design, we can forge more 
+profound and emotional connections between user and 
+object [1], resulting in more immersive and emotional 
+experiences. 
+2.3.3. Sensory Design and Material Choice
+In soft robotics, silicone is valued for its flexibility, 
+stretchability, and lifelike properties, enabling tactile, 
+sensory, and sensory interactions [5]. As a result of 
+these qualities, robots can engage users emotionally 
+and physically, fostering attachment and trust during 
+interaction [30].
+Silicone’s perceptibility aligns with Strawson’s 
+interpretation of objects as tangible, sensory entities 
+designed for human interaction [60]. Soft robots made 
+from silicone are not abstract tools, but objects meant 
+to be held, touched, and felt, facilitating rich, non-
+verbal communication through their physical properties 
+[50]. As Pallasmaa observed, touch unconsciously 
+shapes our visual perception, with textures and forms 
+determining how we connect with objects emotionally 
+and physically [41]. 
+In sensory design, tactile feedback transcends 
+functionality [30], redefining how objects are experienced 
+and interacted. Through touch, sound, and movement, 
+sensory design can also facilitate accessibility and 
+emotional connections [30]. With silicone’s sensory 
+and material properties, this study aimed to create 
+bioinspired soft tactile objects that provided a more 
+sensory and emotional connection between the user 
+and embedded circuit components.
+3 METHODOLOGIES AND DESIGN PROCESS
+Designers play a critical role in Human-Computer 
+Interaction (HCI) research by addressing complex, 
+under-constrained problems with unique 
+perspectives [69]. This pictorial adopts a design-
+oriented approach combining Research through 
+Design (RtD) and Annotated Portfolio to support 
+both practical exploration and interdisciplinary 
+objectives [18]. These methods facilitate the 
+development of prototypes as essential tools for 
+refining design goals and evaluating functional and 
+aesthetic outcomes.  
+RtD emphasizes that uncertainty is not an obstacle, 
+but as a generative resource for design exploration 
+[16]. Hence, this work embraces ambiguity to 
+investigate interaction possibilities through sensory 
+exploration, iterative prototyping and metaphor. 
+RtD was used to generate knowledge by testing 
+interaction patterns inspired by human touch, 
+metaphorical meaning, and biomimetic behavior. 
+Rapid prototyping enabled subjective evaluation 
+of components, forms, textures, sensors, and 
+actuators, informing iterative refinements [61]. 
+Annotated Portfolio documents the design process, 
+inspirations, and iterative process in relation to 
+research questions. This approach retained a close 
+connection with the artifacts while addressing 
+broader concerns within the objectives [23] to 
+create a unique concept.
+This approach is further demonstrated through 
+iterative prototyping and the use of metaphor and 
+bioinspiration to shape the design.
+333
+3.1. Research through Prototyping
+Throughout this pictorial, prototyping serves as a mode of inquiry rather than merely a validation step within a 
+Research through Design (RtD) approach. Iterative making and reflective refinement enable insight into form, 
+movement, and interaction. Subjective decisions and contextual constraints shape each prototype during 
+the prototyping process. The goal is to optimize functionality and explore further possibilities of soft robotic 
+interactions to augment interpersonal communication and evoke emotion by emphasizing metaphor, tactility, 
+and sensory feedback. Ambiguity and uncertainty guide decisions around materials, actuation, sensory systems, 
+and interaction timing. In the evolution from HiPalm to EmoLink, OctoTouch, and finally, SYMBIONT, insights 
+gained through embodied experimentation are gradually layered over time.
+3.2. Metaphor and Bioinspiration
+Each prototype integrates biomimetic behavior and biomorphic aesthetics not as surface decoration but as tools 
+for affective engagement. Prior research shows that shape-changing interfaces [19] and lifelike movements [49] 
+can facilitate emotional responses [20] and contribute to designs that feel agreeable and sensorially appealing 
+[34]. These qualities also make soft robots with biomorphic traits more appropriate for human interaction [12]. 
+While marine organisms are not directly related to communication, their ambiguous and lifelike qualities inspire 
+forms and interactions that encourage users to assign emotional meaning, supporting more flexible, open-
+ended human-robot interaction [11].
+4 ITERATIVE PROTOTYPING
+The following sections describe three different prototypes —HiPalm, EmoLink, and OctoTouch— and describe 
+the design concepts, components, fabrication, and interaction decisions. An overview at the end of this section 
+offers comparative insights into all prototypes and highlights the design-driven rationales for each prototype’s 
+transition to the next one.
+Modalities Sub Modality Sub-Sub Modality Tactile Interaction Modalities & Affective Meanings
+Touch Discriminative 
+Touch
+Touch / Pressure / 
+Flutter / Vibration
+Pressure Sense of presence
+Sense of skin touching
+Vibration Extend physical touch
+Temperature Warm/Hot - Temperature Identity
+Sense of skin touching
+Metaphorical mapping between emotions and 
+temperature
+Table 1 - Selected Somatosensory Modalities
+In the initial prototyping stage, HiPalm serves as a 
+foundation for testing. The choice of the actuation system 
+is established at this stage, and subsequent development 
+is built upon its structure and insights. EmoLink prioritizes 
+functionality by leveraging somatosensory modalities 
+[15], such as pressure, vibration, and temperature (table 
+1), for accurate tactile signal transmission. OctoTouch 
+is built on this foundation by refining communication 
+protocols, mapping realistic interactions utilizing haptic 
+embellishment principles (table 3), and integrating 
+biomorphic aesthetics. Prototype development 
+involves subjective decisions, as well as consideration 
+of contextual constraints, emphasizing metaphors, 
+bioinspired design, tactility, and sensory feedback.
+HiPalm
+EmoLink
+OctoTouch
+334
+4.1. Prototype I: HiPalm
+HiPalm served as a starting point 
+for design exploration and iterative 
+prototyping during this research. To 
+understand pneumatic actuation, air 
+control mechanisms, and the fabrication 
+of inflatable structures, early prototyping 
+employed open-source hardware 
+platforms like the Programmable Air Kit 
+[72] and Soft Robotics Toolkit [31, 72]. As 
+exploration progressed, another open-
+source pneumatic toolkit, FlowIO [73,
+55], was used. FlowIO’s documentation
+provided insight into scalable system
+design, real-time actuation control, and
+soft robotics.
+Following that, a custom pneumatic 
+system is designed to align with the 
+research objectives. This was followed 
+by incorporating a range of sensors 
+and components to experiment with 
+affective interpersonal communication 
+on a low-fidelity and simplified level. 
+This phase aims to develop a wearable 
+device capable of augmenting affective 
+interpersonal communication, even 
+though it is not intended to enable full 
+bidirectional communication. The design 
+evolved gradually, starting with a more 
+achievable and technically manageable 
+prototype that laid the foundation 
+for more complex systems later on, 
+encompassing aesthetics, control logic, 
+components, and interactions.
+As a wearable soft robotic device, HiPalm simulates heartbeat-like pulsing when another hand is detected nearby through 
+an embodied, rhythm-based tactile medium. This concept aims at amplifying subtle emotional cues by mimicking lifelike 
+inflation patterns.
+CONCEPT
+FABRICATION AND AESTHETICS
+The actuator is designed based on the pufferfish, 
+which is characterized by its biomorphic form, 
+which inflates upon external stimulus. Using 
+a laser-cut acrylic mold, the top and bottom 
+parts are assembled. Later, skin-safe silicone is 
+used to cast the actuator, which is sealed with 
+room-temperature-vulcanizing silicone (RTV) 
+adhesive. It is placed on the palm to leverage the 
+sensitivity of the glabrous skin and its symbolic 
+association with gestures such as handshakes.
+SYSTEM DESIGN
+The design of HiPalm’s control logic is based 
+on synchronizing the inflation and deflation 
+cycles with the wearer’s heart rate. 
+This device features three heart rate 
+zones: Calm, Normal, and Elevated, each with 
+specific inflation and deflation timings that 
+correspond to the physiological rhythm of the 
+human heart. The heart rate and time-of-flight 
+(ToF) sensors provided real-time feedback, 
+which was utilized to maintain control.
+HiPalm Components
+(a) HUZZAH32 ESP32 Feather, (b) CRICKIT Extension Board, (c) ToF
+Sensor VL53LOX, (d) Heart Sensor, (d) Silicone Actuator, (f) Mini Air Pump, 
+(g) Mini Solenoid, and (h) 5V power input.
+335
+4.2. Prototype II: EmoLink
+CONCEPT
+EmoLink explores how tactile feedback 
+can send and receive signals by leveraging 
+the distributed nature of somatosensory 
+receptors (table 1) across the body. In 
+its original form, it was imagined as two 
+separate parts that could be attached 
+to different body areas for personal 
+interaction. Later, however, the focus 
+moved away from aesthetic refinement 
+toward establishing a reliable circuit and 
+optimizing its functionality.
+EmoLink is developed using two silicone 
+layers, each containing a variety of 
+components arranged in modular 
+layouts and tested for responsiveness 
+and signal clarity. Differences in skin 
+texture and thickness are also evaluated 
+to assess sensor performance. In this 
+step, sensory-actuator responses can be 
+compared directly, and tactile mappings 
+can be refined without excessive 
+attention to aesthetics.
+FABRICATION AND AESTHETICS
+SYSTEM DESIGN
+The system employs a feedback loop 
+in which sensors detect tactile inputs, 
+including pressure and touch, and 
+actuators generate corresponding 
+tactile outputs, including vibration, 
+temperature, or the sensation of being 
+touched. A single microcontroller and 
+a single set of sensors and actuators 
+enable more efficient prototyping, a 
+better understanding of component 
+functionality, and data transmission 
+between them.
+what if I could 
+hold my niece’s 
+hand? missed 
+her a lot..
+it was your 
+auntie’s 
+touch!
+EmoLink Components
+(a) FlatFlab Actuator & 10mm
+neodymium magnet, (b) FSR sensor,
+(c) Mini Haptic Motor, (d) TRILL Flex
+Capasitive Touch, (e) Heating Pad.
+Electronics were mounted 
+on a breadboard to 
+facilitate flexible testing.
+0.5 mm thickness
+(a)
+(b)
+(c)
+(d)
+(e)
+1.5 mm thickness
+1 mm thickness
+To assess sensor accuracy and tactile 
+response, the TRILL Flex sensor [71] was 
+tested with three silicone thickness levels. 
+Thinner layer enhanced sensor’s interaction 
+accuracy.
+Smooth and bumpy textures 
+were incorporated to examine 
+sensory engagement.
+flex sensors
+layout test for 
+components
+FlatFlab 
+actuator
+FSR sensor
+mini haptic 
+motor
+creating bumpy 
+texture in mol d 
+design
+336
+4.3. Prototype III: OctoTouch
+CONCEPT
+This prototype is designed to achieve 
+biomimetic behavior and biomorphic 
+aesthetics. In addition to re-designing the 
+final circuit and testing new components, 
+experiments are conducted on the 
+silicone body fabrication process and 
+3D-printed mold to simulate lifelike 
+interaction for emotional resonance. 
+The design emphasizes metaphorical 
+interactions by combining form and 
+tactile feedback to evoke sensations of 
+being touched or touching.
+A lack of practical guidelines in the field 
+has led researchers [35] to provide ten 
+guidelines to assist haptic designers. 
+Table 2 demonstrates the four principles 
+chosen for this study. Incorporating 
+these principles into the control logic 
+supports the project’s biomimetic focus 
+and enhances the user experience.
+FABRICATION AND AESTHETICS
+OctoTouch prioritizes biomorphic design 
+and biomimetic behavior, integrating 
+forms and textures inspired by oceanic 
+creatures. These forms reflect the 
+flexibility and semi-transparency seen 
+in marine life. Biomimetic behaviors 
+are pressing and bending in sensors’ 
+interactions, crawling, pulsing 
+(heartbeat), and vibrating in actuators’ 
+interactions.
+Principles Definition Relation to Haptics Principles Control Logic
+Realism Mimic an object’s 
+physical qualities
+A gradual increase in vibration / Tactile 
+feedback is proportional to the applied force / 
+Heartbeat rhythm (slightly faster than 60 bpm, 
+with two pulses of 100 milliseconds and a 
+pause of 700 milliseconds).
+Proportional force mapping PWM-based motor 
+control / State machine control to manage 
+pulses and pauses
+Slow In & Out Gradual acceleration 
+and deceleration
+Timer-controlled actuation simulates lifelike 
+crawling motions / gradual engagement and 
+disengagement.
+Timing logic: Gradual ramp-up and cool-down 
+for actuators / Delays in cooling and heating SMA 
+spring leads to a delicate behavior / Controlled 
+pulse frequency.
+Energy Matching the 
+intensity of tactile 
+feedback with the 
+perceived energy
+Vibration intensity is dynamically matched 
+to input force, with more substantial inputs 
+triggering stronger vibrations.
+Dynamic frequency modulation of haptic 
+motors.
+Expressivity Creating variety and 
+depth in interactions
+Communicating metaphorical meanings using 
+distinct touch patterns.
+Flex sensor and FSR input integration / 
+Multi-modal actuation.
+Table 2 - Selected Principles of Haptic Embellishments for Designing OctoTouch and SYMBIONTS’ System
+I would love 
+to send a 
+heartbeat to 
+her!
+337
+4.3. Prototype III: OctoTouch
+Communication protocol and system logic diagram
+SYSTEM DESIGN AND   COMMUNICA-
+TION
+Using MQTT, a lightweight messaging 
+protocol, OctoTouch translates tactile input 
+into metaphorical output that provides low-
+latency, real-time feedback and reliable 
+data exchange, supporting synchronized 
+sensor-actuator communication. Below are 
+three interaction states:
+Vibration for high-energy pressure.
+Pulse for a calming, heartbeat-like rhythm.
+Crawl for soft, lifelike touch sensations.
+Each actuator responds continuously 
+as long as the corresponding signal 
+is received—otherwise, it stops. (An 
+exception applies to the SMA spring, 
+which requires a 5-second cooling period 
+after activation.) To maintain awareness 
+between users, a green LED on the sender’s 
+object blinks when the receiver detects a 
+signal. Communication is bidirectional and 
+can occur simultaneously between users, 
+reinforcing the immediacy and intimacy of 
+the exchange.
+In order to center a feeling 
+of actual heart and grab more 
+attention, the Hearbeat actuator 
+has been placed in the center of the 
+OctoTouch body.
+Electronics were mounted on a breadboard 
+to facilitate flexible testing.
+Silicone skin texture to simulate active and passive 
+touch for lifelike quality.
+Embedded magnet: A silicone 
+adhesive sealant is used to secure 
+the magnet to a 0.5 mm thick 
+silicone layer.
+Each principle was selected based on actuator function, 
+interaction goals, and lifelike responsiveness.
+OctoTouch Components
+(a) FSR sensor, (b) CoilPad [ 0.1mm] & 10mm
+neodymium magnet, (c) Mini Haptic Motor, (d) SMA
+spring [40+6 coil-0.015 wire iameter - 90°C  activation],
+(e) Flex Sensor, (f) Arduino Nano 33 IoT.
+(a)
+(b)
+(c)
+(d)
+(e)
+(f)
+Feeling her 
+beside me 
+calms me..
+338
+4.4. Findings from Initial Prototypes
+HiPalm demonstrates the potential of a pneumatic
+system for rhythmic, affective feedback in this 
+research, but its actuation and control system 
+proved bulky, noisy, and visually dominant. The 
+next prototype is developed focusing on compact 
+components that are flexible in form and behavior to 
+reduce distraction and explore more subtle (in this 
+case, life-like) interaction patterns.
+Hand-Based Interaction
+Through using the hand and being worn on the 
+palm, stronger emotional symbolism and tactile 
+sensitivity can be achieved, promoting embodied 
+interaction.
+System Complexity vs. Emotional Subtlety
+The pneumatic actuation enables expressive 
+pulsing patterns. However, the noise and 
+bulk of the system distract from subtle 
+emotional cues.
+EmoLink explores a few tactile  modalities,
+sensors, and  actuators, but  it lacks aesthetic 
+integration, metaphorical expression, and a complete 
+circuit with all components incorporated.
+Component Evaluation through Low-Fidelity Testing
+Through prototyping and testing, parameters such as tactile 
+clarity and responsiveness are evaluated, which leads to the 
+exclusion of some components (e.g., TRILL, heating pad).
+Modality and Emotional Mapping
+Emotional resonance is tested for pressure, 
+vibration, and temperature.
+OctoTouch creates a framework for
+metaphorically driven tactile states that integrates 
+sensory and communication logic, and explores how 
+form, texture, and movement could be combined 
+to create more lifelike and emotionally resonant 
+interactions. However, aligning these interactions 
+within a coherent system requires further 
+refinement.
+Metaphorical Touch Patterns
+Vibration, crawling, and pulse are mapped to distinct 
+emotional tones to provide a framework for metaphor-
+driven interaction.
+Balancing Realism and Responsiveness
+SMA springs and flex sensors enable smooth, 
+lifelike feedback while supporting responsive 
+control. SMA also introduces subtle warmth 
+into the interaction.
+Embodied Aesthetics through 
+Biomorphic Form
+This prototype’s marine-inspired 
+forms and silicone skins show 
+how form, texture, and motion 
+work together to create an 
+engaging experience.
+?
+339
+5 SYMBIONT
+5.1. DESIGN PROCESS
+The design process for SYMBIONT 
+revolves around integrating sensory 
+design, biomorphic aesthetics, and 
+biomimetic behavior into a soft 
+robotic object for affective tactile 
+communication. Iterative prototyping 
+refines SYMBIONT through multiple 
+stages of technical exploration, realistic 
+interaction mapping, and emotional 
+resonance.
+5.2. MATERIAL AND TACTILE AESTHETICS
+The silicone used in SYMBIONT supports 
+lifelike (soft) tactile interaction while 
+protecting embedded electronics. The 
+material is flexible while durable, allowing 
+sensors and actuators to be integrated 
+safely. In order to optimize sensory 
+responsiveness and reinforce emotional 
+resonance through tactile engagement, 
+silicone skin has been tested in varying 
+thicknesses and textures.
+Marine life forms inspire SYMBIONT’s 
+biomorphic design.  For example, 
+creatures with long  tentacles guided 
+the placement of flex sensors due 
+to  their  length, while centralized 
+bulges helped frame the core section 
+in which the microcontroller was 
+embedded. Based on these studies, 
+structural layouts are developed that 
+are both aesthetically and functionally 
+aligned with the circuit structure.
+5.3. BIOINSPIRATION AND FORM STUDY
+flex sensorflex sensor
+fsr sensor
+coilpad & magnetSMA spring
+haptic motor
+like starfish
+beating heart at centre
+big bulby 
+head for 
+microcontroller
+two 
+extended 
+legs for 
+each flex 
+sensor
+flat sensors
+embedded in legs6 legs for all 
+components
+long tentacles
+or legs
+FSR sensor
+at the end the leg
+340
+SYMBIONT’s body is cast in silicone using 
+a modular, 3D-printed mold consisting of 
+top and bottom halves. An internal bone-
+like structure  provides a central cavity 
+for storing electronics, while biomorphic 
+surface textures  enhance SYMBIONT’s 
+body’s tactile  and visual qualities. The 
+mold’s asymmetrical design divides it into 
+two halves, each divided into six segments, 
+to  minimize printing complexity and fit 
+within standard 3D printer build volumes.
+To ensure an airtight silicone casting, a 
+3D positive master must be modeled, a 
+segmented Negative Mold printed, and the 
+pieces sealed with RTV  glue. Challenges 
+such as controlling silicone flow and 
+achieving fine surface detail are resolved 
+through iterative prototyping. The casting 
+process is repeated to produce a matching 
+pair of soft SYMBIONTs.
+5.4. FABRICATION AND ASSEMBLY
+bone structure
+top part mold & 
+bone structure top part mold
+Symbiont’s 
+bottom part
+Symbiont’s 
+top part
+embedded 
+electronics
+SYMBIONT is built on OctoTouch’s interaction system using the MQTT 
+protocol for real-time, bidirectional communication. To simulate 
+metaphorical and lifelike responses, haptic embellishment principles 
+(Table 2) are applied to each tactile pattern by mapping it to a sensor-
+actuator pair. Key interaction features:
+5.5. SYSTEM DESIGN AND INTERACTION PATTERNS
+Metaphor - Passive Touch (Crawling): 
+Flex sensor and SMA spring simulate crawling 
+through slow movement and heating.
+SYMBIONT
+Different states of SMA spring 
+contraction and 
+displacement of 
+Symbiont’s leg.
+Metaphor - Active Touch (Vibration): 
+The FSR sensor activates a haptic motor 
+to produce force-proportional feedback.
+SYMBIONT
+Different states of touch and 
+Haptic Motor.
+Metaphor - Intra-active Touch (Heartbeat): 
+Flex
+ sensor triggers the CoilPad to generate 
+rhythmic pulses resembling heartbeats.
+Attraction
+SYMBIONT
+Different states of CoilPad and 
+displacement of Symbiont’s leg. Repulsion
+Stable
+341
+Each sensor, when activated, triggers a corresponding actuator on another symbol, facilitating silent, 
+affective tactile communication between users, imbued with metaphorical meanings.
+5.6. Interactions and Communication
+Bend
+Intra-active Touch (heartbeat)
+Heartbeat
+Press
+Active Touch (vibration)
+Vibration
+Bend
+Passive Touch (crawl)
+Crawl
+6 CONTRIBUTIONS
+This pictorial presents a research-through-design 
+(RtD) process exploring how soft robotic objects 
+can facilitate affective, tactile interpersonal 
+communication. Through four iterative 
+prototypes—HiPalm, EmoLink, OctoTouch, and 
+SYMBIONT—the research investigates how 
+metaphor, sensory  modalities,  and bioinspired 
+design can be  involved  in designing objects 
+for  mediated  tactile  interaction in shared or 
+remote contexts.
+The contribution lies in articulating a prototyping 
+process that integrates haptic interaction 
+mapping, component testing, metaphor, and 
+bioinspired design. Rather than presenting a 
+single outcome, each prototype builds toward 
+SYMBIONT, which combines biomorphic 
+aesthetics, biomimetic behavior, and 
+metaphorical tactile expressions.
+This approach offers practical insights into 
+designing soft robotic systems that convey 
+emotion through iterative, embodied design.
+7 DISCUSSION AND 
+FURTHER DEVELOPMENTS
+The research demonstrates the application 
+of iterative prototyping to developing soft 
+robotic objects that facilitate affective 
+tactile interpersonal communication. A 
+variety of interaction modalities and system 
+configurations were explored in each 
+prototype, building toward technical and 
+aesthetic refinements. While SYMBIONT 
+presents a cohesive system, the broader 
+process demonstrates how affective tactile 
+interactions can emerge through exploration 
+rather than predefined solutions.
+Future work in the form of user studies to 
+examine how metaphorical tactile cues 
+are  perceived is also possible, as is  the 
+potential for quieter, more adaptive actuations. 
+This approach also suggests new opportunities 
+for soft robotics to be applied to assistive 
+technologies, media presence, and sensory 
+augmentation.
+This pictorial is derived from Mona Safari’s Master of Design thesis. The authors gratefully acknowledge Professor 
+Kari Love, as thesis external examiner, for her valuable insights and thoughtful feedback on author’s thesis. 
+We also extend our appreciation to the open-source communities and projects for their generous culture of 
+knowledge-sharing—three of which are specifically referenced in the pictorial, which played a vital role in the 
+development of the prototypes discussed in this work.
+ACKNOWLEDGMENT
+342
+REFERENCES
+[1] Victoria E. Abraira and David D. Ginty. 2013. The 
+Sensory Neurons of Touch. Neuron 79, 4 (August 
+2013), 10.1016/j.neuron.2013.07.051. https://doi.
+org/10.1016/j.neuron.2013.07.051
+[2] Quan-Zen Ang, Ben Horan, Zoran Najdovski, and 
+Saeid Nahavandi. 2011. Grasping virtual objects 
+with multi-point haptics. In 2011 IEEE Virtual 
+Reality Conference, March 2011. IEEE, Singapore, 
+Singapore, 189–190. https://doi.org/10.1109/
+VR.2011.5759462
+[3] Ali Asadi, Oliver Niebuhr, Jonas Jorgensen, and 
+Kerstin Fischer. 2022. Inducing Changes in Breath-
+ing Patterns Using a Soft Robot. In 2022 17th ACM/
+IEEE International Conference on Human-Robot 
+Interaction (HRI), March 07, 2022. IEEE, Sap-
+poro, Japan, 683–687. https://doi.org/10.1109/
+HRI53351.2022.9889343
+[4] Yuki Ban, Hiroyuki Karasawa, Rui Fukui, and Shin’ichi 
+Warisawa. 2022. Development of a Cushion-
+Shaped Device to Induce Respiratory Rhythm and 
+Depth for Enhanced Relaxation and Improved Cog-
+nition. Front. Comput. Sci. 4, (March 2022). https://
+doi.org/10.3389/fcomp.2022.770701
+[5] Yunwen Bo, Haochen Wang, Hui Niu, Xinyang He, 
+Quhao Xue, Zexi Li, Hao Yang, and Fuzhou Niu. 
+2024. Advancements in materials, manufacturing, 
+propulsion and localization: propelling soft robotics 
+for medical applications. Front. Bioeng. Biotech-
+nol. 11, (January 2024). https://doi.org/10.3389/
+fbioe.2023.1327441
+[6] Laura K. Case, Jaquette Liljencrantz, Micaela V . Mc-
+Call, Megan Bradson, Aaron Necaise, Justin Tubbs, 
+Håkan Olausson, Binquan Wang, and M. Catherine 
+Bushnell. 2021. Pleasant Deep Pressure: Expanding 
+the Social Touch Hypothesis. Neuroscience 464, 
+(June 2021), 3–11. https://doi.org/10.1016/j.neuro-
+science.2020.07.050
+[7] Ang Chen, Ruixue Yin, Lin Cao, Chenwang Yuan, 
+H.K. Ding, and W.J. Zhang. 2017. Soft robotics: 
+Definition and research issues. In 2017 24th Interna-
+tional Conference on Mechatronics and Machine Vi-
+sion in Practice (M2VIP), November 2017. 366–370. 
+https://doi.org/10.1109/M2VIP .2017.8267170
+[8] Kyung Yun Choi and Hiroshi Ishii. 2020. ambienBeat: 
+Wrist-worn Mobile Tactile Biofeedback for Heart 
+Rate Rhythmic Regulation. In Proceedings of the 
+Fourteenth International Conference on Tangible, 
+Embedded, and Embodied Interaction, February 09, 
+2020. ACM, Sydney NSW Australia, 17–30. https://
+doi.org/10.1145/3374920.3374938
+[9] Kyung Yun Choi, Jinmo Lee, Neska ElHaouij, Rosa-
+lind Picard, and Hiroshi Ishii. 2021. aSpire: Clippa-
+ble, Mobile Pneumatic-Haptic Device for Breathing 
+Rate Regulation via Personalizable Tactile Feedback. 
+In Extended Abstracts of the 2021 CHI Conference 
+on Human Factors in Computing Systems, May 
+08, 2021. ACM, Yokohama Japan, 1–8. https://doi.
+org/10.1145/3411763.3451602
+[10] Jason K. Chow, Thomas J. Palmeri, and Isabel 
+Gauthier. 2022. Haptic object recognition based on 
+shape relates to visual object recognition ability. 
+Psychol Res 86, 4 (2022), 1262–1273. https://doi.
+org/10.1007/s00426-021-01560-z
+[11] Mads Bering Christiansen, Ahmad Rafsanjani, and 
+Jonas Jørgensen. 2023. “It Brings the Good Vibes”: 
+Exploring Biomorphic Aesthetics in the Design of 
+Soft Personal Robots. Int J of Soc Robotics (Novem-
+ber 2023). https://doi.org/10.1007/s12369-023-
+01037-6
+[12] Mads Bering Christiansen, Ahmad Rafsanjani, 
+and Jonas Jørgensen. 2024. Nature redux: inter-
+rogating biomorphism and soft robot aesthetics 
+through generative AI. Front Robot AI 11, (Octo-
+ber 2024), 1472051. https://doi.org/10.3389/
+frobt.2024.1472051
+[13] Nathaniel Dennler, Changxiao Ruan, Jessica Hadi-
+wijoyo, Brenna Chen, Stefanos Nikolaidis, and Maja 
+Matarić. 2023. Design Metaphors for Understand-
+ing User Expectations of Socially Interactive Robot 
+Embodiments. J. Hum.-Robot Interact. 12, 2 (June 
+2023), 1–41. https://doi.org/10.1145/3550489
+[14] Rutvik H. Desai, Jeffrey R. Binder, Lisa L. Conant, 
+Quintino R. Mano, and Mark S. Seidenberg. 2011. 
+The neural career of sensory-motor metaphors. 
+J Cogn Neurosci 23, 9 (September 2011), 2376–
+2386. https://doi.org/10.1162/jocn.2010.21596
+[15] Patrick Dougherty and Chieyeko Tsuchitani. 2020. 
+Somatosensory Systems. In An Electronic Textbook 
+for the Neurosciences. The University of Texas Medi-
+cal School at Houston. Retrieved March 4, 2024 
+from https://nba.uth.tmc.edu/neuroscience/m/s2/
+chapter02.html
+[16] Felix Anand Epp, Anton Poikolainen Rosén, Antti 
+Salovaara, and Camilo Sanchez. 2024. Uncertain-
+ties as Generative Resources in Research through 
+Design: Three Dynamics for Moving in a Design 
+Space. ACM Trans. Comput.-Hum. Interact. 31, 
+6 (December 2024), 70:1-70:31. https://doi.
+org/10.1145/3689041
+[17] Jan B. F . van Erp and Alexander Toet. 2015. Social 
+Touch in Human–Computer Interaction. Front. Digit. 
+Humanit. 2, (May 2015). https://doi.org/10.3389/
+fdigh.2015.00002
+[18] Daniel Fallman. 2003. Design-oriented hu-
+man-computer interaction. In Proceedings of 
+the SIGCHI Conference on Human Factors in 
+Computing Systems, April 05, 2003. ACM, Ft. 
+Lauderdale Florida USA, 225–232. https://doi.
+org/10.1145/642611.642652
+343
+[19] Neda Fayazi and Lois Frankel. 2017. Designing 
+Biologically Inspired Movements into the Esthetics 
+of Interactive Artifacts. In Proceedings of the Confer-
+ence on Design and Semantics of Form and Move-
+ment - Sense and Sensitivity, DeSForM 2017, Miguel 
+Bruns Alonso and Elif Ozcan (eds.). InTech. https://
+doi.org/10.5772/intechopen.71117
+[20] Loe Feijs, Steven Kyffin, and B ob Young. 2005. De-
+sign and semantics of form and movement. Konin-
+klijke Philips Electronics, Eindhoven. Retrieved from 
+https://research.tue.nl/en/publications/design-and-
+semantics-of-form-and-movement
+[21] Esther Foo and Brad Holschuh. 2018. Dynamic 
+Compression in Affective Haptics. In Proceedings 
+of the 2018 ACM International Joint Conference and 
+2018 International Symposium on Pervasive and 
+Ubiquitous Computing and Wearable Computers, 
+October 08, 2018. ACM, Singapore Singapore, 577–
+583. https://doi.org/10.1145/3267305.3267312
+[22] Carolina Fuentes, Valeria Herskovic, Iyubanit Rodrí-
+guez, Carmen Gerea, Maíra Marques, and Pedro O. 
+Rossel. 2017. A systematic literature review about 
+technologies for self-reporting emotional informa-
+tion. J Ambient Intell Human Comput 8, 4 (August 
+2017), 593–606. https://doi.org/10.1007/s12652-
+016-0430-z
+[23] Bill Gaver and John Bowers. 2012. Annotated portfo-
+lios. interactions 19, 4 (July 2012), 40–49. https://
+doi.org/10.1145/2212877.2212889
+[24] Eleonora Gullone. 2000. The Biophilia Hypothesis 
+and Life in the 21st Century: Increasing Mental 
+Health or Increasing Pathology? Journal of Hap-
+piness Studies 1, 3 (September 2000), 293–322. 
+https://doi.org/10.1023/A:1010043827986
+[25] Taku Hachisu and Kenji Suzuki. 2019. Representing 
+Interpersonal Touch Directions by Tactile Appar-
+ent Motion Using Smart Bracelets. IEEE Transac-
+tions on Haptics PP , (July 2019), 1–1. https://doi.
+org/10.1109/TOH.2019.2929810
+[26] Sheng He, Hao Zeng, Mengru Xue, Guanghui Huang, 
+Cheng Yao, and Fangtian Ying. 2024. Affective Strok-
+ing: Design Thermal Mid-Air Tactile for Assisting 
+People in Stress Regulation. Applied Sciences 14, 
+20 (January 2024), 9494. https://doi.org/10.3390/
+app14209494
+[27] Matthew J. Hertenstein, Rachel Holmes, Marga-
+ret McCullough, and Dacher Keltner. 2009. The 
+communication of emotion via touch. Emotion 9, 4 
+(2009), 566–573. https://doi.org/10.1037/a0016108
+[28] Matthew J. Hertenstein, Dacher Keltner, Betsy App, 
+Brittany A. Bulleit, and Ariane R. Jaskolka. 2006. 
+Touch communicates distinct emotions. Emotion 6, 
+3 (2006), 528–533. https://doi.org/10.1037/1528-
+3542.6.3.528
+[29] Matthew J. Hertenstein, Julie M. Verkamp, Alyssa M. 
+Kerestes, and Rachel M. Holmes. 2006. The Com-
+municative Functions of Touch in Humans, Nonhu-
+man Primates, and Rats: A Review and Synthesis of 
+the Empirical Research. Genetic, Social, and Gener-
+al Psychology Monographs 132, 1 (February 2006), 
+5–94. https://doi.org/10.3200/MONO.132.1.5-94
+[30] Cooper Hewitt. 2018. “THE SENSES: DESIGN BE-
+YOND VISION. ” Retrieved February 29, 2024 from 
+https://www.cooperhewitt.org/2018/02/27/cooper-
+hewitt-smithsonian-design-museum-to-present-
+the-senses-design-beyond-vision/
+[31] Dónal P . Holland, Evelyn J. Park, Panagiotis Poly-
+gerinos, Gareth J. Bennett, and Conor J. Walsh. 
+2014. The Soft Robotics Toolkit: Shared Resources 
+for Research and Design. Soft Robotics 1, 3 (Sep-
+tember 2014), 224–230. https://doi.org/10.1089/
+soro.2014.0010
+[32] Nooshin Jafari, Kim D Adams, and Mahdi Tava-
+koli. 2016. Haptics to improve task performance 
+in people with disabilities: A review of previous 
+studies and a guide to future research with children 
+with disabilities. J Rehabil Assist Technol Eng 3, 
+(October 2016), 2055668316668147. https://doi.
+org/10.1177/2055668316668147
+[33] Yannick Joye and Philip Van Locke. 2007. Motivat-
+ing biomorphic constructions based on complex 
+systems science. Syst. Res. 24, 1 (January 2007), 
+103–114. https://doi.org/10.1002/sres.742
+[34] Stephen Kellert. 2008. Dimensions, elements, and 
+attributes of biophilic design. Biophilic Design (Janu-
+ary 2008), 3–20.
+[35] Chelsea Kelling, Daniella Pitaro, and Jussi 
+Rantala. 2016. Good Vibes: The Impact of 
+Haptic Patterns on Stress Levels. https://doi.
+org/10.1145/2994310.2994368
+[36] Dacher Keltner, Disa Sauter, Jessica Tracy, and Alan 
+Cowen. 2019. Emotional Expression: Advances 
+in Basic Emotion Theory. J Nonverbal Behav 43, 
+2 (June 2019), 133–160. https://doi.org/10.1007/
+s10919-019-00293-3
+[37] Cecilia Laschi, Barbara Mazzolai, and Matteo 
+Cianchetti. 2016. Soft robotics: Technologies and 
+systems pushing the boundaries of robot abili-
+ties. Sci. Robot. 1, 1 (December 2016), eaah3690. 
+https://doi.org/10.1126/scirobotics.aah3690
+[38] Cecilia Laschi, Barbara Mazzolai, and Matteo 
+Cianchetti. 2016. Soft robotics: Technologies and 
+systems pushing the boundaries of robot abili-
+ties. Sci. Robot. 1, 1 (December 2016), eaah3690. 
+https://doi.org/10.1126/scirobotics.aah3690
+[39] Sunniva Liu, Jianzhe Gu, Dinesh K Patel, and Lining 
+Yao. 2024. breatHaptics: Enabling Granular Ren-
+dering of Breath Signals via Haptics using Shape-
+Changing Soft Interfaces. In Proceedings of the 
+344
+Eighteenth International Conference on Tangible, 
+Embedded, and Embodied Interaction, February 
+11, 2024. ACM, Cork Ireland, 1–11. https://doi.
+org/10.1145/3623509.3633372
+[40] Mati Mõttus. 2017. Aesthetics in interaction design. 
+In Proceedings of the ACM SIGCHI Symposium on 
+Engineering Interactive Computing Systems, June 
+26, 2017. ACM, Lisbon Portugal, 141–144. https://
+doi.org/10.1145/3102113.3102153
+[41] Juhani Pallasmaa. 2012. The eyes of the skin: archi-
+tecture and the senses. Wiley-Academy ; John Wiley 
+& Sons, Chichester : Hoboken, NJ.
+[42] Mark Paterson. 2007. The senses of touch: haptics, 
+affects, and technologies. Berg, Oxford ; New York.
+[43] Marianne Graves Petersen, Ole Sejer Iversen, Peter 
+Gall Krogh, and Martin Ludvigsen. 2004. Aesthetic 
+interaction: a pragmatist’s aesthetics of interactive 
+systems. In Proceedings of the 5th conference on 
+Designing interactive systems: processes, prac-
+tices, methods, and techniques (DIS ’04), August 
+01, 2004. Association for Computing Machin-
+ery, New York, NY , USA, 269–276. https://doi.
+org/10.1145/1013115.1013153
+[44] Isabel Pfab and Christian J.A.M. Willemse. 2015. 
+Design of a wearable research tool for warm mediat-
+ed social touches. In 2015 International Conference 
+on Affective Computing and Intelligent Interaction 
+(ACII), September 2015. IEEE, Xi’an, China, 976–
+981. https://doi.org/10.1109/ACII.2015.7344694
+[45] Rolf Pfeifer, Max Lungarella, and Fumiya Iida. 
+2012. The challenges ahead for bio-inspired “soft” 
+robotics. Commun. ACM 55, 11 (November 2012), 
+76–87. https://doi.org/10.1145/2366316.2366335
+[46] Joel Pinney, Fiona Carroll, and Paul Newbury. 
+2022. Human-robot interaction: the impact of 
+robotic aesthetics on anticipated human trust. PeerJ 
+Comput Sci 8, (January 2022), e837. https://doi.
+org/10.7717/peerj-cs.837
+[47] Myrthe Plaisier and Astrid Kappers. 2021. Social 
+Haptic Communication mimicked with vibrotactile 
+patterns - an evaluation by users with deafblind-
+ness. In Proceedings of the 23rd International ACM 
+SIGACCESS Conference on Computers and Acces-
+sibility (ASSETS ’21), October 17, 2021. Association 
+for Computing Machinery, New York, NY , USA, 1–3. 
+https://doi.org/10.1145/3441852.3476528
+[48] Sara Price, Nadia Bianchi-Berthouze, Carey Jew-
+itt, Nikoleta Yiannoutsou, Katerina Fotopoulou, 
+Svetlana Dajic, Juspreet Virdee, Yixin Zhao, Douglas 
+Atkinson, and Frederik Brudy. 2022. The Making of 
+Meaning through Dyadic Haptic Affective Touch. 
+ACM Trans. Comput.-Hum. Interact. 29, 3 (June 
+2022), 1–42. https://doi.org/10.1145/3490494
+[49] Majken Rasmussen, Esben Pedersen, Marianne Pe-
+tersen, and Kasper Hornbæk. 2012. Shape-changing 
+interfaces: A review of the design space and open 
+research questions. Conference on Human Factors 
+in Computing Systems - Proceedings (May 2012). 
+https://doi.org/10.1145/2207676.2207781
+[50] Bradley Rettler and Andrew M. Bailey. 2017. 
+Object. (October 2017). Retrieved December 29, 
+2024 from https://plato.stanford.edu/ENTRIES/
+object/#ObjeSensPercPropNot
+[51] P . Ross and S. Wensveen. 2010. Designing behav-
+ior in interaction : using aesthetic experience as 
+a mechanism for design. International Journal of 
+Design (2010). Retrieved July 23, 2024 from https://
+www.semanticscholar.org/paper/Designing-behav-
+ior-in-interaction-%3A-using-aesthetic-Ross-Wen
+sveen/1155d0ee8a12c17851a4f7ede52bc6f87b2
+aaa0b
+[52] Daniela Rus and Michael T. Tolley. 2015. Design, 
+fabrication and control of soft robots. Nature 
+521, 7553 (May 2015), 467–475. https://doi.
+org/10.1038/nature14543
+[53] Aino Saarinen, Ville Harjunen, Inga Jasinskaja-Lahti, 
+Iiro P . Jääskeläinen, and Niklas Ravaja. 2021. Social 
+touch experience in different contexts: A review. 
+Neuroscience & Biobehavioral Reviews 131, (De-
+cember 2021), 360–372. https://doi.org/10.1016/j.
+neubiorev.2021.09.027
+[54] Ofir Sadka and Alissa Antle. 2022. Interactive Tech-
+nologies for Emotion Regulation Training: A Scoping 
+Review. International Journal of Human-Computer 
+Studies 168, (December 2022), 102906. https://doi.
+org/10.1016/j.ijhcs.2022.102906
+[55] Mona Safari. 2025. HiPalm: Wearable Device for 
+Affective Tactile Interpersonal Communication. In 
+Nineteenth International Conference on Tangible, 
+Embedded, and Embodied Interaction (TEI ’25) 
+(Tangible, Embedded, and Embodied Interaction 
+(TEI)), March 04, 2025. ACM, New York, NY , USA; 
+Bordeaux / Talence, France, 8 pages. https://doi.
+org/10.1145/3689050.3705974
+[56] Oliver Schneider, Karon MacLean, Colin Swindells, 
+and Kellogg Booth. 2017. Haptic experience design: 
+What hapticians do and where they need help. Inter-
+national Journal of Human-Computer Studies 107, 
+(November 2017), 5–21. https://doi.org/10.1016/j.
+ijhcs.2017.04.004
+[57] Ali Shtarbanov. 2021. FlowIO Development Platform 
+– the Pneumatic “Raspberry Pi” for Soft Robotics. 
+In Extended Abstracts of the 2021 CHI Conference 
+on Human Factors in Computing Systems (CHI 
+EA ’21), May 08, 2021. Association for Computing 
+Machinery, New York, NY , USA, 1–6. https://doi.
+org/10.1145/3411763.3451513
+[58] Roland Sigrist, Georg Rauter, Robert Riener, and 
+Peter Wolf. 2013. Augmented visual, auditory, 
+haptic, and multimodal feedback in motor learning: 
+345
+A review. Psychon Bull Rev 20, 1 (February 2013), 
+21–53. https://doi.org/10.3758/s13423-012-0333-8
+[59] Jocelyn Smith and Karon MacLean. 2007. Commu-
+nicating emotion through a haptic link: Design space 
+and methodology. International Journal of Human-
+Computer Studies 65, 4 (April 2007), 376–387. 
+https://doi.org/10.1016/j.ijhcs.2006.11.006
+[60] Peter F . Strawson. 2000. Perception and its Objects. 
+In Knowledge: Readings in Contemporary Episte-
+mology. Oxford University Press, 570.
+[61] Madalina Sucala, Nnamdi Peter Ezeanochie, Heath-
+er Cole-Lewis, and Jennifer Turgiss. 2019. An itera-
+tive, interdisciplinary, collaborative framework for 
+developing and evaluating digital behavior change 
+interventions. Transl Behav Med 10, 6 (July 2019), 
+1538–1548. https://doi.org/10.1093/tbm/ibz109
+[62] A. Toet, J.B.F . Van Erp, F .F . Petrignani, M.H. Dufra-
+snes, A. Sadhashivan, D. Van Alphen, F . Boeree, H.O. 
+De Gruijter, J. Hoeksema, C.T. Stamhuis, and P .J. 
+Steenbergen. 2013. Reach Out and Touch Some-
+body’s Virtual Hand: Affectively Connected through 
+Mediated Touch. In 2013 Humaine Association 
+Conference on Affective Computing and Intel-
+ligent Interaction, September 2013. IEEE, Geneva, 
+Switzerland, 786–791. https://doi.org/10.1109/
+ACII.2013.146
+[63] Dzmitry Tsetserukou and Alena Neviarouskaya. 
+2009. Affective haptic garment enhancing com-
+munication in second life. https://doi.org/10.1109/
+ACII.2009.5349525
+[64] Dianne Vasseur, Sima Ipakchian Askari, Sandra Sui-
+jkerbuijk, Henk Herman Nap, and Wijnand IJsselstei-
+jn. 2024. Sensory, Affective, and Social Experiences 
+with Haptic Devices in Intramural Care Practice. 
+Nursing Reports 14, 1 (March 2024), 230–253. 
+https://doi.org/10.3390/nursrep14010019
+[65] Peter-Paul Verbeek, Robert P . Crease, and Peter-
+Paul Verbeek. 2005. What things do: philosophical 
+reflections on technology, agency, and design (2. 
+printing ed.). Pennsylvania State Univ. Press, Univer-
+sity Park, Pa.
+[66] Yon Visell. 2009. Tactile sensory substitution: 
+Models for enaction in HCI. Interacting with Com-
+puters 21, (January 2009), 38–53. https://doi.
+org/10.1016/j.intcom.2008.08.004
+[67] Judith Weda, Dasha Kolesnyk, Angelika Mader, and 
+Jan Van Erp. 2022. Experiencing Touch by Technol-
+ogy. In Haptics: Science, Technology, Applications, 
+Hasti Seifi, Astrid M. L. Kappers, Oliver Schneider, 
+Knut Drewing, Claudio Pacchierotti, Alireza Abbasi-
+moshaei, Gijs Huisman and Thorsten A. Kern (eds.). 
+Springer International Publishing, Cham, 110–118. 
+https://doi.org/10.1007/978-3-031-06249-0_13
+[68] Nianmei Zhou, Steven Devleminck, and Luc Geurts. 
+2024. Tangible Affect: A Literature Review of 
+Tangible Interactive Systems Addressing Human 
+Core Affect, Emotions and Moods. In Designing 
+Interactive Systems Conference, July 2024. ACM, 
+Copenhagen Denmark, 424–440. https://doi.
+org/10.1145/3643834.3661608
+[69] John Zimmerman, Jodi Forlizzi, and Shelley Even-
+son. 2007. Research through design as a method 
+for interaction design research in HCI. In Proceed-
+ings of the SIGCHI Conference on Human Fac-
+tors in Computing Systems, April 29, 2007. ACM, 
+San Jose California USA, 493–502. https://doi.
+org/10.1145/1240624.1240704
+[70] 2024. Definition of SYMBIONT. Retrieved March 14, 
+2024 from https://www.merriam-webster.com/dic-
+tionary/symbiont
+[71] 2025. Trill Touch Sensors. Bela.io. Retrieved May 12, 
+2025 from https://bela.io/products/trill/
+[72] Programmable Air. Programmable Air. Retrieved 
+April 14, 2025 from https://www.programmableair.
+com
+[73] Soft Robotics Toolkit. Retrieved April 14, 2025 from 
+https://softroboticstoolkit.com/home
+[74] SoftRobotics.IO | FlowIO. SoftRobotics.IO. Re-
+trieved April 14, 2025 from https://www.softrobot-
+ics.io
+346

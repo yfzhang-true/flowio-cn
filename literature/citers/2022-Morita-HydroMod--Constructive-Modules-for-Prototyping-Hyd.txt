@@ -1,0 +1,364 @@
+Demonstrating HydroMod : Constructive Modules for
+Prototyping Hydraulic Physical Interfaces
+Takafumi Morita
+The University of Tokyo
+Tokyo, Japan
+morita@xlab.iii.u-tokyo.ac.jp
+Yu Kuwajima
+Smart Materials lab., Shibaura
+Institute of Technology
+Tokyo, Japan
+nb21105@shibaura-it.ac.jp
+Ayato Minaminosono
+Smart Materials lab., Shibaura
+Institute of Technology
+Tokyo, Japan
+nb20108@shibaura-it.ac.jp
+Shingo Maeda
+Smart Materials lab., Shibaura
+Institute of Technology
+Tokyo, Japan
+maeshin@shibaura-it.ac.jp
+Yasuaki Kakehi
+The University of Tokyo
+Tokyo, Japan
+kakehi@iii.u-tokyo.ac.jp
+Figure 1: HydroMod. (A) HydroMod supports three types of main modules and four types of additional parts, (B) Snapping each
+module together by magnets, (C) Actuated seesaw, (D) Silent pin-based color display, (E) Wearable mobile fluid interface.
+ABSTRACT
+In recent years, actuators that handle fluids such as gases and liquids
+have been attracting attention for their applications in soft robots
+and shape-changing interfaces. In the field of HCI, there have been
+various inflatable prototyping tools that utilize air control, however,
+very few tools for liquid control have been developed. In this study,
+we propose HydroMod, novel constructive modules that can easily
+generate liquid flow and programmatically control liquid flow, with
+the aim of lowering the barrier to entry for prototyping with liquids.
+HydroMod consists of palm-sized small modules, which can gener-
+ate liquid flow with the electrohydrodynamics (EHD) phenomenon
+by simply connecting the modules. Moreover, users can control
+the flow path by simply recombining the modules. In this paper,
+we demonstrate three applications that can be easily prototyped
+with liquids by recombining HydroMod. These applications show-
+case the characteristics of using liquids: weight manipulation, color
+expression, and heating/cooling control.
+CCS CONCEPTS
+• Human-centered computing → Interactive systems and
+tools.
+Permission to make digital or hard copies of part or all of this work for personal or
+classroom use is granted without fee provided that copies are not made or distributed
+for profit or commercial advantage and that copies bear this notice and the full citation
+on the first page. Copyrights for third-party components of this work must be honored.
+For all other uses, contact the owner/author(s).
+CHI ’22 Extended Abstracts, April 29-May 5, 2022, New Orleans, LA, USA
+© 2022 Copyright held by the owner/author(s).
+ACM ISBN 978-1-4503-9156-6/22/04.
+https://doi.org/10.1145/3491101.3519893
+KEYWORDS
+Programmable Materials, Toolkit, Prototyping, Fluid Interface, Wear-
+ables, Electrohydrodynamics
+ACM Reference Format:
+Takafumi Morita, Yu Kuwajima, Ayato Minaminosono, Shingo Maeda, and Ya-
+suaki Kakehi. 2022. Demonstrating HydroMod : Constructive Modules for
+Prototyping Hydraulic Physical Interfaces. InCHI Conference on Human Fac-
+tors in Computing Systems Extended Abstracts (CHI ’22 Extended Abstracts),
+April 29-May 5, 2022, New Orleans, LA, USA. ACM, New York, NY, USA,
+4 pages. https://doi.org/10.1145/3491101.3519893
+1 INTRODUCTION
+Groups of components are increasingly being modularized, pack-
+aged, and kitted to enable prototyping in electronics and robotics
+for those without engineering expertise [2, 9, 10, 12, 14, 16]. Toolk-
+its such as littleBits [3], which reduce the time required to connect
+components and allow users to create electronic systems by simply
+connecting modules, are also expected to have applications in wear-
+ables [7] and soft materials [8]. In the field of HCI, there has been a
+significant amount of research in recent years on programmable
+matter, where the material itself has interactivity. Fluid systems,
+particularly in gases and liquids, are attracting attention for various
+applications. However, compared with fields such as electronics
+and robotics, the development of platforms for prototypes in the
+field of programmable materials that deal with fluid control is a
+developing area.
+Prototyping with materials such as gases and liquids is a chal-
+lenge because the system that drives the fluid must be built from
+scratch and requires specialized knowledge. Several toolkits for
+CHI ’22 Extended Abstracts, April 29-May 5, 2022, New Orleans, LA, USA Morita, Kuwajima, Minaminosono, Maeda and Kakehi
+handling gases have been released in recent years. Typical exam-
+ples include The Soft Robotics Toolkit [ 6], Pneuduino [ 13] [11],
+Programmable Air [1], and FlowIO [15]. However, there are still
+very few toolkits for handling liquids. There are three major reasons
+why liquids are difficult to handle. First, many large external devices
+are required for the handling of liquids. Further, relatively large
+devices such as pumps, tanks, and valves are required to generate a
+liquid flow. Second, it is difficult to reconfigure the path design of
+liquid flow. Once the liquid flow path is specified and designed, it
+takes a considerable amount of time to reconfigure it again using
+the same parts because the existing fluid system is not designed to
+be frequently removed. Third, the fluid system is vulnerable. If any
+part of the system is defective, the working fluid will leak, and the
+system will not function properly.
+In this study, we propose HydroMod, novel constructive modules
+that can easily generate liquid flow and programmatically control
+liquid flow, with the aim of lowering the barrier to entry for proto-
+typing through the use of liquids. We utilize electrohydrodynamic
+(EHD) pumps [5] [4], which use the EHD phenomenon as a pump
+function to generate liquid flow. The EHD phenomenon occurs
+when a high voltage is applied to a dielectric liquid. Utilizing the
+EHD pump, no mechanical moving parts are required because the
+flow is generated simply by placing an electrode in the liquid and
+applying a voltage. Furthermore, we expect that the small size and
+quietness of the EHD pump will address the problem of using a large
+pump, which is the primary cause of the difficulty when handling a
+fluid. Therefore, we adopted an EHD pump for the pump function
+of HydroMod. The HydroMod is composed of palm-sized compact
+modules: Pump modules that generate liquid flow, Actuate modules
+that apply a high voltage to drive the Pump modules, and Wire
+modules that connect the modules. Each module of the HydroMod
+is designed to be easily connected by magnets. A fluid flow can
+be generated by simply connecting these modules, and flow paths
+can be freely designed by simply recombining the modules, which
+eliminates the difficulty of reconfiguring the fluid system, which is
+a challenge. Furthermore, because HydroMod is a plug-and-play
+module, anyone can easily prototype fluid systems without the need
+for specialized knowledge. In addition, because the fluid system is
+built through the combination of modules, even if a defect occurs
+somewhere, it can be fixed by simply changing a part of the module
+without changing the entire system. Hence, HydroMod is resistant
+to vulnerabilities in fluid systems.
+In this paper, we demonstrate three applications that can be
+easily prototyped with liquids by recombining HydroMod. These
+applications showcase the characteristics of using liquids: weight
+manipulation, color expression, and heating/cooling control.
+2 HYDROMOD
+2.1 System Overview
+HydroMod was created based on the following requirements to
+enable an easy prototyping with liquid.
+• It is possible to design a fluid system that can be easily re-
+configured by simply combining modules.
+• It is an untethered module based on wireless communication,
+which allows the synchronization of multiple pumps and a
+distributed placement according to the shape of the target.
+Figure 2: HydroMod supports three types of main modules
+and four types of additional parts: (a) Actuate module, (b)
+Pump module, (c) Wire module, (d) Battery, (e) Connector, (f)
+Small tank, (g) Tube including soft and hard types.
+Figure 3: Five step process to operate the fluids with Hydro-
+Mod: (A) place the Pump module at arbitrary positions, (B)
+connect the Actuate module to the Pump module with a mag-
+netic connector, (C) attach tubes or small tanks as the flow
+path, (D) inject Novec 7100 as a liquid in the fluid system, (E)
+control the created fluid system with simple GUI software.
+• The pump function can be miniaturized without the need
+for large external devices, and fluid systems can be designed
+including wearable and mobile applications.
+As shown in Fig. 2, HydroMod supports three types of main
+modules and four types of additional parts. The main modules
+consist of (a) Actuate module that can control the high voltage
+applied to drive the EHD pump of the Pump module, (b) Pump
+module with an EHD pump that generates liquid flow as a pump
+function, and (c) Wire module that acts as a conductor to electrically
+connect the Pump module and Actuate module. Additional parts
+consist of (d) batteries that drive the Actuate module, (e) connectors
+that connect the flow paths, (f) small tanks that store the liquid, and
+(g) tubes, including soft and hard types, serving as the flow path.
+The batteries, connectors, and tubes are off-the-shelf components,
+and the small tanks are prepared by simply crafting acrylic sheets
+according to the size required.
+Each of the modules comprising HydroMod has a built-in magnet
+as a connector. It is easy to create flow paths and electrical circuits
+by simply connecting the modules together with the magnets. By
+reconfiguring the modules, flow paths can be freely designed to
+take into account the flow direction, pressure, and flow rate. In
+addition, each module is small enough to fit in the palm of the hand
+Demonstrating HydroMod : Constructive Modules for Prototyping Hydraulic Physical Interfaces CHI ’22 Extended Abstracts, April 29-May 5, 2022, New Orleans, LA, USA
+and has a wireless communication function, making it possible to
+create a compact hydraulic system that can be carried around and
+used while moving around, which has been difficult to achieve with
+existing hydraulic systems.
+HydroMod is simple and requires only five steps to operate the
+fluid system, as shown in Fig. 3. First, the Pump Module, which
+generates the liquid flow, is placed at an arbitrary position. Subse-
+quently, the Actuate module is connected to the Pump module with
+a magnetic connector. If the Pump module and Actuate module can-
+not be connected next to each other owing to placement problems
+during prototyping, the Wire module can be connected between
+them to increase the flexibility of the module placement. Next, the
+additional parts such as connectors, tanks or tubes are attached
+to create a flow path as needed. The user then injects Novec 7100
+as a liquid in the fluid system. Finally, a simple GUI software on a
+smartphone is used to remotely control the created fluid system. In
+this way, as the main feature of HydroMod, it allows the users to
+freely design a fluid system through this simple operation.
+2.2 Intuitive Liquid Function Design through
+the Combination of HydroMod Modules
+The main features of the proposed HydroMod are the modularity
+and reconfigurability of the fluid system. All the devices that make
+up conventional fluid systems are substituted with small modules,
+which are easy to handle, and once the modules are connected,
+they can be easily reconnected. This makes it possible to design
+the flow path intuitively through trial and error without detailed
+simulations.
+Furthermore, HydroMod has a major feature that is not found in
+existing fluid systems that handle liquids. In the past, the pressure
+and flow rates in fluid systems were usually controlled by adjusting
+the opening of the solenoid valves. However, with HydroMod, the
+pressure and flow rate can be changed tangibly by reconfiguring the
+Pump modules. Fig. 4 shows the changes in the fluid functions when
+the Pump modules are combined in series and parallel. Connecting
+the Pump modules in series increases the pressure of the fluid,
+whereas connecting them in parallel increases the flow rate of the
+fluid. Not only can HydroMod programmatically control the liquid
+from a microcontroller, but it can also be used to design a fluid
+system with a tangibly adjusted fluid output in hardware.
+Figure 4: Designing liquid functions by combining pump
+modules. (Left) If the Pump modules are connected in series,
+the pressure increases, and (Right) if they are connected in
+parallel, the flow rate increases.
+2.3 Flow Control Method by Recombining
+HydroMod
+The flow direction in HydroMod can be controlled dynamically by
+changing the position of the Actuate module, without changing the
+entire fluid system and without introducing additional equipment.
+Figure 5: Reconfigurable flow control by recombining Actu-
+ate modules: (A) place the Actuate modules in the lower left,
+only the fan on the left turns counterclockwise. (B) place
+the Actuate modules in the upper left, only the fan on the
+left turns clockwise. (C) place the Actuate modules in the
+upper left and lower right, the fan on the left turns clockwise
+and the fan on the right turns clockwise simultaneously. (D)
+place the Actuate modules in the upper left and upper right,
+the fan on the left turns clockwise and the fan on the right
+turns counterclockwise simultaneously.
+The four consecutive flow controls in Fig.5 are taken as examples
+and are described in the following order. First, (A) if the two Actuate
+modules are placed in the lower left, only the fan on the left turns
+counterclockwise. Subsequently, (B) if the two Actuate modules are
+placed in the upper left, only the fan on the left turns clockwise.
+Next, (C) if the two Actuate modules are placed in the upper left
+and two Actuate modules are placed in the lower right, the fan on
+the left turns clockwise and the fan on the right turns clockwise
+simultaneously. Finally, (D) if the two Actuate modules are placed
+in the upper left and two Actuate modules are placed in the upper
+right, the fan on the left turns clockwise and the fan on the right
+turns counterclockwise simultaneously. In this way, fluid systems
+using HydroMod can dynamically and tangibly control the fluid
+flow in ways that are not possible with conventional fluid systems.
+This control method does not require rebuilding the fluid system
+to change the fluid flow, but can be controlled simply by attaching
+the Actuate module, and thus there is no need to introduce new
+equipment.
+3 DEMO APPLICATIONS
+3.1 Actuated Seesaw
+Fig. 6 shows a seesaw object created by combining the modules of
+HydroMod. By moving the liquid inside the hard tube and tank, the
+position of the center of gravity is changed, and this application
+functions as an actuator with kinetic movement. By alternately
+driving two Actuate modules with different voltage application
+directions, the liquid moves left and right inside the tube and tank,
+and the tilt of the seesaw changes as the center of gravity shifts.
+CHI ’22 Extended Abstracts, April 29-May 5, 2022, New Orleans, LA, USA Morita, Kuwajima, Minaminosono, Maeda and Kakehi
+In addition, the timing and strength of the pump drive can be con-
+trolled remotely through wireless communication, and it is possible
+to implement with less wiring that does not interfere with the move-
+ment of the seesaw. This application is based on the application of
+weight manipulation, which is one of the properties of liquids.
+Figure 6: Actuated seesaw. (A) HydroMod allows intuitive
+design of a fluid system by simply combining modules. (B) It
+creates a fluid flow and sends it to the face of the seesaw. (C)
+Kinetic movements are created by moving the liquid inside
+the tube and tank, and changing the position of the center
+of gravity.
+3.2 Silent Pin-based Color Display
+Fig. 7 shows a silent pin-based color display created by combining
+HydroMod. This pin-based display can silently show a liquid rep-
+resentation synchronized at each drive location, such as a wave
+representation. The colored water is controlled by utilizing the
+separation characteristics of the liquid. Novec 7100, which is used
+as a dielectric liquid, has a high density and is hydrophobic, so it
+separates from water. When colored water is placed on Novec 7100,
+Novec 7100 can push the colored water upward, so the colored
+water can be controlled variably, and it is expressed as a display.
+This application is based on the application of color expression,
+which is one of the properties of liquids.
+Figure 7: Silent pin-based color display. (A) The liquid in
+the vertical pin is controlled in an upward and downward
+direction. (B) By having multiple modules working in syn-
+chronization, synchronized liquid expression can be achieved
+at each driving location. (C) The colored water is controlled
+by utilizing the separation characteristics of the liquid.
+3.3 Wearable Mobile Fluid Interface
+Fig. 8 shows a wearable mobile fluid interface created by combining
+HydroMod. This is a wearable interface that can control cooling
+by liquid, and can be used for mobile applications, such as moving
+around or going outside. HydroMod is composed of a combination
+of palm-sized modules that allows for the portable use of fluid
+systems, which has been difficult with conventional fluid systems.
+This application is based on the application of heating/cooling
+control, which is one of the properties of liquids.
+4 CONCLUSION
+In this demonstration, with the aim of lowering the barrier to entry
+for prototyping with liquids, we proposed HydroMod, novel con-
+structive modules that can easily generate and programmatically
+control liquid flow. HydroMod consists of palm-sized modules, and
+the flow path can be freely designed by simply recombining the
+Figure 8: Wearable mobile fluid interface. (A) A wearable
+fluid device that can control cooling without external large
+devices. (B) The pressure can be increased by connecting the
+Pump modules in series. (C) Cooling the body with wearable
+mobile fluid interface.
+modules. Therefore, HydroMod overcomes the three factors that
+have made it difficult to handle liquids in the past: the need for
+large external devices, the difficulty in reconfiguring the flow path
+design, and the fragility of the fluid system. We presented three
+applications that can be easily prototyped with liquids by recom-
+bining HydroMod. These applications showcase the characteristics
+of using liquids such as weight manipulation, color expression, and
+heating/cooling control. We believe that HydroMod will inspire
+users to explore new types of fluid systems.
+ACKNOWLEDGMENTS
+This work was supported by JSPS KAKENHI Grant Number JP21H04
+882, Japan.
+REFERENCES
+[1] Programmable Air. 2021. Retrieved August 27, 2021 from https://www.
+programmableair.com/.
+[2] Arduino. 2021. Retrieved August 27, 2021 from www.arduino.cc./.
+[3] Ayah Bdeir and Ted Ullrich. 2010. Electronics as Material: LittleBits. In Proceed-
+ings of the Fifth International Conference on Tangible, Embedded, and Embodied
+Interaction (Funchal, Portugal) (TEI ’11). Association for Computing Machinery,
+New York, NY, USA, 341–344. https://doi.org/10.1145/1935701.1935781
+[4] Vito Cacucciolo, Hiroyuki Nabae, Koichi Suzumori, and Herbert Shea. 2020.
+Electrically-Driven Soft Fluidic Actuators Combining Stretchable Pumps With
+Thin McKibben Muscles. Frontiers in Robotics and AI 6 (2020), 146. https:
+//doi.org/10.3389/frobt.2019.00146
+[5] Vito Cacucciolo, Jun Shintake, Yu Kuwajima, Shingo Maeda, Dario Floreano, and
+Herbert Shea. 2019. Stretchable pumps for soft machines. Nature 572, 7770 (2019),
+516–519. https://doi.org/10.1038/s41586-019-1479-6
+[6] Donal Holland, Colette Abah, Marielena Velasco Enriquez, Maxwell Herman,
+Gareth Bennett, Emir Vela, and Conor Walsh. 2017. The Soft Robotics Toolkit:
+Strategies for Overcoming Obstacles to the Wide Dissemination of Soft-Robotic
+Hardware. IEEE Robotics & Automation Magazine PP (02 2017), 1–1. https:
+//doi.org/10.1109/MRA.2016.2639067
+[7] Majeed Kazemitabaar, Jason McPeak, Alexander Jiao, Liang He, Thomas Outing,
+and Jon E. Froehlich. 2017. MakerWear: A Tangible Approach to Interactive Wear-
+able Creation for Children . Association for Computing Machinery, New York, NY,
+USA, 133–145. https://doi.org/10.1145/3025453.3025887
+[8] Mannu Lambrichts, Jose Maria Tijerina, and Raf Ramakers. 2020. SoftMod: A Soft
+Modular Plug-and-Play Kit for Prototyping Electronic Systems. In Proceedings
+of the Fourteenth International Conference on Tangible, Embedded, and Embodied
+Interaction (Sydney NSW, Australia) (TEI ’20). Association for Computing Ma-
+chinery, New York, NY, USA, 287–298. https://doi.org/10.1145/3374920.3374950
+[9] MESH. 2021. Retrieved August 27, 2021 from https://meshprj.com/en/.
+[10] Lego Mindstorms. 2021. Retrieved August 27, 2021 from https://www.lego.com/
+en-us/themes/mindstorms/.
+[11] Jifei Ou, Felix Heibeck, and Hiroshi Ishii. 2016. TEI 2016 Studio: Inflated Curiosity.
+In Proceedings of the TEI ’16: Tenth International Conference on Tangible, Embedded,
+and Embodied Interaction (Eindhoven, Netherlands) (TEI ’16). Association for
+Computing Machinery, New York, NY, USA, 766–769. https://doi.org/10.1145/
+2839462.2854119
+[12] Raspberry Pi. 2021. Retrieved August 27, 2021 from www.raspberrypi.org./.
+[13] Pneuduino. 2021. Retrieved August 27, 2021 from https://pneuduino.org/.
+[14] Scratch. 2021. Retrieved August 27, 2021 from https://scratch.mit.edu.
+[15] Ali Shtarbanov. 2021. FlowIO Development Platform – the Pneumatic “Raspberry
+Pi” for Soft Robotics. Association for Computing Machinery, New York, NY, USA.
+https://doi.org/10.1145/3411763.3451513
+[16] Toio. 2021. Retrieved August 27, 2021 from https://toio.io/.
