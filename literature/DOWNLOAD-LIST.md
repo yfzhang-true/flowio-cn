@@ -10,9 +10,15 @@
 - [x] PneuKnit 学位论文（MIT SMArchS 2022，用户自选）→ `AlHajri-…-thesis.pdf`
 - [x] **Lumped-Parameter Response Time Models（ASME 2020）** → `Lumped-Parameter Response Time Models for Pneumatic Circuit Dynamics.pdf`（已提取 `lumped-param-asme2020.txt`，阻力模型已并入 PHYSICS-SPEC）
 
-## ⚠ 待确认
+## ⚠ 待用户下载（链接已用 DSpace API 元数据验证）
 
-**Shtarbanov MIT 学位论文**：用户反馈已下载，但 `literature/` 与 Downloads/Desktop/Documents 近期文件中均未找到——请确认保存位置（或重新下载后移入 `literature/`）。它是各泵模块实测压力-流量数据（Table 1 扩展版）的唯一来源，物理标定等它落地。
+**Shtarbanov 博士学位论文**《Modular Development Platforms and Creative Ecosystems: Design & Deployment for Wide Impact Across Fields》
+- 作者：Shtarbanov, Ali ｜ 类型：Thesis ｜ 时间：2025-05 ｜ handle：1721.1/164267
+- 文件：`Shtarbanov-alims-PHD-MAS-2025-thesis.pdf`（约 25 MB）
+- **正确直链（浏览器打开，过一次人机验证）**：https://dspace.mit.edu/bitstreams/1312d343-1433-453b-acb8-6653e9339e4d/download
+- 论文详情页（备选入口）：https://dspace.mit.edu/handle/1721.1/164267
+- ⚠ 勘误记录：此前提供的 `e2f98dce-…` 直链来自搜索引擎误标，实测指向 Aljomairi 的 PneuKnit 论文（DSpace API 已核实该 bitstream 官方名称）。本次链接由 DSpace 官方 API 的 bitstreams 清单直接取得。
+- 下载后放入 `literature/`——它是各泵模块实测压力-流量数据的唯一来源，物理标定表等它落地。
 
 ## ① 仍强烈推荐（物理 SPEC 标定关键）
 
