@@ -3,6 +3,7 @@
 .tmp_*
 *.log
 __pycache__/
+node_modules/
 
 # ── 仓库整理暂存目录（subtree 合并期间存在，完成后删除）──
 /.fwkeep/
