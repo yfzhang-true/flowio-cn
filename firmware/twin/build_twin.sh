@@ -8,10 +8,10 @@ CORE=../components/pn_core
 SRC="$CORE/src/actions.c $CORE/src/closedloop.c $CORE/src/proto.c $CORE/src/cli.c ../tests/mock_hal.c"
 INC="-I$CORE/include -I../tests"
 
-gcc -shared -o pn_twin.dll $INC twin_api.c $SRC
+gcc -shared -o pn_twin.dll -static-libgcc $INC twin_api.c $SRC
 echo "✓ pn_twin.dll"
 
-gcc -o twin_selftest.exe $INC twin_selftest.c twin_api.c $SRC
+gcc -o twin_selftest.exe -static-libgcc $INC twin_selftest.c twin_api.c $SRC
 echo "✓ twin_selftest.exe"
 
 ./twin_selftest.exe

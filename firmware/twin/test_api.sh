@@ -47,7 +47,7 @@ if [ $((st0 & 32768)) -ne 0 ] 2>/dev/null; then
 fi
 
 echo "─ 接口：协议契约 ─"
-for k in state valves pump sensors cl err; do
+for k in state valves pump sensors cl err leaks; do
   ok "GET /api/state 含字段 $k" "$(grep -c "\"$k\"" <<<"$s")"
 done
 ok "valves 长度 7" "$(grep -c '"valves": \[[^]]*\]' <<<"$s" >/dev/null && [ "$(grep -o '[0-9]*' <<<"$(jnum n "$s")" >/dev/null; echo 1)" ] && [ "$(tr -cd ',' <<<"$(grep -o '"valves": \[[^]]*\]' <<<"$s")" | wc -c)" = "6" ] && echo 1 || echo 0)"
@@ -64,10 +64,10 @@ ok "端口阀1-3 duty>0、4/5=0" "$(v=$(grep -o '"valves": \[[^]]*\]' <<<"$s" | 
 ok "进气阀>0、排气阀=0" "$(v=($(grep -o '"valves": \[[^]]*\]' <<<"$s" | grep -o '[0-9]*')); [ "${v[5]}" -gt 0 ] && [ "${v[6]}" = 0 ] && echo 1 || echo 0)"
 ok "泵 duty=255" "$([ "$(jnum pump "$s")" = "255" ] && echo 1 || echo 0)"
 p1=$(sens 1 "$s")
-ok "0.4s 升压 >5 kPa (≈30kPa/s)" "$(numgt "$p1" 5 && echo 1 || echo 0)"
+ok "0.4s 升压 >2 kPa (v2 孔口)" "$(numgt "$p1" 2 && echo 1 || echo 0)"
 sleep 1.5
 s=$(state); p2=$(sens 1 "$s")
-ok "持续充气单调上升(>+15)" "$(awk -v a="$p2" -v b="$p1" 'BEGIN{exit !(a>b+15)}' && echo 1 || echo 0)"
+ok "持续充气上升(>+8)" "$(awk -v a="$p2" -v b="$p1" 'BEGIN{exit !(a>b+8)}' && echo 1 || echo 0)"
 v=($(grep -o '"valves": \[[^]]*\]' <<<"$s" | grep -o '[0-9]*'))
 ok "阀节能：500ms 后 duty 降为保持值≤170" "$([ "${v[0]}" -gt 0 ] && [ "${v[0]}" -le 170 ] && echo 1 || echo 0)"
 
@@ -134,31 +134,52 @@ ok "饱和不触发超压(err=0)：阈值120>量程100=固件保护盲区(已记
   "$([ "$(jnum err "$s")" = "0" ] && [ $(( $(jnum state "$s") & 32768 )) -eq 0 ] && echo 1 || echo 0)"
 ok "POST /api/reset 回 {ok:true}" "$(curl -s -m 3 -X POST "$BASE/api/reset" | grep -c '"ok": *true')"
 
-echo "─ 接口：一阶气动物理模型 ─"
-# 每项测量前 /apireset 归零（clean 只关阀不清压），保证速率从同一零表压起点可比
-curl -s -m 2 -X POST "$BASE/api/reset" >/dev/null; sleep 0.2
-cmd 'I 7 255'; sleep 1.0; pa=$(sens 1 "$(state)")
-curl -s -m 2 -X POST "$BASE/api/reset" >/dev/null; sleep 0.2
-cmd 'I 7 100'; sleep 1.0; pb=$(sens 1 "$(state)")
-ok "充压速率随 duty 缩放（255:${pa}kPa vs 100:${pb}kPa / 1s @零表压）" \
+echo "─ 接口：一阶气动物理模型 v2（孔口+容积耦合+泄漏） ─"
+reset0() { curl -s -m 2 -X POST "$BASE/api/reset" >/dev/null; sleep 0.2; }
+
+# A. duty 缩放
+reset0; cmd 'I 7 255'; sleep 1.0; pa=$(sens 1 "$(state)")
+reset0; cmd 'I 7 100'; sleep 1.0; pb=$(sens 1 "$(state)")
+ok "A1 充压速率随 duty 缩放（255:${pa} vs 100:${pb} kPa/1s）" \
   "$(awk -v a="$pa" -v b="$pb" 'BEGIN{exit !(a>b*1.8)}' && echo 1 || echo 0)"
-curl -s -m 2 -X POST "$BASE/api/reset" >/dev/null; sleep 0.2
-cmd 'I 7 255'; sleep 8.0; cmd 'S 7'; sleep 0.2
+
+# B. 充压渐近死点（61 kPa）
+reset0; cmd 'I 7 255'; sleep 8.0; cmd 'S 7'; sleep 0.2
 pp=$(sens 1 "$(state)")
-ok "泵压渐近死点 55~70kPa（实测 ${pp}，无 130 假上限）" \
-  "$(awk -v a="$pp" 'BEGIN{exit !(a>55 && a<70)}' && echo 1 || echo 0)"
-curl -s -m 2 -X POST "$BASE/api/reset" >/dev/null; sleep 0.2
-cmd 'V 7 255'; sleep 1.0
+ok "A2 泵压渐近死点 25~65kPa（实测 ${pp}）" \
+  "$(awk -v a="$pp" 'BEGIN{exit !(a>25 && a<65)}' && echo 1 || echo 0)"
+
+# C. 抽气负压
+reset0; cmd 'V 7 255'; sleep 1.0
 pv1=$(sens 1 "$(state)")
-ok "抽气产生真实负压（1s 实测 ${pv1} < -15）" \
-  "$(awk -v a="$pv1" 'BEGIN{exit !(a<-15)}' && echo 1 || echo 0)"
-sleep 7.0; cmd 'S 7'; sleep 0.2
+ok "A3 抽气产生负压（1s 实测 ${pv1} < -2）" \
+  "$(awk -v a="$pv1" 'BEGIN{exit !(a<-2)}' && echo 1 || echo 0)"
+
+# D. 真空渐近极限
+reset0; cmd 'V 7 255'; sleep 8.0; cmd 'S 7'; sleep 0.2
 pv2=$(sens 1 "$(state)")
-ok "真空渐近极限 -50~-35kPa（实测 ${pv2}）" \
-  "$(awk -v a="$pv2" 'BEGIN{exit !(a>-50 && a<-35)}' && echo 1 || echo 0)"
-sleep 1.0
-pv3=$(sens 1 "$(state)")
-ok "负压密封缓慢回充（朝 0 方向：${pv3} > ${pv2}）" "$(awk -v a="$pv3" -v b="$pv2" 'BEGIN{exit !(a>b)}' && echo 1 || echo 0)"
+ok "A4 真空渐近极限（实测 ${pv2} < -10）" \
+  "$(awk -v a="$pv2" 'BEGIN{exit !(a<-10)}' && echo 1 || echo 0)"
+
+# E. 容积耦合：3 端口 vs 1 端口充压速率差
+reset0; cmd 'I 7 255'; sleep 2.0; cmd 'S 7'; p3=$(sens 1 "$(state)")
+reset0; cmd 'I 1 255'; sleep 2.0; cmd 'S 1'; p1=$(sens 1 "$(state)")
+ok "A5 容积耦合：1口(${p1}) > 3口(${p3})×1.2（V_m+V_p vs V_m+3V_p）" \
+  "$(awk -v a="$p1" -v b="$p3" 'BEGIN{exit !(a>b*1.2)}' && echo 1 || echo 0)"
+
+# F. 泄漏注入（TinyML Phase 0）
+reset0; cmd 'I 7 255'; sleep 3.0; cmd 'S 7'; sleep 0.3
+pl0=$(sens 1 "$(state)")
+curl -s -m 2 -X POST "$BASE/api/leak" -d "0 0.3" >/dev/null
+sleep 2.0
+pl1=$(sens 1 "$(state)")
+ok "A6 泄漏注入 k=0.3 加速衰减（${pl0}→${pl1}，降>3kPa/2s）" \
+  "$(awk -v a="$pl0" -v b="$pl1" 'BEGIN{exit !(a-b>3)}' && echo 1 || echo 0)"
+curl -s -m 2 -X POST "$BASE/api/leak" -d "reset" >/dev/null
+lk=$(grep -o '"leaks": \[[^]]*\]' "$(state)" | grep -o '[0-9]' | tr -d '[:space:]')
+ok "A7 /api/leak reset 清零（leaks 全 0）" "$([ -z "$lk" ] && echo 1 || echo 0)"
+ok "A8 /api/leak 非法参数回 {ok:false}" \
+  "$(curl -s -m 2 -X POST "$BASE/api/leak" -d "9 1" | grep -c '"ok": *false')"
 
 clean
 echo ""

@@ -24,6 +24,9 @@ lib.pn_twin_pump_duty.restype = ctypes.c_uint8
 lib.pn_twin_cl_status.restype = ctypes.c_int
 lib.pn_twin_command.argtypes = [ctypes.c_char_p]
 lib.pn_twin_set_sensor.argtypes = [ctypes.c_uint8, ctypes.c_float]
+lib.pn_twin_set_leak.argtypes = [ctypes.c_uint8, ctypes.c_float]
+lib.pn_twin_leak.restype = ctypes.c_float
+lib.pn_twin_leak.argtypes = [ctypes.c_uint8]
 
 CL_NAMES = {0: "IDLE", 1: "RUNNING", 2: "DONE", 3: "TIMEOUT", 4: "ERR"}
 
@@ -62,6 +65,7 @@ class Handler(BaseHTTPRequestHandler):
                 "sensors": [round(lib.pn_twin_sensor(i), 2) for i in range(2)],
                 "cl": CL_NAMES.get(lib.pn_twin_cl_status(), "?"),
                 "err": 1 if (lib.pn_twin_state() & 0x8000) else 0,
+                "leaks": [round(lib.pn_twin_leak(i), 3) for i in range(7)],
             })
         else:
             self._send(404, '{"error":"not found"}', "application/json")
@@ -82,6 +86,25 @@ class Handler(BaseHTTPRequestHandler):
                 idx, kpa = (float(x) for x in body.strip().split())
                 lib.pn_twin_set_sensor(int(idx), kpa)
                 self._json({"ok": True})
+            except ValueError:
+                self._json({"ok": False})
+        elif self.path == "/api/leak":
+            # TinyML Phase 0：泄漏注入（SPEC 15）。body: "<idx 0-6> <k 0-1>" 或 "reset"
+            try:
+                parts = body.strip().split()
+                if len(parts) == 1 and parts[0] == "reset":
+                    for i in range(7):
+                        lib.pn_twin_set_leak(i, 0.0)
+                    self._json({"ok": True})
+                elif len(parts) == 2:
+                    idx, k = int(parts[0]), float(parts[1])
+                    if 0 <= idx <= 6 and 0.0 <= k <= 1.0:
+                        lib.pn_twin_set_leak(idx, k)
+                        self._json({"ok": True})
+                    else:
+                        self._json({"ok": False})
+                else:
+                    self._json({"ok": False})
             except ValueError:
                 self._json({"ok": False})
         else:

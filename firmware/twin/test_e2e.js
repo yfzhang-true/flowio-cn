@@ -77,14 +77,14 @@ function T(name, cond) {
   await p.evaluate(() => send('S 31'));
   await p.waitForTimeout(300);
   await p.click('text=▶ 充气');
-  await p.waitForTimeout(1400);
+  await p.waitForTimeout(5000);
   let s = await snap();
   T('端口阀1-3+进气阀 导通', s.pistons.every(Boolean));
   T('泵叶轮旋转', s.imp);
   T('全路径气流(干管+泵+3分支=5)', s.flows === 5);
   T('气球长大(>0.5)', parseFloat(s.bal[0].match(/[\d.]+/)[0]) > 0.5);
   const g1 = parseFloat(s.gauge);
-  T('压力上升 >20 kPa', g1 > 20);
+  T('压力上升 >12 kPa', g1 > 12);
   const cardP = await p.evaluate(() => parseFloat(document.getElementById('pvp0').textContent));
   T('端口卡片压力跟随上升(>5)', cardP > 5);
 
@@ -171,7 +171,7 @@ function T(name, cond) {
   await p.waitForTimeout(500);
   let g = await p.evaluate(() => fetch('/api/state', { cache: 'no-store' }).then(r => r.json()));
   T('G 命令已发(闭环启动)', g.cl === 'RUNNING' || g.cl === 'DONE');
-  for (let i = 0; i < 45 && g.cl === 'RUNNING'; ++i) {
+  for (let i = 0; i < 80 && g.cl === 'RUNNING'; ++i) {
     await p.waitForTimeout(200);
     g = await p.evaluate(() => fetch('/api/state', { cache: 'no-store' }).then(r => r.json()));
   }

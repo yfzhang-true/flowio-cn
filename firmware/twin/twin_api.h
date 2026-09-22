@@ -29,6 +29,12 @@ PN_TWIN_API uint8_t  pn_twin_pump_duty(void);
 PN_TWIN_API int      pn_twin_cl_status(void);             /* 闭环状态枚举 */
 PN_TWIN_API void     pn_twin_advance(uint32_t ms);        /* 推进虚拟时钟 */
 
+/* TinyML Phase 0：泄漏注入（标注数据工厂，SPEC 15）
+ * idx 0-4=端口阀（阀开时经端口侧漏）、5=进气阀、6=排气阀（关阀时经密封面漏）
+ * k ∈ [0,1] 泄漏系数；0=无泄漏（默认）。供 /api/leak 与训练数据生成使用。 */
+PN_TWIN_API void     pn_twin_set_leak(uint8_t idx, float k);
+PN_TWIN_API float    pn_twin_leak(uint8_t idx);
+
 #ifdef __cplusplus
 }
 #endif
