@@ -1,0 +1,874 @@
+[
+ {
+  "title": "KiPneu: Designing a Constructive Pneumatic Platform for Biomimicry Learning in STEAM Education",
+  "year": 2024,
+  "venue": "Conference on Designing Interactive Systems",
+  "n_au": 18,
+  "n_py": 18,
+  "py_first": true,
+  "py_names": [
+   "Guanyun Wang",
+   "Chen Zheng",
+   "Yan-Bo Fu",
+   "Kuangqi Zhu"
+  ]
+ },
+ {
+  "title": "SnapInflatables: Designing Inflatables with Snap-through Instability for Responsive Interaction",
+  "year": 2024,
+  "venue": "International Conference on Human Factors in Computing Syste",
+  "n_au": 17,
+  "n_py": 17,
+  "py_first": true,
+  "py_names": [
+   "Yue Yang",
+   "Lei Ren",
+   "Chuang Chen",
+   "Bin Hu"
+  ]
+ },
+ {
+  "title": "MorphingSkin: A Skin-like Platform that Integrates Multimodal Hydraulic Actuators Based on Flexible Electroosmotic Pumps",
+  "year": 2025,
+  "venue": "ACM Symposium on User Interface Software and Technology",
+  "n_au": 14,
+  "n_py": 12,
+  "py_first": true,
+  "py_names": [
+   "Tianyu Yu",
+   "Peisheng He",
+   "Bob Tianqi Wei",
+   "Chenyuheng Wang"
+  ]
+ },
+ {
+  "title": "Single Pump-Valve Pneumatic Actuation With Continuous Flow Rate Control for Soft Robots",
+  "year": 2025,
+  "venue": "IEEE Robotics and Automation Letters",
+  "n_au": 12,
+  "n_py": 12,
+  "py_first": true,
+  "py_names": [
+   "Sicong Liu",
+   "Lin Wang",
+   "Zhongfeng Qian",
+   "Dihan Liu"
+  ]
+ },
+ {
+  "title": "DuoMorph: Synergistic Integration of FDM Printing and Pneumatic Actuation for Shape-Changing Interfaces",
+  "year": 2026,
+  "venue": "International Conference on Human Factors in Computing Syste",
+  "n_au": 13,
+  "n_py": 10,
+  "py_first": true,
+  "py_names": [
+   "Xueqing Li",
+   "Dan Huang",
+   "Tianyu Yu",
+   "Shuzi Yin"
+  ]
+ },
+ {
+  "title": "An FPGA-Based Networked Hybrid Valve Pneumatic System for a Multi-Layer Soft Sponge Robot",
+  "year": 2025,
+  "venue": "Applied Sciences",
+  "n_au": 5,
+  "n_py": 5,
+  "py_first": true,
+  "py_names": [
+   "Haiming Huang",
+   "Xujing Li",
+   "Ya-Ge Fan",
+   "Yang Liu"
+  ]
+ },
+ {
+  "title": "Peristaltic Pump-Based Palm-Sized Multi-Mode Pressure Supply System for Soft Robots",
+  "year": 2024,
+  "venue": "IEEE Robotics and Automation Letters",
+  "n_au": 5,
+  "n_py": 5,
+  "py_first": true,
+  "py_names": [
+   "Cheng-Quan Hu",
+   "Jingyi Kang",
+   "Jiayuan Liu",
+   "Jie Wang"
+  ]
+ },
+ {
+  "title": "Xstrings: 3D Printing Cable-Driven Mechanism for Actuation, Deformation, and Manipulation",
+  "year": 2025,
+  "venue": "International Conference on Human Factors in Computing Syste",
+  "n_au": 7,
+  "n_py": 4,
+  "py_first": true,
+  "py_names": [
+   "Jiaji Li",
+   "Shuyue Feng",
+   "Yujia Liu",
+   "Guanyun Wang"
+  ]
+ },
+ {
+  "title": "MiuraKit: A Modular Hands-On Construction Kit For Pneumatic Shape-Changing And Robotic Interfaces",
+  "year": 2023,
+  "venue": "Conference on Designing Interactive Systems",
+  "n_au": 5,
+  "n_py": 4,
+  "py_first": true,
+  "py_names": [
+   "Zhitong Cui",
+   "Shuhong Wang",
+   "Junxian Li",
+   "Shi-Jian Luo"
+  ]
+ },
+ {
+  "title": "A Silent, Low-Heat Pinch Valve Driven by a Single Rolled Dielectric Elastomer Actuator",
+  "year": 2026,
+  "venue": "IEEE/ASME transactions on mechatronics",
+  "n_au": 4,
+  "n_py": 3,
+  "py_first": true,
+  "py_names": [
+   "Qi Shao",
+   "Xin-Jun Liu",
+   "Hui-Chan Zhao"
+  ]
+ },
+ {
+  "title": "LivingLoom: Investigating Human-Plant Symbiosis Through Integrating Living Plants Into (E-)Textiles",
+  "year": 2025,
+  "venue": "International Conference on Human Factors in Computing Syste",
+  "n_au": 4,
+  "n_py": 3,
+  "py_first": true,
+  "py_names": [
+   "Jingwen Zhu",
+   "Samantha Chang",
+   "Ruth Zhao"
+  ]
+ },
+ {
+  "title": "Characterisation and control platform for pneumatically driven soft robots: Design and applications",
+  "year": 2023,
+  "venue": "International Conference on Soft Robotics",
+  "n_au": 5,
+  "n_py": 3,
+  "py_first": true,
+  "py_names": [
+   "Jia-Lei Shi",
+   "Hanyu Jin",
+   "Ge Shi"
+  ]
+ },
+ {
+  "title": "MistMaker and Large Language Model MistMaker(LLMMM): LLM Operated Mist Making",
+  "year": 2026,
+  "venue": "CHI Extended Abstracts",
+  "n_au": 3,
+  "n_py": 2,
+  "py_first": true,
+  "py_names": [
+   "Shuangshuang Cai",
+   "David Yang"
+  ]
+ },
+ {
+  "title": "MemoGlove: Capturing and Recreating XR Memory with Haptic Interaction Traces",
+  "year": 2025,
+  "venue": "2025 IEEE International Symposium on Mixed and Augmented Rea",
+  "n_au": 2,
+  "n_py": 2,
+  "py_first": true,
+  "py_names": [
+   "Qingyun Liu",
+   "Yu-Han Wang"
+  ]
+ },
+ {
+  "title": "A Modular Pneumatic Soft Gripper Design for Aerial Grasping and Landing",
+  "year": 2023,
+  "venue": "International Conference on Soft Robotics",
+  "n_au": 5,
+  "n_py": 3,
+  "py_first": false,
+  "py_names": [
+   "Ching-Wei Chang",
+   "Bailun Jiang",
+   "Chih-Yung Wen"
+  ]
+ },
+ {
+  "title": "Fluidic Control of Untethered Underwater Soft Robots",
+  "year": 2026,
+  "venue": "IEEE Robotics and Automation Letters",
+  "n_au": 5,
+  "n_py": 1,
+  "py_first": true,
+  "py_names": [
+   "Allyson E. Chen"
+  ]
+ },
+ {
+  "title": "An 18-g haptic feedback ring with a three-axis force-sensing skin",
+  "year": 2025,
+  "venue": "Nature Electronics",
+  "n_au": 8,
+  "n_py": 1,
+  "py_first": true,
+  "py_names": [
+   "Sunju Kang"
+  ]
+ },
+ {
+  "title": "Demonstrating NeuroFlux: A Non-Invasive Peripheral Magnetic Stimulation Device for Multimodal Haptic Feedback",
+  "year": 2025,
+  "venue": "UIST Adjunct",
+  "n_au": 4,
+  "n_py": 1,
+  "py_first": true,
+  "py_names": [
+   "Bingjian Huang"
+  ]
+ },
+ {
+  "title": "Exploring On-Body Haptic Systems through HCI Methods: From Perception to Hardware and Application Innovation",
+  "year": 2025,
+  "venue": "UIST Adjunct",
+  "n_au": 1,
+  "n_py": 1,
+  "py_first": true,
+  "py_names": [
+   "Bingjian Huang"
+  ]
+ },
+ {
+  "title": "Soft Haptic Display Toolkit: A Low-Cost, Open-Source Approach to High Resolution Tactile Feedback",
+  "year": 2025,
+  "venue": "2025 22nd International Conference on Ubiquitous Robots (UR)",
+  "n_au": 6,
+  "n_py": 1,
+  "py_first": true,
+  "py_names": [
+   "Pijuan Yu"
+  ]
+ },
+ {
+  "title": "AirCraft: Exploring Air as a Design Medium",
+  "year": 2025,
+  "venue": "International Conference on Tangible, Embedded, and Embodied",
+  "n_au": 3,
+  "n_py": 1,
+  "py_first": true,
+  "py_names": [
+   "Semina Yi"
+  ]
+ },
+ {
+  "title": "Info-Motion: Using the Metaphor of Plant Motion for Information Communication in Shape-changing Interface: Info-motion",
+  "year": 2024,
+  "venue": "International Conference on Tangible, Embedded, and Embodied",
+  "n_au": 1,
+  "n_py": 1,
+  "py_first": true,
+  "py_names": [
+   "Jiawen Yao"
+  ]
+ },
+ {
+  "title": "Framing responsive architecture with soft robots—the exploratory practice of soft pneumatic robotic architectural system",
+  "year": 2023,
+  "venue": "Architectural Intelligence",
+  "n_au": 1,
+  "n_py": 1,
+  "py_first": true,
+  "py_names": [
+   "Sihui Wang"
+  ]
+ },
+ {
+  "title": "Touchibo: Multimodal Texture-Changing Robotic Platform for Shared Human Experiences",
+  "year": 2022,
+  "venue": "ACM Symposium on User Interface Software and Technology",
+  "n_au": 7,
+  "n_py": 1,
+  "py_first": true,
+  "py_names": [
+   "Yuhan Hu"
+  ]
+ },
+ {
+  "title": "Pulling, Pressing, and Sensing with In-Flat: Transparent Touch Overlay for Smartphones",
+  "year": 2022,
+  "venue": "International Working Conference on Advanced Visual Interfac",
+  "n_au": 4,
+  "n_py": 1,
+  "py_first": true,
+  "py_names": [
+   "Zhuoming Zhang"
+  ]
+ },
+ {
+  "title": "Designing and Fabricating Pneumatic Textures for Human-Robot Interaction",
+  "year": null,
+  "venue": "",
+  "n_au": 2,
+  "n_py": 1,
+  "py_first": true,
+  "py_names": [
+   "Yuhan Hu"
+  ]
+ },
+ {
+  "title": "Power from Potential: A Survey of Electrostatic Actuators for Haptics",
+  "year": 2026,
+  "venue": "IEEE Transactions on Haptics",
+  "n_au": 8,
+  "n_py": 2,
+  "py_first": false,
+  "py_names": [
+   "Ran Zhou",
+   "Teng Han"
+  ]
+ },
+ {
+  "title": "Texoskeletons: Developing the Fundamental Technologies for Creating Intelligent Soft Robotic Clothing With Integrated 1D",
+  "year": 2026,
+  "venue": "Advanced Functional Materials",
+  "n_au": 20,
+  "n_py": 2,
+  "py_first": false,
+  "py_names": [
+   "Shuxin Meng",
+   "Zi-Yun Ding"
+  ]
+ },
+ {
+  "title": "AirForce: Personal Fabrication of Large-Scale, Load-Bearing Animatronics Structures from a Single Tube",
+  "year": 2026,
+  "venue": "International Conference on Human Factors in Computing Syste",
+  "n_au": 12,
+  "n_py": 2,
+  "py_first": false,
+  "py_names": [
+   "Min Deng",
+   "Chiao Fang"
+  ]
+ },
+ {
+  "title": "Soft Pneumatic Actuators: A Review of Design, Fabrication, Modeling, Sensing, Control and Applications",
+  "year": 2022,
+  "venue": "IEEE Access",
+  "n_au": 11,
+  "n_py": 2,
+  "py_first": false,
+  "py_names": [
+   "Jie-Wen Lai",
+   "Yuen K. Yong"
+  ]
+ },
+ {
+  "title": "A Wearable Pneumatic Device for Continuous, Closed-Loop, Bidirectional Tactile Interaction",
+  "year": 2026,
+  "venue": "",
+  "n_au": 8,
+  "n_py": 1,
+  "py_first": false,
+  "py_names": [
+   "Ava Chen"
+  ]
+ },
+ {
+  "title": "A Cabinet of Affective Touches: Building Design Repository Linking Somatic Experience with Soft Robotic Systems",
+  "year": 2026,
+  "venue": "Creativity & Cognition",
+  "n_au": 6,
+  "n_py": 1,
+  "py_first": false,
+  "py_names": [
+   "Caroline Yan Zheng"
+  ]
+ },
+ {
+  "title": "Automatic enclosure system with tunable strapping pressure for active physical interface using soft actuated straps: a p",
+  "year": 2025,
+  "venue": "Smart materials and structures (Print)",
+  "n_au": 5,
+  "n_py": 1,
+  "py_first": false,
+  "py_names": [
+   "Mengnan Wu"
+  ]
+ },
+ {
+  "title": "Haptiknit: Distributed stiffness knitting for wearable haptics",
+  "year": 2024,
+  "venue": "Sci. Robotics",
+  "n_au": 7,
+  "n_py": 1,
+  "py_first": false,
+  "py_names": [
+   "Tian Chen"
+  ]
+ },
+ {
+  "title": "Conveying Emotions through Shape-changing to Children with and without Visual Impairment",
+  "year": 2024,
+  "venue": "International Conference on Human Factors in Computing Syste",
+  "n_au": 7,
+  "n_py": 1,
+  "py_first": false,
+  "py_names": [
+   "Yuhan Hu"
+  ]
+ },
+ {
+  "title": "\"I’m Not Touching You. It’s The Robot!\": Inclusion Through A Touch-Based Robot Among Mixed-Visual Ability Children",
+  "year": 2024,
+  "venue": "IEEE/ACM International Conference on Human-Robot Interaction",
+  "n_au": 9,
+  "n_py": 1,
+  "py_first": false,
+  "py_names": [
+   "Yuhan Hu"
+  ]
+ },
+ {
+  "title": "SleeveIO: Modular and Reconfigurable Platform for Multimodal Wearable Haptic Feedback Interactions",
+  "year": 2023,
+  "venue": "ACM Symposium on User Interface Software and Technology",
+  "n_au": 4,
+  "n_py": 1,
+  "py_first": false,
+  "py_names": [
+   "Mengjia Zhu"
+  ]
+ },
+ {
+  "title": "Soft Robotics and Programmable Materials for Human-Computer Interaction",
+  "year": 2023,
+  "venue": "Conference on Designing Interactive Systems",
+  "n_au": 6,
+  "n_py": 1,
+  "py_first": false,
+  "py_names": [
+   "Yuhan Hu"
+  ]
+ },
+ {
+  "title": "NugiTex: An Interactive, Affective Wearable that Informs Users of a Plant’s “Comfort” Level through Haptic Cues",
+  "year": 2023,
+  "venue": "Conference on Designing Interactive Systems",
+  "n_au": 4,
+  "n_py": 1,
+  "py_first": false,
+  "py_names": [
+   "Sailin Zhong"
+  ]
+ },
+ {
+  "title": "InflatableMod: Untethered and Reconfigurable Inflatable Modules for Tabletop-sized Pneumatic Physical Interfaces",
+  "year": 2023,
+  "venue": "International Conference on Human Factors in Computing Syste",
+  "n_au": 8,
+  "n_py": 1,
+  "py_first": false,
+  "py_names": [
+   "Ziyuan Jiang"
+  ]
+ },
+ {
+  "title": "From UbiComp to Universe—Moving Pervasive Computing Research Into Space Applications",
+  "year": 2023,
+  "venue": "IEEE pervasive computing",
+  "n_au": 7,
+  "n_py": 1,
+  "py_first": false,
+  "py_names": [
+   "Fangzheng Liu"
+  ]
+ },
+ {
+  "title": "Model-Based Nonlinear Feedback Controllers for Pressure Control of Soft Pneumatic Actuators Using On/Off Valves",
+  "year": 2022,
+  "venue": "Frontiers in Robotics and AI",
+  "n_au": 3,
+  "n_py": 1,
+  "py_first": false,
+  "py_names": [
+   "Yuen K. Yong"
+  ]
+ },
+ {
+  "title": "Emotion Through Motion: How Shape-Changing Jewelry Conveys Emotions",
+  "year": 2026,
+  "venue": "International Conference on Human Factors in Computing Syste",
+  "n_au": 6,
+  "n_py": 0,
+  "py_first": false,
+  "py_names": []
+ },
+ {
+  "title": "Foldflatables: Programmable Folding in Inflatable Structures with Stiffness-Tunable Thermoplastic Hinges",
+  "year": 2026,
+  "venue": "International Conference on Tangible, Embedded, and Embodied",
+  "n_au": 4,
+  "n_py": 0,
+  "py_first": false,
+  "py_names": []
+ },
+ {
+  "title": "Electropermanent Magnetic Muscles: Power‐Efficient, Low‐Voltage, Compact Magnetic Actuators to Power Wearables and Untet",
+  "year": 2025,
+  "venue": "Advanced Intelligent Systems",
+  "n_au": 5,
+  "n_py": 0,
+  "py_first": false,
+  "py_names": []
+ },
+ {
+  "title": "SOFT OBJECTS: Prototyping for Tactile Interpersonal Communication",
+  "year": 2025,
+  "venue": "Conference on Designing Interactive Systems",
+  "n_au": 3,
+  "n_py": 0,
+  "py_first": false,
+  "py_names": []
+ },
+ {
+  "title": "Enhancing Dual-Loop Pressure Control in Pneumatic Soft Robotics With a Comparison of Evolutionary Algorithms for PID & F",
+  "year": 2025,
+  "venue": "IEEE Robotics and Automation Letters",
+  "n_au": 3,
+  "n_py": 0,
+  "py_first": false,
+  "py_names": []
+ },
+ {
+  "title": "HaptiCoil: Soft Programmable Buttons with Hydraulically Coupled Haptic Feedback and Sensing",
+  "year": 2025,
+  "venue": "International Conference on Human Factors in Computing Syste",
+  "n_au": 3,
+  "n_py": 0,
+  "py_first": false,
+  "py_names": []
+ },
+ {
+  "title": "BiFlu2: A Miniaturized Electro-Fluidic Circuit for All-On-Board Control of Hydraulically-Actuated Biorobotic Organs",
+  "year": 2025,
+  "venue": "International Conference on Soft Robotics",
+  "n_au": 4,
+  "n_py": 0,
+  "py_first": false,
+  "py_names": []
+ },
+ {
+  "title": "Tape-Tics: A Flexible and Modular Vibrotactile Feedback System for Rapid Prototyping of Haptic Applications in Education",
+  "year": 2025,
+  "venue": "NASA/ESA Conference on Adaptive Hardware and Systems",
+  "n_au": 6,
+  "n_py": 0,
+  "py_first": false,
+  "py_names": []
+ },
+ {
+  "title": "3D-Printed Modified Pinch Valve for Controlling Pneumatic Artificial Muscles",
+  "year": 2024,
+  "venue": "International Conference on Automation, Control and Robotics",
+  "n_au": 4,
+  "n_py": 0,
+  "py_first": false,
+  "py_names": []
+ },
+ {
+  "title": "Wear + Touch: An Exploration of Wearables for Vibrotactile Feedback During Touchscreen Input",
+  "year": 2024,
+  "venue": "International journal of human computer interactions",
+  "n_au": 2,
+  "n_py": 0,
+  "py_first": false,
+  "py_names": []
+ },
+ {
+  "title": "Evaluating ActuAir: Building Occupants' Experiences of a Shape-Changing Air Quality Display",
+  "year": 2024,
+  "venue": "International Conference on Human Factors in Computing Syste",
+  "n_au": 4,
+  "n_py": 0,
+  "py_first": false,
+  "py_names": []
+ },
+ {
+  "title": "PneuDrive: An Embedded Pressure Control System and Modeling Toolkit for Large-Scale Soft Robots",
+  "year": 2024,
+  "venue": "International Conference on Soft Robotics",
+  "n_au": 4,
+  "n_py": 0,
+  "py_first": false,
+  "py_names": []
+ },
+ {
+  "title": "phloSAR: A Portable, High-Flow Pressure Supply and Regulator Enabling Untethered Operation of Large Pneumatic Soft Robot",
+  "year": 2024,
+  "venue": "International Conference on Soft Robotics",
+  "n_au": 4,
+  "n_py": 0,
+  "py_first": false,
+  "py_names": []
+ },
+ {
+  "title": "pneuCNTRL: a Pneumatic Control System for User Studies on Dynamic, Haptic Inflatables",
+  "year": 2024,
+  "venue": "International Conference on Tangible, Embedded, and Embodied",
+  "n_au": 3,
+  "n_py": 0,
+  "py_first": false,
+  "py_names": []
+ },
+ {
+  "title": "ToRoS: A Topology Optimization Approach for Designing Robotic Skins",
+  "year": 2023,
+  "venue": "ACM Transactions on Graphics",
+  "n_au": 4,
+  "n_py": 0,
+  "py_first": false,
+  "py_names": []
+ },
+ {
+  "title": "Probing Respiratory Care With Generative Deep Learning",
+  "year": 2023,
+  "venue": "Proc. ACM Hum. Comput. Interact.",
+  "n_au": 4,
+  "n_py": 0,
+  "py_first": false,
+  "py_names": []
+ },
+ {
+  "title": "Tinkering with social touch technology",
+  "year": 2023,
+  "venue": "Frontiers Comput. Sci.",
+  "n_au": 4,
+  "n_py": 0,
+  "py_first": false,
+  "py_names": []
+ },
+ {
+  "title": "Design, Development, and Testing of Peristaltic Suit: Active-Dynamic Compression and Physiological Sensing Intra-vehicul",
+  "year": 2023,
+  "venue": "52nd International Conference on Environmental Systems",
+  "n_au": 6,
+  "n_py": 0,
+  "py_first": false,
+  "py_names": []
+ },
+ {
+  "title": "Corsetto: A Kinesthetic Garment for Designing, Composing for, and Experiencing an Intersubjective Haptic Voice",
+  "year": 2023,
+  "venue": "International Conference on Human Factors in Computing Syste",
+  "n_au": 9,
+  "n_py": 0,
+  "py_first": false,
+  "py_names": []
+ },
+ {
+  "title": "Boards Hit Back: Reflecting on Martial Arts Practices Through Soma Design",
+  "year": 2023,
+  "venue": "International Conference on Human Factors in Computing Syste",
+  "n_au": 3,
+  "n_py": 0,
+  "py_first": false,
+  "py_names": []
+ },
+ {
+  "title": "A High-Strength, Highly-Flexible Robotic Strap for Harnessing, Lifting, and Transferring Humans",
+  "year": 2023,
+  "venue": "IEEE Robotics and Automation Letters",
+  "n_au": 2,
+  "n_py": 0,
+  "py_first": false,
+  "py_names": []
+ },
+ {
+  "title": "A Large-Area Wearable Soft Haptic Device Using Stacked Pneumatic Pouch Actuation",
+  "year": 2022,
+  "venue": "IEEE/RJS International Conference on Intelligent RObots and ",
+  "n_au": 6,
+  "n_py": 0,
+  "py_first": false,
+  "py_names": []
+ },
+ {
+  "title": "VIREO: Web-based Graphical Authoring of Vibrotactile Feedback for Interactions with Mobile and Wearable Devices",
+  "year": 2022,
+  "venue": "International journal of human computer interactions",
+  "n_au": 2,
+  "n_py": 0,
+  "py_first": false,
+  "py_names": []
+ },
+ {
+  "title": "Wearable Choreographer: Designing Soft-Robotics for Dance Practice",
+  "year": 2022,
+  "venue": "Conference on Designing Interactive Systems",
+  "n_au": 3,
+  "n_py": 0,
+  "py_first": false,
+  "py_names": []
+ },
+ {
+  "title": "HydroMod : Constructive Modules for Prototyping Hydraulic Physical Interfaces",
+  "year": 2022,
+  "venue": "International Conference on Human Factors in Computing Syste",
+  "n_au": 5,
+  "n_py": 0,
+  "py_first": false,
+  "py_names": []
+ },
+ {
+  "title": "KnitSkin: Machine-Knitted Scaled Skin for Locomotion",
+  "year": 2022,
+  "venue": "International Conference on Human Factors in Computing Syste",
+  "n_au": 5,
+  "n_py": 0,
+  "py_first": false,
+  "py_names": []
+ },
+ {
+  "title": "Demonstrating HydroMod : Constructive Modules for Prototyping Hydraulic Physical Interfaces",
+  "year": 2022,
+  "venue": "CHI Extended Abstracts",
+  "n_au": 5,
+  "n_py": 0,
+  "py_first": false,
+  "py_names": []
+ },
+ {
+  "title": "Actuated Materials and Soft Robotics Strategies for Human-Computer Interaction Design",
+  "year": 2022,
+  "venue": "CHI Extended Abstracts",
+  "n_au": 6,
+  "n_py": 0,
+  "py_first": false,
+  "py_names": []
+ },
+ {
+  "title": "PneuBots: Modular Inflatables for Playful Exploration of Soft Robotics",
+  "year": 2022,
+  "venue": "CHI Extended Abstracts",
+  "n_au": 2,
+  "n_py": 0,
+  "py_first": false,
+  "py_names": []
+ },
+ {
+  "title": "A Desktop-sized Platform for Real-time Control Applications of Pneumatic Soft Robots",
+  "year": 2022,
+  "venue": "International Conference on Soft Robotics",
+  "n_au": 4,
+  "n_py": 0,
+  "py_first": false,
+  "py_names": []
+ },
+ {
+  "title": "Layer by Layer, Patterned Valves Enable Programmable Soft Surfaces",
+  "year": 2022,
+  "venue": "Proceedings of the ACM on Interactive Mobile Wearable and Ub",
+  "n_au": 2,
+  "n_py": 0,
+  "py_first": false,
+  "py_names": []
+ },
+ {
+  "title": "AirPinch – An Inflatable Touch Fader with Pneumatic Tactile Feedback",
+  "year": 2022,
+  "venue": "International Conference on Tangible, Embedded, and Embodied",
+  "n_au": 3,
+  "n_py": 0,
+  "py_first": false,
+  "py_names": []
+ },
+ {
+  "title": "OmniFiber: Integrated Fluidic Fiber Actuators for Weaving Movement based Interactions into the ‘Fabric of Everyday Life’",
+  "year": 2021,
+  "venue": "ACM Symposium on User Interface Software and Technology",
+  "n_au": 10,
+  "n_py": 0,
+  "py_first": false,
+  "py_names": []
+ },
+ {
+  "title": "SymbioSinging: Robotically transposing singing experience across singing and non-singing bodies",
+  "year": 2021,
+  "venue": "Creativity & Cognition",
+  "n_au": 5,
+  "n_py": 0,
+  "py_first": false,
+  "py_names": []
+ },
+ {
+  "title": "Software Architecture Based on Web Standards for Gesture Input with Smartwatches and Smartglasses",
+  "year": 2021,
+  "venue": "International Conference on Mobile and Ubiquitous Multimedia",
+  "n_au": 2,
+  "n_py": 0,
+  "py_first": false,
+  "py_names": []
+ },
+ {
+  "title": "Experimenting With Soft Robotics in Education: A Systematic Literature Review From 2006 to 2022",
+  "year": 2024,
+  "venue": "IEEE Transactions on Learning Technologies",
+  "n_au": 5,
+  "n_py": 0,
+  "py_first": false,
+  "py_names": []
+ },
+ {
+  "title": "Comparative Analysis of Evolutionary Algorithms for PID Controller Optimization in Pneumatic Soft Robotic Systems: A Sim",
+  "year": 2024,
+  "venue": "IEEE Access",
+  "n_au": 2,
+  "n_py": 0,
+  "py_first": false,
+  "py_names": []
+ },
+ {
+  "title": "MIT Open Access",
+  "year": null,
+  "venue": "",
+  "n_au": 11,
+  "n_py": 0,
+  "py_first": false,
+  "py_names": []
+ },
+ {
+  "title": "What to Design Next: Actuated Materials and Soft Robots for Children",
+  "year": null,
+  "venue": "",
+  "n_au": 1,
+  "n_py": 0,
+  "py_first": false,
+  "py_names": []
+ },
+ {
+  "title": "Threads of Possibility: Diverse Youth Designers, Soft Robotics, and Sports Wearables Making soft robotics accessible to ",
+  "year": null,
+  "venue": "",
+  "n_au": 4,
+  "n_py": 0,
+  "py_first": false,
+  "py_names": []
+ },
+ {
+  "title": "The Rise of Organic Soft Robotics : Strategies for Fabrication",
+  "year": null,
+  "venue": "",
+  "n_au": 6,
+  "n_py": 0,
+  "py_first": false,
+  "py_names": []
+ }
+]
