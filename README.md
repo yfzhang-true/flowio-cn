@@ -1,16 +1,30 @@
-# FlowIO-CN — 气动软体机器人通用控制器（国产替代 · 科研/教育套件）
+# FlowIO-CN — 气动软体机器人国产化平台
 
-对标 softrobotics.io FlowIO 的自主实现：`pn_core` 纯逻辑层（C，主机/ESP32 双宿主）→ ESP32-S3 固件 → Windows 数字孪生（pn_twin.dll + Web 控制台）。
+> **定位**：对标 FlowIO 的国产替代 B2B 方案——给康复手套白牌厂商供"升级大脑"
+> **开发者**：独立开发者（上海，2 年嵌入式经验），全职开发中（计划求职后业余继续）
+> **财务**：爱人在职 + 储蓄 = 可持续开发
+
+## 商业模式
+
+**唯一主线 = B2B 部件供应**：给 1688 白牌康复手套厂商（已售 5100+ 件、91% 回头率）
+提供"5 路压力闭环控制板 + 固件 + 小程序报表"整套方案，方案价 ¥300-500/套。
+
+**四大核心卖点**：
+1. **分指控制**——5 端口独立压力闭环（竞品基础版不分指）
+2. **客观评估**——压力数据 + TinyML → FMA 趋势报表（竞品无评估输出）
+3. **国产化低成本**——全 1688 采购 BOM ¥150-250
+4. **API 开源**——CLI + Web GUI + 数字孪生，可二次开发
+
+**明确不做**：整机价格战（¥69 白牌）、医用注册（二类械）、BCI 方向、通用平台故事
 
 ## 目录结构
 
 | 位置 | 内容 |
 |------|------|
-| `firmware/` | P0 固件与数字孪生：ESP-IDF 工程 + pn_core 逻辑层（主机测试 21/21）+ `twin/` Web 孪生控制台 |
-| `study-notes/` | 研究笔记 01–13（架构 / 协议 / 国产替代路线 / 采购清单 / 对标表 / 康复方案…） |
-| `flowio-softrobotics-docs/` | softrobotics.io 官方文档镜像（抓取脚本 `save_softrobotics_docs.py`） |
-| `资源/` | FlowIO 官方资源包：3MF 结构件、Arduino 源码、数据手册（ESP32-S3 / XGZP6897D / TCA9548A）、演示视频 |
-| `FlowIO-Arduino-Libraries-master.zip` | 官方 Arduino 库参考压缩包（解包目录 453M 不入库） |
+| `firmware/` | P0 固件（ESP32-S3-N16R8）+ 数字孪生 + Web 控制台 + TinyML |
+| `study-notes/` | 战略文档（竞品分析/市场分层/临床调研/B2B 方案） |
+| `literature/` | 文献库（9 篇核心精读 + 81 篇被引 + 阅读笔记） |
+| `资源/` | FlowIO 官方资源包 + 数据手册 + 硬件验证报告 |
 
 ## 快速开始
 
@@ -18,33 +32,32 @@
 
 ```bash
 cd firmware/twin
-./build_twin.sh            # 编译 pn_twin.dll（git 不跟踪二进制，一条命令重建）
+./build_twin.sh            # 编译 pn_twin.dll（一条命令重建）
 python server.py           # → http://127.0.0.1:8000/gui
 ```
 
-**Web 前端三层测试（cd firmware/twin，改 gui.html 必跑）**
-
-一键运行（推荐，自起 8017 隔离实例，不干扰浏览器正在用的 8000）：
+**三层测试（改代码必跑）**
 
 ```bash
-bash run_tests.sh        # 静态冒烟 + 接口 36 + 单元 28 + 功能 39
+cd firmware/twin && bash run_tests.sh   # 冒烟 + 接口45 + 单元28 + 功能37 = 110 项
 ```
 
-| 层 | 单独运行 | 覆盖 |
-|----|------|------|
-| 静态冒烟 | `node check.js gui.html` | 内联脚本语法 / 处理函数 / id 引用 |
-| 单元 | `node test_gui.js` | buildFlowPaths 气流路径 / balloonScale / 端口掩码 / Scheduler 计时器编排 / 请求体 |
-| 接口 | `bash test_api.sh` | 三端点协议契约 + 物理语义 + 超压锁存/虚拟断电（纯 curl，自起隔离实例） |
-| 功能 | `node test_e2e.js` | 真实浏览器全场景（加载/充/保/释/抽/卡片/序列/闭环/注入/超压/刷新） |
+**目标机（需 ESP32-S3-N16R8）**
 
-用例明细见 `firmware/twin/TEST-CASES.md`（103 项，含未覆盖项与审查指引）。
-单元与功能测试依赖 playwright-core（`npm i playwright-core`；Chromium 用本地 ms-playwright 缓存，`TWIN_CHROME` 可指定路径）。
-注意：测试与手工操作**必须用不同端口实例**（脚本默认 8017），否则命令串扰产生假失败；固件超压保护是硬规则锁存，接口测试带虚拟断电自愈。
+```bash
+cd firmware && powershell build_n16r8.ps1   # 已配置 16MB Flash + 8MB PSRAM + 240MHz
+```
 
-**主机单元测试（改逻辑必跑）** 与 **目标机构建/烧录**：见 `firmware/README.md`。
+## 项目阶段
 
-## 版本管理说明
+| 阶段 | 状态 | 产出 |
+|------|------|------|
+| 数字孪生 | ✅ 完成 | 物理 v2（孔口方程）+ 泄漏注入 + Web 控制台 + 110 项测试 |
+| P0 硬件 | ⏳ 等待到货 | ESP32-S3 + 阀 + 泵 + 传感器（1688 已采购） |
+| TinyML | 📋 SPEC 已批准 | 泄漏检测管线（仿真预训练 → 真机迁移学习） |
+| B2B 对接 | ⏳ 等 P0 demo | 3 家白牌厂商联系（天津大晴天/深圳晟烨/云天星） |
 
-本仓库为单一根仓库：资料（笔记/文档镜像/资源包）直接在根历史中；
-`firmware/` 由原独立 git 仓库经 `git subtree add` 合并而来（9+3 条提交全部保留），
-firmware 内部的 `.gitignore` 继续生效（忽略 `build/`、`*.dll`、`*.exe` 等可重建产物）。
+## 开发节奏
+
+- **现在（全职）**：P0 到货前完成 TinyML 仿真管线 + B2B 销售材料准备
+- **求职后（业余）**：下班后 + 周末——实物调试、白牌对接、临床合作（远期）
