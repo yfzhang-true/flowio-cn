@@ -32,6 +32,10 @@ def build_model(input_len=200, n_classes=3):
 
 
 def main():
+    import random
+    random.seed(42)
+    np.random.seed(42)
+    tf.random.set_seed(42)   # 可复现训练（normal 召回曾在 92.7↔99.9% 间摆动——训练方差）
     data = np.load(FEATURES_FILE)
     X_train, y_train = data["X_train"], data["y_train"]
     X_test, y_test = data["X_test"], data["y_test"]

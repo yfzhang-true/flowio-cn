@@ -25,7 +25,7 @@ SAMPLE_HZ_LOCAL = SAMPLE_HZ  # 兼容引用
 def label_for(meta, series):
     """v5 物理可观测标签（宪法第 12 条）：
     0 = 无泄漏（或低于检测下限）
-    1 = 可测轻度泄漏（超额衰减 Δ∈[0.15, 1.2) kPa/s）
+    1 = 可测轻度泄漏（超额衰减 Δ∈[0.25, 1.2) kPa/s；0.15→0.25 加宽死区压训练方差）
     2 = 重度泄漏（Δ ≥ 1.2 kPa/s）
     Δ = |窗口线性斜率| − |窗口均压|×1%（基线密封微漏，PHYSICS-SPEC）
     依据：k 定义的类别跨工况物理重叠（k=0.5@20kPa/31口 Δ≈0.2 与 normal 不可分；
@@ -37,7 +37,7 @@ def label_for(meta, series):
     slope = abs(np.polyfit(t, arr, 1)[0])              # kPa/s
     base = abs(arr.mean()) * 0.01                      # 基线密封微漏
     excess = slope - base
-    if excess < 0.15:
+    if excess < 0.25:
         return 0
     return 1 if excess < 1.2 else 2
 

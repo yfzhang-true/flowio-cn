@@ -44,21 +44,22 @@ static const gpio_num_t s_servo_gpio[3] = {
     GPIO_NUM_15, GPIO_NUM_16, GPIO_NUM_17,
 };
 
-/* I2C — XGZP6897D（数字 IIC 差压，协议见 CFSensor 数据手册：0x30←0x0A 启动转换、
- * 轮询 0x30 bit3、从 0x06 读压力 24bit 有符号；raw/K=Pa） */
+/* I2C — XGZP6897D-C（数字 IIC 差压，手册 V1.1，2026-09-23 按规格书重写）
+ * 🔴 此前驱动三处错误（对照手册 V1.1 第 4/7/15 页修正）：
+ *   ① 地址 0x6D/0x5D 错 → 固定 0x58（-C 型不可定制，双传感器必须经 TCA9548A）
+ *   ② "写 0x30←0x0A 启动转换→轮询"协议错 → 从 0x04 连读 5 字节（ASIC 自动刷新）
+ *   ③ K 因子 2^24/span 错 → 手册公式 P[Pa]=补码和/2^21×(PMAX−PMIN)（差 8 倍）
+ * 时序：上电启动 24ms；响应 2.5ms@OSR1024 —— 均小于 50ms tick，可忽略 */
 static i2c_master_bus_handle_t s_i2c_bus;
 static i2c_master_dev_handle_t s_xgzp_dev[2];
 static bool s_xgzp_present[2];
-/* 地址：0x6D 为默认；第二只下单时向厂商备注改地址（或经 TCA9548A 分通道） */
-static const uint8_t s_xgzp_addr[2] = { 0x6D, 0x5D };
-
-/* 量程系数：-100~100kPa 型全跨度 200kPa 对应 24bit 原始值（±2^23） */
-#define XGZP_K_FACTOR    (16777216.0f / 200000.0f)   /* counts per Pa */
-#define XGZP_REG_CMD     0x30
-#define XGZP_CMD_START   0x0A    /* 联合转换：压力+温度 */
-#define XGZP_REG_PDATA   0x06    /* 压力 24bit 有符号，高字节在前 */
-#define XGZP_BUSY_BIT    0x08
-#define XGZP_TIMEOUT_US  30000
+#define XGZP_ADDR       0x58      /* 7 位地址，-C 型固定（选型码 C） */
+#define XGZP_REG_PDATA  0x04      /* 连读 5 字节：3=压力24bit补码 + 2=温度16bit */
+#define XGZP_SPAN_PA    200000.0f /* ±100kPa 型（C100KPDPN）：PMAX−PMIN */
+#define XGZP_TWO_POW_21 2097152.0f
+/* 注：两只同地址 0x58 不能挂同一总线——第二只经 TCA9548A 分通道（P0 装配指南
+ * 第四节已预案；通道切换在 bring-up 时补，当前两 handle 直挂验证单只场景） */
+static const uint8_t s_xgzp_addr[2] = { XGZP_ADDR, XGZP_ADDR };
 
 /* ---------- 阀/泵：LEDC（端口阀）+ RMT 舵机（kit 方向阀/泵） ----------
  * 硬件映射（P0，见 study-notes/10）：
@@ -225,28 +226,17 @@ static void i2c_init_all(void)
 static int xgzp_read_kpa(uint8_t idx, float *kpa)
 {
     if (!s_xgzp_present[idx]) return -1;
-    i2c_master_dev_handle_t dev = s_xgzp_dev[idx];
 
-    /* 1) 启动联合转换（压力+温度） */
-    uint8_t start_cmd[2] = { XGZP_REG_CMD, XGZP_CMD_START };
-    if (i2c_master_transmit(dev, start_cmd, 2, 50) != ESP_OK) return -1;
+    /* 从 0x04 连读 5 字节：ASIC 自动刷新，无需启动/轮询（手册第 7 页读取序列） */
+    uint8_t reg = XGZP_REG_PDATA, data[5] = { 0 };
+    if (i2c_master_transmit_receive(s_xgzp_dev[idx], &reg, 1, data, 5, 20) != ESP_OK)
+        return -1;
 
-    /* 2) 轮询 CMD 寄存器 bit3（转换忙标志），最多 30ms */
-    uint8_t reg = XGZP_REG_CMD, status = 0;
-    int64_t deadline = esp_timer_get_time() + XGZP_TIMEOUT_US;
-    do {
-        if (esp_timer_get_time() > deadline) return -1;
-        if (i2c_master_transmit_receive(dev, &reg, 1, &status, 1, 50) != ESP_OK) return -1;
-    } while (status & XGZP_BUSY_BIT);
+    int32_t sum = ((int32_t)data[0] << 16) | ((int32_t)data[1] << 8) | data[2];
+    if (sum & 0x800000) sum -= 0x1000000;      /* 24 位补码 */
 
-    /* 3) 从 0x06 连读 5 字节：压力 24bit 有符号 + 温度 16bit */
-    uint8_t preg = XGZP_REG_PDATA, data[5] = { 0 };
-    if (i2c_master_transmit_receive(dev, &preg, 1, data, 5, 50) != ESP_OK) return -1;
-
-    int32_t raw = ((int32_t)data[0] << 16) | ((int32_t)data[1] << 8) | data[2];
-    if (raw & 0x800000) raw -= 0x1000000;      /* 24 位符号扩展 */
-
-    *kpa = (float)raw / XGZP_K_FACTOR / 1000.0f;   /* Pa → kPa */
+    /* P[Pa] = sum / 2^21 × (PMAX−PMIN)（手册第 7 页公式） */
+    *kpa = (float)sum / XGZP_TWO_POW_21 * XGZP_SPAN_PA / 1000.0f;   /* Pa → kPa */
     return 0;
 }
 

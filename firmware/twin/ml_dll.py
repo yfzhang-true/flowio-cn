@@ -95,8 +95,12 @@ def run_scenario_dll(lib, leak_comp, leak_k, operation, init_p, ports, noise_sig
             lib.pn_twin_set_leak(idx, 0.0)
         lib.pn_twin_command(b"S 31")
 
-    # 5. 附加高斯噪声（kPa；纯 numpy，在静默块外）
-    series += rng.normal(0, noise_sigma, n_samples)
+    # 5. 附加测量误差（纯 numpy，在静默块外）
+    #    a) 高斯噪声 σ=noise_sigma（随机分量）
+    #    b) 零点残余偏移 ~N(0, 0.5kPa)：手册零点漂移 ±1%FS(±2kPa) 为回流后最坏值；
+    #       部署侧上电零点自校准（通大气采均值为零偏，装配指南 bring-up 步骤）后
+    #       残差按 0.5 建模——常数偏移不影响斜率类标签（ML-SPEC §5 域随机化）
+    series += rng.normal(0, noise_sigma, n_samples) + rng.normal(0, 0.5)
 
     meta = {"leak_component": leak_comp, "leak_k": leak_k,
             "operation": operation, "initial_pressure": init_p,
