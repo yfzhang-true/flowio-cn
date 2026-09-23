@@ -44,22 +44,28 @@ static const gpio_num_t s_servo_gpio[3] = {
     GPIO_NUM_15, GPIO_NUM_16, GPIO_NUM_17,
 };
 
-/* I2C — XGZP6897D-C（数字 IIC 差压，手册 V1.1，2026-09-23 按规格书重写）
- * 🔴 此前驱动三处错误（对照手册 V1.1 第 4/7/15 页修正）：
- *   ① 地址 0x6D/0x5D 错 → 固定 0x58（-C 型不可定制，双传感器必须经 TCA9548A）
- *   ② "写 0x30←0x0A 启动转换→轮询"协议错 → 从 0x04 连读 5 字节（ASIC 自动刷新）
- *   ③ K 因子 2^24/span 错 → 手册公式 P[Pa]=补码和/2^21×(PMAX−PMIN)（差 8 倍）
- * 时序：上电启动 24ms；响应 2.5ms@OSR1024 —— 均小于 50ms tick，可忽略 */
+/* I2C — XGZP6897D-C（数字 IIC 差压，手册 V1.1）经 TCA9548A 模块分通道
+ * 2026-09-23 依据：XGZP6897D-C 手册 V1.1 + CJMCU-9548 模块资料（拨码/例程核对）
+ * 🔴 修正史（对照手册，原实现到货必炸）：
+ *   ① 传感器地址 0x6D/0x5D 错 → 固定 0x58（-C 型不可定制）
+ *   ② "写 0x30←0x0A 启动转换"协议错 → 从 0x04 连读 5 字节（ASIC 自动刷新）
+ *   ③ K 因子 2^24/span 错 → P[Pa]=补码和/2^21×(PMAX−PMIN)（差 8 倍）
+ *   ④ 两只 0x58 同挂一条总线冲突 → TCA9548A 通道切换（传感器#1→CH0，#2→CH1）
+ * TCA9548A 模块（CJMCU-9548）：拨码 A2A1A0 默认全'0'→地址 0x70（可拨 0x70~0x77）；
+ * 通道选择 = 向 0x70 写 1 字节 (1<<ch)；模块主侧/各通道侧均带上拉。
+ * 传感器时序：上电 24ms、响应 2.5ms@OSR1024 —— 均 <50ms tick，可忽略 */
 static i2c_master_bus_handle_t s_i2c_bus;
-static i2c_master_dev_handle_t s_xgzp_dev[2];
+static i2c_master_dev_handle_t s_tca_dev;     /* TCA9548A @0x70 */
+static i2c_master_dev_handle_t s_xgzp_dev;    /* 传感器 @0x58（通道切换后复用） */
+static bool s_tca_present;
 static bool s_xgzp_present[2];
+static uint8_t s_xgzp_ch[2] = { 0, 1 };       /* 传感器#1→CH0，传感器#2→CH1 */
+static int tca_select(uint8_t ch);            /* 定义见 xgzp_read_kpa 前 */
+#define TCA9548A_ADDR   0x70
 #define XGZP_ADDR       0x58      /* 7 位地址，-C 型固定（选型码 C） */
 #define XGZP_REG_PDATA  0x04      /* 连读 5 字节：3=压力24bit补码 + 2=温度16bit */
 #define XGZP_SPAN_PA    200000.0f /* ±100kPa 型（C100KPDPN）：PMAX−PMIN */
 #define XGZP_TWO_POW_21 2097152.0f
-/* 注：两只同地址 0x58 不能挂同一总线——第二只经 TCA9548A 分通道（P0 装配指南
- * 第四节已预案；通道切换在 bring-up 时补，当前两 handle 直挂验证单只场景） */
-static const uint8_t s_xgzp_addr[2] = { XGZP_ADDR, XGZP_ADDR };
 
 /* ---------- 阀/泵：LEDC（端口阀）+ RMT 舵机（kit 方向阀/泵） ----------
  * 硬件映射（P0，见 study-notes/10）：
@@ -205,31 +211,58 @@ static void i2c_init_all(void)
     bus.scl_io_num = GPIO_NUM_9;
     bus.clk_source = I2C_CLK_SRC_DEFAULT;
     bus.glitch_ignore_cnt = 7;
-    bus.flags.enable_internal_pullup = true;   /* P0 面包板阶段先靠内部上拉 */
+    bus.flags.enable_internal_pullup = true;   /* 模块板载上拉为主，内部上拉兜底 */
     /* 优雅降级：I2C 总线不可用（QEMU）时标记传感器缺失，闭环照常报传感器错 */
     if (i2c_new_master_bus(&bus, &s_i2c_bus) != ESP_OK) {
-        printf("[HAL] i2c bus unavailable (QEMU?)\n");
+        printf("[HAL] i2c bus unavailable\n");
         s_xgzp_present[0] = s_xgzp_present[1] = false;
         return;
     }
 
+    i2c_device_config_t tca = { 0 };
+    tca.dev_addr_length = I2C_ADDR_BIT_LEN_7;
+    tca.device_address  = TCA9548A_ADDR;
+    tca.scl_speed_hz    = 100000;
+    s_tca_present = (i2c_master_bus_add_device(s_i2c_bus, &tca, &s_tca_dev) == ESP_OK);
+
+    i2c_device_config_t dev = { 0 };
+    dev.dev_addr_length = I2C_ADDR_BIT_LEN_7;
+    dev.device_address  = XGZP_ADDR;
+    dev.scl_speed_hz    = 100000;
+    i2c_master_bus_add_device(s_i2c_bus, &dev, &s_xgzp_dev);
+
+    /* 逐通道探测：TCA 选通后试读一只字节，成功即该通道传感器在线 */
     for (int i = 0; i < 2; ++i) {
-        i2c_device_config_t dev = { 0 };
-        dev.dev_addr_length = I2C_ADDR_BIT_LEN_7;
-        dev.device_address  = s_xgzp_addr[i];
-        dev.scl_speed_hz    = 100000;
-        s_xgzp_present[i] =
-            (i2c_master_bus_add_device(s_i2c_bus, &dev, &s_xgzp_dev[i]) == ESP_OK);
+        s_xgzp_present[i] = false;
+        if (s_tca_present && tca_select(s_xgzp_ch[i]) == 0) {
+            uint8_t reg = XGZP_REG_PDATA, dummy[5] = { 0 };
+            s_xgzp_present[i] =
+                (i2c_master_transmit_receive(s_xgzp_dev, &reg, 1, dummy, 5, 20) == ESP_OK);
+        }
     }
+    tca_select(0);   /* 复位到通道 0（传感器#1） */
+    printf("[HAL] tca9548a@0x70 %s, sensors CH0=%d CH1=%d\n",
+           s_tca_present ? "ok" : "MISSING",
+           (int)s_xgzp_present[0], (int)s_xgzp_present[1]);
+}
+
+/* TCA9548A 通道选择：向 0x70 写 1 字节 (1<<ch)（模块例程 selectPort 语义） */
+static int tca_select(uint8_t ch)
+{
+    uint8_t cmd = (uint8_t)(1u << ch);
+    return (i2c_master_transmit(s_tca_dev, &cmd, 1, 10) == ESP_OK) ? 0 : -1;
 }
 
 static int xgzp_read_kpa(uint8_t idx, float *kpa)
 {
     if (!s_xgzp_present[idx]) return -1;
 
+    /* 先切通道（传感器#1=CH0 / #2=CH1），再对 0x58 读 */
+    if (s_tca_present && tca_select(s_xgzp_ch[idx]) != 0) return -1;
+
     /* 从 0x04 连读 5 字节：ASIC 自动刷新，无需启动/轮询（手册第 7 页读取序列） */
     uint8_t reg = XGZP_REG_PDATA, data[5] = { 0 };
-    if (i2c_master_transmit_receive(s_xgzp_dev[idx], &reg, 1, data, 5, 20) != ESP_OK)
+    if (i2c_master_transmit_receive(s_xgzp_dev, &reg, 1, data, 5, 20) != ESP_OK)
         return -1;
 
     int32_t sum = ((int32_t)data[0] << 16) | ((int32_t)data[1] << 8) | data[2];
