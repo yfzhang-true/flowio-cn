@@ -309,6 +309,7 @@ input[type=range]{padding:0;accent-color:var(--accent)}
         <button id="detectBtn" onclick="leakDetect()" style="flex:1">🔍 立即检测（4s 窗口推理）</button>
         <span id="mlBadge" style="padding:3px 12px;border-radius:8px;background:#21262d;color:var(--dim)">未检测</span>
         <span id="mlSamples" style="color:var(--dim);font-size:11px">0/80</span>
+        <span id="mlRegime" style="color:var(--dim);font-size:11px"></span>
       </div>
       <div class="row" style="margin-top:6px">
         <button id="demoBtn" onclick="demoSeq()" style="flex:1">▶ 一键演示剧本（充压→H保压→检测normal→注入→检测报警）</button>
@@ -619,10 +620,15 @@ async function leakDetect() {
       1: ['轻度泄漏', '#3a2d00', '#e3b341'],
       2: ['重度泄漏!', '#3d1015', '#f85149'],
     }[j.label];
+    const relName = { high: '✓可靠', low: '△仅供参考', none: '✗不可靠' }[j.reliability] || '';
+    const regimeName = { hold_open: 'H保压', sealed: 'S密封', inflating: '充气中',
+                         vacuuming: '抽气中', releasing: '释放中', mixed: '混合' }[j.regime] || j.regime;
     badge.textContent = look[0] + ' ' + (j.conf * 100).toFixed(0) + '%';
     badge.style.background = look[1];
     badge.style.color = look[2];
-    dlog('🔍 TinyML 检测：' + look[0] + '（置信 ' + (j.conf * 100).toFixed(1) + '%，样本 ' + j.samples + '/80）',
+    badge.title = '工况: ' + regimeName;
+    document.getElementById('mlRegime').textContent = regimeName + ' ' + relName;
+    dlog('🔍 TinyML 检测：' + look[0] + '（置信 ' + (j.conf * 100).toFixed(1) + '%，' + regimeName + '，' + relName + '）',
          j.label === 2 ? 'warn' : undefined);
     if (j.hint) dlog('⚠ 工况提示：' + j.hint, 'warn');
   } catch (e) {

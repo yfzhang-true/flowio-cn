@@ -78,15 +78,36 @@ class Handler(BaseHTTPRequestHandler):
             # TinyML 泄漏检测（C 推理器=未来 ESP32 同码；-1=样本未满需再等）
             conf = ctypes.c_float(0.0)
             cls = lib.pn_twin_leak_detect(ctypes.byref(conf))
-            # 工况守卫（物理 v2.1）：端口阀全关时端口侧泄漏对汇流管传感器不可见——
-            # 检测窗口采的是 S0（汇流管），此时注入端口泄漏只会测得 normal（正确行为）
+            # 工况感知（2026-09-23 用户设计质询触发）：模型按密封态训练，
+            # 动态工况（充/抽/放气进行中）属分布外——死点附近泄漏可显现（用户实测案例），
+            # 但泵/排气流量主导斜率时不可靠。分级披露而非禁止调用。
+            st = lib.pn_twin_state()
+            pump, inlet, vent = st & 0x80, st & 0x20, st & 0x40
+            ports = st & 0x1F
+            if pump and inlet:
+                regime, rel = "inflating", "low"      # 充气中：仅接近死点时泄漏主导信号
+            elif pump and vent:
+                regime, rel = "vacuuming", "low"      # 抽气中：同理（渐近 -53.3 附近）
+            elif vent and not pump:
+                regime, rel = "releasing", "none"     # 释放中：排气大流主导，泄漏不可分
+            elif ports and not pump and not inlet and not vent:
+                regime, rel = "hold_open", "high"     # H 诊断保压：训练分布内
+            elif not ports and not pump and not inlet and not vent:
+                regime, rel = "sealed", "high"        # S 全密封：分布内（但端口泄漏不可见）
+            else:
+                regime, rel = "mixed", "low"
             hint = None
-            if any(lib.pn_twin_leak(i) > 0 for i in range(5)) and not (lib.pn_twin_state() & 0x1F):
+            if any(lib.pn_twin_leak(i) > 0 for i in range(5)) and not ports:
                 hint = "端口阀全关（S 隔离保压）：端口侧泄漏对汇流管不可见——请用 H 诊断保压（端口保持通）后检测"
+            elif rel == "low":
+                hint = f"动态工况（{regime}）：模型按密封态训练，结果仅供参考——充/抽气接近死点时泄漏才主导信号"
+            elif rel == "none":
+                hint = "释放进行中：排气流量完全主导斜率，泄漏不可分——请等停机后再检测"
             self._json({"label": int(cls),
                         "name": {-1: "warming", 0: "normal", 1: "leak_minor", 2: "leak_major"}.get(cls, "?"),
                         "conf": round(conf.value, 3),
                         "samples": lib.pn_twin_ml_samples(),
+                        "regime": regime, "reliability": rel,
                         "hint": hint})
         else:
             self._send(404, '{"error":"not found"}', "application/json")

@@ -216,7 +216,8 @@ function T(name, cond) {
   await p.waitForTimeout(800);
   const ml0 = await p.evaluate(() => document.getElementById('mlBadge').textContent);
   T('无泄漏检测=normal', ml0.startsWith('normal'));
-  T('样本进度 80/80', await p.evaluate(() => document.getElementById('mlSamples').textContent) === '80/80');
+  const samplesTag = await p.evaluate(() => document.getElementById('mlRegime').textContent);
+  T('H保压工况+可靠分级', samplesTag === 'H保压 ✓可靠');
   await p.click('#lkc0');                             /* chips 选部位（内嵌浏览器兼容，select 已弃用） */
   T('部位 chips 可切换', await p.evaluate(() => document.getElementById('lkc0').classList.contains('sel')));
   await p.evaluate(() => leakPreset('0.5'));
@@ -245,6 +246,18 @@ function T(name, cond) {
   T('工况守卫 hint 提示 H 保压', guarded.hint.includes('H 诊断保压'));
   await p.evaluate(() => leakClear());
   await p.evaluate(() => send('S 31'));
+  await p.waitForTimeout(300);
+
+  console.log('─ 功能：动态工况分级披露（充气中检测） ─');
+  await p.evaluate(() => send('I 1 255'));
+  await p.waitForTimeout(1000);                       /* 充气进行中 */
+  const dyn = await p.evaluate(async () => {
+    const j = await (await fetch('/api/leakdetect')).json();
+    return { regime: j.regime, rel: j.reliability, hint: j.hint || '' };
+  });
+  T('充气中 regime=inflating', dyn.regime === 'inflating');
+  T('可靠性分级=low + 分布外提示', dyn.rel === 'low' && dyn.hint.includes('仅供参考'));
+  await p.evaluate(() => send('S 1'));
   await p.waitForTimeout(300);
 
   console.log('─ 功能：刷新恢复 ─');
