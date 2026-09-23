@@ -76,3 +76,13 @@ p 钳位 [−100, +100] kPa（XGZP6897D 量程饱和）
 5. run_tests.sh 全绿 → SPEC.md 补 v1.3 修订 → 提交
 
 **待用户决策项**（沿用 v1 遗留）：超压保护阈值 120 kPa > 传感器量程 100 kPa 的盲区是否降阈值（建议 90）。
+
+## 附录：泵参数溯源（2026-09-22，用户质询触发）
+
+| 常数 | 当前值 | 来源 | 到货后动作 |
+|------|--------|------|-----------|
+| PUMP_P_MIN_KPA | -58.0 | **370 Mini Vacuum Pump 规格书**（DFRobot FIT0801 ≥-58kPa，`literature/370-pump-FIT0801-spec.md`） | calibrate_pump.py 实测复核 |
+| PUMP_P_MAX_KPA | 61.0 | FlowIO Small 实测死点（Shtarbanov thesis Table 2；370 正压规格书无单值 60-100 型号相关） | **必须实测**（calibrate_pump.py） |
+| PUMP_C | 9e-8 | 按 FlowIO 实测充压曲线拟合（大容积执行器时标） | **必须实测**（小容积升压率比对） |
+
+时间尺度诚实说明：370 空载流量 2.2L/min ≈ 0.037L/s，直驱 7mL 汇流管理论充压远快于孪生当前时标——孪生时标锚定 FlowIO 文档级充气曲线（秒级，真实执行器容积下成立）。对 TinyML 无影响：泄漏检测标签窗口在**密封态**（泵停），与泵时标无关（宪法第 13 条）。到货三实验协议见 calibrate_pump.py 头注释。

@@ -30,9 +30,9 @@
  * 每元件泄漏系数（TinyML Phase 0 标注数据工厂，SPEC 15） */
 #define GAMMA            1.2f
 #define P_ATM_KPA        101.325f
-#define PUMP_P_MAX_KPA   61.0f     /* FlowIO Small 实测死点（thesis Table 2） */
-#define PUMP_P_MIN_KPA   (-38.0f)  /* FlowIO Small 实测真空极限（同表） */
-#define PUMP_C           9.0e-8f  /* 标定：实验校准（2s→19kPa, 4s→35kPa, 渐近61死点） */
+#define PUMP_P_MAX_KPA   61.0f     /* 370 规格书正压无单值(60-100 型号相关)，暂用 FlowIO Small 实测死点（thesis Table 2），到货实测后定 */
+#define PUMP_P_MIN_KPA   (-58.0f)  /* 370 Mini Vacuum Pump 规格书 ≥-58kPa（DFRobot FIT0801，2026-09-22 修正；原 -38 为 FlowIO 借值） */
+#define PUMP_C           9.0e-8f  /* 标定：按 FlowIO 实测充压曲线（2s→19kPa, 4s→35kPa）；370 直驱小容积更快，到货用 calibrate_pump.py 重标 */
 #define VENT_C           1.0e-5f  /* 标定：40 kPa → 0 in ~4s/单端口（实验校准） */
 #define LEAK_C           1.0e-5f  /* 标定：k=0.2 → 密封 60kPa ≈7 kPa/s */
 #define SEAL_LEAK_PER_S  0.01f     /* 基线密封微漏（比例，文献外经验值） */
