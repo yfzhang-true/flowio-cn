@@ -78,7 +78,11 @@ void app_main(void)
         if (fgets(line, sizeof(line), stdin)) {
             size_t n = strlen(line);
             if (n && (line[n - 1] == '\n' || line[n - 1] == '\r')) line[n - 1] = 0;
-            if (line[0]) pn_cli_process_line(line);
+            if (!line[0]) continue;
+            if (line[0] == 'W' && line[1] == 0)
+                pn_hal_esp32_i2c_scan();   /* bring-up 诊断：I2C 全总线扫描 */
+            else
+                pn_cli_process_line(line);
         }
     }
 }

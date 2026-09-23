@@ -23,6 +23,10 @@ void pn_hal_esp32_servo_refresh(void);   /* 挂控制节拍每 ~20ms 调用一�
  * QEMU 仿真差异项（2026-09-23：真机 fgets(stdin) 需 uart_vfs_dev_use_driver） */
 int pn_hal_esp32_is_qemu(void);
 
+/* I2C 全总线扫描（bring-up 诊断）：主总线 0x03-0x77 + CH0/CH1 下游。
+ * main.c 拦截 'W' 命令调用（真机 only；QEMU 打印未初始化提示） */
+void pn_hal_esp32_i2c_scan(void);
+
 #ifdef __cplusplus
 }
 #endif

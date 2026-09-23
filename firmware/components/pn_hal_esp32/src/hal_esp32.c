@@ -289,6 +289,37 @@ static int tca_select(uint8_t ch)
     return (i2c_master_transmit(s_tca_dev, &cmd, 1, 10) == ESP_OK) ? 0 : -1;
 }
 
+/* I2C 全总线扫描（bring-up 诊断，CLI 'W'）：主总线全段 + CH0/CH1 下游 0x50-0x60 段 */
+void pn_hal_esp32_i2c_scan(void)
+{
+    if (!s_i2c_bus) { printf("[SCAN] i2c bus not initialized (QEMU?)\n"); return; }
+
+    /* 先全关通道，主总线扫描不受下游干扰 */
+    if (s_tca_present) {
+        uint8_t none = 0;
+        i2c_master_transmit(s_tca_dev, &none, 1, 10);
+    }
+    printf("[SCAN] main:");
+    for (int a = 0x03; a <= 0x77; ++a)
+        if (i2c_master_probe(s_i2c_bus, (uint16_t)a, 20) == ESP_OK)
+            printf(" 0x%02X", a);
+    printf("\n");
+
+    if (!s_tca_present) return;
+    for (int ch = 0; ch < 2; ++ch) {
+        if (tca_select((uint8_t)ch) != 0) {
+            printf("[SCAN] CH%d: select fail\n", ch);
+            continue;
+        }
+        printf("[SCAN] CH%d:", ch);
+        for (int a = 0x08; a <= 0x77; ++a)
+            if (i2c_master_probe(s_i2c_bus, (uint16_t)a, 20) == ESP_OK)
+                printf(" 0x%02X", a);
+        printf("\n");
+    }
+    tca_select(0);
+}
+
 static int xgzp_read_kpa(uint8_t idx, float *kpa)
 {
     if (!s_xgzp_present[idx]) return -1;
