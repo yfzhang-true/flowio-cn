@@ -1,8 +1,9 @@
 # 370 Mini Vacuum Pump 规格档案（DFRobot SKU: FIT0801）
 
 > 2026-09-22 建立 | 触发：用户质询"370 泵有没有手册？没有的话孪生参数是瞎猜"
-> 四源交叉一致（DFRobot / Mouser / RobotShop / Schematik）。Mouser 有 2 页官方 PDF，
-> 拦脚本下载，需浏览器自取（搜索 "370 mini vacuum pump mouser datasheet"）。
+> 四源交叉一致（DFRobot / Mouser / RobotShop / Schematik）。
+> **原件已入库**：`370-pump-FIT0801-datasheet.pdf`（2 页，Mouser Product Overview，
+> 2023-01-09 版，用户浏览器代下——宪法第 27 条协议首次执行）。
 > **本档是孪生泵参数的正源之一（PHYSICS-SPEC §泵参数溯源）。**
 
 ## 规格表
@@ -28,6 +29,6 @@
 
 ## 来源
 
-- DFRobot 官方（SKU FIT0801，$5.50）
-- Mouser（2 页官方 PDF，2023-01-09 版）
-- RobotShop、Schematik（转售页同表）
+- **原件 PDF**：`370-pump-FIT0801-datasheet.pdf`（本目录，pypdf 已验：2 页 + 规格逐项核对）
+- DFRobot 官方产品页（SKU FIT0801，$5.50）：product-2374.html
+- Mouser（原件出处）、RobotShop、Schematik（转售页同表交叉）
