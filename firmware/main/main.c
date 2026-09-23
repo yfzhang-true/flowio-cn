@@ -12,6 +12,8 @@
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "driver/uart.h"
+#include "driver/uart_vfs.h"
 #include "esp_timer.h"
 #include <stdio.h>
 #include <string.h>
@@ -49,15 +51,25 @@ static void control_task(void *arg)
         pn_optimize_power(PN_HOLD_DEFAULT_DUTY, PN_HOLD_DEFAULT_DELAY_MS);
         pn_check_overpressure(120.f);
         pn_ml_tick((uint32_t)(esp_timer_get_time() / 1000));   /* TinyML 20Hz 采样（内部节流） */
+        pn_hal_esp32_servo_refresh();                           /* 舵机 50Hz 脉冲流（单次发送非循环） */
         vTaskDelay(pdMS_TO_TICKS(10));
     }
 }
 
 void app_main(void)
 {
+    /* 真机 stdin 需要 UART 驱动 + VFS 桥接（默认 console 只配输出——fgets 收不到；
+     * 2026-09-23 真机首次点亮实证。QEMU 的 UART 模型走轮询读，跳过以免驱动中断差异） */
+    if (!pn_hal_esp32_is_qemu()) {
+        uart_driver_install(CONFIG_ESP_CONSOLE_UART_NUM, 256, 0, 0, NULL, 0);
+        uart_vfs_dev_use_driver(CONFIG_ESP_CONSOLE_UART_NUM);
+    }
     pn_cli_set_delay_fn(cli_delay_wrapper);
+    printf("[BOOT] hal init...\n"); fflush(stdout);
     pn_init(pn_hal_esp32_init(), PN_CFG_GENERAL);
+    printf("[BOOT] pn_init done\n"); fflush(stdout);
     printf("FlowIO-compatible P0 ready. state=0x%04X\n", (unsigned)pn_get_state());
+    fflush(stdout);
 
     xTaskCreate(control_task, "pn_ctrl", 4096, NULL, 5, NULL);
 

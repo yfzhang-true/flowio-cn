@@ -145,6 +145,7 @@ static void ledc_init_all(void)
 static rmt_channel_handle_t s_servo_rmt[3];
 static rmt_encoder_handle_t s_servo_enc[3];
 static bool s_servo_ok[3];        /* RMT 通道不可用时优雅降级（QEMU 无 RMT 外设，2026-09-22 验证） */
+static uint16_t s_servo_pulse[3] = { 500, 500, 500 };   /* 目标脉宽，refresh 周期发送 */
 
 static size_t rmt_encoder_callback(const void *data, size_t data_size,
                                    size_t symbols_written, size_t symbols_free,
@@ -163,14 +164,28 @@ static size_t rmt_encoder_callback(const void *data, size_t data_size,
 
 void pn_hal_esp32_servo_set(uint8_t switch_idx, uint16_t pulse_us)
 {
-    if (switch_idx >= 3 || !s_servo_ok[switch_idx]) return;
+    /* 只更新目标脉宽；实际发送由 pn_hal_esp32_servo_refresh() 周期执行——
+     * loop_count=-1 无限循环模式下对同一通道二次 rmt_transmit 会挂死
+     * （2026-09-23 真机首点实证：pn_init 的关阀脉冲即第二次发送）。
+     * 舵机信号本就是 50Hz 连续脉冲流，改非循环+周期重发语义更正确。 */
+    if (switch_idx >= 3) return;
     if (pulse_us < 500)  pulse_us = 500;
     if (pulse_us > 2500) pulse_us = 2500;
-    static uint16_t pulses[3];
-    pulses[switch_idx] = pulse_us;
-    rmt_transmit_config_t cfg = { .loop_count = -1 };
-    rmt_transmit(s_servo_rmt[switch_idx], s_servo_enc[switch_idx],
-                 &pulses[switch_idx], sizeof(uint16_t), &cfg);
+    s_servo_pulse[switch_idx] = pulse_us;
+}
+
+void pn_hal_esp32_servo_refresh(void)
+{
+    static uint32_t s_last_us;
+    uint32_t now = (uint32_t)esp_timer_get_time();
+    if (s_last_us && now - s_last_us < 19000) return;   /* 节流 20ms=50Hz（10ms 节拍下隔拍发） */
+    s_last_us = now;
+    rmt_transmit_config_t cfg = { 0 };   /* 单次发送（非循环），发完即返回不等待 */
+    for (int i = 0; i < 3; ++i) {
+        if (!s_servo_ok[i] || !s_servo_enc[i]) continue;
+        rmt_transmit(s_servo_rmt[i], s_servo_enc[i],
+                     &s_servo_pulse[i], sizeof(uint16_t), &cfg);
+    }
 }
 
 static bool pn_is_qemu(void)
@@ -181,6 +196,8 @@ static bool pn_is_qemu(void)
            efuse_hal_get_minor_chip_version() == 0;
 }
 
+int pn_hal_esp32_is_qemu(void) { return pn_is_qemu() ? 1 : 0; }
+
 static void servo_init_all(void)
 {
     if (pn_is_qemu()) {
@@ -190,7 +207,10 @@ static void servo_init_all(void)
     rmt_tx_channel_config_t tx = { 0 };
     tx.clk_src           = RMT_CLK_SRC_DEFAULT;
     tx.resolution_hz     = PN_SERVO_RES_US;
-    tx.mem_block_symbols = 64;
+    tx.mem_block_symbols = 48;   /* S3 每通道 RAM=48 词：48=合法最小值且恰好自身够用不级联。
+                                  * 教训链（2026-09-23 真机首点）：64→级联相邻通道内存，每舵机
+                                  * 吃 2 个 TX 通道致第 3 只 no free tx channels；32→驱动拒绝
+                                  * （must be even and at least 48）。编码器每周期仅 1 符号对 */
     tx.trans_queue_depth = 1;
     for (int i = 0; i < 3; ++i) {
         tx.gpio_num = s_servo_gpio[i];
@@ -208,7 +228,8 @@ static void servo_init_all(void)
         };
         ESP_ERROR_CHECK(rmt_new_simple_encoder(&enc_cfg, &s_servo_enc[i]));
         ESP_ERROR_CHECK(rmt_enable(s_servo_rmt[i]));
-        pn_hal_esp32_servo_set(i, 0);      /* 0=不上舵机脉冲? 归 500us 全关位 */
+        /* 初始脉冲不发（500us 全关位已是默认缓存）——由 control_task 的
+         * pn_hal_esp32_servo_refresh() 周期发送，避免 init 期间 transmit */
     }
 }
 
