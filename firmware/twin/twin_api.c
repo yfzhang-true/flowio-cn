@@ -32,14 +32,23 @@
 #define P_ATM_KPA        101.325f
 #define PUMP_P_MAX_KPA   61.0f     /* 370 规格书正压无单值(60-100 型号相关)，暂用 FlowIO Small 实测死点（thesis Table 2），到货实测后定 */
 #define PUMP_P_MIN_KPA   (-58.0f)  /* 370 Mini Vacuum Pump 规格书 ≥-58kPa（DFRobot FIT0801，2026-09-22 修正；原 -38 为 FlowIO 借值） */
+#define VALVE_P_MIN_KPA  (-53.3f)  /* 0520D/F 电磁阀动作压力下限（规格书：-53.3~+300 / -53.3~+100 kPa，2026-09-23）
+                                    * 真空渐近取 max(泵极限, 阀动作窗)——泵虽可到 -58，但阀在 -53.3 以下不能可靠
+                                    * 通电切换（闭环"关阀保压"会失败），系统可用真空由阀窗决定；正压侧
+                                    * 阀动作上限 +300/+100 >> 泵死点 61，不构成约束 */
 #define PUMP_C           9.0e-8f  /* 标定：按 FlowIO 实测充压曲线（2s→19kPa, 4s→35kPa）；370 直驱小容积更快，到货用 calibrate_pump.py 重标 */
-#define VENT_C           1.0e-5f  /* 标定：40 kPa → 0 in ~4s/单端口（实验校准） */
-#define LEAK_C           1.0e-5f  /* 标定：k=0.2 → 密封 60kPa ≈7 kPa/s */
-#define SEAL_LEAK_PER_S  0.01f     /* 基线密封微漏（比例，文献外经验值） */
+#define VENT_C           1.0e-5f  /* 演示时间尺度假设（40kPa→0 约 4s，无实物依据）：裸阀 Cv0.05(0520D)/0.10(0520F)
+                                   * 全开流导高约 2 个量级，实物排气会显著更快；到货 calibrate_pump.py 实测重标 */
+#define LEAK_C           1.0e-5f  /* 泄漏注入孔流导（ML 数据工厂参数，非硬件）：k=0.2 → 密封 60kPa ≈7 kPa/s */
+#define SEAL_LEAK_PER_S  0.01f     /* 基线密封微漏 0.01/s ≈ 3mL/min@40kPa·V=5mL（典型好品假设）。
+                                    * 手册锚点：0520D/F 内部泄漏规格 ≤30mL/min ≈ 0.073/s（密封态上限）——
+                                    * 接近规格上限的阀 4s 掉压 ~25%，会被 ML 判 major 泄漏，这是设计意图
+                                    * （内漏超标的阀本就该在出厂筛选中暴露），标签边界无需放宽 */
 #define V_MANIFOLD_L     0.005f    /* 汇流管容积 */
 #define V_PORT_L         0.002f    /* 单端口通道容积 */
 #define SENSOR_SPAN_KPA  100.0f    /* XGZP6897D 量程饱和 */
 #define CHOKED_RATIO     1.893f    /* 空气临界压比（音速阻塞） */
+/* 阀瞬态：0520D 响应 ≤20ms / 0520F ≤30ms（规格书）——均 << 50ms tick，瞬时假设成立 */
 
 static float s_leak[7];            /* 泄漏系数：0-4 端口 / 5 进气 / 6 排气 */
 static uint32_t s_prev_ports;      /* 上拍端口阀位图（开阀混合/关阀快照检测） */
@@ -135,8 +144,10 @@ PN_TWIN_API int pn_twin_tick(void)
     if (pump_on && inlet_on) {                    /* 充气：孔口形式渐近死点 */
         float PR = PUMP_P_MAX_KPA + P_ATM_KPA;
         net_q += PUMP_C * duty * sq_pos(P * (PR - P));
-    } else if (pump_on && vent_on) {              /* 抽真空：对称形式渐近极限 */
-        float Pm = PUMP_P_MIN_KPA + P_ATM_KPA;
+    } else if (pump_on && vent_on) {              /* 抽真空：对称形式渐近极限
+                                                   * 渐近 = max(泵 -58, 阀动作窗 -53.3) → -53.3（VALVE_P_MIN_KPA，
+                                                   * 0520D/F 规格书 2026-09-23：阀是链路最弱环节） */
+        float Pm = ((PUMP_P_MIN_KPA > VALVE_P_MIN_KPA) ? PUMP_P_MIN_KPA : VALVE_P_MIN_KPA) + P_ATM_KPA;
         net_q -= PUMP_C * duty * sq_pos(P * (P - Pm));
     }
     if (vent_on && !pump_on) {                    /* 被动排气/负压回充（choked 钳位） */

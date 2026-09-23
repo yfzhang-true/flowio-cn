@@ -83,6 +83,14 @@ static int tca_select(uint8_t ch);            /* 定义见 xgzp_read_kpa 前 */
  * ⚠️ 舵机两个位置的气动语义（ON=充气位还是排气位）在首次上电时标定（装配指南 3.5 步），
  *    标定后如与本文件相反，交换 s_servo_invert 或调换映射即可。
  */
+/* 0520D 阀型存疑（规格书自相矛盾，2026-09-23，literature/valve-0520df-spec.md）：
+ * 标题写"0520D常闭阀"（疑模板复制残留），但同页"3.模式：常开式"，且 0520F 规格书明示
+ * 命名规则"结尾 D=常开型 / F=常闭型"（2:1 证据指向常开 NO）。
+ * 到货判定（装配指南四.2.5）：单阀断电吹气——断电即通气=NO。
+ * 若实测 NO：将下方宏置 1 重编译（LEDC duty 自动反转，"导通占空比"语义不变），
+ *   并禁用阀保持降占空比特性（NO 阀保压需持续通电闭合，与节能矛盾），或直接换购常闭型。 */
+#define PN_VALVE_NORMALLY_OPEN 0
+
 static void pn_valve_write(uint8_t idx, uint8_t duty)
 {
     if (idx == 5) {          /* INLET → kit 充气三通阀舵机 */
@@ -93,6 +101,9 @@ static void pn_valve_write(uint8_t idx, uint8_t duty)
         pn_hal_esp32_servo_set(2, duty ? 2500 : 500);
         return;
     }
+#if PN_VALVE_NORMALLY_OPEN
+    duty = (uint8_t)(255 - duty);   /* NO 阀：断电=通；duty 语义统一为"气流导通" */
+#endif
     ledc_set_duty(LEDC_LOW_SPEED_MODE, (ledc_channel_t)idx, duty);
     ledc_update_duty(LEDC_LOW_SPEED_MODE, (ledc_channel_t)idx);
 }
