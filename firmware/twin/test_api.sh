@@ -177,23 +177,23 @@ pl1=$(sens 1 "$(state)")
 ok "A6 泄漏注入 k=0.3 加速衰减（H 诊断保压单口，${pl0}→${pl1}，降>3kPa/2s）" \
   "$(awk -v a="$pl0" -v b="$pl1" 'BEGIN{exit !(a-b>3)}' && echo 1 || echo 0)"
 # A6b：S 隔离保压下端口泄漏不可见（汇流管不降）——物理 v2.1 端口节点语义
+portp() { grep -o '"ports_p": \[[^]]*\]' <<<"$(state)" | grep -o '\[[^]]*\]' | tr -d '[] ' | cut -d, -f"$1"; }
 reset0; cmd 'I 7 255'; sleep 3.0; cmd 'S 7'; sleep 0.3
 q0=$(sens 1 "$(state)")
+ppA=$(portp 1)
 curl -s -m 2 -X POST "$BASE/api/leak" -d "0 0.5" >/dev/null
 sleep 2.0
 q1=$(sens 1 "$(state)")
+ppB=$(portp 1)
 ok "A6b S 隔离保压：端口泄漏对汇流管不可见（${q0}→${q1}，降<0.5）" \
   "$(awk -v a="$q0" -v b="$q1" 'BEGIN{exit !(a-b<0.5)}' && echo 1 || echo 0)"
-# A6c：ports_p 端口独立节点存在且密封后缓降（k=0.5 泄漏仍在端口侧作用）
-portp() { grep -o '"ports_p": \[[^]]*\]' <<<"$(state)" | grep -o '\[[^]]*\]' | tr -d '[] ' | cut -d, -f"$1"; }
-pp0=$(portp 1)
-sleep 2.0
-pp1=$(portp 1)
-ok "A6c 端口节点独立衰减（ports_p[0] ${pp0}→${pp1}，降>0.5）" \
-  "$(awk -v a="$pp0" -v b="$pp1" 'BEGIN{exit !(a-b>0.5)}' && echo 1 || echo 0)"
+# A6c：同一泄漏窗口内端口节点大降（v2.1 泄漏分流语义；端口 V=0.002L+k=0.5
+#       时间常数≪2s，必须在窗口内取样——事后取样端口已漏光，断言必 flaky）
+ok "A6c 端口节点独立衰减（ports_p[0] ${ppA}→${ppB}，降>0.5）" \
+  "$(awk -v a="$ppA" -v b="$ppB" 'BEGIN{exit !(a-b>0.5)}' && echo 1 || echo 0)"
 curl -s -m 2 -X POST "$BASE/api/leak" -d "reset" >/dev/null
-lk=$(grep -o '"leaks": \[[^]]*\]' "$(state)" | grep -o '[0-9]' | tr -d '[:space:]')
-ok "A7 /api/leak reset 清零（leaks 全 0）" "$([ -z "$lk" ] && echo 1 || echo 0)"
+lks=$(grep -o '"leaks": \[[^]]*\]' <<<"$(state)" | grep -o '\[[^]]*\]' | tr -d '[] ' | tr ',' '\n' | awk '$0+0!=0{bad=1} END{print bad?"1":"0"}')
+ok "A7 /api/leak reset 清零（leaks 全 0）" "$([ "$lks" = "0" ] && echo 1 || echo 0)"
 ok "A8 /api/leak 非法参数回 {ok:false}" \
   "$(curl -s -m 2 -X POST "$BASE/api/leak" -d "9 1" | grep -c '"ok": *false')"
 

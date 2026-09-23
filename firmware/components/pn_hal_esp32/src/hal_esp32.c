@@ -68,11 +68,18 @@ static int tca_select(uint8_t ch);            /* 定义见 xgzp_read_kpa 前 */
 #define XGZP_TWO_POW_21 2097152.0f
 
 /* ---------- 阀/泵：LEDC（端口阀）+ RMT 舵机（kit 方向阀/泵） ----------
- * 硬件映射（P0，见 study-notes/10）：
- *   固件 idx0-4（PORT1-5）→ MOS 模块 CH1-5 → 5 只常闭端口阀（LEDC PWM，支持保持降压）
+ * 硬件映射（P0，见 study-notes/10；MOS 模块实测手册 2026-09-23，
+ *           literature/mos-module-4ch-core-set.md）：
+ *   固件 idx0-4（PORT1-5）→ MOS 模块 PWM 输入 → 常闭端口阀（LEDC，支持保持降压）
+ *     块#1（4 路）：PWM1-3=阀A/B/C，PWM4=备用；块#2（4 路）：泵 PWM 调速实验等
  *   固件 idx5（INLET 角色）→ kit 充气三通阀（舵机：ON=接泵充气口，OFF=通大气）
  *   固件 idx6（VENT 角色）→ kit 吸气三通阀（舵机：ON=接泵吸气口，OFF=通大气）
- *   泵 → kit 泵舵机开关（ON/OFF）；MOS 备用通道留给泵 PWM 调速实验
+ *   泵 → kit 泵舵机开关（ON/OFF）
+ * MOS 模块事实（CORE SET 四路光耦隔离，60N03）：
+ *   - 输入高电平有效 PWM，0~20kHz（LEDC 1kHz 合规）→ duty 逻辑无需反转
+ *   - ⚠️ 输入下限 3.6V > ESP32 3.3V（商品属性表标 3.3-5V 与详情参数表 3.6~20V 矛盾）
+ *     → 到货先测 3.3V 直连可靠性（装配指南四.3），不达标加一级电平转换
+ *   - 输入建议串 1K；输出每路独立 OUTn+/OUTn-（隔离开关，非共地低边）
  * ⚠️ 舵机两个位置的气动语义（ON=充气位还是排气位）在首次上电时标定（装配指南 3.5 步），
  *    标定后如与本文件相反，交换 s_servo_invert 或调换映射即可。
  */
