@@ -44,8 +44,12 @@ def main():
     model.summary()
 
     early_stop = tf.keras.callbacks.EarlyStopping(patience=8, restore_best_weights=True)
+    # normal 类加权（2026-09-23）：类分布 60/24/16%，normal 召回被边界工况吃掉
+    # （k=0.2 标签翻转簇 93.3%<95 验收线）——normal→minor 误报无安全代价，但验收线是硬门禁
+    cw = {0: 1.3, 1: 1.0, 2: 1.0}
     model.fit(X_train, y_train, validation_split=0.15,
-              epochs=60, batch_size=32, callbacks=[early_stop], verbose=1)
+              epochs=60, batch_size=32, class_weight=cw,
+              callbacks=[early_stop], verbose=1)
 
     test_loss, test_acc = model.evaluate(X_test, y_test, verbose=0)
     print(f"\nTest accuracy: {test_acc:.4f}（验收线 ≥0.90）")

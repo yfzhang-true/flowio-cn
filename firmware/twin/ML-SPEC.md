@@ -4,14 +4,42 @@
 > 前置：SPEC 15 决策已批准；开源数据集检索结论=软体机器人气动泄漏领域空白
 > 核心策略变更：**仿真用于管线验证+预训练（warm start），部署依赖真机数据微调**
 
-## 0. 物理修正后重训验证记录（2026-09-23，电磁阀手册触发）
+## 0. 固件端部署记录（2026-09-23，用户质询"为什么不用上模型"触发）
 
-真空渐近 -58→-53.3（0520D/F 阀动作窗，VALVE_P_MIN_KPA）后 DLL 重建，全链路（1000 场景重生成→训练→int8 量化→评估→EI 导出）重跑：
+**推理已进固件**（不再只在 PC 管线）：`components/pn_ml` 纯 C int8 推理器（零依赖，
+host DLL / ESP32 / QEMU 三端同码），权重由 `ml_export_c.py` 从 int8 tflite 导出
+（6299 参数，重训后重跑导出即可换模型）。
 
-- **对照发现**：仅 k=0.2 真空边界工况标签 minor→major 翻转（12/1000 场景 ≈1%，该 k 档本就横跨 Δ=1.2 分类边界，旧数据 1major/11minor 佐证），其余工况零漂移；
-- **新指标（int8）**：acc 94.50%（≥90 ✓）· normal R 99.4% · minor R 78.3%（边界类，漏向 normal 无安全代价）· major R 96.2% · **normal↔major 双向混淆=0**（危险漏报为零）· 18KB ≤50KB ✓——与旧物理数字同级，"免重训"推演经实证成立；
+- **采样**：`pn_ml_tick()` 挂控制节拍（孪生 50ms/真机 10ms 任务，内部 ≥45ms 节流 20Hz），
+  传感器#0 → 80 点环形缓冲（4s 窗口）；CLI `L` / `GET /api/leakdetect` 立即推理；
+- **数值一致性**：C 推理器 vs TFLite Interpreter 21/21 对齐（max|Δp|≤0.011，
+  `ml_conformance.c` 每次构建自动跑）——手写推理器不是"差不多"，是逐样本对齐；
+- 途中两坑入档：① Interpreter 的 `tensor_details` 对常量权重 quantization 恒 (0,0)
+  → 必须 flatbuffer schema 直解（`schema_py_generated`）；② CONV/FC 权重为
+  **per-channel 量化**（dim=0），requant 乘子 m[oc]=s_in·s_w[oc]/s_out；
+- **QEMU 整固件**：L 命令路由+采样器故障路径 9/9 冒烟过（QEMU 无 I2C 传感器模型→样本恒 0
+  属环境限制，推理数值由 host 一致性+自测覆盖）；idf 编译过；
+- **GUI 泄漏检测实验室**：注入（7 部位×k 滑杆）+ 立即检测 + 三色徽章（绿/黄/红）+
+  样本进度条（state.ml 字段）；e2e 全流程用例 ×4；
+- **最终模型**（class_weight {0:1.3} 调优后）：int8 acc 95.69% · normal R 95.9% ·
+  minor R 92.1% · major R 98.7% · **normal↔major 双向零漏报** · 18KB；
+- 仍待到货：真机传感器数据上的迁移学习（Task 6/7）、Edge Impulse 平台上传（CSV 已备）。
+
+### 物理修正后重训验证记录（2026-09-23，电磁阀手册触发）
+
+真空渐近 -58→-53.3（0520D/F 阀动作窗，VALVE_P_MIN_KPA）后 DLL 重建：
+
+- **对照发现**：仅 k=0.2 真空边界工况标签 minor→major 翻转（12/1000 场景 ≈1%，该 k 档
+  本就横跨 Δ=1.2 分类边界），其余工况零漂移；
+- ⚠️ **勘误**：首轮"重训"实际误读旧 features.npz（ml_train 只读不生成，需先跑 ml_features）
+  ——那轮报的 94.50%/normal R 93.3% 系旧特征文件产物，已在同日发现并按正确三步管线
+  （ml_features→ml_train→ml_evaluate）重跑；教训：管线串行步骤不可跳，时间戳先查；
+- **正确管线首轮**：int8 acc 90.96%、normal R 93.3%<95 验收线（门禁正确拦截）；
+- **class_weight {0:1.3} 调优后（最终）**：int8 acc 95.69% · normal R 95.9% · minor R 92.1% ·
+  major R 98.7% · 双向零危险漏报 · 18KB——全部验收通过；
 - 旧物理数据集备份 `dataset_old58/`（本地保留供对照，gitignored）；
-- **未测项（诚实清单）**：ESP32 端推理未部署（固件零模型引用已核实，Phase 1）；Edge Impulse 平台上传为手动步骤（CSV 已重新导出）；真机数据迁移学习待到货。
+- **未测项（诚实清单）**：Edge Impulse 平台上传为手动步骤（CSV 已重新导出）；
+  真机数据迁移学习待到货（Task 6/7）。
 
 ## 1. 双阶段策略
 

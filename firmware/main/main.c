@@ -7,6 +7,7 @@
 #include "pn_core/actions.h"
 #include "pn_core/closedloop.h"
 #include "pn_core/cli.h"
+#include "pn_core/leak_detect.h"
 #include "pn_hal_esp32/hal_esp32.h"
 
 #include "freertos/FreeRTOS.h"
@@ -47,6 +48,7 @@ static void control_task(void *arg)
 
         pn_optimize_power(PN_HOLD_DEFAULT_DUTY, PN_HOLD_DEFAULT_DELAY_MS);
         pn_check_overpressure(120.f);
+        pn_ml_tick((uint32_t)(esp_timer_get_time() / 1000));   /* TinyML 20Hz 采样（内部节流） */
         vTaskDelay(pdMS_TO_TICKS(10));
     }
 }

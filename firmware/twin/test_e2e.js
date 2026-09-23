@@ -205,6 +205,29 @@ function T(name, cond) {
   T('饱和不触发超压横幅（阈值120>量程100=固件盲区，已上报）', sat.err === 0 && sat.banner === 'none');
   await p.evaluate(() => fetch('/api/sim', { method: 'POST', body: '0 0' }));
 
+  console.log('─ 功能：泄漏检测实验室（TinyML） ─');
+  await p.evaluate(() => send('S 31'));
+  await p.waitForTimeout(300);
+  await p.evaluate(() => send('I 1 255'));
+  await p.waitForTimeout(3000);
+  await p.evaluate(() => send('H 1'));
+  await p.waitForTimeout(4500);                       /* 4s 窗口灌满 */
+  await p.click('#detectBtn');
+  await p.waitForTimeout(800);
+  const ml0 = await p.evaluate(() => document.getElementById('mlBadge').textContent);
+  T('无泄漏检测=normal', ml0.startsWith('normal'));
+  T('样本进度 80/80', await p.evaluate(() => document.getElementById('mlSamples').textContent) === '80/80');
+  await p.selectOption('#leakIdx', '0');
+  await p.evaluate(() => { document.getElementById('leakK').value = '0.5'; });
+  await p.evaluate(() => leakInject());
+  await p.waitForTimeout(4000);                       /* 窗口全为大泄漏样本 */
+  await p.click('#detectBtn');
+  await p.waitForTimeout(800);
+  const ml1 = await p.evaluate(() => document.getElementById('mlBadge').textContent);
+  T('注入 k=0.5 检测=重度泄漏(红)', ml1.startsWith('重度泄漏'));
+  await p.evaluate(() => leakClear());
+  await p.waitForTimeout(300);
+
   console.log('─ 功能：刷新恢复 ─');
   await p.reload({ waitUntil: 'load' });
   await p.waitForTimeout(1000);

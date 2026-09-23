@@ -3,6 +3,8 @@
  */
 #include "pn_core/cli.h"
 #include "pn_core/closedloop.h"
+#include "pn_core/leak_detect.h"
+#include "pn_ml/leak_infer.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -105,10 +107,16 @@ void pn_cli_process_line(char *line)
     case 'T':
         printf("state=0x%04X err=%d\n", (unsigned)pn_get_state(), pn_last_error());
         break;
-    case 'L':
-        pn_optimize_power(PN_HOLD_DUTY_DEFAULT, PN_HOLD_MS_DEFAULT);
-        printf("optimized\n");
+    case 'L': {   /* 泄漏检测（TinyML，需上电 ≥4s 采样）。
+                   * 旧 'L'=手动节能优化已删（tick 循环自动调用，冗余调试命令） */
+        float conf = 0.f;
+        int cls = pn_leak_detect(&conf);
+        if (cls < 0)
+            printf("leak=detecting samples=%d/80\n", pn_ml_samples());
+        else
+            printf("leak=%s conf=%.2f\n", pn_ml_class_name(cls), (double)conf);
         break;
+    }
     default:
         printf("?\n");
     }

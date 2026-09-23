@@ -39,6 +39,12 @@ PN_TWIN_API float    pn_twin_leak(uint8_t idx);
  * 供 /api/state 的 ports_p 与 GUI 端口卡片显示。idx 0-4。 */
 PN_TWIN_API float    pn_twin_port_pressure(uint8_t idx);
 
+/* TinyML 泄漏检测（2026-09-23 部署）：C 推理器与未来 ESP32 固件同一份代码
+ * （components/pn_ml，数值与 TFLite 一致性 21/21 对齐）。采样挂 pn_twin_tick。
+ * detect 返回 0/1/2 类别（-1=样本未满 80 点），conf 出参可 NULL。 */
+PN_TWIN_API int      pn_twin_leak_detect(float *conf);
+PN_TWIN_API int      pn_twin_ml_samples(void);              /* 已缓存样本 0..80 */
+
 #ifdef __cplusplus
 }
 #endif

@@ -29,6 +29,9 @@ lib.pn_twin_leak.restype = ctypes.c_float
 lib.pn_twin_leak.argtypes = [ctypes.c_uint8]
 lib.pn_twin_port_pressure.restype = ctypes.c_float
 lib.pn_twin_port_pressure.argtypes = [ctypes.c_uint8]
+lib.pn_twin_leak_detect.restype = ctypes.c_int
+lib.pn_twin_leak_detect.argtypes = [ctypes.POINTER(ctypes.c_float)]
+lib.pn_twin_ml_samples.restype = ctypes.c_int
 
 CL_NAMES = {0: "IDLE", 1: "RUNNING", 2: "DONE", 3: "TIMEOUT", 4: "ERR"}
 
@@ -69,7 +72,16 @@ class Handler(BaseHTTPRequestHandler):
                 "cl": CL_NAMES.get(lib.pn_twin_cl_status(), "?"),
                 "err": 1 if (lib.pn_twin_state() & 0x8000) else 0,
                 "leaks": [round(lib.pn_twin_leak(i), 3) for i in range(7)],
+                "ml": lib.pn_twin_ml_samples(),
             })
+        elif path == "/api/leakdetect":
+            # TinyML 泄漏检测（C 推理器=未来 ESP32 同码；-1=样本未满需再等）
+            conf = ctypes.c_float(0.0)
+            cls = lib.pn_twin_leak_detect(ctypes.byref(conf))
+            self._json({"label": int(cls),
+                        "name": {-1: "warming", 0: "normal", 1: "leak_minor", 2: "leak_major"}.get(cls, "?"),
+                        "conf": round(conf.value, 3),
+                        "samples": lib.pn_twin_ml_samples()})
         else:
             self._send(404, '{"error":"not found"}', "application/json")
 

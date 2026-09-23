@@ -280,6 +280,30 @@ input[type=range]{padding:0;accent-color:var(--accent)}
     </div>
 
     <div class="card">
+      <h3>泄漏检测实验室（TinyML）</h3>
+      <div class="row">
+        <span style="color:var(--dim)">泄漏部位</span>
+        <select id="leakIdx">
+          <option value="0">端口1</option><option value="1">端口2</option><option value="2">端口3</option>
+          <option value="3">端口4</option><option value="4">端口5</option>
+          <option value="5">进气阀</option><option value="6">排气阀</option>
+        </select>
+        <span style="color:var(--dim)">强度</span>
+        <input id="leakK" type="range" min="0" max="1" step="0.05" value="0.5"
+               oninput="document.getElementById('leakKv').textContent=(+this.value).toFixed(2)">
+        <b id="leakKv">0.50</b>
+        <button onclick="leakInject()">注入泄漏</button>
+        <button onclick="leakClear()">清除</button>
+      </div>
+      <div class="row" style="margin-top:8px">
+        <button id="detectBtn" onclick="leakDetect()" style="flex:1">🔍 立即检测（4s 窗口推理）</button>
+        <span id="mlBadge" style="padding:3px 12px;border-radius:8px;background:#21262d;color:var(--dim)">未检测</span>
+        <span id="mlSamples" style="color:var(--dim);font-size:11px">0/80</span>
+      </div>
+      <div class="hint">推理跑在固件同一份 C 代码里（未来 ESP32 同码）。剧本：充气→保压(H)→检测=normal →注入泄漏→数秒→检测=报警。</div>
+    </div>
+
+    <div class="card">
       <h3>运行日志</h3>
       <div id="devlog"></div>
     </div>
@@ -541,6 +565,48 @@ function simInject() {
     .catch(e => dlog('✗ 注入失败 ' + e.message, 'warn'));
 }
 
+/* ═══ 泄漏检测实验室（TinyML，2026-09-23） ═══ */
+function leakInject() {
+  const idx = $('leakIdx').value, k = $('leakK').value;
+  fetch('/api/leak', { method: 'POST', body: idx + ' ' + k })
+    .then(r => r.json())
+    .then(j => dlog('◆ 泄漏注入：部位#' + idx + ' k=' + (+k).toFixed(2) + (j.ok ? '' : ' ✗ 参数非法')))
+    .catch(e => dlog('✗ 注入失败 ' + e.message, 'warn'));
+}
+function leakClear() {
+  fetch('/api/leak', { method: 'POST', body: 'reset' })
+    .then(r => r.json())
+    .then(j => dlog('◆ 泄漏全部清除' + (j.ok ? '' : ' ✗')))
+    .catch(e => dlog('✗ 清除失败 ' + e.message, 'warn'));
+}
+async function leakDetect() {
+  const badge = $('mlBadge');
+  badge.textContent = '推理中…';
+  badge.style.background = '#21262d';
+  badge.style.color = 'var(--dim)';
+  try {
+    const j = await (await fetch('/api/leakdetect')).json();
+    if (j.label < 0) {
+      badge.textContent = '预热 ' + j.samples + '/80';
+      dlog('TinyML：样本未满（' + j.samples + '/80），上电 ' + Math.ceil((80 - j.samples) / 20) + 's 后可检测');
+      return;
+    }
+    const look = {
+      0: ['normal', '#0d2818', 'var(--ok)'],
+      1: ['轻度泄漏', '#3a2d00', '#e3b341'],
+      2: ['重度泄漏!', '#3d1015', '#f85149'],
+    }[j.label];
+    badge.textContent = look[0] + ' ' + (j.conf * 100).toFixed(0) + '%';
+    badge.style.background = look[1];
+    badge.style.color = look[2];
+    dlog('🔍 TinyML 检测：' + look[0] + '（置信 ' + (j.conf * 100).toFixed(1) + '%，样本 ' + j.samples + '/80）',
+         j.label === 2 ? 'warn' : undefined);
+  } catch (e) {
+    badge.textContent = '检测失败';
+    dlog('✗ 检测失败 ' + e.message, 'warn');
+  }
+}
+
 /* ═══ 状态轮询 + 渲染（Step 3，200ms） ═══ */
 async function poll() {
   let s;
@@ -567,6 +633,7 @@ function render() {
   if (s.err && !prevErr) dlog('⚠ 状态字错误位置位 (bit15)', 'warn');
   prevErr = s.err;
   $('tbclk').textContent = new Date().toLocaleTimeString('zh-CN', { hour12: false });
+  if (s.ml !== undefined) $('mlSamples').textContent = s.ml + '/80';
 
   /* 阀活塞 ×7：duty>0 = 导通（绿+下压） */
   for (let i = 0; i < 7; ++i) $('pn' + (i + 1)).classList.toggle('on', s.valves[i] > 0);

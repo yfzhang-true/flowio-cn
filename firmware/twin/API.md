@@ -36,9 +36,21 @@ pn_twin.dll（pn_core 控制逻辑【与 ESP32 固件同一份代码】+ 物理 
   "ports_p": [29.7,0,0,0,0],   // 5 端口侧压力（物理 v2.1）：阀开=汇流管值，阀关=端口独立节点（含密封微漏缓降）
   "cl": "DONE",          // 闭环状态机：IDLE|RUNNING|DONE|TIMEOUT|ERR
   "err": 0,              // pn_last_error() 错误码（0=无错）
-  "leaks": [0.0,0.0,0.0,0.0,0.0,0.0,0.0]  // 7 维泄漏系数 0-1（TinyML 数据工厂）
+  "leaks": [0.0,0.0,0.0,0.0,0.0,0.0,0.0],  // 7 维泄漏系数 0-1（TinyML 数据工厂）
+  "ml": 80               // TinyML 已缓存样本数 0..80（泄漏检测窗口就绪度，2026-09-23）
 }
 ```
+
+### 1.2b `GET /api/leakdetect` — TinyML 泄漏检测（2026-09-23 部署）
+
+用最近 80 个汇流管样本（4s@20Hz）立即推理。**推理跑在 `components/pn_ml` 的纯 C int8
+推理器里——与未来 ESP32 固件同一份代码**（数值与 TFLite 一致性 21/21 对齐，Δp≤0.011）。
+
+**响应**：`{"label": 2, "name": "leak_major", "conf": 0.997, "samples": 80}`
+- label：0=normal / 1=leak_minor / 2=leak_major / **-1=样本未满**（上电需 4s 灌满窗口）
+- conf：softmax 置信度 0-1；samples：当前缓存样本数
+- 模型：18KB int8 1D-CNN（acc 95.7%，normal↔major 双向零漏报）；上电零点自校准后残差已入训练域
+- 语义前提：检测应在 `H` 诊断保压工况（或任何密封态）进行——充/放气进行中窗口斜率是泵/阀流量不是泄漏
 
 ### 1.3 `POST /api/cmd` — 执行 CLI 命令
 
@@ -99,7 +111,7 @@ curl -d 'G 7 30 0' http://127.0.0.1:8000/api/cmd
 | `F` | — | 硬件自检（传感器检测+阀咔哒+汇流管 ΔP） | `[ST] ...` 多行 |
 | `P` | — | 读全部传感器 | `sensor0=29.75 kPa` |
 | `T` | — | 查询状态字与错误码 | `state=0x0200 err=0` |
-| `L` | — | 触发节能保持（降压占空比） | `optimized` |
+| `L` | — | **TinyML 泄漏检测**（最近 80 样本立即推理；样本未满报进度） | `leak=normal conf=0.98` / `leak=detecting samples=37/80` |
 
 未识别命令回 `?`。端口掩码：`1`=仅 PORT1，`7`=PORT1-3，`31`=全部五口。
 
