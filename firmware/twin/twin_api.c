@@ -42,7 +42,8 @@
 #define CHOKED_RATIO     1.893f    /* 空气临界压比（音速阻塞） */
 
 static float s_leak[7];            /* 泄漏系数：0-4 端口 / 5 进气 / 6 排气 */
-static uint32_t s_prev_ports;      /* 上拍端口阀位图（开阀混合检测） */
+static uint32_t s_prev_ports;      /* 上拍端口阀位图（开阀混合/关阀快照检测） */
+static float s_port_p[5];          /* 端口侧独立气压节点（阀关后隔离容积，gauge kPa）——物理 v2.1 */
 
 static float sq_pos(float v) { return v > 0.f ? v : 0.f; }
 
@@ -58,6 +59,7 @@ PN_TWIN_API void pn_twin_init(void)
     pn_init(pn_mock_hal(), PN_CFG_GENERAL);
     s_last_cl = PN_CL_IDLE;   /* 虚拟断电重启：闭环状态一并归零，不残留旧值 */
     for (int i = 0; i < 7; ++i) s_leak[i] = 0.f;
+    for (int i = 0; i < 5; ++i) s_port_p[i] = 0.f;
     s_prev_ports = 0;
 }
 
@@ -99,7 +101,7 @@ PN_TWIN_API int pn_twin_tick(void)
 {
     pn_mock_advance_ms(TICK_MS);
 
-    /* ---- 一阶气动物理 v2（规律真实，文献锚点标定） ---- */
+    /* ---- 一阶气动物理 v2.1（多节点：汇流管 + 5 端口侧独立容积） ---- */
     float dt  = TICK_MS / 1000.f;
     float p   = pn_mock_sensor_kpa[0];
     uint32_t st = pn_get_state();
@@ -109,17 +111,21 @@ PN_TWIN_API int pn_twin_tick(void)
     uint32_t ports = st & PN_PORT_MASK_ALL;
     float duty = pn_mock_pump_duty[0] / 255.f;
 
-    /* 开阀瞬时等温混合：汇流管气体与新接通端口通道（大气压）均压 */
+    /* 开阀瞬时等温混合：汇流管气体与新接通端口容积（初压=端口节点当前值）均压 */
     uint32_t new_bits = ports & ~s_prev_ports;
     if (new_bits) {
-        int n_new = __builtin_popcount(new_bits);
         int n_old = __builtin_popcount(s_prev_ports);
         float V_old = V_MANIFOLD_L + (float)n_old * V_PORT_L;
-        float V_new = V_old + (float)n_new * V_PORT_L;
-        float P = p + P_ATM_KPA;
-        P = (P * V_old + P_ATM_KPA * (float)n_new * V_PORT_L) / V_new;
-        p = P - P_ATM_KPA;
+        float num = (p + P_ATM_KPA) * V_old;
+        for (int i = 0; i < 5; ++i)
+            if (new_bits & (1u << i)) num += (s_port_p[i] + P_ATM_KPA) * V_PORT_L;
+        float V_new = V_old + (float)__builtin_popcount(new_bits) * V_PORT_L;
+        p = num / V_new - P_ATM_KPA;
     }
+    /* 关阀快照：端口侧与汇流管隔离，从此独立演化（物理 v2.1——修复"端口压力冻结"bug） */
+    uint32_t closed_bits = s_prev_ports & ~ports;
+    for (int i = 0; i < 5; ++i)
+        if (closed_bits & (1u << i)) s_port_p[i] = p;
     s_prev_ports = ports;
 
     float V = V_MANIFOLD_L + (float)__builtin_popcount(ports) * V_PORT_L;
@@ -142,11 +148,11 @@ PN_TWIN_API int pn_twin_tick(void)
         if (f < -f_choked) f = -f_choked;
         net_q -= VENT_C * sqrtf(fabsf(f));
     }
-    /* 泄漏（注入）：端口阀关=密封面漏、开=下游管路/执行器漏；进气/排气阀关=密封面漏 */
+    /* 汇流管节点泄漏：进气/排气阀密封面（阀关时）+ 端口侧泄漏仅当端口阀开（下游连通才可见） */
     {
         float leak_eff = 0.f;
         for (int i = 0; i < 5; ++i)
-            leak_eff += s_leak[i];           /* 端口泄漏无论阀位均作用于汇流管节点 */
+            if (ports & (1u << i)) leak_eff += s_leak[i];
         if (!inlet_on) leak_eff += s_leak[5] * 0.5f;  /* 进气阀关时半幅（远端通大气） */
         if (!vent_on)  leak_eff += s_leak[6];
         if (leak_eff > 0.f) {
@@ -157,11 +163,27 @@ PN_TWIN_API int pn_twin_tick(void)
     }
 
     p += GAMMA * P / V * net_q * dt;              /* 多变气体定律压力动力学 */
-    if (!ports && !pump_on && !vent_on)           /* 全密封基线微漏（比例） */
+    if (!pump_on && !inlet_on && !vent_on)        /* 泵侧密封即基线微漏（含 H 诊断保压：端口开） */
         p -= p * SEAL_LEAK_PER_S * dt;
     if (p > SENSOR_SPAN_KPA) p = SENSOR_SPAN_KPA;
     if (p < -SENSOR_SPAN_KPA) p = -SENSOR_SPAN_KPA;
     pn_mock_sensor_kpa[0] = p;
+
+    /* 端口侧独立节点演化（阀关的端口）：自身密封微漏 + 端口泄漏（作用于下游，汇流管不可见） */
+    for (int i = 0; i < 5; ++i) {
+        if (ports & (1u << i)) { s_port_p[i] = p; continue; }   /* 阀开=与汇流管同节点 */
+        float pp = s_port_p[i];
+        if (s_leak[i] > 0.f) {
+            float Pv = pp + P_ATM_KPA;
+            float d = Pv - P_ATM_KPA;
+            float f = (d > 0.f) ? sqrtf(P_ATM_KPA * d) : ((d < 0.f) ? -sqrtf(P_ATM_KPA * -d) : 0.f);
+            pp += GAMMA * Pv / V_PORT_L * (-LEAK_C * s_leak[i] * f) * dt;
+        }
+        pp -= pp * SEAL_LEAK_PER_S * dt;
+        if (pp > SENSOR_SPAN_KPA) pp = SENSOR_SPAN_KPA;
+        if (pp < -SENSOR_SPAN_KPA) pp = -SENSOR_SPAN_KPA;
+        s_port_p[i] = pp;
+    }
 
     /* ---- 控制节拍（与真机 10ms 任务同构，此处 50ms） ---- */
     pn_cl_status_t cl = pn_inflate_to_tick();
@@ -181,3 +203,11 @@ PN_TWIN_API void pn_twin_set_leak(uint8_t idx, float k)
 }
 
 PN_TWIN_API float pn_twin_leak(uint8_t idx) { return idx < 7 ? s_leak[idx] : 0.f; }
+
+/* 端口侧压力（物理 v2.1）：阀开=汇流管同节点值；阀关=端口独立节点当前值 */
+PN_TWIN_API float pn_twin_port_pressure(uint8_t idx)
+{
+    if (idx >= 5) return 0.f;
+    uint32_t ports = pn_get_state() & PN_PORT_MASK_ALL;
+    return (ports & (1u << idx)) ? pn_mock_sensor_kpa[0] : s_port_p[idx];
+}

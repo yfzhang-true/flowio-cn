@@ -64,20 +64,20 @@ def run_scenario_dll(lib, leak_comp, leak_k, operation, init_p, ports, noise_sig
         lib.pn_twin_init()
 
         # 2. 建立初始工况（tick 上限 2000 拍 = 虚拟 100s，防死循环）
-        #    两种密封态工况（v3）：hold=充至+init_p 后密封；vacuum=抽至-init_p 后密封。
-        #    泄漏必须作用于有压差的密封系统才有可观测信号（训练诊断修正）。
+        #    两种密封态工况（v4：H 诊断保压 = 泵侧密封+端口保持通——端口侧泄漏
+        #    可被汇流管传感器观测；v3 的 S 隔离保压物理上对端口泄漏不可见，已废弃）
         if operation == "vacuum":
             lib.pn_twin_command(f"V {ports} 255".encode())
             for _ in range(2000):
                 if lib.pn_twin_sensor(0) <= -init_p: break
                 lib.pn_twin_tick()
-            lib.pn_twin_command(f"S {ports}".encode())   # 密封（负压保持）
+            lib.pn_twin_command(f"H {ports}".encode())   # 诊断保压（负压保持）
         else:  # hold
             lib.pn_twin_command(f"I {ports} 255".encode())
             for _ in range(2000):
                 if lib.pn_twin_sensor(0) >= init_p: break
                 lib.pn_twin_tick()
-            lib.pn_twin_command(f"S {ports}".encode())   # 保压密封
+            lib.pn_twin_command(f"H {ports}".encode())   # 诊断保压（端口通，泵侧封）
 
         # 3. 注入泄漏（idx 0-6；7=无泄漏跳过）
         if leak_comp < 7:
@@ -95,7 +95,8 @@ def run_scenario_dll(lib, leak_comp, leak_k, operation, init_p, ports, noise_sig
             lib.pn_twin_set_leak(idx, 0.0)
         lib.pn_twin_command(b"S 31")
 
-    # 5. 附加高斯噪声（kPa；放静默块外，纯 numpy）
+    # 5. 附加高斯噪声（kPa；纯 numpy，在静默块外）
+    series += rng.normal(0, noise_sigma, n_samples)
 
     meta = {"leak_component": leak_comp, "leak_k": leak_k,
             "operation": operation, "initial_pressure": init_p,

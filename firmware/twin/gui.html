@@ -230,7 +230,7 @@ input[type=range]{padding:0;accent-color:var(--accent)}
 
     <div class="card">
       <h3>端口控制</h3>
-      <div class="hint" style="margin:-4px 0 8px">点卡片头部选端口（联动上图动作按钮）· 端口压力：阀开=汇流传导值，阀关=密封保持值</div>
+      <div class="hint" style="margin:-4px 0 8px">点卡片头部选端口（联动上图动作按钮）· 端口压力：阀开=汇流传导值，阀关=端口侧独立节点（含密封微漏，会缓降）</div>
       <div id="pcards"></div>
     </div>
   </section>
@@ -602,6 +602,7 @@ function render() {
   /* 气球：阀开→压力跟随汇流管 S0，阀关→密封保持；大小+颜色随压力 */
   for (let i = 0; i < 5; ++i) {
     if ((s.state >> i) & 1) balP[i] = p0;
+    else if (Array.isArray(s.ports_p)) balP[i] = s.ports_p[i];   /* 物理 v2.1：阀关=端口节点真值（会衰减） */
     const f = Math.max(0, Math.min(65, balP[i])) / 65;
     balRefs[i].g.style.transform = `scale(${balloonScale(balP[i]).toFixed(3)})`;
     balRefs[i].c.setAttribute('fill', `hsl(152,52%,${Math.round(20 + f * 20)}%)`);

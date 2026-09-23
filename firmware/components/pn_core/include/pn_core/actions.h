@@ -47,7 +47,8 @@ void pn_pump_stop(void);
 pn_err_t pn_start_inflation(uint8_t ports, uint8_t pwm);  /* 进气阀开+端口开+泵转 */
 pn_err_t pn_start_vacuum(uint8_t ports, uint8_t pwm);     /* 排气路径（P0 泵支持吸/充两用） */
 pn_err_t pn_start_release(uint8_t ports);                 /* 排放：开排气位+端口阀，泵停 */
-pn_err_t pn_stop_action(uint8_t ports);                   /* 停止=关方向阀+关指定端口+泵停（=保压） */
+pn_err_t pn_stop_action(uint8_t ports);                   /* 停止=关方向阀+关指定端口+泵停（=隔离保压） */
+pn_err_t pn_hold_open(uint8_t ports);                     /* 诊断保压：泵侧密封+端口保持通（汇流管+下游连成单一密封容积，泄漏诊断/TinyML 检测窗口用） */
 
 /* ---- 阀保持节能：开启超 threshold 的阀降至 hold_duty ---- */
 void pn_optimize_power(uint8_t hold_duty, uint16_t threshold_ms);

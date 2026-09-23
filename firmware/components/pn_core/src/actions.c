@@ -141,6 +141,21 @@ pn_err_t pn_start_release(uint8_t ports)
     return PN_OK;
 }
 
+pn_err_t pn_hold_open(uint8_t ports)
+{
+    if (!ports_valid(ports)) { s_last_err = PN_ERR_PARAM; return PN_ERR_PARAM; }
+
+    /* 诊断保压：泵侧密封（进气/排气全关+泵停），端口阀保持通——
+     * 汇流管+下游执行器连成单一密封容积，端口侧泄漏可被汇流管传感器观测。
+     * 与 pn_stop_action 的区别：stop 把端口也关了（隔离保压，端口侧变化不可见）。 */
+    pn_pump_stop();
+    pn_inlet_close();
+    pn_vent_close();
+    pn_ports_open(ports);
+    s_last_err = PN_OK;
+    return PN_OK;
+}
+
 pn_err_t pn_stop_action(uint8_t ports)
 {
     pn_inlet_close();

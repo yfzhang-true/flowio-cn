@@ -27,6 +27,8 @@ lib.pn_twin_set_sensor.argtypes = [ctypes.c_uint8, ctypes.c_float]
 lib.pn_twin_set_leak.argtypes = [ctypes.c_uint8, ctypes.c_float]
 lib.pn_twin_leak.restype = ctypes.c_float
 lib.pn_twin_leak.argtypes = [ctypes.c_uint8]
+lib.pn_twin_port_pressure.restype = ctypes.c_float
+lib.pn_twin_port_pressure.argtypes = [ctypes.c_uint8]
 
 CL_NAMES = {0: "IDLE", 1: "RUNNING", 2: "DONE", 3: "TIMEOUT", 4: "ERR"}
 
@@ -63,6 +65,7 @@ class Handler(BaseHTTPRequestHandler):
                 "valves": [lib.pn_twin_valve_duty(i) for i in range(7)],
                 "pump": lib.pn_twin_pump_duty(),
                 "sensors": [round(lib.pn_twin_sensor(i), 2) for i in range(2)],
+                "ports_p": [round(lib.pn_twin_port_pressure(i), 2) for i in range(5)],
                 "cl": CL_NAMES.get(lib.pn_twin_cl_status(), "?"),
                 "err": 1 if (lib.pn_twin_state() & 0x8000) else 0,
                 "leaks": [round(lib.pn_twin_leak(i), 3) for i in range(7)],

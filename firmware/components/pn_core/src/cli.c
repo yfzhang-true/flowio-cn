@@ -74,6 +74,10 @@ void pn_cli_process_line(char *line)
         if (sscanf(line + 1, "%hhu", &ports) == 1)
             printf("stop=%d\n", pn_stop_action(ports));
         break;
+    case 'H':
+        if (sscanf(line + 1, "%hhu", &ports) == 1)
+            printf("hold_open=%d\n", pn_hold_open(ports));   /* 诊断保压：泵侧密封+端口保持通 */
+        break;
     case 'O':
         if (sscanf(line + 1, "%hhu", &ports) == 1) pn_ports_open(ports);
         break;

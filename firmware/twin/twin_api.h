@@ -35,6 +35,10 @@ PN_TWIN_API void     pn_twin_advance(uint32_t ms);        /* 推进虚拟时钟 
 PN_TWIN_API void     pn_twin_set_leak(uint8_t idx, float k);
 PN_TWIN_API float    pn_twin_leak(uint8_t idx);
 
+/* 端口侧压力（物理 v2.1 多节点模型）：阀开=汇流管值，阀关=端口独立节点值。
+ * 供 /api/state 的 ports_p 与 GUI 端口卡片显示。idx 0-4。 */
+PN_TWIN_API float    pn_twin_port_pressure(uint8_t idx);
+
 #ifdef __cplusplus
 }
 #endif

@@ -47,10 +47,11 @@ if [ $((st0 & 32768)) -ne 0 ] 2>/dev/null; then
 fi
 
 echo "─ 接口：协议契约 ─"
-for k in state valves pump sensors cl err leaks; do
+for k in state valves pump sensors ports_p cl err leaks; do
   ok "GET /api/state 含字段 $k" "$(grep -c "\"$k\"" <<<"$s")"
 done
 ok "valves 长度 7" "$(grep -c '"valves": \[[^]]*\]' <<<"$s" >/dev/null && [ "$(grep -o '[0-9]*' <<<"$(jnum n "$s")" >/dev/null; echo 1)" ] && [ "$(tr -cd ',' <<<"$(grep -o '"valves": \[[^]]*\]' <<<"$s")" | wc -c)" = "6" ] && echo 1 || echo 0)"
+ok "ports_p 长度 5" "$([ "$(tr -cd ',' <<<"$(grep -o '"ports_p": \[[^]]*\]' <<<"$s")" | wc -c)" = "4" ] && echo 1 || echo 0)"
 ok "cl 枚举合法" "$(case "$(jstr cl "$s")" in IDLE|RUNNING|DONE|TIMEOUT|ERR) echo 1;; *) echo 0;; esac)"
 ok "POST /api/cmd 回 {ok:true}" "$(cmd 'T'; curl -s -m 3 -X POST "$BASE/api/cmd" -d 'T' | grep -c '"ok": *true')"
 
@@ -167,14 +168,29 @@ reset0; cmd 'I 1 255'; sleep 2.0; cmd 'S 1'; p1=$(sens 1 "$(state)")
 ok "A5 容积耦合：1口(${p1}) > 3口(${p3})×1.2（V_m+V_p vs V_m+3V_p）" \
   "$(awk -v a="$p1" -v b="$p3" 'BEGIN{exit !(a>b*1.2)}' && echo 1 || echo 0)"
 
-# F. 泄漏注入（TinyML Phase 0）
-reset0; cmd 'I 7 255'; sleep 3.0; cmd 'S 7'; sleep 0.3
+# F. 泄漏注入（TinyML Phase 0；物理 v2.1 语义）
+reset0; cmd 'I 1 255'; sleep 3.0; cmd 'H 1'; sleep 0.3
 pl0=$(sens 1 "$(state)")
 curl -s -m 2 -X POST "$BASE/api/leak" -d "0 0.3" >/dev/null
 sleep 2.0
 pl1=$(sens 1 "$(state)")
-ok "A6 泄漏注入 k=0.3 加速衰减（${pl0}→${pl1}，降>3kPa/2s）" \
+ok "A6 泄漏注入 k=0.3 加速衰减（H 诊断保压单口，${pl0}→${pl1}，降>3kPa/2s）" \
   "$(awk -v a="$pl0" -v b="$pl1" 'BEGIN{exit !(a-b>3)}' && echo 1 || echo 0)"
+# A6b：S 隔离保压下端口泄漏不可见（汇流管不降）——物理 v2.1 端口节点语义
+reset0; cmd 'I 7 255'; sleep 3.0; cmd 'S 7'; sleep 0.3
+q0=$(sens 1 "$(state)")
+curl -s -m 2 -X POST "$BASE/api/leak" -d "0 0.5" >/dev/null
+sleep 2.0
+q1=$(sens 1 "$(state)")
+ok "A6b S 隔离保压：端口泄漏对汇流管不可见（${q0}→${q1}，降<0.5）" \
+  "$(awk -v a="$q0" -v b="$q1" 'BEGIN{exit !(a-b<0.5)}' && echo 1 || echo 0)"
+# A6c：ports_p 端口独立节点存在且密封后缓降（k=0.5 泄漏仍在端口侧作用）
+portp() { grep -o '"ports_p": \[[^]]*\]' <<<"$(state)" | grep -o '\[[^]]*\]' | tr -d '[] ' | cut -d, -f"$1"; }
+pp0=$(portp 1)
+sleep 2.0
+pp1=$(portp 1)
+ok "A6c 端口节点独立衰减（ports_p[0] ${pp0}→${pp1}，降>0.5）" \
+  "$(awk -v a="$pp0" -v b="$pp1" 'BEGIN{exit !(a-b>0.5)}' && echo 1 || echo 0)"
 curl -s -m 2 -X POST "$BASE/api/leak" -d "reset" >/dev/null
 lk=$(grep -o '"leaks": \[[^]]*\]' "$(state)" | grep -o '[0-9]' | tr -d '[:space:]')
 ok "A7 /api/leak reset 清零（leaks 全 0）" "$([ -z "$lk" ] && echo 1 || echo 0)"

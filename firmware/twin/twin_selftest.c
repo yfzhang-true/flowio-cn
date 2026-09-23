@@ -26,16 +26,27 @@ int main(void)
     for (int i = 0; i < 160; ++i) pn_twin_tick();
     printf("after release 4s: sensor0=%.2f kPa (期望 <3)\n", (double)pn_twin_sensor(0));
 
-    /* TinyML Phase 0：泄漏注入 demo——密封 50kPa 级，注入 k=0.2 观察加速衰减 */
+    /* TinyML Phase 0：泄漏注入 demo——H 诊断保压（泵侧密封+端口保持通），
+     * 端口泄漏可被汇流管传感器观测（物理 v2.1：S 隔离保压下端口侧泄漏不可见） */
     pn_twin_command("S 1");
     pn_twin_command("I 1 255");
     for (int i = 0; i < 60; ++i) pn_twin_tick();          /* 3s 充到 ~55 */
-    pn_twin_command("S 1");
+    pn_twin_command("H 1");                               /* 诊断保压：端口通，泵侧封 */
     float pl0 = pn_twin_sensor(0);
+    float pp0 = pn_twin_port_pressure(0);
     pn_twin_set_leak(0, 0.2f);
     for (int i = 0; i < 40; ++i) pn_twin_tick();          /* 2s 泄漏 */
     float pl1 = pn_twin_sensor(0);
-    printf("leak k=0.2: %.2f -> %.2f kPa in 2s (期望降 >4)\n", (double)pl0, (double)pl1);
+    printf("leak k=0.2 (H hold): %.2f -> %.2f kPa in 2s (期望降 >4)\n", (double)pl0, (double)pl1);
+
+    /* 端口独立节点 demo：S 隔离保压下，端口压力自身缓降、汇流管不受端口泄漏影响 */
+    pn_twin_command("S 1");
+    float pp1 = pn_twin_port_pressure(0);
+    for (int i = 0; i < 40; ++i) pn_twin_tick();          /* 2s：端口节点独立演化 */
+    float pp2 = pn_twin_port_pressure(0);
+    printf("port node sealed: %.2f -> %.2f kPa in 2s (期望缓慢下降，端口泄漏继续作用)\n",
+           (double)pp1, (double)pp2);
+    (void)pp0;
 
     return 0;
 }
