@@ -78,10 +78,16 @@ class Handler(BaseHTTPRequestHandler):
             # TinyML 泄漏检测（C 推理器=未来 ESP32 同码；-1=样本未满需再等）
             conf = ctypes.c_float(0.0)
             cls = lib.pn_twin_leak_detect(ctypes.byref(conf))
+            # 工况守卫（物理 v2.1）：端口阀全关时端口侧泄漏对汇流管传感器不可见——
+            # 检测窗口采的是 S0（汇流管），此时注入端口泄漏只会测得 normal（正确行为）
+            hint = None
+            if any(lib.pn_twin_leak(i) > 0 for i in range(5)) and not (lib.pn_twin_state() & 0x1F):
+                hint = "端口阀全关（S 隔离保压）：端口侧泄漏对汇流管不可见——请用 H 诊断保压（端口保持通）后检测"
             self._json({"label": int(cls),
                         "name": {-1: "warming", 0: "normal", 1: "leak_minor", 2: "leak_major"}.get(cls, "?"),
                         "conf": round(conf.value, 3),
-                        "samples": lib.pn_twin_ml_samples()})
+                        "samples": lib.pn_twin_ml_samples(),
+                        "hint": hint})
         else:
             self._send(404, '{"error":"not found"}', "application/json")
 

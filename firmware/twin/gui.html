@@ -38,6 +38,9 @@ input[type=range]{padding:0;accent-color:var(--accent)}
   gap:12px;padding:12px;align-items:start}
 .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:12px}
 .card h3{font-size:13px;color:var(--accent);margin-bottom:8px}
+.chip{padding:3px 10px;border-radius:9px;border:1px solid var(--line);background:#21262d;color:var(--fg);cursor:pointer;font-size:11px}
+.chip:hover{border-color:var(--accent)}
+.chip.sel{border-color:var(--accent);background:#0d2818;color:var(--ok)}
 .row{display:flex;align-items:center;gap:8px;margin:6px 0;flex-wrap:wrap}
 
 /* ═══ SVG 气路动画 ═══ */
@@ -281,14 +284,21 @@ input[type=range]{padding:0;accent-color:var(--accent)}
 
     <div class="card">
       <h3>泄漏检测实验室（TinyML）</h3>
-      <div class="row">
-        <span style="color:var(--dim)">泄漏部位</span>
-        <select id="leakIdx">
-          <option value="0">端口1</option><option value="1">端口2</option><option value="2">端口3</option>
-          <option value="3">端口4</option><option value="4">端口5</option>
-          <option value="5">进气阀</option><option value="6">排气阀</option>
-        </select>
+      <div class="row" style="flex-wrap:wrap;gap:4px">
+        <span style="color:var(--dim)">部位</span>
+        <button class="chip" id="lkc0" onclick="leakSel(0)">端口1</button>
+        <button class="chip" id="lkc1" onclick="leakSel(1)">端口2</button>
+        <button class="chip" id="lkc2" onclick="leakSel(2)">端口3</button>
+        <button class="chip" id="lkc3" onclick="leakSel(3)">端口4</button>
+        <button class="chip" id="lkc4" onclick="leakSel(4)">端口5</button>
+        <button class="chip" id="lkc5" onclick="leakSel(5)">进气阀</button>
+        <button class="chip" id="lkc6" onclick="leakSel(6)">排气阀</button>
+      </div>
+      <div class="row" style="margin-top:6px">
         <span style="color:var(--dim)">强度</span>
+        <button class="chip" onclick="leakPreset(0.15)">轻 0.15</button>
+        <button class="chip" onclick="leakPreset(0.35)">中 0.35</button>
+        <button class="chip" onclick="leakPreset(0.75)">重 0.75</button>
         <input id="leakK" type="range" min="0" max="1" step="0.05" value="0.5"
                oninput="document.getElementById('leakKv').textContent=(+this.value).toFixed(2)">
         <b id="leakKv">0.50</b>
@@ -300,7 +310,10 @@ input[type=range]{padding:0;accent-color:var(--accent)}
         <span id="mlBadge" style="padding:3px 12px;border-radius:8px;background:#21262d;color:var(--dim)">未检测</span>
         <span id="mlSamples" style="color:var(--dim);font-size:11px">0/80</span>
       </div>
-      <div class="hint">推理跑在固件同一份 C 代码里（未来 ESP32 同码）。剧本：充气→保压(H)→检测=normal →注入泄漏→数秒→检测=报警。</div>
+      <div class="row" style="margin-top:6px">
+        <button id="demoBtn" onclick="demoSeq()" style="flex:1">▶ 一键演示剧本（充压→H保压→检测normal→注入→检测报警）</button>
+      </div>
+      <div class="hint">⚠ 检测工况前提：端口泄漏只有在<b>端口阀开着</b>时才对汇流管传感器可见——用 H 诊断保压，不要用 S 隔离保压（S 会让端口泄漏"隐身"，物理 v2.1）。推理跑在固件同一份 C 代码里（未来 ESP32 同码）。</div>
     </div>
 
     <div class="card">
@@ -566,11 +579,21 @@ function simInject() {
 }
 
 /* ═══ 泄漏检测实验室（TinyML，2026-09-23） ═══ */
+let leakIdxSel = 0;
+function leakSel(i) {
+  leakIdxSel = i;
+  for (let k = 0; k < 7; ++k) document.getElementById('lkc' + k).classList.toggle('sel', k === i);
+  dlog('泄漏部位 → [' + ['端口1','端口2','端口3','端口4','端口5','进气阀','排气阀'][i] + ']');
+}
+function leakPreset(k) {
+  document.getElementById('leakK').value = k;
+  document.getElementById('leakKv').textContent = (+k).toFixed(2);
+}
 function leakInject() {
-  const idx = $('leakIdx').value, k = $('leakK').value;
-  fetch('/api/leak', { method: 'POST', body: idx + ' ' + k })
+  const k = document.getElementById('leakK').value;
+  fetch('/api/leak', { method: 'POST', body: leakIdxSel + ' ' + k })
     .then(r => r.json())
-    .then(j => dlog('◆ 泄漏注入：部位#' + idx + ' k=' + (+k).toFixed(2) + (j.ok ? '' : ' ✗ 参数非法')))
+    .then(j => dlog('◆ 泄漏注入：部位#' + leakIdxSel + ' k=' + (+k).toFixed(2) + (j.ok ? '' : ' ✗ 参数非法')))
     .catch(e => dlog('✗ 注入失败 ' + e.message, 'warn'));
 }
 function leakClear() {
@@ -580,7 +603,7 @@ function leakClear() {
     .catch(e => dlog('✗ 清除失败 ' + e.message, 'warn'));
 }
 async function leakDetect() {
-  const badge = $('mlBadge');
+  const badge = document.getElementById('mlBadge');
   badge.textContent = '推理中…';
   badge.style.background = '#21262d';
   badge.style.color = 'var(--dim)';
@@ -601,9 +624,35 @@ async function leakDetect() {
     badge.style.color = look[2];
     dlog('🔍 TinyML 检测：' + look[0] + '（置信 ' + (j.conf * 100).toFixed(1) + '%，样本 ' + j.samples + '/80）',
          j.label === 2 ? 'warn' : undefined);
+    if (j.hint) dlog('⚠ 工况提示：' + j.hint, 'warn');
   } catch (e) {
     badge.textContent = '检测失败';
     dlog('✗ 检测失败 ' + e.message, 'warn');
+  }
+}
+async function demoSeq() {
+  const btn = document.getElementById('demoBtn');
+  btn.disabled = true;
+  try {
+    dlog('▶ 演示剧本开始（正确工况：充压 → H 诊断保压 → 检测 → 注入 → 检测）');
+    leakClear(); await new Promise(r => setTimeout(r, 400));
+    send('S 1'); await new Promise(r => setTimeout(r, 300));
+    send('I 1 255');                                  /* 1. 充压（端口阀开） */
+    await new Promise(r => setTimeout(r, 3000));
+    send('H 1');                                      /* 2. H 诊断保压：端口保持通 */
+    dlog('⏳ H 保压中，等窗口灌满…');
+    await new Promise(r => setTimeout(r, 4500));
+    await leakDetect();                               /* 3. 应为 normal */
+    const k = document.getElementById('leakK').value;
+    fetch('/api/leak', { method: 'POST', body: leakIdxSel + ' ' + k });   /* 4. 注入 */
+    dlog('◆ 已注入部位#' + leakIdxSel + ' k=' + (+k).toFixed(2) + '，泄漏发展中…');
+    await new Promise(r => setTimeout(r, 4000));
+    await leakDetect();                               /* 5. 应报警 */
+    leakClear();
+    send('S 1');
+    dlog('▶ 演示剧本结束（已清除泄漏并密封）');
+  } finally {
+    btn.disabled = false;
   }
 }
 
@@ -693,6 +742,7 @@ buildCards();
 renderSched();
 dlog('✅ FlowIO-CN P0 数字孪生控制台就绪');
 dlog('轮询 /api/state @200ms · 命令 POST /api/cmd');
+leakSel(0);   /* 泄漏部位默认端口1（chips 初始化） */
 poll();
 setInterval(poll, 200);
 </script>

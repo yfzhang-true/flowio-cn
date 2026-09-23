@@ -217,8 +217,9 @@ function T(name, cond) {
   const ml0 = await p.evaluate(() => document.getElementById('mlBadge').textContent);
   T('无泄漏检测=normal', ml0.startsWith('normal'));
   T('样本进度 80/80', await p.evaluate(() => document.getElementById('mlSamples').textContent) === '80/80');
-  await p.selectOption('#leakIdx', '0');
-  await p.evaluate(() => { document.getElementById('leakK').value = '0.5'; });
+  await p.click('#lkc0');                             /* chips 选部位（内嵌浏览器兼容，select 已弃用） */
+  T('部位 chips 可切换', await p.evaluate(() => document.getElementById('lkc0').classList.contains('sel')));
+  await p.evaluate(() => leakPreset('0.5'));
   await p.evaluate(() => leakInject());
   await p.waitForTimeout(4000);                       /* 窗口全为大泄漏样本 */
   await p.click('#detectBtn');
@@ -226,6 +227,24 @@ function T(name, cond) {
   const ml1 = await p.evaluate(() => document.getElementById('mlBadge').textContent);
   T('注入 k=0.5 检测=重度泄漏(红)', ml1.startsWith('重度泄漏'));
   await p.evaluate(() => leakClear());
+  await p.waitForTimeout(300);
+
+  console.log('─ 功能：S 隔离保压下端口泄漏不可见（工况守卫提示） ─');
+  await p.evaluate(() => send('S 1'));                /* 端口阀全关 */
+  await p.waitForTimeout(300);
+  await p.evaluate(() => leakPreset('0.75'));
+  await p.evaluate(() => leakInject());
+  await p.waitForTimeout(4000);
+  await p.click('#detectBtn');
+  await p.waitForTimeout(800);
+  const guarded = await p.evaluate(async () => {
+    const j = await (await fetch('/api/leakdetect')).json();
+    return { label: j.label, hint: j.hint || '' };
+  });
+  T('S 隔离态端口泄漏检测=normal（物理正确：不可见）', guarded.label === 0);
+  T('工况守卫 hint 提示 H 保压', guarded.hint.includes('H 诊断保压'));
+  await p.evaluate(() => leakClear());
+  await p.evaluate(() => send('S 31'));
   await p.waitForTimeout(300);
 
   console.log('─ 功能：刷新恢复 ─');
