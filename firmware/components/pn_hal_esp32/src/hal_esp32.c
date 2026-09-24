@@ -294,7 +294,10 @@ void pn_hal_esp32_i2c_scan(void)
 {
     if (!s_i2c_bus) { printf("[SCAN] i2c bus not initialized (QEMU?)\n"); return; }
 
-    /* 先全关通道，主总线扫描不受下游干扰 */
+    /* 先全关通道，主总线扫描不受下游干扰。
+     * 已知瑕疵（2026-09-24 真机）：此克隆模块写 0x00 后 main 扫描仍见下游 0x58——
+     * deselect 未立即生效，属扫描工具瑕疵；功能层 P 命令交替读取双传感器干净独立，
+     * 固件从不依赖 deselect（每次读前必 tca_select）。 */
     if (s_tca_present) {
         uint8_t none = 0;
         i2c_master_transmit(s_tca_dev, &none, 1, 10);
