@@ -30,10 +30,22 @@ static void cli_delay_wrapper(uint32_t ms) { vTaskDelay(pdMS_TO_TICKS(ms)); }
 static void demo_task(void *arg)
 {
     (void)arg;
-    vTaskDelay(pdMS_TO_TICKS(8000));   /* 上电静默 8s：传感器零点自校准 + 观察窗口 */
-    if (gpio_get_level(GPIO_NUM_0) == 0) {
-        printf("[DEMO] BOOT held at boot — demo disabled this session\n");
-        vTaskDelete(NULL);
+    /* 上电后 30 秒内按住 BOOT（GPIO0 拉低）≥1 秒 → 本次跳过演示；
+     * 30 秒后未按 → 自动开始呼吸演示循环（充电宝独立供电场景）。
+     * 注意：复位瞬间不要按 BOOT（GPIO0 采样低会进下载模式挂起）——
+     * 复位完成后再按。 */
+    gpio_config_t io = {
+        .pin_bit_mask = 1ULL << GPIO_NUM_0,
+        .mode = GPIO_MODE_INPUT,
+        .pull_up_en = GPIO_PULLUP_ENABLE,
+    };
+    gpio_config(&io);
+    for (int i = 0; i < 600; ++i) {   /* 30s = 600×50ms */
+        if (gpio_get_level(GPIO_NUM_0) == 0) {
+            printf("[DEMO] BOOT held — demo disabled this session\n");
+            vTaskDelete(NULL);
+        }
+        vTaskDelay(pdMS_TO_TICKS(50));
     }
     printf("[DEMO] breathing demo: I 6s -> S 3s -> V 6s -> S 3s loop\n");
     for (;;) {
