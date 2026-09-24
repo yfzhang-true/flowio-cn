@@ -125,6 +125,12 @@ void app_main(void)
             if (!line[0]) continue;
             if (line[0] == 'W' && line[1] == 0)
                 pn_hal_esp32_i2c_scan();   /* bring-up 诊断：I2C 全总线扫描 */
+            else if (line[0] == 'M') {
+                /* 舵机诊断：M <gpio> <usec> —— LEDC 精确时基发 50Hz 舵机脉冲 */
+                int gpio = 17, usec = 2500;
+                if (sscanf(line + 1, "%d %d", &gpio, &usec) >= 1)
+                    pn_hal_esp32_servo_le_test(gpio, usec);
+            }
             else
                 pn_cli_process_line(line);
         }

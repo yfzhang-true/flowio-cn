@@ -139,6 +139,18 @@ static void ledc_init_all(void)
     ch.channel  = LEDC_CHANNEL_7;
     if (ledc_channel_config(&ch) != ESP_OK)
         printf("[HAL] ledc pump ch config failed\n");
+
+    /* 舵机信号诊断通道（2026-09-24）：LEDC 时基由时钟树精确保证，与 RMT 独立——
+     * 用于判别"RMT 发的脉宽是否正确"（万用表平均电压无法区分占空比相同、
+     * 时基不同的脉冲串）。独立 50Hz 定时器 + 独立通道，不影响 1kHz 阀路。 */
+    ledc_timer_config_t st = {
+        .speed_mode      = LEDC_LOW_SPEED_MODE,
+        .timer_num       = LEDC_TIMER_1,
+        .duty_resolution = LEDC_TIMER_14_BIT,
+        .freq_hz         = 50,
+        .clk_cfg         = LEDC_AUTO_CLK,
+    };
+    ledc_timer_config(&st);
 }
 
 /* ---------- kit 舵机开关：RMT 50Hz ---------- */
@@ -177,14 +189,19 @@ void pn_hal_esp32_servo_set(uint8_t switch_idx, uint16_t pulse_us)
 void pn_hal_esp32_servo_refresh(void)
 {
     static uint32_t s_last_us;
+    static uint32_t s_drop_cnt;
     uint32_t now = (uint32_t)esp_timer_get_time();
     if (s_last_us && now - s_last_us < 19000) return;   /* 节流 20ms=50Hz（10ms 节拍下隔拍发） */
     s_last_us = now;
     rmt_transmit_config_t cfg = { 0 };   /* 单次发送（非循环），发完即返回不等待 */
     for (int i = 0; i < 3; ++i) {
         if (!s_servo_ok[i] || !s_servo_enc[i]) continue;
-        rmt_transmit(s_servo_rmt[i], s_servo_enc[i],
-                     &s_servo_pulse[i], sizeof(uint16_t), &cfg);
+        if (rmt_transmit(s_servo_rmt[i], s_servo_enc[i],
+                         &s_servo_pulse[i], sizeof(uint16_t), &cfg) != ESP_OK) {
+            if ((++s_drop_cnt % 50) == 1)
+                printf("[HAL] servo tx queue full, dropped %u total\n",
+                       (unsigned)s_drop_cnt);   /* 诊断：队列竞争残留指示（修复后应几乎不出现） */
+        }
     }
 }
 
@@ -211,7 +228,10 @@ static void servo_init_all(void)
                                   * 教训链（2026-09-23 真机首点）：64→级联相邻通道内存，每舵机
                                   * 吃 2 个 TX 通道致第 3 只 no free tx channels；32→驱动拒绝
                                   * （must be even and at least 48）。编码器每周期仅 1 符号对 */
-    tx.trans_queue_depth = 1;
+    tx.trans_queue_depth = 4;    /* 2026-09-24 修复：1 时与 20ms 发送节奏竞争——每帧发送耗时
+                                  * 20ms=发送间隔，新帧到达时上一帧未发完，队列满静默丢弃，
+                                  * 舵机信号大部分时间停发（开关白线被内部上拉顶到 2.7V、
+                                  * LED 永闪的根因）。4 深=稳态 1-2，彻底消除竞争 */
     for (int i = 0; i < 3; ++i) {
         tx.gpio_num = s_servo_gpio[i];
         /* 优雅降级：RMT 通道注册失败（QEMU 不仿真 RMT）时跳过该舵机，
@@ -231,6 +251,25 @@ static void servo_init_all(void)
         /* 初始脉冲不发（500us 全关位已是默认缓存）——由 control_task 的
          * pn_hal_esp32_servo_refresh() 周期发送，避免 init 期间 transmit */
     }
+}
+
+/* 舵机信号诊断（'M' 命令，2026-09-24）：LEDC 精确时基发 50Hz 舵机脉冲，
+ * 判别 RMT 时基问题。同时停该 gpio 的 RMT 后续发送（refresh 跳过）。 */
+void pn_hal_esp32_servo_le_test(int gpio, int usec)
+{
+    for (int i = 0; i < 3; ++i)
+        if (s_servo_gpio[i] == gpio) s_servo_ok[i] = false;
+    ledc_channel_config_t ch = { 0 };
+    ch.speed_mode = LEDC_LOW_SPEED_MODE;
+    ch.timer_sel  = LEDC_TIMER_1;
+    ch.channel    = LEDC_CHANNEL_7;
+    ch.gpio_num   = (gpio_num_t)gpio;
+    /* 14bit@50Hz：满 duty=20ms；usec 脉宽 → duty = usec×16384/20000 */
+    ch.duty = (uint32_t)((int64_t)usec * 16384 / 20000);
+    ch.hpoint = 0;
+    esp_err_t e = ledc_channel_config(&ch);
+    printf("[HAL] servo LE-test gpio=%d pulse=%dus duty=%u -> %s\n",
+           gpio, usec, (unsigned)ch.duty, e == ESP_OK ? "OK" : "FAIL");
 }
 
 /* ---------- I2C / XGZP6897D ---------- */

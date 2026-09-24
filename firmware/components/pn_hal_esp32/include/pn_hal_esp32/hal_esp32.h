@@ -27,6 +27,10 @@ int pn_hal_esp32_is_qemu(void);
  * main.c 拦截 'W' 命令调用（真机 only；QEMU 打印未初始化提示） */
 void pn_hal_esp32_i2c_scan(void);
 
+/* 舵机信号诊断（'M' 命令）：用 LEDC 精确时基在指定 gpio 发 50Hz 舵机脉冲
+ * （usec=500 关位 / 2500 开位），判别 RMT 时基问题。同时停该 gpio 的 RMT 发送。 */
+void pn_hal_esp32_servo_le_test(int gpio, int usec);
+
 #ifdef __cplusplus
 }
 #endif
