@@ -14,11 +14,40 @@
 #include "freertos/task.h"
 #include "driver/uart.h"
 #include "driver/uart_vfs.h"
+#include "driver/gpio.h"
 #include "esp_timer.h"
 #include <stdio.h>
 #include <string.h>
 
+/* 充电宝/电池独立供电时无串口对端，上电自动跑呼吸演示循环（充→停→抽→停）。
+ * 串口调试时按住 BOOT 键开机可禁用演示（GPIO0 拉低即跳过），
+ * 否则演示会周期性改变阀/传感状态干扰测试。置 0 永久关闭。 */
+#define PN_BOOT_DEMO 1
+
 static void cli_delay_wrapper(uint32_t ms) { vTaskDelay(pdMS_TO_TICKS(ms)); }
+
+#if PN_BOOT_DEMO
+static void demo_task(void *arg)
+{
+    (void)arg;
+    vTaskDelay(pdMS_TO_TICKS(8000));   /* 上电静默 8s：传感器零点自校准 + 观察窗口 */
+    if (gpio_get_level(GPIO_NUM_0) == 0) {
+        printf("[DEMO] BOOT held at boot — demo disabled this session\n");
+        vTaskDelete(NULL);
+    }
+    printf("[DEMO] breathing demo: I 6s -> S 3s -> V 6s -> S 3s loop\n");
+    for (;;) {
+        pn_cli_process_line("I 1 255");   /* 充气 */
+        vTaskDelay(pdMS_TO_TICKS(6000));
+        pn_cli_process_line("S 1");       /* 停止保压 */
+        vTaskDelay(pdMS_TO_TICKS(3000));
+        pn_cli_process_line("V 1 255");   /* 抽气 */
+        vTaskDelay(pdMS_TO_TICKS(6000));
+        pn_cli_process_line("S 1");
+        vTaskDelay(pdMS_TO_TICKS(3000));
+    }
+}
+#endif
 
 static void control_task(void *arg)
 {
@@ -70,6 +99,9 @@ void app_main(void)
     printf("[BOOT] pn_init done\n"); fflush(stdout);
     printf("FlowIO-compatible P0 ready. state=0x%04X\n", (unsigned)pn_get_state());
     fflush(stdout);
+#if PN_BOOT_DEMO
+    xTaskCreate(demo_task, "pn_demo", 4096, NULL, 4, NULL);
+#endif
 
     xTaskCreate(control_task, "pn_ctrl", 4096, NULL, 5, NULL);
 
