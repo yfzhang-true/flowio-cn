@@ -17,6 +17,9 @@ def load():
             c = p.GetPosition()
             sz = p.GetSize()
             pads.append(dict(x=MM(c.x), y=MM(c.y), r=max(MM(sz.x), MM(sz.y)) / 2,
+                             rc=math.hypot(MM(sz.x), MM(sz.y)) / 2,   # 外接圆(保守, 走线用)
+                             w=MM(sz.x), h=MM(sz.y),
+                             rot=math.radians(p.GetOrientation().AsDegrees()),
                              net=p.GetNetname(),
                              drill=(MM(p.GetDrillSizeX()) if p.GetAttribute() != pcbnew.PAD_ATTRIB_SMD else 0.0),
                              npth=p.GetAttribute() == pcbnew.PAD_ATTRIB_NPTH,
@@ -28,6 +31,15 @@ def load():
             s, e = t.GetStart(), t.GetEnd()
             trks.append((t.GetNetname(), t.GetLayer(), MM(s.x), MM(s.y), MM(e.x), MM(e.y), MM(t.GetWidth())))
     return b, pads, trks, vias
+
+def pad_pt_dist(x, y, p):
+    """点到焊盘(旋转矩形)铜边缘距离的精确近似: 负值=侵入."""
+    dx, dy = x - p["x"], y - p["y"]
+    c, s = math.cos(p["rot"]), math.sin(p["rot"])
+    lx, ly = c * dx + s * dy, -s * dx + c * dy        # 逆旋转到焊盘局部系
+    qx, qy = abs(lx) - p["w"] / 2, abs(ly) - p["h"] / 2
+    d = math.hypot(max(qx, 0), max(qy, 0))
+    return d if qx > 0 or qy > 0 else max(qx, qy)      # 内部时返回负穿透深度
 
 def netcode(b, name):
     return b.FindNet(name).GetNetCode()
@@ -51,12 +63,12 @@ def seg_seg_dist(p1, p2, p3, p4):
 
 def _obs_ok(x, y, net, od, drill, pads, vias):
     for p in pads:
-        d = math.hypot(p["x"] - x, p["y"] - y)
+        d = pad_pt_dist(x, y, p)                        # 点到矩形边缘(精确)
         if p["npth"] or (p["net"] != net and p["net"] != ""):
-            if d - p["r"] - od / 2 < CLR: return False
+            if d - od / 2 < CLR: return False
         if p["drill"] > 0 and p["net"] != net:
-            if d < (p["drill"] + drill) / 2 + HOLE_CLR: return False
-        if p["npth"] and d < (p["drill"] + drill) / 2 + HOLE_CLR: return False
+            if math.hypot(p["x"] - x, p["y"] - y) < (p["drill"] + drill) / 2 + HOLE_CLR: return False
+        if p["npth"] and math.hypot(p["x"] - x, p["y"] - y) < (p["drill"] + drill) / 2 + HOLE_CLR: return False
     for vx, vy, vnet, vw in vias:
         d = math.hypot(vx - x, vy - y)
         if vnet != net and d - (vw + od) / 2 < CLR: return False
@@ -78,7 +90,8 @@ def spot_ok(x, y, net, pads, trks, vias, od=0.8, drill=0.4):
 def track_ok(p1, p2, net, w, pads, trks, vias):
     for p in pads:
         if p["net"] == net and not p["npth"]: continue
-        if seg_dist(p["x"], p["y"], *p1, *p2) - p["r"] - w / 2 < CLR: return False
+        # 焊盘用外接圆 (rc) 保守模型 — 矩形角必在圆内
+        if seg_dist(p["x"], p["y"], *p1, *p2) - p["rc"] - w / 2 < CLR: return False
     for tn, _ly, ax, ay, bx, by, tw in trks:
         if tn == net: continue
         if seg_seg_dist(p1, p2, (ax, ay), (bx, by)) - tw / 2 - w / 2 < CLR: return False
