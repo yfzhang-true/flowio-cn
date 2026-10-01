@@ -1,0 +1,75 @@
+ERC report (2026-10-01T14:56:03, Encoding UTF8)
+Report includes: Errors, Warnings
+
+***** Sheet /
+[lib_symbol_mismatch]: 符号 '+3V3' 与来源库 'power' 中的符号存在差异
+    ; warning
+    @(68.58 mm, 251.46 mm): Symbol #PWR05 [+3V3]
+[lib_symbol_mismatch]: 符号 'PWR_FLAG' 与来源库 'power' 中的符号存在差异
+    ; warning
+    @(74.93 mm, 67.31 mm): Symbol #FLG01 [PWR_FLAG]
+[lib_symbol_mismatch]: 符号 '+5V' 与来源库 'power' 中的符号存在差异
+    ; warning
+    @(100.33 mm, 69.85 mm): Symbol #PWR01 [+5V]
+[lib_symbol_mismatch]: 符号 'PWR_FLAG' 与来源库 'power' 中的符号存在差异
+    ; warning
+    @(124.46 mm, 77.47 mm): Symbol #FLG02 [PWR_FLAG]
+[lib_symbol_mismatch]: 符号 'GND' 与来源库 'power' 中的符号存在差异
+    ; warning
+    @(199.39 mm, 109.22 mm): Symbol #PWR03 [GND]
+[lib_symbol_issues]: 在符号库中 'PH' 找不到符号 'power'
+    ; warning
+    @(240.03 mm, 68.58 mm): Symbol #PWR02 [PH]
+[lib_symbol_mismatch]: 符号 'PWR_FLAG' 与来源库 'power' 中的符号存在差异
+    ; warning
+    @(240.03 mm, 115.57 mm): Symbol #FLG03 [PWR_FLAG]
+[lib_symbol_mismatch]: 符号 'GND' 与来源库 'power' 中的符号存在差异
+    ; warning
+    @(242.57 mm, 180.34 mm): Symbol #PWR04 [GND]
+[lib_symbol_mismatch]: 符号 'PWR_FLAG' 与来源库 'power' 中的符号存在差异
+    ; warning
+    @(320.04 mm, 26.67 mm): Symbol #FLG04 [PWR_FLAG]
+[lib_symbol_issues]: 在符号库中 'TestPoint' 找不到符号 'Mechanical'
+    ; warning
+    @(459.74 mm, 299.72 mm): Symbol TP1 [TestPoint]
+[lib_symbol_issues]: 在符号库中 'TestPoint' 找不到符号 'Mechanical'
+    ; warning
+    @(459.74 mm, 326.39 mm): Symbol TP5 [TestPoint]
+[lib_symbol_issues]: 在符号库中 'TestPoint' 找不到符号 'Mechanical'
+    ; warning
+    @(459.74 mm, 351.79 mm): Symbol TP9 [TestPoint]
+[lib_symbol_issues]: 在符号库中 'TestPoint' 找不到符号 'Mechanical'
+    ; warning
+    @(491.49 mm, 299.72 mm): Symbol TP2 [TestPoint]
+[lib_symbol_issues]: 在符号库中 'TestPoint' 找不到符号 'Mechanical'
+    ; warning
+    @(491.49 mm, 326.39 mm): Symbol TP6 [TestPoint]
+[lib_symbol_issues]: 在符号库中 'TestPoint' 找不到符号 'Mechanical'
+    ; warning
+    @(491.49 mm, 351.79 mm): Symbol TP10 [TestPoint]
+[lib_symbol_issues]: 在符号库中 'TestPoint' 找不到符号 'Mechanical'
+    ; warning
+    @(524.51 mm, 299.72 mm): Symbol TP3 [TestPoint]
+[lib_symbol_issues]: 在符号库中 'TestPoint' 找不到符号 'Mechanical'
+    ; warning
+    @(524.51 mm, 326.39 mm): Symbol TP7 [TestPoint]
+[lib_symbol_issues]: 在符号库中 'TestPoint' 找不到符号 'Mechanical'
+    ; warning
+    @(524.51 mm, 351.79 mm): Symbol TP11 [TestPoint]
+[lib_symbol_issues]: 在符号库中 'TestPoint' 找不到符号 'Mechanical'
+    ; warning
+    @(556.26 mm, 299.72 mm): Symbol TP4 [TestPoint]
+[lib_symbol_issues]: 在符号库中 'TestPoint' 找不到符号 'Mechanical'
+    ; warning
+    @(556.26 mm, 326.39 mm): Symbol TP8 [TestPoint]
+[lib_symbol_issues]: 在符号库中 'TestPoint' 找不到符号 'Mechanical'
+    ; warning
+    @(556.26 mm, 351.79 mm): Symbol TP12 [TestPoint]
+
+ ** ERC messages: 21  Errors 0  Warnings 21
+
+ ** Ignored checks:
+    - Global label only appears once in the schematic
+    - Four connection points are joined together
+    - SPICE model issue
+    - Assigned footprint doesn't match footprint filters
