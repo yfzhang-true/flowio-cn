@@ -7,7 +7,6 @@
 import re, os, glob, uuid as _uuid
 
 LIBDIR = r"C:/Users/yuefe/Documents/KiCad/9.0/3rdparty/jlc_mcp/symbols"
-OUT    = os.path.join(os.path.dirname(__file__), "..", "flowio-p1.kicad_sch")
 ROOT_UUID = "7f1a2c34-0000-4000-8000-5a6b7c8d9e0f"
 PROJ = "flowio-p1"
 SCH_VERSION = "20250114"
@@ -700,8 +699,7 @@ sch.append('\t\t)')
 sch.append('\t)')
 sch.append(")")
 
-out = os.path.abspath(OUT)
-with open(out, "w", encoding="utf-8", newline="\n") as f:
-    f.write("\n".join(sch))
-print(f"OK -> {out}")
+from pathlib import Path as _P
+_P("flowio-p1-v1-backup.kicad_sch").write_bytes("\n".join(sch).encode("utf-8"))
+print("OK -> flowio-p1-v1-backup.kicad_sch")
 print(f"parts={len(PARTS)} embedded_symbols={len(uniq)}")

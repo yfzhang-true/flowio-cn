@@ -11,13 +11,132 @@ MM = pcbnew.FromMM
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
-# ---- 从 gen_sch.py 提取 PARTS(共享真值源) ----
+# ---- 从 gen_sch.py 提取 PARTS(共享真值源; ast 受限解释, 禁 exec) ----
+import ast
 _src = open(os.path.join(HERE, "gen_sch.py"), encoding="utf-8").read()
-_seg = _src[_src.index("PARTS = []"):_src.index("# ---------------------------------------------------------------- 几何收集与防撞")]
-_pre = _src[_src.index("P = lambda"):_src.index("PARTS = []")]
-_ns = {}
-exec(_pre + _seg, _ns)
-PARTS = _ns["PARTS"]
+_tree = ast.parse(_src)
+
+CONSTS = {}
+PARTS = []
+
+def _lit(n, env=None):
+    env = env or {}
+    if isinstance(n, ast.Constant):
+        return n.value
+    if isinstance(n, ast.Name):
+        if n.id in env: return env[n.id]
+        return CONSTS[n.id]
+    if isinstance(n, ast.Subscript):
+        return _lit(n.value, env)[_lit(n.slice, env)]
+    if isinstance(n, ast.List):
+        return [_lit(e, env) for e in n.elts]
+    if isinstance(n, ast.Tuple):
+        return tuple(_lit(e, env) for e in n.elts)
+    if isinstance(n, ast.Dict):
+        return {_lit(k, env): _lit(v, env) for k, v in zip(n.keys, n.values)}
+    if isinstance(n, ast.BinOp):
+        import operator as _op
+        _ops = {ast.Add: _op.add, ast.Sub: _op.sub, ast.Mult: _op.mul,
+                ast.Div: _op.truediv, ast.FloorDiv: _op.floordiv, ast.Mod: _op.mod}
+        if type(n.op) in _ops:
+            return _ops[type(n.op)](_lit(n.left, env), _lit(n.right, env))
+    if isinstance(n, ast.JoinedStr):                       # f-string
+        return "".join(str(_lit(v, env)) for v in n.values)
+    if isinstance(n, ast.FormattedValue):
+        return _lit(n.value, env)
+    raise SystemExit(f"PARTS 依赖不支持的节点: {type(n).__name__} @line {getattr(n, 'lineno', '?')}")
+
+def _iterable(node, env=None):
+    env = env or {}
+    it = node.iter
+    if isinstance(it, ast.Call) and isinstance(it.func, ast.Name) and it.func.id == "range":
+        return range(*[_lit(a, env) for a in it.args])
+    if isinstance(it, ast.Call) and isinstance(it.func, ast.Name) and it.func.id == "enumerate":
+        return enumerate(_lit(it.args[0], env))
+    return _lit(it, env)
+
+def _pcall(call, env=None):
+    env = env or {}
+    if not (isinstance(call, ast.Call) and isinstance(call.func, ast.Name) and call.func.id == "P"):
+        return None
+    names = ["ref", "sym", "val", "fp", "lcsc", "x", "y", "nets"]
+    kw = {}
+    for i, a in enumerate(call.args):
+        kw[names[i]] = _lit(a, env)
+    for a in call.keywords:
+        kw[a.arg] = _lit(a.value, env)
+    return kw
+
+def _collect_partlist(val, env=None):
+    env = env or {}
+    out = []
+    if isinstance(val, (ast.List, ast.Tuple)):
+        for e in val.elts:
+            d = _pcall(e, env)
+            if d: out.append(d)
+    elif isinstance(val, ast.Call):
+        d = _pcall(val, env)
+        if d: out.append(d)
+    return out
+
+def _targets(node):
+    return node.targets if isinstance(node, ast.Assign) else [node.target]
+
+for _node in _tree.body:
+    if isinstance(_node, (ast.Assign, ast.AugAssign)):
+        _t0 = _targets(_node)[0]
+        _val = _node.value
+        if isinstance(_t0, ast.Name) and _t0.id == "PARTS":
+            try:
+                PARTS.extend(_collect_partlist(_val))
+            except SystemExit:
+                raise SystemExit("PARTS 块含不可解析节点 (仅允许 P() 与字面量)")
+        elif isinstance(_t0, ast.Tuple):
+            for _t, _v in zip(_t0.elts, _val.elts):
+                try:
+                    CONSTS[_t.id] = _lit(_v)
+                except SystemExit:
+                    pass
+        elif isinstance(_t0, ast.Name):
+            try:
+                CONSTS[_t0.id] = _lit(_val)
+            except SystemExit:
+                pass  # 非 P 依赖的复杂定义 (函数/调用) 跳过
+    elif isinstance(_node, ast.For):                        # for ...: PARTS.append(P(...)) / PARTS += [...]
+        _touches_parts = any(
+            (isinstance(s, ast.Expr) and isinstance(s.value, ast.Call)
+             and isinstance(s.value.func, ast.Attribute) and s.value.func.attr == "append"
+             and isinstance(s.value.func.value, ast.Name) and s.value.func.value.id == "PARTS")
+            or (isinstance(s, ast.AugAssign) and isinstance(s.target, ast.Name) and s.target.id == "PARTS")
+            for s in _node.body)
+        if not _touches_parts:
+            continue
+        try:
+            for _item in _iterable(_node):
+                _env = {}
+                _tgt = _node.target
+                if isinstance(_tgt, ast.Name):
+                    _env[_tgt.id] = _item
+                elif isinstance(_tgt, (ast.Tuple, ast.List)):
+                    for _t, _v in zip(_tgt.elts, _item):
+                        _env[_t.id] = _v
+                for _stmt in _node.body:
+                    if isinstance(_stmt, ast.Expr) and isinstance(_stmt.value, ast.Call):
+                        _c = _stmt.value
+                        if (isinstance(_c.func, ast.Attribute) and _c.func.attr == "append"
+                                and isinstance(_c.func.value, ast.Name) and _c.func.value.id == "PARTS"):
+                            _d = _pcall(_c.args[0], _env)
+                            if _d: PARTS.append(_d)
+                    elif isinstance(_stmt, ast.AugAssign) and isinstance(_stmt.target, ast.Name) and _stmt.target.id == "PARTS":
+                        PARTS.extend(_collect_partlist(_stmt.value, _env))
+                    elif isinstance(_stmt, ast.Assign) and isinstance(_stmt.targets[0], ast.Name):
+                        _env[_stmt.targets[0].id] = _lit(_stmt.value, _env)
+                    elif isinstance(_stmt, ast.AugAssign) and isinstance(_stmt.target, ast.Name):
+                        _env[_stmt.target.id] = _env.get(_stmt.target.id, 0) + _lit(_stmt.value, _env) \
+                            if isinstance(_stmt.op, ast.Add) else _env[_stmt.target.id]
+        except SystemExit as _e:
+            raise SystemExit(f"PARTS 循环块不可解析: {_e}")
+
 BY_REF = {p["ref"]: p for p in PARTS}
 
 JLC = r"C:/Users/yuefe/Documents/KiCad/9.0/3rdparty/jlc_mcp/footprints/JLC-MCP.pretty"

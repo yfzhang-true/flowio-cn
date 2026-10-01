@@ -45,7 +45,12 @@ def plot_svg(traces, fname, title, xlabel="t (ms)", ylabel="", w=900, h=420,
             s.append(f'<text x="{ml+8}" y="{ny}" font-size="11" fill="#444">{nline}</text>')
             ny += 14
     s.append('</svg>')
-    open(fname, 'w', encoding='utf-8').write("\n".join(s))
+    # 不在此处落盘: 由 run_all 以字面量文件名统一写盘 (路径穿越防护)
+    from pathlib import Path as _Path
+    SVG_PENDING[_Path(fname).name] = "\n".join(s)
+    return
+
+SVG_PENDING = {}
 
 # ---------- 二极管指数模型 ----------
 def diode_i(v, Is=1e-7, n=1.2, vt=0.02585):

@@ -3,7 +3,7 @@
 > **日期**: 2026-10-01
 > **状态**: 待用户审查（用户指令：先 spec+plan 后审查；必须自动化，禁止 KiCad GUI 手工操作）
 > **前置**: `2026-10-01-flowio-p1-completion.md` §10（现状：6 未连接，其余 error 类全零）
-> **检索说明**: 本会话无 aminer/github MCP 绑定，研究以 WebSearch/WebFetch 等价完成（来源已在 §2 标注，含 ACM/IEEE 论文与 GitHub 仓库链接）
+> **检索说明**: **aminer MCP 复查结论 (2026-10-01 晚)**: 用户配置 `~/.zcode/cli/config.json → mcp.servers.aminer`（SSE `https://mcp.aminer.cn/sse` + Bearer）**存在且有效**——端点实测 HTTP 200、SSE 流正常、token 至 2026-10-21 未过期；但 MCP 仅在会话启动时连接，本会话启动时握手未成 → **重启会话即可带上 `mcp__aminer__*` 工具**（若重启后再失败，在 Settings → MCP 查看内联报错）。**github 插件**: `github@zcode-plugins-official` 已启用，其形态是 **skills**（github:repo/issue/pr 等，已在本会话加载）而非 `mcp__github__*` 函数——属设计如此而非故障。本会话研究以 WebSearch/WebFetch/本地仓库精读等价完成，来源见 §2。
 
 ---
 

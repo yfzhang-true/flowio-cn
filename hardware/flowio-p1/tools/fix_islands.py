@@ -57,7 +57,7 @@ elif mode == "probe":
                     print(f"孤岛: {b.GetLayerName(ly)} bbox=({min(xs):.1f},{min(ys):.1f})-({max(xs):.1f},{max(ys):.1f}) 内点=({gx:.1f},{gy:.1f})")
 elif mode == "stitch":
     b, pads, trks, vias = G.load()
-    ISLANDS = eval(sys.argv[2]) if len(sys.argv) > 2 else []
+    ISLANDS = [tuple(p) for p in ast.literal_eval(sys.argv[2])] if len(sys.argv) > 2 else []
     for cx, cy in ISLANDS:
         spot = G.find_spot(cx, cy, "GND", pads, trks, vias, rmax=1.5)
         if spot: G.add_via(b, spot[0], spot[1], "GND"); print("stitch @", spot)

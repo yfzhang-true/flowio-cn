@@ -7,7 +7,7 @@ import os, json
 import pcbnew
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-BOARD_FILE = os.path.join(HERE, "..", "flowio-p1.kicad_pcb")
+BOARD_FILE = "flowio-p1.kicad_pcb"       # 相对当前目录 (用法: 在 flowio-p1/ 下运行)
 board = pcbnew.LoadBoard(BOARD_FILE)
 
 def anchored(ref):
@@ -86,6 +86,6 @@ for ref, g in geom.items():
                                  int(pcbnew.FromMM(cy - ocy))))
     solved[ref] = [round(cx, 2), round(cy, 2)]
 pcbnew.SaveBoard(BOARD_FILE, board)
-json.dump(solved, open(os.path.join(HERE, "place_solved.json"), "w", encoding="utf-8"),
-          ensure_ascii=False, indent=1)
+from pathlib import Path as _P
+_P("place_solved.json").write_bytes(json.dumps(solved, ensure_ascii=False, indent=1).encode("utf-8"))
 print("已回写板文件 + place_solved.json")
