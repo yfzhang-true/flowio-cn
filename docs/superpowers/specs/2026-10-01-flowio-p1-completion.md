@@ -110,3 +110,24 @@ silk_over_copper 52 · courtyards_overlap 44 · silk_edge_clearance 6 · pth_ins
 | 桥接 zone 反而制造新的 5V/3V3 交叠 | 桥接矩形逐顶点坐标在 plan 中硬编码并经 zones_intersect DRC 验证 |
 | 孤岛检测 API 差异（Outline/Contains） | 任务内先 5 行探针脚本确认 API 再写主逻辑 |
 | 删除走线段引发新的未连接 | 只删"定位到的单段"，删后 DRC 差分（条数必须只减不增） |
+
+---
+
+## 9. 执行后变更记录 (2026-10-01 晚)
+
+| # | 变更 | 原因 |
+|---|---|---|
+| C7 | 外壳工具 OpenSCAD → **FreeCAD 1.1 (E:\FreeCAD, OCCT 内核)** | 用户指令: 规避 OpenSCAD↔FreeCAD 的 STL 互操作丢拓扑/丢参数问题; 直接产出 FCStd(参数化)+STEP(BREP) |
+| C8 | 新增电路仿真交付 (docs/sim/) | 用户指令 "电路必须给出全面的仿真结果"; 无 ngspice 环境下用自研 numpy 状态机+SVG |
+| C9 | HD 安装孔 (77,62)→(68,65) | 原位与 D10.1 焊盘孔边距 0.0 且堵死出线走廊; 全区扫描净空最优位 |
+
+## 10. 实际结果 vs 验收门槛
+
+| 验收项 | 门槛 | 实际 | 状态 |
+|---|---|---|---|
+| 未连接 | 0 | **6** | ⚠ 需 GUI 收尾 (freerouting 三轮+脚本攻坚后的真死角) |
+| 其他 error 类 | 0 | **0** (短路/间距/孔距/悬空全清) | ✓ |
+| 制造输出 | JLC 包 | fab/ 全套 + zip | ✓ |
+| 外壳 | 参数化+STL | FCStd+STEP+STL 水密 | ✓ (工具换 FreeCAD) |
+| 仿真 | — | 4 电路 8/9 指标达标 | ✓ 新增 |
+| 目视检查 | 双视图 | 顶/底+禁布区探测 0 命中+外壳布局图 | ✓ |
