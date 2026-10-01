@@ -25,7 +25,7 @@
 C2913202  ESP32-S3-WROOM-1-N16R8
 C130026   TCA9548APWR
 C9865     TPS54331DR
-C99652    CH340E（修正 #10：替代 CH340N）
+C968586   CH340K（修正 #12：替代 CH340E——E 无 DTR#）
 C20917    AO3400A
 ```
 
@@ -122,7 +122,7 @@ L1 输出侧:
 ```
 V3V3 → ESP32-S3-WROOM-1 Pin 2 (3V3) + C9 10µF + C10 100nF
 V3V3 → TCA9548APWR Pin 12 (VCC) + C11 100nF
-V3V3 → CH340E VCC + V3短接VCC + C12 100nF
+V3V3 → CH340K VCC + V3短接VCC + C12 100nF
 V3V3 → WS2812B VCC + C13 100nF
 V3V3 → 5× XH2.54 Pin 1 (传感器 VCC)
 ```
@@ -162,8 +162,8 @@ U1 ESP32-S3-WROOM-1-N16R8:
   Pin 11 (IO11) → 阀驱动 ch6 (INLET)
   Pin 12 (IO12) → 阀驱动 ch7 (VENT)
   Pin 21 (IO21) → 阀驱动 ch8 (泵)
-  Pin 43 (TXD0) → R10 1kΩ → CH340N TXD + TP_TXD + 排针
-  Pin 44 (RXD0) → R11 1kΩ → CH340N RXD + TP_RXD + 排针
+  Pin 43 (TXD0) → R10 1kΩ → CH340K TXD + TP_TXD + 排针
+  Pin 44 (RXD0) → R11 1kΩ → CH340K RXD + TP_RXD + 排针
   Pin 48 (IO48) → R12 330Ω → WS2812B DIN
   (其余引脚悬空或按 strapping)
 ```
@@ -177,24 +177,25 @@ GPIO45         → R15 10kΩ→GND
 GPIO46         → R16 10kΩ→V3V3
 ```
 
-- [ ] **Step 3: 画 CH340E USB 转串口（修正 #10：CH340N→CH340E）**
+- [ ] **Step 3: 画 CH340K USB 转串口（修正 #12：CH340E→CH340K）**
 
-> CH340N (SOP-8) 只有 RTS# 没有 DTR#，无法实现已批准的双三极管自动下载电路。
-> CH340E (MSOP-10, C99652, ¥0.78) 内置振荡器（无需 12MHz 晶振）且 DTR#+RTS# 齐全。
-> 引脚映射按名称进行；编号以安装到 KiCad 的官方符号为准。
+> 依据官方 WCH CH340DS1 v3B 引脚表逐字核对：
+> CH340E (MSOP-10) = {1 UD+, 2 UD−, 3 GND, 4 RTS#, 5 CTS#, 6 TNOW, 7 VCC, 8 TXD, 9 RXD, 10 V3} ——无 DTR#，无法自动下载
+> CH340K (ESSOP-10) = {1 UD+, 2 UD−, 3 GND, **4 DTR#**, 5 CTS#, **6 RTS#**, 7 VCC, 8 TXD, 9 RXD, 10 V3, 11 EP-GND} ✓
+> KiCad 符号已核对一致（pin_pad_match=true）。内置振荡器，无需晶振。
 
 ```
-U4 CH340E (MSOP-10):
-  VCC   → V3V3 + C15 100nF（就近）
-  V3    → 短接 VCC（3.3V 供电时，手册要求）
-  GND   → GND
-  UD+   → R17 22Ω → USB_DP（USBLC6 I/O1 同网络）
-  UD-   → R18 22Ω → USB_DN（USBLC6 I/O2 同网络）
-  TXD   → R10 1kΩ → ESP32 TXD0（直连，同侧 TX-TX 经电阻）
-  RXD   → R11 1kΩ → ESP32 RXD0
-  DTR#  → R19 1kΩ → Q1 基极
-  RTS#  → R20 1kΩ → Q2 基极
-  其余引脚悬空
+U4 CH340K (ESSOP-10, C968586):
+  VCC (7)  → V3V3 + C15 100nF（就近）
+  V3 (10)  → 短接 VCC（3.3V 供电时，手册要求）
+  GND (3)  → GND；EP (11) → GND
+  UD+ (1)  → R17 22Ω → USB_DP（USBLC6 I/O1 同网络）
+  UD- (2)  → R18 22Ω → USB_DN（USBLC6 I/O2 同网络）
+  TXD (8)  → R10 1kΩ → ESP32 RXD0 (GPIO44)
+  RXD (9)  → R11 1kΩ → ESP32 TXD0 (GPIO43)
+  DTR# (4) → R19 1kΩ → Q1 基极
+  RTS# (6) → R20 1kΩ → Q2 基极
+  CTS# (5) → 悬空
 
 USBLC6-2SC6:
   I/O1 → USB_DP
@@ -202,7 +203,7 @@ USBLC6-2SC6:
   GND  → GND
   VBUS → V5V
 
-（无晶振——CH340E 内置振荡器；删除原计划的 X1/C16/C17）
+（无晶振——CH340K 内置振荡器；删除原计划的 X1/C16/C17）
 
 SS8050 Q1 (EN 复位控制):
   基极   → R19 1kΩ (来自 DTR#) + R21 10kΩ → V3V3
@@ -231,8 +232,8 @@ User LED (D5 蓝):
   正极 → GPIO13 (空闲)
   负极 → R24 1kΩ → GND
 
-TX LED (D6 黄): 正极→V3V3, 负极→R25 1kΩ→CH340E TXD
-RX LED (D7 黄): 正极→V3V3, 负极→R26 1kΩ→CH340E RXD
+TX LED (D6 黄): 正极→V3V3, 负极→R25 1kΩ→CH340K TXD
+RX LED (D7 黄): 正极→V3V3, 负极→R26 1kΩ→CH340K RXD
 
 User Button (SW3): 一端→GPIO14 (空闲)+R27 10kΩ→V3V3, 另一端→GND
 ```
@@ -248,7 +249,7 @@ Expected: 0 errors
 - [ ] **Step 6: Commit**
 
 ```bash
-git add -A && git commit -m "feat: 原理图主控块——ESP32+strapping+CH340E+自动下载+LED/按钮"
+git add -A && git commit -m "feat: 原理图主控块——ESP32+strapping+CH340K+自动下载+LED/按钮"
 ```
 
 ---
@@ -348,7 +349,7 @@ git add -A && git commit -m "feat: 原理图完成——TCA9548A+8路AO3400+测�
 │ [天线净空 ≥15mm，四层无铜]                │  ← 板顶边
 ├──────────────────────────────────────────┤
 │ ESP32-S3 模组 (U1)                      │
-│ BOOT  RST   WS2812B          CH340E(U4) │
+│ BOOT  RST   WS2812B          CH340K(U4) │
 │                                          │ USB-C (板右前边)
 │ TCA9548A (U2)               TP 排针     │
 │                                          │
