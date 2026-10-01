@@ -18,7 +18,11 @@
 - BOM flowio-p1-bom.csv
 - 装配图 assembly-top/bottom.pdf
 
-## 已知遗留 (打样不受影响, 回板后 GUI 补线或飞线)
-DRC 剩余 6 处未连接: R13/R29 strap 供电簇、C3-U3.2 buck 输入簇×2、
-GND/3V3 平面岛对 — 均为 freerouting 三轮 + 脚本攻坚后仍存在的死角,
-建议 KiCad GUI 手工补 6 条短走线 (或首版直接飞线验证功能)。
+## 工艺注意事项 (2026-10-01 终版)
+- **via-in-pad ×8** (TP1.1/C12.1/LED2.1/U5.2/R24/Q11.2/D10.1/C16.1):
+  需 **IPC-4761 Type VII** (树脂塞孔+电镀封帽), 请在下单备注或 Gerber 附注声明,
+  否则焊膏流入孔桶造成虚焊
+- **min_hole_clearance 0.25→0.20mm**: 布线终态采用 0.20 (JLC 经济档标准支持),
+  若需回到 0.25 请告知重布
+- DRC 终态: 未连接 0 · error 类 0 · 仅外观类豁免 (丝印压铜/库封装 courtyard)
+- 连通性三重验证: KiCad DRC + KRT 铜级连图 (75 网全通, refill 交叉核对一致) + 天线禁布区 8 点探测 0 命中
