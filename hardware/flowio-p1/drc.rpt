@@ -1,32 +1,16 @@
 ** Drc report for flowio-p1.kicad_pcb **
-** Created on 2026-10-01T16:49:01 **
+** Created on 2026-10-01T17:58:34 **
 ** Report includes: Errors, Warnings **
 
-** Found 119 DRC violations **
-[clearance]: 间距违规 ( 间距 0.2000 mm; 实际 0.1767 mm)
-    Local override; error
-    @(88.1500 mm, 5.5000 mm): Pad A5 [CC1] of J2 on F.Cu
-    @(89.0267 mm, 4.5000 mm): Track [USB_VBUS] on F.Cu, length 3.0000 mm
-[hole_clearance]: 孔间距违规 (<电路板配置> 中的 "孔" 约束 间距 0.2500 mm; 实际 0.0780 mm)
-    Rule: <电路板配置> 中的 "孔" 约束; error
-    @(78.3649 mm, 60.5000 mm): Via [+5V] on F.Cu - B.Cu
-    @(77.0000 mm, 62.0000 mm): NPTH pad of HD
-[hole_clearance]: 孔间距违规 (<电路板配置> 中的 "孔" 约束 间距 0.2500 mm; 实际 0.0780 mm)
-    Rule: <电路板配置> 中的 "孔" 约束; error
-    @(78.3649 mm, 60.5000 mm): Via [+5V] on F.Cu - B.Cu
-    @(77.0000 mm, 62.0000 mm): NPTH pad of HD
-[hole_clearance]: 孔间距违规 (<电路板配置> 中的 "孔" 约束 间距 0.2500 mm; 实际 0.0780 mm)
-    Rule: <电路板配置> 中的 "孔" 约束; error
-    @(78.3649 mm, 60.5000 mm): Via [+5V] on F.Cu - B.Cu
-    @(77.0000 mm, 62.0000 mm): NPTH pad of HD
+** Found 118 DRC violations **
 [clearance]: 间距违规 ( 间距 0.2000 mm; 实际 0.0084 mm)
     Local override; error
     @(26.9966 mm, 32.2990 mm): Via [GND] on F.Cu - B.Cu
     @(25.6999 mm, 33.5000 mm): Pad 2 [DC_IN] of D1 on F.Cu
-[hole_clearance]: 孔间距违规 (<电路板配置> 中的 "孔" 约束 间距 0.2500 mm; 实际 0.0780 mm)
-    Rule: <电路板配置> 中的 "孔" 约束; error
-    @(78.3649 mm, 60.5000 mm): Via [+5V] on F.Cu - B.Cu
-    @(77.0000 mm, 62.0000 mm): NPTH pad of HD
+[clearance]: 间距违规 ( 间距 0.2000 mm; 实际 0.1767 mm)
+    Local override; error
+    @(88.1500 mm, 5.5000 mm): Pad A5 [CC1] of J2 on F.Cu
+    @(89.0267 mm, 4.5000 mm): Track [USB_VBUS] on F.Cu, length 3.0000 mm
 [clearance]: 间距违规 ( 间距 0.2000 mm; 实际 0.1001 mm)
     Local override; error
     @(47.5000 mm, 31.0000 mm): Pad 1 [I2C_SCL] of TP8 on F.Cu
@@ -35,10 +19,6 @@
     Rule: <电路板配置> 中的 "孔" 约束; error
     @(25.6999 mm, 33.5000 mm): Pad 2 [DC_IN] of D1 on F.Cu
     @(26.9966 mm, 32.2990 mm): Via [GND] on F.Cu - B.Cu
-[hole_clearance]: 孔间距违规 (<电路板配置> 中的 "孔" 约束 间距 0.2500 mm; 实际 0.0000 mm)
-    Rule: <电路板配置> 中的 "孔" 约束; error
-    @(76.8649 mm, 60.5000 mm): Pad 1 [+5V] of D10 on F.Cu
-    @(77.0000 mm, 62.0000 mm): NPTH pad of HD
 [courtyards_overlap]: Courtyards overlap
     Rule: <电路板配置> 中的 "元件外框" 约束; error
     @(48.5000 mm, 43.0000 mm): Footprint D3
@@ -50,7 +30,15 @@
 [courtyards_overlap]: Courtyards overlap
     Rule: <电路板配置> 中的 "元件外框" 约束; error
     @(72.5000 mm, 68.5000 mm): Footprint J16
-    @(77.0000 mm, 62.0000 mm): Footprint HD
+    @(68.0000 mm, 65.0000 mm): Footprint HD
+[npth_inside_courtyard]: NPTH inside courtyard
+    Local override; error
+    @(68.0000 mm, 65.0000 mm): NPTH pad of HD
+    @(72.5000 mm, 68.5000 mm): Footprint J16
+[pth_inside_courtyard]: PTH inside courtyard
+    Local override; error
+    @(69.9600 mm, 68.5000 mm): PTH pad 2 [DRV7] of J16
+    @(68.0000 mm, 65.0000 mm): Footprint HD
 [courtyards_overlap]: Courtyards overlap
     Rule: <电路板配置> 中的 "元件外框" 约束; error
     @(72.5000 mm, 68.5000 mm): Footprint J16
@@ -59,10 +47,6 @@
     Rule: <电路板配置> 中的 "元件外框" 约束; error
     @(72.5000 mm, 68.5000 mm): Footprint J16
     @(83.5000 mm, 68.5000 mm): Footprint J17
-[courtyards_overlap]: Courtyards overlap
-    Rule: <电路板配置> 中的 "元件外框" 约束; error
-    @(81.1000 mm, 60.5000 mm): Footprint Q10
-    @(77.0000 mm, 62.0000 mm): Footprint HD
 [courtyards_overlap]: Courtyards overlap
     Rule: <电路板配置> 中的 "元件外框" 约束; error
     @(81.1000 mm, 60.5000 mm): Footprint Q10
@@ -145,16 +129,20 @@
     @(5.0000 mm, 46.0000 mm): Footprint J8
 [courtyards_overlap]: Courtyards overlap
     Rule: <电路板配置> 中的 "元件外框" 约束; error
-    @(77.0000 mm, 62.0000 mm): Footprint HD
-    @(74.9000 mm, 60.5000 mm): Footprint D10
+    @(68.0000 mm, 65.0000 mm): Footprint HD
+    @(61.5000 mm, 68.5000 mm): Footprint J15
 [npth_inside_courtyard]: NPTH inside courtyard
     Local override; error
-    @(77.0000 mm, 62.0000 mm): NPTH pad of HD
-    @(74.9000 mm, 60.5000 mm): Footprint D10
+    @(68.0000 mm, 65.0000 mm): NPTH pad of HD
+    @(61.5000 mm, 68.5000 mm): Footprint J15
 [courtyards_overlap]: Courtyards overlap
     Rule: <电路板配置> 中的 "元件外框" 约束; error
-    @(77.0000 mm, 62.0000 mm): Footprint HD
-    @(83.5000 mm, 68.5000 mm): Footprint J17
+    @(68.0000 mm, 65.0000 mm): Footprint HD
+    @(70.1000 mm, 60.5000 mm): Footprint Q9
+[courtyards_overlap]: Courtyards overlap
+    Rule: <电路板配置> 中的 "元件外框" 约束; error
+    @(68.0000 mm, 65.0000 mm): Footprint HD
+    @(63.9000 mm, 60.5000 mm): Footprint D9
 [courtyards_overlap]: Courtyards overlap
     Rule: <电路板配置> 中的 "元件外框" 约束; error
     @(66.5000 mm, 22.0000 mm): Footprint R20
@@ -235,16 +223,9 @@
     Rule: <电路板配置> 中的 "元件外框" 约束; error
     @(6.5000 mm, 68.5000 mm): Footprint J10
     @(12.0000 mm, 63.5000 mm): Footprint TP9
-[solder_mask_bridge]: 顶层阻焊开窗区域与不同网络的项目相连
-    Rule: <电路板配置> 中的 "阻焊层最小宽度"; error
-    @(77.0000 mm, 62.0000 mm): NPTH pad of HD
-    @(76.8649 mm, 60.5000 mm): Pad 1 [+5V] of D10 on F.Cu
 [via_dangling]: Via is not connected or connected on only one layer
     Local override; warning
     @(88.0001 mm, 28.6900 mm): Via [+3V3] on F.Cu - B.Cu
-[via_dangling]: Via is not connected or connected on only one layer
-    Local override; warning
-    @(78.3649 mm, 60.5000 mm): Via [+5V] on F.Cu - B.Cu
 [silk_edge_clearance]: Silkscreen clipped by board edge
     Local override; warning
     @(90.0000 mm, 0.0000 mm): Segment on Edge.Cuts
@@ -271,12 +252,24 @@
     @(-0.2600 mm, 46.0000 mm): Reference field of J8
 [silk_over_copper]: Silkscreen clipped by solder mask
     Local override; warning
-    @(74.9000 mm, 63.6800 mm): Reference field of D10
-    @(77.0000 mm, 62.0000 mm): NPTH pad of HD
+    @(67.4200 mm, 63.9775 mm): Segment of J16 on F.Silkscreen
+    @(68.0000 mm, 65.0000 mm): NPTH pad of HD
 [silk_over_copper]: Silkscreen clipped by solder mask
     Local override; warning
-    @(70.1000 mm, 57.1500 mm): Reference field of Q9
-    @(70.1000 mm, 56.2534 mm): Pad 1 [IO12] of R45 on F.Cu
+    @(67.4200 mm, 63.9775 mm): Segment of J16 on F.Silkscreen
+    @(68.0000 mm, 65.0000 mm): NPTH pad of HD
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(66.5800 mm, 65.4999 mm): Segment of J15 on F.Silkscreen
+    @(68.0000 mm, 65.0000 mm): NPTH pad of HD
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(67.1800 mm, 64.7500 mm): Segment of J15 on F.Silkscreen
+    @(68.0000 mm, 65.0000 mm): NPTH pad of HD
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(67.1800 mm, 65.7500 mm): Segment of J15 on F.Silkscreen
+    @(68.0000 mm, 65.0000 mm): NPTH pad of HD
 [silk_over_copper]: Silkscreen clipped by solder mask
     Local override; warning
     @(67.0100 mm, 48.5000 mm): Reference field of R26
@@ -315,16 +308,8 @@
     @(81.5000 mm, 57.5000 mm): Pad 1 [GND] of TP5 on F.Cu
 [silk_over_copper]: Silkscreen clipped by solder mask
     Local override; warning
-    @(77.0000 mm, 61.5711 mm): Segment of D10 on F.Silkscreen
-    @(77.0000 mm, 62.0000 mm): NPTH pad of HD
-[silk_over_copper]: Silkscreen clipped by solder mask
-    Local override; warning
     @(78.6100 mm, 55.5000 mm): Reference field of R46
     @(78.5000 mm, 55.7250 mm): Pad 2 [GND] of C16 on F.Cu
-[silk_over_copper]: Silkscreen clipped by solder mask
-    Local override; warning
-    @(77.0000 mm, 61.8000 mm): Segment of D10 on F.Silkscreen
-    @(77.0000 mm, 62.0000 mm): NPTH pad of HD
 [silk_over_copper]: Silkscreen clipped by solder mask
     Local override; warning
     @(81.1000 mm, 57.1500 mm): Reference field of Q10
@@ -333,6 +318,14 @@
     Local override; warning
     @(81.5000 mm, 56.0520 mm): Reference field of TP5
     @(81.1000 mm, 56.2534 mm): Pad 1 [IO21] of R46 on F.Cu
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(70.1000 mm, 57.1500 mm): Reference field of Q9
+    @(70.1000 mm, 56.2534 mm): Pad 1 [IO12] of R45 on F.Cu
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(68.0000 mm, 60.8500 mm): Reference field of HD
+    @(69.1000 mm, 60.5000 mm): Pad 3 [DRV7] of Q9 on F.Cu
 [silk_over_copper]: Silkscreen clipped by solder mask
     Local override; warning
     @(59.5100 mm, 30.0000 mm): Reference field of R29
@@ -443,6 +436,10 @@
     @(66.0000 mm, 35.5534 mm): Pad 1 [+3V3] of R35 on F.Cu
 [silk_over_copper]: Silkscreen clipped by solder mask
     Local override; warning
+    @(66.5800 mm, 63.9801 mm): Segment of J15 on F.Silkscreen
+    @(68.0000 mm, 65.0000 mm): NPTH pad of HD
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
     @(56.6100 mm, 55.5000 mm): Reference field of R44
     @(56.5000 mm, 56.7466 mm): Pad 2 [TCA_RST] of R28 on F.Cu
 [silk_over_copper]: Silkscreen clipped by solder mask
@@ -478,7 +475,7 @@
     @(26.1000 mm, 57.1500 mm): Reference field of Q5
     @(26.1000 mm, 56.2534 mm): Pad 1 [IO6] of R41 on F.Cu
 
-** Found 17 unconnected pads **
+** Found 16 unconnected pads **
 [unconnected_items]: Missing connection between items
     Local override; error
     @(0.8000 mm, 0.8000 mm): Zone [+3V3] on In2.Cu, priority 0
@@ -529,24 +526,20 @@
     @(0.5000 mm, 0.5000 mm): Zone 'GND' [GND] on F.Cu, priority 0
 [unconnected_items]: Missing connection between items
     Local override; error
-    @(16.5158 mm, 23.6084 mm): Track [+5V] on In2.Cu, length 2.8061 mm
     @(21.0000 mm, 28.7534 mm): Track [+5V] on F.Cu, length 1.5000 mm
+    @(17.0000 mm, 25.5926 mm): Track [+5V] on F.Cu, length 1.5000 mm
 [unconnected_items]: Missing connection between items
     Local override; error
-    @(24.3650 mm, 49.5221 mm): Track [+5V] on F.Cu, length 1.8170 mm
-    @(29.2250 mm, 40.0000 mm): Via [+5V] on F.Cu - B.Cu
+    @(25.0806 mm, 50.2377 mm): Track [+5V] on F.Cu, length 1.0120 mm
+    @(33.1552 mm, 52.2896 mm): Track [+5V] on In2.Cu, length 2.8302 mm
 [unconnected_items]: Missing connection between items
     Local override; error
-    @(19.7000 mm, 28.5000 mm): Zone [+5V] on In2.Cu, priority 0
-    @(19.7000 mm, 28.5000 mm): Zone [+5V] on In2.Cu, priority 0
+    @(29.2250 mm, 38.5000 mm): Track [+5V] on F.Cu, length 1.5000 mm
+    @(24.3650 mm, 47.7051 mm): Pad 2 [+5V] of U3 on F.Cu
 [unconnected_items]: Missing connection between items
     Local override; error
     @(33.1552 mm, 52.2896 mm): Track [+5V] on In2.Cu, length 2.8302 mm
     @(32.8649 mm, 60.5000 mm): Track [+5V] on F.Cu, length 1.5000 mm
-[unconnected_items]: Missing connection between items
-    Local override; error
-    @(78.3649 mm, 60.5000 mm): Via [+5V] on F.Cu - B.Cu
-    @(76.8649 mm, 60.5000 mm): Pad 1 [+5V] of D10 on F.Cu
 
 ** Found 0 Footprint errors **
 

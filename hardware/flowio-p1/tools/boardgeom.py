@@ -84,8 +84,19 @@ def track_ok(p1, p2, net, w, pads, trks, vias):
         if seg_seg_dist(p1, p2, (ax, ay), (bx, by)) - tw / 2 - w / 2 < CLR: return False
     return True
 
+def plan_route(anchor, spot, net, w, pads, trks, vias):
+    """直线或 L 形两腿 (先x后y / 先y后x) 任一可通行; 返回路径点列或 None."""
+    if track_ok(anchor, spot, net, w, pads, trks, vias): return [anchor, spot]
+    c1 = (spot[0], anchor[1])
+    if track_ok(anchor, c1, net, w, pads, trks, vias) and track_ok(c1, spot, net, w, pads, trks, vias):
+        return [anchor, c1, spot]
+    c2 = (anchor[0], spot[1])
+    if track_ok(anchor, c2, net, w, pads, trks, vias) and track_ok(c2, spot, net, w, pads, trks, vias):
+        return [anchor, c2, spot]
+    return None
+
 def find_spot(cx, cy, net, pads, trks, vias, anchor=None, rmax=3.5, od=0.8, drill=0.4, w=0.3):
-    """从 (cx,cy) 环形搜索: 过孔落点 + (anchor→落点) 短走线双净空."""
+    """从 (cx,cy) 环形搜索: 过孔落点 + (anchor→落点) 直线/L形走线双净空."""
     r = 0.3
     while r <= rmax:
         n = max(8, int(2 * math.pi * r / 0.3))
@@ -93,10 +104,17 @@ def find_spot(cx, cy, net, pads, trks, vias, anchor=None, rmax=3.5, od=0.8, dril
             a = 2 * math.pi * i / n
             x, y = cx + r * math.cos(a), cy + r * math.sin(a)
             if not spot_ok(x, y, net, pads, trks, vias, od, drill): continue
-            if anchor and not track_ok(anchor, (x, y), net, w, pads, trks, vias): continue
-            return round(x, 3), round(y, 3)
+            sp = (round(x, 3), round(y, 3))
+            if anchor and plan_route(anchor, sp, net, w, pads, trks, vias) is None: continue
+            return sp
         r += 0.2
     return None
+
+def add_route(b, path, layer, net, w=0.3):
+    """布 plan_route 返回的路径. 返回段数."""
+    for p1, p2 in zip(path, path[1:]):
+        add_seg(b, p1, p2, layer, net, w)
+    return len(path) - 1
 
 def add_via(b, x, y, net, od=0.8, drill=0.4):
     v = pcbnew.PCB_VIA(b); v.SetNetCode(netcode(b, net)); v.SetPosition(VI(int(FM(x)), int(FM(y))))
