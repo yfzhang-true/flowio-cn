@@ -1,0 +1,2866 @@
+{
+    "$schema": "https://schemas.kicad.org/drc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-10-01T18:45:18",
+    "ignored_checks": [
+        {
+            "description": "Footprint has no courtyard defined",
+            "key": "missing_courtyard"
+        },
+        {
+            "description": "Track endpoint not centered on via",
+            "key": "track_not_centered_on_via"
+        },
+        {
+            "description": "Tuning profile track geometries",
+            "key": "tuning_profile_track_geometries"
+        },
+        {
+            "description": "Footprint doesn't match symbol's footprint filters",
+            "key": "footprint_filters_mismatch"
+        },
+        {
+            "description": "Footprint component type doesn't match footprint pads",
+            "key": "footprint_type_mismatch"
+        }
+    ],
+    "included_severities": [
+        "error",
+        "warning",
+        "exclusion"
+    ],
+    "kicad_version": "10.0.6",
+    "schematic_parity": [],
+    "source": "flowio-p1.kicad_pcb",
+    "unconnected_items": [
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "填充区[+3V3]在 In2.Cu 上, 优先级 0",
+                    "pos": {
+                        "x": 19.7,
+                        "y": 21.5
+                    },
+                    "uuid": "11a50665-adca-4777-9fda-51e696340cd3"
+                },
+                {
+                    "description": "填充区[+3V3]在 In2.Cu 上, 优先级 0",
+                    "pos": {
+                        "x": 19.7,
+                        "y": 21.5
+                    },
+                    "uuid": "11a50665-adca-4777-9fda-51e696340cd3"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "走线 [+3V3] (F.Cu), 长度: 2.1000 mm",
+                    "pos": {
+                        "x": 38.2466,
+                        "y": 31.0
+                    },
+                    "uuid": "afa6dae0-c06e-473a-a8ea-863afadc0713"
+                },
+                {
+                    "description": "走线 [+3V3] (F.Cu), 长度: 0.7001 mm",
+                    "pos": {
+                        "x": 27.7466,
+                        "y": 31.0
+                    },
+                    "uuid": "fe57b850-e3cd-4048-b3f9-efdd848bd64e"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "过孔 [+3V3] (F.Cu - B.Cu)",
+                    "pos": {
+                        "x": 61.366,
+                        "y": 31.652
+                    },
+                    "uuid": "84f7695d-3307-4416-b475-0d1e0b44eebf"
+                },
+                {
+                    "description": "走线 [+3V3] (F.Cu), 长度: 1.6500 mm",
+                    "pos": {
+                        "x": 60.0,
+                        "y": 28.2499
+                    },
+                    "uuid": "0a824ad6-3447-4f70-822f-071f0b21ec1c"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "填充区 'GND' [GND]在 In1.Cu 上, 优先级 0",
+                    "pos": {
+                        "x": 0.5,
+                        "y": 0.5
+                    },
+                    "uuid": "7bfd1a9b-5822-4c4b-946c-37ba31caa20b"
+                },
+                {
+                    "description": "填充区 'GND' [GND]在 F.Cu 上, 优先级 0",
+                    "pos": {
+                        "x": 0.5,
+                        "y": 0.5
+                    },
+                    "uuid": "f4838f66-3061-4194-85cd-20300d4a729a"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "走线 [+5V] (In2.Cu), 长度: 1.2000 mm",
+                    "pos": {
+                        "x": 18.4,
+                        "y": 40.0
+                    },
+                    "uuid": "4f05f483-8e78-46a6-a029-ca934020708d"
+                },
+                {
+                    "description": "走线 [+5V] (F.Cu), 长度: 1.8170 mm",
+                    "pos": {
+                        "x": 24.365,
+                        "y": 49.5221
+                    },
+                    "uuid": "54252c77-1db3-4270-a1c9-14344d0cc118"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "走线 [+5V] (F.Cu), 长度: 1.0120 mm",
+                    "pos": {
+                        "x": 25.0806,
+                        "y": 50.2377
+                    },
+                    "uuid": "22a741e1-8477-49ee-987d-df223418393b"
+                },
+                {
+                    "description": "走线 [+5V] (In2.Cu), 长度: 5.2500 mm",
+                    "pos": {
+                        "x": 22.25,
+                        "y": 51.95
+                    },
+                    "uuid": "25f3ce44-73cd-41f1-8fc7-6dd011475d78"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        }
+    ],
+    "violations": [
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 D3",
+                    "pos": {
+                        "x": 48.5,
+                        "y": 43.0
+                    },
+                    "uuid": "052dd9ff-0282-4d88-aa09-a32d2eb2ad66"
+                },
+                {
+                    "description": "封装 R5",
+                    "pos": {
+                        "x": 51.5,
+                        "y": 44.5
+                    },
+                    "uuid": "a7d6e27f-d467-40fd-8b6a-dc4af253245d"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 D3",
+                    "pos": {
+                        "x": 48.5,
+                        "y": 43.0
+                    },
+                    "uuid": "052dd9ff-0282-4d88-aa09-a32d2eb2ad66"
+                },
+                {
+                    "description": "封装 L1",
+                    "pos": {
+                        "x": 39.5,
+                        "y": 43.0
+                    },
+                    "uuid": "f6114a0e-1af0-4e4a-bf70-2e1982f11dbe"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 J16",
+                    "pos": {
+                        "x": 72.5,
+                        "y": 68.5
+                    },
+                    "uuid": "0762dda3-4741-419b-bfac-c0c994ef9083"
+                },
+                {
+                    "description": "封装 HD",
+                    "pos": {
+                        "x": 68.0,
+                        "y": 65.0
+                    },
+                    "uuid": "516970e9-fac1-485e-b1ee-3a92994ae557"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "NPTH inside courtyard",
+            "items": [
+                {
+                    "description": "HD 的 NPTH 焊盘",
+                    "pos": {
+                        "x": 68.0,
+                        "y": 65.0
+                    },
+                    "uuid": "601f1cf8-6f17-4d1f-854d-13b9c42ab655"
+                },
+                {
+                    "description": "封装 J16",
+                    "pos": {
+                        "x": 72.5,
+                        "y": 68.5
+                    },
+                    "uuid": "0762dda3-4741-419b-bfac-c0c994ef9083"
+                }
+            ],
+            "severity": "error",
+            "type": "npth_inside_courtyard"
+        },
+        {
+            "description": "PTH inside courtyard",
+            "items": [
+                {
+                    "description": "J16 的PTH 焊盘 2 [DRV7]",
+                    "pos": {
+                        "x": 69.96,
+                        "y": 68.5
+                    },
+                    "uuid": "a34c2b28-2be7-49be-9df8-462f336ee41c"
+                },
+                {
+                    "description": "封装 HD",
+                    "pos": {
+                        "x": 68.0,
+                        "y": 65.0
+                    },
+                    "uuid": "516970e9-fac1-485e-b1ee-3a92994ae557"
+                }
+            ],
+            "severity": "error",
+            "type": "pth_inside_courtyard"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 J16",
+                    "pos": {
+                        "x": 72.5,
+                        "y": 68.5
+                    },
+                    "uuid": "0762dda3-4741-419b-bfac-c0c994ef9083"
+                },
+                {
+                    "description": "封装 J15",
+                    "pos": {
+                        "x": 61.5,
+                        "y": 68.5
+                    },
+                    "uuid": "96ed2f78-4392-4ca6-afe5-934d63afb3be"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 J16",
+                    "pos": {
+                        "x": 72.5,
+                        "y": 68.5
+                    },
+                    "uuid": "0762dda3-4741-419b-bfac-c0c994ef9083"
+                },
+                {
+                    "description": "封装 J17",
+                    "pos": {
+                        "x": 83.5,
+                        "y": 68.5
+                    },
+                    "uuid": "e3bfc7a7-1743-4c01-8a56-722fd4a29d83"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 Q10",
+                    "pos": {
+                        "x": 81.1,
+                        "y": 60.5
+                    },
+                    "uuid": "0adcb686-8866-42fa-a56b-a78d19da59cd"
+                },
+                {
+                    "description": "封装 D11",
+                    "pos": {
+                        "x": 85.9,
+                        "y": 60.5
+                    },
+                    "uuid": "f37fce15-41d8-45d8-8fa5-0b1a2dcd56ba"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 R13",
+                    "pos": {
+                        "x": 24.0,
+                        "y": 31.0
+                    },
+                    "uuid": "13a0c41e-06fb-4646-b6df-16422fa1f217"
+                },
+                {
+                    "description": "封装 D1",
+                    "pos": {
+                        "x": 23.5,
+                        "y": 33.5
+                    },
+                    "uuid": "5d1d651d-b2f4-484d-b61e-8dcb1622142f"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 C7",
+                    "pos": {
+                        "x": 56.0,
+                        "y": 40.0
+                    },
+                    "uuid": "15408b29-3abb-46bc-913c-20e9d6c0d6f4"
+                },
+                {
+                    "description": "封装 C8",
+                    "pos": {
+                        "x": 56.0,
+                        "y": 45.5
+                    },
+                    "uuid": "93d99888-c46f-4d22-a561-8d147c77acc9"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 J2",
+                    "pos": {
+                        "x": 86.0,
+                        "y": 6.0
+                    },
+                    "uuid": "16904c94-fd5b-4402-bdf3-086f29ca5853"
+                },
+                {
+                    "description": "封装 HC",
+                    "pos": {
+                        "x": 86.0,
+                        "y": 13.0
+                    },
+                    "uuid": "ade43b07-669e-4199-9d18-590ceda386df"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "PTH inside courtyard",
+            "items": [
+                {
+                    "description": "J2 的PTH 焊盘 7 [GND]",
+                    "pos": {
+                        "x": 87.9,
+                        "y": 10.32
+                    },
+                    "uuid": "b0f23fc1-0158-4ba0-b72f-5174d6d3414e"
+                },
+                {
+                    "description": "封装 HC",
+                    "pos": {
+                        "x": 86.0,
+                        "y": 13.0
+                    },
+                    "uuid": "ade43b07-669e-4199-9d18-590ceda386df"
+                }
+            ],
+            "severity": "error",
+            "type": "pth_inside_courtyard"
+        },
+        {
+            "description": "PTH inside courtyard",
+            "items": [
+                {
+                    "description": "J2 的PTH 焊盘 7 [GND]",
+                    "pos": {
+                        "x": 84.1,
+                        "y": 10.32
+                    },
+                    "uuid": "f6acecf4-2f38-415e-be8f-ffad5242d04d"
+                },
+                {
+                    "description": "封装 HC",
+                    "pos": {
+                        "x": 86.0,
+                        "y": 13.0
+                    },
+                    "uuid": "ade43b07-669e-4199-9d18-590ceda386df"
+                }
+            ],
+            "severity": "error",
+            "type": "pth_inside_courtyard"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 LED5",
+                    "pos": {
+                        "x": 69.5,
+                        "y": 44.0
+                    },
+                    "uuid": "19aef322-aa48-4cfd-bdb8-09d6e73269fc"
+                },
+                {
+                    "description": "封装 U2",
+                    "pos": {
+                        "x": 74.0,
+                        "y": 44.0
+                    },
+                    "uuid": "8c7716f2-c7d3-4275-b839-c8e32d407b03"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 HA",
+                    "pos": {
+                        "x": 4.0,
+                        "y": 4.0
+                    },
+                    "uuid": "1a091d7b-0788-4752-9573-4f89ca9e636f"
+                },
+                {
+                    "description": "封装 SW1",
+                    "pos": {
+                        "x": 9.0,
+                        "y": 8.5
+                    },
+                    "uuid": "c979641c-a41e-440f-adbe-f220ecdca0ab"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 D8",
+                    "pos": {
+                        "x": 52.9,
+                        "y": 60.5
+                    },
+                    "uuid": "29c0e030-7bde-4b6c-adb1-2a1850ec2e6c"
+                },
+                {
+                    "description": "封装 Q7",
+                    "pos": {
+                        "x": 48.1,
+                        "y": 60.5
+                    },
+                    "uuid": "9d73dcbf-8e78-4034-926e-3239bb64487c"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 D8",
+                    "pos": {
+                        "x": 52.9,
+                        "y": 60.5
+                    },
+                    "uuid": "29c0e030-7bde-4b6c-adb1-2a1850ec2e6c"
+                },
+                {
+                    "description": "封装 R28",
+                    "pos": {
+                        "x": 56.5,
+                        "y": 57.5
+                    },
+                    "uuid": "fb984f6a-59cc-4ebe-9d9f-eb28e2196abf"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 R14",
+                    "pos": {
+                        "x": 28.5,
+                        "y": 31.0
+                    },
+                    "uuid": "2b6d0ea6-47f0-49e2-ad48-5873a06c9f57"
+                },
+                {
+                    "description": "封装 D1",
+                    "pos": {
+                        "x": 23.5,
+                        "y": 33.5
+                    },
+                    "uuid": "5d1d651d-b2f4-484d-b61e-8dcb1622142f"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 J13",
+                    "pos": {
+                        "x": 39.5,
+                        "y": 68.5
+                    },
+                    "uuid": "30fa548e-9eab-4687-80ad-91a909762863"
+                },
+                {
+                    "description": "封装 J14",
+                    "pos": {
+                        "x": 50.5,
+                        "y": 68.5
+                    },
+                    "uuid": "4c2eafe1-baae-49f2-9cd0-15b44cde9d49"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 J13",
+                    "pos": {
+                        "x": 39.5,
+                        "y": 68.5
+                    },
+                    "uuid": "30fa548e-9eab-4687-80ad-91a909762863"
+                },
+                {
+                    "description": "封装 J12",
+                    "pos": {
+                        "x": 28.5,
+                        "y": 68.5
+                    },
+                    "uuid": "939e701c-c4f8-421a-be0e-12603846ac8b"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 Q12",
+                    "pos": {
+                        "x": 69.5,
+                        "y": 28.5
+                    },
+                    "uuid": "3a679f82-9fd9-411c-b968-8be83ffc1ba3"
+                },
+                {
+                    "description": "封装 R22",
+                    "pos": {
+                        "x": 66.5,
+                        "y": 26.0
+                    },
+                    "uuid": "9f243cb4-659b-48e1-aa04-95f9e638931f"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 Q8",
+                    "pos": {
+                        "x": 59.1,
+                        "y": 60.5
+                    },
+                    "uuid": "3baf22eb-07f2-4867-adcf-696271b52ad7"
+                },
+                {
+                    "description": "封装 R28",
+                    "pos": {
+                        "x": 56.5,
+                        "y": 57.5
+                    },
+                    "uuid": "fb984f6a-59cc-4ebe-9d9f-eb28e2196abf"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 Q8",
+                    "pos": {
+                        "x": 59.1,
+                        "y": 60.5
+                    },
+                    "uuid": "3baf22eb-07f2-4867-adcf-696271b52ad7"
+                },
+                {
+                    "description": "封装 D9",
+                    "pos": {
+                        "x": 63.9,
+                        "y": 60.5
+                    },
+                    "uuid": "fe32e3d1-9576-4010-9bc7-b982b6d010cb"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 Q4",
+                    "pos": {
+                        "x": 15.1,
+                        "y": 60.5
+                    },
+                    "uuid": "45f3aed8-460c-42c5-92cf-266512dd6b66"
+                },
+                {
+                    "description": "封装 D5",
+                    "pos": {
+                        "x": 19.9,
+                        "y": 60.5
+                    },
+                    "uuid": "c13528d1-eff7-4411-b871-8c712eb15b4e"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 D6",
+                    "pos": {
+                        "x": 30.9,
+                        "y": 60.5
+                    },
+                    "uuid": "4715dd0c-417e-43fb-baf3-b1a44b82b307"
+                },
+                {
+                    "description": "封装 Q5",
+                    "pos": {
+                        "x": 26.1,
+                        "y": 60.5
+                    },
+                    "uuid": "d797d5e8-60c3-4b39-8dde-215fbfcf5860"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 J14",
+                    "pos": {
+                        "x": 50.5,
+                        "y": 68.5
+                    },
+                    "uuid": "4c2eafe1-baae-49f2-9cd0-15b44cde9d49"
+                },
+                {
+                    "description": "封装 J15",
+                    "pos": {
+                        "x": 61.5,
+                        "y": 68.5
+                    },
+                    "uuid": "96ed2f78-4392-4ca6-afe5-934d63afb3be"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 HB",
+                    "pos": {
+                        "x": 3.0,
+                        "y": 37.0
+                    },
+                    "uuid": "506ee95d-1f12-4d0e-b9a7-2111caaf39c0"
+                },
+                {
+                    "description": "封装 J8",
+                    "pos": {
+                        "x": 5.0,
+                        "y": 46.0
+                    },
+                    "uuid": "c8b403f3-39d2-47ad-b6ea-dcaae8fb467b"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 HD",
+                    "pos": {
+                        "x": 68.0,
+                        "y": 65.0
+                    },
+                    "uuid": "516970e9-fac1-485e-b1ee-3a92994ae557"
+                },
+                {
+                    "description": "封装 J15",
+                    "pos": {
+                        "x": 61.5,
+                        "y": 68.5
+                    },
+                    "uuid": "96ed2f78-4392-4ca6-afe5-934d63afb3be"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "NPTH inside courtyard",
+            "items": [
+                {
+                    "description": "HD 的 NPTH 焊盘",
+                    "pos": {
+                        "x": 68.0,
+                        "y": 65.0
+                    },
+                    "uuid": "601f1cf8-6f17-4d1f-854d-13b9c42ab655"
+                },
+                {
+                    "description": "封装 J15",
+                    "pos": {
+                        "x": 61.5,
+                        "y": 68.5
+                    },
+                    "uuid": "96ed2f78-4392-4ca6-afe5-934d63afb3be"
+                }
+            ],
+            "severity": "error",
+            "type": "npth_inside_courtyard"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 HD",
+                    "pos": {
+                        "x": 68.0,
+                        "y": 65.0
+                    },
+                    "uuid": "516970e9-fac1-485e-b1ee-3a92994ae557"
+                },
+                {
+                    "description": "封装 Q9",
+                    "pos": {
+                        "x": 70.1,
+                        "y": 60.5
+                    },
+                    "uuid": "f7c790f2-a63d-406a-b166-64500d76428e"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 HD",
+                    "pos": {
+                        "x": 68.0,
+                        "y": 65.0
+                    },
+                    "uuid": "516970e9-fac1-485e-b1ee-3a92994ae557"
+                },
+                {
+                    "description": "封装 D9",
+                    "pos": {
+                        "x": 63.9,
+                        "y": 60.5
+                    },
+                    "uuid": "fe32e3d1-9576-4010-9bc7-b982b6d010cb"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 R20",
+                    "pos": {
+                        "x": 66.5,
+                        "y": 22.0
+                    },
+                    "uuid": "52c68ca0-9379-4de2-9063-21c846b4f1c2"
+                },
+                {
+                    "description": "封装 Q11",
+                    "pos": {
+                        "x": 69.5,
+                        "y": 23.5
+                    },
+                    "uuid": "eea0a834-6476-4add-8b62-fcf7b9847b76"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 J11",
+                    "pos": {
+                        "x": 17.5,
+                        "y": 68.5
+                    },
+                    "uuid": "569a422e-121f-498c-9ecd-7002dd6aac71"
+                },
+                {
+                    "description": "封装 J12",
+                    "pos": {
+                        "x": 28.5,
+                        "y": 68.5
+                    },
+                    "uuid": "939e701c-c4f8-421a-be0e-12603846ac8b"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 J11",
+                    "pos": {
+                        "x": 17.5,
+                        "y": 68.5
+                    },
+                    "uuid": "569a422e-121f-498c-9ecd-7002dd6aac71"
+                },
+                {
+                    "description": "封装 J10",
+                    "pos": {
+                        "x": 6.5,
+                        "y": 68.5
+                    },
+                    "uuid": "e59f2e4b-8d76-4c1b-a32f-80e8f57c16d7"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 J11",
+                    "pos": {
+                        "x": 17.5,
+                        "y": 68.5
+                    },
+                    "uuid": "569a422e-121f-498c-9ecd-7002dd6aac71"
+                },
+                {
+                    "description": "封装 TP9",
+                    "pos": {
+                        "x": 12.0,
+                        "y": 63.5
+                    },
+                    "uuid": "f43f443d-37a9-44ce-863f-ef2f42543e26"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 C17",
+                    "pos": {
+                        "x": 17.0,
+                        "y": 24.0
+                    },
+                    "uuid": "689c8ccb-e0b6-463b-957e-1c0dc6752cfb"
+                },
+                {
+                    "description": "封装 U1",
+                    "pos": {
+                        "x": 28.0,
+                        "y": 16.5
+                    },
+                    "uuid": "a5fbdb96-ce4f-4ac1-a28c-b9034c92a9fb"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 Q3",
+                    "pos": {
+                        "x": 4.1,
+                        "y": 60.5
+                    },
+                    "uuid": "6f9ceee1-7478-4058-a647-525c6687d796"
+                },
+                {
+                    "description": "封装 D4",
+                    "pos": {
+                        "x": 8.9,
+                        "y": 60.5
+                    },
+                    "uuid": "76218868-3b72-4c14-84c1-c33498bb8e9a"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 U2",
+                    "pos": {
+                        "x": 74.0,
+                        "y": 44.0
+                    },
+                    "uuid": "8c7716f2-c7d3-4275-b839-c8e32d407b03"
+                },
+                {
+                    "description": "封装 R26",
+                    "pos": {
+                        "x": 69.5,
+                        "y": 48.5
+                    },
+                    "uuid": "b1a8a495-bdc0-4591-b0b8-2f6d465965d4"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 U2",
+                    "pos": {
+                        "x": 74.0,
+                        "y": 44.0
+                    },
+                    "uuid": "8c7716f2-c7d3-4275-b839-c8e32d407b03"
+                },
+                {
+                    "description": "封装 R25",
+                    "pos": {
+                        "x": 69.5,
+                        "y": 39.0
+                    },
+                    "uuid": "fec728ab-c2ba-420b-8ce6-cdedbe745510"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 J6",
+                    "pos": {
+                        "x": 86.5,
+                        "y": 32.5
+                    },
+                    "uuid": "8e54fedb-49ff-4eec-a304-f112ff29d257"
+                },
+                {
+                    "description": "封装 J5",
+                    "pos": {
+                        "x": 86.5,
+                        "y": 22.0
+                    },
+                    "uuid": "c2895838-c608-4cb3-b3c7-3dd902faa470"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "PTH inside courtyard",
+            "items": [
+                {
+                    "description": "J5 的PTH 焊盘 4 [S1_SCL]",
+                    "pos": {
+                        "x": 86.4999,
+                        "y": 25.81
+                    },
+                    "uuid": "d4a4e99c-f8f2-4b83-a3fe-d2575c5f1309"
+                },
+                {
+                    "description": "封装 J6",
+                    "pos": {
+                        "x": 86.5,
+                        "y": 32.5
+                    },
+                    "uuid": "8e54fedb-49ff-4eec-a304-f112ff29d257"
+                }
+            ],
+            "severity": "error",
+            "type": "pth_inside_courtyard"
+        },
+        {
+            "description": "PTH inside courtyard",
+            "items": [
+                {
+                    "description": "J6 的PTH 焊盘 1 [+3V3]",
+                    "pos": {
+                        "x": 86.5001,
+                        "y": 28.69
+                    },
+                    "uuid": "64dc8e50-a9f7-487a-8f37-7a4cd3e01fda"
+                },
+                {
+                    "description": "封装 J5",
+                    "pos": {
+                        "x": 86.5,
+                        "y": 22.0
+                    },
+                    "uuid": "c2895838-c608-4cb3-b3c7-3dd902faa470"
+                }
+            ],
+            "severity": "error",
+            "type": "pth_inside_courtyard"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 TP5",
+                    "pos": {
+                        "x": 81.5,
+                        "y": 57.5
+                    },
+                    "uuid": "9213afca-e2f3-44bb-900f-c87f5d8712b1"
+                },
+                {
+                    "description": "封装 R46",
+                    "pos": {
+                        "x": 81.1,
+                        "y": 55.5
+                    },
+                    "uuid": "d6540b40-d95a-4e12-9c8d-2c80ad6f62eb"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 R22",
+                    "pos": {
+                        "x": 66.5,
+                        "y": 26.0
+                    },
+                    "uuid": "9f243cb4-659b-48e1-aa04-95f9e638931f"
+                },
+                {
+                    "description": "封装 Q11",
+                    "pos": {
+                        "x": 69.5,
+                        "y": 23.5
+                    },
+                    "uuid": "eea0a834-6476-4add-8b62-fcf7b9847b76"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 HC",
+                    "pos": {
+                        "x": 86.0,
+                        "y": 13.0
+                    },
+                    "uuid": "ade43b07-669e-4199-9d18-590ceda386df"
+                },
+                {
+                    "description": "封装 J5",
+                    "pos": {
+                        "x": 86.5,
+                        "y": 22.0
+                    },
+                    "uuid": "c2895838-c608-4cb3-b3c7-3dd902faa470"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 D10",
+                    "pos": {
+                        "x": 74.9,
+                        "y": 60.5
+                    },
+                    "uuid": "b0db00c2-6458-48ab-81fb-fe407a76ca5f"
+                },
+                {
+                    "description": "封装 Q9",
+                    "pos": {
+                        "x": 70.1,
+                        "y": 60.5
+                    },
+                    "uuid": "f7c790f2-a63d-406a-b166-64500d76428e"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 Q6",
+                    "pos": {
+                        "x": 37.1,
+                        "y": 60.5
+                    },
+                    "uuid": "b54a2107-51bf-43ab-952c-a0d91c444db3"
+                },
+                {
+                    "description": "封装 D7",
+                    "pos": {
+                        "x": 41.9,
+                        "y": 60.5
+                    },
+                    "uuid": "dd147264-81ee-426f-9d80-d56973e26078"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 TP8",
+                    "pos": {
+                        "x": 47.2,
+                        "y": 31.0
+                    },
+                    "uuid": "bb0b2276-18ba-49cc-bf0e-7445861d3d25"
+                },
+                {
+                    "description": "封装 LED3",
+                    "pos": {
+                        "x": 48.5,
+                        "y": 30.0
+                    },
+                    "uuid": "f1a1ca3e-d7a4-46df-86fa-4efd831a9d00"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 D5",
+                    "pos": {
+                        "x": 19.9,
+                        "y": 60.5
+                    },
+                    "uuid": "c13528d1-eff7-4411-b871-8c712eb15b4e"
+                },
+                {
+                    "description": "封装 TP10",
+                    "pos": {
+                        "x": 23.5,
+                        "y": 59.5
+                    },
+                    "uuid": "ed5f584d-821b-4664-a033-639da6346d48"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 Q5",
+                    "pos": {
+                        "x": 26.1,
+                        "y": 60.5
+                    },
+                    "uuid": "d797d5e8-60c3-4b39-8dde-215fbfcf5860"
+                },
+                {
+                    "description": "封装 TP10",
+                    "pos": {
+                        "x": 23.5,
+                        "y": 59.5
+                    },
+                    "uuid": "ed5f584d-821b-4664-a033-639da6346d48"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "封装 J10",
+                    "pos": {
+                        "x": 6.5,
+                        "y": 68.5
+                    },
+                    "uuid": "e59f2e4b-8d76-4c1b-a32f-80e8f57c16d7"
+                },
+                {
+                    "description": "封装 TP9",
+                    "pos": {
+                        "x": 12.0,
+                        "y": 63.5
+                    },
+                    "uuid": "f43f443d-37a9-44ce-863f-ef2f42543e26"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Track has unconnected end",
+            "items": [
+                {
+                    "description": "走线 [+3V3] (F.Cu), 长度: 1.5000 mm",
+                    "pos": {
+                        "x": 23.25,
+                        "y": 31.0
+                    },
+                    "uuid": "56f1c56f-fffb-4247-86d1-15f04c0b866c"
+                }
+            ],
+            "severity": "warning",
+            "type": "track_dangling"
+        },
+        {
+            "description": "Via is not connected or connected on only one layer",
+            "items": [
+                {
+                    "description": "过孔 [+3V3] (F.Cu - B.Cu)",
+                    "pos": {
+                        "x": 27.116,
+                        "y": 30.696
+                    },
+                    "uuid": "3b17646f-cc0b-4ec7-ac5e-4d0930cca084"
+                }
+            ],
+            "severity": "warning",
+            "type": "via_dangling"
+        },
+        {
+            "description": "Via is not connected or connected on only one layer",
+            "items": [
+                {
+                    "description": "过孔 [+3V3] (F.Cu - B.Cu)",
+                    "pos": {
+                        "x": 38.3,
+                        "y": 43.07
+                    },
+                    "uuid": "8d8c87d4-8a8c-4b2c-80f3-dca568f2ca2a"
+                }
+            ],
+            "severity": "warning",
+            "type": "via_dangling"
+        },
+        {
+            "description": "Track has unconnected end",
+            "items": [
+                {
+                    "description": "走线 [+3V3] (In2.Cu), 长度: 2.0159 mm",
+                    "pos": {
+                        "x": 23.2221,
+                        "y": 27.5832
+                    },
+                    "uuid": "e30fdf2c-a8c6-4c50-b82c-a47d0a23e1be"
+                }
+            ],
+            "severity": "warning",
+            "type": "track_dangling"
+        },
+        {
+            "description": "Via is not connected or connected on only one layer",
+            "items": [
+                {
+                    "description": "过孔 [+5V] (F.Cu - B.Cu)",
+                    "pos": {
+                        "x": 8.17,
+                        "y": 57.2
+                    },
+                    "uuid": "49484c02-d74a-4927-a472-bda933376ad3"
+                }
+            ],
+            "severity": "warning",
+            "type": "via_dangling"
+        },
+        {
+            "description": "Via is not connected or connected on only one layer",
+            "items": [
+                {
+                    "description": "过孔 [+5V] (F.Cu - B.Cu)",
+                    "pos": {
+                        "x": 22.25,
+                        "y": 51.95
+                    },
+                    "uuid": "67d0b03e-a4ba-4895-9f42-4db92b8cf27f"
+                }
+            ],
+            "severity": "warning",
+            "type": "via_dangling"
+        },
+        {
+            "description": "Silkscreen clipped by board edge",
+            "items": [
+                {
+                    "description": "Edge.Cuts 上的 线段",
+                    "pos": {
+                        "x": 90.0,
+                        "y": 0.0
+                    },
+                    "uuid": "65f31b5e-7936-4c22-9348-2b12cea2ee77"
+                },
+                {
+                    "description": "J2 的参考字段",
+                    "pos": {
+                        "x": 90.6,
+                        "y": 6.0
+                    },
+                    "uuid": "c995bf6e-f2ae-4a48-a8ed-b5d57f35a99a"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_edge_clearance"
+        },
+        {
+            "description": "Silkscreen clipped by board edge",
+            "items": [
+                {
+                    "description": "Edge.Cuts 上的 线段",
+                    "pos": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "uuid": "b268688d-d43f-4c9f-b598-2275f3f4fc8b"
+                },
+                {
+                    "description": "HA 的参考字段",
+                    "pos": {
+                        "x": 4.0,
+                        "y": -0.15
+                    },
+                    "uuid": "1f9cf090-dddb-4903-8f39-565d1329402f"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_edge_clearance"
+        },
+        {
+            "description": "Silkscreen clipped by board edge",
+            "items": [
+                {
+                    "description": "Edge.Cuts 上的 线段",
+                    "pos": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "uuid": "b268688d-d43f-4c9f-b598-2275f3f4fc8b"
+                },
+                {
+                    "description": "U1 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 19.0,
+                        "y": -0.045
+                    },
+                    "uuid": "b5ec7c6b-21f4-403f-9cf9-153a658e371c"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_edge_clearance"
+        },
+        {
+            "description": "Silkscreen clipped by board edge",
+            "items": [
+                {
+                    "description": "Edge.Cuts 上的 线段",
+                    "pos": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "uuid": "b268688d-d43f-4c9f-b598-2275f3f4fc8b"
+                },
+                {
+                    "description": "U1 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 37.0,
+                        "y": -0.045
+                    },
+                    "uuid": "d944dfef-885a-4ece-8631-2b88cdc24122"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_edge_clearance"
+        },
+        {
+            "description": "Silkscreen clipped by board edge",
+            "items": [
+                {
+                    "description": "Edge.Cuts 上的 线段",
+                    "pos": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "uuid": "b268688d-d43f-4c9f-b598-2275f3f4fc8b"
+                },
+                {
+                    "description": "U1 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 37.017,
+                        "y": 6.7739
+                    },
+                    "uuid": "50050d25-1c34-4d5d-a9aa-4758dd2cd2cc"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_edge_clearance"
+        },
+        {
+            "description": "Silkscreen clipped by board edge",
+            "items": [
+                {
+                    "description": "Edge.Cuts 上的 线段",
+                    "pos": {
+                        "x": 0.0,
+                        "y": 75.0
+                    },
+                    "uuid": "53117bfd-d27c-48da-8758-0005c4d008ef"
+                },
+                {
+                    "description": "J8 的参考字段",
+                    "pos": {
+                        "x": -0.26,
+                        "y": 46.0
+                    },
+                    "uuid": "b57024d8-6805-4cda-b157-5e931f1bf32e"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_edge_clearance"
+        },
+        {
+            "description": "钻孔太靠近其他孔 (电路板配置约束 最小 0.2500 mm; 实际 0.1972 mm)",
+            "items": [
+                {
+                    "description": "过孔 [+5V] (F.Cu - B.Cu)",
+                    "pos": {
+                        "x": 78.3764,
+                        "y": 57.6554
+                    },
+                    "uuid": "8552f5d1-b33b-41e8-9d64-589240b6ebf0"
+                },
+                {
+                    "description": "过孔 [+5V] (F.Cu - B.Cu)",
+                    "pos": {
+                        "x": 78.9,
+                        "y": 57.275
+                    },
+                    "uuid": "fa020cc9-9919-4bc2-b86c-dd863795bbf8"
+                }
+            ],
+            "severity": "warning",
+            "type": "hole_to_hole"
+        },
+        {
+            "description": "钻孔太靠近其他孔 (电路板配置约束 最小 0.2500 mm; 实际 0.1972 mm)",
+            "items": [
+                {
+                    "description": "过孔 [+5V] (F.Cu - B.Cu)",
+                    "pos": {
+                        "x": 77.565,
+                        "y": 60.5
+                    },
+                    "uuid": "a5b4271f-82cf-455b-95ff-68d948f3a50c"
+                },
+                {
+                    "description": "过孔 [+5V] (F.Cu - B.Cu)",
+                    "pos": {
+                        "x": 77.0414,
+                        "y": 60.8804
+                    },
+                    "uuid": "f1dd501b-c955-40c6-a22b-36219aead8c6"
+                }
+            ],
+            "severity": "warning",
+            "type": "hole_to_hole"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "J16 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 67.42,
+                        "y": 63.9775
+                    },
+                    "uuid": "b2af8bb6-d7ca-4877-856e-5d2039857d95"
+                },
+                {
+                    "description": "HD 的 NPTH 焊盘",
+                    "pos": {
+                        "x": 68.0,
+                        "y": 65.0
+                    },
+                    "uuid": "601f1cf8-6f17-4d1f-854d-13b9c42ab655"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "J16 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 67.42,
+                        "y": 63.9775
+                    },
+                    "uuid": "22b8163e-6dc7-4b46-89db-119f8d838477"
+                },
+                {
+                    "description": "HD 的 NPTH 焊盘",
+                    "pos": {
+                        "x": 68.0,
+                        "y": 65.0
+                    },
+                    "uuid": "601f1cf8-6f17-4d1f-854d-13b9c42ab655"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "J15 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 66.58,
+                        "y": 65.4999
+                    },
+                    "uuid": "40b624ae-0b30-42b7-b1ea-97cc4ada7bf5"
+                },
+                {
+                    "description": "HD 的 NPTH 焊盘",
+                    "pos": {
+                        "x": 68.0,
+                        "y": 65.0
+                    },
+                    "uuid": "601f1cf8-6f17-4d1f-854d-13b9c42ab655"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "J15 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 67.18,
+                        "y": 64.75
+                    },
+                    "uuid": "62427409-c153-4b99-8937-19f7fe75fb11"
+                },
+                {
+                    "description": "HD 的 NPTH 焊盘",
+                    "pos": {
+                        "x": 68.0,
+                        "y": 65.0
+                    },
+                    "uuid": "601f1cf8-6f17-4d1f-854d-13b9c42ab655"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "J15 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 67.18,
+                        "y": 65.75
+                    },
+                    "uuid": "019c652f-6f0d-4416-a14a-e62648b66f1f"
+                },
+                {
+                    "description": "HD 的 NPTH 焊盘",
+                    "pos": {
+                        "x": 68.0,
+                        "y": 65.0
+                    },
+                    "uuid": "601f1cf8-6f17-4d1f-854d-13b9c42ab655"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "R26 的参考字段",
+                    "pos": {
+                        "x": 67.01,
+                        "y": 48.5
+                    },
+                    "uuid": "7d3c255c-2e6e-4574-8865-3e48eda9b813"
+                },
+                {
+                    "description": "F.Cu 上 R38 的焊盘 1 [+3V3]",
+                    "pos": {
+                        "x": 66.0,
+                        "y": 49.9534
+                    },
+                    "uuid": "a64abe00-e52a-4ce1-baf7-1679ef1a63d8"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "LED5 的参考字段",
+                    "pos": {
+                        "x": 66.92,
+                        "y": 44.0
+                    },
+                    "uuid": "0279d721-9abd-4f93-957a-b36273ccdec2"
+                },
+                {
+                    "description": "F.Cu 上 R37 的焊盘 2 [S4_SCL]",
+                    "pos": {
+                        "x": 66.0,
+                        "y": 43.6466
+                    },
+                    "uuid": "a1d26e24-9f2a-49c7-9e40-9be6a8a2a360"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "R25 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 70.1606,
+                        "y": 40.3851
+                    },
+                    "uuid": "0330f430-5501-4b88-b57e-da743f044e39"
+                },
+                {
+                    "description": "F.Cu 上 U2 的焊盘 24 [+3V3]",
+                    "pos": {
+                        "x": 70.4252,
+                        "y": 40.9774
+                    },
+                    "uuid": "f13d6a84-2a9c-44a3-9cb3-6e74b09a4600"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "R25 的参考字段",
+                    "pos": {
+                        "x": 67.01,
+                        "y": 39.0
+                    },
+                    "uuid": "c07a9138-c2ba-4536-856e-bf73f8420279"
+                },
+                {
+                    "description": "F.Cu 上 R36 的焊盘 1 [+3V3]",
+                    "pos": {
+                        "x": 66.0,
+                        "y": 40.3534
+                    },
+                    "uuid": "4397f972-f12c-4f2d-9bb3-d8fa53b3bc50"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "LED5 的参考字段",
+                    "pos": {
+                        "x": 66.92,
+                        "y": 44.0
+                    },
+                    "uuid": "0279d721-9abd-4f93-957a-b36273ccdec2"
+                },
+                {
+                    "description": "F.Cu 上 R37 的焊盘 1 [+3V3]",
+                    "pos": {
+                        "x": 66.0,
+                        "y": 45.1534
+                    },
+                    "uuid": "56c2e139-7cdc-4def-93f3-e1247f6bd4c0"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "R26 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 70.1606,
+                        "y": 47.1149
+                    },
+                    "uuid": "dc288c82-5730-46e9-b3f7-49484b6e8f25"
+                },
+                {
+                    "description": "F.Cu 上 U2 的焊盘 1 [GND]",
+                    "pos": {
+                        "x": 70.4252,
+                        "y": 47.0226
+                    },
+                    "uuid": "1b3a04e7-1665-4142-bb54-63b657403c38"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "R26 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 70.1606,
+                        "y": 48.0738
+                    },
+                    "uuid": "46dcd399-9551-4342-a370-ec55f7b0b663"
+                },
+                {
+                    "description": "F.Cu 上 U2 的焊盘 1 [GND]",
+                    "pos": {
+                        "x": 70.4252,
+                        "y": 47.0226
+                    },
+                    "uuid": "1b3a04e7-1665-4142-bb54-63b657403c38"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "R26 的参考字段",
+                    "pos": {
+                        "x": 67.01,
+                        "y": 48.5
+                    },
+                    "uuid": "7d3c255c-2e6e-4574-8865-3e48eda9b813"
+                },
+                {
+                    "description": "F.Cu 上 R38 的焊盘 2 [S5_SCL]",
+                    "pos": {
+                        "x": 66.0,
+                        "y": 48.4466
+                    },
+                    "uuid": "790cb334-1980-4d04-9f3d-2af4065b2d40"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "Q10 的参考字段",
+                    "pos": {
+                        "x": 81.1,
+                        "y": 57.15
+                    },
+                    "uuid": "5e63bfad-dad5-4bc9-93bb-0679693684b6"
+                },
+                {
+                    "description": "F.Cu 上 TP5 的焊盘 1 [GND]",
+                    "pos": {
+                        "x": 81.5,
+                        "y": 57.5
+                    },
+                    "uuid": "6a1c950a-7226-4684-9a3b-43b8653d8902"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "R46 的参考字段",
+                    "pos": {
+                        "x": 78.61,
+                        "y": 55.5
+                    },
+                    "uuid": "49892170-e8e1-4faf-bf85-37cc585449fc"
+                },
+                {
+                    "description": "F.Cu 上 C16 的焊盘 2 [GND]",
+                    "pos": {
+                        "x": 78.5,
+                        "y": 55.725
+                    },
+                    "uuid": "e327d068-e147-424c-9ea5-bcd6a69d1f95"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "Q10 的参考字段",
+                    "pos": {
+                        "x": 81.1,
+                        "y": 57.15
+                    },
+                    "uuid": "5e63bfad-dad5-4bc9-93bb-0679693684b6"
+                },
+                {
+                    "description": "F.Cu 上 R46 的焊盘 1 [IO21]",
+                    "pos": {
+                        "x": 81.1,
+                        "y": 56.2534
+                    },
+                    "uuid": "2dba90cd-2872-4863-8de0-a061653e112d"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "TP5 的参考字段",
+                    "pos": {
+                        "x": 81.5,
+                        "y": 56.052
+                    },
+                    "uuid": "96061d6a-7ec3-471a-b4c7-b441357189f4"
+                },
+                {
+                    "description": "F.Cu 上 R46 的焊盘 1 [IO21]",
+                    "pos": {
+                        "x": 81.1,
+                        "y": 56.2534
+                    },
+                    "uuid": "2dba90cd-2872-4863-8de0-a061653e112d"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "Q9 的参考字段",
+                    "pos": {
+                        "x": 70.1,
+                        "y": 57.15
+                    },
+                    "uuid": "bb17e579-29ae-4cba-8895-2771e2c1f4e0"
+                },
+                {
+                    "description": "F.Cu 上 R45 的焊盘 1 [IO12]",
+                    "pos": {
+                        "x": 70.1,
+                        "y": 56.2534
+                    },
+                    "uuid": "75a96114-3be4-4820-b300-8caa72ff197b"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "HD 的参考字段",
+                    "pos": {
+                        "x": 68.0,
+                        "y": 60.85
+                    },
+                    "uuid": "8f021ec2-96c9-4d03-9258-96669ebbc150"
+                },
+                {
+                    "description": "F.Cu 上 Q9 的焊盘 3 [DRV7]",
+                    "pos": {
+                        "x": 69.1,
+                        "y": 60.5
+                    },
+                    "uuid": "2794b447-4580-4e45-a2da-98e73a5326b4"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "R29 的参考字段",
+                    "pos": {
+                        "x": 59.51,
+                        "y": 30.0
+                    },
+                    "uuid": "6d23a529-7fd3-41c6-8a9c-dbd0df5b3057"
+                },
+                {
+                    "description": "F.Cu 上 LED2 的焊盘 2 [LED_PWR_K]",
+                    "pos": {
+                        "x": 58.5,
+                        "y": 29.7501
+                    },
+                    "uuid": "28c73fc6-3238-429c-9146-0abdac3366fa"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "R24 的参考字段",
+                    "pos": {
+                        "x": 46.01,
+                        "y": 35.0
+                    },
+                    "uuid": "eb35bd26-5cf1-4ba5-b893-b8a540b89023"
+                },
+                {
+                    "description": "F.Cu 上 R27 的焊盘 2 [BTN_USER]",
+                    "pos": {
+                        "x": 46.5,
+                        "y": 33.7466
+                    },
+                    "uuid": "dab61616-e490-44ae-95e8-ec5d1a2e2312"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "R24 的参考字段",
+                    "pos": {
+                        "x": 46.01,
+                        "y": 35.0
+                    },
+                    "uuid": "eb35bd26-5cf1-4ba5-b893-b8a540b89023"
+                },
+                {
+                    "description": "F.Cu 上 R27 的焊盘 1 [+3V3]",
+                    "pos": {
+                        "x": 46.5,
+                        "y": 35.2534
+                    },
+                    "uuid": "d17455dd-f489-4faa-9f65-de1b6544057e"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "TP8 的参考字段",
+                    "pos": {
+                        "x": 47.2,
+                        "y": 29.552
+                    },
+                    "uuid": "f2d3e5f9-0a2a-4b0d-9d87-81957e61bdd7"
+                },
+                {
+                    "description": "F.Cu 上 LED3 的焊盘 2 [LED_USER_K]",
+                    "pos": {
+                        "x": 48.4999,
+                        "y": 29.251
+                    },
+                    "uuid": "2b92d467-6d6c-417f-91b6-ebde5bce07f9"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "LED3 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 47.7457,
+                        "y": 30.1395
+                    },
+                    "uuid": "3c54ffc7-21fa-450f-be41-7a574aefd063"
+                },
+                {
+                    "description": "F.Cu 上 TP8 的焊盘 1 [I2C_SCL]",
+                    "pos": {
+                        "x": 47.2,
+                        "y": 31.0
+                    },
+                    "uuid": "326020a2-3c63-4421-8780-bd460ecf3ff5"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "R30 的参考字段",
+                    "pos": {
+                        "x": 59.51,
+                        "y": 34.8
+                    },
+                    "uuid": "f47ec855-bc11-43f8-978a-75145f30ed91"
+                },
+                {
+                    "description": "F.Cu 上 R23 的焊盘 1 [LED_PWR_K]",
+                    "pos": {
+                        "x": 58.5,
+                        "y": 34.2534
+                    },
+                    "uuid": "06f20990-0cca-4675-8fe0-dab010b5b62d"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "C1 的参考字段",
+                    "pos": {
+                        "x": 30.0,
+                        "y": 30.58
+                    },
+                    "uuid": "98ed5ba8-63d1-4f16-961d-16374614c643"
+                },
+                {
+                    "description": "F.Cu 上 R14 的焊盘 2 [STRAP3]",
+                    "pos": {
+                        "x": 29.2534,
+                        "y": 31.0
+                    },
+                    "uuid": "850f9613-07f9-467f-a6b8-05db06770f0c"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "U3 的参考字段",
+                    "pos": {
+                        "x": 25.0,
+                        "y": 39.57
+                    },
+                    "uuid": "5eff655e-1c48-4f29-b926-7b76ca0ab199"
+                },
+                {
+                    "description": "F.Cu 上 D2 的焊盘 2 [USB_VBUS]",
+                    "pos": {
+                        "x": 26.1999,
+                        "y": 38.5
+                    },
+                    "uuid": "93a8f853-841a-485e-80f1-ba526e56c82c"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "C4 的参考字段",
+                    "pos": {
+                        "x": 27.5,
+                        "y": 49.07
+                    },
+                    "uuid": "1c4a2911-680c-47fd-8bae-a183c21c091b"
+                },
+                {
+                    "description": "F.Cu 上 U3 的焊盘 4 [BUCK_SS]",
+                    "pos": {
+                        "x": 26.905,
+                        "y": 47.7051
+                    },
+                    "uuid": "5fe82d13-a28f-4a75-8d92-ec75261b5503"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "C3 的参考字段",
+                    "pos": {
+                        "x": 23.0,
+                        "y": 49.07
+                    },
+                    "uuid": "b6f649e5-25a6-4b27-b75b-73756cabadbd"
+                },
+                {
+                    "description": "F.Cu 上 U3 的焊盘 1 [BOOT]",
+                    "pos": {
+                        "x": 23.095,
+                        "y": 47.7051
+                    },
+                    "uuid": "256b420b-5aab-4cbc-942c-680f0ad46eea"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "D3 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 51.0933,
+                        "y": 44.1756
+                    },
+                    "uuid": "c2f2f54e-baac-416c-9ab3-9a065fe49fc5"
+                },
+                {
+                    "description": "F.Cu 上 R5 的焊盘 2 [GND]",
+                    "pos": {
+                        "x": 51.5,
+                        "y": 43.7466
+                    },
+                    "uuid": "33e4c34b-98ee-4d97-a6d1-d700a07691ab"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "D1 的参考字段",
+                    "pos": {
+                        "x": 23.5,
+                        "y": 30.24
+                    },
+                    "uuid": "36f0f1c7-910c-4b29-b38c-c0d4e39ff915"
+                },
+                {
+                    "description": "F.Cu 上 R13 的焊盘 1 [+3V3]",
+                    "pos": {
+                        "x": 23.2466,
+                        "y": 31.0
+                    },
+                    "uuid": "a31fab0b-3266-412c-a645-a17aedbadec2"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "D1 的参考字段",
+                    "pos": {
+                        "x": 23.5,
+                        "y": 30.24
+                    },
+                    "uuid": "36f0f1c7-910c-4b29-b38c-c0d4e39ff915"
+                },
+                {
+                    "description": "F.Cu 上 R13 的焊盘 2 [BOOT]",
+                    "pos": {
+                        "x": 24.7534,
+                        "y": 31.0
+                    },
+                    "uuid": "9cc45944-a040-48fc-8e29-30dd417b8d5a"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "R2 的参考字段",
+                    "pos": {
+                        "x": 76.01,
+                        "y": 14.0
+                    },
+                    "uuid": "982dccfe-f1e1-4274-af0a-abc58391e96f"
+                },
+                {
+                    "description": "F.Cu 上 U5 的焊盘 3 [USB_DN]",
+                    "pos": {
+                        "x": 75.45,
+                        "y": 13.1491
+                    },
+                    "uuid": "8052ed64-ab4b-4d73-a78f-2901077efaff"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "J6 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 86.3422,
+                        "y": 26.252
+                    },
+                    "uuid": "096c59ca-1deb-4c7b-9131-d80a729f2aba"
+                },
+                {
+                    "description": "J5 的PTH 焊盘 4 [S1_SCL]",
+                    "pos": {
+                        "x": 86.4999,
+                        "y": 25.81
+                    },
+                    "uuid": "d4a4e99c-f8f2-4b83-a3fe-d2575c5f1309"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "J5 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 86.3499,
+                        "y": 27.5899
+                    },
+                    "uuid": "39ab4890-455e-4d45-9d89-48c822ddfeb0"
+                },
+                {
+                    "description": "J6 的PTH 焊盘 1 [+3V3]",
+                    "pos": {
+                        "x": 86.5001,
+                        "y": 28.69
+                    },
+                    "uuid": "64dc8e50-a9f7-487a-8f37-7a4cd3e01fda"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "J6 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 84.1503,
+                        "y": 26.25
+                    },
+                    "uuid": "170b0696-284a-4c91-86f7-efc881dc6c1f"
+                },
+                {
+                    "description": "J5 的PTH 焊盘 4 [S1_SCL]",
+                    "pos": {
+                        "x": 86.4999,
+                        "y": 25.81
+                    },
+                    "uuid": "d4a4e99c-f8f2-4b83-a3fe-d2575c5f1309"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "J5 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 89.8501,
+                        "y": 28.2499
+                    },
+                    "uuid": "0b9c6f44-156b-4264-a14e-592991e9b953"
+                },
+                {
+                    "description": "J6 的PTH 焊盘 1 [+3V3]",
+                    "pos": {
+                        "x": 86.5001,
+                        "y": 28.69
+                    },
+                    "uuid": "64dc8e50-a9f7-487a-8f37-7a4cd3e01fda"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "R1 的参考字段",
+                    "pos": {
+                        "x": 76.01,
+                        "y": 10.0
+                    },
+                    "uuid": "9dedc2e6-94cf-4b40-b6a9-f3274835802e"
+                },
+                {
+                    "description": "F.Cu 上 U5 的焊盘 4 [USB_DN]",
+                    "pos": {
+                        "x": 75.45,
+                        "y": 10.8509
+                    },
+                    "uuid": "d2a56a51-18a1-4f7d-ad54-9fdfcb7f7e9e"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "Q12 的参考字段",
+                    "pos": {
+                        "x": 69.5,
+                        "y": 25.12
+                    },
+                    "uuid": "9066644e-c86a-4816-be91-740c0674346f"
+                },
+                {
+                    "description": "F.Cu 上 Q11 的焊盘 1 [DTR_R]",
+                    "pos": {
+                        "x": 70.4637,
+                        "y": 24.45
+                    },
+                    "uuid": "2d6b7660-027f-44b1-aad5-03b723ca06d3"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "LED2 的参考字段",
+                    "pos": {
+                        "x": 55.92,
+                        "y": 29.0
+                    },
+                    "uuid": "fcbf3d60-eebe-4163-8df8-a084546ee2a7"
+                },
+                {
+                    "description": "F.Cu 上 R9 的焊盘 2 [I2C_SCL]",
+                    "pos": {
+                        "x": 55.2534,
+                        "y": 27.0
+                    },
+                    "uuid": "83510c04-6924-4954-b87c-93f04e82379d"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "LED4 的参考字段",
+                    "pos": {
+                        "x": 66.92,
+                        "y": 34.0
+                    },
+                    "uuid": "3411d803-b92f-4711-a309-7c36c5b8a354"
+                },
+                {
+                    "description": "F.Cu 上 R35 的焊盘 2 [S2_SCL]",
+                    "pos": {
+                        "x": 66.0,
+                        "y": 34.0466
+                    },
+                    "uuid": "31283134-d9e3-4a8d-bd4f-0871d9ebd682"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "R25 的参考字段",
+                    "pos": {
+                        "x": 67.01,
+                        "y": 39.0
+                    },
+                    "uuid": "c07a9138-c2ba-4536-856e-bf73f8420279"
+                },
+                {
+                    "description": "F.Cu 上 R36 的焊盘 2 [S3_SCL]",
+                    "pos": {
+                        "x": 66.0,
+                        "y": 38.8466
+                    },
+                    "uuid": "be125a18-bcc4-416e-b2de-c8a9454c7e67"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "R25 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 70.1606,
+                        "y": 39.4262
+                    },
+                    "uuid": "b478f514-25cc-472c-b241-8494bbd02698"
+                },
+                {
+                    "description": "F.Cu 上 U2 的焊盘 24 [+3V3]",
+                    "pos": {
+                        "x": 70.4252,
+                        "y": 40.9774
+                    },
+                    "uuid": "f13d6a84-2a9c-44a3-9cb3-6e74b09a4600"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "LED4 的参考字段",
+                    "pos": {
+                        "x": 66.92,
+                        "y": 34.0
+                    },
+                    "uuid": "3411d803-b92f-4711-a309-7c36c5b8a354"
+                },
+                {
+                    "description": "F.Cu 上 R35 的焊盘 1 [+3V3]",
+                    "pos": {
+                        "x": 66.0,
+                        "y": 35.5534
+                    },
+                    "uuid": "70eaefd5-c01f-4f5d-a7ed-4fdb1f2af520"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "J15 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 66.58,
+                        "y": 63.9801
+                    },
+                    "uuid": "3e29ba2a-6a2e-4f8b-abd6-7ac7a6a46c74"
+                },
+                {
+                    "description": "HD 的 NPTH 焊盘",
+                    "pos": {
+                        "x": 68.0,
+                        "y": 65.0
+                    },
+                    "uuid": "601f1cf8-6f17-4d1f-854d-13b9c42ab655"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "R44 的参考字段",
+                    "pos": {
+                        "x": 56.61,
+                        "y": 55.5
+                    },
+                    "uuid": "d5b53bac-ba7b-4a1a-9dcb-2145a005c275"
+                },
+                {
+                    "description": "F.Cu 上 R28 的焊盘 2 [TCA_RST]",
+                    "pos": {
+                        "x": 56.5,
+                        "y": 56.7466
+                    },
+                    "uuid": "98e719b1-4f5c-4290-9fc7-f32d9075853d"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "Q8 的参考字段",
+                    "pos": {
+                        "x": 59.1,
+                        "y": 57.15
+                    },
+                    "uuid": "3a3eff75-5e47-41b1-8541-be9b68026a27"
+                },
+                {
+                    "description": "F.Cu 上 R44 的焊盘 1 [IO11]",
+                    "pos": {
+                        "x": 59.1,
+                        "y": 56.2534
+                    },
+                    "uuid": "edf865b4-e956-4d7b-a906-db89112aceb3"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "R5 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 50.8394,
+                        "y": 43.1149
+                    },
+                    "uuid": "681d66d4-8bbf-4cbc-aef8-30fd16fc054a"
+                },
+                {
+                    "description": "F.Cu 上 D3 的焊盘 2 [GND]",
+                    "pos": {
+                        "x": 50.6999,
+                        "y": 43.0
+                    },
+                    "uuid": "50f819f1-32ed-4b0d-a29e-88ed0702f351"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "R5 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 52.1606,
+                        "y": 43.1149
+                    },
+                    "uuid": "50cc0bc1-0f8c-4817-bcd8-a531b6429678"
+                },
+                {
+                    "description": "F.Cu 上 D3 的焊盘 2 [GND]",
+                    "pos": {
+                        "x": 50.6999,
+                        "y": 43.0
+                    },
+                    "uuid": "50f819f1-32ed-4b0d-a29e-88ed0702f351"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "Q7 的参考字段",
+                    "pos": {
+                        "x": 48.1,
+                        "y": 57.15
+                    },
+                    "uuid": "fc50b36a-8fbe-46a7-b9fd-ab83a248786b"
+                },
+                {
+                    "description": "F.Cu 上 R43 的焊盘 1 [IO10]",
+                    "pos": {
+                        "x": 48.1,
+                        "y": 56.2534
+                    },
+                    "uuid": "1af23184-e823-4d7c-879a-f7ae9a408475"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "Q6 的参考字段",
+                    "pos": {
+                        "x": 37.1,
+                        "y": 57.15
+                    },
+                    "uuid": "4d3eea96-52d6-4816-a210-8bc2359e478e"
+                },
+                {
+                    "description": "F.Cu 上 R42 的焊盘 1 [IO7]",
+                    "pos": {
+                        "x": 37.1,
+                        "y": 56.2534
+                    },
+                    "uuid": "34335ba4-b477-4085-a654-17ac747b6388"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "Q4 的参考字段",
+                    "pos": {
+                        "x": 15.1,
+                        "y": 57.15
+                    },
+                    "uuid": "7091a08a-0027-47b5-aa6c-7e36accbabbc"
+                },
+                {
+                    "description": "F.Cu 上 R40 的焊盘 1 [IO5]",
+                    "pos": {
+                        "x": 15.1,
+                        "y": 56.2534
+                    },
+                    "uuid": "7ac9e09f-85c8-410c-a70e-404d6b57fa50"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "Q3 的参考字段",
+                    "pos": {
+                        "x": 4.1,
+                        "y": 57.15
+                    },
+                    "uuid": "48e2479d-8026-4e88-b899-0bf00582eb12"
+                },
+                {
+                    "description": "F.Cu 上 R39 的焊盘 1 [IO4]",
+                    "pos": {
+                        "x": 4.1,
+                        "y": 56.2534
+                    },
+                    "uuid": "bee8acd4-9fd5-4bb4-86c8-a80b8a0f9f3b"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "Q5 的参考字段",
+                    "pos": {
+                        "x": 26.1,
+                        "y": 57.15
+                    },
+                    "uuid": "275e9a09-e935-45db-b397-d1efb8ede2b0"
+                },
+                {
+                    "description": "F.Cu 上 R41 的焊盘 1 [IO6]",
+                    "pos": {
+                        "x": 26.1,
+                        "y": 56.2534
+                    },
+                    "uuid": "c67d1462-4e87-4ee0-b47f-b51e8d491f6b"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        }
+    ]
+}

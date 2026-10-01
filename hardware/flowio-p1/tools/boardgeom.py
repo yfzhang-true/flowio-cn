@@ -64,7 +64,7 @@ def seg_seg_dist(p1, p2, p3, p4):
 def _obs_ok(x, y, net, od, drill, pads, vias):
     for p in pads:
         d = pad_pt_dist(x, y, p)                        # 点到矩形边缘(精确)
-        if p["npth"] or (p["net"] != net and p["net"] != ""):
+        if p["npth"] or p["net"] != net:                # 空网络焊盘(如 TCA NC 脚)同为障碍
             if d - od / 2 < CLR: return False
         if p["drill"] > 0 and p["net"] != net:
             if math.hypot(p["x"] - x, p["y"] - y) < (p["drill"] + drill) / 2 + HOLE_CLR: return False
@@ -72,7 +72,8 @@ def _obs_ok(x, y, net, od, drill, pads, vias):
     for vx, vy, vnet, vw in vias:
         d = math.hypot(vx - x, vy - y)
         if vnet != net and d - (vw + od) / 2 < CLR: return False
-        if vnet != net and d < (0.3 + drill) / 2 + HOLE_CLR: return False
+        # 孔距规则不分网 (含同网叠孔)
+        if d < (0.3 + drill) / 2 + HOLE_CLR: return False
     return True
 
 def _in_keepout(x, y):
@@ -87,29 +88,38 @@ def spot_ok(x, y, net, pads, trks, vias, od=0.8, drill=0.4):
         if seg_dist(x, y, ax, ay, bx, by) - w / 2 - od / 2 < CLR: return False
     return True
 
-def track_ok(p1, p2, net, w, pads, trks, vias):
+def track_ok(p1, p2, net, w, pads, trks, vias, layer=None):
+    """走线铜冲突检查; layer=None 时查所有层(过孔语义), 否则只查同层走线.
+    过孔为全层圆形障碍(铜+孔规则); 焊盘用沿段采样精确矩形距离."""
+    L = math.hypot(p2[0]-p1[0], p2[1]-p1[1])
+    n = max(2, min(400, int(L / 0.1)))
+    samples = [(p1[0] + (p2[0]-p1[0]) * k / (n-1), p1[1] + (p2[1]-p1[1]) * k / (n-1)) for k in range(n)]
     for p in pads:
         if p["net"] == net and not p["npth"]: continue
-        # 焊盘用外接圆 (rc) 保守模型 — 矩形角必在圆内
-        if seg_dist(p["x"], p["y"], *p1, *p2) - p["rc"] - w / 2 < CLR: return False
-    for tn, _ly, ax, ay, bx, by, tw in trks:
+        if min(pad_pt_dist(sx, sy, p) for sx, sy in samples) - w / 2 < CLR: return False
+    for vx, vy, vnet, vw in vias:
+        d = min(math.hypot(sx - vx, sy - vy) for sx, sy in samples)
+        if vnet != net and d - vw / 2 - w / 2 < CLR: return False
+        # 同网: 铜重叠合法, 走线无孔故无孔距问题
+    for tn, tly, ax, ay, bx, by, tw in trks:
         if tn == net: continue
+        if layer is not None and tly != layer: continue
         if seg_seg_dist(p1, p2, (ax, ay), (bx, by)) - tw / 2 - w / 2 < CLR: return False
     return True
 
-def plan_route(anchor, spot, net, w, pads, trks, vias):
+def plan_route(anchor, spot, net, w, pads, trks, vias, layer=None):
     """直线或 L 形两腿 (先x后y / 先y后x) 任一可通行; 返回路径点列或 None."""
-    if track_ok(anchor, spot, net, w, pads, trks, vias): return [anchor, spot]
+    if track_ok(anchor, spot, net, w, pads, trks, vias, layer): return [anchor, spot]
     c1 = (spot[0], anchor[1])
-    if track_ok(anchor, c1, net, w, pads, trks, vias) and track_ok(c1, spot, net, w, pads, trks, vias):
+    if track_ok(anchor, c1, net, w, pads, trks, vias, layer) and track_ok(c1, spot, net, w, pads, trks, vias, layer):
         return [anchor, c1, spot]
     c2 = (anchor[0], spot[1])
-    if track_ok(anchor, c2, net, w, pads, trks, vias) and track_ok(c2, spot, net, w, pads, trks, vias):
+    if track_ok(anchor, c2, net, w, pads, trks, vias, layer) and track_ok(c2, spot, net, w, pads, trks, vias, layer):
         return [anchor, c2, spot]
     return None
 
-def find_spot(cx, cy, net, pads, trks, vias, anchor=None, rmax=3.5, od=0.8, drill=0.4, w=0.3):
-    """从 (cx,cy) 环形搜索: 过孔落点 + (anchor→落点) 直线/L形走线双净空."""
+def find_spot(cx, cy, net, pads, trks, vias, anchor=None, rmax=3.5, od=0.8, drill=0.4, w=0.3, route_layer=None):
+    """从 (cx,cy) 环形搜索: 过孔落点(全层) + (anchor→落点) 同层走线双净空."""
     r = 0.3
     while r <= rmax:
         n = max(8, int(2 * math.pi * r / 0.3))
@@ -118,7 +128,7 @@ def find_spot(cx, cy, net, pads, trks, vias, anchor=None, rmax=3.5, od=0.8, dril
             x, y = cx + r * math.cos(a), cy + r * math.sin(a)
             if not spot_ok(x, y, net, pads, trks, vias, od, drill): continue
             sp = (round(x, 3), round(y, 3))
-            if anchor and plan_route(anchor, sp, net, w, pads, trks, vias) is None: continue
+            if anchor and plan_route(anchor, sp, net, w, pads, trks, vias, route_layer) is None: continue
             return sp
         r += 0.2
     return None

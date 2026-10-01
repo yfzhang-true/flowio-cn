@@ -1,16 +1,8 @@
 ** Drc report for flowio-p1.kicad_pcb **
-** Created on 2026-10-01T18:02:20 **
+** Created on 2026-10-01T18:45:39 **
 ** Report includes: Errors, Warnings **
 
-** Found 116 DRC violations **
-[clearance]: 间距违规 ( 间距 0.2000 mm; 实际 0.1767 mm)
-    Local override; error
-    @(88.1500 mm, 5.5000 mm): Pad A5 [CC1] of J2 on F.Cu
-    @(89.0267 mm, 4.5000 mm): Track [USB_VBUS] on F.Cu, length 3.0000 mm
-[clearance]: 间距违规 ( 间距 0.2000 mm; 实际 0.1001 mm)
-    Local override; error
-    @(47.5000 mm, 31.0000 mm): Pad 1 [I2C_SCL] of TP8 on F.Cu
-    @(48.5001 mm, 30.7490 mm): Pad 1 [LED_USER] of LED3 on F.Cu
+** Found 111 DRC violations **
 [courtyards_overlap]: Courtyards overlap
     Rule: <电路板配置> 中的 "元件外框" 约束; error
     @(48.5000 mm, 43.0000 mm): Footprint D3
@@ -201,7 +193,7 @@
     @(41.9000 mm, 60.5000 mm): Footprint D7
 [courtyards_overlap]: Courtyards overlap
     Rule: <电路板配置> 中的 "元件外框" 约束; error
-    @(47.5000 mm, 31.0000 mm): Footprint TP8
+    @(47.2000 mm, 31.0000 mm): Footprint TP8
     @(48.5000 mm, 30.0000 mm): Footprint LED3
 [courtyards_overlap]: Courtyards overlap
     Rule: <电路板配置> 中的 "元件外框" 约束; error
@@ -215,9 +207,6 @@
     Rule: <电路板配置> 中的 "元件外框" 约束; error
     @(6.5000 mm, 68.5000 mm): Footprint J10
     @(12.0000 mm, 63.5000 mm): Footprint TP9
-[via_dangling]: Via is not connected or connected on only one layer
-    Local override; warning
-    @(88.0001 mm, 28.6900 mm): Via [+3V3] on F.Cu - B.Cu
 [silk_edge_clearance]: Silkscreen clipped by board edge
     Local override; warning
     @(90.0000 mm, 0.0000 mm): Segment on Edge.Cuts
@@ -332,20 +321,12 @@
     @(46.5000 mm, 35.2534 mm): Pad 1 [+3V3] of R27 on F.Cu
 [silk_over_copper]: Silkscreen clipped by solder mask
     Local override; warning
-    @(47.5000 mm, 29.5520 mm): Reference field of TP8
+    @(47.2000 mm, 29.5520 mm): Reference field of TP8
     @(48.4999 mm, 29.2510 mm): Pad 2 [LED_USER_K] of LED3 on F.Cu
 [silk_over_copper]: Silkscreen clipped by solder mask
     Local override; warning
-    @(47.5000 mm, 31.0000 mm): Circle of TP8 on F.Silkscreen
-    @(48.5001 mm, 30.7490 mm): Pad 1 [LED_USER] of LED3 on F.Cu
-[silk_over_copper]: Silkscreen clipped by solder mask
-    Local override; warning
     @(47.7457 mm, 30.1395 mm): Segment of LED3 on F.Silkscreen
-    @(47.5000 mm, 31.0000 mm): Pad 1 [I2C_SCL] of TP8 on F.Cu
-[silk_over_copper]: Silkscreen clipped by solder mask
-    Local override; warning
-    @(48.0457 mm, 31.4896 mm): Segment of LED3 on F.Silkscreen
-    @(47.5000 mm, 31.0000 mm): Pad 1 [I2C_SCL] of TP8 on F.Cu
+    @(47.2000 mm, 31.0000 mm): Pad 1 [I2C_SCL] of TP8 on F.Cu
 [silk_over_copper]: Silkscreen clipped by solder mask
     Local override; warning
     @(59.5100 mm, 34.8000 mm): Reference field of R30
@@ -467,71 +448,31 @@
     @(26.1000 mm, 57.1500 mm): Reference field of Q5
     @(26.1000 mm, 56.2534 mm): Pad 1 [IO6] of R41 on F.Cu
 
-** Found 16 unconnected pads **
+** Found 6 unconnected pads **
 [unconnected_items]: Missing connection between items
     Local override; error
-    @(0.8000 mm, 0.8000 mm): Zone [+3V3] on In2.Cu, priority 0
+    @(27.7466 mm, 31.0000 mm): Track [+3V3] on F.Cu, length 0.7001 mm
+    @(38.2466 mm, 31.0000 mm): Track [+3V3] on F.Cu, length 2.1000 mm
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(19.7000 mm, 21.5000 mm): Zone [+3V3] on In2.Cu, priority 0
     @(19.7000 mm, 21.5000 mm): Zone [+3V3] on In2.Cu, priority 0
 [unconnected_items]: Missing connection between items
     Local override; error
-    @(19.7000 mm, 21.5000 mm): Zone [+3V3] on In2.Cu, priority 0
-    @(19.7000 mm, 21.5000 mm): Zone [+3V3] on In2.Cu, priority 0
+    @(60.0000 mm, 28.2499 mm): Track [+3V3] on F.Cu, length 1.6500 mm
+    @(61.3660 mm, 31.6520 mm): Via [+3V3] on F.Cu - B.Cu
 [unconnected_items]: Missing connection between items
     Local override; error
-    @(54.7250 mm, 17.5000 mm): Track [+3V3] on F.Cu, length 2.1000 mm
-    @(49.7991 mm, 17.2500 mm): Via [+3V3] on F.Cu - B.Cu
-[unconnected_items]: Missing connection between items
-    Local override; error
-    @(58.5000 mm, 21.5000 mm): Track [+3V3] on F.Cu, length 1.5000 mm
-    @(54.7250 mm, 17.5000 mm): Track [+3V3] on F.Cu, length 2.1000 mm
-[unconnected_items]: Missing connection between items
-    Local override; error
-    @(62.0000 mm, 30.7534 mm): Track [+3V3] on F.Cu, length 1.5000 mm
-    @(60.0000 mm, 28.2499 mm): Via [+3V3] on F.Cu - B.Cu
-[unconnected_items]: Missing connection between items
-    Local override; error
-    @(79.2250 mm, 25.5000 mm): Track [+3V3] on F.Cu, length 2.1000 mm
-    @(86.5001 mm, 28.6900 mm): PTH pad 1 [+3V3] of J6
-[unconnected_items]: Missing connection between items
-    Local override; error
-    @(0.5000 mm, 0.5000 mm): Zone 'GND' [GND] on F.Cu, priority 0
+    @(0.5000 mm, 0.5000 mm): Zone 'GND' [GND] on In1.Cu, priority 0
     @(0.5000 mm, 0.5000 mm): Zone 'GND' [GND] on F.Cu, priority 0
 [unconnected_items]: Missing connection between items
     Local override; error
-    @(0.5000 mm, 0.5000 mm): Zone 'GND' [GND] on F.Cu, priority 0
-    @(0.5000 mm, 0.5000 mm): Zone 'GND' [GND] on F.Cu, priority 0
-[unconnected_items]: Missing connection between items
-    Local override; error
-    @(0.5000 mm, 0.5000 mm): Zone 'GND' [GND] on F.Cu, priority 0
-    @(0.5000 mm, 0.5000 mm): Zone 'GND' [GND] on F.Cu, priority 0
-[unconnected_items]: Missing connection between items
-    Local override; error
-    @(72.3752 mm, 40.9774 mm): Pad 21 [GND] of U2 on F.Cu
-    @(0.5000 mm, 0.5000 mm): Zone 'GND' [GND] on F.Cu, priority 0
-[unconnected_items]: Missing connection between items
-    Local override; error
-    @(0.5000 mm, 0.5000 mm): Zone 'GND' [GND] on F.Cu, priority 0
-    @(74.5000 mm, 13.1491 mm): Pad 2 [GND] of U5 on F.Cu
-[unconnected_items]: Missing connection between items
-    Local override; error
-    @(0.5000 mm, 0.5000 mm): Zone 'GND' [GND] on F.Cu, priority 0
-    @(0.5000 mm, 0.5000 mm): Zone 'GND' [GND] on F.Cu, priority 0
-[unconnected_items]: Missing connection between items
-    Local override; error
-    @(21.0000 mm, 28.7534 mm): Track [+5V] on F.Cu, length 1.5000 mm
-    @(16.5158 mm, 23.6084 mm): Track [+5V] on In2.Cu, length 2.8061 mm
-[unconnected_items]: Missing connection between items
-    Local override; error
-    @(25.0806 mm, 50.2377 mm): Track [+5V] on F.Cu, length 1.0120 mm
-    @(33.1552 mm, 52.2896 mm): Track [+5V] on In2.Cu, length 2.8302 mm
-[unconnected_items]: Missing connection between items
-    Local override; error
-    @(29.2250 mm, 40.0000 mm): Via [+5V] on F.Cu - B.Cu
+    @(18.4000 mm, 40.0000 mm): Track [+5V] on In2.Cu, length 1.2000 mm
     @(24.3650 mm, 49.5221 mm): Track [+5V] on F.Cu, length 1.8170 mm
 [unconnected_items]: Missing connection between items
     Local override; error
-    @(33.1552 mm, 52.2896 mm): Track [+5V] on In2.Cu, length 2.8302 mm
-    @(32.8649 mm, 60.5000 mm): Track [+5V] on F.Cu, length 1.5000 mm
+    @(22.2500 mm, 51.9500 mm): Track [+5V] on In2.Cu, length 5.2500 mm
+    @(25.0806 mm, 50.2377 mm): Track [+5V] on F.Cu, length 1.0120 mm
 
 ** Found 0 Footprint errors **
 
