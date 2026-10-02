@@ -125,3 +125,42 @@ body: `{ "circuit": "buck|dior|valve|i2c", "params": {...} }`，响应：
 
 ## 7. 交付物清单
 `server.py`(改) · `board_model.py` · `sim_engine.py` · `gui.html`(增) · `lib/three.min.js` · `meshes/*.stl`(5) · `enclosure/make_meshes.py` · `API.md`(→v1.2) · `README` 启动命令更新 · 测试三件 · 本 spec + plan
+
+---
+
+## 8. 第四支柱 S4：嵌入式 P1 bring-up（2026-10-02 用户裁定并入）
+
+> 定位：板卡回板即可烧写的固件增量 + 产品承诺的上位机 SDK 骨架。**不依赖传感器到货**（真实传感器驱动与压力闭环 = 二期，到货后另启）。
+> 现状依据：固件引脚已与 P1 逐脚对齐（阀 4/5/6/7/10/11/12+泵21，I2C 8/9）；缺 TCA9548A/传感框架/WS2812/SDK。
+
+### 8.1 TCA9548A 五通道复用驱动
+- **分层遵循 pn_core 契约**：`components/pn_core` 增 `tca9548.c/h`（纯逻辑：通道选择字节编码 0x01<<ch、总线扫描状态机、错误码），平台无关可主机测；`pn_hal_esp32` 增 I2C 读写实现（地址 0x70，esp-idf i2c_master API）。
+- 接口：`tca_select(ch 0-4|MANIFOLD)`, `tca_scan(ch, addr_out[])`, `tca_read_sensor(ch, ...)→压力值`（sensor_if 转发）。
+- 主机 mock：mock_hal 提供虚拟 TCA + 每通道一只虚拟传感器（固定/可注入读数），复用 `tests/` gcc 框架。
+
+### 8.2 压力传感器抽象 + mock
+- `sensor_if.h`：`sensor_probe(ch)→型号枚举`, `sensor_read_pa(ch)→uint32`（Pa）, 错误码（断线/超时/CRC）。
+- 本期只实现 mock 型号（+数据手册就绪的一个真实驱动槽位 `#ifdef` 预留）。真实驱动=二期。
+
+### 8.3 WS2812 状态灯（GPIO48）
+- RMT 驱动（esp-idf `led_strip` 或裸 RMT，选组件依赖最少者）。
+- 状态映射表（固件常量，孪生侧同步展示）：IDLE=呼吸蓝 / RUNNING=绿 / HOLD=青 / ERR=红闪 / OTA=紫。
+- 进 `main.c` 10ms 任务尾部钩子，不占新任务。
+
+### 8.4 上位机 SDK 骨架（产品交付物 "板+固件+SDK"）
+- 新目录 `sdk/python/`：`flowio_sdk` 包
+  - `transport.py`（serial 列举/连接/读写帧），`protocol.py`（0xA5 帧编解码——**与 pn_core proto.c 共用测试向量**，防止双源漂移）
+  - 高层 API：`FlowIO.inflate(port,pwm,ms)/hold/release/vacuum/state()/sensor(ch)`
+  - `examples/hello_glove.py`（充-保-释-抽循环 20 行示例）+ README 快速上手
+- 本期骨架不含：蓝牙/WebSocket 传输、打包发版（pip 发布=后续）、异步 API。
+
+### 8.5 回板验证清单（与既有阻塞合流，固件侧视角）
+CH340K 烧录与自动复位、74HCT245/MOS 触发波形、TCA 实测扫描 5 通道、WS2812 点亮、8 阀全功能、I2C 100kHz 首选（400kHz 视 tr 实测）。产出 `firmware/BRINGUP.md`。
+
+### 8.6 测试增量
+- `tests/`：TCA 纯逻辑 + mock 传感器用例（通道选择编码、scan 去抖、断线错误码）≥6 例，入 21 绿基线。
+- `sdk/python/tests/`：协议编解码金样（与 pn_core 同向量表双向）、transport 用 loopback mock。
+- QEMU 冒烟（`qemu_smoke.sh` 既有）跑通 WS2812/TCA 初始化不崩溃。
+
+## 9. 交付物清单（增补版）
+原 §7 全部 + `components/pn_core/tca9548.*` · `pn_hal_esp32` I2C 实现 · `sensor_if + mock` · WS2812 驱动 · `sdk/python/flowio_sdk` 包 + 示例 · `firmware/BRINGUP.md` · 测试两处增量
