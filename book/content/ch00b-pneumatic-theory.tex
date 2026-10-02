@@ -1,0 +1,156 @@
+\chapter{气动软体机器人驱动与控制}
+\label{ch:pneu-theory}
+
+第~\ref{ch:twin} 章的孪生物理引擎 v2 里跑着三条方程：多变气体定律、ANSI 孔口流量、RC 集中参数类化。它们不是本书的发明，而是气动软体机器人社区近十年的公共财产——大部分来自 Xavier、Fleming 与 Yong 的系列工作与 Facebook Reality Labs 的气路响应时间模型。本章把这些方程的来历、适用条件与推荐参数讲透；第~\ref{ch:twin} 章只是它们的工程化读者，本章是文献意义上的原始出处课。同样重要的一半是\textbf{装置史}：从 PneUI 到 FlowIO 的交互装置脉络与从拇指手套到织物综述的康复前沿，共同构成 FLOWIO-CN"分指压力闭环 + B2B 白牌"定位的参照系。
+
+\section{驱动方式谱系：为什么是气动}
+\label{sec:pneu-actuation}
+
+软体机器人的"软"来自执行器，驱动执行器的能量形式却只有有限的几条路线。Xavier 等在其非线性控制器综述的引言里列举了软机器人常用的驱动族：介电弹性体、气动、液压、形状记忆合金（SMA）等~\cite{Xavier2022Frontiers}。把工程约束（响应速度、功率密度、驱动电压、可微制造性、成本）压上去，谱系就收窄了，见表~\ref{tab:pneu-spectrum}。
+
+\begin{table}[htbp]
+  \centering
+  \caption{软体执行器主流驱动方式谱系}
+  \label{tab:pneu-spectrum}
+  \begin{tabular}{lp{2.6cm}p{2.4cm}p{3.6cm}}
+    \toprule
+    驱动方式 & 代表特征 & 主要瓶颈 & 在本书场景的裁决 \\
+    \midrule
+    气动（流体） & 响应快、力量/重量比高、执行器即气囊 & 需泵阀气路与传感闭环 & \textbf{选定}：康复手套事实标准，白牌厂商工艺成熟 \\
+    SMA 形状记忆 & 结构极简、可直接电驱动~\cite{Sansone2022} & 热惯性慢、迟滞大、效率低 & 放弃：分指节拍 (秒级热循环) 撑不住训练密度 \\
+    介电弹性体 & 应变大、速度快 & 千伏级驱动电压 & 放弃：人体穿戴安全与绝缘成本 \\
+    绳驱/腱鞘 & 传动成熟、电机生态好 & 摩擦/迟滞、非软体本体 & 部分竞品采用；与织物气囊工艺不亲 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+SMA 一支值得多说一句：Sansone 等 2022 年在 \emph{Actuators} 上完成了 SMA 扭转执行器从概念设计到初步设计的完整方法学~\cite{Sansone2022}——这类工作证明了替代路线的成熟度，也反衬了它的边界：热驱动的高能量密度换不来快响应与低迟滞，而康复训练恰恰要求高频、可重复、可计量的节拍。气动的"短板"（需要一套泵阀传感系统）在本书语境里不是缺点，而是\textbf{产品本身}——驱动系统做对了，气动路线的全部优点都被执行器侧继承。
+
+\section{气动系统建模：三条方程与一个类化}
+\label{sec:pneu-modeling}
+
+\subsection{多变气体定律：压力动力学的主方程}
+
+Xavier 等 2020 年 AIM 论文 \emph{Modelling and Simulation of Pneumatic Sources for Soft Robotic Applications}~\cite{Xavier2020AIM} 给出了软体机器人气源建模的热力学起点：理想气体假设下，控制体内压力的一般变化由能量方程导出，对多变过程（polytropic，指数 $\gamma$ 从等温 1.0 到绝热 1.4）可写成
+
+\begin{equation}
+\Delta P = \frac{\gamma R T}{V}\left(\dot m_{\mathrm{in}} - \dot m_{\mathrm{out}}\right) - \frac{\gamma P}{V}\Delta V,
+\label{eq:pneu-energy}
+\end{equation}
+
+即压力变化由\textbf{净质量流入}与\textbf{边界变形}两项竞争~\cite{Xavier2020AIM}。若以体积流量 $Q$（而非质量流量）表出、腔体容积暂视作常数，就得到本书孪生每 50\,ms tick 积分一次的主方程（Xavier 2022 前述综述 Eq.2/Eq.4 的形式~\cite{Xavier2022Frontiers}）：
+
+\begin{equation}
+\frac{\mathrm{d}P_A}{\mathrm{d}t} = \frac{\gamma P_A}{V_A}\, Q,
+\qquad Q = Q_c - Q_d .
+\label{eq:pneu-dpdt}
+\end{equation}
+
+多变指数怎么取？\cite{Xavier2020AIM} 的建议是 $\gamma=1.2$：充气过程偏绝热、放气偏等温，实验与仿真落在两者之间；且多数软体机器人工作在 100\,kPa、10\,SLM 以下，过程"更靠近等温"。这条经验值被本书孪生原样继承（第~\ref{ch:twin} 章参数表 $\gamma{=}1.2$），\cite{Xavier2020AIM} 同时报告：计入壁面换热只带来约 10\% 的差异——对工程孪生，经典多变模型已是足够的精度。
+
+\subsection{孔口方程：流量的两个分支}
+
+压力动力学里的 $Q$ 从哪来？对阀控系统，Xavier 2022 采用 ANSI/(NFPA) T3.21.3 阀流量模型~\cite{Xavier2022Frontiers}：体积流量（L/s）随占空比线性标度、随上下游压差平方根增长：
+
+\begin{equation}
+Q = 114.5\, u\, C_v \sqrt{\frac{P_{\mathrm{low}}\,\Delta P}{T_{\mathrm{high}}}},
+\qquad \Delta P = P_{\mathrm{high}} - P_{\mathrm{low}},
+\label{eq:pneu-ansi}
+\end{equation}
+
+其中压力取绝对压（bar）、温度取开尔文，$C_v$ 为流导系数，$u\in[0,1]$ 为 PWM 占空比——"泵/阀 PWM 线性标度流量"这条被 FlowIO 工程化~\cite{Shtarbanov2021} 的经验律，在孔口模型里就是 $u$ 的线性因子。把充气（上游为汇流管/储气罐 $P_R$）与排气（下游为大气 $P_{atm}$）两支代入式~\eqref{eq:pneu-ansi}，整理即得孪生 v2 的充气渐近死点行为：$Q_c \propto \sqrt{P_A(P_R-P_A)}$，当腔压逼近气源压力时流量自然趋零~\cite{Xavier2022Frontiers}。
+
+式~\eqref{eq:pneu-ansi} 是\textbf{亚音速分支}。当上下游绝对压比超过空气临界压比（约 1.893）时，孔口流速钳制在音速，流量不再随 $\sqrt{\Delta P}$ 增长——即 choked flow（阻塞流）。这正是本书孪生对 $f = P_{\mathrm{low}}\Delta P$ 项做上下钳位的物理依据（第~\ref{ch:twin} 章），其可观测签名是泄放初期降压速率近似恒定、之后才转入平方根衰减尾。选型层面，阀的流通能力以 ISO 6358 声导 $C$（L/(s$\cdot$bar)）给出，可换算为 ANSI $C_v$~\cite{Xavier2022Frontiers}——\cite{Xavier2022Frontiers} 给出的完整选型流程（目标压力/上升时间 $\to$ 储气罐容积 $>$10 倍腔体 $\to$ 声导下限 $\to$ 泵流量下限）是 FLOWIO-CN 泵阀选型的模板。
+
+\subsection{集中参数类化：RC 电路的气动镜像}
+
+第三条方程是\textbf{类化}而非方程本体：压力 $\leftrightarrow$ 电压、体积流量 $\leftrightarrow$ 电流，气路元件即可写成~\cite{Xavier2020AIM}
+
+\begin{equation}
+R = \frac{128\,\mu\, l}{\pi d_h^4},
+\qquad C = \frac{V}{\beta},
+\qquad L = \frac{\rho\, l}{A},
+\label{eq:pneu-rc}
+\end{equation}
+
+气阻（管道沿程损耗，$\mu$ 黏度、$d_h$ 水力直径）、气容（$V$ 容积、$\beta$ 体积模量；多变过程下 $\beta = \gamma P$）、气感（管内流体惯性）。以此类化，\cite{Xavier2020AIM} 把"理想泵直充""泵 + 泄漏""泵 + 管路""泵 + 储气罐 + 执行器""带压力控制的全系统"五种工况逐一写成常微分方程——例如含泄漏的直充工况为 $\mathrm{d}P_a/\mathrm{d}t = (\gamma P_a/V_a)Q_c - (\gamma P_a^2)/(V_a R_c)$，泄漏项以 $P^2$ 增长，最终压力稳定在源流量与泄漏平衡处。
+
+同一类化的实验验证来自 Stanley 等 2021 年（2020 年在线）的 ASME 论文~\cite{Stanley2021}：他们对 100\,$\mu$m--1\,mm 的流阻、5--200\,kPa 气源、0.5--16\,mL 容积的组合系统标定了 RC 响应时间模型，63.2\%（$1-1/e$）充放气时间的预测与实测的决定系数达 $r^2 = 0.983$，响应时间从毫秒级到秒级全覆盖。对本书的直接意义：汇流管 + 端口气腔的每个通道都是一阶 RC 系统，闭环带宽、阀 PWM 频率、孪生积分步长的量级估算都以此为尺。三条方程汇总见表~\ref{tab:pneu-eqs}。
+
+\begin{table}[htbp]
+  \centering
+  \caption{本书孪生物理 v2 的三条方程与文献出处（详细对应见第~\ref{ch:twin} 章表）}
+  \label{tab:pneu-eqs}
+  \begin{tabular}{lp{4.4cm}p{2.2cm}}
+    \toprule
+    规律 & 采用形式 & 出处 \\
+    \midrule
+    压力动力学 & 式~\eqref{eq:pneu-dpdt}，$\gamma{=}1.2$ & \cite{Xavier2020AIM,Xavier2022Frontiers} \\
+    阀孔流量 & 式~\eqref{eq:pneu-ansi} + 音速阻塞钳位 & \cite{Xavier2022Frontiers} \\
+    气路类化 & 式~\eqref{eq:pneu-rc}，RC 响应时间 $r^2{=}0.983$ & \cite{Xavier2020AIM,Stanley2021} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{控制器谱系：从 PID 到模型基非线性}
+\label{sec:pneu-control}
+
+有了模型，控制器才能"看菜下饭"。Xavier 等 2022 年在 \emph{Frontiers in Robotics and AI} 的模型基非线性控制器研究~\cite{Xavier2022Frontiers} 把单阀系统的压力动力学整理为控制仿射形式 $\dot x = f(x) + g(x)u$（$x$ 为腔压、$u$ 为 40\,Hz PWM 占空比），并系统比较了谱系上的四档策略（表~\ref{tab:pneu-ctrl}）：实验整定的 PID/PI；状态依赖 Riccati 方程（SDRE）控制；滑模控制（SMC）与反馈线性化（FL）两支模型基非线性控制，以及为抗模型不确定性给二者附加的积分作用；最后是模型前馈 + 抗饱和 PI 的组合——用稳态占空比的前馈解 $u_{ff}$（令 $\dot x = 0$ 反解）抵消大部分非线性，PI 只收残差~\cite{Xavier2022Frontiers}。
+
+\begin{table}[htbp]
+  \centering
+  \caption{气动软体执行器压力控制器谱系（据 \cite{Xavier2022Frontiers} 整理）}
+  \label{tab:pneu-ctrl}
+  \begin{tabular}{lp{3.2cm}p{3.4cm}p{2.2cm}}
+    \toprule
+    档位 & 策略 & 特征 & 本书采用 \\
+    \midrule
+    经典 & PID/PI + 抗饱和 & 免模型、整定靠实验 & \textbf{采用}：pn\_core 分指闭环（第~\ref{ch:firmware} 章） \\
+    前馈增强 & $u_{ff}$ + PI & 模型抵扣非线性，PI 收残差 & 候选特性（泵 PID 连续流量同类思路） \\
+    模型基 & SDRE / SMC / FL & 需要可信模型与全状态 & 暂不引入：参数成色不足 \\
+    学习型 & 持续学习/自适应 & 数据驱动，样本昂贵 & 不引入（同第~\ref{ch:dt-theory} 章裁决） \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+本书的选择是谱系的"保守端"：在阀线圈与泵参数仍是手册值（黄徽章）的阶段，模型基控制器的精度承诺兑现不了，PI + 抗饱和反而是\textbf{成色最诚实}的选择——这与第~\ref{ch:dt-theory} 章"按服务倒推技术"的原则一致：等孪生对拍把参数洗成实测值，前馈增强才有立足之地。
+
+\section{交互装置脉络：PneUI $\to$ OmniFiber $\to$ FlowIO}
+\label{sec:pneu-devices}
+
+理论之外，本书的另一条血脉是 MIT 媒体实验室的交互装置谱系。2013 年的 PneUI~\cite{Yao2013} 把"气动驱动 + 多层软复合材料"引入界面：复合材料同时集成输入传感与形变输出，会变形的手机、可变高度的实体图标（phicon）、可变身平板套与变形台灯四个应用，确立了"压力 $\to$ 形变"作为\textbf{可编程物质}的交互原语~\cite{Yao2013}。执行器形态此后持续演化：2021 年的 OmniFiber~\cite{Afsar2021} 把流体驱动做进细径纤维——外径毫米级的薄壁纤维内嵌流体通道，可编织、可缠绕，钢琴教学辅具、呼吸感知胸衣、动力首饰等应用展示了"驱动器即材料"的可能性；其驱动硬件正是 FlowIO（合作者含 Shtarbanov）~\cite{Afsar2021}。
+
+执行器越千变万化，驱动器越需要标准化——这是 FlowIO 的诞生逻辑。Shtarbanov 2021 年的 CHI 论文~\cite{Shtarbanov2021} 把它做成五端口、模块化（S/M/L 泵模块磁吸互换）、全集成（泵阀传感电池一体，主模块 77\,g）、带完整软件栈（Arduino/JavaScript/Web GUI）的可穿戴气动开发平台，"软体机器人的树莓派"；其 2025 年博士论文~\cite{Shtarbanov2025} 补齐了各泵模块的实测锚点（Small 模块 $-38\sim+61$\,kPa、$\pm0.3$\,L/min）——这组数字后来成为本书孪生参数表的初值（第~\ref{ch:twin} 章）。FlowIO 的动作语义（充气/抽真空/泄放/保压/测压/流量可变）与 PWM 调流量经验律~\cite{Shtarbanov2021}，被 FLOWIO-CN 的 CLI 动词与孔口乘子逐条继承（第~\ref{ch:intro} 章对照表）。
+
+\section{康复手套前沿：便携拇指手套与织物综述}
+\label{sec:pneu-rehab}
+
+本书目标市场的两条最新文献边界，勾勒出"学术前沿走到哪、空白在哪"。Xie 等 2026 年发表于 \emph{Advanced Science} 的便携式软体手套~\cite{Xie2026} 是拇指全功能辅助的代表作：连续分段双腔折纸（origami）拇指执行器覆盖腕掌外展/内收、屈伸与指间伸展全部功能范围，指尖力 18\,N（约为克服典型中风痉挛所需的两倍）；系统集成传感化的便携驱动与"按需辅助"（assist-as-needed）控制器，三名慢性期卒中受试者完成捏取、侧捏、绕环、滑屏、拧盖与拇指对掌全部任务，侧捏力提升 62.9\%、拇指活动范围扩大九倍~\cite{Xie2026}。它验证了三件事：\textbf{拇指通道必须全功能}（与本书分指/分腔路线互证）、\textbf{驱动必须便携且带传感}（开环不可接受）、国产压力传感器（XGZP 同族）已进入顶刊方案。
+
+Yilmaz 等 2026 年在 \emph{Advanced Materials Technologies} 的织物外骨骼手套综述~\cite{Yilmaz2026} 则盘点行业现状：制造家族、驱动机制、传感集成、控制架构与能源五个维度的进展与短板，并直指两个空白——\textbf{开环控制对康复手套根本不够}，以及\textbf{行业缺乏统一测试标准}~\cite{Yilmaz2026}。前者是本书"分指压力闭环一等公民"的文献判词，后者是"孪生对拍精度报告 + 36 张验收工单"的市场机会（第~\ref{ch:product}、\ref{ch:acceptance} 章）。
+
+\section{本书定位：在谱系坐标上}
+\label{sec:pneu-position}
+
+把本章三段谱系放进同一张表（表~\ref{tab:pneu-position}），FLOWIO-CN 的位置一目了然：它不做执行器（织物与折纸气囊留给白牌厂商的传统强项），不做新材料驱动（SMA/纤维/DE 均非本书战场），而是把气动路线的\textbf{驱动与控制层}做成 B2B 产品——以本章三条方程为孪生物理，以谱系保守端的 PI 闭环为分指节拍，以 FlowIO 的语义为兼容接口，以两篇 2026 综述指出的空白（闭环、标准）为差异化卖点。
+
+\begin{table}[htbp]
+  \centering
+  \caption{本书与本章文献谱系的定位对照}
+  \label{tab:pneu-position}
+  \begin{tabular}{lp{3.6cm}p{3.2cm}}
+    \toprule
+    工作 & 定位 & 与 FLOWIO-CN 的关系 \\
+    \midrule
+    PneUI~\cite{Yao2013} / OmniFiber~\cite{Afsar2021} & 交互原语 / 驱动材料 & 需求来源：执行器谱系越丰富，标准驱动器越稀缺 \\
+    FlowIO~\cite{Shtarbanov2021,Shtarbanov2025} & 可穿戴开发平台 & 对标本体：语义与参数锚点的直接来源 \\
+    Xavier 系列~\cite{Xavier2020AIM,Xavier2022Frontiers} / Stanley~\cite{Stanley2021} & 建模与控制方法 & 孪生物理 v2 的方程供应链 \\
+    Xie 2026~\cite{Xie2026} & 顶刊拇指手套 & 路线互证：分指/传感/便携三项一致 \\
+    Yilmaz 2026~\cite{Yilmaz2026} & 行业综述 & 空白判词：闭环与测试标准即卖点 \\
+    \textbf{本书（FLOWIO-CN）} & 分指压力闭环 B2B 驱动套件 & 以上文献的工程收口 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section*{本章小结}
+气动在软体驱动谱系中以"快响应、高力量重量比、执行器即气囊"胜出，其代价——一套泵阀传感系统——正是本书的产品本体~\cite{Xavier2022Frontiers,Sansone2022}。系统建模有三条公共方程：多变定律式~\eqref{eq:pneu-dpdt}（$\gamma{=}1.2$）、ANSI 孔口式~\eqref{eq:pneu-ansi}（含音速阻塞分支）与 RC 类化式~\eqref{eq:pneu-rc}~\cite{Xavier2020AIM,Xavier2022Frontiers,Stanley2021}；控制器谱系从实验整定 PI 到模型基非线性依次升高，本书按参数成色选保守端~\cite{Xavier2022Frontiers}。装置脉络 PneUI$\to$OmniFiber$\to$FlowIO 证明驱动器标准化是执行器多样性的必然反题~\cite{Yao2013,Afsar2021,Shtarbanov2021}；康复前沿的拇指手套与织物综述则把"分指闭环 + 测试标准"标成行业空白~\cite{Xie2026,Yilmaz2026}。下一章开始，这些坐标全部变成工程图纸。
