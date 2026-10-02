@@ -1,14 +1,303 @@
 \chapter{软体机器人与 FLOWIO-CN 生态位}
 \label{ch:intro}
 
-\section{软体驱动的前世今生}
-从 PneuNet 驱动器到气压康复手套：软体机器人为什么需要一套"气源+阀+传感"的最小系统。本章将从文献脉络出发，梳理气动软体机器人在康复、抓取与可穿戴方向的三条主线。
+如果把一台气动康复手套拆开，你会看到三层东西：最里面是硅胶或织物制成的\textbf{软体执行器}——气囊、气腔、编织层；中间是\textbf{气路}——气管、快插接头、汇流管；最外面才是本书的主角——\textbf{驱动系统}：泵、阀、传感器、主控板、固件与上位机。三层里最不起眼的是最后一层，但文献与产业报告反复指出同一个事实：它消耗了软体机器人项目最多的工程时间。MIT 媒体实验室的 FlowIO 论文开篇即写道，气动项目的研究者"通常必须从零开始自建驱动系统，有时甚至要把大部分时间花在气动、电子与软件上，而不是开发新颖的软体执行器、应用或用户体验"。
 
-\section{MIT FlowIO 与开源生态位}
-MIT FlowIO（七常闭阀、板载传感、开源 API）确立了气动软体机器人"标准实验台"的形态。本节分析其七阀拓扑与 FLOWIO-CN 需求的差异，以及继承其 API 语义的价值。
+本书是一本"自研驱动系统"的完整实录。我们以 MIT FlowIO 为对标，面向国内康复手套白牌厂商设计了 FLOWIO-CN——一套定价 300--500 元的 B2B 套件（主板 + 固件 + 上位机 SDK），并把从原理图、PCB、制造下单、参数化外壳，到固件、数字孪生、BLE、验收工单的全过程写成十二章。本章先回答两个问题：软体机器人到底需要一台什么样的驱动设备；FLOWIO-CN 凭什么在已有开源平台的世界里再做一个。
+
+\section{软体驱动的前世今生：三条主线}
+\label{sec:intro-lines}
+
+气动软体机器人不是一个领域，而是三条需求差异极大的主线在共用同一套物理（压缩气体 $\times$ 可变形腔体）。
+
+\textbf{主线一：人机界面与可编程材料（HCI）。}2013 年 MIT 的 PneUI（UIST'13，被引数以百计）把"气动驱动 + 软复合材料"引入界面设计：多层复合材料集成传感与形变输出，高度可变的实体图标（phicon）、会变形的手机、可变身平板套、变形台灯四个应用展示了"压力 $\to$ 形变"的连续映射。这条线后来长出了 aeroMorph、MorphIO、Bubble、AuxeticBreath 等一系列工作——它们的共同点是：执行器千变万化，驱动器最好是一台小巧、可穿戴、能编程的"气源 + 阀 + 传感"黑盒。FlowIO 正是 Bubble 项目（2018--2019）找不到这样一台五端口微型驱动器，逼出来的产物——作者 Shtarbanov 为此做了两年、超过 20 轮原型迭代。同一条线上还有两个值得一提的近亲：OmniFiber（UIST'21，Shtarbanov 参与合作）把流体驱动做进了绕在轴上的纤维，PneuKnit（MIT SMArchS 2022）用气压让针织物自成形——执行器的形态在从"气囊"向"材料本身"演化，驱动器反而越来越需要标准化。
+
+\textbf{主线二的旁支：教育套件。}PneuBots（TEI'22，哈佛 GSD）把模块化充气执行器做成可拼插的玩具形态，用于软体机器人的公众教育。教育场景对驱动器的要求与创客几乎相同：便宜、安全、图形化编程。FLOWIO-CN 的文献台账把 PneuBots 标注为"教育定位直接对标"——虽然我们的主战场是 B2B 康复，但同一套硬件天然覆盖高校实验室与创客教育的第二市场，这也影响了开放 API 的设计优先级。
+
+\textbf{主线二：抓取与通用软体机械臂（机器人学）。}气动欠驱动夹爪利用软体材料的顺应性抓取异形易碎物体，研究重心在执行器的材料、腔体拓扑与建模（集中参数电路、RC 类比、非线性控制器）。这条线对驱动系统的要求是\textbf{压力包线与流量}：更高压力、更大流量、更快的动态响应。我们在文献库里精读的 Xavier 2022（Frontiers in Robotics and AI）与 Stanley \& Amini 2020（ASME 集中参数气路）都出自这条线——它们后来成为 FLOWIO-CN 数字孪生物理引擎的方程来源（第~\ref{ch:twin} 章）。
+
+\textbf{主线三：康复与助力手套（可穿戴医疗）。}这是 FLOWIO-CN 的目标市场，也是近年文献最密集的方向。几篇关键文献勾勒出技术底线：
+
+\begin{itemize}
+  \item \textbf{压力量级}：手部康复手套的工作压强大约在数十 kPa——Chen 2026（arXiv，Sant'Anna）的 CSP 手套对患者测试区间为 50--70\,kPa；我们的孪生参数表也以此校准量程。
+  \item \textbf{拇指通道数}：Wang 2022（Applied Sciences，千叶大学）用对照实验裁决了"拇指要不要独立通道"——三腔独立驱动（3C-ACT）组 Kapandji 拇指功能评分满分，模块化耦合驱动（M-ACT）组仅 0--5 分；最优组合是"3C 拇指 + 模块化四指"。结论：\textbf{分指/分腔独立控制不是锦上添花，而是功能性的分水岭}。
+  \item \textbf{传感方案}：Xie 2026（Advanced Science，港中大汤启宇组）的便携拇指助力手套用了 XGZP6857 系列压力传感器——与 FLOWIO-CN BOM 中的 XGZP6897D 同族；这说明国产传感器方案已进入顶刊工作。
+  \item \textbf{行业现状}：Yilmaz 2026 织物手套综述（Advanced Materials Technologies）盘点五大制造家族后直言"开环控制对康复手套根本不够"，且行业缺乏统一测试标准——前者正是我们的卖点（分指压力闭环），后者是数据报表的机会。
+  \item \textbf{免费竞品}：郑州大学专利 CN108392375A（气动康复手套）公开了"双泵 + 双作用 + 12 传感器 + 迭代学习控制"的完整方案——一份免费拆机对象，其架构（多阀多传感 + 闭环）印证了 B2B 客户的真实需求。
+\end{itemize}
+
+三条主线对驱动系统的交集可以概括成一张"最小系统"清单：\textbf{气源（泵）+ 方向控制（阀）+ 反馈（压力传感）+ 大脑（MCU/SoC）+ 通信（USB/BLE）+ 外壳}。差异只在量级与侧重——HCI 要小要美，机器人学要压力流量，康复要闭环与分指。表~\ref{tab:intro-lines} 总结三者的取向。
+
+\begin{table}[htbp]
+  \centering
+  \caption{气动软体机器人三条主线对驱动系统的不同要求}
+  \label{tab:intro-lines}
+  \begin{tabular}{lp{4.2cm}p{4.6cm}l}
+    \toprule
+    主线 & 代表工作 & 对驱动系统的核心要求 & 典型压力 \\
+    \midrule
+    HCI 界面 & PneUI、Bubble、FlowIO 应用生态 & 微型、可穿戴、低功耗、易编程（GUI/API） & $<$30\,psi 级 \\
+    抓取/机械臂 & Xavier 2020/2022、Stanley 2020 & 压力包线、流量、动态建模与非线性控制 & 数百 kPa 级 \\
+    康复手套 & Wang 2022、Xie 2026、Chen 2026、CN108392375A & \textbf{分指闭环}、多传感、数据记录、成本 & 50--70\,kPa \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{平台化的呼唤：气动工具包谱系}
+\label{sec:intro-toolkits}
+
+电子原型有 Arduino，便携计算有树莓派，编程入门有 Scratch——平台把一个个"高门槛领域"变成了周末项目。软体机器人在 2020 年前后仍在等自己的平台。FlowIO 官网关于页梳理了此前三次尝试（表~\ref{tab:intro-toolkits}）：Soft Robotics Toolkit（SRT）是散件 DIY 方案；Pneuduino 有模块化硬件与 Arduino 库，但仍需外接泵与电源；Programmable Air 把泵集成进设备、用料更便宜，但基础版只有单个气动端口，仍依赖外部大电流电源，泵也不易更换。三者共同的问题：体积大、传感能力有限、缺 GUI、只兼容 Arduino。
+
+\begin{table}[htbp]
+  \centering
+  \caption{气动软体工具包谱系（依据 FlowIO 官网与 CHI'21 论文整理）}
+  \label{tab:intro-toolkits}
+  \begin{tabular}{llp{3.2cm}p{4.4cm}}
+    \toprule
+    平台 & 形态 & 主要短板 & FLOWIO 的回应 \\
+    \midrule
+    SRT & 散件 DIY & 体积大、外部气源/电源 & 全集成微型整机 \\
+    Pneuduino & 模块化硬件 + Arduino 库 & 外接泵与电源 & 泵模块内置 \\
+    Programmable Air & 集成泵、低价 & 单端口、外部大电流电源 & 5 端口、可换泵模块 \\
+    FlowIO（CHI'21） & 主模块 + 泵模块（磁吸） & 见 \S\ref{sec:intro-limits} & ——（对标本体） \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+FlowIO 对这些短板的回应构成了它的设计基因：\textbf{模块化}（主模块与 S/M/L 三档泵模块磁吸互换，几秒钟按压力/流量/尺寸需求重组系统）、\textbf{全集成}（泵、阀、传感、电池、充电全在机上）、\textbf{软件栈}（这是作者自认"最重要的特征"——网页 GUI 经 Chrome Web Bluetooth 零安装控制、JavaScript API、串口命令、Arduino API 多层抽象）。FlowIO 主模块仅重 77\,g，平台包线 $-26\sim+30$\,psi（约 $-179\sim+207$\,kPa）、流量至 3.2\,L/min。它是"软体机器人的树莓派"这个比喻的出处，也是我们一切对标的锚点。
+
+平台技术的另一半生命在社区。CHI 2022 上 Shtarbanov 与 RWTH、康奈尔、KTH 等机构的合作者组织了"软体机器人 for HCI"工作坊——一天议程，三十个名额，线上下混合；议题从交互、界面、制造工艺一路排到包容性设计与商业化机会，现场备有多台 FlowIO 与软体机器人入门套件供参与者上手。工作坊收录的短文阵容（气动纹理、模块化充气玩具 PneuBots、织物到软体机器的实践路径……）勾勒出这个社区的用户画像：他们要的不是更强的执行器，而是\textbf{更低的驱动门槛}。FLOWIO-CN 选择兼容这个社区的语言（表~\ref{tab:intro-api}），本质上是在为同一群人的国内版本做准备。
+
+\section{MIT FlowIO：架构解剖}
+\label{sec:intro-flowio}
+
+对标必须对到细节。按 CHI'21 论文的硬件构成一节，FlowIO 主模块（控制器）的气动-电子架构如下：
+
+\begin{itemize}
+  \item \textbf{阀拓扑}：7 只\textbf{常闭}电磁阀组成汇流管（manifold）构型——2 只分别作进气与排气，5 只对应 5 个气动 I/O 端口。每端口支持充气、抽真空、泄放至大气、保压、测压与流量可变六种动作。常闭阀的默认态即"保压"：断电时各腔体各自密封，这一语义我们原样继承进 FLOWIO-CN 固件。
+  \item \textbf{传感}：单只压力传感器\textbf{直连汇流管}，通过阀的时分复用（time-multiplexing）轮流测任一通道压力——想测哪个口，先开哪个口的阀。
+  \item \textbf{主控}：Adafruit Feather Sense nRF52840（BLE + IMU/气压/光感等板载传感），500\,mAh 锂电藏于阀阵之下，USB 充电。
+  \item \textbf{泵模块}：S/M/L 三档，区别在泵与电池选型；两泵 + 驱动板 + 电池，磁吸四针连接主模块。Shtarbanov 2025 年的博士论文（303 页）给出了各档的实测锚点——Small 模块 $-38\sim+61$\,kPa、$\pm0.3$\,L/min（论文 Table 2/3），这组数字后来直接成为我们孪生参数表的初值来源（第~\ref{ch:twin} 章）。
+  \item \textbf{配置生态}：五种标准气动配置（各端口/泵/阀的组合接法）覆盖充气、真空、双作用等典型工况；论文还收录了 12 个部署案例，从可穿戴到桌面应用——一个平台自我证明的方式，是别人拿它做了多少种东西。
+  \item \textbf{调速}：泵 PWM 调流量、阀 PWM 调流量（论文 \S4），占空比 $u\in[0,1]$ 线性标度流量——这条经验律后来被我们孪生的孔口方程继承为流导系数的乘子。
+\end{itemize}
+
+软件栈自底向上：固件层（稳定）、Arduino 库与 API（基本完备）、JavaScript API（演进中）、Web GUI（Chrome）。控制方式四种：网页 GUI、JS API over BLE、USB 串口命令、自写固件。这套"一份硬件、多层软件入口"的分层思想，直接映射为 FLOWIO-CN 的固件（pn\_core）/串口协议/上位机 SDK/Web GUI 四层。
+
+FLOWIO-CN 继承的不只是分层，还有\textbf{动作语义}。FlowIO 为每个端口定义了六种动作：充气、抽真空、泄放、保压、测压、流量可变——这组动词是五年用户教育沉淀下来的公共词汇，白牌厂商的工程师大概率已经在 FlowIO 生态里见过它们。P1 的 CLI 命令动词与之逐一对应（表~\ref{tab:intro-api}），客户从 FlowIO 迁移的认知成本接近零；命令文法与 BLE 载荷共用同一份协议定义（第~\ref{ch:ble} 章），这是"开放 API"差异化的具体形态。
+
+\begin{table}[htbp]
+  \centering
+  \caption{FlowIO 动作语义与 FLOWIO-CN P1 的 CLI 动词对应}
+  \label{tab:intro-api}
+  \begin{tabular}{llp{5.6cm}}
+    \toprule
+    FlowIO 语义 & P1 CLI & 说明 \\
+    \midrule
+    inflation & \texttt{I <口> <占空比>} & 如 \texttt{I 1 255}：1 号端口全速充气 \\
+    vacuum & \texttt{V} & 抽真空（泵 + 排气阀组合） \\
+    release & \texttt{R} / \texttt{S} & \texttt{R} 释放但不清占空比；\texttt{S <口>} 确定性关阀（隔离密封） \\
+    pressure hold & \texttt{H <口>} & 泵侧密封 + 端口保持通——保压/泄漏诊断标准工况 \\
+    pressure sense & 传感遥测 & 6 只传感器并行回读（\texttt{/api/state}、BLE notify） \\
+    流量可变 & 占空比参数 & 泵/阀 PWM，$0\sim255$ 线性标度 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{FlowIO 的边界，就是 FLOWIO-CN 的切入口}
+\label{sec:intro-limits}
+
+FlowIO 官网的 Limitations 页坦率列出了平台仍未解决的问题。对一家想拿它做产品的 B2B 厂商来说，这张清单比论文更有价值——每一条都是差异化的机会：
+
+\begin{itemize}
+  \item \textbf{分时测压}：单传感器时分复用意味着五口压力\textbf{不可同时测量}，且测压必须开阀（开阀本身就是一次扰动）。官方的补丁是另购 Sensors++ 模块（每端口一只专用传感器）。——FLOWIO-CN 把"每口一只传感器"直接做进主板：汇流管 1 只 + 端口侧 5 只 XGZP6897D，经 TCA9548A 五通道 I2C 复用器接入，恰是"Sensors++ 内置化"。
+  \item \textbf{同刻只能同种动作}：可以同时对多口充气，但\textbf{不能}口 1 充气同时口 2 抽真空。官方解法是买两台设备同步控制。——分指康复恰恰需要异口异动作；FLOWIO-CN 的 8 路阀（7 阀 + 1 泵）由 8 只独立 AO3400 MOSFET 直驱，阀位图与泵向自由组合。
+  \item \textbf{低层反馈闭环未完成}：官方明言"跑在 MCU 上的反馈控制环"属于待实现特性（部分实验性功能仅在付费 premium 内容中开放）。——FLOWIO-CN 以分指压力闭环为一等公民（第~\ref{ch:firmware} 章）。
+  \item \textbf{可穿戴优先的权衡}：wearable-first 意味着压力/流量让位于体积与功耗；且 FlowIO 定位是"演进中的开源项目"而非产品。——B2B 客户需要的是\textbf{交付形态}：可代工制造、可验收、带精度报告的整机方案。
+\end{itemize}
 
 \section{FLOWIO-CN 的差异化定位}
-分指压力闭环、数据报表、国产 BOM、开放 API——面向 B2B 康复手套白牌厂商的 \textyen300--500 套件方案，与科研开源套件的生态位差异。
+\label{sec:intro-position}
+
+产品定位在项目规格书 \S1 以一张表锁定（表~\ref{tab:intro-spec}）。客户是\textbf{康复手套白牌厂商}：他们有执行器与织物工艺、有渠道，缺的是一颗可靠的"大脑"与配套软件；售价 300--500 元/套（主板 + 固件 + 上位机 SDK），对标 MIT FlowIO，差异化四件套为\textbf{分指压力闭环、数据报表、国产 BOM、开放 API}。
+
+\begin{table}[htbp]
+  \centering
+  \caption{FLOWIO-CN P1 产品定位（规格书 \S1 原表）}
+  \label{tab:intro-spec}
+  \begin{tabular}{ll}
+    \toprule
+    项 & 值 \\
+    \midrule
+    名称 & FLOWIO-CN P1「升级大脑」 \\
+    客户 & 康复手套白牌厂商（B2B） \\
+    售价 & 300--500 元/套（含此板 + 固件 + 上位机 SDK） \\
+    对标 & MIT FlowIO（7 常闭阀、传感、开源 API） \\
+    差异化 & 分指压力闭环 + 数据报表 + 国产 BOM + 开放 API \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+P1 板（顶/底面渲染见图~\ref{fig:pcb-top} 与图~\ref{fig:pcb-bot}）把定位落成硬件：ESP32-S3-WROOM-1-N16R8 主控（BLE + WiFi，国产渠道现货）；8 路 AO3400A 直驱 7 阀 + 1 泵；TCA9548A 挂 6 只 XGZP6897D（汇流管 1 + 端口 5）实现全通道并行测压；双输入电源（DC 5V/3A 主供电 + USB-C 逻辑供电，SS34 二极管或门）；90$\times$75\,mm 四层板。表~\ref{tab:intro-vs} 逐项对比两代平台。
+
+\begin{table}[htbp]
+  \centering
+  \caption{FlowIO 主模块 与 FLOWIO-CN P1 对比}
+  \label{tab:intro-vs}
+  \begin{tabular}{lp{5.2cm}p{5.2cm}}
+    \toprule
+    维度 & MIT FlowIO（CHI'21） & FLOWIO-CN P1 \\
+    \midrule
+    定位 & 开发平台（演进中开源项目） & B2B 产品套件 \\
+    主控 & nRF52840（Feather Sense） & ESP32-S3-WROOM-1 \\
+    阀 & 7 常闭（2 进/排 + 5 端口） & 7 常闭 + 泵直驱，共 8 路 MOSFET \\
+    测压 & 单传感器分时（Sensors++ 另购） & 6 传感器并行（TCA9548A 五通道） \\
+    异口异动作 & 不支持 & 支持（阀位图自由组合） \\
+    闭环 & 低层反馈环待实现 & 分指压力闭环一等公民 \\
+    供电 & 锂电 + USB（可穿戴） & DC 5V/3A + USB-C 双输入 \\
+    软件栈 & Web GUI / JS / 串口 / Arduino & 固件 pn\_core / 串口 0xA5 / BLE GATT / Python SDK / Web 孪生 \\
+    BOM & 海外渠道 & 国产 BOM，全代工可造 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+差异化不是口号，每一条都有文献或工程依据：分指闭环对应 Wang 2022 的三腔独立裁决与 Yilmaz 综述"开环不够"的判词；每口传感对应 FlowIO 单传感器分时的官方短板；数据报表对应行业无统一测试标准的空白（孪生对拍精度报告，第~\ref{ch:product} 章）；开放 API 对应白牌厂商二次开发的真实工作流（第~\ref{ch:sdk} 章）。国产 BOM 则是供应链的现实选择——也正是它把整板物料成本压进了 300--500 元的售价区间（第~\ref{ch:fab} 章的 5 片打样物料仅约 150--300 元）。
+
+\section{从文献差距到产品需求}
+\label{sec:intro-reqs}
+
+差异化定位不能停在口号，要能追溯到"哪篇文献的哪个结论、落实为板上哪颗料"。表~\ref{tab:intro-reqs} 是这条追溯链的全貌——它也是项目规格书的生成方式：每条硬件决策都能向左回答"为什么"、向右回答"怎么做"。
+
+\begin{table}[htbp]
+  \centering
+  \caption{文献结论 $\to$ 产品需求 $\to$ P1 硬件落点}
+  \label{tab:intro-reqs}
+  \begin{tabular}{lp{4.4cm}p{4.8cm}}
+    \toprule
+    文献结论 & 产品需求 & P1 落点 \\
+    \midrule
+    Wang 2022：三腔独立 Kapandji 满分，耦合组 0--5 分 & 分指独立控制 & 8 路 AO3400A 直驱（7 阀 + 1 泵），阀位图自由组合 \\
+    Yilmaz 2026："开环对康复手套根本不够" & 板载压力闭环 & pn\_core 闭环节拍 + \texttt{G} 命令（第~\ref{ch:firmware} 章） \\
+    FlowIO 官方：单传感器分时测压的短板 & 并行测压 & TCA9548A 五通道 + 6 只 XGZP6897D \\
+    Chen 2026 / Xie 2026：患者工作压 50--70\,kPa；XGZP 同族传感进顶刊 & 量程与传感选型 & $\pm$100\,kPa 差压量程，国产现货渠道 \\
+    Shtarbanov 论文 Table 2：Small 泵 $+61$\,kPa 死点 & 孪生参数锚点 & 充气渐近 61\,kPa（第~\ref{ch:twin} 章） \\
+    Yilmaz 2026：行业无统一测试标准 & 评估工具即卖点 & 36 张验收工单 + 孪生对拍精度报告（第~\ref{ch:acceptance}、\ref{ch:product} 章） \\
+    专利 CN108392375A：双泵 + 12 传感 + 迭代学习 & 竞品架构印证 & 多阀多传感 + 闭环的配置方向一致 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+这张表还回答了一个潜在质疑：\textbf{为什么不直接买 FlowIO？}除了海外渠道与价格，根本原因是表中第二列——FlowIO 的硬件形态（单传感器分时、同刻同动作）由它的可穿戴优先定位决定，改不动；而这些恰是康复分指闭环的硬前提。复刻一个对标物的短板没有意义，继承它的语义、修掉它的约束，才是"对标"的完整含义。
+
+\section{被引数据里的市场信号}
+\label{sec:intro-signal}
+
+"国产替代"是不是一厢情愿？项目用数据回答了这个问题：经 Semantic Scholar API 拉取 FlowIO（CHI'21）的全部 83 篇引用论文，再以拼音姓氏启发式初筛、AMiner 逐篇核查作者机构——结果是 \textbf{42 篇（51\%）含中国作者}，且逐年引用量（2021--2026：3、15、16、15、18、11 篇进行中）持续增长无衰减。中国是 FlowIO 最大的用户群体，这个判断被引文数据坐实；海外渠道的价格与交期，恰好是这个用户群最敏感的痛点。
+
+机构核查还产出了一份具体的国内客户地图：浙江大学圈（气动形变界面与 STEAM 教育，四篇引用，其中 KiPneu 被项目标注为"教育版 FlowIO"）、清华大学三个组（柔性液压皮肤、医疗压力源、静音阀）、南方科技大学与深圳技术大学（iSoRD 可穿戴驱动）、深圳大学（EtherCAT 组网混合阀）等。这份清单的价值不在名单本身，而在它揭示的\textbf{需求结构}：国内最活跃的气动 HCI 团队与医疗压力源团队，要的正是 FlowIO 形态的设备——而他们现在只能海外采购。
+
+同一轮调研还抓出了直接对标的国产竞品规格锚点（表~\ref{tab:intro-comp}）。值得注意的是南科大 iSoRD：单泵 + 四位二通阀的架构、$-53\sim+83$\,kPa 的包线、PID 连续流量——与 FLOWIO-CN 同赛道，其"连续流量靠泵 PID"的思路后来也被记为 P1 固件的候选特性。竞品不是坏消息：它证明赛道真实存在。
+
+\begin{table}[htbp]
+  \centering
+  \caption{直接对标产品规格锚点（学术地图调研，2026-09）}
+  \label{tab:intro-comp}
+  \begin{tabular}{lp{4.2cm}p{4.4cm}}
+    \toprule
+    产品 & 关键规格 & 对 P1 的启示 \\
+    \midrule
+    FlowIO 本尊 & $-179\sim+207$\,kPa（模块包线）/ 3.2\,L/min & 平台上限；P1 定位数十 kPa 康复档差异化 \\
+    iSoRD（南科大，RA-L'25） & $-53\sim+83$\,kPa；PID 连续流量 15\,mL/s；2.95\,W/通道 & 同赛道印证；泵 PID 思路入固件候选 \\
+    清华蠕动泵压力源（RA-L'24） & 掌上、$\pm$50\,kPa、MRAC 控制误差 $<$0.85\,kPa & 医疗级精度标杆，闭环对拍目标 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{康复手套的工程解剖：客户到底在买什么}
+\label{sec:intro-anatomy}
+
+理解 B2B 定位，最好把白牌厂商的整机拆开看。一只气压康复手套从内到外大致四层，每层的成熟度与利润结构都不同：
+
+\begin{itemize}
+  \item \textbf{执行器层}：硅胶气囊或织物气腔，热封或模压成形。Yilmaz 2026 综述把这一层的制造归为五大家族——这是白牌厂商真正的传统强项，也是他们不需要我们的部分。Chen 2026 甚至展示了用改装 FDM 打印机做 CNC 热封的桌面级方案，整只执行器手环仅 90\,g。
+  \item \textbf{传感层}：腔压传感（XGZP 系列）、关节测角（Xie 2026 用 IMU 测拇指角度）、肌电/肌腱刺激触发（Chen 2026）。这一层决定"知不知道手在干什么"。
+  \item \textbf{驱动层（本书）}：泵 + 阀 + 压力闭环 + 主控 + 无线。Xie 2026 与 Chen 2026 都把"控制箱"列为便携化的主要瓶颈——Chen 的方案把 ESP32、12 只电磁阀、双作用泵和浏览器 GUI 塞进一只手腕盒，架构与 FLOWIO-CN 同构（ESP32 + 浏览器 GUI + 多电磁阀），这在文献上印证了我们的技术路线不是孤例。
+  \item \textbf{软件层}：处方设定、疗程记录、数据报表。学术工作止步于控制算法（Xie 的贝叶斯 AAN 控制、专利 CN108392375A 的迭代学习控制），但\textbf{把算法变成产线可复制的商品}需要的是工程化——这正是"大脑 + 固件 + SDK"三件套的含义。
+\end{itemize}
+
+从这个解剖看定价就清楚了。套件 300--500 元覆盖"板 + 固件 + 上位机 SDK"。以第~\ref{ch:fab} 章的打样数据粗算：5 片打样物料 150--300 元，单板物料约 30--60 元；标准版贴装的工程费、钢网、上料（300--600 元）是一次性投入，随批量摊薄。也就是说，批量单板的硬件成本远低于套件定价——差额买的是固件、SDK、验收体系与精度报告这些"软件密度"高的部分。这与 Yilmaz 综述点出的行业空白（无统一测试标准 $\to$ 评估能力即卖点）是同一件事的两面：\textbf{硬件趋同的行业里，可验证的软件与数据能力才是利润所在}。
 
 \section{全栈自研的产品思维}
-电路（KiCad）+ 结构（FreeCAD/OpenSCAD）+ 软件（ESP-IDF/Python/Web）+ 调试（测试点+逻辑分析仪）四位一体的联合设计流程：本书其余十一章即这条流水线的完整实录。
+\label{sec:intro-fullstack}
+
+FLOWIO-CN 的第二个差异化在方法论：\textbf{全栈联合设计}。传统白牌流程里，电路外包给方案公司、结构外包给模具厂、软件外包给团队——三者以"甲方需求文档"为界面，扯皮发生在界面上。本书的流水线把四条腿收进同一个仓库、同一套规格书体系：
+
+\begin{itemize}
+  \item \textbf{电路}（KiCad）：原理图与 PCB 由 \texttt{gen\_sch.py}/\texttt{gen\_pcb.py} 代码生成，选型修正以编号决策记录（第~\ref{ch:schematic} 章）；
+  \item \textbf{结构}（FreeCAD）：外壳参数直接读取 PCB 板框与连接器坐标，改板不必重画壳（第~\ref{ch:enclosure} 章）；
+  \item \textbf{软件}（ESP-IDF / Python / Web）：固件逻辑层与数字孪生共用同一份 pn\_core 代码（第~\ref{ch:twin}、\ref{ch:firmware} 章）；
+  \item \textbf{调试}：测试点 TP1--TP12 上板、仿真四电路先行、逻辑分析仪/示波器动线写进验收工单（第~\ref{ch:acceptance} 章）。
+\end{itemize}
+
+这套流程的地基是一份 2026-09-22 制定的\textbf{项目宪法}（\texttt{宪法.md}）——全部条文由项目实践沉淀，每条注明出处事故。与本书各章关系最密的几条：\textbf{孪生物理必须真实}（禁止硬编码轨迹或查表模拟，物理模型必须来自文献加实验校准——第~\ref{ch:twin} 章的立法依据）；\textbf{先读后写}（任何规格书制定前必须先读文献原文，引用必须落到本地 PDF）；\textbf{双宿主单一逻辑源}（pn\_core 是唯一控制逻辑，Windows 孪生 DLL 与 ESP32 固件共用同一份代码，任何改动两侧同验）；\textbf{验收即证据}（宣称"完成"必须附带刚运行的证据——测试输出、编译退出码、冒烟日志，不允许凭记忆宣称）。
+
+宪法同样规定了\textbf{不做什么}，且与卖点同等具体（表~\ref{tab:intro-not}）。"四不做"背后是同一条逻辑：本项目由独立开发者全职启动、后转业余推进，财务与人力都经不起战线扩张——每一条"不做"都对应一种真实的诱惑与它的代价。其中"69 元整机价格战"一行值得展开：康复手套市场确有超低价整机在走量，但那是一条\textbf{执行器成本 + 注册成本 + 渠道成本}三重挤压的路，与"卖大脑赚软件密度"的定位正交；主动放弃它，才守得住 300--500 元的部件定价与毛利结构。
+
+\begin{table}[htbp]
+  \centering
+  \caption{宪法"四不做"清单（\texttt{宪法.md} 第一章）}
+  \label{tab:intro-not}
+  \begin{tabular}{lp{8.4cm}}
+    \toprule
+    不做 & 理由 \\
+    \midrule
+    69 元整机价格战 & 与"部件供应 + 软件密度"的毛利结构正交；执行器/注册/渠道三重成本挤压 \\
+    二类医疗器械注册（现阶段） & 注册周期与成本吞没独立开发者；白牌厂商自有注册路径 \\
+    通用平台叙事 & FlowIO 的定位空档恰是专用闭环；通用 = 与本尊正面竞争 \\
+    BCI（脑机接口） & 技术栈与康复手套无重叠；纯粹的战线扩张 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+表~\ref{tab:intro-map} 是全书路线图：十二章对应这条流水线的十二站，每站有 git 提交与可复现产物。
+
+\begin{table}[htbp]
+  \centering
+  \caption{本书十二章地图}
+  \label{tab:intro-map}
+  \begin{tabular}{clp{6.4cm}}
+    \toprule
+    章 & 主题 & 核心产物 \\
+    \midrule
+    1 & 生态位与产品定位（本章） & 差异化论证 \\
+    2 & 数字孪生物理建模 & 孪生引擎 + 校准矩阵 \\
+    3 & 原理图 & 13 次编号修正的教训 \\
+    4 & PCB 布线 & 146$\to$0 未连接攻坚 \\
+    5 & 制造（嘉立创全代工） & 可直接下单的 fab/ 资产包 \\
+    6 & 参数化外壳 & FCStd/STEP/STL + 孪生网格 \\
+    7 & 固件 & pn\_core + QEMU 冒烟 \\
+    8 & BLE & 自研 GATT 四服务 \\
+    9 & 上位机与孪生前端 & Web GUI v2 \\
+    10 & SDK & flowio\_sdk（Python） \\
+    11 & 验收 & 36 张工单机制 \\
+    12 & 产品化 & 标定、精度报告、路线图 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{文献工作流：结论是怎么来的}
+\label{sec:intro-litflow}
+
+本书引用的每篇文献都经过了同一套入库流程——它本身值得记录，因为"结论可信"的前提是"文献管理不出错"。项目文献库（\texttt{literature/}）的结构是两层：根目录 15 篇\textbf{精读}核心（平台与物理 9 篇 + 精细动作控制 6 篇），\texttt{citers/} 子目录 81 篇 FlowIO \textbf{被引}文献（Semantic Scholar 元数据对账而来）。
+
+入库的验证流程四步定型：pypdf 抽页数与首页文本 $\to$ 标题/作者/DOI 与检索清单比对 $\to$ 统一重命名 \texttt{YYYY-一作姓-venue-slug} $\to$ 全文提取 \texttt{.txt} 伴生文件（图片扫描件除外）。四步挡住的都是真实发生过的坑：远端静默截断的 PDF（无 EOF 标记需续传）、数据库 DOI 记错（Xavier 2022 的正确 DOI 是 10.3389/frobt.2022.818187）、以及下载到不相关的论文——文献库里至今留着一篇误下载的 SMA 扭转执行器论文（本想下拇指三腔对比），标注"与产品无关"存档而不是删除。\textbf{错误留档}是这套流程的底色：它让每一次勘误都可追溯，也让后來者不会重复同一个坑。
+
+这套流程的产出直接服务于工程：第~\ref{ch:twin} 章孪生物理的每条方程都能在文献库指出对应的 PDF 与章节；泵参数锚点（$+61$\,kPa）标注着"博士论文 Table 2"的出处。文献库不是装饰，是孪生模型的参数供应链。
+
+\section{如何读这本书}
+\label{sec:intro-read}
+
+本书十二章按开发流水线排列，但三类读者可以各取捷径。\textbf{创客读者}关心"我能不能照着做一台"：直接从第~\ref{ch:schematic} 章的原理图与第~\ref{ch:fab} 章的下单包入手——fab/ 目录的资产包可以原样上传嘉立创，绕过电路设计的学习曲线先把板拿到手。\textbf{嵌入式工程师}关心固件与协议：第~\ref{ch:twin}（孪生物理）、\ref{ch:firmware}（pn\_core）、\ref{ch:ble}（GATT 契约）、\ref{ch:sdk}（上位机）四章是一条完整的"逻辑层单源、多端复用"参考实现。\textbf{产品/厂商读者}关心的是风险与交付：第~\ref{ch:acceptance} 章的 36 张验收工单与第~\ref{ch:product} 章的精度报告路线图，回答"这东西怎么证明它能用"。所有章节共享同一套纪律：决策有编号、修正有记录、每个数字有出处——这也是全书唯一要求读者带走的"方法论装备"。
+
+\section*{本章小结}
+软体机器人三条主线汇流到同一张驱动系统最小清单；FlowIO 用模块化与软件栈把它做成了"软体机器人的树莓派"，但其分时测压、同刻同动作、闭环缺位与"项目而非产品"的形态，恰是 B2B 康复市场的切入点。FLOWIO-CN 以分指压力闭环、每口传感、数据报表与开放 API 立位，用国产 BOM 把价格压进 300--500 元；每条差异化都能追溯到具体的文献结论，并落实为板上具体的料。接下来十一章，是这套论证的工程兑现。

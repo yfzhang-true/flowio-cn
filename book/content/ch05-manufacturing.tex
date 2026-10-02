@@ -1,14 +1,291 @@
 \chapter{制造：嘉立创全代工实战}
 \label{ch:fab}
 
-\section{BOM 带 LCSC 编码与基础库优先}
-\texttt{hardware/flowio-p1/fab/} 全套下单资产：BOM 逐行带 LCSC 编码，AO3400A/SS14 等优先选基础库降低贴装费。
+第~\ref{ch:pcb} 章结束时，P1 板的 DRC 清零、Gerber 交付。但"可制造"与"已制造"之间还隔着一段路：BOM 要带商城编码、贴装坐标要能被 SMT 产线解析、工艺备注要让工人看得懂、费用要能过财务。本章是这段路的完整实录——目标交付形态在 \texttt{README-jlc-order.md} 第一行就写死了：\textbf{用户零手工焊}。嘉立创（JLC）完成 PCB 制造 + 107 件 SMT 贴焊 + 16 件 THT 代插代焊，上下外壳 3D 代打；白牌厂商收货后只需拧 M3 螺丝、插线即用。对 B2B 客户而言，"零焊接门槛"不是便利，是采购决策的一部分——他们的产线上没有回流焊。
 
-\section{SMT107+THT16 全代焊方案}
-标准版 PCBA 全代工：107 个 SMT 贴片 + 16 个 THT 插件全部由嘉立创代焊，白牌厂商零焊接门槛。
+为什么坚持全代工而不是"贴片代工 + 插件自焊"的半代工？算三笔账。\textbf{能力账}：16 只插件里有 DC 座、USB-C 座、8 只螺丝端子与 5 只 XH 座，手工焊接的一致性完全依赖工人，而端子排的机械强度直接吃焊接质量——半代工把整板最受力的一批焊点留给了随机性。\textbf{责任账}：单一供应商完成制造 + 贴装 + 插件，出问题时责任边界清晰；半代工的虚焊到底是"板的问题"还是"焊的问题"，扯皮成本远超省下的代插费。\textbf{规模账}：打样 2 片与小批量数百片走同一条标准版工艺路径，转产不需要换产线、换工艺文档——对以"起量"为目标的 B2B 项目，这比单价更重要。
 
-\section{工艺注意事项}
-8 处 via-in-pad 需 IPC-4761 Type VII 填孔电镀；最小孔距 0.20\,mm 对齐 JLC 经济档能力（\texttt{README-jlc-order.md}）。
+\section{下单资产包：fab/ 目录里都有什么}
+\label{sec:fab-assets}
 
-\section{板 5 装 2 的下单策略}
-制板最低 5 片、贴装仅 2 片（主力+备用），费用约 360--720 元的取舍逻辑。
+制造输出的全部资产集中在 \texttt{hardware/flowio-p1/fab/}（表~\ref{tab:fab-files}）。每个文件都有明确的上传去向，下单流程里不会出现"临时导出一个文件"的环节——所有产物在布线清零当日一次性生成、打包、核验。
+
+\begin{table}[htbp]
+  \centering
+  \caption{fab/ 下单资产清单（README-jlc-order \S0）}
+  \label{tab:fab-files}
+  \begin{tabular}{lp{9.2cm}}
+    \toprule
+    文件 & 用途 \\
+    \midrule
+    \texttt{flowio-p1-jlc.zip} & PCB 制造 Gerber 包（下单第一步上传） \\
+    \texttt{flowio-p1-bom-jlc.csv} & PCBA 物料清单：38 行 / 123 件，逐行带 LCSC 编码 \\
+    \texttt{flowio-p1-pos-jlc.csv} & 贴装坐标（CPL）：首 4 行 \texttt{\#} 注释为核对说明 \\
+    \texttt{flowio-p1-pos.csv} & 原版无注释 CPL（上传器报错时的备用，内容与上行一致） \\
+    \texttt{assembly-top/bottom.pdf} & 上/下贴位置人工核对图 \\
+    \texttt{../enclosure/case-top.stl} 等 & 3D 打印上传件（第~\ref{ch:enclosure} 章） \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{制板参数与三重验证}
+\label{sec:fab-params}
+
+制板参数（表~\ref{tab:fab-params}）按嘉立创经济档能力逐项对齐：0.2/0.2\,mm 最小线宽/间距、0.3\,mm 孔/0.6\,mm 盘的最小过孔（电源孔个别放宽到 0.45/0.9）。两个容易被忽略的选项各有一句理由：\textbf{阻焊过孔覆盖}（Gerber 已做 subtract-soldermask 处理）让过孔不被锡珠桥接，也为后文的 via-in-pad 塞孔打底；\textbf{表面处理选 ENIG}（沉金）而不是喷锡，是为了 XH 插件与端子的可焊性一致性——这是打样包里少数"贵但值"的选项。
+
+\begin{table}[htbp]
+  \centering
+  \caption{嘉立创打样参数（README-fab）}
+  \label{tab:fab-params}
+  \begin{tabular}{ll}
+    \toprule
+    项 & 值 \\
+    \midrule
+    层数/尺寸 & 4 层 90$\times$75\,mm 矩形 \\
+    板厚 & 1.6\,mm \\
+    最小线宽/间距 & 0.2/0.2\,mm \\
+    最小过孔 & 0.3\,mm 孔 / 0.6\,mm 盘（个别 0.45/0.9 电源孔） \\
+    阻焊 & 过孔覆盖（Gerber 已 subtract-soldermask） \\
+    表面处理 & ENIG（XH 插件可焊性） \\
+    丝印 & 白色 \\
+    工艺边 & 无需 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+布线终态的 DRC 记录一并写入 README 供下单前回看：\textbf{未连接 0、error 类 0}，仅剩外观类豁免（丝印压铜/库封装 courtyard 等，详见第~\ref{ch:pcb} 章豁免清单）。交付不是"DRC 过了"一句话，而是\textbf{三重连通性验证}：KiCad DRC + KRT 铜级连图（75 个网络全通，refill 交叉核对一致）+ 天线禁布区 8 点探测零命中。三道验证互为独立实现，任何一道单独放行都不作数——这是本书反复出现的"双轨复核"原则在制造环节的落地。
+
+Gerber 包本身的构成也有核验口径：11 个层文件（F/In1/In2/B.Cu 四铜层 + F/B.Paste + F/B.Silk + F/B.Mask + Edge.Cuts）加 \texttt{.gbrjob}，钻孔 ExCELLon 格式（PTH/NPTH 合并、单位 mm、附 map 图核对）；打包 \texttt{flowio-p1-jlc.zip} 后的三条自检——非 txt 文件数 $=$ 层数文件数 + 钻孔、无 0 字节文件、zip 不超 20\,MB——写在收尾规格书 \S4，属于"上传前 30 秒能做完"的检查，但省掉任何一条都可能换来一轮退单。规格书同时记录了一个显式的"不做"：\textbf{不导出 STEP}——多数封装无 3D 模型（渲染已证实），导出无意义；外壳核对走尺寸图（第~\ref{ch:enclosure} 章）。把"不做的事"和"做的事"一起写进决策记录，是防止后人好心补漏反而引入垃圾产物的办法。
+
+\section{下单七步：从 Gerber 到付款}
+\label{sec:fab-steps}
+
+PCBA 下单本身是一个七步流程（jlc.com $\to$ PCB 制造 $\to$ 勾选"PCB 组装"），每一步的核对点见表~\ref{tab:fab-steps}。它看起来琐碎，但每一步都对应一类真实的翻车：参数错档、料不上贴、坐标翻转、工艺未声明、贴装面搞反——每一类都有人付过学费。
+
+\begin{table}[htbp]
+  \centering
+  \caption{嘉立创 PCBA 下单七步与核对点（README-jlc-order \S1）}
+  \label{tab:fab-steps}
+  \begin{tabular}{cp{9.6cm}}
+    \toprule
+    步 & 操作与核对点 \\
+    \midrule
+    1 & 上传 \texttt{flowio-p1-jlc.zip}，参数照表~\ref{tab:fab-params}（4 层 / 90$\times$75 / 1.6 / 0.2/0.2 / 过孔覆盖 / 白油 / 无工艺边 / ENIG） \\
+    2 & 组装类型选\textbf{标准版}（硬约束，见 \S\ref{sec:fab-standard}） \\
+    3 & 数量按打样策略填写（\S\ref{sec:fab-cost}） \\
+    4 & 上传 BOM，确认解析：38 行全部匹配物料、无"无物料/缺码"行，全部器件勾选上贴 \\
+    5 & 上传 CPL，确认解析：123 个位号、全部 top 面；PosY 为负正常（\S\ref{sec:fab-cpl}） \\
+    6 & 留言栏抄录工艺备注：via-in-pad 塞孔封帽 + 孔距 0.20 + ENIG（\S\ref{sec:fab-vip}） \\
+    7 & 付款前看预览拼版图：顶面 107 SMT + 16 插件全部有位号标注 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{via-in-pad $\times$ 8：塞孔封帽工艺}
+\label{sec:fab-vip}
+
+全板有 8 处\textbf{盘内孔}（via-in-pad）：TP1.1、C12.1、LED2.1、U5.2、R24、Q11.2、D10.1、C16.1。它们的成因各不相同（表~\ref{tab:fab-vip}）——去耦电容与测试点的焊盘下借孔换层、USB 串口区的器件密集、+5V 肖特基附近的走线拥挤——但风险是同一个：普通过孔不塞孔，\textbf{回流焊时焊膏会顺着孔桶流走}，焊盘虚焊、器件立碑，而且缺陷藏在器件底下，目检看不见。
+
+\begin{table}[htbp]
+  \centering
+  \caption{8 处盘内孔清单与器件角色}
+  \label{tab:fab-vip}
+  \begin{tabular}{llp{5.2cm}}
+    \toprule
+    焊盘 & 器件 & 角色 \\
+    \midrule
+    TP1.1 & 测试点 & +3V3 首电测量点（A201 工单） \\
+    C12.1 / C16.1 & 0603 电容 & 100\,nF 去耦（电源就近） \\
+    LED2.1 & LED & 电源指示灯（PWR） \\
+    U5.2 & USBLC6 & USB ESD 保护 \\
+    R24 & 1\,k$\Omega$ & 用户指示灯限流电阻 \\
+    Q11.2 & SS8050 & 自动下载三极管（GND 脚） \\
+    D10.1 & SS14 & +5V 肖特基 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+对策是 IPC-4761 标准的\textbf{树脂塞孔 + 电镀封帽}工艺：孔先用树脂填实，表面镀铜盖平，焊盘恢复成平整平面。打包参数页（README-fab）标注为 Type VII，下单留言栏按 Type VIII（封帽之上再加表面覆盖）抄录——两者在生产端指向同一条"塞孔 + 封帽"产线，名称差异不影响执行，但必须在下单时\textbf{显式声明}，否则产线默认不塞孔，焊膏流入孔桶的虚焊就在所难免。下单留言原文如下，可直接抄录：
+
+\begin{quote}\small
+本板 8 处 via-in-pad（TP1.1 / C12.1 / LED2.1 / U5.2 / R24 / Q11.2 / D10.1 / C16.1），需 IPC-4761 Type VIII（树脂塞孔+电镀封帽），否则焊膏流入孔桶造成虚焊；最小孔间距 0.20\,mm（经济档标准支持，如需回到 0.25 请联系改布）；表面处理 ENIG（XH 插件可焊性）。
+\end{quote}
+
+另一条工艺备注同样来自布线终态：\texttt{min\_hole\_clearance} 从 0.25 收到 0.20\,mm（经济档标准支持）。README 里特意写了"若需回到 0.25 请告知重布"——把可回退的余地留给产线，比硬顶参数下单后被退单更省一轮时间。
+
+\section{BOM 的单一真值源：make\_bom.py 与 LCSC 编码}
+\label{sec:fab-bom}
+
+BOM 不是从原理图工具里"导出"的，而是从\textbf{代码生成的真值源}里"再生成"的。P1 的原理图本身由 \texttt{gen\_sch.py} 生成（第~\ref{ch:schematic} 章），其中 \texttt{PARTS} 列表是全板元件的唯一事实：每颗料以 \texttt{P(ref, sym, val, fp, lcsc, x, y, nets)} 七元组喂入——\texttt{lcsc} 字段在选型时就回填好商城编码，BOM 生成时零查询、零手工。\texttt{make\_bom.py} 的工作是把这份真值源变成 JLC 上传格式，全程纯标准库：
+
+\begin{lstlisting}[language=Python, basicstyle=\small\ttfamily, breaklines=true,
+  caption={make\_bom.py 核心：受限解析、分组合行、覆盖率与交叉验证（摘编）}]
+# 受限 ast 解释器: 只允许 P() 调用 + 字面量/名/下标/算术/f-string,
+# 覆盖 gen_sch.py 里 PARTS 的三种喂料方式: 顶层 += 列表 / for-append / for-+=
+# (禁 exec —— 生成下单文件时不执行任何原理图代码)
+
+placed  = [p for p in PARTS if p["lcsc"]]   # 有码 -> 可上贴
+# 分组键: (lcsc, footprint, value) —— 同码同封装同值合一行
+for p in placed:
+    groups.setdefault((p["lcsc"], p["fp"], p["val"]), []).append(p["ref"])
+
+def mpn_of(pt):
+    """sym 字段清洗成 MPN: 去掉 JLC 库命名尾缀 _Cxxxxxx / 悬空下划线"""
+    return re.sub(r"_C\d+$", "", pt["sym"] or "").rstrip("_")
+
+rows.sort(key=lambda r: (r["tht"], ref_key(r["refs"][0])))  # SMT 在前, ref 自然序
+# ……写出 flowio-p1-bom-jlc.csv (Comment,Designator,Footprint,LCSC Part #) ……
+
+print(f"SMT LCSC 码覆盖率: {sum(1 for p in placed if not is_tht(p['fp']))}/{n_smt} = 100%"
+      if all(p['lcsc'] for p in placed if not is_tht(p['fp'])) else "SMT 存在缺码!")
+# 交叉验证: BOM 位号集合 == CPL 位号集合 (TP/HA-HD 等无器件孔除外)
+if not only_pos and not only_bom:
+    print(f"交叉验证: BOM {len(bom_refs)} refs == CPL {len(pos_refs)} refs, 一致")
+\end{lstlisting}
+
+四个设计点值得展开。\textbf{其一，受限 ast 解释器}：解析 \texttt{PARTS} 时只允许 \texttt{P()} 调用与字面量运算（禁 \texttt{exec}），与 \texttt{gen\_pcb.py} 同一模式——生成下单文件的动作不执行任何原理图代码，供应链工具链不做代码执行。解释器覆盖 \texttt{PARTS} 的三种喂料写法：顶层 \texttt{+=} 列表、\texttt{for} 循环 \texttt{append}、\texttt{for} 循环增量累加——真值源怎么组织是原理图的自由，解析器全接得住；遇到不支持的语法节点立即报错退出，绝不静默漏料。\textbf{其二，分组合行}：以 (LCSC 码, 封装, 值) 为键合并同类料，123 件收敛为 38 行，行序 SMT 在前、同组位号自然数排序（\texttt{C1,C2,\dots,C16} 而不是字典序的 \texttt{C1,C10,C11}）；表~\ref{tab:fab-bom} 是成品 BOM 的头部几行。\textbf{其三，LCSC 编码回填}：编码不是 BOM 阶段补的，而是选型阶段随 \texttt{P()} 调用逐颗回填进真值源，\texttt{sym} 字段里的 JLC 库命名尾缀（\texttt{\_C8678} 之类）在 \texttt{mpn\_of} 里清洗成干净的 MPN——"设计即含供应链信息"，这是全代工流程能全自动的原因。\textbf{其四，自检兜底}：SMT 与 THT 的 LCSC 覆盖率分别断言 100\%，BOM 与 CPL 位号集合交叉验证必须相等（\texttt{pos} 有而 \texttt{BOM} 无、\texttt{BOM} 有而 \texttt{pos} 无，两个方向的差集都必须为空）；无码器件（测试点 TP1--TP12 是裸铜焊盘、安装孔 HA--HD 是板件孔）明确打印"不入 BOM"，产线不会看到来路不明的空行。
+
+\begin{table}[htbp]
+  \centering
+  \caption{成品 BOM 头部（flowio-p1-bom-jlc.csv，节选）}
+  \label{tab:fab-bom}
+  \begin{tabular}{llll}
+    \toprule
+    Comment & Designator & Footprint & LCSC \\
+    \midrule
+    CL10B104KB8NNNC & C2,C5,C6,C10--C13,C15,C16 & C\_0603 & C1591 \\
+    SS34 & D1,D2,D3 & SMA & C8678 \\
+    SS14 & D4--D11 & SMA & C2480 \\
+    TYPE-C\_6P & J2 & TYPE-C-SMD & C456012 \\
+    ESP32-S3-WROOM-1 & U1 & SMD 18$\times$25.5 & C2913202 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+价格口径顺带一提：全板最贵单件 U1（ESP32-S3-WROOM-1-N16R8）在规格书记录为 5.14 元、下单页实时价一度约 26 元——LCSC 编码锁定的是\textbf{物料身份}，价格以下单页实时价为准，预算区间里已留了余量。
+
+\section{标准版是硬约束，不是省钱选项}
+\label{sec:fab-standard}
+
+PCBA 下单第二步要选组装类型：经济版或标准版。对这个决定，README 的措辞罕见地斩钉截铁——"不是省钱问题，是硬约束"，理由有二：
+
+\begin{itemize}
+  \item \textbf{U1 卡死经济版}：ESP32-S3-WROOM-1-N16R8（C2913202）在 JLC 元件库的属性是 \texttt{standard-only}——经济版产线无法上贴这颗料。这不是传闻，是实测查询确认的库属性。
+  \item \textbf{THT 只有标准版代插代焊}：J1（DC 座）+ J5--J9/J18/J19/J10--J17 共 16 只插件，只有标准版提供代插代焊。这 16 个孔位器件正是"零手工焊"的关键——经济版下单意味着 16 只连接器全部手工焊接，白牌客户的产线门槛立刻回来了。
+\end{itemize}
+
+页面若出现"经济型 + 代插件"之类的组合选项也不行——U1 那一条就先卡死。所以标准版不是在两档价格里挑了贵的一档，而是\textbf{唯一的可行档}。这个结论写进下单指南的目的，是防止后来者在下单页看到价差时"优化"掉这个决定。
+
+顺带厘清一对容易混淆的概念：\textbf{经济档与标准版说的是两件事}。"经济档"指制板工艺档位（最小线宽/间距 0.2/0.2\,mm、过孔 0.3/0.6\,mm 这些能力边界，P1 的设计规则全程对齐它，个别 0.15\,mm 细线只在布线攻坚时作为最后手段用于 6 条 $<$10\,mm 补线）；"标准版"指贴装服务档位（哪些料能上贴、能否代插 THT）。P1 的选择是"制板按经济档能力设计 + 贴装必须标准版"——两头各取所需，互不矛盾。
+
+\begin{table}[htbp]
+  \centering
+  \caption{经济版 vs 标准版（P1 视角）}
+  \label{tab:fab-tiers}
+  \begin{tabular}{lp{4.5cm}p{4.5cm}}
+    \toprule
+    维度 & 经济版 & 标准版（P1 选用） \\
+    \midrule
+    元件库范围 & 基础库 + 扩展库（经济档） & 全库，含 \texttt{standard-only} 料 \\
+    U1（C2913202） & \textbf{不可上贴} & 可上贴 \\
+    THT 代插代焊 & 无（或受限组合） & 16 只插件全代焊 \\
+    费用 & 低 & 高（工程费+钢网+上料） \\
+    对 P1 的意义 & 仅制板工艺档可用 & "零手工焊"的唯一路径 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{板 5 装 2 与费用区间}
+\label{sec:fab-cost}
+
+打样数量的最终策略是\textbf{板 5 装 2}：PCB 制造 5 片（制板起订最低量），贴装只做 2 片（主力 + 备用）。取舍逻辑很直白——打样阶段真正的风险集中在首块贴装板上，多贴三片救不了系统性缺陷，却把物料费翻倍；多出的 3 片裸板留着作补焊与改制实验的板材。费用区间按两个口径记录（表~\ref{tab:fab-cost}）：全贴 5 片的完整估算（README 记录，约 550--1150 元），与板 5 装 2 策略的执行口径（约 360--720 元，HANDOFF 记录值）——差额主要来自按片计费的贴装与物料。
+
+\begin{table}[htbp]
+  \centering
+  \caption{打样费用区间（元，不含运费；上行 README 全贴 5 片估算，末行 HANDOFF 板 5 装 2 记录）}
+  \label{tab:fab-cost}
+  \begin{tabular}{ll}
+    \toprule
+    项 & 区间 \\
+    \midrule
+    PCB（4 层 90$\times$75 $\times$ 5，ENIG） & $\sim$50--100 \\
+    标准版贴装（工程费+钢网+上料+THT 代插） & $\sim$300--600 \\
+    元器件物料 & $\sim$150--300（5 套） \\
+    3D 打印（两外壳） & $\sim$50--150 \\
+    \midrule
+    合计（全贴 5 片） & \textbf{$\sim$550--1150} \\
+    合计（板 5 装 2） & \textbf{$\sim$360--720} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+对照第~\ref{ch:intro} 章的售价定位：单套打样全成本落在数百元区间，与"套件售价 300--500 元 + 白牌厂商的执行器/织物成本"的 B2B 定价结构是自洽的——制造端没有结构性亏损点。
+
+自购清单同样为零：BOM 内 123 件全部由 JLC 供料上贴或代插，不存在"自购不上贴"项。需要自备的只是使用耗材——XH2.54-4P 对线、USB-C 数据线、DC 5V/3A 适配器、气路快插接头与气管、装壳的 M3$\times$6 螺丝 4 颗。
+
+\section{CPL 坐标与人工核对}
+\label{sec:fab-cpl}
+
+贴装坐标文件（CPL）是产线的"放料地图"，出错即批量错位。P1 的 CPL 有三个实操细节。其一，PosY 为负值——这是 KiCad 向下 y 轴的导出方向，JLC 直接接受，无需翻转；与其花时间在导出器里翻轴，不如把这个事实写进注释让核对者安心。其二，\texttt{-jlc} 版在文件头加了 4 行 \texttt{\#} 注释说明核对方法，若上传器报表头错误，删注释行再传——原版 \texttt{flowio-p1-pos.csv} 内容完全一致，作为无注释备份保留在同级目录。一份数据、两个文件版本，是用"冗余"换"上传器兼容性"的廉价保险。其三，也是最重要的——\textbf{机器解析通过不等于坐标正确}：上传器只校验格式，不校验语义；必须人工抽检，任取 3 行对照 \texttt{assembly-top.pdf}，核对法为 U1 应在板左上、J10--J17 应在板底边一排、J2 应在板右上角。三个锚点分别覆盖"大件 BGA 类""多件端子排""小件连接器"三种易错形态。位号共 123 个、全部 top 面；付款前再看一眼预览拼版图：顶面 107 SMT + 16 插件全部有位号标注，即可下单。
+
+\section{收货验收：从目检到上电}
+\label{sec:fab-receive}
+
+收货后的验收三步走，写在下单指南末尾、与回板工单衔接（A201 首电三测等，见第~\ref{ch:acceptance} 章）：
+
+\begin{enumerate}
+  \item \textbf{目检}：U1 模组四侧焊脚、J10--J17 端子无歪斜/浮高、XH 座无损脚——插件工序的缺陷在这一步最容易被肉眼发现；
+  \item \textbf{上电}（DC 座或 USB 供电）：TP2 测 $+5$\,V、TP1 测 $+3.3$\,V、LED2（PWR）亮——三个测试点就是第~\ref{ch:pcb} 章布线时特意保留的裸铜焊盘；
+  \item \textbf{外壳试装}：PCB 入下壳、四角 M3 孔对位（HA--HD）、上壳按键对准 SW1/SW2/SW3——结构对位的最后确认（第~\ref{ch:enclosure} 章）。
+\end{enumerate}
+
+三步全过，制造闭环完成；任何一步失败，证据（照片/万用表读数）按工单机制回流到书稿（第~\ref{ch:acceptance} 章的"踩坑实录"专栏——fail 的工单同样入书）。
+
+\section{制造交付的完成定义}
+\label{sec:fab-done}
+
+"可以下单了"不是一个感觉，而是一张可勾选的门槛表。收尾规格书 \S1 为制造交付定义了六条验收门槛（表~\ref{tab:fab-gate}），其中"目视检查"一行值得强调：它被用户定为\textbf{强制要求}——修复后重新渲染顶/底两视图逐区人工检查。第~\ref{ch:pcb} 章天线禁布区那场"自动布线器静默删约束"的事故，正是这条铁律的直接理由。
+
+\begin{table}[htbp]
+  \centering
+  \caption{制造交付验收门槛（收尾规格书 \S1）}
+  \label{tab:fab-gate}
+  \begin{tabular}{lp{8.2cm}}
+    \toprule
+    验收项 & 门槛 \\
+    \midrule
+    DRC error 类 & \textbf{0}（未连接/间距/孔间距全清零） \\
+    悬空过孔 & 0 \\
+    外观类 & 豁免清单记录在案（JLC 可制，见第~\ref{ch:pcb} 章） \\
+    制造输出 & Gerber + 钻孔 + 坐标 + BOM + 装配 PDF，JLC 参数核对通过 \\
+    外壳 & 参数化源文件 + 渲染 STL，四铜柱位与最终 HD 孔位一致 \\
+    目视检查 & 顶/底两视图渲染逐区人工检查（用户强制要求） \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+六条门槛的共同点：每一条都有\textbf{机器可复查的产物}——DRC 报告、豁免清单、下单 zip、外壳脚本与渲染图。后人接手时不必信任任何人的记忆，重跑一遍工具链即可验证。这就是"制造输出"与"制造完成"的区别：前者是文件，后者是文件加证据。
+
+把本章散落各节的翻车点汇成一张速查表（表~\ref{tab:fab-fail}）——每一行都来自本项目真实踩过或真实核实过的风险，不是想象出来的清单。
+
+\begin{table}[htbp]
+  \centering
+  \caption{下单失败模式速查（症状 $\to$ 根因 $\to$ 预防）}
+  \label{tab:fab-fail}
+  \begin{tabular}{lp{4.2cm}p{4.2cm}}
+    \toprule
+    症状 & 根因 & 预防 \\
+    \midrule
+    BOM 有行"无物料/缺码" & 选型时未回填 LCSC 码 & 覆盖率 100\% 断言；缺码即中止生成 \\
+    部分器件未上贴 & BOM 解析后未勾选 & 逐项确认"经济+免经济"全部勾选 \\
+    CPL 上传器报表头错误 & \texttt{\#} 注释行不被解析 & 删注释行重传；无注释备份件常备 \\
+    坐标镜像/翻转 & 误改 PosY 符号 & 三锚点人工抽检（U1/J10--J17/J2） \\
+    via-in-pad 虚焊 & 未声明塞孔工艺 & 留言栏显式抄录 Type VIII 要求 \\
+    U1 无法上贴 & 误选经济版 & 标准版是硬约束（\S\ref{sec:fab-standard}） \\
+    外壳支撑过剩 & 打印方向被自动重排 & "摆件需人工确认"+备注原始方向 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section*{本章小结}
+制造环节的全部输出都是\textbf{可复现的文件}而非人工操作：BOM 从 gen\_sch.py 的 PARTS 真值源再生成，LCSC 编码在选型时逐颗回填，受限解析器保证生成过程不执行原理图代码；8 处 via-in-pad 的塞孔封帽与 0.20\,mm 孔距作为工艺备注写进下单留言；标准版组装是 U1 库属性与 16 只 THT 共同决定的硬约束；板 5 装 2 把打样成本压到约 360--720 元。收货三步验收之后，"可制造"终于变成"已制造"——接下来的问题是给它一个家。

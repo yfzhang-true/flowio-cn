@@ -1,14 +1,299 @@
 \chapter{孪生先行：物理建模与仿真}
 \label{ch:twin}
 
-\section{为什么孪生先行}
-回板之前固件与上位机如何验证？数字孪生把"等板子"变成"先跑起来"——板级物理模型（\texttt{twin/board\_model.py}）让遥测、校准与前端在真实硬件到来前即可全链路演练。
+PCB 下单到回板之间有两三周的空窗。传统流程里这段时间只能等；FLOWIO-CN 的流程里，这段时间被数字孪生填满：\texttt{firmware/twin/} 目录下的板级物理模型（\texttt{twin\_api.c} 气动 + \texttt{board\_model.py} 电气）让固件命令、遥测面板、BLE 契约、上位机 SDK 在真实硬件到来之前就全链路跑通。回板那天，孪生不是被抛弃的脚手架，而是与真机\textbf{对拍}的标尺——两者的偏差本身就是产品交付物（第~\ref{ch:product} 章的"数字孪生精度报告"）。
 
-\section{板级物理引擎与 BOARD\_PARAMS}
-阀线圈 R/L、AO3400 导通电阻、Buck ESR/Cout、热阻、逻辑电流六组参数构成孪生的"体质"；黄徽章机制区分"理论值（未本机标定）"与实测值。
+本章讲三件事：孪生的架构为什么必须"逻辑与物理分离"；气动物理如何从工程近似（v1）升级为文献形式（v2/v2.1）；以及如何诚实地管理模型参数的成色——"理论值"与"实测值"用徽章区分，不让演示数字冒充实测。
 
-\section{仿真套件四电路}
-电源效率、输出纹波、温升、I2C 时序四个电路的仿真与达标判据（含一次 I2C 警告案例的复盘）。
+\section{逻辑与物理分离：一份 pn\_core，两个世界}
+\label{sec:twin-arch}
 
-\section{从仿真到验收的对拍闭环}
-Phase CAL 工单（A301--A306）如何把仿真曲线与实测曲线叠图，产出"数字孪生精度报告"——详见第~\ref{ch:product} 章。
+孪生的第一条架构原则：\textbf{逻辑层与物理层彻底分离}（图~\ref{fig:twin-3d}）。逻辑层是 \texttt{pn\_core}——命令分发、状态机、闭环控制、调度器，它与烧进 ESP32-S3 的固件是\textbf{同一份代码}；物理层是 \texttt{mock\_hal} 之后的仿真世界：阀位图不再驱动真实线圈，而是驱动一套气动微分方程，压力传感器的读数不再来自 XGZP6897D，而是方程的积分值。
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.85\textwidth]{figures/f3_3d.png}
+  \caption{孪生控制台的 3D 装配视图：五部件（上壳/器件阵/PCB/下壳）可整体查看亦可分解——孪生不仅算得出压力，也看得见结构}\label{fig:twin-3d}
+\end{figure}
+
+这样做的收益是结构性的。固件在 QEMU 或主机上冒烟通过，意味着回板后烧进去的逻辑大概率没有低级 bug；孪生编译成 \texttt{pn\_twin.dll}（C ABI）交给上位机 \texttt{server.py} 加载，前端遥测面板、Web GUI、SDK 的每个接口在回板前就有"会动的假硬件"可调；而闭环算法的调参，在孪生上先跑通一轮，真机只做最后确认。\texttt{twin\_api.c} 因此只是一层薄壳：初始化、命令注入、50\,ms 节拍推进、传感器读出：
+
+\begin{lstlisting}[language=C, basicstyle=\small\ttfamily, breaklines=true,
+  caption={twin\_api.c 的公共接口：逻辑世界与物理世界的全部通道（摘自源码）}]
+PN_TWIN_API void     pn_twin_init(void);              /* 虚拟上电：pn_core 复位 + 泄漏/端口节点清零 */
+PN_TWIN_API void     pn_twin_command(const char *line); /* CLI 命令，与真机串口同一文法 */
+PN_TWIN_API int      pn_twin_tick(void);              /* 推进 50ms：物理积分 + 闭环节拍 */
+PN_TWIN_API float    pn_twin_sensor(uint8_t idx);     /* 汇流管压力 kPa */
+PN_TWIN_API float    pn_twin_port_pressure(uint8_t idx); /* 端口侧独立节点压力（v2.1） */
+PN_TWIN_API void     pn_twin_set_leak(uint8_t idx, float k); /* 泄漏注入（出厂筛选工况） */
+\end{lstlisting}
+
+\section{从 v1 到 v2：让模型长出文献的形状}
+\label{sec:twin-v2}
+
+孪生的第一版物理（v1）是工程一阶近似：充气压头线性衰减 $(1-p/P_\text{max})$、抽真空对称、被动排气按时间常数指数衰减。它的优点是直觉、可调；缺点是\textbf{形状不对}——真实气动系统的高压差段是恒流（音速阻塞），充气曲线是 $\sqrt{\ }$ 压头而不是线性渐近，开阀数量会改变升降压速率。演示够用，对拍不够。
+
+v2 重构（\texttt{PHYSICS-SPEC.md}）的原则是\textbf{每条规律给出文献出处}，表~\ref{tab:twin-lit} 是逐条对应关系。
+
+\begin{table}[htbp]
+  \centering
+  \caption{孪生物理 v2 的文献依据（PHYSICS-SPEC \S1）}
+  \label{tab:twin-lit}
+  \begin{tabular}{lp{5.6cm}p{4.9cm}}
+    \toprule
+    物理规律 & 文献出处 & 采用形式 \\
+    \midrule
+    压力动力学 & Xavier 2022 \S2.1 Eq.1--4 & 多变气体定律 $PV^\gamma{=}$const；$\mathrm{d}P_A/\mathrm{d}t=\gamma P_A Q/V_A$（$\gamma{=}1.2$） \\
+    阀孔流量 & Xavier 2022 \S2.1（ANSI/(NFPA) T3.21.3） & $Q=114.5\,u\,C_v\sqrt{\Delta P \cdot P_\text{low}}/\sqrt{T}$；充气 $Q_c\propto\sqrt{P_A(P_R-P_A)}$ \\
+    音速阻塞 & ANSI 标准隐含（临界压比 1.893） & 高压差段流量与 $\sqrt{\Delta P}$ 解耦（恒质量流）——v1 完全缺失 \\
+    占空比标度 & Xavier 2022（40\,Hz PWM 阀）；FlowIO CHI'21 \S4（泵 PWM） & $u\in[0,1]$ 线性标度流导 \\
+    常闭保压/被动释放 & FlowIO CHI'21 \S4 & 沿用 v1 已有实现 \\
+    单传感器分时 & FlowIO CHI'21 \S4 & S0 定位汇流管；S1 端口侧（Sensors++ 雏形） \\
+    规格包线 & FlowIO CHI'21：$-26\sim+30$\,psi、3.2\,L/min & UI 曲线按 $\pm100$\,kPa 传感器量程展示 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+表~\ref{tab:twin-v1v2} 列出 v1$\to$v2 的逐环节替换。最有教学意味的是"容积"一行：v1 里腔体容积是常数，v2 里 $V(n)=V_m+n\cdot V_p$ 随开阀端口数变化——同样的泵功率，开 3 个口充压自然比开 1 个口慢。这不是高级点缀，而是 Xavier 2022 Eq.4 中 $1/V$ 因子的直接后果，也是后来验收断言"容积耦合"的物理来源。
+
+\begin{table}[htbp]
+  \centering
+  \caption{v1（工程一阶）与 v2（文献形式）逐环节对比}
+  \label{tab:twin-v1v2}
+  \begin{tabular}{llp{4.2cm}}
+    \toprule
+    环节 & v1 & v2 \\
+    \midrule
+    泵充压 & 线性压头 $(1-p/P_\text{max})$ & 孔口形式 $\sqrt{p(P_R-p)}$ + choked 段 \\
+    抽真空 & 对称线性 & 孔口形式 $\sqrt{p(p-P_\text{min})}$ + choked 段 \\
+    被动排气 & 指数衰减 $\tau{=}1.6$\,s & ANSI 孔口（choked 恒流段 $\to\sqrt{\ }$ 衰减尾） \\
+    容积 & 固定 & $V(n)=V_m+n V_p$ + 开阀瞬时等温混合 \\
+    微漏 & 比例 1\%/s & 不变（经验值，标注待标定） \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{核心方程与 \texttt{dP/dt} 实现}
+\label{sec:twin-dpdt}
+
+v2 的每个 50\,ms tick 做四件事：容积合成、孔口流量求和、多变定律积分、传感器钳位。核心代码（\texttt{twin\_api.c}，注释为源码原有）：
+
+\begin{lstlisting}[language=C, basicstyle=\small\ttfamily, breaklines=true,
+  caption={twin\_api.c 物理积分核心：孔口流量、choked 钳位与多变定律}]
+float V = V_MANIFOLD_L + popcount(ports) * V_PORT_L;   /* V = V_m + n·V_p（L） */
+float P = p + P_ATM_KPA;          /* 表压 -> 绝对压 */
+float net_q = 0.f;                /* 净流量 L/s，充为正 */
+
+if (pump_on && inlet_on) {        /* 充气：孔口形式渐近死点 */
+    float PR = PUMP_P_MAX_KPA + P_ATM_KPA;
+    net_q += PUMP_C * duty * sq_pos(P * (PR - P));
+} else if (pump_on && vent_on) {  /* 抽真空：对称形式渐近极限 */
+    float Pm = (PUMP_P_MIN_KPA > VALVE_P_MIN_KPA ?
+                PUMP_P_MIN_KPA : VALVE_P_MIN_KPA) + P_ATM_KPA;
+    net_q -= PUMP_C * duty * sq_pos(P * (P - Pm));
+}
+if (vent_on && !pump_on) {        /* 被动排气/负压回充（choked 钳位） */
+    float d = P - P_ATM_KPA;
+    float f = P_ATM_KPA * d;                       /* f = P_low·ΔP（带符号） */
+    float f_choked = P_ATM_KPA * (CHOKED_RATIO - 1.f) * P_ATM_KPA;
+    if (f >  f_choked) f =  f_choked;   /* 高压差恒流：与 √ΔP 解耦 */
+    if (f < -f_choked) f = -f_choked;
+    net_q -= VENT_C * sqrtf(fabsf(f));
+}
+/* ……泄漏项：进气/排气阀密封面 + 端口侧泄漏（阀开才对汇流管可见）…… */
+p += GAMMA * P / V * net_q * dt;  /* 多变气体定律：dp = γ·P/V·Q·dt（γ=1.2） */
+if (p >  SENSOR_SPAN_KPA) p =  SENSOR_SPAN_KPA;   /* XGZP6897D ±100kPa 饱和 */
+if (p < -SENSOR_SPAN_KPA) p = -SENSOR_SPAN_KPA;
+\end{lstlisting}
+
+三处细节值得放大。\textbf{其一，choked 段}：当上游与下游绝对压比超过 1.893（空气临界压比），孔口流速钳制在音速，流量不再随 $\sqrt{\Delta P}$ 增长——对应代码里对 $f=P_\text{low}\Delta P$ 的上下钳位。真机上它的可观测签名是：泄放初期降压速率近似恒定，之后才转入 $\sqrt{\ }$ 衰减尾。v1 完全没有这个现象，对拍时一眼就能识破。\textbf{其二，开阀瞬时等温混合}：端口阀 0$\to$1 的瞬间，汇流管气体与新接通的端口容积（初压取端口节点当前值）均压，$p \leftarrow \frac{P_1V_1+P_2V_2}{V_1+V_2}-P_\text{atm}$——密封 60\,kPa 时开一个新端口，压力阶跃下降且幅度按 $V_m/(V_m+V_p)$ 可预测，这是验收用例之一。\textbf{其三，$\gamma{=}1.2$}：多变指数介于等温 1.0 与绝热 1.4 之间，取自 Xavier 2022 \S4 的实验值——快速充放气介于两者之间，这是文献给出的折中。
+
+\section{参数成色：孪生模型也会"说谎"}
+\label{sec:twin-params}
+
+方程形状对了，参数仍可能错。PHYSICS-SPEC \S3 为每个参数标注来源与成色（表~\ref{tab:twin-params}），其中真空渐近值的推导过程最能体现"规格书交叉验证"的思维：泵规格书极限是 $-58$\,kPa（370 迷你真空泵，DFRobot FIT0801），但 0520D/F 阀规格书的动作压力下限是 $-53.3$\,kPa——\textbf{阀在这个深度以下不能可靠通电切换}，闭环"关阀保压"会失败。系统可用真空由链路最弱环节决定：$\max(-58,\,-53.3)=-53.3$\,kPa。最初的 $-38$\,kPa 是从 FlowIO 借来的值，$-58$ 是泵单独极限，均已被这条推导取代。
+
+\begin{table}[htbp]
+  \centering
+  \caption{孪生气动参数表（PHYSICS-SPEC \S3 浓缩版；成色=数值可信度）}
+  \label{tab:twin-params}
+  \begin{tabular}{llp{5.5cm}}
+    \toprule
+    参数 & 值 & 来源与成色 \\
+    \midrule
+    $P_R-P_\text{atm}$（充气死点） & $+61$\,kPa & FlowIO Small 模块实测死点（Shtarbanov 论文 Table 2）；到货必测 \\
+    $P_\text{min}-P_\text{atm}$（真空渐近） & $-53.3$\,kPa & $\max$(泵 $-58$, 阀动作窗 $-53.3$)——阀是最弱环节（0520D/F 规格书） \\
+    $C_\text{pump}$ & $9.0\times10^{-8}$ & 按 FlowIO 实测充压曲线拟合；到货 \texttt{calibrate\_pump.py} 重标 \\
+    $C_\text{vent}$ & $1.0\times10^{-5}$ & \textbf{演示时间尺度假设}（40\,kPa$\to$0 约 4\,s，无实物依据） \\
+    密封微漏率 & $0.01$/s & 好品假设 $\approx$3\,mL/min@40\,kPa；手册上限（阀内漏 $\le$30\,mL/min $\approx$0.073/s）——接近上限的阀该被判泄漏 \\
+    $V_m$ / $V_p$ & 5 / 2\,mL & 结构设计值，待实测 \\
+    $\gamma$ & 1.2 & Xavier 2022 \S4 \\
+    阀响应 & $\le$20/30\,ms & 0520D/F 规格书，$\ll$50\,ms tick，瞬时假设成立 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+注意 $C_\text{vent}$ 的成色标注：它是全表最"虚"的数——裸阀 Cv 0.05（0520D）/0.10（0520F）全开流导比它高约两个数量级，实物排气会显著更快。SPEC 不掩盖这一点，而是写明"到货重标"。参数表还诚实处理了时间尺度：370 泵空载流量 2.2\,L/min 直驱 7\,mL 汇流管理论充压远快于孪生当前时标——孪生时标锚定的是 FlowIO 文档级充气曲线（秒级，真实执行器容积下成立）。对不上实物的原因被写进文档，而不是藏进代码。
+
+参数表之外还挂着一条\textbf{如实建模的已知缺陷}：固件的超压保护阈值定在 120\,kPa，而传感器量程上限是 100\,kPa——压力永远到不了 120 才会被钳在 100，真机上这个保护\textbf{永远无法触发}，是一段客观存在的盲区。孪生没有"顺手修好"它，而是原样建模（钳位在 $\pm100$，保护阈值 120 原样传入 \texttt{pn\_check\_overpressure}），并在文件头注释里标注"待用户决策阈值"。理由与黄徽章一脉相承：孪生的职责是忠实复现当前设计——包括它的缺陷——让缺陷在对拍与验收里暴露，而不是在仿真里被无意识地"优化"掉。孪生若悄悄比真机更安全，它就失去了作为测试台的可信度。阈值本身最终裁定建议降到 90\,kPa（量程内留裕量），列入回板前的待决策清单。
+
+\section{v2.1 多节点端口模型：一个 bug 牵出的物理修正}
+\label{sec:twin-v21}
+
+v2 交付后，用户实测报了一个 bug：G 闭环运行时汇流管压力缓缓下降，而界面上的"端口 1 压力"纹丝不动。排查结论出乎意料——\textbf{不是显示 bug，是物理模型的 bug}：物理层只有汇流管单一气压节点，所谓"端口压力"只是前端变量（阀开时拷贝汇流管值、阀关时冻结），根本没有仿真状态。更深一层：端口泄漏被无条件作用于汇流管节点，而物理上\textbf{阀关之后，端口侧的泄漏对汇流管传感器不可见}——用这样的模型生成的训练数据，含有物理上不成立的签名。
+
+v2.1 的修正（\texttt{twin\_api.c} 中 \texttt{s\_port\_p[5]} 数组）：
+
+\begin{enumerate}
+  \item 每端口独立节点：关阀瞬间快照汇流管压力，此后独立演化（自身密封微漏 + 端口泄漏孔口流）；开阀时与汇流管同节点；
+  \item 开阀混合的端口初压改用端口节点真值（原假设大气压）；
+  \item 端口泄漏移到端口侧：阀开对汇流管可见、阀关不可见；
+  \item 基线微漏条件修正为"泵侧密封即适用"（含 H 诊断保压的端口全通态）；
+  \item 新增 CLI \texttt{H <ports>} 命令（泵侧密封 + 端口保持通）——泄漏诊断的标准工况。
+\end{enumerate}
+
+修正同时暴露了一个采样率声明错误：每 tick 一个采样点实际是 20\,Hz，原标注 50\,Hz，斜率特征因此虚高 2.5 倍。两处修正一并落地后，孪生行为与"阀是隔离边界"的物理直觉终于一致：关阀后端口压力沿自身泄漏曲线漂移，汇流管读数不再被下游污染。\texttt{pn\_twin\_port\_pressure()} 把端口节点导出到 \texttt{/api/state.ports\_p}，前端端口卡片直接显示真值，原先的"冻结 hack"删除。
+
+v2.1 的涟漪还波及了当时搭载在孪生上的 TinyML 泄漏检测：训练工况改为 H 语义、标签改为物理可观测的 $\Delta$ 分级、采样率修正并入、类平衡采样——终值准确率 95.73\%、normal 召回 98.6\%、major 召回 95.3\%（零漏报为 normal）、模型 18\,KB。但这个功能最终在 2026-10-02 随用户裁定\textbf{整体下线}：对标 FlowIO，官方平台没有出厂级泄漏诊断，白牌客户也未必愿意为此付钱；后端、接口、前端三层拆除归档，CLI \texttt{L} 命令退化为应答 \texttt{leak=off}。这段插曲值得记录的不是模型指标，而是方法论：\textbf{孪生的价值不随搭载功能的下线而消失}——泄漏注入接口（\texttt{pn\_twin\_set\_leak}）保留至今，用于出厂筛选工况的复现与孪生自测；被裁掉的是产品功能，留下的是物理能力。
+
+\section{形状对不对，断言说了算}
+\label{sec:twin-tests}
+
+v2 换方程之后，验证用例也随之换血——旧断言（渐近线性）对新形状（$\sqrt{\ }$ 压头）必然失效，TEST-CASES \S I 重写为一组\textbf{规律形状断言}（表~\ref{tab:twin-tests}）。这些断言测的不是数值精度（那是回板对拍的事），而是曲线的\textbf{函数形状}——形状错了，参数再准也没用。
+
+\begin{table}[htbp]
+  \centering
+  \caption{孪生物理 v2 验证用例（TEST-CASES \S I 要点）}
+  \label{tab:twin-tests}
+  \begin{tabular}{lp{8.6cm}}
+    \toprule
+    用例 & 断言要点 \\
+    \midrule
+    充压曲线 & 按 $\sqrt{\,p(P_R-p)\,}$ 形式做非线性回归拟合（替代 v1 的渐近线性断言） \\
+    choked 恒流 & 高压差段（表压 $>53$\,kPa，即 $P/P_\text{atm}>1.893$ 边界之上）释放初期降压速率近似恒定 \\
+    容积耦合 & 同 PWM 下开 1 口 vs 开 3 口充压，后者速率显著低（$\Delta V/V$ 断言） \\
+    开阀混合 & 密封 60\,kPa 时开新端口 $\to$ 压力阶跃下降，幅度按 $V_m/(V_m+V_p)$ 可预测 \\
+    真空/回充 & 渐近 $-53.3$\,kPa；负压开排气阀自然回充至大气压 \\
+    微漏/量程饱和 & 密封态按微漏率缓降；注入超量程值按 $\pm100$\,kPa 钳位 \\
+    自测重算 & \texttt{twin\_selftest.c} 期望值按 v2 全部重算，\texttt{build\_twin.sh} 自测通过 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{传感器模型：对着手册逐条校准}
+\label{sec:twin-sensor}
+
+压力传感器 XGZP6897D-C 的孪生模型不是拍脑袋的 $\pm100$\,kPa 钳位就完了。对照 CFSensor 官方手册 V1.1 逐条核对，发现原实现有三处\textbf{到货必炸}的驱动级错误（表~\ref{tab:twin-xgzp}）：I2C 地址、读法与换算全错。这正是"孪生先行"的另一种价值——在真机到来之前，靠文档把驱动层的雷排掉。
+
+\begin{table}[htbp]
+  \centering
+  \caption{XGZP6897D-C 驱动级三处修正（对照手册 V1.1，2026-09-23）}
+  \label{tab:twin-xgzp}
+  \begin{tabular}{llp{4.6cm}}
+    \toprule
+    项 & 原实现（错） & 手册 \\
+    \midrule
+    I2C 地址 & 0x6D/0x5D 可配 & 固定 \textbf{0x58}（-C 型选型码即地址）$\Rightarrow$ 双传感器必须 TCA9548A \\
+    读法 & 写 0x30$\leftarrow$0x0A 启动$\to$轮询$\to$读 0x06 & 从 0x04 \textbf{连读 5 字节}（ASIC 自动刷新，无启动命令） \\
+    换算 & $K=2^{24}/\text{span}$ & $P=\text{补码和}/2^{21}\times(\text{span})$（$\pm$100\,kPa 型 span$=$200\,000，原差 \textbf{8 倍}） \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+传感器的其余手册参数进孪生的取舍同样有据：量程饱和 $\pm100$\,kPa 已建模；精度 $\pm2.5\%$FS 属系统性分量，经上电零点自校准消除（装配指南 bring-up 步骤）；零点漂移 $\pm1\%$FS 按校准后残差 $N(0,0.5)$ 建模；响应 2.5\,ms@OSR1024 与上电 24\,ms 均 $\ll$ 50\,ms tick，忽略；量化步约 0.1\,Pa，忽略。
+
+\section{板级电气孪生：BOARD\_PARAMS 与黄徽章}
+\label{sec:twin-board}
+
+气动孪生之外，回板前还建了\textbf{电气孪生}（\texttt{board\_model.py}）：8 路阀线圈的 RL 电流、5V/3V3 双轨负载、一阶热惯性、600\,s 环形历史。阀电流用解析式而非数值积分：开通 $\tau_\text{on}=L/(r_\text{coil}+r_\text{ds})\approx1.78$\,ms，关断经 SS14 续流回路 $\tau_\text{off}=L/r_\text{coil}\approx1.79$\,ms，电流过零被二极管反向截止钳位——与仿真套件 \texttt{sim\_engine} 的续流 ODE 是同一物理量，防"双源漂移"。
+
+\begin{lstlisting}[language=Python, basicstyle=\small\ttfamily, breaklines=true,
+  caption={board\_model.py 的 BOARD\_PARAMS：每个参数带成色注释（摘自源码）}]
+BOARD_PARAMS = {
+    "r_coil": 14.0,    # [假设-行业典型] 阀线圈电阻 14Ω (5V/14Ω ≈ 0.356A 稳态)
+    "l_coil": 25e-3,   # [假设] 阀线圈电感 25mH
+    "rds": 0.040,      # [手册] AO3400 @ VGS=3.3V 导通电阻 ~40mΩ
+    "vbus": 5.0,       # [标称] USB 5V 总线
+    "vf_ss34": 0.31,   # [手册] SS34 肖特基正向压降 (5V 轨串入)
+    "vout3v3": 3.269,  # [实测] buck 标称输出
+    "load_reg": 0.012, # [仿真] buck 负载调整率 (V/A)
+    "i_pump": 0.35,    # [假设] 泵电机平均电流
+    "theta": {"cpu": 35.0, "buck": 130.0, "mos": 350.0},  # [手册] 热阻 ℃/W
+}
+BUCK_EFF = 0.876      # [仿真] buck 效率
+\end{lstlisting}
+
+模型的其余两个状态量同样一行一个物理假设：逻辑负载电流 0.43\,A 由三部分估算——ESP32 峰值约 0.24\,A、TCA9548A 与 CH340 等外围合计补足（成色：估算，回板电流钳实测）；板级热惯性按一阶模型推进，时间常数 30\,s，三个热节点（CPU/buck/MOS）各挂手册热阻 35/130/350\,$^\circ$C/W。温升的意义在验收侧：A215 工单要用红外热像对照修正这三条热阻，MOS 那 350\,$^\circ$C/W 是全板最孤注一掷的数字——SOT-23 封装的天然弱势，设计上靠"8 路阀不同时满占空比"的使用假设兜底。
+
+电气参数的成色管理与气动侧同一套思想，汇总成\textbf{物理校准状态矩阵}（设计规格书 \S10）：每个模型参数区分两件事——\textbf{结构正确性}（方程是不是物理规律，如多变定律、RL 解析式）与\textbf{参数校准度}（数值是不是本机实测），不混谈。成色分四档：实测 $>$ 手册 $>$ 仿真 $>$ 假设。全项目电气参数中最硬的一档在仿真引擎里：buck 分压比 R4/R5 就是板上实阻（3.27\,V 输出的来源，见第~\ref{ch:schematic} 章修正 \#11）；最软的一档是阀线圈 R/L——BOM 未锁传感器与阀型号前只能用行业典型值。
+
+矩阵的呈现约束写进了前端：遥测面板角落固定显示\textbf{黄色徽章}"模型参数：理论值（未本机标定）"；回板后跑完六项电气校准（A211--A215：阀线圈万用表+LCR 实测、RDS 示波器反推、ESR 纹波反推、效率四线法、$\theta_{ja}$ 红外对照、ESP32 电流钳），改 \texttt{BOARD\_PARAMS} 常量，徽章转绿。\textbf{不让演示数字冒充实测}——这是孪生的诚信底线，也是它作为产品文档的可信度来源。
+
+\section{仿真套件四电路与对拍闭环}
+\label{sec:twin-sim}
+
+与板级模型配套的还有四个电路的行为级仿真（\texttt{sim\_engine.py}，无 ngspice 环境下的自研状态机 + SVG 输出）：电源效率、输出纹波、温升、I2C 时序。四电路的达标判据与一次 I2C 告警案例的复盘见第~\ref{ch:acceptance} 章 A103 工单；参数重算接口（\texttt{POST /api/board/sim}）允许前端改元件值即时重跑。
+
+\section{孪生即测试台：API v1.2 一览}
+\label{sec:twin-api}
+
+孪生对上位机的价值，取决于它暴露的接口与真机的距离。API v1.2 之后，孪生服务（\texttt{server.py} 加载 \texttt{pn\_twin.dll}）的板级接口与真实遥测同构（表~\ref{tab:twin-apis}）——前端与 SDK 写一次，两种模式（HTTP 孪生 / BLE 真机）切换运行，仅以徽章区分，防混淆。
+
+\begin{table}[htbp]
+  \centering
+  \caption{孪生服务板级 API v1.2（设计规格书 \S3 增量契约）}
+  \label{tab:twin-apis}
+  \begin{tabular}{lp{8.8cm}}
+    \toprule
+    接口 & 用途 \\
+    \midrule
+    \texttt{GET /api/board/state} & 板级实时遥测：阀电流、双轨电压、结温、历史 \\
+    \texttt{POST /api/board/sim} & 参数重算：改元件值即时重跑四电路仿真 \\
+    \texttt{GET /api/board/sim/presets} & 预设参数集（BOM 实值 / 手册 / 假设三档标签） \\
+    \texttt{GET /api/board/assembly} & 结构件清单（3D 爆炸视图数据源，第~\ref{ch:enclosure} 章） \\
+    \texttt{GET/POST /api/time} & 孪生时间控制（暂停/倍速——真机没有的调试自由度） \\
+    \texttt{POST /api/record} + \texttt{replay} & 场景录制回放：一次复现，永远复现 \\
+    \texttt{GET /api/board/history/export} & 遥测 CSV 导出（对拍数据就地落盘） \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+其中 \texttt{/api/time} 与 \texttt{record/replay} 是孪生独有的两种能力：时间可以暂停、可以慢放——真机上 20\,ms 的阀电流建立过程在孪生里可以拉到肉眼可见；场景可以录制、可以逐帧回放——一个触发条件可疑的 bug，录制一次就能反复重演。board\_model 侧还有两处工程细节：遥测快照与推进互斥（tick 线程持锁写入，HTTP 线程同式重算读出，杜绝"半个状态"）；服务失联时置 \texttt{stale} 标志，前端立即降级显示而非渲染过期值。600\,s 的环形历史（6000 点）覆盖最长的一次充放气循环，配合 CSV 导出即得对拍数据集。
+
+\section{到货之后：calibrate\_pump.py 三实验协议}
+\label{sec:twin-calib}
+
+孪生参数表里所有"借值"与"假设"都指向同一个收尾动作：到货实测。\texttt{calibrate\_pump.py} 把这个动作固化成三个实验的协议（P0 装配完成、共地确认后执行）：
+
+\begin{enumerate}
+  \item \textbf{实验 A，充气死点}：堵死充气口（或全密封），\texttt{I 31 255} 连续 30\,s，每秒记录汇流管压力——末端渐近值即 $P_R$ 实测；
+  \item \textbf{实验 B，真空死点}：堵死气路，\texttt{V 31 255} 连续 30\,s，每秒记录——末端渐近即 $P_\text{min}$ 实测（验证 $-53.3$ 的阀窗假设）；
+  \item \textbf{实验 C，升压曲线}：接实际执行器容积，\texttt{I 1 255} 从 0 充到死点，每 0.5\,s 记录——用于拟合 $C_\text{pump}$。
+\end{enumerate}
+
+记录格式统一为无表头两列 CSV（\texttt{time\_s, pressure\_kPa}）；脚本读入后做渐近估计（末端中位数）并检查收敛（末端抖动 $<0.5$\,kPa 才算到达死点，否则提示加长实验时长），输出\textbf{直接可抄的 \texttt{\#define} 修改建议}——含建议值与数据文件名注释，对照 \texttt{twin\_api.c} 改两行即完成一次参数升级。实验 C 的 1--4\,s 平均升压率与 FlowIO 标定参照值（2\,s$\to$19 / 4\,s$\to$35\,kPa，约 8--9\,kPa/s）对照，明显更快则说明 $C_\text{pump}$ 需上调。改完常数后的回归门槛写在脚本尾注里：\texttt{build\_twin.sh} 与 \texttt{run\_tests.sh} 全绿。三个实验、一个脚本、两行宏——这就是"黄徽章转绿"在气动侧的全部操作量；它对应的验收工单是 A216--A218（第~\ref{ch:acceptance} 章）。
+
+电气侧的校准动线同构但更手工：六项实测（表~\ref{tab:twin-board}）改的是 \texttt{BOARD\_PARAMS} 常量块，无需新脚本——校准工具的价值在于协议与判定门槛，不在于代码量。
+
+\begin{table}[htbp]
+  \centering
+  \caption{电气孪生六项校准（设计规格书 \S10.2；对应工单 A211--A215）}
+  \label{tab:twin-board}
+  \begin{tabular}{lll}
+    \toprule
+    参数 & 当前成色 & 回板校准法 \\
+    \midrule
+    阀线圈 $R{=}14\,\Omega$ / $L{=}25$\,mH & 假设（行业典型） & 万用表 + LCR 实测 \\
+    AO3400 $R_\text{DS}{=}40$\,m$\Omega$ & 手册 & 示波器 $V_\text{ds}$ 波形反推 \\
+    buck ESR / $C_\text{out}$ & 手册/仿真 & 示波器纹波实测反推 ESR \\
+    负载调整率 / 效率 87.6\% & 仿真 & 四线法效率实测 \\
+    $\theta_{ja}$（MOS 350 / buck 130 / CPU 35\,$^\circ$C/W） & 手册 & 红外/热电偶对照修正 \\
+    ESP32 逻辑电流 0.43\,A & 估算 & 电流钳实测（WiFi 活动系数） \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+从仿真到验收的闭环由 Phase CAL 六张工单（A301--A306）完成：改 \texttt{BOARD\_PARAMS} 与 PHYSICS 常数后，孪生曲线与实测曲线叠图，六个维度（阀电流、电源效率、温升、充气升压、真空死点、闭环精度）各出一张对比图，汇总成"数字孪生精度报告"——详见第~\ref{ch:product} 章。
+
+\section*{本章小结}
+孪生先行的本质是把"等板子"变成"先跑起来"：逻辑层与物理层分离让固件、前端、SDK 在回板前全链路演练；气动物理以文献形式（多变定律 + ANSI 孔口 + choked + 容积耦合）重写，再用多节点端口模型修正了"冻结端口压力"这类物理不成立的行为；电气侧以 BOARD\_PARAMS 成色注释与黄徽章机制管理参数可信度。回板之后，孪生与真机对拍——偏差本身就是交付物。

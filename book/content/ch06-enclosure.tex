@@ -1,11 +1,258 @@
 \chapter{结构：FreeCAD 参数化外壳}
 \label{ch:enclosure}
 
-\section{参数化建模与 PCB 联动}
-\texttt{hardware/flowio-p1/enclosure/}：外壳关键尺寸由 PCB 板框与连接器坐标驱动，改板不必重画壳。
+主板造出来只是一块裸板：端子裸露、按键悬空、天线区的净空一碰就没。第~\ref{ch:fab} 章末尾的收货验收第三步"外壳试装"，指向的就是本章的产物——\texttt{hardware/flowio-p1/enclosure/} 下的参数化外壳（FCStd/STEP/STL 三格式）与它的孪生网格。外壳设计只有一条核心原则：\textbf{关键尺寸全部由 PCB 决定}——板框、铜柱位、连接器坐标、端子节距。板改了，改几个参数重跑脚本，壳就跟着变；反过来，壳上的任何一个孔，都能在板子上指出对应的器件。这条"参数化联动"原则让结构设计不再是画图，而是\textbf{把装配关系写成代码}。
 
-\section{M3 自攻柱与端子开孔}
-螺丝端子排的开孔对位公差；装配动线对应工单 A220（见第~\ref{ch:acceptance} 章）。
+\section{从 OpenSCAD 到 FreeCAD：一次工具链变更}
+\label{sec:encl-freecad}
 
-\section{装配干涉检查}
-渲染装配图核对阀/泵接管方向与外壳开孔的一致性，装配零干涉是出 STL 前的最后一道闸。
+项目最初选的是 OpenSCAD（收尾规格书 \S6 还留着它的决策表），执行中变更为 FreeCAD 1.1（OCCT 内核，变更记录 C7），理由只有一条但足够硬：\textbf{规避 OpenSCAD 与 FreeCAD 之间 STL 互操作的丢拓扑/丢参数问题}。数字孪生需要外壳网格（\S\ref{sec:encl-meshes}），生产需要 STEP（BREP 精确边界表示），存档需要可参数化重开的工程文件——三种用途、三种格式，从同一个 OCCT 建模内核出发一次产出，不在网格与实体之间来回转换。
+
+\texttt{make\_case.py} 以 FreeCADCmd 无头运行（\texttt{E:/FreeCAD/bin/FreeCADCmd.exe make\_case.py}），输出 \texttt{flowio-p1-case.FCStd}（参数化工程）+ \texttt{case-bottom.step}/\texttt{case-top.step}（生产）+ 两只 STL（打印与孪生）。三种格式不是冗余，而是三种下游的母语（表~\ref{tab:encl-formats}）：工程文件记得住"参数"，边界表示记得住"曲面"，网格只记得住"三角形"——下游要什么，就交什么，谁也不必迁就谁。坐标系约定在文件头写死：板左下角为原点，$x\to$右，$y\to$上（板宽 75），$z\to$高出板面。
+
+\begin{table}[htbp]
+  \centering
+  \caption{外壳的三格式输出与各自下游}
+  \label{tab:encl-formats}
+  \begin{tabular}{llp{4.4cm}}
+    \toprule
+    格式 & 信息保真 & 下游 \\
+    \midrule
+    FCStd（参数化工程） & 全部建模历史与参数 & 改板后重开改参重跑 \\
+    STEP（BREP 边界表示） & 精确曲面与实体拓扑 & 生产/检查：实体数、体积、有效性 \\
+    STL（三角形网格） & 离散面片（水密即可） & 3D 打印切片、孪生 3D 渲染 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{参数区：外壳的全部体质}
+\label{sec:encl-params}
+
+整个外壳的几何由 20 来个参数完全决定（代码列表~\ref{lst:case-params}）。壁厚 2.4\,mm 与板壁间隙 0.5\,mm 是基础量；内腔高 13.5\,mm 不是拍的——\textbf{端子高 11\,mm + 裕量}，端子（J10--J17）是板上最高的器件，它定了腔高，腔高加板厚加底壁就是壳体总高。铜柱位 \texttt{ST} 四元组直接来自 PCB 的四个安装孔，其中第四个 (68, 65) 是布线攻坚后\textbf{移动过的 HD 实测位}（\S\ref{sec:encl-hd}）——外壳脚本不认原理图里的旧默认值，只认修正后的真值。
+
+\begin{lstlisting}[language=Python, basicstyle=\small\ttfamily, breaklines=true,
+  caption={make\_case.py 参数区（摘自源码）}, label={lst:case-params}]
+WALL, CLR = 2.4, 0.5            # 壁厚 / 板-壁间隙
+BW, BH, PCB_T = 90.0, 75.0, 1.6
+INNER_H = 13.5                   # 端子高11 + 裕量
+TOTAL_H = INNER_H + PCB_T + 1.5
+OX = WALL + CLR                  # 板原点 -> 壳内壁偏移 (=2.9)
+OW, OH = BW + 2*OX, BH + 2*OX    # 壳体外廓 95.8 x 80.8
+# 铜柱 (板坐标, HD 为 PCB 修复后实测位)
+ST = [(4, 4), (3, 37), (86, 13), (68, 65)]
+PD, PH = 4.2, 5.0               # M3 自攻底孔 / 柱高
+SCREW_D = 3.4                    # 顶盖过孔
+# 侧开孔 [面, 板坐标位置, 宽, 高]
+CUTS = [("L", 27.0, 10.0, 9.0), ("L", 46.0, 8.0, 8.5),
+        ("R", 6.0, 10.0, 4.0), ("R", 22.0, 8.0, 8.5),
+        ("R", 32.5, 8.0, 8.5), ("R", 46.0, 8.0, 8.5),
+        ("T", 46.0, 8.5, 8.0), ("T", 59.5, 8.5, 8.0), ("T", 73.0, 8.5, 8.0)]
+TERM_X = [6.5 + 11*i for i in range(8)]   # 底边 8 端子, 节距 11
+TY = 68.5
+\end{lstlisting}
+
+壳体本身是三步布尔运算：外盒减内腔得壳体；壳体再减全部侧开孔（\texttt{side\_cut} 生成穿越壁厚的切割盒，孔中心统一落在离壳底 3\,mm 起的安装带上）；最后熔合四根铜柱——外圆柱半径底孔/2 + 1.75\,mm，中心钻 4.2\,mm 的 M3 自攻底孔，柱高 5\,mm。\texttt{b2c(x,y)} 这个两行函数是全文件的枢纽：板坐标加 \texttt{OX} 偏移即壳坐标，所有开孔、铜柱、螺丝孔的位置都以板坐标书写——\textbf{看外壳脚本就能读出器件布局}，这是联动的具体形态。
+
+顶盖是壳体的镜像减法再加两个特征：内腔四边各收 0.4\,mm（盖与体的配合面——这 0.4\,mm 让顶盖内壁恰好扣住底壳外壁，形成无卡扣的过盈配合），顶面开 $8\times6$ 通风栅格（每个 $5\times4$\,mm，网格原点 \texttt{OX+12, OX+18}，节距 $9\times8$\,mm），四角开 3.4\,mm 螺丝过孔对准铜柱。每个布尔阶段的产物都过一遍 \texttt{removeSplitter()}——OCCT 会把 fuse/cut 留下的重合面与冗余边清理掉，STEP 里就是一个干净的单实体；这一步省掉的话，下游打印机切片器与孪生加载器都可能被碎面绊倒。
+
+表~\ref{tab:encl-spec} 把外壳的完整设计决策汇总成一张表——左三列是收尾规格书 \S6 的初版决策（当时还是 OpenSCAD），右侧注明执行中的两处变更（C7 工具链、C9 铜柱位）。决策表与参数区代码互相印证：表里的每个数字都能在代码列表~\ref{lst:case-params} 里找到同名常量。
+
+\begin{table}[htbp]
+  \centering
+  \caption{外壳设计决策表（收尾规格书 \S6 + 执行变更记录）}
+  \label{tab:encl-spec}
+  \begin{tabular}{lp{5.2cm}p{3.6cm}}
+    \toprule
+    项 & 值 & 备注 \\
+    \midrule
+    形式 & 底壳 + 顶盖，M3 自攻铜柱 $\times$4 & 盖体 0.4\,mm 过盈配合 \\
+    壁厚/间隙 & 2.4\,mm / 0.5\,mm & 板到壁间隙 \\
+    内腔高 & 13.5\,mm（端子 11 + 裕量）+ 板 1.6 & 总高约 18.5\,mm \\
+    外廓 & $95.8\times80.8\times19$\,mm & 板 $90\times75$ + 双壁 \\
+    铜柱位 & HA(4,4) · HB(3,37) · HC(86,13) · HD(68,65) & C9：HD 从 (77,62) 移位 \\
+    侧开孔 & 9 孔 + 8 端子带 & 表~\ref{tab:encl-cuts} \\
+    顶盖 & 螺丝孔 $\times$4 + 通风栅 $8\times6$ & 天线区上方不开金属 \\
+    工具 & FreeCAD 1.1（OCCT） & C7：由 OpenSCAD 变更 \\
+    输出 & FCStd + STEP + STL & 三格式同源 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{尺寸传递链：从板到壳的一条路}
+\label{sec:encl-chain}
+
+把"关键尺寸由 PCB 决定"落到实处，就是一条显式的传递链（表~\ref{tab:encl-chain}）：板上的每个特征，穿过某个公式，长成壳上的某个参数。这条链上没有一处需要人脑记忆——改板时跑一遍脚本，链自动重算。
+
+\begin{table}[htbp]
+  \centering
+  \caption{PCB 特征 $\to$ 外壳参数的传递链（代码常量名见 make\_case.py）}
+  \label{tab:encl-chain}
+  \begin{tabular}{llp{3.6cm}}
+    \toprule
+    PCB 特征 & 外壳参数 & 代码常量 \\
+    \midrule
+    板框 $90\times75$ & 外廓 $95.8\times80.8$（双壁 + 间隙） & \texttt{OW,OH} \\
+    板厚 1.6\,mm & 腔底垫高、总高 18.5 & \texttt{PCB\_T, TOTAL\_H} \\
+    最高器件：端子高 11\,mm & 内腔高 13.5（含裕量） & \texttt{INNER\_H} \\
+    安装孔 HA--HD 坐标 & 铜柱位（HD 取移位后真值） & \texttt{ST} \\
+    端子节距 11\,mm $\times$ 8 & 底边开孔带 $6.5+11i$ & \texttt{TERM\_X} \\
+    连接器坐标与体量 & 九个侧开孔的位/宽/高 & \texttt{CUTS} \\
+    天线净空区 & 顶盖该区完整塑料面 & （约束，非孔） \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+传递链的每一环都有一个真实的源头故事。外廓 95.8 来自"$90 + 2\times(2.4+0.5)$"——壁厚与间隙是仅有的两个自由量，其余全部被板锁定。内腔高 13.5 的"端子高 11 + 裕量"里，11 是 BOM 里 CONN-TH\_2P 端子的实测体高（孪生网格字典同值），裕量给的是装配公差与器件高度偏差——而器件高度可信的前提，又回到第~\ref{ch:fab} 章的 via-in-pad 塞孔工艺。天线净空一环最特殊：它传递的不是尺寸而是\textbf{约束}——顶盖在那里"什么都不做"，这件事必须显式记录，否则下一次改壳的人很可能顺手把通风栅挪过去"利用空间"。
+
+\section{侧开孔清单：每个孔对着一个连接器}
+\label{sec:encl-cuts}
+
+九个侧开孔加八个端子孔，每一个都对应板上一只连接器（表~\ref{tab:encl-cuts}）。左壁两个：DC-005 电源座（10$\times$9）与一只 XH 座；右壁四个：USB-C（10$\times$4，扁平孔贴合 Type-C 的低矮轮廓）、三只 XH；顶壁三个：J9/J18/J19 的 XH 座；底边则是 8 只螺丝端子的连贯开孔带——\texttt{TERM\_X = 6.5 + 11i} 与板上端子节距 11\,mm 严格一致，单孔 9.6$\times$9，让每只端子的螺丝压接面都能从壳外操作。
+
+\begin{table}[htbp]
+  \centering
+  \caption{侧开孔与端子孔清单（板坐标；对应连接器据收尾规格书 \S6）}
+  \label{tab:encl-cuts}
+  \begin{tabular}{llp{3.0cm}l}
+    \toprule
+    壁面 & 板坐标位置 & 开孔（宽$\times$高\,mm） & 对应器件 \\
+    \midrule
+    左 & 27.0 & $10\times9$ & DC-005 电源座（J1） \\
+    左 & 46.0 & $8\times8.5$ & XH 座（J8） \\
+    右 & 6.0 & $10\times4$ & USB-C（J2） \\
+    右 & 22.0 / 32.5 / 46.0 & 各 $8\times8.5$ & XH 座（J5/J6/J7） \\
+    顶 & 46.0 / 59.5 / 73.0 & 各 $8.5\times8$ & XH 座（J9/J18/J19） \\
+    底 & $6.5+11i$，$i=0..7$ & 各 $9.6\times9$ & 螺丝端子排（J10--J17） \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+开孔带的高度统一从壳底 3\,mm 起量（\texttt{cz = Z0 + 3.0 + hh/2}），保证所有线缆插座都在同一水平带内——装配时不用翻转壳体对孔，这对 B2B 客户产线上的装配节拍是有实际意义的细节。
+
+底边端子带还有一个记录在案的取舍：收尾规格书给出过两个方案——每端子一个 $11\times9$ 单孔，或整条 $82\times9$ 长槽。最终实现取的是单孔方案（$9.6\times9$、节距对齐端子）。长槽的优势是开的程序少、对位要求低；代价是底边整条被切断，壳体底部变成两条悬臂梁——抗弯与抗扭刚度都受损，跌落工况最吃亏。单孔之间保留的塑料梁让底边保持连续结构，代价只是布尔切割的循环次数。对一个要长期挂在康复设备上的产品，结构刚度优先于建模省事，这个优先级不难判断，但\textbf{把备选方案记进决策文档}才是让它可复核的关键。
+
+\section{公差链：间隙、配合与自攻}
+\label{sec:encl-tol}
+
+外壳的可用性最终取决于几个毫米级的数字（表~\ref{tab:encl-tol}）。它们构成一条从"板能放进壳"到"螺丝能拧紧"的公差链——任何一环吃紧，装配体验都会崩坏。
+
+\begin{table}[htbp]
+  \centering
+  \caption{外壳公差链（数值均出自 make\_case.py 参数区）}
+  \label{tab:encl-tol}
+  \begin{tabular}{llp{5.6cm}}
+    \toprule
+    特征 & 值 & 作用 \\
+    \midrule
+    板壁间隙 \texttt{CLR} & 0.5\,mm & 板入壳的滑动配合；吸收板边毛刺与打印偏差 \\
+    壁厚 \texttt{WALL} & 2.4\,mm & 强度主体；$\ge$1.2\,mm 打印底线的两倍裕量 \\
+    盖体配合 & 0.4\,mm 收边 & 顶盖内壁扣住底壳外壁，无卡扣过盈配合 \\
+    自攻底孔 \texttt{PD} & 4.2\,mm & M3 自攻标准底孔；柱体被螺丝牙切入 \\
+    柱外径 & 约 7.7\,mm & 底孔半径 + 1.75\,mm 壁——保证牙区周向塑料完整 \\
+    顶盖过孔 \texttt{SCREW\_D} & 3.4\,mm & 螺丝穿过不咬合；拆盖不松动主板 \\
+    开孔中心带 & 离壳底 3\,mm & 所有线缆插座同一水平带 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+自攻连接值得多说一句，因为它是 3D 打印外壳最常被低估的环节。M3 自攻螺丝切入 4.2\,mm 底孔时，塑料被挤压成内螺纹——连接强度完全取决于孔周塑料的\textbf{周向完整性}：孔太小，切入阻力过大直接滑丝；孔太大，牙型不饱满，拧两轮就秃。4.2\,mm 是 ABS/PLA 上 M3 的标准底孔径，柱外径 7.7\,mm 保证牙区外圈还有约 1.75\,mm 厚的实心塑料受力。柱高 5\,mm 对板厚 1.6\,mm 的咬合长度约 3.4\,mm——足够 M3$\times$6 螺丝建立稳定预紧。这些数字单看都不起眼，但任何一条被"顺手改改"，装壳那天的返工成本都是整只外壳。
+
+\section{HD 移位：一个安装孔的 (77,62)$\to$(68,65)}
+\label{sec:encl-hd}
+
+铜柱位 (68, 65) 的第四个坐标背后是布线攻坚（第~\ref{ch:pcb} 章）里最干净利落的一次修复。故事从一处坏过孔开始：\texttt{route\_pcb} 阶段残留的手工 +5V 过孔 @(78.36, 60.5) 紧贴 D10（+5V 肖特基）与 HD 安装孔，一口气命中 4 条孔间距、1 条悬空、1 条未连接违规。删掉坏过孔后，剩余冲突定位到：\textbf{D10.1 焊盘孔与 HD 安装孔 (77, 62) Ø3.2 的边距为 0.000\,mm}——两孔相切，且 HD 堵死了 D10 的出线走廊。
+
+此时有两个选项：挪 D10（焊盘有网络有走线，牵一发动全身）或挪 HD。裁决是挪 HD，理由是排障规格书里那句朴素的风险评估——\textbf{安装孔无网络无走线，移动零风险}。\texttt{move\_hd.py} 用与过孔落点相同的全障碍感知搜索（焊盘含孔、走线、过孔、NPTH、板边、禁布区全部纳入）做全区扫描，(68, 65) 以净空 5.6\,mm（Ø3.2 孔 + 1.2\,mm 铜净空）成为全场最优点，同时避开了端子排区（$y\ge66$）与 D10。
+
+这次移位暴露了一个结构性盲区：\textbf{DRC 不会替你保护安装孔}。孔间距规则查的是"孔与孔的几何距离"，但 HD 作为无网络器件，它的"合理位置"（四角对称、避让器件、给铜柱留塑料壁厚）不在任何电气规则的定义域里——它在机械设计者的脑子里。所以移位后的真值必须显式传递：\texttt{standoffs.txt} 记录四柱终位（HA 4,4 / HB 3,37 / HC 86,13 / HD 68,65），\texttt{make\_case.py} 的 \texttt{ST} 数组与之一致。任何一侧单独改动都会造成"板上孔、壳上柱"对不上的装配事故——参数化联动的纪律在这里比任何地方都重要。
+
+\section{铜柱、自攻与装配动线}
+\label{sec:encl-assembly}
+
+装配动线四步（收货验收第三步的展开，对应验收工单 A220）：PCB 入下壳 $\to$ 四角 M3 孔对位（HA--HD）$\to$ 上壳按键对准 SW1/SW2/SW3 $\to$ 四颗 M3$\times$6 螺丝自攻入铜柱。三个几何参数各司其职：铜柱底孔 4.2\,mm 是 M3 自攻螺丝的标准底孔（塑料柱体被螺丝牙切入形成螺纹）；柱高 5\,mm 保证板厚 1.6\,mm 之后仍有足够咬合长度；顶盖过孔 3.4\,mm 让螺丝穿过而不咬合顶盖——拆卸顶盖不松动主板。
+
+这里有一个跨章的呼应，也是"全栈联合设计"的注脚：第~\ref{ch:fab} 章的 8 处 via-in-pad 塞孔封帽工艺，与外壳的\textbf{内腔高度裕量}直接相关。内腔高按"端子 11\,mm + 裕量"设定，这个设定成立的前提是器件以设计高度稳定焊接——盘内孔若不塞孔，焊膏流失造成器件沉降或立碑，最高的器件高度就不再可信，裕量设计随之失效。\textbf{工艺决定焊接质量，焊接质量决定器件高度，器件高度决定壳体尺寸}——链条跨过 PCB 工艺、贴装与结构三个专业，这正是把三者放进同一个仓库设计的原因。
+
+\section{天线净空与通风栅}
+\label{sec:encl-antenna}
+
+顶盖有两处"刻意不做"的设计。其一，ESP32 模组天线区（板坐标 $x\,19.5$--$36.5$ / $y\,<\,6.4$，即第~\ref{ch:pcb} 章的禁布区）正上方的顶盖\textbf{不开金属、允许塑料}——塑料对 2.4\,GHz 电磁波近乎透明，而 PCB 侧已保证天线正下方四层无铜；顶盖的唯一责任是不在这里加金属件。其二，通风栅格的位置刻意远离该区：栅格起于壳坐标 $y=20.9$（板坐标 $y\approx18$），与天线区之间留出完整塑料面。$8\times6$ 个 $5\times4$\,mm 的栅格孔承担泵与阀长时间工作的散热——8 路阀线圈满负荷时每只约 0.36\,A 电流（5V/14$\Omega$），腔体积热不可忽视。
+
+\section{孪生网格：make\_meshes.py 与坐标映射的证伪}
+\label{sec:encl-meshes}
+
+外壳 STL 的第二去向是数字孪生的 3D 装配视图（第~\ref{ch:twin} 章图~\ref{fig:twin-3d}，五部件爆炸见图~\ref{fig:encl-assembly}）。\texttt{make\_meshes.py} 把 PCB、器件阵与外壳组装成同一坐标系下的网格包，输出的 \texttt{assembly.json} 驱动前端爆炸视图。
+
+这份脚本最有教学价值的是\textbf{坐标映射的证伪过程}。KiCad 导出的 \texttt{pos.csv} 用向下 y 轴，板坐标用向上 y 轴，两者之间最可疑的变换有两种：$y=-\text{PosY}$ 或 $y=-\text{PosY}+75$（75 是板宽）。脚本没有选一个"看起来对"的，而是用三只位置已知的器件做锚点校验——J10 端子应在 $(6.5,\,68.5)$、J2 USB-C 应在 $(86,\,6)$、J1 应在 $(5.5,\,27)$：
+
+\begin{lstlisting}[language=Python, basicstyle=\small\ttfamily, breaklines=true,
+  caption={make\_meshes.py 的坐标映射校验（摘自源码）}, label{lst:mesh-verify}]
+def verify_mapping(parts):
+    """已知器件校验 pos.csv -> 板坐标映射, 定稿后供建模使用."""
+    refs = {p["ref"]: p for p in parts}
+    checks = [("J10", 6.5, 68.5), ("J2", 86.0, 6.0), ("J1", 5.5, 27.0)]
+    for ref, ex, ey in checks:
+        p = refs[ref]
+        x, y = p["x"], -p["y"]          # 候选映射: x=PosX, y=-PosY
+        ok = abs(x - ex) < 0.01 and abs(y - ey) < 0.01
+        assert ok, "Y mapping verification failed for %s" % ref
+    print("[map] mapping FIXED: x=PosX, y=-PosY "
+          "('-PosY+75' rejected by J10/J2 checks)")
+\end{lstlisting}
+
+$+75$ 翻转假设在 J10/J2 两个锚点上立刻露馅（会给出 143.5/81 这类板外坐标），被断言拒绝。三锚点、0.01\,mm 容差、失败即中止——这与第~\ref{ch:pcb} 章"目视检查抓出天线禁布区被删"是同一个信条：\textbf{凡是人推定的几何关系，都要有程序化的证伪手段}。
+
+器件几何按封装关键字查表（\texttt{H} 字典覆盖 CONN-TH、TYPE-C、WROOM、XH、SOP、CDRH 等 17 类，外加 L1 电感与 SOIC 两个别名），90° 旋转交换宽深，top 面器件自板面向上生长、bottom 面自板底向下生长；全部器件合成一个复合体再统一网格化（LinearDeflection 0.4 / AngularDeflection 0.5），逐一断言 \texttt{isSolid}。BOM 无底面器件时，\texttt{parts\_b.stl} 写入 84 字节的空二进制占位——下游加载器不需要特判。\texttt{assembly.json} 登记五部件（上壳/器件阵-顶/PCB/器件阵-底/下壳）、整机包围盒 $95.8\times80.8\times19$\,mm 与装配备注（M3 螺丝自攻入下壳铜柱）。五部件各自的爆炸位移也登记在同一文件里：上壳 $+28$\,mm、顶面器件阵 $+12$\,mm、PCB 不动、底面器件阵 $-8$\,mm、下壳 $-16$\,mm——前端爆炸滑杆从 0 拉到 100\%，装配体按这条轴线分解，装配顺序（下壳 $\to$ 板 $\to$ 器件 $\to$ 上壳）即拆卸顺序的倒放。
+
+同一份 \texttt{pos.csv} 还是前端\textbf{气流可视化}的数据源：气流拓扑与热点卡片（\texttt{flows/hotspots.json}）由脚本从坐标文件同源生成，并带同源断言防止拓扑与器件位漂移——充气时端子喷出的那束青色粒子（第~\ref{ch:acceptance} 章图）飞出的位置，就是 pos.csv 里那只端子的真实坐标。坐标文件驱动三处消费（贴装、网格、气流拓扑），一处生成、三处同源，这是"真值源"思想在结构-软件边界的延伸。
+
+网格管线的完整产出是六个文件加一个清单（表~\ref{tab:encl-mesh}），每个都有断言把守：面片数非零、\texttt{isSolid} 为真——空文件或破面网在生成当场就会让脚本失败，而不是等到前端渲染时才白屏。
+
+\begin{table}[htbp]
+  \centering
+  \caption{make\_meshes.py 产出清单（firmware/twin/meshes/）}
+  \label{tab:encl-mesh}
+  \begin{tabular}{llp{4.6cm}}
+    \toprule
+    文件 & 内容 & 去向 \\
+    \midrule
+    \texttt{case\_bottom.stl} & 下壳（含铜柱） & 3D 爆炸视图底层 \\
+    \texttt{parts\_f.stl} & 顶面器件阵复合体 & 爆炸视图（+12\,mm 层） \\
+    \texttt{pcb.stl} & 90$\times$75$\times$1.6 板体 & 爆炸视图基准层 \\
+    \texttt{parts\_b.stl} & 底面器件阵（或空占位） & 爆炸视图（$-8$\,mm 层） \\
+    \texttt{case\_top.stl} & 上壳（通风栅） & 爆炸视图顶层（+28\,mm） \\
+    \texttt{assembly.json} & 五部件清单/颜色/爆炸位移/包围盒 & 前端装配数据源 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.85\textwidth]{figures/p1_structure.png}
+  \caption{P1 装配的五部件结构视图：上壳（通风栅）、顶面器件阵、PCB、下壳（铜柱）——由 make\_meshes.py 从 pos.csv 与外壳 STL 同源生成}\label{fig:encl-assembly}
+\end{figure}
+
+\section{3D 打印下单与水密自检}
+\label{sec:encl-print}
+
+外壳走 JLC 3D 代打，与 PCBA 同一笔物流。材料三档的取舍直接抄自下单指南：\textbf{PLA 默认推荐}——结构强度够、最便宜，上壳约 34.4\,cm$^3$、下壳约 29.8\,cm$^3$；MJF 尼龙 PA12 是进阶选项，强度/韧性/耐温最佳，适合长期按压的卡扣与螺柱（自攻铜柱正是长期受力件），价高；树脂表面细但脆，不建议用于承载外壳。
+
+下单前两道自检已写进脚本与指南。其一，\textbf{壁厚}：全壳最薄处 $\ge$1.2\,mm，水密网格已验证——最小壁厚是 FDM 打印不断料的底线。其二，\textbf{网格质量}：STL 格式本质是三角形面片的无序集合，"看起来像个壳"与"数学上是个封闭实体"是两回事——不封闭的模型在切片器里表现为随机的破面与补洞。\texttt{check\_case.py} 对两只 STL 断言 \texttt{isSolid()}（水密），对两只 STEP 断言实体数、体积与 \texttt{isValid()}：
+
+\begin{lstlisting}[language=Python, basicstyle=\small\ttfamily, breaklines=true,
+  caption={check\_case.py：水密与实体有效性自检（全文仅数行）}]
+for name in ("case-bottom", "case-top"):
+    m = Mesh.Mesh(); m.read(name + ".stl")
+    print("CHK", name, "STLfaces", len(m.Facets),
+          "watertight", m.isSolid())
+    sh = Part.Shape(); sh.read(name + ".step")
+    print("CHK", name, "STEPsolids", len(sh.Solids),
+          "vol_cm3", round(sh.Volume/1000, 1), "valid", sh.isValid())
+\end{lstlisting}
+
+摆放方向是打印质量的最后变量：上壳的通风栅面\textbf{朝上平放}可让栅格孔不生支撑。JLC 下单页默认可能自动转向——指南的对策是勾选"摆件需人工确认"，或在备注栏写"保持模型原始方向"；层高 0.1--0.2\,mm 均可。
+
+外壳与 PCB 一样执行\textbf{目视检查铁律}：建模完成后三次渲染截图逐区人工过目（收尾规格书 \S6 的输出要求），配合 \texttt{make\_meshes.py} 里逐网格的 \texttt{check\_mesh} 打印（面片数 + \texttt{isSolid} 断言）。检查清单包括：四铜柱与安装孔对位、九个侧开孔与端子带的位置、通风栅避让天线区、顶盖螺丝孔与铜柱同轴。第~\ref{ch:pcb} 章"自动布线器静默删掉天线禁布区"的教训在这里同样适用——布尔运算是脚本自动执行的，每一次重跑都可能引入它不报告的几何退化，人眼逐区过图是最后一道不可替代的闸。
+
+\section*{本章小结}
+外壳不是 PCB 的包装，是装配关系的代码化：参数区把壁厚、腔高、铜柱、开孔全部收敛为可重跑的常量，板改参数改，壳随板动；HD 安装孔从 (77,62) 移到 (68,65) 的故事说明无网络器件不受 DRC 保护、真值必须显式传递；坐标映射三锚点证伪、水密自检与天线净空的"刻意不做"，与孪生网格的同源生成一起，让结构与电路、软件共享同一套"可验证才交付"的纪律。至此，电路（\ref{ch:schematic}、\ref{ch:pcb} 章）、制造（\ref{ch:fab} 章）、结构（本章）三块硬件拼图合龙——余下的章节属于软件。
