@@ -1,112 +1,338 @@
-\chapter{验收：数字孪生全套产品}
+\chapter{验收实录：数字孪生与实物}
 \label{ch:acceptance}
 
-本章与产品验收同步产出——每一节对应一项验收，验收产生的截图/数据即书稿图源。
+验收在本书里不是附录，而是一等公民的写作方式——每一节对应一张验收工单，验收产生的截图、波形与实测值即书稿图源。本章分上下两篇。\textbf{上篇}是已经完成的一半：板还在嘉立创产线上，但数字孪生的全套产品（前端、固件逻辑、BLE 契约、SDK）已经可以逐项验收，六张软件侧工单 A101--A106 于 2026-10-02 全部判定 \texttt{pass}，本章按"操作步骤 $\to$ 判定 $\to$ 证据"的固定体例逐节实录。\textbf{下篇}是等待硬件的一半：二十四张硬件工单（A201--A224）与六张标定工单（A301--A306）已生成模板，回板后按 15--30 分钟一张的节奏执行，产物直接回流本章与第~\ref{ch:product} 章。上篇证明"软件这边没有欠账"，下篇规定"硬件那边怎么还账"。
 
-\section{孪生前端 v2：装配叙事与爆炸视图}
-打开 \texttt{http://localhost:8000/}，首屏为装配叙事（五部件飞入合体）。
+\section{上篇：数字孪生验收（已完成）}
+\label{sec:acc-sw}
+
+软件侧验收的总战场是 \texttt{firmware/twin/} 的回归矩阵：前端全链 \texttt{test\_webapp.js} 44 断言、经典版三套 \texttt{test\_gui}/\texttt{test\_gui\_p1}/\texttt{test\_e2e}（28/40/43）、API 两套 \texttt{test\_api.sh}/\texttt{test\_api\_board.sh}（50 项 + 板级全 OK）、Python 侧 \texttt{test\_sim\_engine.py}/\texttt{test\_board\_model.py}/\texttt{test\_flows.py}、固件主机 33 测试与 QEMU 冒烟、SDK \texttt{test\_protocol.py} 九用例。2026-10-02 交付日全绿（HANDOFF"前端 v2 交付"节）。六张工单各自从这张矩阵里取证，表~\ref{tab:acc-sw-overview} 先给总览，以下逐节实录。
+
+\begin{table}[htbp]
+  \centering
+  \caption{软件侧六张工单验收一览（2026-10-02 全部 \texttt{pass}）}
+  \label{tab:acc-sw-overview}
+  \begin{tabular}{@{}lp{4.1cm}p{3.6cm}l@{}}
+    \toprule
+    工单 & 验什么 & 证据形态 & 详见 \\
+    \midrule
+    A101 & 装配叙事 + 爆炸滑杆跟随 & 截图 + 渲染态断言（7+4 项） & 本节；\ref{sec:acc-matrix} \\
+    A102 & \texttt{I/V/S} 三态差分联动 & 差分截图 + 断言（13 项） & 本节；图~\ref{fig:acc-silent} \\
+    A103 & 仿真实验室四电路重算 & 截图 + 断言（7 项） & 本节；图~\ref{fig:acc-simlab} \\
+    A104 & SDK 协议向量双向 & 测试输出（8 组向量往返） & 第~\ref{ch:sdk} 章表~\ref{tab:sdk-vectors} \\
+    A105 & 固件两道防线 & 33 测试 + 九项 grep & 第~\ref{ch:firmware} 章 \S\ref{sec:fw-tests} \\
+    A106 & BLE 载荷向量先验 & 4 向量主机测试 & 第~\ref{ch:ble} 章 \S\ref{sec:ble-verify} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{A101 装配叙事与爆炸跟随}
+\textbf{操作步骤}：启动 \texttt{server.py} 后打开 \texttt{http://127.0.0.1:8000/}，首屏即装配叙事——五部件（上壳/器件阵/PCB/下壳等）从四散位飞入合体约 1.5\,s，随后进入呼吸悬浮；拖动运输条爆炸滑杆至 50\%，记录分解态截图。自动化侧由 \texttt{test\_webapp.js} 经调试钩 \texttt{window.\_\_t2} 读取渲染态：加载块断言五部件在场且收敛位移 $<$3\,mm，爆炸块断言 \texttt{setExplode(1)} 后部件位移 $>$10\,mm、系数平滑跟随 $k\!\approx\!1$、\textbf{流组每帧复制 PCB 位移}（流线端点绑定不断线）。
+
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.9\textwidth]{figures/v2_01_intro.png}
-  \caption{数字孪生 v2 首屏：产品即主角，仪表盘退居玻璃抽屉}
+  \includegraphics[width=0.92\textwidth]{figures/v2_02_explode50.png}
+  \caption{A101 爆炸 50\%：五部件沿轴向分解，电流线与气流弧随 PCB 部件平移拉伸——端点绑定"连线不断"，左滑杆百分比标签实时联动}\label{fig:acc-explode}
 \end{figure}
 
-\section{数据长在产品上：电流与气流}
-发送命令 \texttt{I 1 255}（1 号端口充气），栅极支路电流辉光增强、端子喷出气流粒子：
+\textbf{判定}：\texttt{pass}。装配叙事收敛、爆炸位移量级、流组跟随、滑杆标签联动四项断言全绿；目视侧首屏记录 \texttt{v2\_01\_intro.png}（同款图见第~\ref{ch:host} 章图~\ref{fig:v2-intro}）。\textbf{证据}：\texttt{firmware/twin/shots/v2\_01\_intro.png}、\texttt{v2\_02\_explode50.png} 归档于交付提交 \texttt{ec3cefa}，拷贝入 \texttt{book/figures/}（本章图~\ref{fig:acc-explode}）。
+
+\subsection{A102 开阀电流亮起、真空反向与静默差分}
+\textbf{操作步骤}：在左控制抽屉发三条命令做\textbf{差分}——\texttt{I 1 255}（1 号口全充）、\texttt{S 1}（确定性关阀）、\texttt{V 1 255}（1 号口抽真空），各等遥测管道（200\,ms 节拍）回流一拍后截图。三态的关键差异：充气态 1 号栅极支路电流辉光增强（\texttt{uGain$>$0.5}）、行进虚线加速（\texttt{uSpeed$>$1.5}）、端子喷出青色粒子（正压色 \#6ad4ff、方向 $+1$）；关阀态辉光回落底光（\texttt{uGain$<$0.35}）、粒子淡出（\texttt{op$<$0.05}）；真空态粒子相位递减（$t$ 逆向行进）、颜色转琥珀 \#ffb454——方向与颜色都由压力符号驱动（第~\ref{ch:host} 章 \S\ref{sec:host-render}）。
+
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.9\textwidth]{figures/v2_03_inflate.png}
-  \caption{充气瞬间：电流（蓝）与气流（青）由实时遥测驱动}
+  \includegraphics[width=0.92\textwidth]{figures/v2_04_silent.png}
+  \caption{A102 静默态（\texttt{S 1} 后）：栅极支路回落 8\% 底光、粒子淡出——"通道存在"的提示仍在，但不再假装有气流}\label{fig:acc-silent}
 \end{figure}
-真空模式（\texttt{V}）下气流反向并转为琥珀色（图~\ref{fig:vacuum}）。
+
+充气态与真空态截图（\texttt{v2\_03\_inflate.png}/\texttt{v2\_05\_vacuum.png}）与第~\ref{ch:host} 章图~\ref{fig:v2-inflate}、图~\ref{fig:v2-vacuum} 同源，此处不重复收录；本节补入第三张差分锚点——静默态。\textbf{判定}：\texttt{pass}，三态差分对照表~\ref{tab:acc-a102}（断言全文见 \S\ref{sec:acc-matrix} 矩阵第 12--24 行）。其余端口静默也在断言内：开 1 号阀时 \texttt{port2} 粒子透明度 $\approx 0$——联动是选择性的，不是全场发光的假动画。
+
+\begin{table}[htbp]
+  \centering
+  \caption{A102 三态差分判定表（期望即 spec \S3 语义，实测取自渲染态断言）}
+  \label{tab:acc-a102}
+  \begin{tabular}{@{}lp{3.5cm}p{3.6cm}c@{}}
+    \toprule
+    状态 & 栅极电流辉光 & 端口气流粒子 & 判定 \\
+    \midrule
+    \texttt{I 1 255} & 亮起（\texttt{uGain$>$0.5}） & 喷出，青色，$t$ 递增 & \texttt{pass} \\
+    \texttt{S 1} & 回落底光（\texttt{uGain$<$0.35}） & 淡出（\texttt{op$<$0.05}） & \texttt{pass} \\
+    \texttt{V 1 255} & 亮起（同充气） & 琥珀色，$t$ 递减（反向） & \texttt{pass} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{A103 仿真实验室四电路重算}
+\textbf{操作步骤}：状态行点开"仿真实验室"浮层，依次选择 Buck 电源 / 双源二极管或 / 阀驱动 / I\textsuperscript{2}C 上拉四个电路，保持 BOM 默认参数各重算一次；再把 I\textsuperscript{2}C 上拉的负载电容从默认值改动并越域提交一次，观察 400 红条与修正后的收敛。\textbf{判定}：\texttt{pass}——四电路指标表与波形 canvas 均按参数即时重算（断言"四电路选择卡""presets 动态表单（buck 参数 $\ge$6 输入）""自动重算指标表 + 波形 canvas"），越域请求返回 400 且红条指名道姓含 \texttt{vin}，修正后红条收敛。
+
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.9\textwidth]{figures/v2_05_vacuum.png}
-  \caption{真空回流：方向与颜色随压力符号切换}\label{fig:vacuum}
+  \includegraphics[width=0.92\textwidth]{figures/v2_08_simlab.png}
+  \caption{A103 仿真浮层：全屏玻璃接管，四电路分段选择、参数域驱动的动态表单与指标/波形重算——四电路的物理与达标判据见第~\ref{ch:twin} 章 \S\ref{sec:twin-sim}}\label{fig:acc-simlab}
 \end{figure}
 
-\section{验收清单（与 BRINGUP 联动）}
-\begin{itemize}
-  \item 软件侧（回板前）：装配叙事/爆炸跟随/流光联动/热点卡/仿真浮层/BLE 契约 —— 已由 44+111 断言与 26 项目视审计覆盖；
-  \item 硬件侧（回板后）：按 \texttt{firmware/BRINGUP.md} 九章动线执行，产物（示波器照片/标定曲线/校准后黄徽转绿截图）直接补入本章各节。
-\end{itemize}
+这张浮层在验收史上留过一个实战案例：I\textsuperscript{2}C 上拉 4.7\,k$\Omega\times$115\,pF 的上升时间告警（第~\ref{ch:host} 章 \S\ref{sec:host-simlab}），就是用它扫参数定位的——告警不是终点，浮层给出"改哪个参数能救"的动线。证据：\texttt{v2\_08\_simlab.png}；软件侧由 \texttt{test\_webapp.js} 仿真块 7 断言覆盖（矩阵第 36--42 行）。
 
-\section{验收工单机制：一张工单，两份产物}
-\label{sec:acc-ticket}
+\subsection{A104 SDK 协议向量双向 + hello\_glove 冒烟}
+\textbf{操作步骤}：\texttt{python -m unittest test\_protocol}（\texttt{sdk/python/tests/}）跑协议回归；\texttt{python examples/hello\_glove.py}（孪生模式）跑"充 $\to$ 保 $\to$ 释 $\to$ 抽"一个来回的最小冒烟。\textbf{判定}：\texttt{pass}——\texttt{vectors.json} 的 8 组黄金帧向量与固件 \texttt{test\_proto.c} 同参数构帧、逐字节相同；同 8 组 decode 往返还原 \texttt{cmd/ports/pwm} 三元组；坏 CRC/坏魔数/坏长度/参数越界四条错误路径各自由 \texttt{ProtocolError} 接住。向量表全文与"CRC 多项式写错"的纠错故事见第~\ref{ch:sdk} 章表~\ref{tab:sdk-vectors}（\S\ref{sec:sdk-vectors}）。
 
-回板验收与书稿写作共用一套"验收工单"机制（spec \texttt{2026-10-02-acceptance-book-design.md}）：每项验收是一张工单——\texttt{book/tickets/A\#\#\#.yaml}，YAML 头记录元数据（相位/对应 BRINGUP 章节/汇入书稿章/状态/证据要求），Markdown 正文记录操作步骤、实测值与判定。一张工单完成等于两份产物落袋：BRINGUP 对应 checkbox 勾掉，书稿对应小节的图与数据就位。\textbf{fail 的工单同样入书}（"踩坑实录"专栏——比 pass 更有教学价值）。管理工具 \texttt{book/tools/ticket.py}（纯标准库）提供 \texttt{new}/\texttt{report}/\texttt{set\_status} 三个子命令，验收进度与写书进度一屏可见。
+值得强调的是这组工单的取证形态：它没有截图，证据是\textbf{测试输出本身}——两侧对同一向量表双向编解码，任何一端漂移都会立刻红。hello\_glove 冒烟补的则是"五分钟上手"承诺的可兑现性（第~\ref{ch:sdk} 章 \S\ref{sec:sdk-hello}）。
 
-\section{36 张验收工单总表}
-\label{sec:acc-table}
+\subsection{A105 固件 QEMU 冒烟 + 主机 33 测试}
+\textbf{操作步骤}：\texttt{cmake + Ninja} 主机编译后跑 \texttt{firmware/tests/} 全量；\texttt{bash qemu\_smoke.sh} 跑整只固件冒烟。\textbf{判定}：\texttt{pass}——33 个主机测试全绿（动作层 10 / 闭环 7 / 协议 4 / TCA 8 / BLE 载荷 4），QEMU 冒烟九项 grep 判定全过：启动横幅、PSRAM 8\,MB、\texttt{F} 自检三步、\texttt{I 1 255}/\texttt{H 1}/\texttt{S 1} 应答、\texttt{L} 路由。两道防线的分工与实跑输出见第~\ref{ch:firmware} 章 \S\ref{sec:fw-tests} 与 \S\ref{sec:fw-qemu}。
 
-表~\ref{tab:tickets} 为全部 36 张工单的当前状态：软件侧（sw）六张回板前已验证完毕（\ref{sec:acc-sw} 节），硬件侧（hw）二十四张与标定（cal）六张待回板执行。
+这是六张工单里唯一"没有浏览器"的一张，却是对回板影响最大的一张：逻辑层在烧录前就带着 33 条断言的战绩上路，BRINGUP 里遇到的硬件问题才可能被\textbf{定位到硬件}，而不是与软件 bug 混作一团。
 
-\begin{longtable}{llp{6.6cm}l}
-  \caption{36 张验收工单总表（2026-10-02：pass 6 / pending 30）}\label{tab:tickets}\\
+\subsection{A106 BLE 契约载荷向量（向量先验）}
+\textbf{操作步骤}：跑 \texttt{ble\_tests.c} 四个主机测试（帧打包、负压小端、哨兵值、保留字节违例）。\textbf{判定}：\texttt{pass}——契约 \texttt{twin/BLE.md} \S 4.1 命令帧（0xA5 前缀 + CRC-8/ATM）与 \S 4.2 state 20\,B 小端载荷以向量形式\textbf{先验冻结}：负压 $-533$\,Pa 打包为 \texttt{EB FD} 小端、压力无效哨兵 \texttt{0x8000}、保留字节违例拒收。真机侧的 nRF Connect 扫描/写/订阅三步不在此单范围——那是回板后 A209 的活（第~\ref{ch:ble} 章 \S\ref{sec:ble-verify}）。
+
+"向量先验"是这张工单的方法论价值：无线链路的正确性不必等天线，字节级契约可以在主机上先钉死；等真机到场时，A209 要验的只剩射频与连接管理本身。
+
+\subsection{test\_webapp.js：44 断言矩阵}
+\label{sec:acc-matrix}
+
+六张工单里四张（A101/A102/A103 及 v2 全链）共享同一台取证机器——\texttt{test\_webapp.js}。它的做法值得单独记一节：playwright 无头浏览器加载 v2 页面，经 \texttt{window.\_\_t2=\{scene,flows,panels,simlab\}} 调试钩直接读\textbf{渲染态}（shader uniform、粒子相位、部件位移），而非截图比像素；控制命令用 fetch 拦截采集（POST 截获、GET 透传保遥测存活），保证"发命令"与"看回流"在同一条真实管道上；热点卡用相机投影 U3 中心坐标做\textbf{真实鼠标点击}（raycaster 实证），不用 DOM 伪事件。表~\ref{tab:acc-webapp} 是全部 44 条断言的矩阵，按功能块分十一组。
+
+\begin{longtable}{@{}rp{11.2cm}@{}}
+  \caption{test\_webapp.js 44 断言矩阵（2026-10-02 全绿；分组标题行非断言）}\label{tab:acc-webapp}\\
   \toprule
-  ID（相位 · BRINGUP） & 书章 & 工单内容 & 状态 \\
+  \# & 断言（含判定基准） \\
   \midrule
   \endfirsthead
-  \multicolumn{4}{l}{\tablename~\thetable{}（续）}\\
+  \multicolumn{2}{l}{\tablename~\thetable{}（续）}\\
   \toprule
-  ID（相位 · BRINGUP） & 书章 & 工单内容 & 状态 \\
+  \# & 断言（含判定基准） \\
   \midrule
   \endhead
   \bottomrule
   \endfoot
   \endlastfoot
-  A101（sw · --） & 11 & 孪生 v2 首屏装配叙事 + 爆炸滑杆 & \texttt{pass} \\
-  A102（sw · --） & 11 & 电流/气流联动：I/V/S 命令差分截图 & \texttt{pass} \\
-  A103（sw · --） & 9 & 仿真实验室四电路重算（含 i2c 告警案例） & \texttt{pass} \\
-  A104（sw · --） & 10 & SDK 协议向量双向 + hello\_glove 冒烟 & \texttt{pass} \\
-  A105（sw · --） & 7 & 固件 QEMU 冒烟 + 主机 33 测试 & \texttt{pass} \\
-  A106（sw · --） & 8 & BLE 契约载荷向量（nRF Connect 待真机，向量先验） & \texttt{pass} \\
+  \multicolumn{2}{l}{\textbf{加载与首屏（7）}} \\
+  1 & 5 部件 STL 装配在场（\texttt{\_\_t2.scene.parts}） \\
+  2 & 装配叙事收敛（部件位移 $<$3\,mm） \\
+  3 & 热点器件 6 个（hotspots.json） \\
+  4 & 电流线 12 条（4 电源 + 8 栅极） \\
+  5 & 气流端口 8 组 $\times$ 50 粒 \\
+  6 & 状态行：未标定黄徽常驻 / stale 隐藏 \\
+  7 & 遥测抽屉默认收起（spec \S2） \\
   \midrule
-  A201（hw · 1） & 11 & 首电三测（万用表） & \texttt{pending} \\
-  A202（hw · 1） & 11 & CH340 烧录/自动复位 & \texttt{pending} \\
-  A203（hw · 2） & 11 & 74HCT245 电平迁移（示波器） & \texttt{pending} \\
-  A204（hw · 2） & 11 & MOS 触发栅极/Vds 波形（示波器） & \texttt{pending} \\
-  A205（hw · 4） & 11 & WS2812 状态灯 & \texttt{pending} \\
-  A206（hw · 3） & 11 & TCA 五通道扫描 & \texttt{pending} \\
-  A207（hw · 5） & 11 & 8 阀全功能（听声+电流） & \texttt{pending} \\
-  A208（hw · 6） & 11 & I2C tr 实测（100/400kHz 裁决） & \texttt{pending} \\
-  A209（hw · 8） & 11 & BLE 三步（扫描/写/订阅） & \texttt{pending} \\
-  A210（hw · 8） & 11 & gui 真机模式（Web Bluetooth） & \texttt{pending} \\
-  A211（hw · 7） & 11 & 电气校准①阀线圈 R/L（万用表+LCR） & \texttt{pending} \\
-  A212（hw · 7） & 11 & 电气校准②AO3400 RDS（示波器反推） & \texttt{pending} \\
-  A213（hw · 7） & 11 & 电气校准③buck ESR/Cout（纹波反推） & \texttt{pending} \\
-  A214（hw · 7） & 11 & 电气校准④负载调整率/效率（4 线法） & \texttt{pending} \\
-  A215（hw · 7） & 11 & 电气校准⑤⑥$\theta_{ja}$ 红外 + ESP32 电流钳 & \texttt{pending} \\
-  A216（hw · 9） & 11 & 泵实验A 充气死点（calibrate\_pump.py） & \texttt{pending} \\
-  A217（hw · 9） & 11 & 泵实验B 真空死点 & \texttt{pending} \\
-  A218（hw · 9） & 11 & 泵实验C 升压曲线 & \texttt{pending} \\
-  A219（hw · 9） & 11 & 闭环充气到目标 kPa & \texttt{pending} \\
-  A220（hw · 9+） & 11 & 外壳装配（M3 自攻 + 端子开孔对位） & \texttt{pending} \\
-  A221（hw · 9+） & 11 & 整机气密（保压 60s） & \texttt{pending} \\
-  A222（hw · 9+） & 11 & 长跑温升 & \texttt{pending} \\
-  A223（hw · 9+） & 11 & 8 阀轮巡 & \texttt{pending} \\
-  A224（hw · 9+） & 11 & 满载纹波 & \texttt{pending} \\
+  \multicolumn{2}{l}{\textbf{爆炸滑杆（4）}} \\
+  8 & \texttt{setExplode(1)} $\to$ 部件位移 $>$10\,mm \\
+  9 & 爆炸系数平滑跟随（$k\approx1$） \\
+  10 & 流组每帧复制 pcb 位移（端点绑定不断线） \\
+  11 & 滑杆 input $\to$ 百分比标签联动（50\%） \\
   \midrule
-  A301（cal · 7） & 12 & 孪生对拍：阀驱动电流曲线（BOARD\_PARAMS 改后叠图） & \texttt{pending} \\
-  A302（cal · 7） & 12 & 孪生对拍：电源效率/纹波（4 线法实测叠图） & \texttt{pending} \\
-  A303（cal · 7） & 12 & 孪生对拍：热学温升（$\theta_{ja}$ 修正后叠图） & \texttt{pending} \\
-  A304（cal · 9） & 12 & 孪生对拍：充气升压曲线（实验C CSV 叠图） & \texttt{pending} \\
-  A305（cal · 9） & 12 & 孪生对拍：真空死点曲线（实验B CSV 叠图） & \texttt{pending} \\
-  A306（cal · 9） & 12 & 孪生对拍：闭环精度 + 数字孪生精度报告 & \texttt{pending} \\
+  \multicolumn{2}{l}{\textbf{充气联动（7）}} \\
+  12 & gate1 live01=阀电流归一（$>$0.5） \\
+  13 & gate1 uGain$>$0.5（电流辉光） \\
+  14 & gate1 uSpeed$>$1.5（行进虚线加速） \\
+  15 & port1 粒子可见（op$>$0.3） \\
+  16 & 其余端口静默（port2 op$\approx$0） \\
+  17 & 正压配色 青 0x6ad4ff / 方向 $+1$ \\
+  18 & 粒子沿曲线行进（300\,ms 内位移） \\
+  \midrule
+  \multicolumn{2}{l}{\textbf{关阀回落（2）}} \\
+  19 & \texttt{S 1} $\to$ gate1 回落底光（uGain$<$0.35） \\
+  20 & \texttt{S 1} $\to$ port1 粒子淡出（op$<$0.05） \\
+  \midrule
+  \multicolumn{2}{l}{\textbf{真空反向（4）}} \\
+  21 & 真空压力符号 $\to$ dir$=-$1 \\
+  22 & 真空配色 琥珀 0xffb454 \\
+  23 & 真空粒子可见（op$>$0.3） \\
+  24 & 粒子相位递减（$t$ 逆向行进） \\
+  \midrule
+  \multicolumn{2}{l}{\textbf{遥测抽屉（3）}} \\
+  25 & 遥测浮钮可见（默认收起）$\to$ 点击展开 \\
+  26 & 遥测抽屉 5 张 sparkline 卡 \\
+  27 & 遥测/控制抽屉 收起$\leftrightarrow$展开 往返 \\
+  \midrule
+  \multicolumn{2}{l}{\textbf{控制命令（4）}} \\
+  28 & 阀1 充 $\to$ POST /api/cmd ``\texttt{I 1 255}'' \\
+  29 & PWM 滑杆并入命令（全局抽 $\to$ ``\texttt{V 31 200}''） \\
+  30 & 阀3 释 $\to$ ``\texttt{S 4}''（确定性关阀掩码） \\
+  31 & 脚部按钮 状态字 $\to$ ``\texttt{T}'' \\
+  \midrule
+  \multicolumn{2}{l}{\textbf{热点卡（4）}} \\
+  32 & U3 点击 $\to$ 热点卡出现（ref+器件） \\
+  33 & 热点卡 live 值全部填充（非 ---） \\
+  34 & 热点卡迷你横条渲染 \\
+  35 & 热点卡关闭按钮收卡 \\
+  \midrule
+  \multicolumn{2}{l}{\textbf{仿真浮层（4）}} \\
+  36 & 浮层升起（非 hidden） \\
+  37 & 四电路选择卡 \\
+  38 & presets 动态表单（buck 参数） \\
+  39 & 自动重算指标表 + 波形 canvas \\
+  \midrule
+  \multicolumn{2}{l}{\textbf{越域与恢复（3）}} \\
+  40 & 参数越域 $\to$ 400 红条含 vin \\
+  41 & 修正参数后指标回归（红条收敛） \\
+  42 & ESC 关闭浮层 \\
+  \midrule
+  \multicolumn{2}{l}{\textbf{收尾（2）}} \\
+  43 & /classic 旧 gui 挂载（5 端口卡片 + 气路 SVG） \\
+  44 & 全程无页面 JS 错误 \\
 \end{longtable}
 
-\section{软件侧六项：预验证记录（回板前完成）}
-\label{sec:acc-sw}
+矩阵之外，回归网还有三层：旧三套（\texttt{test\_gui} 28/28、\texttt{test\_gui\_p1} 40/40、\texttt{test\_e2e} 43/43）改挂 \texttt{/classic} 保证过渡版不坏；\texttt{test\_api.sh} 50/50 守住 API v1.2 端点零改动；性能用 \texttt{?debug} 浮层 60\,s rAF 采样，实测 56.8\,fps（预算 $\ge$45，headless 受 vsync 钳制，真机更高）。
 
-软件侧六张工单在回板前即可执行完毕，证据已归档，状态预填 \texttt{pass}：
+\subsection{26 项目视审计：从截图到像素证据}
+\label{sec:acc-visual}
 
-\begin{itemize}
-  \item \textbf{A101 孪生 v2 首屏装配叙事 + 爆炸滑杆}——\texttt{firmware/twin/shots/v2\_*.png} 26 项目视记录（机内像素审计 26/26 + AI 视觉复核，commit \texttt{ec3cefa}）；本章图~1--3 即其直接复用；
-  \item \textbf{A102 电流/气流联动}——\texttt{I/V/S} 三命令差分截图：\texttt{v2\_03\_inflate.png}（I 全充）/ \texttt{v2\_05\_vacuum.png}（V 抽真空）/ \texttt{v2\_04\_silent.png}（S 静默态）；
-  \item \textbf{A103 仿真实验室四电路重算}——\texttt{v2\_08\_simlab.png} 四电路重算记录 + \texttt{test\_webapp.js} 44 断言全绿（详见第~\ref{ch:host} 章）；
-  \item \textbf{A104 SDK 协议向量双向 + hello\_glove 冒烟}——\texttt{sdk/python/tests/} 以 \texttt{vectors.json} 9 组向量做双向编解码回归（详见第~\ref{ch:sdk} 章）；
-  \item \textbf{A105 固件 QEMU 冒烟 + 主机 33 测试}——\texttt{firmware/tests/} 33 个主机测试全绿 + \texttt{qemu\_smoke.sh}（详见第~\ref{ch:firmware} 章）；
-  \item \textbf{A106 BLE 契约载荷向量}——\texttt{twin/BLE.md} \S 4.1 命令帧（0xA5 前缀）与 \S 4.2 state 20B 小端载荷向量先验冻结；真机 nRF Connect 验证回板后归 A209（详见第~\ref{ch:ble} 章）。
-\end{itemize}
+断言读的是渲染态，但"看起来对不对"断言管不了——装配动画的手感、玻璃材质的层次、粒子在亮壳上的对比度，最终都要过\textbf{人眼}这一关。v2 交付按 F3 模式做强制目视：十张截图 \texttt{v2\_01}--\texttt{v2\_10}（首屏/爆炸 50\%/充气/静默/真空/热点卡/遥测抽屉/仿真浮层/断连态/恢复态），先机内像素审计——直方图、色簇、帧间差分，外加"浏览器投影走廊"校准（同一元素在浏览器坐标系与截图像素坐标系之间的映射带），共 26 项检查全数通过；再交 AI 视觉复核装配材质、UI 布局与热点卡内容，全部对上。断言、像素、AI 三层证据互不替代：断言防逻辑错、像素防渲染错、AI 复核防语义错。
 
-回板后，硬件侧二十四张按 \texttt{firmware/BRINGUP.md} 各章标注的"对应工单"逐张执行；标定侧六张的产物汇入第~\ref{ch:product} 章精度报告。
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.92\textwidth]{figures/v2_06_hotspot.png}
+  \caption{目视审计之热点卡：raycaster 点击 U3（buck 变换器）弹出玻璃卡，实时值全部填充（无一空位），迷你横条渲染正常}\label{fig:acc-hotspot}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.92\textwidth]{figures/v2_07_telemetry.png}
+  \caption{目视审计之遥测抽屉：右缘展开 5 张 sparkline 玻璃卡，数字等宽（tabular-nums）刷新不跳动}\label{fig:acc-telemetry}
+\end{figure}
+
+断连态是目视审计里最有设计含量的一项（图~\ref{fig:acc-stale}）：停掉遥测源后，连续两次失败才置 \texttt{stale}（单次抖动不算），主场景流光淡出为底光、粒子淡出、状态行亮"遥测冻结"徽章——\textbf{不弹窗、不渲染过期值}（第~\ref{ch:host} 章 \S\ref{sec:host-telemetry}）。恢复后底光重新亮起、徽章消退。这一"安静的降级"哲学：坏消息用光的暗下来讲，比用弹窗讲更符合一台机器的体面。
+
+\begin{figure}[htbp]
+  \centering
+  \begin{minipage}[t]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/v2_09_stale.png}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/v2_10_recovered.png}
+  \end{minipage}
+  \caption{目视审计之断连态（左：\texttt{v2\_09\_stale}，遥测冻结，流光回落底光；右：\texttt{v2\_10\_recovered}，恢复后重新点亮）}\label{fig:acc-stale}
+\end{figure}
+
+审计也留下一条\textbf{已知事项}并维持裁定：气流粒子 \texttt{depthTest:false} + 高渲染序，保证"通道存在、气流喷出"在默认视角（管路被壳遮挡）下始终可见——代价是亮壳表面上叠加粒子的对比度偏克制。像素审计走廊内 38\,px 青簇可检出，判定不改（spec \S3.2 底光语义）。把这类"审过但保留"的记录写进书，与 pass/fail 一样是验收产物。
+
+\subsection{验收工单机制：一张工单，两份产物}
+\label{sec:acc-ticket}
+
+上篇六张工单能"验收完即写完书"，靠的是机制本身。设计规格（\texttt{2026-10-02-acceptance-book-design.md}）把 BRINGUP 的 30 个 checkbox 与书稿 12 章的素材需求合流成 36 张\textbf{验收工单}：每张是一个 YAML 文件，放在 \texttt{book/tickets/} 下、以工单号命名（\texttt{A\#\#\#.yaml}）——头部记录元数据（相位 \texttt{sw}/\texttt{hw}/\texttt{cal}、对应 BRINGUP 章节、汇入书稿章、状态、证据要求），\texttt{---} 之后是 Markdown 正文（操作步骤、实测值表、判定、素材管线指令）。一张工单完成等于两份产物落袋：BRINGUP 对应 checkbox 勾掉，书稿对应小节的图与数据就位。\textbf{fail 的工单同样入书}——"踩坑实录"专栏比 pass 更有教学价值。
+
+管理工具 \texttt{ticket.py}（在 \texttt{book/tools/} 下，纯标准库实现，YAML 头按"一行一字段"手写格式解析、不依赖 PyYAML）用三个子命令覆盖全生命周期：
+
+\begin{lstlisting}[basicstyle=\small\ttfamily, breaklines=true,
+  caption={ticket.py 用法（自项目根）}]
+python book/tools/ticket.py new A225 "新验收项" hw 9+ --book-ch 11   # 生成模板
+python book/tools/ticket.py report                                  # 进度一屏
+python book/tools/ticket.py set_status A205 pass                    # 更新状态
+\end{lstlisting}
+
+\texttt{report} 的实时输出即 36 张工单的总账（摘头尾）：
+
+\begin{lstlisting}[basicstyle=\small\ttfamily, breaklines=true,
+  caption={ticket.py report 输出（2026-10-02，摘录）}]
+ID    phase  status   title
+----------------------------
+A101  sw     pass     孪生 v2 首屏装配叙事 + 爆炸滑杆
+A102  sw     pass     电流/气流联动：I/V/S 命令差分截图
+...   ...    ...      （A103--A106 软件侧全 pass）
+A201  hw     pending  首电三测（万用表）
+...   ...    ...      （硬件 24 张、标定 6 张全 pending）
+A306  cal    pending  孪生对拍：闭环精度 + 数字孪生精度报告
+----------------------------
+合计 36 张（sw 6 / hw 24 / cal 6）：pass 6 · pending 30 · fail 0 · waived 0
+\end{lstlisting}
+
+软件侧六张（\texttt{pass}）即本篇 A101--A106 各小节与 \S\ref{sec:acc-matrix}、\S\ref{sec:acc-visual} 的实录来源；其余三十张的下篇总表见 \S\ref{sec:acc-hw-table}。状态机四态（\texttt{pending}/\texttt{pass}/\texttt{fail}/\texttt{waived}）中 \texttt{fail} 不算失败的项目、算\textbf{进书资格}，\texttt{waived} 留给"理性放弃并记录理由"的项——三者都会在书里留下正文。
+
+\section{下篇：实物验收（工单驱动，待回板）}
+\label{sec:acc-hw}
+
+下篇的三十张工单在等一块板：嘉立创制板 5 片、贴装 2 片（主力 + 备用，第~\ref{ch:fab} 章下单实录）。这一篇先立好三样东西——执行节奏（\S\ref{sec:acc-workflow}）、工单总表（\S\ref{sec:acc-hw-table}）、首电安全门（\S\ref{sec:acc-firstpower}）——回板之日即可开工，边验收边把本章下篇从"总表"长成与上篇同体量的实录。
+
+\subsection{回板后工作流：每张工单 15--30 分钟}
+\label{sec:acc-workflow}
+
+工单的粒度按"一个工作台上的一段专注时间"设计：执行 10--20 分钟，归档与写书 5--10 分钟。固定动线九步：
+
+\begin{lstlisting}[basicstyle=\small\ttfamily, breaklines=true,
+  caption={单张工单动线（spec 2026-10-02-acceptance-book-design.md §4）}]
+领工单（ticket.py report 选 pending 头一张）
+-> 照 firmware/BRINGUP.md 对应章节执行验收（截图/拍照/录数）
+-> 产物拷入 book/figures/（图）与 book/data/（CSV）
+-> 工单正文填实测值表 + 判定（pass/fail + 容差）
+-> ticket.py set_status <ID> <pass|fail|waived>
+-> BRINGUP.md 对应 checkbox 勾掉
+-> 书稿对应章 .tex 增图/表/叙述（fail 走踩坑实录专栏）
+-> xelatex 编译过 -> git commit
+\end{lstlisting}
+
+这个节奏的可贵之处在\textbf{不积压}：验收产物当天变成书稿，书稿编译错误当天暴露；三十张工单全部走完时，第~\ref{ch:acceptance} 章与第~\ref{ch:product} 章的实物素材同步齐稿——验收完成日即书稿主体完成日，这是"验收 $\times$ 专著一体化"设计的全部赌注。
+
+\subsection{硬件 24 张 + 标定 6 张工单总表}
+\label{sec:acc-hw-table}
+
+表~\ref{tab:acc-hw-tickets} 由 \texttt{book/tickets/A2*.yaml} 与 \texttt{A3*.yaml} 的元数据生成，列出回板后待执行的三十张工单。硬件侧按 BRINGUP 九章动线排序：先通电视频流（A201--A204），再外设逐个点亮（A205--A208），无线与上位机（A209--A210），然后是六章校准（A211--A215，产物改 \texttt{BOARD\_PARAMS} 使黄徽转绿）、泵三实验与闭环（A216--A219），最后整机四项（A220--A224）。标定侧六张（A301--A306）是硬件数据的\textbf{二次消费}：实测曲线回流孪生后的对拍叠图，产物汇入第~\ref{ch:product} 章精度报告。
+
+\begin{longtable}{@{}llc@{}l@{}}
+  \caption{硬件（hw）24 张 + 标定（cal）6 张工单总表（2026-10-02 生成，均 pending）}\label{tab:acc-hw-tickets}\\
+  \toprule
+  ID & 工单内容 & BRINGUP 节 & 状态 \\
+  \midrule
+  \endfirsthead
+  \multicolumn{4}{l}{\tablename~\thetable{}（续）}\\
+  \toprule
+  ID & 工单内容 & BRINGUP 节 & 状态 \\
+  \midrule
+  \endhead
+  \bottomrule
+  \endfoot
+  \endlastfoot
+  A201 & 首电三测（万用表） & 1 & \texttt{pending} \\
+  A202 & CH340 烧录/自动复位 & 1 & \texttt{pending} \\
+  A203 & 74HCT245 电平迁移（示波器） & 2 & \texttt{pending} \\
+  A204 & MOS 触发栅极/Vds 波形（示波器） & 2 & \texttt{pending} \\
+  A205 & WS2812 状态灯 & 4 & \texttt{pending} \\
+  A206 & TCA9548A 五通道扫描 & 3 & \texttt{pending} \\
+  A207 & 8 阀全功能（听声 + 电流） & 5 & \texttt{pending} \\
+  A208 & I\textsuperscript{2}C tr 实测（100/400\,kHz 裁决） & 6 & \texttt{pending} \\
+  A209 & BLE 三步（扫描/写/订阅） & 8 & \texttt{pending} \\
+  A210 & gui 真机模式（Web Bluetooth） & 8 & \texttt{pending} \\
+  A211 & 电气校准①阀线圈 R/L（万用表 + LCR） & 7 & \texttt{pending} \\
+  A212 & 电气校准②AO3400 RDS（示波器反推） & 7 & \texttt{pending} \\
+  A213 & 电气校准③buck ESR/Cout（纹波反推） & 7 & \texttt{pending} \\
+  A214 & 电气校准④负载调整率/效率（4 线法） & 7 & \texttt{pending} \\
+  A215 & 电气校准⑤⑥$\theta_{ja}$ 红外 + ESP32 电流钳 & 7 & \texttt{pending} \\
+  A216 & 泵实验A 充气死点（\texttt{calibrate\_pump.py}） & 9 & \texttt{pending} \\
+  A217 & 泵实验B 真空死点（\texttt{calibrate\_pump.py}） & 9 & \texttt{pending} \\
+  A218 & 泵实验C 升压曲线（\texttt{calibrate\_pump.py}） & 9 & \texttt{pending} \\
+  A219 & 闭环充气到目标 kPa & 9 & \texttt{pending} \\
+  A220 & 外壳装配（M3 自攻 + 端子开孔对位） & 9+ & \texttt{pending} \\
+  A221 & 整机气密（保压 60\,s） & 9+ & \texttt{pending} \\
+  A222 & 长跑温升 & 9+ & \texttt{pending} \\
+  A223 & 8 阀轮巡 & 9+ & \texttt{pending} \\
+  A224 & 满载纹波 & 9+ & \texttt{pending} \\
+  \midrule
+  A301 & 孪生对拍：阀驱动电流曲线（\texttt{BOARD\_PARAMS} 改后叠图） & 7 & \texttt{pending} \\
+  A302 & 孪生对拍：电源效率/纹波（4 线法实测叠图） & 7 & \texttt{pending} \\
+  A303 & 孪生对拍：热学温升（$\theta_{ja}$ 修正后叠图） & 7 & \texttt{pending} \\
+  A304 & 孪生对拍：充气升压曲线（实验C CSV 叠图） & 9 & \texttt{pending} \\
+  A305 & 孪生对拍：真空死点曲线（实验B CSV 叠图） & 9 & \texttt{pending} \\
+  A306 & 孪生对拍：闭环精度 + 数字孪生精度报告 & 9 & \texttt{pending} \\
+\end{longtable}
+
+表里埋着几处跨章的伏笔，回板时会逐一回收：A203/A204 的示波器波形对照第~\ref{ch:schematic} 章电平迁移与低边驱动的拓扑选择；A208 用 tr 实测裁决 100/400\,kHz（第~\ref{ch:schematic} 章 I\textsuperscript{2}C 上拉告警的实物侧答案）；A211--A215 的六项校准常数逐一直接写入 \texttt{board\_model.py} 的 \texttt{BOARD\_PARAMS}，UI"未标定"黄徽章（图~\ref{fig:v2-intro} 右下状态行）转绿的那一截图，就是 A215 的收官证据；A216--A218 的泵三实验脚本 \texttt{calibrate\_pump.py} 已备好，输出"直接可抄的 \texttt{\#define} 修改建议"（第~\ref{ch:twin} 章 \S\ref{sec:twin-calib}）。
+
+\subsection{首电安全三测预告（A201）：万用表的唯一保留环节}
+\label{sec:acc-firstpower}
+
+三十张工单大多以"软件读数"取证（串口日志、遥测截图、示波器波形），唯有一张从上个世纪活到现在——A201 首电三测，工具栏里只有一只万用表。理由很硬：\textbf{软件无法保护你免于第一次上电的短路}。烧录、遥测、BLE 全部成立的前提是 5V/3V3 轨活着，而"轨活着"在首电那一刻只能用表说话。三测动线：
+
+\begin{enumerate}
+  \item \textbf{轨阻抗}：不上电，万用表二极管/电阻档测 5V 与 3V3 轨对地阻抗，排短路——贴装板的第一道闸，第~\ref{ch:fab} 章收货验收的延伸；
+  \item \textbf{限量首电}：经限流（电源限流挡或 USB 电流表）首电，观察静态电流应为 mA 级而非安级——安级即回第 1 步找短路；
+  \item \textbf{轨电压}：表笔确认 5V 与 3V3 电压在容差内（buck 空载输出对照第~\ref{ch:twin} 章 \S\ref{sec:twin-board} 的标称值），方可进入 A202 烧录。
+\end{enumerate}
+
+三测的实测读数与表笔照片按素材管线归档为 A201 证据。它是整条动线的第一张工单，也是"数字孪生验收（上篇）"与"实物验收（本篇）"的分界：从此以后，每一个数字都长在真板上。
+
+\section*{本章小结}
+上篇用六张 \texttt{pass} 工单证明了"回板之前，软件无欠账"：装配叙事与爆炸跟随（A101）、三态差分联动（A102）、四电路重算（A103）、SDK 双向向量（A104）、固件两道防线（A105）、BLE 先验冻结（A106），背后是 44 断言矩阵、26 项目视审计与三层证据哲学（断言防逻辑错、像素防渲染错、AI 复核防语义错）。下篇用三十张 \texttt{pending} 工单规定了回板之后怎么还账：15--30 分钟一张的九步动线、按 BRINGUP 九章排序的总表、以及一只万用表守着的首电安全门。上下两篇合起来，才是"验收"的完整定义——\textbf{已完成的可复核，未完成的可执行}。
