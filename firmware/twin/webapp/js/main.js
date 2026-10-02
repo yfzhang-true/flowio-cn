@@ -16,8 +16,10 @@ function resolveField(obj, path) {
 }
 
 // 热点卡 (Task5 将扩展为完整 live 横条; 此处先给 名称+实时值 最小闭环)
-function onPartClick(h) {
+let lastHotspot = null;
+function fillHotspotCard(h) {
   const card = $("t2_hotspotCard");
+  lastHotspot = h;
   if (!h) { card.classList.add("hidden"); return; }
   card.classList.remove("hidden");
   if (h.type === "hotspot") {
@@ -31,6 +33,7 @@ function onPartClick(h) {
     card.innerHTML = `<h4>${h.name}</h4><div class="t2_hsRef">部件 · ${h.partId}</div>`;
   }
 }
+const onPartClick = (h) => fillHotspotCard(h);
 
 async function postJSON(url, body) {
   try { await fetch(url, { method: "POST", body: JSON.stringify(body) }); } catch (e) { /* 断连由轮询侧呈现 */ }
@@ -72,6 +75,23 @@ function initDebug() {
   setInterval(() => { el.textContent = "fps " + (scene ? scene.fps.toFixed(0) : "—") + "\nparts " + (scene ? scene.parts.length : 0); }, 500);
 }
 
+// 数据管道 (Task6 将演进为 telemetry.js 200ms 交替轮询): 双源 → flows.update + setState
+// 断连 → 流光降底光 0.08 / 粒子淡出 (spec §6 安静降级, 不弹窗)
+async function pollData() {
+  if (document.hidden || !scene) return;
+  try {
+    const [tel, pnu] = await Promise.all([
+      fetch("/api/board/state").then((r) => r.json()),
+      fetch("/api/state").then((r) => r.json()),
+    ]);
+    setState({ telemetry: tel, pnu, stale: false });
+    if (scene.flows) scene.flows.update({ tel, pnu, connected: true });
+  } catch (e) {
+    setState({ stale: true });
+    if (scene.flows) scene.flows.update({ connected: false });
+  }
+}
+
 function initChrome() {
   for (const id of ["t2_ctrlDrawer", "t2_tlmDrawer", "t2_hotspotCard"]) $(id).classList.add("t2_glass");
   $("t2_ctrlDrawer").innerHTML = '<h3>控制</h3><p style="color:var(--txt2)">待 Task 6 填充</p>';
@@ -80,7 +100,12 @@ function initChrome() {
   initTransport();
   initDebug();
   createScene($("t2_canvas"), onPartClick)
-    .then((h) => { scene = h; })
+    .then((h) => {
+      scene = h;
+      pollData();
+      setInterval(pollData, 250);
+      onState(() => { if (lastHotspot) fillHotspotCard(lastHotspot); });   // 卡内 live 值随遥测刷新
+    })
     .catch((e) => {                                 // WebGL/装配失败 → 优雅降级卡 (spec §6)
       const d = document.createElement("div");
       d.className = "t2_glass";

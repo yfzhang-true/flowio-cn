@@ -160,9 +160,9 @@ export async function createScene(canvas, onPartClick = () => {}) {
   // ── 动画状态: 装配叙事 + 爆炸缓动 + 呼吸 ───────────────────────
   let kTarget = 0;                                // 滑杆目标
   let kCur = 0;                                   // 平滑值
-  let introT0 = performance.now() / 1000 + 0.12;  // 1.5s 装配叙事起点
+  let introT0 = -1;                               // 渲染循环启动时才起表 (flows 加载不占叙事窗口)
+  let lastT = 0;
   const INTRO = 1.5;
-  let lastT = introT0 - 0.12;
   let flowsTick = null;                           // Task4: flows 渲染回调
   let fps = 0;
 
@@ -182,6 +182,7 @@ export async function createScene(canvas, onPartClick = () => {}) {
   }
 
   function render(t) {
+    if (introT0 < 0) { introT0 = t + 0.12; lastT = t; }   // 首帧起表
     const dt = Math.min(0.1, Math.max(0, t - lastT));
     lastT = t;
     if (dt > 0) fps = fps ? fps * 0.92 + (1 / dt) * 0.08 : 1 / dt;
@@ -240,6 +241,16 @@ export async function createScene(canvas, onPartClick = () => {}) {
     get fps() { return fps; },
     registerFlowsTick(fn) { flowsTick = fn; },
   };
+
+  // ── Task4: 流光/粒子 (电流辉光 + 气流) — 挂 asm 随呼吸, 锚 pcb 部件随爆炸 ──
+  try {
+    const { createFlows } = await import("/webapp/js/flows.js");
+    handle.flows = await createFlows(asm, { getPcb: () => (parts.find((p) => p.id === "pcb") || {}).mesh || null });
+    flowsTick = handle.flows.tick;                // 渲染回调: render(t) 每帧驱动
+  } catch (e) {
+    console.warn("flows 加载失败 (流光/粒子不可用):", e);
+  }
+
   window.__t2 = window.__t2 || {};
   window.__t2.scene = handle;                     // T7 测试调试钩
   return handle;
