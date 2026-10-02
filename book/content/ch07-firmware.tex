@@ -1,14 +1,242 @@
 \chapter{固件：ESP-IDF 分层架构}
 \label{ch:firmware}
 
-\section{pn\_core 分层与 HAL 抽象}
-核心逻辑（\texttt{pn\_core}）与硬件访问（\texttt{hal\_esp32.c}）分离：同一份核心代码可在主机 mock 与 QEMU 上运行，这是"33 个主机测试全绿"的前提。
+固件是整个项目里最"怕等"的部分：PCB 在产线上飞（第~\ref{ch:fab} 章），执行器还没到货，凭什么先写固件？答案在第~\ref{ch:twin} 章已经埋下——孪生先行。但孪生能跑固件的前提，是固件本身\textbf{长得分层}：核心逻辑不依赖任何一块真硬件。本章讲 FLOWIO-CN 固件的四层架构：一份 \texttt{pn\_core} 如何同时活在三个世界（ESP32-S3 真机、主机 gcc 测试、QEMU 仿真），CLI 十三条命令如何兼任调试入口与验收工具，TCA9548A 复用器如何用"函数注入"保持纯逻辑，以及串口与 BLE 如何汇入同一个命令分发器。
 
-\section{CLI 十三条命令}
-\texttt{O/C/I/V/R/S/T/W/P} 等命令既是调试入口，也是回板验收的标准工具——BRINGUP 九章动线的每一步都靠它驱动（工单 A201--A224）。
+\section{四层架构与两个"没有"}
+\label{sec:fw-layers}
 
-\section{主机测试与 QEMU 冒烟}
-\texttt{firmware/tests/} 33 个测试全绿 + \texttt{qemu\_smoke.sh} 冒烟，构成软件侧工单 A105 的证据链（见第~\ref{ch:acceptance} 章）。
+固件仓库（\texttt{firmware/}）的目录结构本身就是架构宣言：
 
-\section{PID 闭环与状态机}
-充气到目标 kPa 的闭环控制（工单 A219）：压力反馈、占空比输出与状态字的联动。
+\begin{lstlisting}[basicstyle=\small\ttfamily, breaklines=true,
+  caption={firmware/ 目录结构（README 摘录）}]
+components/
+  pn_core/       纯逻辑层（动作/闭环/协议）——不依赖任何平台，主机可测
+  pn_hal_esp32/  ESP32-S3 硬件层（LEDC 阀/泵 + RMT 舵机 + I2C 传感器）
+main/            app_main：10ms 控制任务 + 串口 CLI
+tests/           主机单元测试（gcc/cmake/ninja，无需 ESP-IDF）
+\end{lstlisting}
+
+自上而下四层（表~\ref{tab:fw-layers}）。分层的判据只有一条：\texttt{pn\_core} 目录里的 C 文件只 include 自己的头文件与标准库，一个 ESP-IDF 头都不出现。这不是洁癖，而是两个"没有"的工程前提——\textbf{没有开发板也能改逻辑}（主机 gcc 直接编译测试），\textbf{没有仿真器外设也能冒烟}（QEMU 不仿真 RMT/I2C，逻辑层照跑）。
+
+\begin{table}[htbp]
+  \centering
+  \caption{固件四层架构（firmware/README.md）}
+  \label{tab:fw-layers}
+  \begin{tabular}{lp{4.2cm}p{5.2cm}}
+    \toprule
+    层 & 代码 & 职责 \\
+    \midrule
+    应用层 & \texttt{main.c} & 串口 CLI 主循环 + 10\,ms 控制任务 + 呼吸演示 \\
+    协议层 & \texttt{proto.c} & 5 字节帧 \texttt{[0xA5][cmd][ports][pwm][crc8]} 的流式解析与构造 \\
+    动作层 & \texttt{actions.c} / \texttt{closedloop.c} & 端口三胞胎/方向阀/泵、状态字、节能、超压保护、压力闭环 \\
+    HAL & \texttt{hal\_if.h} 契约 & \texttt{pn\_hal\_esp32} 实现（目标机）/ \texttt{mock\_hal}（测试）双实现 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+HAL 契约小得出奇——四个函数指针就把"什么是一块 FlowIO"定义完了：\texttt{valve\_write}（阀/泵占空比）、\texttt{pump\_write}、\texttt{sensor\_read}（kPa）、\texttt{now\_ms}（时基）。真机实现把它们接到 LEDC/RMT/I2C；测试的 \texttt{mock\_hal} 把它们接到内存里的假寄存器。动作层的一切语义——阀开多久了（\texttt{pn\_valve\_open\_ms}）、节能降额是否到期——都从这个 4 函数契约里长出来，因此换一个 HAL 就换一个世界，而逻辑一行不改。
+
+\section{主机 33 测试：逻辑层的证据链}
+\label{sec:fw-tests}
+
+\texttt{firmware/tests/} 是一套零依赖极简框架（\texttt{test\_util.h} 只有两个宏：\texttt{CHECK} 与 \texttt{RUN\_TEST}），用 cmake + Ninja 在主机上编译，不需要装 ESP-IDF。当前 33 个测试的分布：动作层 10（\texttt{test\_actions.c}）、闭环 7（\texttt{test\_closedloop.c}）、协议 4（\texttt{test\_proto.c}）、TCA9548A 8（\texttt{tca\_tests.c}）、BLE 载荷 4（\texttt{ble\_tests.c}）。实跑输出：
+
+\begin{lstlisting}[basicstyle=\small\ttfamily, breaklines=true,
+  caption={主机单元测试实跑（gcc/cmake/ninja，2026-10 当前状态）}]
+$ cd firmware/tests && cmake --build build-test && ./build-test/pn_tests.exe
+=== pn_core host unit tests ===
+[ RUN ] t_inflation_sequence        （动作层：I 的阀位组合与状态字）
+[ RUN ] t_overpressure_failsafe     （安全：超压硬规则全关）
+[ RUN ] t_crc_known_vector          （协议：CRC-8/0x07 定值防手滑）
+[ RUN ] t_leading_garbage_resync    （协议：垃圾字节后重同步）
+...
+=== 33 tests, 0 failed ===
+\end{lstlisting}
+
+数字背后有一段演化：README 里写的"21 tests 全绿"是 S3 时代的状态；S4 加 TCA9548A 驱动补 8 个、S5 加 BLE 载荷编解码补 4 个，长到 33。测试策略是\textbf{改逻辑必跑}——任何 \texttt{pn\_core} 的修改，先在主机上跑这 33 个断言，再谈烧录。这份"主机可测"的纪律最终成为验收工单 A105 的软件侧证据（第~\ref{ch:acceptance} 章）。
+
+\section{动作层：阀位组合与状态字}
+\label{sec:fw-actions}
+
+动作层（\texttt{actions.c}）把气路知识编码成五个组合动作，每个动作就是一张阀位真值表（表~\ref{tab:fw-actions}）。其中两处细节来自对 370 迷你泵气路的理解：抽真空走\textbf{排气位}（泵吸/充同侧，负压路径经排气位对端口侧抽取）；释放是\textbf{完全被动}的（泵停、进气关、端口开、排气通大气，不用泵抽）。
+
+\begin{table}[htbp]
+  \centering
+  \caption{五个组合动作的阀位组合（actions.c 语义）}
+  \label{tab:fw-actions}
+  \begin{tabular}{lcccl}
+    \toprule
+    动作 & 进气阀 & 排气阀 & 端口阀 & 泵 \\
+    \midrule
+    充气 \texttt{I} & 开 & 关 & 开 & 起（pwm=0 自替 255） \\
+    抽气 \texttt{V} & 关 & 开 & 开 & 起 \\
+    释放 \texttt{R} & 关 & 开 & 开 & \textbf{停}（被动放气） \\
+    保压 \texttt{S} & 关 & 关 & 关 & 停（隔离保压） \\
+    诊断保压 \texttt{H} & 关 & 关 & \textbf{开} & 停（单一密封容积） \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\texttt{H} 值得单独说明：它与 \texttt{S} 的唯一区别是端口阀保持通——泵侧密封后汇流管与下游执行器连成\textbf{一个}密封容积，端口侧泄漏因此可被汇流管传感器观测。这正是第~\ref{ch:twin} 章 v2.1 物理修正（端口独立节点）与出厂筛选工况的固件侧对应物。
+
+状态字是全系统的通用语言（CLI 的 \texttt{T}、BLE 遥测帧、上位机徽章都消费它）：bit0--4 = 端口 1--5 开，bit5 = 进气阀，bit6 = 排气阀，bit7 = 泵，bit9 = 传感器在线，bit15 = 错误；协议层另预留设备 ID 字段位（多机同步，对标 FlowIO JS API）。\texttt{valve\_drive()} 是唯一写状态字的地方——写占空比的同时登记 \texttt{s\_open\_since} 时间戳，\texttt{pn\_valve\_open\_ms} 由此提供"开了多久"，闭环超时与节能降额都依赖它。
+
+安全有三条，全是\textbf{硬规则}：上电 \texttt{pn\_init} 先把所有阀与泵写零（常闭阀 + duty=0，最坏情况也只是不动作）；超压保护 \texttt{pn\_check\_overpressure} 任何上层不可关闭，触发即 \texttt{pn\_stop\_action(ALL)} 全关；真机上 main.c 另加泵连续运行 120\,s 护栏（防干转/过热，超时强制停泵）。第三条原则写给未来的智能层：TinyML 之类永远是并行观察者，不进控制路径——后来泄漏检测整体下线（第~\ref{ch:twin} 章），控制路径果然一行未动。
+
+\section{CLI：十三条命令的调试与验收两用}
+\label{sec:fw-cli}
+
+CLI 分发器 \texttt{pn\_core/cli.c} 从 main.c 抽出后就是双宿主共用——真机串口、虚拟设备、孪生 DLL 走同一个 \texttt{pn\_cli\_process\_line()}。表~\ref{tab:fw-cli} 是完整命令表：前九条对标 FlowIO 动作语义，后四条是本项目自己的运维入口。
+
+\begin{table}[htbp]
+  \centering
+  \caption{串口 CLI 命令表（cli.c + main.c，115200-8N1）}
+  \label{tab:fw-cli}
+  \begin{tabular}{llp{5.6cm}}
+    \toprule
+    命令 & 示例 & 语义 \\
+    \midrule
+    \texttt{I <ports> <pwm>} & \texttt{I 1 255} & 充气（ports 为位掩码，1--5 位） \\
+    \texttt{V <ports> <pwm>} & \texttt{V 1 200} & 抽气 \\
+    \texttt{R <ports>} & \texttt{R 1} & 释放（被动放气） \\
+    \texttt{S <ports>} & \texttt{S 1} & 停止/隔离保压 \\
+    \texttt{H <ports>} & \texttt{H 1} & 诊断保压（端口保持通） \\
+    \texttt{O/C <ports>} & \texttt{O 7} & 只开/关端口阀 \\
+    \texttt{G <ports> <kPa> <s>} & \texttt{G 1 40 0} & 闭环充气到目标压力 \\
+    \texttt{X} & & 闭环复位（完成闩锁解除） \\
+    \texttt{F} & & 三步自检（见下） \\
+    \texttt{P} & & 读全部传感器（kPa） \\
+    \texttt{T} & & 打印状态字与错误码 \\
+    \texttt{W} & & I2C 全总线扫描（bring-up 诊断） \\
+    \texttt{M <gpio> <usec>} & \texttt{M 17 2500} & 舵机信号诊断（LEDC 时基发脉冲） \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+三条历史注脚。\textbf{其一}，\texttt{L} 命令仍在表外活着：TinyML 泄漏检测 2026-10-02 下线后，\texttt{L} 改为应答 \texttt{leak=off (TinyML retired 2026-10-02)}——命令号保留不 404，旧客户端与 BLE 脚本不至于拿到 \texttt{?}。这是"接口先冻结、语义可演化"的小型示范。\textbf{其二}，\texttt{F} 自检三步（传感器探测 $\to$ 3 端口阀 + 进/排气阀咔哒 $\to$ 泵 1.5\,s 后汇流管 $\Delta P$，$>2$\,kPa 判 PASS 否则 FAIL/LEAK）是回板当天 CLI 的第一件事，也构成 QEMU 冒烟的判定项。\textbf{其三}，\texttt{cli.c} 里没有一行 \texttt{printf} 直发应答——所有应答走 \texttt{cli\_out()}：先 \texttt{vprintf} 到串口，再把同一行喂给可注入的 \texttt{resp\_sink}。这个看似多余的挂钩，正是第~\ref{ch:ble} 章 BLE resp 特征的接缝：CLI 应答行原样变成 GATT 通知。
+
+\section{TCA9548A：函数注入保住的纯逻辑}
+\label{sec:fw-tca}
+
+双压力传感器共用固定地址 0x58（XGZP6897D-C 选型码即地址，第~\ref{ch:twin} 章），必须经 TCA9548A 八通道复用器分时选通。麻烦在于：选通是 I2C 写，而 \texttt{pn\_core} 不许碰 I2C。解法是\textbf{注入}——纯逻辑层只定义函数指针类型 \texttt{tca\_i2c\_write\_fn} 与编码规则，真机在初始化时把硬件写函数绑进来：
+
+\begin{lstlisting}[language=C, basicstyle=\small\ttfamily, breaklines=true,
+  caption={tca9548.c 的编码与注入（摘自源码）}]
+static tca_i2c_write_fn s_fn;    /* 真机注入；NULL=主机 mock 模式 */
+
+uint8_t tca_encode(uint8_t ch)
+{
+    return (ch < TCA_CH_MAX) ? (uint8_t)(1u << ch) : 0;
+}
+
+void tca_bind(tca_i2c_write_fn fn) { s_fn = fn; }
+
+tca_err_t tca_select(uint8_t ch)
+{
+    if (ch == TCA_MANIFOLD) {          /* 汇流管直连：写 0x00 断开全部下游
+                                        * （旁路 encode——0xFF 编码本为非法 0） */
+        if (s_fn) return (s_fn(TCA_ADDR, 0x00) == 0) ? TCA_OK : TCA_ERR_BUS;
+        s_mock_cur = TCA_MANIFOLD;
+        return TCA_OK;
+    }
+    uint8_t code = tca_encode(ch);
+    if (code == 0) return TCA_ERR_CHAN;
+    if (s_fn) return (s_fn(TCA_ADDR, code) == 0) ? TCA_OK : TCA_ERR_BUS;
+    s_mock_cur = ch;                   /* mock 模式：仅记录当前通道 */
+    return TCA_OK;
+}
+\end{lstlisting}
+
+一个指针，两种世界。\texttt{s\_fn == NULL} 时整套逻辑跑在 mock 总线表上——每通道可挂最多 4 个模拟设备地址（\texttt{tca\_mock\_attach} 注入 Pa$\times$10 读数），\texttt{tca\_scan} 数地址、\texttt{tca\_read\_pa} 读首个传感器、空通道返回 \texttt{TCA\_ERR\_BUS}——这正是 8 个主机测试（\texttt{tca\_tests.c}）所断言的行为：编码边界（\texttt{tca\_encode(0)==0x01}、\texttt{tca\_encode(5)==0}）、通道越界、断线错误码、同通道双地址去重。真机侧 \texttt{main.c} 一行完成注入：
+
+\begin{lstlisting}[language=C, basicstyle=\small\ttfamily, breaklines=true,
+  caption={main.c 的绑定（摘自源码，S4）}]
+pn_init(pn_hal_esp32_init(), PN_CFG_GENERAL);
+tca_bind(tca_hal_write);   /* pn_core TCA9548A 逻辑层绑定真机 I2C 写（QEMU 下恒 -1，无害） */
+\end{lstlisting}
+
+真机实现 \texttt{tca\_hal\_write} 有一次小的工程判断：任务书示例给的是 legacy API \texttt{i2c\_master\_write\_to\_device}，但它与 \texttt{hal\_esp32.c} 既有的 new-driver 总线句柄互斥——于是改为复用既有 \texttt{s\_tca\_dev} 句柄走 \texttt{i2c\_master\_transmit}，"用既有 i2c master 句柄"的意图不变。所有真机 I2C 出总线都收敛到这一个函数，QEMU 或器件缺失时返回 $-1$，逻辑层把它翻译成 \texttt{TCA\_ERR\_BUS}，优雅降级而非挂死。传感器读取路径（\texttt{xgzp\_read\_kpa}）同样是"先 \texttt{tca\_hw\_select} 切通道，再对 0x58 从寄存器 0x04 连读 5 字节，24 位补码和除以 $2^{21}$ 乘量程"——读法与换算是第~\ref{ch:twin} 章表~\ref{tab:twin-xgzp} 三处手册修正的直接落地。bring-up 期的 \texttt{W} 命令（全总线扫描：主总线全段 + CH0/CH1 下游段）则把这套硬件拓扑变成一条可粘贴进验收工单 A206 的日志。
+
+\section{pn\_cmd\_feed：串口与 BLE 的同一入口}
+\label{sec:fw-feed}
+
+S5 之前的命令入口只有串口 \texttt{fgets}；BLE 来了之后，最偷懒的做法是在 GATT 回调里再写一个解析器——那意味着两份文法、两份 bug。实际做法是给所有命令入口修一条\textbf{共用河道} \texttt{pn\_cmd\_feed(buf, len)}：字节流进来，先识别是 0xA5 二进制帧还是 ASCII 明文行，帧翻译成等价 CLI 行（翻译表见第~\ref{ch:ble} 章表~\ref{tab:ble-translate}），行聚齐后统一进 \texttt{pn\_cli\_process\_line()}。跨多次 write 分片的行也能拼上——BLE 的 MTU 分段对上层完全透明。
+
+\begin{lstlisting}[language=C, basicstyle=\small\ttfamily, breaklines=true,
+  caption={main.c 的 pn\_cmd\_feed 核心：帧/行双模式与线程串行化（摘自源码）}]
+void pn_cmd_feed(const uint8_t *buf, size_t len)
+{
+    char cooked[24];
+    for (size_t i = 0; i < len; ++i) {
+        uint8_t b = buf[i];
+
+        /* 二进制帧模式：行缓冲空时见 0xA5 进入，收满 5 字节校验后翻译 */
+        if (s_in_frame || (b == PN_PROTO_MAGIC && s_line_n == 0 && s_frame_n == 0)) {
+            s_in_frame = true;
+            s_frame[s_frame_n++] = b;
+            if (s_frame_n < sizeof(s_frame)) continue;
+            s_frame_n = 0;  s_in_frame = false;
+            if (s_frame[4] == pn_proto_crc8(s_frame, 4)) {   /* 坏帧静默丢弃 */
+                frame_to_line(s_frame, cooked, sizeof(cooked));
+                xSemaphoreTake(s_cmd_mtx, portMAX_DELAY);
+                dispatch_line(cooked);
+                xSemaphoreGive(s_cmd_mtx);
+            }
+            continue;
+        }
+
+        if (b == '\n' || b == '\r') {
+            if (s_line_n) {
+                s_line[s_line_n] = 0;  s_line_n = 0;
+                xSemaphoreTake(s_cmd_mtx, portMAX_DELAY);
+                dispatch_line(s_line);
+                xSemaphoreGive(s_cmd_mtx);
+            }
+            continue;
+        }
+        if (s_line_n < sizeof(s_line) - 1) s_line[s_line_n++] = (char)b;
+        else s_line_n = 0;   /* 超长行整行丢弃（BLE.md：命令行 ≤63B） */
+    }
+}
+\end{lstlisting}
+
+三处细节决定了它扛得住三个并发调用者（串口主循环、BLE cmd 任务、演示任务）。\textbf{其一}，互斥锁 \texttt{s\_cmd\_mtx} 把分发临界区缩到单行——三个线程谁先拿到谁先执行，状态字不会写一半。\textbf{其二}，帧模式只在\textbf{行缓冲为空}时由 0xA5 触发：半截命令 \texttt{I 1} 后跟一个恰好等于 0xA5 的字节，不会把状态机拖进帧模式；坏 CRC 的帧静默丢弃，与 \texttt{proto.c} 流式解析器同一策略（协议层的解析器另有"垃圾紧贴真帧"的缓冲内重同步，深度有界不递归）。\textbf{其三}，超长行整行丢弃而不是截断——截断会产生一条语义全变的合法命令，丢弃最多让调用方重试。
+
+喂入端还有两个小机关。真机 \texttt{stdin} 需要 UART 驱动 + VFS 桥接（默认 console 只配输出，\texttt{fgets} 根本收不到字节——2026-09-23 真机首次点亮的实证；QEMU 的 UART 模型走轮询读，须跳过以免驱动中断差异）。另一个是 \texttt{PN\_BOOT\_DEMO}：充电宝独立供电时没有串口对端，上电 30\,s 内未按住 BOOT 键就自动跑呼吸演示循环（\texttt{I 6s → S 3s → V 6s → S 3s}）——演示任务自己也是 \texttt{pn\_cmd\_feed} 的第三个调用者，吃自己的狗粮。
+
+\section{10\,ms 控制节拍：七件事与一盏灯}
+\label{sec:fw-tick}
+
+\texttt{control\_task} 以 10\,ms 周期轮转，每拍做七件事：闭环 \texttt{pn\_inflate\_to\_tick()}（完成/超时/传感器错三态打印）、泵 120\,s 护栏、阀保持节能 \texttt{pn\_optimize\_power}（参数改读 BLE Config 服务的 RAM 镜像，见第~\ref{ch:ble} 章）、超压保护、舵机 50\,Hz 脉冲流刷新、WS2812 状态灯节拍、BLE 遥测组帧（每 10 拍一次，10\,Hz）。闭环本体（\texttt{closedloop.c}）是个干净的非阻塞状态机：\texttt{G} 启动后不再占用主循环，每拍读传感器、比较目标、检查超时；完成闩锁 \texttt{s\_completed} 要求显式 \texttt{X} 复位才能再次启动；到达目标时\textbf{先}取进气阀开启时长\textbf{再}停止动作——停止会清时间表，顺序反了 \texttt{elapsed\_ms} 就永远是零。启动时若目标端口已在充气（状态字匹配）则沿用当前动作不重启，与 FlowIO \texttt{inflateP} 同款语义。
+
+WS2812 状态灯（GPIO48，板载 1 颗地址型 RGB）是这拍节拍里最"产品"的一件事。设计把\textbf{模式设置}与\textbf{节拍驱动}分开：\texttt{board\_led\_set(mode)} 只改模式变量，呼吸/闪烁动画由每 10\,ms 的 \texttt{board\_led\_tick\_10ms()} 推进相位，且只在 RGB 变化时才碰 RMT 总线。五模式映射见表~\ref{tab:fw-led}。
+
+\begin{table}[htbp]
+  \centering
+  \caption{WS2812 状态灯模式映射（hal\_esp32.c）}
+  \label{tab:fw-led}
+  \begin{tabular}{clp{6.2cm}}
+    \toprule
+    模式 & 名称 & 视觉 \\
+    \midrule
+    0 & IDLE & 呼吸蓝：2\,s 三角波 $0\to255\to0$（相位 10\,ms 步进） \\
+    1 & RUNNING & 常绿 \\
+    2 & HOLD & 常青（绿+蓝） \\
+    3 & ERR & 红闪 2\,Hz（占空 50\%） \\
+    4 & OTA & 紫闪 1\,Hz（红 128 + 蓝 255） \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+S4 阶段的实际接线是简化映射：\texttt{board\_led\_set(pn\_get\_state() ? 1 : 0)}——任一执行器动作即 RUNNING 绿，否则 IDLE 呼吸蓝；HOLD/ERR/OTA 三档留给后续（ERR 现由状态字 bit15 承担信息职责）。这盏灯背后有一条 RMT 通道预算的教训链：ESP32-S3 共 4 个 RMT TX 通道，舵机吃 3、状态灯占第 4；每通道 \texttt{mem\_block\_symbols} 取 48——先是照抄示例写 64，结果级联相邻通道内存、每只舵机吃掉 2 个 TX 通道，第三只直接 \texttt{no free tx channels}；改 32 又被驱动拒绝（"must be even and at least 48"）；48 恰是单通道 RAM 且够用。同源的第二条教训：发送队列深度初值 1 与 20\,ms 发送节奏竞争，新帧到达时上一帧未发完、队列满静默丢弃，舵机信号大部分时间停发——白线被内部上拉顶到 2.7\,V、LED 永闪的"灵异"根因；队列深 4 后稳态只用 1--2，彻底消除竞争。这两条都记在 \texttt{hal\_esp32.c} 注释里，连同 2026-09-23/24 的实证日期。
+
+\section{QEMU 冒烟：没有射频与外设的全固件测试}
+\label{sec:fw-qemu}
+
+主机测试覆盖 \texttt{pn\_core}，QEMU 冒烟覆盖\textbf{整只固件}：真 \texttt{app\_main}、真 FreeRTOS 调度、真启动流程，只缺射频与 RMT/I2C 外设。\texttt{qemu\_smoke.sh} 的流程是 \texttt{merge\_bin} 合并三段镜像 $\to$ 填充 16\,MB $\to$ QEMU 启动（\texttt{-m 8M} + \texttt{ssi\_psram,is\_octal=true} 才能匹配 N16R8 的 Octal PSRAM）$\to$ 延迟喂 CLI 命令 $\to$ 九项 grep 判定：启动横幅、PSRAM 8\,MB 初始化、\texttt{F} 自检三步、\texttt{I 1 255}/\texttt{H 1}/\texttt{S 1} 应答、\texttt{L} 路由。九项全过才算冒烟通过（工单 A105）。
+
+两个坑写进了脚本头注释。\textbf{其一}，启动期间 UART 提前收到字节会触发 QEMU 中断竞态崩溃（\texttt{esp\_task\_wdt\_init} 前后窗口）——命令延迟 10\,s 再发（启动约 2\,s 完成，余量充足），仍偶发则重试至多 5 次。\textbf{其二}，QEMU 的 esp32s3 模型不仿真 RMT/I2C/BT 控制器——固件用 \texttt{efuse} 芯片版本探测（QEMU 报 v0.0，真实 S3 无此版本）：舵机/传感器初始化跳过、WS2812 跳过、BLE 跳过，\texttt{[HAL] QEMU detected} 打印在案，CLI 与逻辑层照常。这个"探测 + 优雅降级"的模式在真机上也兜底：器件缺失时闭环照常报传感器错，而不是挂死在驱动里。
+
+\section*{本章小结}
+分层是本章唯一的主题词：\texttt{pn\_core} 零平台依赖换来主机 33 测试与 QEMU 冒烟两道防线；HAL 四函数契约定义了"什么是 FlowIO"；TCA9548A 用函数注入让复用器逻辑既活在 mock 总线表上、又活在真机 I2C 上；\texttt{pn\_cmd\_feed} 把串口与 BLE 收敛为同一入口，帧与行、三个线程、两种宿主共享同一份文法。CLI 十三条命令既是开发期的手，也是验收期的尺——下一章把其中无线的那一半（BLE 四服务契约）讲完，第~\ref{ch:acceptance} 章的硬件工单将逐条回收这里埋下的验证点。

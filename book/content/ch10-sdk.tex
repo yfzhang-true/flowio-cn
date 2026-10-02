@@ -1,11 +1,183 @@
-\chapter{Python SDK}
+\chapter{Python SDK：把协议钉死}
 \label{ch:sdk}
 
-\section{flowio\_sdk 与协议双向编解码}
-\texttt{sdk/python/}：命令帧的构造与解析共用同一张向量表——\texttt{test\_protocol.py} 以 \texttt{vectors.json} 的 9 组向量做双向编解码回归（工单 A104）。
+白牌厂商拿到一台 FlowIO 兼容模块，愿意花在上手上的时间大约是五分钟。\texttt{sdk/python/}（包名 \texttt{flowio\_sdk}）就是为这五分钟准备的：\texttt{pip install pyserial} 之后一条命令点亮执行器，\texttt{FlowIO("COM3").inflate(1, 180)} 之类的高层 API 背后是 5 字节 0xA5 帧。但本章真正的重点不是 API 表面，而是它示范的\textbf{协议防漂移}手艺：SDK 与固件 \texttt{proto.c} 用同一组测试向量双向钉死，其中一次"计划草案把 CRC 多项式写错"的真实纠错，值得每个要写跨端协议的人读一遍。
 
-\section{hello\_globe 冒烟}
-一条命令连接真机/孪生并点亮执行器的最小示例：白牌厂商集成的 5 分钟上手路径。
+\section{0x8C 事故未遂：计划草案不是真源}
+\label{sec:sdk-08c}
 
-\section{面向二次开发的接口面}
-串口与 BLE 双通道、状态字语义、压力单位约定（kPa$\times$10 整数传输）——开放 API 的边界即产品文档的边界。
+SDK 的实施计划（board-twin 计划 Task 6）里有一段示意代码，其中 CRC 这样写：
+
+\begin{lstlisting}[language=Python, basicstyle=\small\ttfamily, breaklines=true,
+  caption={计划草案的 CRC（错误示范——照抄会让 SDK 全军覆没）}]
+CRC8_POLY = 0x8C          # 与 proto.c 一致 (Dallas/Maxim 反向)
+def crc8(data: bytes, crc: int = 0) -> int:
+    for b in data:
+        crc ^= b
+        for _ in range(8):
+            crc = ((crc >> 1) ^ CRC8_POLY) if (crc & 1) else (crc >> 1)
+    return crc
+\end{lstlisting}
+
+注释信誓旦旦"与 proto.c 一致"，但它是 LSB 先行的反射多项式（0x07 的位反转）；而固件 \texttt{proto.c} 的 \texttt{pn\_proto\_crc8} 是 MSB 先行、多项式 0x07 初值 0x00 的 CRC-8/ATM。两条算法对同一帧算出的 CRC 不同——以充气帧（\texttt{A5 2B 01 C8}）为例：正确 CRC 是 \texttt{0x7D}，草案算法算出 \texttt{0xB1}。更糟的是错误的后果形态：固件对坏 CRC 帧\textbf{静默丢弃}（第~\ref{ch:firmware} 章），SDK 每条命令都石沉大海，没有任何报错指向 CRC——这种 bug 在"链路看起来通了"的假象里能消耗掉一个下午。
+
+草案的错不止一处：命令字节写的是 CLI 字母（\texttt{'I'}=0x49 等），而 \texttt{proto.h} 的动作码是 \texttt{'+'/'-'/'!'/\dots}；UUID 基址、pwm 默认值也与最终契约有出入。救了这一切的是计划里自己写的一句话：\textbf{"命令字节以 proto.c 实表为准——实现前先 grep 该表"}。实现时真的去 grep 了，于是 CRC 算法、命令表、帧长一并按真源重写。教训可以写成一条通用规则：\textbf{计划文档里的代码是草案，真源在编译过的固件里}；跨端协议的每个数值都要能指回一个可执行的出处。
+
+还有一个巧合值得记录：向量表里"停止"帧 \texttt{A5 21 01 00} 的\textbf{正确} CRC 恰好等于 \texttt{0x8C}——错误多项式的常数恰好是某条正确帧的 CRC 值。这意味着肉眼对照一两帧的字节串\textbf{发现不了}算法用错（对得上这帧、对不上其余帧），独立的第三方检查值因此必不可少。
+
+\section{crc8 与 encode：全函数与两枚锚点}
+\label{sec:sdk-proto}
+
+交付版 \texttt{protocol.py} 的两个核心函数全文如下——注释即契约：
+
+\begin{lstlisting}[language=Python, basicstyle=\small\ttfamily, breaklines=true,
+  caption={flowio\_sdk/protocol.py 的 crc8 与 encode（全文摘录）}]
+def crc8(data: bytes) -> int:
+    """CRC-8/ATM（poly=0x07, init=0x00, MSB 先行，无反射/无异或输出）。
+
+    与 proto.c ``pn_proto_crc8`` 位级一致；自检锚点 ``crc8(b"123456789")==0xF4``。
+    """
+    crc = 0x00
+    for byte in data:
+        crc ^= byte
+        for _ in range(8):
+            crc = ((crc << 1) ^ 0x07) & 0xFF if (crc & 0x80) else (crc << 1) & 0xFF
+    return crc
+
+
+def encode(cmd, ports: int = 0, pwm: int = 0) -> bytes:
+    """构造 5 字节帧（等价 proto.c ``pn_proto_build``）。
+
+    :param cmd:   单字符 str（如 ``'+'``）或命令字节 int（如 CMD_INFLATE）
+    :param ports: 端口位掩码 0x00..0xFF（有效位 0x1F，超出仅透传不校验）
+    :param pwm:   占空比 0..255（QUERY 帧语义为传感器号）
+    """
+    frame = bytearray(FRAME_LEN)
+    frame[0] = PN_PROTO_MAGIC
+    frame[1] = _cmd_to_byte(cmd)
+    frame[2] = _to_byte(ports, "ports")
+    frame[3] = _to_byte(pwm, "pwm")
+    frame[4] = crc8(bytes(frame[:4]))  # 覆盖前 4 字节（proto.c ST_CRC 分支同款）
+    return bytes(frame)
+\end{lstlisting}
+
+多项式正确性靠\textbf{两枚独立锚点}钉死，都不依赖固件代码本身：\texttt{crc8(b"123456789")==0xF4} 是 CRC-8/ATM 的国际标准检查值（多项式、初值、移位方向、输出异或四要素中任何一项错都过不了这一关）；\texttt{crc8(b"\textbackslash xA5")==0x72} 则来自固件 \texttt{test\_proto.c} 的 \texttt{t\_crc\_known\_vector}——单字节定值，防有人手滑改多项式。参数侧的纪律是"\textbf{宁可拒发也不静默截断}"：\texttt{\_to\_byte} 把 ports/pwm 收紧到 0..255，越界抛 \texttt{ValueError}（\texttt{encode("+", 0, 256)} 直接报错，而不是截成 255 悄悄发一个满占空比——那是气动执行器上危险的"善意"）。
+
+\section{vectors.json：与固件同向量的回归网}
+\label{sec:sdk-vectors}
+
+帧级正确性靠 \texttt{tests/vectors.json} 的黄金字节（表~\ref{tab:sdk-vectors}）：前 5 组的输入参数\textbf{逐一对齐}固件 \texttt{test\_proto.c} 中 \texttt{pn\_proto\_build} 的调用参数——固件测试怎么构帧，SDK 就怎么构，两侧字节串必须逐字节相同；后 3 组补边界（全端口 + 最大占空比、全端口 pwm=0、混合端口 + 非零 pwm 的字段复用）。
+
+\begin{table}[htbp]
+  \centering
+  \caption{SDK 协议测试向量（vectors.json 摘编；对应工单 A104）}
+  \label{tab:sdk-vectors}
+  \begin{tabular}{llrl}
+    \toprule
+    向量名 & 来源 & 参数 & 帧字节 \\
+    \midrule
+    inflate\_fw\_roundtrip & 固件 t\_frame\_roundtrip & \texttt{'+'}, 1, 200 & \texttt{a52b01c87d} \\
+    stop\_fw & 固件 t\_bad\_crc\_dropped & \texttt{'!'}, 1, 0 & \texttt{a52101008c} \\
+    state\_fw & 固件 t\_bad\_crc\_dropped & \texttt{'S'}, 0, 0 & \texttt{a553000028} \\
+    query\_fw\_resync & 固件 t\_leading\_garbage\_resync & \texttt{'?'}, 31, 1 & \texttt{a53f1f0184} \\
+    reset\_fw & 固件 t\_crc\_known\_vector & \texttt{'R'}, 0, 0 & \texttt{a552000043} \\
+    inflate\_max\_boundary & 边界 & \texttt{'+'}, 31, 255 & \texttt{a52b1fff79} \\
+    vacuum\_zero\_boundary & 边界（pwm=0 自替 255） & \texttt{'-'}, 31, 0 & \texttt{a52d1f00f7} \\
+    release\_field\_reuse & 字段复用 & \texttt{'\^{}'}, 10, 42 & \texttt{a55e0a2aed} \\
+    \midrule
+    \multicolumn{3}{l}{CRC 锚点（独立第三方）} & \texttt{"123456789"}$\to$\texttt{f4}，\texttt{0xA5}$\to$\texttt{72} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\texttt{test\_protocol.py}（stdlib \texttt{unittest}，无 pytest 依赖）织成四层网：encode 对 8 组向量逐字节比对黄金帧；同 8 组 decode 往返（\texttt{cmd/ports/pwm} 三元组还原）；\texttt{encode$\to$decode} 直通往返；错误路径——坏 CRC 用固件同款破坏法（\texttt{frame[4] \^{}= 0xFF}）、坏魔数（重算 CRC 排除干扰专测魔数）、坏长度、参数越界分别断言抛 \texttt{ProtocolError}。注意两侧对坏帧的\textbf{哲学差异}是刻意的：固件面对字节流要容错重同步（静默丢弃 + 重同步）；SDK 面对单帧要帮程序员抓 bug（显式抛错、指名道姓）。
+
+\section{client.py：高层 API 与传输接缝}
+\label{sec:sdk-client}
+
+\texttt{FlowIO} 类把帧协议包成语义动作（表~\ref{tab:sdk-api}）。端口参数有两条路：位掩码常量（\texttt{PORT1..\ PORT5}、\texttt{ALL\_PORTS}）或 \texttt{port\_mask(1,3)} 式助手（端口号 1..5 之外即抛错）。
+
+\begin{table}[htbp]
+  \centering
+  \caption{FlowIO 高层 API（client.py；命令字节抄自 proto.h 动作码）}
+  \label{tab:sdk-api}
+  \begin{tabular}{llp{5.8cm}}
+    \toprule
+    方法 & 帧 & 语义（对应 actions.c） \\
+    \midrule
+    \texttt{inflate(port, pwm)} & \texttt{'+'} & 开进气阀 + 端口阀 + 泵起（pwm=0 固件自替 255） \\
+    \texttt{vacuum(pwm, ports)} & \texttt{'-'} & 开排气位 + 端口阀 + 泵起 \\
+    \texttt{hold(port)} & \texttt{'!'} & 停止/保压（全阀关 + 泵停） \\
+    \texttt{release(port)} & \texttt{'\^{}}' & 释放（被动放气，pwm 忽略） \\
+    \texttt{open\_ports/close\_ports} & \texttt{'o'/'c'} & 只开/关端口阀 \\
+    \texttt{query(sensor)} & \texttt{'?'} & 读压力（pwm 字段复用为传感器号），读回一行 \\
+    \texttt{state()} & \texttt{'S'} & 读状态字（读回一行，超时得空串） \\
+    \texttt{reset()} & \texttt{'R'} & 闭环复位 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+传输层是一条窄接缝：任何实现 \texttt{send(bytes)} 与 \texttt{readline() -> str} 两个方法的对象都能从构造器注入（\texttt{FlowIO(transport=...)}）——测试用假传输离线跑，未来的 BLE 或孪生 HTTP 通道也从同一接缝接入而不动 \texttt{client.py} 一行。串口实现 \texttt{SerialTransport} 有三处细节：\texttt{pyserial} 是\textbf{可选依赖}（延迟到实例化才 import，缺失时报"请先执行 pip install pyserial"而不是裸 \texttt{ImportError}）；打开串口时 \texttt{dtr/rts} 显式拉低——否则打开瞬间会复位 ESP32（\texttt{serial\_monitor.py} 同款经验）；\texttt{list\_ports()} 双路探测（pyserial 自带枚举优先，Windows 下退化为扫 \texttt{COM1..COM255}）。回包语义同样诚实：0xA5 帧协议的回包 handler 在固件侧尚未接线（S4 骨架先行），故默认不读回，仅 \texttt{state()}/\texttt{query()} 这类天生要回包的动作默认读一行（超时得空串，不致命）。SDK 本体 stdlib-only——不装 pyserial 也能 \texttt{encode}/\texttt{decode} 离线工作。
+
+\section{hello\_glove：一个来回的冒烟示例}
+\label{sec:sdk-hello}
+
+示例全文（\texttt{examples/hello\_glove.py}）——充、保、释、抽一个来回，每步打印发出的帧字节；无参数运行时列出可用串口后退出，本身就是可用性设计的一部分：
+
+\begin{lstlisting}[language=Python, basicstyle=\small\ttfamily, breaklines=true,
+  caption={hello\_glove.py 全文（examples/）}]
+"""hello_glove.py — FlowIO 上位机最小示例（充→保→释→抽一个来回）。
+
+用法::  python hello_glove.py COM3        # 指定串口
+        python hello_glove.py             # 无参数时列出可用串口后退出
+"""
+from __future__ import annotations
+import sys, time
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))  # sdk/python 入包路径
+from flowio_sdk import FlowIO, encode  # noqa: E402
+
+def main() -> int:
+    if len(sys.argv) < 2:
+        from flowio_sdk import SerialTransport
+        ports = SerialTransport.list_ports()
+        print("用法: python hello_glove.py <COM口>   如: python hello_glove.py COM3")
+        print("可用串口:", ports if ports else "(未检测到；请安装 pyserial 或检查连接)")
+        return 1
+
+    port = sys.argv[1]
+    cycles = int(sys.argv[2]) if len(sys.argv) > 2 else 1
+
+    with FlowIO(port) as io:
+        print(f"[hello_glove] {port} 已连接，{cycles} 个循环：充→保→释，最后抽一次")
+        for i in range(cycles):
+            print(f"-- cycle {i + 1}/{cycles}")
+            print("  inflate(1,180) ->", encode("+", 1, 180).hex())
+            io.inflate(1, 180)          # 端口 1 充气，180/255 占空比
+            time.sleep(2.0)
+            print("  hold(1)        ->", encode("!", 1, 0).hex())
+            io.hold(1)                  # 保压（停泵关阀）
+            time.sleep(1.0)
+            print("  release(1)     ->", encode("^", 1, 0).hex())
+            io.release(1)               # 释放（被动放气）
+            time.sleep(1.0)
+        print("  vacuum(180)    ->", encode("-", 0x1F, 180).hex())
+        io.vacuum(180)                  # 全端口抽气一次
+        reply = io.state()              # 读一次状态字
+        print("  state()        ->", repr(reply) or "(无回包——固件 0xA5 handler 接线后即有)")
+        print("[hello_glove] 完成")
+    return 0
+
+if __name__ == "__main__":
+    sys.exit(main())
+\end{lstlisting}
+
+打印帧字节（\texttt{encode("+", 1, 180).hex() -> a52b01c87d}）不是装饰：用户拿它对照 \texttt{vectors.json} 或 nRF Connect 的写日志，就完成了第~\ref{ch:acceptance} 章工单 A104 的"向量可见"证据链；串口/孪生双模式则与前端一致——固件 \texttt{pn\_cmd\_feed} 双编码兼容（第~\ref{ch:firmware} 章）意味着 SDK 的帧发到串口、BLE \texttt{cmd} 特征或孪生 DLL 是同一串字节。
+
+\section{接口面：SDK 的边界即产品的边界}
+\label{sec:sdk-surface}
+
+开放给二次开发者的接口面要刻意收窄，SDK 目前公开的是：高层动作方法 + \texttt{encode/decode/crc8}（想自己组帧的人用）+ \texttt{port\_mask} 与端口常量 + \texttt{ProtocolError}。两个单位约定写进文档就不再改：压力一律 \textbf{kPa$\times$10 整数传输}（BLE 帧如此，回包文本如 \texttt{sensor0=12.30 kPa}）；状态字位定义与第~\ref{ch:firmware} 章表一致（bit0--4 端口、bit5/6 方向阀、bit7 泵、bit9 传感器在线、bit15 错误）。串口是 SDK 的第一通道（115200-8N1）；BLE 通道浏览器端已有 \texttt{ble.js}（第~\ref{ch:ble} 章），Python 侧经 \texttt{transport} 接缝留给 P1——契约（UUID、载荷）都已冻结，接入只是工作量而非设计题。
+
+\section*{本章小结}
+SDK 的价值不在几百行代码，而在它把协议变成了\textbf{带防漂移锚点的公共财产}：CRC-8/ATM 被标准检查值 0xF4 与单字节定值 0x72 双重钉死；8 组黄金帧向量与固件测试同参数、同字节；错误路径两侧分工——固件容错重同步、SDK 拒收即抛错。那次"0x8C 草案"的未遂事故是全项目方法论的一次微型演习：计划不是真源，grep 过的、编译过的、被向量测过的才是。至此，固件（第~\ref{ch:firmware} 章）、无线（第~\ref{ch:ble} 章）、前端（第~\ref{ch:host} 章）与 SDK 四条对外通道全部落地，第~\ref{ch:acceptance} 章开始逐工单验收。

@@ -58,7 +58,7 @@
   A101（sw · --） & 11 & 孪生 v2 首屏装配叙事 + 爆炸滑杆 & \texttt{pass} \\
   A102（sw · --） & 11 & 电流/气流联动：I/V/S 命令差分截图 & \texttt{pass} \\
   A103（sw · --） & 9 & 仿真实验室四电路重算（含 i2c 告警案例） & \texttt{pass} \\
-  A104（sw · --） & 10 & SDK 协议向量双向 + hello\_globe 冒烟 & \texttt{pass} \\
+  A104（sw · --） & 10 & SDK 协议向量双向 + hello\_glove 冒烟 & \texttt{pass} \\
   A105（sw · --） & 7 & 固件 QEMU 冒烟 + 主机 33 测试 & \texttt{pass} \\
   A106（sw · --） & 8 & BLE 契约载荷向量（nRF Connect 待真机，向量先验） & \texttt{pass} \\
   \midrule
@@ -104,7 +104,7 @@
   \item \textbf{A101 孪生 v2 首屏装配叙事 + 爆炸滑杆}——\texttt{firmware/twin/shots/v2\_*.png} 26 项目视记录（机内像素审计 26/26 + AI 视觉复核，commit \texttt{ec3cefa}）；本章图~1--3 即其直接复用；
   \item \textbf{A102 电流/气流联动}——\texttt{I/V/S} 三命令差分截图：\texttt{v2\_03\_inflate.png}（I 全充）/ \texttt{v2\_05\_vacuum.png}（V 抽真空）/ \texttt{v2\_04\_silent.png}（S 静默态）；
   \item \textbf{A103 仿真实验室四电路重算}——\texttt{v2\_08\_simlab.png} 四电路重算记录 + \texttt{test\_webapp.js} 44 断言全绿（详见第~\ref{ch:host} 章）；
-  \item \textbf{A104 SDK 协议向量双向 + hello\_globe 冒烟}——\texttt{sdk/python/tests/} 以 \texttt{vectors.json} 9 组向量做双向编解码回归（详见第~\ref{ch:sdk} 章）；
+  \item \textbf{A104 SDK 协议向量双向 + hello\_glove 冒烟}——\texttt{sdk/python/tests/} 以 \texttt{vectors.json} 9 组向量做双向编解码回归（详见第~\ref{ch:sdk} 章）；
   \item \textbf{A105 固件 QEMU 冒烟 + 主机 33 测试}——\texttt{firmware/tests/} 33 个主机测试全绿 + \texttt{qemu\_smoke.sh}（详见第~\ref{ch:firmware} 章）；
   \item \textbf{A106 BLE 契约载荷向量}——\texttt{twin/BLE.md} \S 4.1 命令帧（0xA5 前缀）与 \S 4.2 state 20B 小端载荷向量先验冻结；真机 nRF Connect 验证回板后归 A209（详见第~\ref{ch:ble} 章）。
 \end{itemize}

@@ -1,11 +1,205 @@
-\chapter{BLE 无线}
+\chapter{BLE 无线：契约先行}
 \label{ch:ble}
 
-\section{NimBLE 服务树}
-四服务结构：Command（cmd 写特征 + resp 通知特征）与 Telemetry（state 10Hz 通知特征）的 UUID 设计。
+无线链路是最容易"各写各的"的地方：固件作者想的是 GATT 表怎么注册，前端作者想的是 API 怎么调用，两边对载荷字节序的理解差一位，链路就通了但数据全错。FLOWIO-CN 的对策是\textbf{契约先行}：先有 \texttt{firmware/twin/BLE.md}——UUID 怎么派生、服务怎么组织、每个字节什么含义、回调里允许做什么不允许做什么，全部写成文档并标注"契约冻结"；固件实现（\texttt{ble\_twin.c}）、载荷编解码（\texttt{ble\_frame.c}）、浏览器端（\texttt{webapp/js/ble.js}）都以它为唯一真源，\textbf{改字段先改文档}。本章逐层展开这份契约：UUID 命名空间、四服务表、两种载荷的字节流，以及"回调不阻塞协议栈"的队列解耦设计。
 
-\section{契约先行：载荷向量}
-\texttt{twin/BLE.md} \S 4.1 的命令帧（0xA5 前缀，$\le$20B）与 \S 4.2 的 20 字节 state 帧（state u16 + 5$\times$pressure i16LE kPa$\times$10 + tick u16）在写代码前先冻结——软件侧工单 A106 的向量先验即由此而来。
+\section{架构：命令不新开解析器}
+\label{sec:ble-arch}
 
-\section{真机验证三步}
-nRF Connect 扫描、写命令、订阅遥测（工单 A209），以及 Web Bluetooth 的浏览器直连（工单 A210）。
+BLE 接入的第一条设计决策写在 BLE.md \S1 第一句：\textbf{命令路径不新开解析器}。浏览器经 Web Bluetooth 写入 \texttt{cmd} 特征的字节，与真机串口 \texttt{fgets(stdin)} 收到的字节，汇入\textbf{同一个} \texttt{pn\_cmd\_feed()}（第~\ref{ch:firmware} 章 \S\ref{sec:fw-feed}）——行缓冲聚合、0xA5 帧翻译、\texttt{pn\_cli\_process\_line()} 分发，一条不差。由此得到三宿主行为一致：串口、BLE、孪生 DLL 对同一条命令的应答逐字节相同。遥测方向对称：10\,ms 控制节拍每 100\,ms 打包一个 20 字节状态帧，\texttt{notify\_en} 特征做应用级开关，CCCD 订阅是第二道必要条件。
+
+\section{UUID 命名空间与四服务}
+\label{sec:ble-uuid}
+
+自定 128 bit 基址写死于契约里（改即破坏兼容）：
+\texttt{f10a5c00-0000-4b1e-9c2d-8e3a1b0f0000}。派生规则极简：把基址末 4 个 hex 位替换为顺序编号后缀（0001/0002/\dots）。一个基址、九个后缀，定义了全部自定服务与特征（表~\ref{tab:ble-svc}）；DeviceInfo 则复用 SIG 标准 UUID（服务 0x180A），只有板卡版本号无标准号可用，占自定 0009。
+
+\begin{table}[htbp]
+  \centering
+  \caption{BLE 四服务表（BLE.md \S2--\S3；基址 \dots8e3a1b0f****）}
+  \label{tab:ble-svc}
+  \begin{tabular}{lllp{4.9cm}}
+    \toprule
+    服务 & 特征 & 属性 & 语义 \\
+    \midrule
+    DeviceInfo & fw\_version (0x2A26) & read & ASCII，如 \texttt{0.5.0-s5} \\
+    (0x180A) & serial\_no (0x2A25) & read & BT MAC 12 位 hex \\
+     & board\_rev (0009) & read & ASCII，如 \texttt{P1-N16R8} \\
+    \midrule
+    Command (0001) & cmd (0002) & write & 命令帧（\S\ref{sec:ble-frame}），单次 $\le$ MTU$-$3 \\
+     & resp (0003) & read+notify & 最近一条 CLI 应答行（ASCII 去换行） \\
+    \midrule
+    Telemetry (0004) & state (0005) & read+notify & 20B 状态帧，10\,Hz notify \\
+     & notify\_en (0006) & read+write & u8 应用级遥测开关（非 0 才发） \\
+    \midrule
+    Config (0007) & pwm\_params (0008) & read+write & 4B：[0]=pump\_max [1]=hold\_duty [2:4]=hold\_ms LE \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+两处设计取舍值得展开。\textbf{resp 特征}是 CLI 应答行（如 \texttt{inflate=0}、\texttt{state=0x0221 err=0}）的镜像——第~\ref{ch:firmware} 章讲过的 \texttt{cli\_out()} 应答挂钩（\texttt{pn\_cli\_set\_resp\_sink}）在这里落地：每条新应答存入 64 字节环形缓冲并在已订阅时 notify；未产生应答时 read 返回 \texttt{boot}。BLE 由此拿到的不是一套新协议，而是串口体验的完整平移。\textbf{Config 服务}解决的是"编译期宏没有运行时接口"的欠账：P0 的保压降额参数 \texttt{PN\_HOLD\_DEFAULT\_DUTY/\dots\_DELAY\_MS} 原是编译期常量，S5 用 4 字节 RAM 镜像补上——read 返回镜像（初值 = 宏默认 255/170/500），write 立即生效（10\,ms 节拍的 \texttt{pn\_optimize\_power} 改读 \texttt{ble\_twin\_hold\_duty()}），掉电不保存（NVS 持久化留 P1）。契约对"未完成"同样诚实：\texttt{pump\_max\_pwm} 字段预留未接线。
+
+UUID 在代码里有一个必踩的字节序坑：NimBLE 把 128 bit UUID 存成\textbf{小端字节数组}——\texttt{value[0]} 是 UUID 最低位字节（即后缀的低字节）。\texttt{ble\_twin.c} 的宏 \texttt{PN\_BLE\_UUID\_BASE\_LE(sfx)} 把后缀拼在数组头部、基址逐字节倒序排列，九个 UUID 常量由此展开；文档 \S2 表与代码宏一一对应，"表里哪个后缀"与"代码哪个常量"不会走失。
+
+\section{载荷一：0xA5 帧骑在 write 上}
+\label{sec:ble-frame}
+
+\texttt{cmd} 特征接受的命令帧就是 \texttt{pn\_core/proto.h} 的 v1 二进制帧——BLE 没有发明新格式，只是把第~\ref{ch:firmware} 章协议层的 5 字节帧驮在 GATT write 上：
+
+\begin{lstlisting}[basicstyle=\small\ttfamily, breaklines=true,
+  caption={cmd 写载荷（BLE.md \S4.1：5B，小端无关）}]
+字节  0     1      2      3      4
+     +------+------+------+------+------+
+     | 0xA5 | cmd  |ports | pwm  | crc8 |
+     +------+------+------+------+------+
+例：充气 端口1 PWM255 -> A5 2B 01 FF F8
+   ('+'=0x2B; crc8(A5 2B 01 FF)=0xF8, 多项式 0x07 初值 0x00)
+\end{lstlisting}
+
+CRC 错的帧静默丢弃——与 \texttt{proto.c} 流式解析器同一策略；ASCII 明文行（如 \texttt{I 1 255\textbackslash n}）同样被 \texttt{pn\_cmd\_feed()} 接受，两种编码可混用。帧内 cmd 字节是 ASCII 动作码，\texttt{pn\_cmd\_feed} 把它翻译成等价 CLI 行再分发（表~\ref{tab:ble-translate}）。注意这张表是\textbf{有损子集}：九条帧化命令覆盖高频动作，而 \texttt{H}/\texttt{G}/\texttt{F} 这些无帧码的命令走 ASCII 行直发——浏览器端的逆映射（\texttt{frameForLine}）遇到它们返回 \texttt{null}，自动降级为明文。
+
+\begin{table}[htbp]
+  \centering
+  \caption{0xA5 帧 cmd 字节到 CLI 行的翻译表（BLE.md \S3.2）}
+  \label{tab:ble-translate}
+  \begin{tabular}{llll}
+    \toprule
+    帧内 cmd 字节 & 宏 & 等价 CLI 行 & 语义 \\
+    \midrule
+    \texttt{'+'} & PN\_CMD\_INFLATE & \texttt{I <ports> <pwm>} & 充气 \\
+    \texttt{'-'} & PN\_CMD\_VACUUM & \texttt{V <ports> <pwm>} & 抽气 \\
+    \texttt{'\^{}'} & PN\_CMD\_RELEASE & \texttt{R <ports>} & 释放 \\
+    \texttt{'!'} & PN\_CMD\_STOP & \texttt{S <ports>} & 停止/保压 \\
+    \texttt{'o'} / \texttt{'c'} & PN\_CMD\_OPEN/CLOSE & \texttt{O/C <ports>} & 开/关端口阀 \\
+    \texttt{'?'} & PN\_CMD\_QUERY & \texttt{P} & 读全部传感器（pwm 字段=传感器号） \\
+    \texttt{'S'} & PN\_CMD\_STATE & \texttt{T} & 回状态字 \\
+    \texttt{'R'} & PN\_CMD\_RESET & \texttt{X} & 闭环复位 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{载荷二：20 字节 state 帧与小端纪律}
+\label{sec:ble-state}
+
+遥测方向的核心是 20 字节状态帧（BLE.md \S4.2），全字段小端：
+
+\begin{lstlisting}[basicstyle=\small\ttfamily, breaklines=true,
+  caption={state 通知载荷（BLE.md \S4.2：20B，全部小端 LE）}]
+偏移  0    2         12   14            20
+     +----+----------+----+-------------+
+     | u16| 5 x i16  |u16 | 6B 保留=0   |
+     +----+----------+----+-------------+
+      state  压力x10   tick
+例：state=0x0221, p0=+12.3kPa(123), p1=-53.3kPa(-533), tick=0x01F4:
+ 21 02 | 7B 00 | EB FD | 00 00 | 00 00 | 00 00 | F4 01 | 00 00 00 00 00 00
+                     ^^^^
+                     -533 = 0xFDEB，小端字节序 EB FD（tests/ble_tests.c 同向量）
+\end{lstlisting}
+
+三个字段的语义都经过推敲。\textbf{压力用 i16 存 kPa$\times$10}：物理量程 $\pm100$\,kPa$\times$10 $=\pm1000$，16 位有符号数绰绰有余，整数传输免浮点；读失败的 slot 填哨兵 \texttt{0x8000}（$-32768$）——物理量程内的合法值永远到不了它，不会混淆；P0 现挂 2 只传感器，slot2--4 为 P1 预留恒 0。\textbf{tick 是 ms/100 mod 65536}：即 100\,ms 序号，接收端用它做丢帧检测与时序对齐——10\,Hz 流里 tick 不连续就知道丢了 notify。\textbf{6 字节保留恒 0}：给未来扩展开位，同时兼任帧校验——解包方检查保留字节非 0 即判非契约帧。
+
+打包纯逻辑放在 \texttt{pn\_core/ble\_frame.c}（不进 HAL，主机可测——\texttt{ble\_tests.c} 的 4 个测试就以 $\pm$压力、哨兵、保留字节违例为向量）：
+
+\begin{lstlisting}[language=C, basicstyle=\small\ttfamily, breaklines=true,
+  caption={ble\_frame.c 的 state\_pack / state\_unpack（摘自源码）}]
+int ble_state_pack(uint8_t out[PN_BLE_STATE_LEN], uint16_t state_word,
+                   const int16_t pa10[PN_BLE_PRESS_SLOTS], uint16_t tick)
+{
+    if (!out || !pa10) return -1;
+    put_u16_le(out + 0, state_word);
+    for (int i = 0; i < PN_BLE_PRESS_SLOTS; ++i)
+        put_u16_le(out + 2 + 2 * i, (uint16_t)pa10[i]);
+    put_u16_le(out + 12, tick);
+    memset(out + 14, 0, 6);          /* 保留字节恒 0（契约 §4.2） */
+    return PN_BLE_STATE_LEN;
+}
+
+int ble_state_unpack(const uint8_t *in, size_t len, uint16_t *state_word,
+                     int16_t pa10[PN_BLE_PRESS_SLOTS], uint16_t *tick)
+{
+    if (!in || len < PN_BLE_STATE_LEN) return -1;
+    for (int i = 14; i < PN_BLE_STATE_LEN; ++i)
+        if (in[i] != 0) return -1;   /* 保留字节非 0 = 非 contract 帧 */
+    /* ……逐字段 get_u16_le 读出（略）…… */
+    return 0;
+}
+\end{lstlisting}
+
+浏览器端是同一契约的第二种实现（\texttt{webapp/js/ble.js}）——C 与 JavaScript 对着同一份文档各写一遍，正是契约存在的意义。CRC 与解包各取一例对照：
+
+\begin{lstlisting}[language=Java, basicstyle=\small\ttfamily, breaklines=true,
+  caption={ble.js 的 CRC-8 与 20B 帧解析（摘自源码，与 proto.c/ble\_frame.c 同契约）}]
+function crc8(bytes) {               // MSB-first, 与 pn_core/proto.c 同实现
+  let crc = 0;
+  for (let i = 0; i < bytes.length; ++i) {
+    crc ^= bytes[i];
+    for (let b = 0; b < 8; ++b)
+      crc = (crc & 0x80) ? ((crc << 1) ^ 0x07) & 0xFF : (crc << 1) & 0xFF;
+  }
+  return crc;
+}
+export function parseState20(buf) {
+  const dv = buf instanceof DataView ? buf
+    : new DataView(buf instanceof ArrayBuffer ? buf : (buf && buf.buffer) || buf);
+  if (dv.byteLength < 20) return null;
+  for (let i = 14; i < 20; ++i)
+    if (dv.getUint8(i) !== 0) return null;          // 保留字节必须全 0
+  const state = dv.getUint16(0, true);              // true = 小端
+  const pressures = [];
+  for (let i = 0; i < 5; ++i) {
+    const raw = dv.getInt16(2 + i * 2, true);
+    pressures.push(raw === -32768 ? 0 : raw / 10);  // 0x8000=无效 -> 0
+  }
+  return { state, pressures, tick: dv.getUint16(12, true) };
+}
+\end{lstlisting}
+
+三处实现差异各有理由：JS 的 \texttt{crc8} 少了 \&0xFF 掩码会溢出成浮点（JavaScript 位运算 32 位，\texttt{<<1} 后须钳回单字节）；哨兵 \texttt{0x8000} 在浏览器侧归零而非报错——前端把"传感器失联"显示为 0 比显示 $-3276.8$\,kPa 更不吓人；校验失败静默丢帧（\texttt{return null}）与固件"坏帧静默丢弃"对称。
+
+\section{线程模型：回调不阻塞协议栈}
+\label{sec:ble-threads}
+
+NimBLE 的 GATT 访问回调跑在协议栈自己的 host 任务里。契约 \S6 把红线画得很清楚：\textbf{回调里只许投队列，不许干活}。\texttt{cmd} 特征的 write 回调把字节拷进 \texttt{cmd\_msg\_t}（长度 + 缓冲）投 FreeRTOS 队列（深 8），独立的 \texttt{cmd\_task} 出队调 \texttt{pn\_cmd\_feed()}——命令解析与阀动作的耗时（最坏是自检的秒级 delay）完全不占 BLE 栈时序。队列满时回调返回 \texttt{BLE\_ATT\_ERR\_PREPARE\_QUEUE\_FULL}（CCC 忙语义近似），丢弃有日志：
+
+\begin{lstlisting}[language=C, basicstyle=\small\ttfamily, breaklines=true,
+  caption={ble\_twin.c 的队列解耦（摘自源码）}]
+static int acc_cmd(uint16_t conn, uint16_t attr,
+                   struct ble_gatt_access_ctxt *ctxt, void *arg)
+{
+    if (ctxt->op == BLE_GATT_ACCESS_OP_WRITE_CHR &&
+        (uintptr_t)arg == PN_BLE_UUID_SUFFIX_CHR_CMD) {
+        cmd_msg_t m = { 0 };  uint16_t copied = 0;
+        int rc = ble_hs_mbuf_to_flat(ctxt->om, m.buf, PN_BLE_CMD_MAX, &copied);
+        if (rc != 0) return rc;
+        m.len = copied;
+        if (!s_cmd_q || xQueueSend(s_cmd_q, &m, 0) != pdTRUE) {
+            printf("[BLE] cmd queue full, dropped\n");
+            return BLE_ATT_ERR_PREPARE_QUEUE_FULL;
+        }
+        return 0;
+    }
+    /* ……resp 的 READ 分支：持 s_lock 拷出最近应答行（略）…… */
+}
+
+static void cmd_task(void *arg)      /* 与串口同一 pn_cmd_feed 入口 */
+{
+    cmd_msg_t m;
+    for (;;)
+        if (xQueueReceive(s_cmd_q, &m, portMAX_DELAY) == pdTRUE)
+            pn_cmd_feed(m.buf, m.len);
+}
+\end{lstlisting}
+
+反向的三个数据流同样各有归属：\texttt{resp} 由 CLI 应答挂钩（\texttt{resp\_sink}）写入——持 \texttt{s\_lock} 存行、已订阅才组 mbuf 发 notify，锁外发送；\texttt{state} 由既有 10\,ms \texttt{control\_task} 驱动，\texttt{ble\_twin\_tick\_10ms()} 内 10 分频到 100\,ms，传感器读数转 Pa$\times$10（负压四舍五入方向单独处理），tick 取 \texttt{esp\_timer} 毫秒时钟派生；共享小状态（resp 行 / pwm 参数 / state 帧）统一由 \texttt{s\_lock} 串行化。GAP 侧行为从简：广播名 \texttt{FLOWIO-P1-XXXX}（XXXX = BT MAC 末 2 字节），AdvData 装 Flags + 128 bit 服务 UUID 0001、名字放 ScanRsp（31 字节装不下完整名）；单连接，断开自动重新广播；配对 just-works（无 IO、bonding 开、MITM 关、LE Secure Connections 开），密钥 NVS 持久化断电不丢——bring-up 期特征不做加密强制，真机验证后再评估收紧（\texttt{BLE\_ERR\_INSUFFICIENT\_AUTHEN}）。
+
+\section{真机验证三步与无 BT 降级}
+\label{sec:ble-verify}
+
+契约 \S7 给出六步 BRINGUP 清单，前三步对应验收工单 A209（第~\ref{ch:acceptance} 章）：\textbf{一}，nRF Connect 或 Web Bluetooth 扫描，应见 \texttt{FLOWIO-P1-XXXX}，连上后四服务齐全，0x180A 可读出 fw/serial/board\_rev；\textbf{二}，订阅 resp，写 \texttt{A5 2B 01 FF <crc>}——板上泵启动、resp 收到 \texttt{inflate=0}；\textbf{三}，\texttt{notify\_en} 写 01 后 state 以 10\,Hz 到达，负压抽气时压力字节呈 \texttt{EB FD} 型小端负数。后三步验证 Config 生效（写 \texttt{FF C8 F4 01} 后保压 500\,ms 阀电压应下降）、断电 bond 保留、加密收紧评估。载荷本身则不需要等真机——\texttt{ble\_tests.c} 的向量先验构成软件侧工单 A106：帧打包、负压小端、哨兵值、保留字节违例四类断言在主机上先行全绿。
+
+无 BT 环境是契约 \S8 的"双保险"：编译期 \texttt{\#ifdef CONFIG\_BT\_ENABLED}（BT 关闭编 stub，链接零成本），运行时 \texttt{pn\_hal\_esp32\_is\_qemu()}（QEMU 的 esp32s3 无 BT 控制器仿真）——命中任一即打印 \texttt{[BLE] QEMU \dots skip} 跳过初始化，\texttt{ble\_twin\_tick\_10ms()} 空转，串口 CLI 与遥测填充逻辑不受影响。
+
+浏览器端的连接管理（工单 A210）同样有降级路径：\texttt{requestDevice} 以 \texttt{namePrefix: "FLOWIO-P1"} 过滤，连上后先写 \texttt{notify\_en=1} 再订阅 state 与 resp；状态帧经 \texttt{parseState20} 解析后由 \texttt{bleToStore} 合成与孪生 \texttt{/api/state} \textbf{同构}的对象（状态字拆位、压力数组、合成阀电流 0.36\,A 常量驱动栅极辉光）——写一次的前端在孪生/真机两种模式间切换（第~\ref{ch:host} 章）。取消扫描、连接失败、断连三种情形统一走 \texttt{cleanup()} 安静回落：徽章转灰、HTTP 轮询自动恢复、流光回底光——不弹窗，是这套前端的性格。
+
+\section*{本章小结}
+BLE 链路的可信度来自三份"同一"：命令入口与串口同一（\texttt{pn\_cmd\_feed}，三宿主同文法）；载荷与主机测试同一向量（\texttt{ble\_frame.c} 纯逻辑，0x8000 哨兵与保留字节校验先验固化）；浏览器与固件对着同一契约各写一遍（CRC 与 20\,B 帧双实现互证）。工程红线只有一条——回调不阻塞协议栈，队列解耦让秒级命令与 10\,Hz 遥测互不踩脚。至此固件与无线链路闭环，下一章回到浏览器，看这些字节如何变成"长在产品上"的电流与气流。
