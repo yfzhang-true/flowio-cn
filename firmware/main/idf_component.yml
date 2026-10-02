@@ -1,0 +1,3 @@
+## S4: WS2812 状态灯走 led_strip managed component（RMT 后端）
+dependencies:
+  espressif/led_strip: "^2"

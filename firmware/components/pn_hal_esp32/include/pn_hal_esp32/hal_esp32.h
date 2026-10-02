@@ -31,6 +31,17 @@ void pn_hal_esp32_i2c_scan(void);
  * （usec=500 关位 / 2500 开位），判别 RMT 时基问题。同时停该 gpio 的 RMT 发送。 */
 void pn_hal_esp32_servo_le_test(int gpio, int usec);
 
+/* TCA9548A I2C 写注入点（S4）：main 初始化时 tca_bind(tca_hal_write) 绑给
+ * pn_core/tca9548 纯逻辑层。返回 0=成功，-1=总线失败/QEMU。 */
+int tca_hal_write(uint8_t addr, uint8_t byte);
+
+/* 板载 WS2812 状态灯（GPIO48，S4）：init 上电配置（QEMU 跳过）；
+ * set 切模式（0=IDLE 呼吸蓝 1=RUNNING 绿 2=HOLD 青 3=ERR 红闪 4=OTA 紫闪）；
+ * 呼吸/闪烁状态机由 main 的 10ms 控制节拍调 tick 驱动（颜色变化才刷新总线）。 */
+void board_led_init(void);
+void board_led_set(int mode);
+void board_led_tick_10ms(void);
+
 #ifdef __cplusplus
 }
 #endif

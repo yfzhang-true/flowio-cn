@@ -25,6 +25,8 @@
 #include "esp_timer.h"
 #include "esp_check.h"
 #include "hal/efuse_hal.h"
+#include "freertos/FreeRTOS.h"   /* pdMS_TO_TICKS（tca_hal_write 超时） */
+#include "led_strip.h"           /* WS2812 状态灯（managed component espressif/led_strip^2） */
 
 #include <string.h>
 
@@ -60,7 +62,7 @@ static i2c_master_dev_handle_t s_xgzp_dev;    /* 传感器 @0x58（通道切换�
 static bool s_tca_present;
 static bool s_xgzp_present[2];
 static uint8_t s_xgzp_ch[2] = { 0, 1 };       /* 传感器#1→CH0，传感器#2→CH1 */
-static int tca_select(uint8_t ch);            /* 定义见 xgzp_read_kpa 前 */
+static int tca_hw_select(uint8_t ch);        /* 定义见 tca_hal_write 后 */
 #define TCA9548A_ADDR   0x70
 #define XGZP_ADDR       0x58      /* 7 位地址，-C 型固定（选型码 C） */
 #define XGZP_REG_PDATA  0x04      /* 连读 5 字节：3=压力24bit补码 + 2=温度16bit */
@@ -309,23 +311,36 @@ static void i2c_init_all(void)
     /* 逐通道探测：TCA 选通后试读一只字节，成功即该通道传感器在线 */
     for (int i = 0; i < 2; ++i) {
         s_xgzp_present[i] = false;
-        if (s_tca_present && tca_select(s_xgzp_ch[i]) == 0) {
+        if (s_tca_present && tca_hw_select(s_xgzp_ch[i]) == 0) {
             uint8_t reg = XGZP_REG_PDATA, dummy[5] = { 0 };
             s_xgzp_present[i] =
                 (i2c_master_transmit_receive(s_xgzp_dev, &reg, 1, dummy, 5, 20) == ESP_OK);
         }
     }
-    tca_select(0);   /* 复位到通道 0（传感器#1） */
+    tca_hw_select(0);   /* 复位到通道 0（传感器#1） */
     printf("[HAL] tca9548a@0x70 %s, sensors CH0=%d CH1=%d\n",
            s_tca_present ? "ok" : "MISSING",
            (int)s_xgzp_present[0], (int)s_xgzp_present[1]);
 }
 
-/* TCA9548A 通道选择：向 0x70 写 1 字节 (1<<ch)（模块例程 selectPort 语义） */
-static int tca_select(uint8_t ch)
+/* TCA9548A I2C 写注入点（S4）：pn_core/tca9548 的 hal 绑定函数，
+ * main 初始化时 tca_bind(tca_hal_write) 注入；返回 0=成功（tca_i2c_write_fn 契约）。
+ * 注：addr 恒为 TCA_ADDR=0x70，句柄已在 i2c_init_all 按该地址绑定——任务书示例的
+ * legacy API i2c_master_write_to_device 与本文件既有 new-driver 总线互斥，故走
+ * 既有 s_tca_dev 句柄（"用既有 i2c master 句柄"意图不变）。QEMU/无设备→-1。 */
+int tca_hal_write(uint8_t addr, uint8_t byte)
 {
-    uint8_t cmd = (uint8_t)(1u << ch);
-    return (i2c_master_transmit(s_tca_dev, &cmd, 1, 10) == ESP_OK) ? 0 : -1;
+    (void)addr;
+    if (!s_tca_present || !s_tca_dev) return -1;
+    return (i2c_master_transmit(s_tca_dev, &byte, 1, pdMS_TO_TICKS(100)) == ESP_OK) ? 0 : -1;
+}
+
+/* TCA9548A 通道选择（hal 本地路径：init 期探测用，经 tca_hal_write 单点出总线）。
+ * 改名 tca_hw_select 避免与 pn_core 全局 tca_select 混淆（语义不同：
+ * 返回 0/-1 而非 tca_err_t）。 */
+static int tca_hw_select(uint8_t ch)
+{
+    return tca_hal_write(TCA9548A_ADDR, (uint8_t)(1u << ch));
 }
 
 /* I2C 全总线扫描（bring-up 诊断，CLI 'W'）：主总线全段 + CH0/CH1 下游 0x50-0x60 段 */
@@ -349,7 +364,7 @@ void pn_hal_esp32_i2c_scan(void)
 
     if (!s_tca_present) return;
     for (int ch = 0; ch < 2; ++ch) {
-        if (tca_select((uint8_t)ch) != 0) {
+        if (tca_hw_select((uint8_t)ch) != 0) {
             printf("[SCAN] CH%d: select fail\n", ch);
             continue;
         }
@@ -359,7 +374,7 @@ void pn_hal_esp32_i2c_scan(void)
                 printf(" 0x%02X", a);
         printf("\n");
     }
-    tca_select(0);
+    tca_hw_select(0);
 }
 
 static int xgzp_read_kpa(uint8_t idx, float *kpa)
@@ -367,7 +382,7 @@ static int xgzp_read_kpa(uint8_t idx, float *kpa)
     if (!s_xgzp_present[idx]) return -1;
 
     /* 先切通道（传感器#1=CH0 / #2=CH1），再对 0x58 读 */
-    if (s_tca_present && tca_select(s_xgzp_ch[idx]) != 0) return -1;
+    if (s_tca_present && tca_hw_select(s_xgzp_ch[idx]) != 0) return -1;
 
     /* 从 0x04 连读 5 字节：ASIC 自动刷新，无需启动/轮询（手册第 7 页读取序列） */
     uint8_t reg = XGZP_REG_PDATA, data[5] = { 0 };
@@ -388,6 +403,79 @@ static int pn_sensor_read(uint8_t idx, float *kpa)
 }
 
 static uint32_t pn_now_ms(void) { return (uint32_t)(esp_timer_get_time() / 1000); }
+
+/* ---------- 板载 WS2812 状态灯（GPIO48，S4） ----------
+ * 硬件：YD-ESP32-S3 板载 1 颗地址型 RGB（见文件头板卡事实），RMT 后端驱动。
+ * 时序/占位：RMT TX 通道预算 4 个（S3 共 4 TX）——舵机吃 3，本灯占第 4；
+ * mem_block_symbols=48 与舵机同款（S3 单通道 RAM，不级联相邻通道）。
+ * 语义：board_led_set() 只改模式；呼吸/闪烁由 main 的 10ms 控制节拍调
+ * board_led_tick_10ms() 驱动内部状态机（相位 10ms 步进，只在颜色变化时刷新）。
+ * QEMU 无 RMT → init 跳过，tick 空转（优雅降级，同舵机）。 */
+#define BOARD_LED_GPIO    48
+#define BOARD_LED_NUM     1
+#define BOARD_LED_PERIOD  200       /* 相位周期 200 拍 = 2s */
+
+static led_strip_handle_t s_led;
+static int      s_led_mode;                     /* 0=IDLE 1=RUN 2=HOLD 3=ERR 4=OTA */
+static uint16_t s_led_phase;
+static uint8_t  s_led_last[3];                  /* 上次发出的 RGB（变化才刷） */
+
+void board_led_init(void)
+{
+    if (pn_is_qemu()) return;                   /* QEMU 不仿真 RMT */
+    led_strip_config_t strip = {
+        .strip_gpio_num = BOARD_LED_GPIO,
+        .max_leds       = BOARD_LED_NUM,
+        .led_model      = LED_MODEL_WS2812,
+        .flags.invert_out = false,
+    };
+    led_strip_rmt_config_t rmt = {
+        .clk_src           = RMT_CLK_SRC_DEFAULT,
+        .resolution_hz     = 10 * 1000 * 1000,  /* 0.1us tick，满足 WS2812B 边沿容差 */
+        .mem_block_symbols = 48,                /* 见上：不吃第 5 个 TX 通道 */
+        .flags.with_dma    = false,
+    };
+    if (led_strip_new_rmt_device(&strip, &rmt, &s_led) != ESP_OK) {
+        printf("[HAL] ws2812 init failed (no RMT channel?)\n");
+        s_led = NULL;
+        return;
+    }
+    led_strip_clear(s_led);                     /* 上电熄灯 */
+    s_led_mode = 0;                             /* IDLE */
+    printf("[HAL] ws2812@GPIO%d ready\n", BOARD_LED_GPIO);
+}
+
+void board_led_set(int mode)
+{
+    if (mode == s_led_mode) return;
+    if (mode < 0 || mode > 4) return;
+    s_led_mode = mode;
+    s_led_phase = 0;                            /* 切模式重起相位 */
+}
+
+void board_led_tick_10ms(void)
+{
+    if (!s_led) return;
+    uint8_t r = 0, g = 0, b = 0;
+    switch (s_led_mode) {
+    case 0: {   /* IDLE：呼吸蓝（2s 三角波 0→255→0） */
+        int32_t br = (s_led_phase < BOARD_LED_PERIOD / 2)
+                   ? s_led_phase : (BOARD_LED_PERIOD - s_led_phase);
+        b = (uint8_t)(br * 255 / (BOARD_LED_PERIOD / 2));
+        break;
+    }
+    case 1: g = 255; break;                                      /* RUNNING 绿 */
+    case 2: g = 255; b = 255; break;                             /* HOLD 青 */
+    case 3: if ((s_led_phase / 25) & 1) r = 255; break;          /* ERR 红闪 2Hz */
+    case 4: if ((s_led_phase / 50) & 1) { r = 128; b = 255; } break; /* OTA 紫 1Hz */
+    default: break;
+    }
+    if (++s_led_phase >= BOARD_LED_PERIOD) s_led_phase = 0;
+    if (r == s_led_last[0] && g == s_led_last[1] && b == s_led_last[2]) return;
+    s_led_last[0] = r; s_led_last[1] = g; s_led_last[2] = b;
+    if (led_strip_set_pixel(s_led, 0, r, g, b) == ESP_OK)
+        led_strip_refresh(s_led);
+}
 
 /* ---------- HAL 绑定 ---------- */
 static pn_hal_if_t s_if = {

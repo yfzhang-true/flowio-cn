@@ -8,6 +8,7 @@
 #include "pn_core/closedloop.h"
 #include "pn_core/cli.h"
 #include "pn_core/leak_detect.h"
+#include "pn_core/tca9548.h"      /* S4: tca_bind 注入真机 I2C 写 */
 #include "pn_hal_esp32/hal_esp32.h"
 
 #include "freertos/FreeRTOS.h"
@@ -93,6 +94,8 @@ static void control_task(void *arg)
         pn_check_overpressure(120.f);
         pn_ml_tick((uint32_t)(esp_timer_get_time() / 1000));   /* TinyML 20Hz 采样（内部节流） */
         pn_hal_esp32_servo_refresh();                           /* 舵机 50Hz 脉冲流（单次发送非循环） */
+        board_led_set(pn_get_state() ? 1 : 0);   /* S4 简化映射：任一执行器动作=RUNNING 绿，否则 IDLE 呼吸蓝 */
+        board_led_tick_10ms();                   /* WS2812 呼吸/闪烁状态机（10ms 节拍驱动） */
         vTaskDelay(pdMS_TO_TICKS(10));
     }
 }
@@ -108,6 +111,8 @@ void app_main(void)
     pn_cli_set_delay_fn(cli_delay_wrapper);
     printf("[BOOT] hal init...\n"); fflush(stdout);
     pn_init(pn_hal_esp32_init(), PN_CFG_GENERAL);
+    tca_bind(tca_hal_write);      /* S4: pn_core TCA9548A 逻辑层绑定真机 I2C 写（QEMU 下恒 -1，无害） */
+    board_led_init();             /* S4: 板载 WS2812 状态灯（QEMU 无 RMT，内部跳过） */
     printf("[BOOT] pn_init done\n"); fflush(stdout);
     printf("FlowIO-compatible P0 ready. state=0x%04X\n", (unsigned)pn_get_state());
     fflush(stdout);
