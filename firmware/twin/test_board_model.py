@@ -13,5 +13,13 @@ def test_states():
     assert 0 <= b4.telemetry()["valves"][0]["i_A"] < 0.35*0.5  # 过零~4.9ms, 10ms时已钳0
     b4.step(0.1,[0]*8,0)
     assert b4.telemetry()["valves"][0]["i_A"] < 0.01
+def test_buck_losses():
+    # loss_mw 随负载动态 (v5 跌 → D 升): 不再是 @3A 常量快照, 断言量级 + 动态性
+    b=bm.BoardModel(); b.step(0.1,[0]*8,0); s0=b.telemetry(); l0=s0["rail_3v3"]["loss_mw"]
+    assert all(0<v<2000 for v in l0.values()) and sum(l0.values())>0
+    assert 0<s0["rail_3v3"]["buck_eff"]<1
+    for _ in range(50): b.step(0.1,[1]*8,1)       # 满载 → v5 跌 → 损耗随之变化
+    l8=b.telemetry()["rail_3v3"]["loss_mw"]
+    assert all(0<v<2000 for v in l8.values()) and sum(l8.values())>0 and l8!=l0
 if __name__=="__main__":
-    test_states(); print("board_model tests OK")
+    test_states(); test_buck_losses(); print("board_model tests OK")

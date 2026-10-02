@@ -1086,9 +1086,13 @@ function p1_recToggle() {
   }
 }
 function p1_recReplay() {
+  /* 服务端后台线程按事件时序注入, 立即回 {replaying:n}; 进行中再点 → 409 */
   fetch('/api/record/replay', { method: 'POST', body: JSON.stringify({ events: p1_recEvents }) })
-    .then(r => r.json())
-    .then(j => { $('p1_recState').textContent = '已回放 ' + j.replayed + ' 条'; dlog('▶ 回放 ' + j.replayed + ' 条命令'); })
+    .then(r => r.json().then(j => ({ ok: r.ok, j })))
+    .then(({ ok, j }) => {
+      if (ok) { $('p1_recState').textContent = '时序回放 ' + j.replaying + ' 条中'; dlog('▶ 时序回放 ' + j.replaying + ' 条命令 (后台)'); }
+      else { $('p1_recState').textContent = '回放被拒'; dlog('✗ 回放被拒: ' + (j.error || ''), 'warn'); }
+    })
     .catch(e => dlog('✗ 回放失败 ' + e.message, 'warn'));
 }
 

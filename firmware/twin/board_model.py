@@ -124,6 +124,18 @@ class BoardModel:
         load5 = sum(i) + p["i_pump"] * pump + LOGIC_A
         v5 = p["vbus"] - (p["vf_ss34"] + p["r_ss34"] * load5)
         v33 = p["vout3v3"] - p["load_reg"] * LOGIC_A   # 与 step() history v33 同式
+        # buck 损耗随负载动态 (load5↑ → v5↓ → D↑), 公式与 sim_engine._buck 同源
+        # (CCM 损耗分解: Rsw=0.12Ω, DCR=18mΩ, VF=0.42V, vin=5V, FSW=570kHz):
+        #   P_sw=I²·0.12·D, P_dcr=I²·0.018, P_diode=0.42·I·(1-D),
+        #   P_switching=0.5·5.0·I·20ns·570kHz, D=vout3v3/v5 ≈ 3.269/4.67。
+        d = p["vout3v3"] / v5
+        i33 = LOGIC_A                                  # 3V3 轨负载 = 逻辑电流
+        p_sw = i33 ** 2 * 0.12 * d
+        p_dcr = i33 ** 2 * 0.018
+        p_diode = 0.42 * i33 * (1.0 - d)
+        p_swp = 0.5 * 5.0 * i33 * 20e-9 * 570e3
+        p_out = p["vout3v3"] * i33
+        buck_eff = p_out / (p_out + p_sw + p_dcr + p_diode + p_swp)
         r_loop = p["r_coil"] + p["rds"]
         valves = [{"on": x > 0.01,
                    "i_A": round(x, 3),
@@ -144,9 +156,12 @@ class BoardModel:
             "rail_3v3": {"v": round(v33, 4), "v_nom": p["vout3v3"],
                          "load_a": LOGIC_A,
                          "ripple_mv": 1.0,  # 与 sim_engine buck 默认工况实测一致（@3A）
-                         "buck_eff": BUCK_EFF,
-                         "loss_mw": {"sw": 706, "dcr": 162, "diode": 436,
-                                     "switching": 85}},
+                         # 损耗/效率随负载动态（@LOGIC_A 工况, 非旧 @3A 常量快照
+                         # {706,162,436,85}），公式与 sim_engine._buck 同源。
+                         "buck_eff": round(buck_eff, 4),
+                         "loss_mw": {"sw": round(p_sw * 1e3), "dcr": round(p_dcr * 1e3),
+                                     "diode": round(p_diode * 1e3),
+                                     "switching": round(p_swp * 1e3)}},
             "board_p_w": round(v5 * load5, 3),
             "temp_est_c": {k: round(v, 2) for k, v in temp.items()},
             "history": history,

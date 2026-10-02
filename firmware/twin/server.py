@@ -37,6 +37,9 @@ REC = {"on": False, "buf": []}                       # 命令录制 (wall-clock 
 TIMECTL = {"paused": False, "speed": 1.0, "step_once": False}   # 时间控制
 CARRY = 0.0                                          # 分数倍速累加器 (tick_loop 专用)
 SIM_POOL = concurrent.futures.ThreadPoolExecutor(1)  # 仿真超时保护 (单工位串行)
+_SIM_BUSY = False                                     # 仿真工位忙锁: 防重叠请求在单工位上堆积挂死
+REPLAY = {"on": False}                                # 时序回放进行中标志 (防重入 409)
+_REPLAY_LOCK = threading.Lock()                       # REPLAY 标志 check-and-set 原子化
 
 lib = ctypes.CDLL(str(ROOT / "pn_twin.dll"))
 lib.pn_twin_state.restype = ctypes.c_uint32
@@ -86,6 +89,22 @@ def tick_loop():
                     lib.pn_twin_tick()
                 _board_step(0.05 * n)
         time.sleep(0.05)
+
+
+def _replay_run(evs):
+    """后台时序回放线程: evs 为 [(t, cmd)] (t=墙钟秒), 按 t 升序相邻注入,
+    间隔 sleep min(dt, 0.5s) (上限防录制长间隙把回放卡成半永久)。
+    HTTP handler 立即返回不占线程; finally 清 REPLAY 标志放行下一次回放。"""
+    try:
+        t_prev = None
+        for t, cmd in sorted(evs):
+            if t_prev is not None:
+                time.sleep(min(max(t - t_prev, 0.0), 0.5))
+            lib.pn_twin_command(cmd.encode("utf-8"))
+            t_prev = t
+    finally:
+        with _REPLAY_LOCK:
+            REPLAY["on"] = False
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -199,6 +218,7 @@ class Handler(BaseHTTPRequestHandler):
             self._send(404, '{"error":"not found"}', "application/json")
 
     def do_POST(self):
+        global _SIM_BUSY
         n = int(self.headers.get("Content-Length", 0))
         body = self.rfile.read(n).decode("utf-8", errors="replace")
         if self.path == "/api/cmd":
@@ -241,20 +261,32 @@ class Handler(BaseHTTPRequestHandler):
 
         # ------------------------------------------------ v1.2 时间/仿真/录制
         elif self.path == "/api/board/sim":
+            if _SIM_BUSY:                       # 单工位被占: 快速 503, 不再排队等 504
+                self._err(503, "前一仿真仍在计算")
+                return
             try:
                 req = json.loads(body) if body.strip() else {}
             except ValueError:
                 req = None
             if not isinstance(req, dict):
                 req = {}
+            _SIM_BUSY = True
             try:
                 fut = SIM_POOL.submit(sim_engine.run, req.get("circuit"), req.get("params"))
-                r = fut.result(timeout=3)
-            except sim_engine.ParamError as e:      # 未知电路/参数/超域 → 400
-                self._send(400, json.dumps({"error": str(e)}, ensure_ascii=False),
-                           "application/json")
-                return
-            except concurrent.futures.TimeoutError:
+                try:
+                    r = fut.result(timeout=3)
+                except concurrent.futures.TimeoutError:
+                    # 线程池里跑的纯 python 函数无法强杀; cancel 防止超时后旧结果
+                    # 被后续 result() 复用 (配合 _SIM_BUSY 忙锁, 避免连环/永久 504)
+                    fut.cancel()
+                    r = None
+                except sim_engine.ParamError as e:  # 未知电路/参数/超域 → 400
+                    self._send(400, json.dumps({"error": str(e)}, ensure_ascii=False),
+                               "application/json")
+                    return
+            finally:
+                _SIM_BUSY = False
+            if r is None:
                 self._err(504, "仿真超时 (>3s)")
                 return
             r["api"] = API_VER
@@ -297,18 +329,26 @@ class Handler(BaseHTTPRequestHandler):
             self._json({"api": API_VER, "recording": REC["on"], "n": len(REC["buf"])})
 
         elif self.path == "/api/record/replay":
+            # 时序回放: 按事件 t 差顺序注入。注入序列在后台线程执行 (handler 内
+            # sleep 会占死 HTTP 线程), 立即回 202 语义的 200 + 条数; 进行中再请求
+            # → 409 防重入 (_REPLAY_LOCK 保证 check-and-set 原子)。
             try:
                 req = json.loads(body) if body.strip() else {}
             except ValueError:
                 req = None
             if not isinstance(req, dict):
                 req = {}
-            replayed = 0
-            for ev in req.get("events") or []:
-                if isinstance(ev, dict) and isinstance(ev.get("cmd"), str):
-                    lib.pn_twin_command(ev["cmd"].encode("utf-8"))
-                    replayed += 1
-            self._json({"api": API_VER, "replayed": replayed})
+            evs = [((ev["t"] if isinstance(ev.get("t"), (int, float)) else 0.0),
+                    ev["cmd"])
+                   for ev in req.get("events") or []
+                   if isinstance(ev, dict) and isinstance(ev.get("cmd"), str)]
+            with _REPLAY_LOCK:
+                if REPLAY["on"]:
+                    self._err(409, "回放进行中")
+                    return
+                REPLAY["on"] = True
+            threading.Thread(target=_replay_run, args=(evs,), daemon=True).start()
+            self._json({"api": API_VER, "replaying": len(evs)})
 
         else:
             self._send(404, '{"error":"not found"}', "application/json")
