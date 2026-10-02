@@ -10,6 +10,7 @@ add_library(pn_core STATIC
     ${PN_CORE_DIR}/src/proto.c
     ${PN_CORE_DIR}/src/tca9548.c
     ${PN_CORE_DIR}/src/sensor_if.c
+    ${PN_CORE_DIR}/src/ble_frame.c
 )
 target_include_directories(pn_core PUBLIC ${PN_CORE_DIR}/include)
 
@@ -19,6 +20,7 @@ add_executable(pn_tests
     test_closedloop.c
     test_proto.c
     tca_tests.c
+    ble_tests.c
     mock_hal.c
 )
 target_include_directories(pn_tests PRIVATE ${PN_CORE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR})

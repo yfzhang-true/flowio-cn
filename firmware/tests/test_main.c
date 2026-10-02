@@ -5,6 +5,7 @@ void test_actions_all(void);
 void test_closedloop_all(void);
 void test_proto_all(void);
 void test_tca_all(void);
+void test_ble_all(void);
 
 int pn_tests_run = 0;
 int pn_tests_failed = 0;
@@ -16,6 +17,7 @@ int main(void)
     test_closedloop_all();
     test_proto_all();
     test_tca_all();
+    test_ble_all();
     printf("=== %d tests, %d failed ===\n", pn_tests_run, pn_tests_failed);
     return pn_tests_failed ? 1 : 0;
 }

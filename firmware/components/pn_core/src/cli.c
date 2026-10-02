@@ -6,6 +6,7 @@
 #include "pn_core/leak_detect.h"
 #include "pn_ml/leak_infer.h"
 
+#include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -18,6 +19,29 @@ static pn_cli_delay_fn_t s_delay;
 void pn_cli_set_delay_fn(pn_cli_delay_fn_t fn) { s_delay = fn; }
 
 static void cli_delay(uint32_t ms) { if (s_delay) s_delay(ms); }
+
+/* ---- 应答行捕获（S5）：CLI 单行应答 printf 之外转发 sink（BLE resp 特征） ---- */
+static pn_cli_resp_sink_t s_resp_sink;
+
+void pn_cli_set_resp_sink(pn_cli_resp_sink_t fn) { s_resp_sink = fn; }
+
+static void cli_out(const char *fmt, ...)
+{
+    char buf[96];
+    va_list ap;
+    va_start(ap, fmt);
+    vprintf(fmt, ap);
+    va_end(ap);
+    if (!s_resp_sink) return;
+    va_start(ap, fmt);
+    int n = vsnprintf(buf, sizeof(buf), fmt, ap);
+    va_end(ap);
+    if (n <= 0) return;
+    size_t len = (size_t)n;
+    if (len >= sizeof(buf)) len = sizeof(buf) - 1;
+    while (len && (buf[len - 1] == '\n' || buf[len - 1] == '\r')) buf[--len] = 0;
+    if (len) s_resp_sink(buf);
+}
 
 void pn_cli_selftest(void)
 {
@@ -62,23 +86,23 @@ void pn_cli_process_line(char *line)
     switch (line[0]) {
     case 'I':
         if (sscanf(line + 1, "%hhu %hhu", &ports, &pwm) == 2)
-            printf("inflate=%d\n", pn_start_inflation(ports, pwm));
+            cli_out("inflate=%d\n", pn_start_inflation(ports, pwm));
         break;
     case 'V':
         if (sscanf(line + 1, "%hhu %hhu", &ports, &pwm) == 2)
-            printf("vacuum=%d\n", pn_start_vacuum(ports, pwm));
+            cli_out("vacuum=%d\n", pn_start_vacuum(ports, pwm));
         break;
     case 'R':
         if (sscanf(line + 1, "%hhu", &ports) == 1)
-            printf("release=%d\n", pn_start_release(ports));
+            cli_out("release=%d\n", pn_start_release(ports));
         break;
     case 'S':
         if (sscanf(line + 1, "%hhu", &ports) == 1)
-            printf("stop=%d\n", pn_stop_action(ports));
+            cli_out("stop=%d\n", pn_stop_action(ports));
         break;
     case 'H':
         if (sscanf(line + 1, "%hhu", &ports) == 1)
-            printf("hold_open=%d\n", pn_hold_open(ports));   /* 诊断保压：泵侧密封+端口保持通 */
+            cli_out("hold_open=%d\n", pn_hold_open(ports));   /* 诊断保压：泵侧密封+端口保持通 */
         break;
     case 'O':
         if (sscanf(line + 1, "%hhu", &ports) == 1) pn_ports_open(ports);
@@ -88,36 +112,36 @@ void pn_cli_process_line(char *line)
         break;
     case 'G': {   /* 闭环充气: G <ports> <target_kPa> <sensor_idx> */
         if (sscanf(line + 1, "%hhu %f %hhu", &ports, &kpa, &sensor) == 3)
-            printf("inflate_to=%d\n", pn_inflate_to_start(ports, kpa, sensor, 255, 30000));
+            cli_out("inflate_to=%d\n", pn_inflate_to_start(ports, kpa, sensor, 255, 30000));
         break;
     }
     case 'X':
         pn_cl_reset();
-        printf("closed-loop reset\n");
+        cli_out("closed-loop reset\n");
         break;
     case 'F':
-        printf("[ST] selftest starting\n");
+        cli_out("[ST] selftest starting\n");
         pn_cli_selftest();
         break;
     case 'P':
         for (uint8_t i = 0; i < PN_SENSOR_COUNT; ++i)
-            if (pn_read_pressure(i, &kpa) == PN_OK) printf("sensor%u=%.2f kPa\n", i, (double)kpa);
-            else printf("sensor%u=ERR\n", i);
+            if (pn_read_pressure(i, &kpa) == PN_OK) cli_out("sensor%u=%.2f kPa\n", i, (double)kpa);
+            else cli_out("sensor%u=ERR\n", i);
         break;
     case 'T':
-        printf("state=0x%04X err=%d\n", (unsigned)pn_get_state(), pn_last_error());
+        cli_out("state=0x%04X err=%d\n", (unsigned)pn_get_state(), pn_last_error());
         break;
     case 'L': {   /* 泄漏检测（TinyML，需上电 ≥4s 采样）。
                    * 旧 'L'=手动节能优化已删（tick 循环自动调用，冗余调试命令） */
         float conf = 0.f;
         int cls = pn_leak_detect(&conf);
         if (cls < 0)
-            printf("leak=detecting samples=%d/80\n", pn_ml_samples());
+            cli_out("leak=detecting samples=%d/80\n", pn_ml_samples());
         else
-            printf("leak=%s conf=%.2f\n", pn_ml_class_name(cls), (double)conf);
+            cli_out("leak=%s conf=%.2f\n", pn_ml_class_name(cls), (double)conf);
         break;
     }
     default:
-        printf("?\n");
+        cli_out("?\n");
     }
 }

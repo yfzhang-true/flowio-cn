@@ -19,3 +19,12 @@ CONFIG_SPIRAM_SPEED_80M=y
 
 # ── CPU ──
 CONFIG_ESP_DEFAULT_CPU_FREQ_MHZ_240=y
+
+# ── BLE（S5，契约 firmware/twin/BLE.md）──
+# NimBLE 主机栈 + S3 内置 BT 控制器；单连接；bond 持久化到 NVS（just-works）。
+# 其余附属项（控制器/内存/日志）由 Kconfig 依赖默认值补齐。
+# QEMU 无 BT 控制器仿真：ble_twin_init() 运行时检测 chip v0.0 跳过初始化。
+CONFIG_BT_ENABLED=y
+CONFIG_BT_NIMBLE_ENABLED=y
+CONFIG_BT_NIMBLE_MAX_CONNECTIONS=1
+CONFIG_BT_NIMBLE_NVS_PERSIST=y
