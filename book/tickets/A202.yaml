@@ -1,0 +1,27 @@
+id: A202
+title: CH340 烧录/自动复位
+phase: hw
+bringup: 1
+book_ch: 11
+status: pending
+evidence_required: [photo, measurement]
+---
+# A202 CH340 烧录/自动复位
+
+- phase: hw · BRINGUP §1 · 书稿章 ch11 · 证据要求: photo, measurement
+
+## 操作步骤
+- [ ] 照 firmware/BRINGUP.md §1 执行（15-30 分钟工作流，spec §4）
+
+## 实测值
+| 项目 | 期望 | 实测 | 判定 |
+|---|---|---|---|
+|  |  |  |  |
+
+## 判定（pass/fail + 容差）
+- status: pending（待测）
+
+## 素材管线（产物 → 书稿）
+- [ ] 截图/照片拷入 `book/figures/`
+- [ ] 数据 CSV 落 `book/data/`
+- [ ] 书稿 ch11 对应节增图/表引用 → xelatex 编译过 → git commit

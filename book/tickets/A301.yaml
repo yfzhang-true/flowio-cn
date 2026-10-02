@@ -1,0 +1,27 @@
+id: A301
+title: 孪生对拍：阀驱动电流曲线（BOARD_PARAMS R/L 改后叠图）
+phase: cal
+bringup: 7
+book_ch: 12
+status: pending
+evidence_required: [csv, plot]
+---
+# A301 孪生对拍：阀驱动电流曲线（BOARD_PARAMS R/L 改后叠图）
+
+- phase: cal · BRINGUP §7 · 书稿章 ch12 · 证据要求: csv, plot
+
+## 操作步骤
+- [ ] 照 firmware/BRINGUP.md §7 执行（15-30 分钟工作流，spec §4）
+
+## 实测值
+| 项目 | 期望 | 实测 | 判定 |
+|---|---|---|---|
+|  |  |  |  |
+
+## 判定（pass/fail + 容差）
+- status: pending（待测）
+
+## 素材管线（产物 → 书稿）
+- [ ] 截图/照片拷入 `book/figures/`
+- [ ] 数据 CSV 落 `book/data/`
+- [ ] 书稿 ch12 对应节增图/表引用 → xelatex 编译过 → git commit

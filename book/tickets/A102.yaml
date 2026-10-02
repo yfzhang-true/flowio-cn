@@ -1,0 +1,30 @@
+id: A102
+title: 电流/气流联动：I/V/S 命令差分截图
+phase: sw
+bringup: -
+book_ch: 11
+status: pass
+evidence_required: [screenshot, log]
+---
+# A102 电流/气流联动：I/V/S 命令差分截图
+
+- phase: sw · BRINGUP §- · 书稿章 ch11 · 证据要求: screenshot, log
+
+## 操作步骤
+- [ ] 照 firmware/BRINGUP.md §- 执行（15-30 分钟工作流，spec §4）
+
+## 实测值
+| 项目 | 期望 | 实测 | 判定 |
+|---|---|---|---|
+|  |  |  |  |
+
+## 判定（pass/fail + 容差）
+- status: pass（预填，证据见下）
+
+## 证据（已归档）
+- `firmware/twin/shots/v2_03_inflate.png`（I 全充）/ `v2_05_vacuum.png`（V 抽真空）/ `v2_04_silent.png`（S 静默态）— 差分截图已归档
+
+## 素材管线（产物 → 书稿）
+- [ ] 截图/照片拷入 `book/figures/`
+- [ ] 数据 CSV 落 `book/data/`
+- [ ] 书稿 ch11 对应节增图/表引用 → xelatex 编译过 → git commit

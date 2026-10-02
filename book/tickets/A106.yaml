@@ -1,0 +1,30 @@
+id: A106
+title: BLE 契约载荷向量（nRF Connect 待真机，向量先验）
+phase: sw
+bringup: -
+book_ch: 8
+status: pass
+evidence_required: [screenshot, log]
+---
+# A106 BLE 契约载荷向量（nRF Connect 待真机，向量先验）
+
+- phase: sw · BRINGUP §- · 书稿章 ch8 · 证据要求: screenshot, log
+
+## 操作步骤
+- [ ] 照 firmware/BRINGUP.md §- 执行（15-30 分钟工作流，spec §4）
+
+## 实测值
+| 项目 | 期望 | 实测 | 判定 |
+|---|---|---|---|
+|  |  |  |  |
+
+## 判定（pass/fail + 容差）
+- status: pass（预填，证据见下）
+
+## 证据（已归档）
+- `firmware/twin/BLE.md` §4.1 cmd 0xA5 5B 帧 / §4.2 state 20B LE 载荷向量（真机验证回板后归 A209）
+
+## 素材管线（产物 → 书稿）
+- [ ] 截图/照片拷入 `book/figures/`
+- [ ] 数据 CSV 落 `book/data/`
+- [ ] 书稿 ch8 对应节增图/表引用 → xelatex 编译过 → git commit

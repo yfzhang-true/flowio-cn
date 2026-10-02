@@ -1,0 +1,30 @@
+id: A105
+title: 固件 QEMU 冒烟 + 主机 33 测试
+phase: sw
+bringup: -
+book_ch: 7
+status: pass
+evidence_required: [screenshot, log]
+---
+# A105 固件 QEMU 冒烟 + 主机 33 测试
+
+- phase: sw · BRINGUP §- · 书稿章 ch7 · 证据要求: screenshot, log
+
+## 操作步骤
+- [ ] 照 firmware/BRINGUP.md §- 执行（15-30 分钟工作流，spec §4）
+
+## 实测值
+| 项目 | 期望 | 实测 | 判定 |
+|---|---|---|---|
+|  |  |  |  |
+
+## 判定（pass/fail + 容差）
+- status: pass（预填，证据见下）
+
+## 证据（已归档）
+- `firmware/tests/` 主机 33 测试全绿 + `firmware/qemu_smoke.sh` QEMU 冒烟
+
+## 素材管线（产物 → 书稿）
+- [ ] 截图/照片拷入 `book/figures/`
+- [ ] 数据 CSV 落 `book/data/`
+- [ ] 书稿 ch7 对应节增图/表引用 → xelatex 编译过 → git commit
