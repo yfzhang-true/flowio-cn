@@ -9,6 +9,7 @@ v1.2 新增 (S1/S2 孪生平台扩展):
   GET  /api/board/assembly            3D 装配 (meshes/assembly.json)
   GET  /api/board/history/export      历史四通道 CSV 导出
   GET  /lib/*.js /meshes/*.stl        静态资源 (echarts / three.min / OrbitControls / STLLoader)
+  GET  / | /webapp/*                  v2 前端 (webapp/ 零构建直服); /classic 旧 gui; /gui→301 /
   POST /api/board/sim                 参数化电路仿真重算 (buck/dior/valve/i2c)
   POST /api/time                      时间控制 (暂停/倍速/单步)
   POST /api/record | /api/record/replay  命令录制与回放
@@ -25,6 +26,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 ROOT = Path(__file__).parent
+WEBAPP = ROOT / "webapp"                            # v2 前端 (零构建 ES Modules)
 PORT = int(os.environ.get("TWIN_PORT", "8000"))
 
 sys.path.insert(0, str(ROOT))
@@ -108,12 +110,15 @@ def _replay_run(evs):
 
 
 class Handler(BaseHTTPRequestHandler):
-    def _send(self, code, body, ctype):
+    def _send(self, code, body, ctype, extra_headers=None):
         data = body.encode("utf-8") if isinstance(body, str) else body
         self.send_response(code)
         self.send_header("Content-Type", ctype)
         self.send_header("Content-Length", str(len(data)))
         self.send_header("Cache-Control", "no-cache")
+        if extra_headers:                       # v2: 301 重定向等附加头
+            for k, v in extra_headers.items():
+                self.send_header(k, v)
         self.end_headers()
         self.wfile.write(data)
 
@@ -133,8 +138,26 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         path = self.path.split("?")[0]
-        if path in ("/", "/index.html", "/gui", "/gui.html"):
+        # ------------------------------------------------ v2 前端 (webapp 直服)
+        if path in ("/", "/index.html", "/webapp", "/webapp/"):
+            self._send(200, (WEBAPP / "index.html").read_bytes(), "text/html; charset=utf-8")
+        elif path in ("/gui", "/gui.html"):
+            self._send(301, b"", "text/html", extra_headers={"Location": "/"})
+        elif path == "/classic":
             self._send(200, (ROOT / "gui.html").read_bytes(), "text/html; charset=utf-8")
+        elif path.startswith("/webapp/"):
+            rel = path[len("/webapp/"):]         # 静态资源 (js/css/json/png; 防穿越)
+            if not re.fullmatch(r"[A-Za-z0-9_./-]+", rel) or ".." in rel:
+                self._send(404, b"", "text/plain")
+                return
+            fp = WEBAPP / rel
+            mime = {".js": "text/javascript", ".css": "text/css", ".json": "application/json",
+                    ".html": "text/html", ".png": "image/png"}.get(fp.suffix,
+                                                                   "application/octet-stream")
+            if fp.is_file():
+                self._send(200, fp.read_bytes(), mime)
+            else:
+                self._send(404, b"not found", "text/plain")
         elif path == "/lib/echarts.min.js":
             self._send(200, (ROOT / "lib" / "echarts.min.js").read_bytes(),
                        "application/javascript; charset=utf-8")

@@ -1,0 +1,18 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FLOWIO-CN · 数字孪生</title>
+<link rel="stylesheet" href="/webapp/css/twin.css">
+<script type="importmap">{"imports":{"three":"/webapp/vendor/three.module.js"}}</script>
+</head><body>
+<header id="t2_topbar"><span class="t2_brand">FLOWIO-CN</span>
+  <span id="t2_modeBadge" class="t2_badge">孪生</span>
+  <button id="t2_bleBtn" class="t2_btn ghost">连接真机</button></header>
+<main id="t2_stage"><canvas id="t2_canvas"></canvas>
+  <aside id="t2_ctrlDrawer" class="t2_drawer left"></aside>
+  <div id="t2_transport" class="t2_pill"></div>
+  <aside id="t2_tlmDrawer" class="t2_drawer right"></aside>
+  <div id="t2_hotspotCard" class="t2_card"></div></main>
+<footer id="t2_statusbar"><span id="t2_calBadge" class="t2_badge warn">模型参数：理论值（未本机标定）</span>
+  <span id="t2_timeInfo"></span><button id="t2_simLabBtn" class="t2_btn ghost">仿真实验室</button></footer>
+<div id="t2_simOverlay" hidden></div>
+<script type="module" src="/webapp/js/main.js"></script></body></html>
