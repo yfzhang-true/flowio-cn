@@ -137,3 +137,14 @@ state api=1.2 且全 payload 无 leak 字样；assembly parts=5、bbox_mm=[95.8,
 3. `firmware/build_n16r8.cmd`：曾出现 CRLF 行尾问题，已由根 `.gitattributes`（`* text=auto eol=lf`）统一修正并防复发；后续新增 Windows 批处理注意提交前归一。
 4. T1-T3 审查记档 Minor（未修，均为展示层/无控制风险）：telemetry `loss_mw` 四项损耗为 buck @3A 满载常量快照（706/162/436/85mW），不随实际 0.43A 负载重算；`r_coil/l_coil/i_pump` 为 [假设] 参数待回板标定（BRINGUP 六项校准后转绿）；board state 的 `ml:80` 字段已随 F1 泄漏解耦移除（2026-10-02，DLL 导出删除；API.md 已同步）。
 5. 回板实测对照清单见 §1 待完成第 3 条（效率 87.6%/纹波 ~1mV/阶跃 199mV；注：纹波对照值随本次修正由 3mV 更正为 ~1mV）。
+
+
+## 欠账清偿记录（2026-10-02 深夜 F1-F4）
+| # | 欠账 | 处置 | SHA |
+|---|---|---|---|
+| F1 | 泄漏下线不彻底（pn_core cli 'L'+leak_detect+pn_ml 依赖残留；virtual/ 损坏真根因） | cli L=off 文案/leak_detect 归档/断 PRIV_REQUIRES；**virtual 复活**（state=0x0200）；连带揪出 server /api/state ml 字段 AttributeError 隐藏雷 | 496bfe7 |
+| F2 | sim_engine 缺 --export（spec §4.2 违约） | sim_export.py stdlib SVG+md → twin/sim_out/；旧 tools/sim git mv 归档 deprecated/sim-legacy，仿真真源唯一化 | 984c5ea |
+| F3 | 前端目视检查跳步 | 三面板 playwright 重截+机内视觉审：**零缺陷通过**（数值渲染/曲线/徽章/3D 部件全验） | 260e942 |
+| F4 | Minor 债（loss_mw 常量/SIM 挂死/replay 无时序/冒烟覆盖） | loss_mw 动态化同源引擎/SIM 忙锁 503/replay 后台时序+409/冒烟 7→11 | 81b0467 |
+
+剩余路线图不变：OTA/HIL/Web API 多设备/SDK BLE 传输/报表产品化（均需硬件或独立产品化决策）。
