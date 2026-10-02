@@ -1,0 +1,73 @@
+{
+  "_comment": "0xA5 协议测试向量。算法真源 firmware/components/pn_core/src/proto.c pn_proto_crc8 (poly=0x07, init=0x00, MSB-first, no-xorout)。前 5 组参数逐一对齐 firmware/tests/test_proto.c 中 pn_proto_build 调用参数（该测试无黄金字节，字节串由同算法推导）；后 3 组覆盖全端口/边界 pwm。crc_anchors 为独立第三方检查值。",
+  "crc_anchors": {
+    "123456789": "f4",
+    "a5": "72"
+  },
+  "vectors": [
+    {
+      "name": "inflate_fw_roundtrip",
+      "origin": "firmware/tests/test_proto.c t_frame_roundtrip: pn_proto_build(PN_CMD_INFLATE, 0b00001, 200)",
+      "cmd": "+",
+      "ports": 1,
+      "pwm": 200,
+      "frame_hex": "a52b01c87d"
+    },
+    {
+      "name": "stop_fw",
+      "origin": "firmware/tests/test_proto.c t_bad_crc_dropped: pn_proto_build(PN_CMD_STOP, 0b00001, 0)",
+      "cmd": "!",
+      "ports": 1,
+      "pwm": 0,
+      "frame_hex": "a52101008c"
+    },
+    {
+      "name": "state_fw",
+      "origin": "firmware/tests/test_proto.c t_bad_crc_dropped: pn_proto_build(PN_CMD_STATE, 0, 0)",
+      "cmd": "S",
+      "ports": 0,
+      "pwm": 0,
+      "frame_hex": "a553000028"
+    },
+    {
+      "name": "query_fw_resync",
+      "origin": "firmware/tests/test_proto.c t_leading_garbage_resync: pn_proto_build(PN_CMD_QUERY, 0b11111, 1)",
+      "cmd": "?",
+      "ports": 31,
+      "pwm": 1,
+      "frame_hex": "a53f1f0184"
+    },
+    {
+      "name": "reset_fw",
+      "origin": "firmware/tests/test_proto.c t_crc_known_vector: pn_proto_build(PN_CMD_RESET, 0, 0)",
+      "cmd": "R",
+      "ports": 0,
+      "pwm": 0,
+      "frame_hex": "a552000043"
+    },
+    {
+      "name": "inflate_max_boundary",
+      "origin": "边界: 全端口 0x1F + 最大占空比 0xFF",
+      "cmd": "+",
+      "ports": 31,
+      "pwm": 255,
+      "frame_hex": "a52b1fff79"
+    },
+    {
+      "name": "vacuum_zero_boundary",
+      "origin": "边界: 抽气全端口 + pwm=0 (固件 pn_start_vacuum 自替 255)",
+      "cmd": "-",
+      "ports": 31,
+      "pwm": 0,
+      "frame_hex": "a52d1f00f7"
+    },
+    {
+      "name": "release_field_reuse",
+      "origin": "混合端口 0x0A + 非零 pwm (release 忽略 pwm 字段但须双向往返)",
+      "cmd": "^",
+      "ports": 10,
+      "pwm": 42,
+      "frame_hex": "a55e0a2aed"
+    }
+  ]
+}
