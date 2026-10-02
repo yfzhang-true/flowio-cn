@@ -33,7 +33,7 @@ PN_TWIN_API void     pn_twin_set_leak(uint8_t idx, float k); /* 泄漏注入（�
 
 孪生的第一版物理（v1）是工程一阶近似：充气压头线性衰减 $(1-p/P_\text{max})$、抽真空对称、被动排气按时间常数指数衰减。它的优点是直觉、可调；缺点是\textbf{形状不对}——真实气动系统的高压差段是恒流（音速阻塞），充气曲线是 $\sqrt{\ }$ 压头而不是线性渐近，开阀数量会改变升降压速率。演示够用，对拍不够。
 
-v2 重构（\texttt{PHYSICS-SPEC.md}）的原则是\textbf{每条规律给出文献出处}，表~\ref{tab:twin-lit} 是逐条对应关系。
+v2 重构（\texttt{PHYSICS-SPEC.md}）的原则是\textbf{每条规律给出文献出处}，表~\ref{tab:twin-lit} 是逐条对应关系~\cite{Xavier2020AIM,Xavier2022Frontiers}。
 
 \begin{table}[htbp]
   \centering
@@ -43,10 +43,10 @@ v2 重构（\texttt{PHYSICS-SPEC.md}）的原则是\textbf{每条规律给出文
     \toprule
     物理规律 & 文献出处 & 采用形式 \\
     \midrule
-    压力动力学 & Xavier 2022 \S2.1 Eq.1--4 & 多变气体定律 $PV^\gamma{=}$const；$\mathrm{d}P_A/\mathrm{d}t=\gamma P_A Q/V_A$（$\gamma{=}1.2$） \\
+    压力动力学 & Xavier 2022 \S2.1 Eq.1--4~\cite{Xavier2022Frontiers} & 多变气体定律 $PV^\gamma{=}$const；$\mathrm{d}P_A/\mathrm{d}t=\gamma P_A Q/V_A$（$\gamma{=}1.2$） \\
     阀孔流量 & Xavier 2022 \S2.1（ANSI/(NFPA) T3.21.3） & $Q=114.5\,u\,C_v\sqrt{\Delta P \cdot P_\text{low}}/\sqrt{T}$；充气 $Q_c\propto\sqrt{P_A(P_R-P_A)}$ \\
     音速阻塞 & ANSI 标准隐含（临界压比 1.893） & 高压差段流量与 $\sqrt{\Delta P}$ 解耦（恒质量流）——v1 完全缺失 \\
-    占空比标度 & Xavier 2022（40\,Hz PWM 阀）；FlowIO CHI'21 \S4（泵 PWM） & $u\in[0,1]$ 线性标度流导 \\
+    占空比标度 & Xavier 2022（40\,Hz PWM 阀）~\cite{Xavier2022Frontiers}；FlowIO CHI'21 \S4（泵 PWM）~\cite{Shtarbanov2021} & $u\in[0,1]$ 线性标度流导 \\
     常闭保压/被动释放 & FlowIO CHI'21 \S4 & 沿用 v1 已有实现 \\
     单传感器分时 & FlowIO CHI'21 \S4 & S0 定位汇流管；S1 端口侧（Sensors++ 雏形） \\
     规格包线 & FlowIO CHI'21：$-26\sim+30$\,psi、3.2\,L/min & UI 曲线按 $\pm100$\,kPa 传感器量程展示 \\
@@ -106,7 +106,7 @@ if (p >  SENSOR_SPAN_KPA) p =  SENSOR_SPAN_KPA;   /* XGZP6897D ±100kPa 饱和 *
 if (p < -SENSOR_SPAN_KPA) p = -SENSOR_SPAN_KPA;
 \end{lstlisting}
 
-三处细节值得放大。\textbf{其一，choked 段}：当上游与下游绝对压比超过 1.893（空气临界压比），孔口流速钳制在音速，流量不再随 $\sqrt{\Delta P}$ 增长——对应代码里对 $f=P_\text{low}\Delta P$ 的上下钳位。真机上它的可观测签名是：泄放初期降压速率近似恒定，之后才转入 $\sqrt{\ }$ 衰减尾。v1 完全没有这个现象，对拍时一眼就能识破。\textbf{其二，开阀瞬时等温混合}：端口阀 0$\to$1 的瞬间，汇流管气体与新接通的端口容积（初压取端口节点当前值）均压，$p \leftarrow \frac{P_1V_1+P_2V_2}{V_1+V_2}-P_\text{atm}$——密封 60\,kPa 时开一个新端口，压力阶跃下降且幅度按 $V_m/(V_m+V_p)$ 可预测，这是验收用例之一。\textbf{其三，$\gamma{=}1.2$}：多变指数介于等温 1.0 与绝热 1.4 之间，取自 Xavier 2022 \S4 的实验值——快速充放气介于两者之间，这是文献给出的折中。
+三处细节值得放大。\textbf{其一，choked 段}：当上游与下游绝对压比超过 1.893（空气临界压比），孔口流速钳制在音速，流量不再随 $\sqrt{\Delta P}$ 增长——对应代码里对 $f=P_\text{low}\Delta P$ 的上下钳位。真机上它的可观测签名是：泄放初期降压速率近似恒定，之后才转入 $\sqrt{\ }$ 衰减尾。v1 完全没有这个现象，对拍时一眼就能识破。\textbf{其二，开阀瞬时等温混合}：端口阀 0$\to$1 的瞬间，汇流管气体与新接通的端口容积（初压取端口节点当前值）均压，$p \leftarrow \frac{P_1V_1+P_2V_2}{V_1+V_2}-P_\text{atm}$——密封 60\,kPa 时开一个新端口，压力阶跃下降且幅度按 $V_m/(V_m+V_p)$ 可预测，这是验收用例之一。\textbf{其三，$\gamma{=}1.2$}：多变指数介于等温 1.0 与绝热 1.4 之间，取自 Xavier 2022~\cite{Xavier2022Frontiers} \S4 的实验值——快速充放气介于两者之间，这是文献给出的折中。
 
 \section{参数成色：孪生模型也会"说谎"}
 \label{sec:twin-params}

@@ -119,7 +119,7 @@ CLI 分发器 \texttt{pn\_core/cli.c} 从 main.c 抽出后就是双宿主共用�
 \section{TCA9548A：函数注入保住的纯逻辑}
 \label{sec:fw-tca}
 
-双压力传感器共用固定地址 0x58（XGZP6897D-C 选型码即地址，第~\ref{ch:twin} 章），必须经 TCA9548A 八通道复用器分时选通。麻烦在于：选通是 I2C 写，而 \texttt{pn\_core} 不许碰 I2C。解法是\textbf{注入}——纯逻辑层只定义函数指针类型 \texttt{tca\_i2c\_write\_fn} 与编码规则，真机在初始化时把硬件写函数绑进来：
+双压力传感器共用固定地址 0x58（XGZP6897D-C 选型码即地址，第~\ref{ch:twin} 章），必须经 TCA9548A 八通道复用器~\cite{TCA9548ADS}分时选通。麻烦在于：选通是 I2C 写，而 \texttt{pn\_core} 不许碰 I2C。解法是\textbf{注入}——纯逻辑层只定义函数指针类型 \texttt{tca\_i2c\_write\_fn} 与编码规则，真机在初始化时把硬件写函数绑进来：
 
 \begin{lstlisting}[language=C, basicstyle=\small\ttfamily, breaklines=true,
   caption={tca9548.c 的编码与注入（摘自源码）}]
