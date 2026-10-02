@@ -4,12 +4,13 @@
   阀线圈 RL 电流(解析式) -> 5V 轨负载/压降 -> 3V3 轨 -> 一阶热惯性 -> 600s 环形历史。
 
 设计笔记 (与 test_board_model.py 锚点对齐):
-  * 开通:  i = I_inf + (i0 - I_inf) * exp(-dt/tau_on),  tau_on = L/(r_coil+rds)
+  * 开通:  i = I_inf + (i0 - I_inf) * exp(-dt/tau_on),  tau_on = L/(r_coil+rds) ≈ 1.78ms
            —— 100ms 内电流完全建立 (dt/tau ~ 56)。
-  * 关断:  i = i0 * exp(-dt/tau_off),  tau_off = L/rds
-           —— 续流电流经低侧回路(仅 rds)再循环缓慢释放, 100ms 后残余 ~85.2%
-              (e^(-0.1/0.625)=0.852, 测试锚点 0.85)。若按导通同一 tau(1.78ms)
-              计算, 100ms 后电流归零, 与测试 b4 锚点矛盾 —— 故关断取续流回路 tau。
+  * 关断:  MOS 已断开, 线圈经 SS14 续流回路释放: vcoil = -vf_fw,
+           i = max(0, I_off + (i0 - I_off) * exp(-dt/tau_off)),
+           tau_off = L/r_coil ≈ 1.79ms,  I_off = -vf_fw/r_coil (负稳态,
+           电流过零即被二极管反向截止钳位) —— 与 sim_engine._valve 的
+           续流 ODE (VF_FW=0.35, 钳 i>=0) 同一物理量, 防双源漂移。
 无文件 IO、无 numpy; telemetry() 从当前 state 以与 step() 相同的式子重算轨值。
 """
 
@@ -27,6 +28,7 @@ BOARD_PARAMS = {
     "vbus": 5.0,       # [标称] USB 5V 总线
     "vf_ss34": 0.31,   # [手册] SS34 肖特基正向压降 (5V 轨串入)
     "r_ss34": 0.05,    # [手册] SS34 导通电阻
+    "vf_fw": 0.35,     # [手册] SS14 续流二极管正向压降 (与 sim_engine VF_FW 同源)
     "vout3v3": 3.269,  # [实测] buck 标称输出
     "load_reg": 0.012, # [仿真] buck 负载调整率 (V/A)
     "i_pump": 0.35,    # [假设] 泵电机平均电流
@@ -63,15 +65,17 @@ class BoardModel:
         """推进 dt 秒。valves: 8 元命令列表(真值=开), pump: 泵命令(真值=开)。"""
         p = BOARD_PARAMS
         tau_on = p["l_coil"] / (p["r_coil"] + p["rds"])   # 激励回路: L/(r_coil+rds)
-        tau_off = p["l_coil"] / p["rds"]                  # 续流回路: L/rds
+        tau_off = p["l_coil"] / p["r_coil"]               # 续流回路: L/r_coil (SS14 钳位)
         i_inf = p["vbus"] / (p["r_coil"] + p["rds"])      # 稳态电流 (开)
+        i_inf_off = -p["vf_fw"] / p["r_coil"]             # 续流负稳态 (过零截止)
         for k in range(N_VALVES):
             on = bool(valves[k]) if k < len(valves) else False
             i0 = self.i[k]
             if on:
                 self.i[k] = i_inf + (i0 - i_inf) * math.exp(-dt / tau_on)
             else:
-                self.i[k] = i0 * math.exp(-dt / tau_off)  # I_inf=0
+                i = i_inf_off + (i0 - i_inf_off) * math.exp(-dt / tau_off)
+                self.i[k] = i if i > 0.0 else 0.0         # 二极管反向截止钳位
 
         self.pump = 1.0 if pump else 0.0
         load5 = sum(self.i) + p["i_pump"] * self.pump + LOGIC_A
