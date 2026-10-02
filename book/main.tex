@@ -10,6 +10,7 @@
 \extrainfo{开源书稿：正文 CC BY-NC-ND 4.0，代码 MIT，硬件 CERN-OHL-S。}
 \setcounter{tocdepth}{2}
 \usepackage{longtable} % 36 行验收工单总表跨页
+\addbibresource{reference.bib} % ElegantBook 已内置 biblatex(backend=biber, numeric)
 \begin{document}
 \maketitle
 \frontmatter
@@ -30,4 +31,5 @@
 \appendix
 % 附录占位：回板后收录工单证据汇编与串口日志精选
 \backmatter
+\printbibliography[heading=bibintoc, title={参考文献}]
 \end{document}
