@@ -1,5 +1,6 @@
 # TinyML 泄漏检测训练管线 — 实施计划
 
+> ⚠ **2026-10-02 已下线归档**（spec §12）——产物在 `deprecated/ml-leak/`，复活方法见该目录 README。
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 ## ✅ 执行记录（2026-09-22，五任务全部完成，验收全过）

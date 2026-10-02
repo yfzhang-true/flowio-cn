@@ -9,7 +9,6 @@
 #include "pn_core/actions.h"
 #include "pn_core/closedloop.h"
 #include "pn_core/cli.h"
-#include "pn_core/leak_detect.h"
 #include "pn_core/proto.h"      /* S5: 0xA5 帧命令翻译（BLE cmd 特征） */
 #include "pn_core/tca9548.h"    /* S4: tca_bind 注入真机 I2C 写 */
 #include "pn_hal_esp32/hal_esp32.h"
@@ -179,7 +178,6 @@ static void control_task(void *arg)
 
         pn_optimize_power(ble_twin_hold_duty(), ble_twin_hold_delay_ms());  /* S5: Config 服务 RAM 镜像（默认值=原宏） */
         pn_check_overpressure(120.f);
-        pn_ml_tick((uint32_t)(esp_timer_get_time() / 1000));   /* TinyML 20Hz 采样（内部节流） */
         pn_hal_esp32_servo_refresh();                           /* 舵机 50Hz 脉冲流（单次发送非循环） */
         board_led_set(pn_get_state() ? 1 : 0);   /* S4 简化映射：任一执行器动作=RUNNING 绿，否则 IDLE 呼吸蓝 */
         board_led_tick_10ms();                   /* WS2812 呼吸/闪烁状态机（10ms 节拍驱动） */

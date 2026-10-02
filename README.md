@@ -34,7 +34,7 @@
 ```bash
 cd firmware/twin
 ./build_twin.sh            # 编译 pn_twin.dll（一条命令重建）
-python server.py           # → http://127.0.0.1:8000/gui
+"E:/Program Files/KiCad/10.0/bin/python.exe" server.py   # KPY → http://127.0.0.1:8000/gui
 ```
 
 **三层测试（改代码必跑）**
@@ -49,13 +49,26 @@ cd firmware/twin && bash run_tests.sh   # 冒烟 + 接口45 + 单元28 + 功能3
 cd firmware && powershell build_n16r8.ps1   # 已配置 16MB Flash + 8MB PSRAM + 240MHz
 ```
 
+**上位机 SDK（sdk/python）**
+
+```bash
+pip install pyserial                                       # 仅串口传输需要
+python sdk/python/examples/hello_glove.py COM3             # 充→保→释→抽 一个来回
+```
+
+```python
+from flowio_sdk import FlowIO
+io = FlowIO("COM3")            # 0xA5 帧协议与固件 proto.c 同向量（详 sdk/python/README.md）
+io.inflate(1, 180); io.hold(1); print(io.state())
+```
+
 ## 项目阶段
 
 | 阶段 | 状态 | 产出 |
 |------|------|------|
 | 数字孪生 | ✅ 完成 | 物理 v2（孔口方程）+ 泄漏注入 + Web 控制台 + 110 项测试 |
 | P0 硬件 | ⏳ 等待到货 | ESP32-S3 + 阀 + 泵 + 传感器（1688 已采购） |
-| TinyML | 📋 SPEC 已批准 | 泄漏检测管线（仿真预训练 → 真机迁移学习） |
+| TinyML | 🗄️ 已下线归档 | 泄漏检测管线归档 `firmware/twin/deprecated/ml-leak/`（spec §12，可复活） |
 | B2B 对接 | ⏳ 等 P0 demo | 3 家白牌厂商联系（天津大晴天/深圳晟烨/云天星） |
 
 ## 开发节奏

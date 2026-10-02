@@ -341,8 +341,8 @@ input[type=range]{padding:0;accent-color:var(--accent)}
       <div class="hint">S0 会被物理模型持续演化（充升/排降/微漏），注入即设定起点。</div>
     </div>
 
-    <div class="card">
-      <h3>泄漏检测实验室（TinyML）</h3>
+    <div class="card" title="开发工具">
+      <h3>泄漏注入（开发工具）</h3>
       <div class="row" style="flex-wrap:wrap;gap:4px">
         <span style="color:var(--dim)">部位</span>
         <button class="chip" id="lkc0" onclick="leakSel(0)">端口1</button>
@@ -364,16 +364,7 @@ input[type=range]{padding:0;accent-color:var(--accent)}
         <button onclick="leakInject()">注入泄漏</button>
         <button onclick="leakClear()">清除</button>
       </div>
-      <div class="row" style="margin-top:8px">
-        <button id="detectBtn" onclick="leakDetect()" style="flex:1">🔍 立即检测（4s 窗口推理）</button>
-        <span id="mlBadge" style="padding:3px 12px;border-radius:8px;background:#21262d;color:var(--dim)">未检测</span>
-        <span id="mlSamples" style="color:var(--dim);font-size:11px">0/80</span>
-        <span id="mlRegime" style="color:var(--dim);font-size:11px"></span>
-      </div>
-      <div class="row" style="margin-top:6px">
-        <button id="demoBtn" onclick="demoSeq()" style="flex:1">▶ 一键演示剧本（充压→H保压→检测normal→注入→检测报警）</button>
-      </div>
-      <div class="hint">⚠ 检测工况前提：端口泄漏只有在<b>端口阀开着</b>时才对汇流管传感器可见——用 H 诊断保压，不要用 S 隔离保压（S 会让端口泄漏"隐身"，物理 v2.1）。推理跑在固件同一份 C 代码里（未来 ESP32 同码）。</div>
+      <div class="hint">⚠ 物理故障注入开发工具（非产品功能）：端口泄漏只有在<b>端口阀开着</b>时才对汇流管传感器可见——H 诊断保压可见，S 隔离保压会让端口泄漏"隐身"（物理 v2.1）。</div>
     </div>
 
     <div class="card">
@@ -828,64 +819,8 @@ function leakClear() {
     .then(j => dlog('◆ 泄漏全部清除' + (j.ok ? '' : ' ✗')))
     .catch(e => dlog('✗ 清除失败 ' + e.message, 'warn'));
 }
-async function leakDetect() {
-  const badge = document.getElementById('mlBadge');
-  badge.textContent = '推理中…';
-  badge.style.background = '#21262d';
-  badge.style.color = 'var(--dim)';
-  try {
-    const j = await (await fetch('/api/leakdetect')).json();
-    if (j.label < 0) {
-      badge.textContent = '预热 ' + j.samples + '/80';
-      dlog('TinyML：样本未满（' + j.samples + '/80），上电 ' + Math.ceil((80 - j.samples) / 20) + 's 后可检测');
-      return;
-    }
-    const look = {
-      0: ['normal', '#0d2818', 'var(--ok)'],
-      1: ['轻度泄漏', '#3a2d00', '#e3b341'],
-      2: ['重度泄漏!', '#3d1015', '#f85149'],
-    }[j.label];
-    const relName = { high: '✓可靠', low: '△仅供参考', none: '✗不可靠' }[j.reliability] || '';
-    const regimeName = { hold_open: 'H保压', sealed: 'S密封', inflating: '充气中',
-                         vacuuming: '抽气中', releasing: '释放中', mixed: '混合' }[j.regime] || j.regime;
-    badge.textContent = look[0] + ' ' + (j.conf * 100).toFixed(0) + '%';
-    badge.style.background = look[1];
-    badge.style.color = look[2];
-    badge.title = '工况: ' + regimeName;
-    document.getElementById('mlRegime').textContent = regimeName + ' ' + relName;
-    dlog('🔍 TinyML 检测：' + look[0] + '（置信 ' + (j.conf * 100).toFixed(1) + '%，' + regimeName + '，' + relName + '）',
-         j.label === 2 ? 'warn' : undefined);
-    if (j.hint) dlog('⚠ 工况提示：' + j.hint, 'warn');
-  } catch (e) {
-    badge.textContent = '检测失败';
-    dlog('✗ 检测失败 ' + e.message, 'warn');
-  }
-}
-async function demoSeq() {
-  const btn = document.getElementById('demoBtn');
-  btn.disabled = true;
-  try {
-    dlog('▶ 演示剧本开始（正确工况：充压 → H 诊断保压 → 检测 → 注入 → 检测）');
-    leakClear(); await new Promise(r => setTimeout(r, 400));
-    send('S 1'); await new Promise(r => setTimeout(r, 300));
-    send('I 1 255');                                  /* 1. 充压（端口阀开） */
-    await new Promise(r => setTimeout(r, 3000));
-    send('H 1');                                      /* 2. H 诊断保压：端口保持通 */
-    dlog('⏳ H 保压中，等窗口灌满…');
-    await new Promise(r => setTimeout(r, 4500));
-    await leakDetect();                               /* 3. 应为 normal */
-    const k = document.getElementById('leakK').value;
-    fetch('/api/leak', { method: 'POST', body: leakIdxSel + ' ' + k });   /* 4. 注入 */
-    dlog('◆ 已注入部位#' + leakIdxSel + ' k=' + (+k).toFixed(2) + '，泄漏发展中…');
-    await new Promise(r => setTimeout(r, 4000));
-    await leakDetect();                               /* 5. 应报警 */
-    leakClear();
-    send('S 1');
-    dlog('▶ 演示剧本结束（已清除泄漏并密封）');
-  } finally {
-    btn.disabled = false;
-  }
-}
+/* TinyML 泄漏检测已下线（spec §12，2026-10-02）——检测按钮/结果卡/ml 状态显示一并移除；
+   本面板仅保留物理故障注入（开发调试工具，/api/leak）。 */
 
 /* ═══ 状态轮询 + 渲染（Step 3，200ms） ═══
    渲染核心抽出为 p1_renderState(stateObj)：孪生 HTTP 轮询与 BLE 真机 state
@@ -917,7 +852,6 @@ function p1_renderState(s) {
   if (s.err && !prevErr) dlog('⚠ 状态字错误位置位 (bit15)', 'warn');
   prevErr = s.err;
   $('tbclk').textContent = new Date().toLocaleTimeString('zh-CN', { hour12: false });
-  if (s.ml !== undefined) $('mlSamples').textContent = s.ml + '/80';
 
   /* 阀活塞 ×7：duty>0 = 导通（绿+下压） */
   for (let i = 0; i < 7; ++i) $('pn' + (i + 1)).classList.toggle('on', s.valves[i] > 0);

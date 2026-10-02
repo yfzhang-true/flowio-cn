@@ -205,59 +205,36 @@ function T(name, cond) {
   T('饱和不触发超压横幅（阈值120>量程100=固件盲区，已上报）', sat.err === 0 && sat.banner === 'none');
   await p.evaluate(() => fetch('/api/sim', { method: 'POST', body: '0 0' }));
 
-  console.log('─ 功能：泄漏检测实验室（TinyML） ─');
+  console.log('─ 功能：泄漏注入（开发工具，检测已下线 spec §12） ─');
   await p.evaluate(() => send('S 31'));
   await p.waitForTimeout(300);
   await p.evaluate(() => send('I 1 255'));
-  await p.waitForTimeout(3000);
-  await p.evaluate(() => send('H 1'));
-  await p.waitForTimeout(4500);                       /* 4s 窗口灌满 */
-  await p.click('#detectBtn');
-  await p.waitForTimeout(800);
-  const ml0 = await p.evaluate(() => document.getElementById('mlBadge').textContent);
-  T('无泄漏检测=normal', ml0.startsWith('normal'));
-  const samplesTag = await p.evaluate(() => document.getElementById('mlRegime').textContent);
-  T('H保压工况+可靠分级', samplesTag === 'H保压 ✓可靠');
-  await p.click('#lkc0');                             /* chips 选部位（内嵌浏览器兼容，select 已弃用） */
+  await p.waitForTimeout(2000);
+  await p.evaluate(() => send('H 1'));                     /* H 诊断保压：端口保持通（泄漏对汇流管可见） */
+  await p.waitForTimeout(400);
+  const p0 = parseFloat(await p.evaluate(() =>
+    document.getElementById('sns0').textContent));
+  await p.click('#lkc0');                                  /* chips 选部位（内嵌浏览器兼容，select 已弃用） */
   T('部位 chips 可切换', await p.evaluate(() => document.getElementById('lkc0').classList.contains('sel')));
   await p.evaluate(() => leakPreset('0.5'));
   await p.evaluate(() => leakInject());
-  await p.waitForTimeout(4000);                       /* 窗口全为大泄漏样本 */
-  await p.click('#detectBtn');
-  await p.waitForTimeout(800);
-  const ml1 = await p.evaluate(() => document.getElementById('mlBadge').textContent);
-  T('注入 k=0.5 检测=重度泄漏(红)', ml1.startsWith('重度泄漏'));
-  await p.evaluate(() => leakClear());
-  await p.waitForTimeout(300);
-
-  console.log('─ 功能：S 隔离保压下端口泄漏不可见（工况守卫提示） ─');
-  await p.evaluate(() => send('S 1'));                /* 端口阀全关 */
-  await p.waitForTimeout(300);
-  await p.evaluate(() => leakPreset('0.75'));
-  await p.evaluate(() => leakInject());
-  await p.waitForTimeout(4000);
-  await p.click('#detectBtn');
-  await p.waitForTimeout(800);
-  const guarded = await p.evaluate(async () => {
-    const j = await (await fetch('/api/leakdetect')).json();
-    return { label: j.label, hint: j.hint || '' };
+  await p.waitForTimeout(2000);
+  const lk = await p.evaluate(async () => {
+    const s = await fetch('/api/state', { cache: 'no-store' }).then(r => r.json());
+    const code = await fetch('/api/leakdetect').then(r => r.status);
+    return { k: s.leaks[0], p: parseFloat(document.getElementById('sns0').textContent), code };
   });
-  T('S 隔离态端口泄漏检测=normal（物理正确：不可见）', guarded.label === 0);
-  T('工况守卫 hint 提示 H 保压', guarded.hint.includes('H 诊断保压'));
+  T('注入 k=0.5 生效（leaks[0]≈0.5）', Math.abs(lk.k - 0.5) < 0.01);
+  T('H 保压注入泄漏→汇流管压力下降', lk.p < p0 - 1);
+  T('/api/leakdetect 已下线（404）', lk.code === 404);
+  T('检测 UI 已移除（detectBtn/mlBadge 不存在）', await p.evaluate(() =>
+    !document.getElementById('detectBtn') && !document.getElementById('mlBadge')));
   await p.evaluate(() => leakClear());
+  await p.waitForTimeout(300);
+  const lk0 = await p.evaluate(async () =>
+    (await fetch('/api/state', { cache: 'no-store' }).then(r => r.json())).leaks.every(v => v === 0));
+  T('泄漏全部清除（leaks 全 0）', lk0);
   await p.evaluate(() => send('S 31'));
-  await p.waitForTimeout(300);
-
-  console.log('─ 功能：动态工况分级披露（充气中检测） ─');
-  await p.evaluate(() => send('I 1 255'));
-  await p.waitForTimeout(1000);                       /* 充气进行中 */
-  const dyn = await p.evaluate(async () => {
-    const j = await (await fetch('/api/leakdetect')).json();
-    return { regime: j.regime, rel: j.reliability, hint: j.hint || '' };
-  });
-  T('充气中 regime=inflating', dyn.regime === 'inflating');
-  T('可靠性分级=low + 分布外提示', dyn.rel === 'low' && dyn.hint.includes('仅供参考'));
-  await p.evaluate(() => send('S 1'));
   await p.waitForTimeout(300);
 
   console.log('─ 功能：刷新恢复 ─');
@@ -269,7 +246,9 @@ function T(name, cond) {
     bal: !!document.getElementById('bal0'),
   }));
   T('刷新后布局完整(卡片/行/气球)', rl.cards === 5 && rl.rows === 4 && rl.bal);
-  T('全流程无 JS 错误', errs.length === 0);
+  /* /api/leakdetect 404 探测在 Chromium 记一条资源加载 console error——预期产物，不算 JS 错误 */
+  T('全流程无 JS 错误', errs.filter(e =>
+    !/^Failed to load resource: the server responded with a status of 404/.test(e)).length === 0);
 
   await p.evaluate(() => send('S 31'));
   console.log(`\n${fail ? '✗' : '✓'} 功能测试 ${pass}/${pass + fail}`);

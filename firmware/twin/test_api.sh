@@ -197,21 +197,11 @@ ok "A7 /api/leak reset 清零（leaks 全 0）" "$([ "$lks" = "0" ] && echo 1 ||
 ok "A8 /api/leak 非法参数回 {ok:false}" \
   "$(curl -s -m 2 -X POST "$BASE/api/leak" -d "9 1" | grep -c '"ok": *false')"
 
-# G. TinyML 泄漏检测（2026-09-23 部署：C 推理器=未来 ESP32 同码，一致性 21/21 对齐 TFLite）
-# A9：充压保压 → 无泄漏时检测=normal；A10：注入大泄漏 → 检测=leak_major；A11：契约字段
-reset0; cmd 'I 1 255'; sleep 3.0; cmd 'H 1'; sleep 4.5
-d0=$(curl -s -m 3 "$BASE/api/leakdetect")
-ok "A9 无泄漏检测=normal（conf≥0.8）" \
-  "$(grep -q '"name": *"normal"' <<<"$d0" && awk -v c="$(grep -o '"conf": *[0-9.]*' <<<"$d0" | grep -o '[0-9.]*$')" 'BEGIN{exit !(c>=0.8)}' && echo 1 || echo 0)"
-curl -s -m 2 -X POST "$BASE/api/leak" -d "0 0.5" >/dev/null
-sleep 4.0
-d1=$(curl -s -m 3 "$BASE/api/leakdetect")
-ok "A10 注入 k=0.5 检测=leak_major（conf≥0.9）" \
-  "$(grep -q '"name": *"leak_major"' <<<"$d1" && awk -v c="$(grep -o '"conf": *[0-9.]*' <<<"$d1" | grep -o '[0-9.]*$')" 'BEGIN{exit !(c>=0.9)}' && echo 1 || echo 0)"
-ok "A11 /api/leakdetect 契约（label/name/conf/samples 四字段，samples=80）" \
-  "$(n=$(for k in label name conf samples; do grep -c "\"$k\"" <<<"$d1"; done | grep -vc '^0'); [ "$n" = "4" ] && grep -q '"samples": *80' <<<"$d1" && echo 1 || echo 0)"
-curl -s -m 2 -X POST "$BASE/api/leak" -d "reset" >/dev/null
-# A12（CLI 'L' 输出断言）在 twin_selftest.c 里做——CLI stdout 不经 HTTP 返回（/api/cmd 只回 {ok}）
+# G. TinyML 泄漏检测已下线（spec §12，2026-10-02）：/api/leakdetect 端点删除，检测用例随之移除；
+#    验证下线 = GET /api/leakdetect 应 404
+ok "A9 /api/leakdetect 已下线（404）" \
+  "$( [ "$(curl -s -o /dev/null -w '%{http_code}' -m 3 "$BASE/api/leakdetect")" = "404" ] && echo 1 || echo 0)"
+# A10（CLI 'L' 输出断言）在 twin_selftest.c 里做——CLI stdout 不经 HTTP 返回（/api/cmd 只回 {ok}）
 
 clean
 echo ""

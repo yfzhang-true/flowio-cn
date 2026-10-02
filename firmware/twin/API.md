@@ -1,6 +1,6 @@
 # FlowIO-CN 数字孪生 — 前后端接口文档（API.md）
 
-> 版本：v1.1（2026-09-22 物理 v2.1：新增 `ports_p` 字段 + `H` 命令 + 泄漏语义修正；命令集与 `pn_core/cli.c` 逐条核对）
+> 版本：v1.2（2026-10-02：P1 板级孪生/仿真/时间/录制端点收录；TinyML 泄漏检测端点 `/api/leakdetect` 下线——spec §12）
 > 本文档是前后端开发的**唯一契约来源**。改接口必须同步改本文档（宪法第七章）。
 
 ## 0. 架构与端口
@@ -15,6 +15,7 @@ server.py（:8000 用户实例 / :8017 测试隔离实例）
 pn_twin.dll（pn_core 控制逻辑【与 ESP32 固件同一份代码】+ 物理 v2 + 泄漏注入）
 ```
 
+- 启动命令：`"E:/Program Files/KiCad/10.0/bin/python.exe" server.py`（KPY=KiCad 自带 Python，本机唯一装了 stdlib 之外无依赖需求的解释器；其余带 numpy 的环境亦可）
 - 基址：`http://127.0.0.1:8000`（用户）；测试一律用 `TWIN_PORT=8017` 起隔离实例
 - 全部接口无鉴权（本机开发工具，不暴露公网）
 
@@ -36,21 +37,10 @@ pn_twin.dll（pn_core 控制逻辑【与 ESP32 固件同一份代码】+ 物理 
   "ports_p": [29.7,0,0,0,0],   // 5 端口侧压力（物理 v2.1）：阀开=汇流管值，阀关=端口独立节点（含密封微漏缓降）
   "cl": "DONE",          // 闭环状态机：IDLE|RUNNING|DONE|TIMEOUT|ERR
   "err": 0,              // pn_last_error() 错误码（0=无错）
-  "leaks": [0.0,0.0,0.0,0.0,0.0,0.0,0.0],  // 7 维泄漏系数 0-1（TinyML 数据工厂）
-  "ml": 80               // TinyML 已缓存样本数 0..80（泄漏检测窗口就绪度，2026-09-23）
+  "leaks": [0.0,0.0,0.0,0.0,0.0,0.0,0.0],  // 7 维泄漏系数 0-1（/api/leak 开发工具状态回读）
+  "ml": 80               // TinyML 窗口样本数 0..80（泄漏检测已下线，字段保留=DLL 导出遗留）
 }
 ```
-
-### 1.2b `GET /api/leakdetect` — TinyML 泄漏检测（2026-09-23 部署）
-
-用最近 80 个汇流管样本（4s@20Hz）立即推理。**推理跑在 `components/pn_ml` 的纯 C int8
-推理器里——与未来 ESP32 固件同一份代码**（数值与 TFLite 一致性 21/21 对齐，Δp≤0.011）。
-
-**响应**：`{"label": 2, "name": "leak_major", "conf": 0.997, "samples": 80}`
-- label：0=normal / 1=leak_minor / 2=leak_major / **-1=样本未满**（上电需 4s 灌满窗口）
-- conf：softmax 置信度 0-1；samples：当前缓存样本数
-- 模型：18KB int8 1D-CNN（acc 95.7%，normal↔major 双向零漏报）；上电零点自校准后残差已入训练域
-- 语义前提：检测应在 `H` 诊断保压工况（或任何密封态）进行——充/放气进行中窗口斜率是泵/阀流量不是泄漏
 
 ### 1.3 `POST /api/cmd` — 执行 CLI 命令
 
@@ -68,14 +58,16 @@ curl -d 'G 7 30 0' http://127.0.0.1:8000/api/cmd
 超出 ±100 kPa 按传感器量程饱和（模拟真实 XGZP 行为）。
 **响应**：`{"ok": true}` / 非法体 `{"ok": false}`。
 
-### 1.5 `POST /api/leak` — 泄漏注入（TinyML 数据工厂，仿真专属）
+### 1.5 `POST /api/leak` — 泄漏注入（仿真专属）
+
+> 开发调试工具（物理故障注入），非产品功能。
 
 **请求体**：`"<idx> <k>"`——idx 0-4=端口阀、5=进气阀、6=排气阀；k∈[0,1]；`reset` 清零全部。
 **响应**：`{"ok": true}` / 非法参数 `{"ok": false}`。
 泄漏语义（**物理 v2.1 修正**，`twin_api.c`）：
 - 端口泄漏（0-4）作用于**端口侧节点**：阀开时对汇流管可见（下游连通）；**阀关时汇流管传感器不可见**（隔离容积独立衰减，读 `ports_p` 可见）；
 - 进气阀泄漏（5）在阀关时半幅作用于汇流管；排气阀泄漏（6）在阀关时全幅作用于汇流管；
-- **泄漏检测的正确工况 = `H` 诊断保压**（泵侧密封+端口保持通），不是 `S` 隔离保压。
+- **汇流管侧可见的正确工况 = `H` 诊断保压**（泵侧密封+端口保持通），不是 `S` 隔离保压。
 
 ### 1.6 `POST /api/reset` — 虚拟断电
 
@@ -111,7 +103,7 @@ curl -d 'G 7 30 0' http://127.0.0.1:8000/api/cmd
 | `F` | — | 硬件自检（传感器检测+阀咔哒+汇流管 ΔP） | `[ST] ...` 多行 |
 | `P` | — | 读全部传感器 | `sensor0=29.75 kPa` |
 | `T` | — | 查询状态字与错误码 | `state=0x0200 err=0` |
-| `L` | — | **TinyML 泄漏检测**（最近 80 样本立即推理；样本未满报进度） | `leak=normal conf=0.98` / `leak=detecting samples=37/80` |
+| `L` | — | TinyML 泄漏检测（CLI 层保留=开发工具；Web 端点已随 spec §12 下线） | `leak=normal conf=0.98` / `leak=detecting samples=37/80` |
 
 未识别命令回 `?`。端口掩码：`1`=仅 PORT1，`7`=PORT1-3，`31`=全部五口。
 
@@ -132,3 +124,57 @@ curl -d 'G 7 30 0' http://127.0.0.1:8000/api/cmd
 - 三层测试 110 项全绿（静态 1 + 接口 45 + 单元 28 + 功能 37），含闭环专项：`G 7 40 0` → RUNNING→DONE、终值 40.14kPa（40±3 达标）、自动关阀停泵；GUI 层 ◎闭环按钮 → DONE、停在 60±4kPa。复跑：`bash run_tests.sh`。
 - 实时收敛演示（2026-09-22，:8018 临时实例）：`G 7 30 0` → 0.5s/3.71 → 1.0s/9.30 → 1.5s/15.17 → 2.0s/25.48 → **2.5s/30.05=DONE 泵停** → 之后密封微漏 ~-0.5kPa/s 缓降（物理真实）。
 - 整固件层（QEMU esp32s3）：同一 CLI 命令集在真实固件镜像上响应一致（`bash firmware/qemu_smoke.sh`，7/7）。
+
+## 6. v1.2 端点（P1 板级孪生 S1/S2，2026-10-02 收录）
+
+> 启动命令（KPY）：`"E:/Program Files/KiCad/10.0/bin/python.exe" server.py`（§0 已同步）。
+
+### 6.1 `GET /api/board/state[?since=<秒>]` — 板级电气遥测
+- 方法：GET；无请求体。
+- 响应：`{"api":"1.2", "rail_5v":{v,load_a,...}, "rail_3v3":{v,load_a}, ..., "history":{t,v5,v33,load,vi}}`（600s 四+一通道环形历史，0.05s 步长）。
+- `?since=<秒>`：截取 `t>=since` 的历史尾部（增量拉取）；非法值忽略返回全量。
+- 错误码：无（恒 200）。
+
+### 6.2 `POST /api/board/sim` — 参数化电路仿真重算
+- 方法：POST；请求体 JSON `{"circuit":"buck|dior|valve|i2c","params":{"iload":2.0}}`（可空对象=全默认）。
+- 响应：`{circuit, params, metrics:[{name,value,unit,verdict}], waves:[{name,t,y,unit}], notes:[str], api}`。
+- 错误码：400（未知电路/参数/超域，body `{"error":"..."}`）；504（仿真 >3s 超时保护）。
+
+### 6.3 `GET /api/board/sim/presets` — 仿真参数域表
+- 方法：GET；无请求体。
+- 响应：`{"api":"1.2","presets":{circuit:{"default":{...},"bounds":{参数:[lo,hi]}}}}`——前端动态表单数据源。
+
+### 6.4 `GET /api/board/assembly` — 3D 装配描述
+- 方法：GET；无请求体。
+- 响应：`meshes/assembly.json` 原样 + `api` 字段（部件 STL 引用相对 `/meshes/`）。
+- 错误码：404（meshes 未生成——跑 `enclosure/make_meshes.py`）；500（JSON 解析失败）。
+
+### 6.5 `GET /api/board/history/export` — 历史 CSV 导出
+- 方法：GET；无请求体。
+- 响应：`text/csv`，首行表头 `t_s,rail5v_v,rail3v3_v,load_a`，之后 600s 环形历史逐行。
+- 错误码：无（恒 200）。
+
+### 6.6 `POST /api/time` — 时间控制（暂停/倍速/单步）
+- 方法：POST；请求体 JSON `{"paused":bool,"speed":0.25..4.0,"step_once":bool}`（字段均可选、可组合）。
+- 响应：`{"api":"1.2","paused":..,"speed":..,"step_once":..}`（回显生效值；speed 域外钳到 [0.25,4]）。
+- 错误码：无（非法值静默忽略，恒 200）。
+
+### 6.7 `POST /api/record` — 命令录制起停
+- 方法：POST；请求体 JSON `{"action":"start|stop"}`。
+- 响应：`{"api":"1.2","recording":bool,"n":已录条数}`；stop 时写 `recordings/rec_HHMMSS.json`（墙钟时间戳+命令串数组）。
+- 错误码：无（恒 200）。
+
+### 6.8 `POST /api/record/replay` — 命令回放
+- 方法：POST；请求体 JSON `{"events":[{"t":..,"cmd":"I 1 255"},...]}`（录制文件原样可喂）。
+- 响应：`{"api":"1.2","replayed":实际执行条数}`（非 dict/无 cmd 字段的项跳过；时间轴由调用方掌握）。
+- 错误码：无（恒 200）。
+
+### 6.9 `GET /lib/*.js` — 前端第三方库静态资源
+- 方法：GET；无请求体。
+- 响应：`application/javascript`——echarts.min.js / three.min.js / OrbitControls.js / STLLoader.js（本地 vendor，离线可用）。
+- 错误码：404（文件不存在/路径穿越，仅 `[A-Za-z0-9_.-]+.js` 白名单）。
+
+### 6.10 `GET /meshes/*.stl` — 3D 网格静态资源
+- 方法：GET；无请求体。
+- 响应：`model/stl`——pcb.stl / case_top.stl / case_bottom.stl / parts_f.stl / parts_b.stl。
+- 错误码：404（不存在/非法路径，仅 `[A-Za-z0-9_.]+` 且 `.stl` 后缀白名单）。

@@ -18,7 +18,7 @@ node_modules/
 Thumbs.db
 Desktop.ini
 .DS_Store
-firmware/twin/dataset/edgeimpulse/
-firmware/twin/dataset/
+# TinyML 数据集（306M，随泄漏检测下线移入 deprecated/ml-leak/，本地保留即可）
+firmware/twin/deprecated/ml-leak/dataset/
 firmware/twin/dataset_old58/
 flower-pet/
