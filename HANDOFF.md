@@ -183,3 +183,9 @@ state api=1.2 且全 payload 无 leak 字样；assembly parts=5、bbox_mm=[95.8,
 2. **R/S CLI 语义注记**（固件实证，前端已对齐）：`S <ports>` 确定性关阀（隔离密封）；`R` 释放但不清 duty——UI「释」段映射 `S` 而非 `R`，测试用例避免依赖 R。
 3. **classic 退线决策待定**：`/classic`（gui.html+旧三套测试）保留为过渡；退线需先迁移 P1 面板独有的调试入口（泄漏注入/物理注入/scheduler 编排）再定时间表。
 4. 遥测抽屉默认收起、热点卡 live 值满量程横条为 spec §2/§5 语义；fps 受 headless vsync 钳制 ~57，真机浏览器更高。
+
+## 书稿启动（2026-10-02）
+- `book/`：ElegantBook v4.7 模板（CTAN 开源）+ main.tex + content/ch11-acceptance.tex（验收章先行，与产品验收同步产出图源）+ figures/（v2 验收截图 4 张已入）
+- 编译：MiKTeX xelatex，`cd book && xelatex -output-directory=build main.tex` 两遍，main.pdf 已出
+- 计划：章 11（验收）随回板验收同步写；其余章按 12 章骨架（见 2026-10-02 会话）待用户重启指令
+- JLC 下单策略更新：板 5 片（制板最低）+ **贴装仅 2 片**（主力+备用），费用 ≈360-720 元（README-jlc-order.md 已改）
