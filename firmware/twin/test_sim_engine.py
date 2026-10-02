@@ -22,8 +22,10 @@ def test_param_bounds():
 
 def test_dior_valve_i2c_smoke():
     assert se.run("dior", {})["metrics"]
-    r = se.run("valve", {"pwm_hz": 20}); assert 0 < r["metrics"][0]["value"] < 0.5
+    r = se.run("valve", {"pwm_hz": 20}); assert abs(r["metrics"][0]["value"] - 0.356) < 0.02
     r = se.run("i2c", {"rp_k": 2.2}); assert r["metrics"][0]["value"] < 2e-6
+    # tr 精确锚点 (µs): 2.2·RC = 2.2×2.2k×115pF = 0.557µs; value 为 SI 秒, ×1e6 换算后比较
+    assert abs(r["metrics"][0]["value"] * 1e6 - 2.2 * 2.2e3 * 115e-12 * 1e6) < 0.05
 
 
 if __name__ == "__main__":
