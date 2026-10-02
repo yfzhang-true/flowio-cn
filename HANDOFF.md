@@ -82,3 +82,58 @@ T0 冒烟(补 scipy/shapely/rust grid_router v0.22+v10 补丁) → T1 全层修�
   (a) spec/plan 是否批准执行；(b) papers/ 是否已放文献（Task 3b 按需）；
   (c) 是否先用 aminer MCP 补一轮文献检索（用户此前明确要求过用 aminer）。
 ```
+
+---
+
+## P1 板级孪生五支柱（2026-10-02 交付）
+
+spec/plan：`docs/superpowers/specs/2026-10-02-p1-board-twin-design.md` + `docs/superpowers/plans/2026-10-02-p1-board-twin.md`。五支柱 S1 参数化仿真引擎 / S2 板级电气孪生 / S3 结构网格 / S4 固件+SDK / S5 BLE，API 升 v1.2。
+
+### 10 任务 SHA 表
+
+| 任务 | 内容 | 提交（含随后审查修正） |
+|---|---|---|
+| T1 S1 sim_engine 参数化 | 四电路纯函数+参数域校验 | `1f968cf`（+`58e5010` valve/i2c 锚点断言加固） |
+| T2 S2 board_model | RL 解析式/双轨/温升/600s 历史 | `5faf5dc`（+`a567e59` 关断续流物理与 sim_engine 同源修正） |
+| T3 server.py v1.2 | board/state+sim/presets/assembly/csv + time/record/replay | `1ca000e`（+`eae4fe6` 审查三修：竞态锁/分数倍速累加器/历史节流） |
+| T4 S3 网格 | pcb/器件阵/壳 STL + assembly.json | `fbeb71f`（+`980fb23` 字段对齐 spec §3.4） |
+| T5 S4 固件 | TCA9548A+sensor_if+WS2812（pn_core 纯逻辑+hal 绑定） | `8ae9c20`（+`1416137` tca I2C 超时单位 ms 修正） |
+| T6 S4 SDK | flowio_sdk（proto 同向量编解码+serial+高层 API） | `f631bff` |
+| T7 S5 BLE | NimBLE GATT 四服务+cmd_transport 统一分发+BLE.md | `fd71c83` |
+| T8 前端 | gui.html「P1 板级」遥测/仿真重算/3D 爆炸+Web BLE+three.js vendor | `c11650b` |
+| T9 文档+下线 | API v1.2/BLE.md/BRINGUP 回板动线；TinyML 泄漏检测下线归档 | `22b664d` |
+| T10 终验+收尾 | 双源漂移修正+全测试矩阵+目视复核+本 HANDOFF | 本次终验提交（board_model.py + test_api_board.sh + 本文件） |
+
+### 测试矩阵（2026-10-02 终验实测，全绿）
+
+| 套件 | 结果 |
+|---|---|
+| `test_sim_engine.py`（KPY） | OK（3 用例：buck 锚点/参数域/dior+valve+i2c 冒烟） |
+| `test_board_model.py`（KPY） | OK（1 用例多断言：状态/电流/负载/关断钳位） |
+| `bash test_api_board.sh` | 7/7（state/sim/bounds/time/csv/**assembly**/record；assembly 断言由过期 404 改为 200+parts=5） |
+| `bash test_api.sh` | 50/50（协议契约+物理语义+量程饱和+气动 v2 A1-A9） |
+| `firmware/tests pn_tests.exe` | 33/33 |
+| `sdk/python/tests/test_protocol.py`（KPY） | 9/9 OK |
+| `node test_gui.js` | 28/28（气动台前端单元） |
+| `node test_gui_p1.js` | 40/40（P1 遥测/仿真/结构/BLE 纯逻辑） |
+| `node check.js gui.html` | OK（2 脚本块/34 处理函数/语法 0 错） |
+
+显式计数合计 171 用例 + 静态冒烟。node 侧前置：8017 端口隔离实例（`TWIN_PORT=8017 KPY server.py`）+ `node_modules/playwright-core`（已 vendor）。
+
+### 终验双源漂移修正（board_model.py，审查 Minor 中唯一真隐患）
+
+- `rail_3v3.v`：3.269（误用标称）→ **3.2638**（`vout3v3 − load_reg×LOGIC_A`，与 step()/history v33 同式同值），另加 `v_nom: 3.269` 字段保留标称。
+- `ripple_mv`：3.1（硬编码）→ **1.0**，与 sim_engine buck 默认工况实测一致（@3A 实测 1.004 mVpp）。
+- 同步修 `test_api_board.sh` 过期断言（assembly 404→200）。
+
+### 终验目视复核（手动集成，KPY server.py :8000）
+
+state api=1.2 且全 payload 无 leak 字样；assembly parts=5、bbox_mm=[95.8,80.8,19]；POST sim buck 默认 metrics 4 项全 ✓（3.269V/1.004mVpp/0.272App/87.59%）、waves=2（Vout/iL）；time paused true→false；录制 start→`I 1 255`→stop（n=1）→`recordings/rec_*.json` 落盘→replay `replayed:1` 且回放后 valves[0]=255/pump=255；`shots/p1_telemetry.png`(109KB)/`p1_sim.png`(87KB)/`p1_structure.png`(43KB) 三张非零。复核毕服务进程已杀、8000/8017 端口已清。
+
+### 遗留路线图（记档，非本期缺陷）
+
+1. **范围外路线图**（spec §11.4 重申）：OTA 升级、Web API 多设备同步、SDK BLE 传输（`sdk/python ble.py`+bleak）、真机-孪生 HIL 对拍、治疗报表产品化。
+2. `firmware/virtual/`：合并 subtree 时即预存损坏（陈旧 build/），本期未修，保持原样——如需虚拟设备调试入口先重建其 build。
+3. `firmware/build_n16r8.cmd`：曾出现 CRLF 行尾问题，已由根 `.gitattributes`（`* text=auto eol=lf`）统一修正并防复发；后续新增 Windows 批处理注意提交前归一。
+4. T1-T3 审查记档 Minor（未修，均为展示层/无控制风险）：telemetry `loss_mw` 四项损耗为 buck @3A 满载常量快照（706/162/436/85mW），不随实际 0.43A 负载重算；`r_coil/l_coil/i_pump` 为 [假设] 参数待回板标定（BRINGUP 六项校准后转绿）；board state 的 `ml:80` 字段保留属 DLL 导出遗留（API.md 已注记）。
+5. 回板实测对照清单见 §1 待完成第 3 条（效率 87.6%/纹波 ~1mV/阶跃 199mV；注：纹波对照值随本次修正由 3mV 更正为 ~1mV）。

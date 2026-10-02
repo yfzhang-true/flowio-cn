@@ -123,6 +123,7 @@ class BoardModel:
         p = BOARD_PARAMS
         load5 = sum(i) + p["i_pump"] * pump + LOGIC_A
         v5 = p["vbus"] - (p["vf_ss34"] + p["r_ss34"] * load5)
+        v33 = p["vout3v3"] - p["load_reg"] * LOGIC_A   # 与 step() history v33 同式
         r_loop = p["r_coil"] + p["rds"]
         valves = [{"on": x > 0.01,
                    "i_A": round(x, 3),
@@ -138,8 +139,12 @@ class BoardModel:
             "valves": valves,
             "rail_5v": {"v": round(v5, 4), "load_a": round(load5, 4),
                         "p_w": round(v5 * load5, 3)},
-            "rail_3v3": {"v": p["vout3v3"], "load_a": LOGIC_A,
-                         "ripple_mv": 3.1, "buck_eff": BUCK_EFF,
+            # v 与 step()/history 的 v33 同式同值 (vout3v3 - load_reg*LOGIC_A),
+            # 消除 telemetry 3.269 vs history 3.2638 的双源漂移; v_nom 保留标称。
+            "rail_3v3": {"v": round(v33, 4), "v_nom": p["vout3v3"],
+                         "load_a": LOGIC_A,
+                         "ripple_mv": 1.0,  # 与 sim_engine buck 默认工况实测一致（@3A）
+                         "buck_eff": BUCK_EFF,
                          "loss_mw": {"sw": 706, "dcr": 162, "diode": 436,
                                      "switching": 85}},
             "board_p_w": round(v5 * load5, 3),
