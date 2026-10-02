@@ -8,7 +8,7 @@ v1.2 新增 (S1/S2 孪生平台扩展):
   GET  /api/board/sim/presets         仿真参数域表 (前端动态表单)
   GET  /api/board/assembly            3D 装配 (meshes/assembly.json)
   GET  /api/board/history/export      历史四通道 CSV 导出
-  GET  /lib/three.min.js /meshes/*.stl  静态资源 (three.js 3D 视图)
+  GET  /lib/*.js /meshes/*.stl        静态资源 (echarts / three.min / OrbitControls / STLLoader)
   POST /api/board/sim                 参数化电路仿真重算 (buck/dior/valve/i2c)
   POST /api/time                      时间控制 (暂停/倍速/单步)
   POST /api/record | /api/record/replay  命令录制与回放
@@ -121,12 +121,14 @@ class Handler(BaseHTTPRequestHandler):
         elif path == "/lib/echarts.min.js":
             self._send(200, (ROOT / "lib" / "echarts.min.js").read_bytes(),
                        "application/javascript; charset=utf-8")
-        elif path == "/lib/three.min.js":
-            f = ROOT / "lib" / "three.min.js"
-            if f.exists():
-                self._send(200, f.read_bytes(), "application/javascript; charset=utf-8")
+        elif path.startswith("/lib/"):
+            # 通用库路由: echarts / three.min / OrbitControls / STLLoader (防穿越: 白名单字符)
+            name = path[len("/lib/"):]
+            f = ROOT / "lib" / name
+            if not re.fullmatch(r"[A-Za-z0-9_.-]+\.js", name) or not f.exists():
+                self._err(404, f"lib 文件不存在: {name}")
             else:
-                self._err(404, "three.min.js 未就绪 (放至 twin/lib/)")
+                self._send(200, f.read_bytes(), "application/javascript; charset=utf-8")
 
         # ------------------------------------------------ v1.2 板级电气孪生
         elif path == "/api/board/state":

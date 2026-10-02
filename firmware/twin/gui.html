@@ -3,9 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>FlowIO-CN P0 · 数字孪生控制台</title>
+<title>FlowIO-CN · 数字孪生控制台（气动台 | P1 板级）</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='%23161b22' stroke='%2358a6ff'/%3E%3Cpath d='M8 8 L8 3 A5 5 0 0 1 12 5 Z' fill='%237ee0ff'/%3E%3C/svg%3E">
 <script src="/lib/echarts.min.js"></script>
+<script src="/lib/three.min.js"></script>
+<script src="/lib/OrbitControls.js"></script>
+<script src="/lib/STLLoader.js"></script>
 <style>
 :root{
   --bg:#0d1117; --card:#161b22; --line:#30363d; --fg:#e6edf3; --dim:#8b949e;
@@ -114,6 +117,55 @@ input[type=range]{padding:0;accent-color:var(--accent)}
   padding:8px;font-family:Consolas,monospace;font-size:11px;color:#7ee787;line-height:1.55}
 #devlog .warn{color:var(--err)}
 #devlog .cmd{color:#79c0ff}
+
+/* ═══ 顶层标签栏（气动台 | P1 板级） ═══ */
+.tabbar{display:flex;gap:6px;padding:10px 16px 0;background:#161b22;border-bottom:1px solid var(--line)}
+.tabbtn{background:#161b22;border:1px solid var(--line);border-bottom:none;border-radius:8px 8px 0 0;
+  padding:8px 22px;font-size:13px;color:var(--dim)}
+.tabbtn:hover{color:var(--fg);border-color:var(--accent)}
+.tabbtn.sel{background:var(--bg);color:var(--accent);font-weight:700;border-color:var(--accent)}
+
+/* ═══ P1 板级面板 ═══ */
+.p1sub{display:flex;gap:6px;padding:10px 16px 0}
+.p1sub .tabbtn.sel{background:var(--card)}
+#p1_tabp1{padding:12px}
+.p1grid{display:grid;grid-template-columns:minmax(430px,1.25fr) minmax(320px,1fr);gap:12px;align-items:start}
+#p1_histchart{width:100%;height:240px}
+.p1calbadge{position:absolute;top:10px;right:12px;padding:3px 10px;border-radius:10px;
+  background:#3a2d00;border:1px solid #6b5300;color:#e3b341;font-size:11px;white-space:nowrap}
+.p1stale{display:none;padding:3px 10px;border-radius:10px;background:#3d1418;border:1px solid #a03030;
+  color:var(--err);font-size:11px;font-weight:700}
+.ptbox{fill:#10161d;stroke:#546e7a;stroke-width:1.5;rx:6}
+.ptlbl{fill:#8b949e;font-size:10px}
+.ptval{fill:#58a6ff;font-size:12px;font-family:Consolas,monospace;font-weight:600}
+.ptvalG{fill:#3fb950;font-size:12px;font-family:Consolas,monospace;font-weight:600}
+.vbar{margin:5px 0}
+.vbar .vl{display:flex;justify-content:space-between;font-size:11px;color:var(--dim);margin-bottom:2px}
+.vbar .vl b{color:var(--fg);font-family:Consolas,monospace;font-weight:400}
+.vbar .tr{height:10px;background:#0a0e14;border:1px solid var(--line);border-radius:5px;overflow:hidden}
+.vbar .fl{height:100%;width:0;background:linear-gradient(90deg,#1a5c2e,#3fb950);transition:width .25s}
+.p1err{margin-top:8px;padding:7px 10px;border-radius:6px;background:#3d1418;border:1px solid #a03030;
+  color:var(--err);font-size:12px}
+.p1simcards{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.p1simcard{border:1px solid var(--line);border-radius:8px;padding:10px;cursor:pointer;transition:.15s;background:#0d1117}
+.p1simcard:hover{border-color:var(--accent)}
+.p1simcard.sel{border-color:var(--accent);box-shadow:0 0 8px rgba(88,166,255,.25)}
+.p1simcard .t{font-weight:700;font-size:13px}
+.p1simcard .d{color:var(--dim);font-size:11px;margin-top:3px}
+.p1simgrid{display:grid;grid-template-columns:minmax(260px,.75fr) minmax(420px,1.5fr);gap:12px;align-items:start}
+.p1simform label{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:6px 0;font-size:12px}
+.p1simform label span{color:var(--dim)}
+.p1simform input{width:110px;font-family:Consolas,monospace}
+#p1_simmets{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px}
+#p1_simmets th{color:var(--dim);font-weight:400;text-align:left;padding:3px 6px;border-bottom:1px solid var(--line)}
+#p1_simmets td{padding:4px 6px;border-bottom:1px solid #21262d}
+#p1_simmets td.v{font-family:Consolas,monospace;color:var(--accent)}
+#p1_simmets .ok{color:var(--ok)}
+#p1_simmets .warn{color:#e3b341}
+#p1_simnotes div{margin-top:4px}
+#p1_c3d{width:100%;height:480px;display:block;background:#0a0e14;border:1px solid var(--line);border-radius:8px;touch-action:none}
+#p1_3dhint{margin-left:12px;font-family:Consolas,monospace;color:var(--cyan);min-height:16px}
+#p1_3dfail{margin-top:10px;color:#e3b341;font-size:12px}
 </style>
 </head>
 <body>
@@ -123,6 +175,8 @@ input[type=range]{padding:0;accent-color:var(--accent)}
   <span class="badge">state=<b id="tbstate" style="font-family:Consolas">0x0000</b></span>
   <span class="badge">闭环 <b id="tbcl">IDLE</b></span>
   <span class="badge"><span class="dot" id="errdot"></span><span id="tberr">无错误</span></span>
+  <span class="badge" id="p1_modeBadge" title="命令与状态来源：孪生=本地 HTTP API；真机=Web Bluetooth 直连 ESP32">模式 孪生(HTTP)</span>
+  <button id="p1_bleBtn" onclick="p1_bleToggle()" title="Web Bluetooth 连接 FLOWIO-P1 真机">⏺ 连接真机(BLE)</button>
   <span class="badge" id="tbclk" style="margin-left:auto;font-family:Consolas">--:--:--</span>
 </header>
 
@@ -132,7 +186,12 @@ input[type=range]{padding:0;accent-color:var(--accent)}
   <button onclick="vmReset()" style="margin-left:12px;background:#5c1a1a;border-color:#a03030">⟳ 虚拟断电重启</button>
 </div>
 
-<div class="layout">
+<nav class="tabbar">
+  <button class="tabbtn sel" id="p1_tabbtnPneu" onclick="p1_switchTab('pneu')">气动台</button>
+  <button class="tabbtn" id="p1_tabbtnP1" onclick="p1_switchTab('p1')">P1 板级</button>
+</nav>
+
+<div class="layout" id="p1_tabpneu">
 
   <!-- ═══════════ 左栏：气路示意 + 全局控制 + 端口卡片 ═══════════ -->
   <section>
@@ -324,6 +383,155 @@ input[type=range]{padding:0;accent-color:var(--accent)}
   </section>
 </div>
 
+<!-- ═══════════════════════ P1 板级标签页（遥测/仿真/结构） ═══════════════════════ -->
+<div id="p1_tabp1" style="display:none">
+
+  <div class="p1sub">
+    <button class="tabbtn sel" id="p1_subbtntel" onclick="p1_switchSub('tel')">遥测</button>
+    <button class="tabbtn" id="p1_subbtnsim" onclick="p1_switchSub('sim')">仿真</button>
+    <button class="tabbtn" id="p1_subbtn3d" onclick="p1_switchSub('3d')">结构</button>
+  </div>
+
+  <!-- ── 子面板 1：板级遥测 ── -->
+  <div id="p1_panetel">
+    <div class="p1grid">
+      <section>
+        <div class="card" style="position:relative">
+          <span class="p1calbadge">模型参数：理论值（未本机标定）</span>
+          <h3 style="padding-right:210px">电源树（实时）</h3>
+          <svg id="p1ptree" viewBox="0 0 560 170" width="100%" xmlns="http://www.w3.org/2000/svg">
+            <!-- 源：USB-C / DC 座 → SS34×2 二极管或 -->
+            <text class="ptlbl" x="18" y="26">USB-C 5V / DC 座</text>
+            <rect class="ptbox" x="20" y="38" width="108" height="40"/>
+            <text class="ptval" x="74" y="55" text-anchor="middle">双源输入</text>
+            <text class="ptlbl" x="74" y="70" text-anchor="middle">DC005 + USB-C</text>
+            <line x1="128" y1="58" x2="176" y2="58" stroke="#546e7a" stroke-width="3"/>
+            <!-- SS34 ×2 -->
+            <rect class="ptbox" x="178" y="38" width="96" height="40"/>
+            <text class="ptval" x="226" y="55" text-anchor="middle">SS34 ×2</text>
+            <text class="ptlbl" x="226" y="70" text-anchor="middle">二极管-或</text>
+            <line x1="274" y1="58" x2="322" y2="58" stroke="#546e7a" stroke-width="3"/>
+            <!-- 5V 轨 -->
+            <rect class="ptbox" x="324" y="34" width="118" height="48" stroke="#2ea043"/>
+            <text class="ptlbl" x="383" y="50" text-anchor="middle">5V 轨</text>
+            <text class="ptval" x="383" y="66" text-anchor="middle" id="p1_ptV5">-.--- V</text>
+            <text class="ptvalG" x="383" y="79" text-anchor="middle" id="p1_ptI5">-.-.- A</text>
+            <line x1="442" y1="58" x2="486" y2="58" stroke="#546e7a" stroke-width="3"/>
+            <!-- buck → 3V3 -->
+            <rect class="ptbox" x="488" y="34" width="62" height="48" stroke="#8b5cf6"/>
+            <text class="ptlbl" x="519" y="50" text-anchor="middle">buck</text>
+            <text class="ptlbl" x="519" y="63" text-anchor="middle">TPS54331</text>
+            <text class="ptvalG" x="519" y="77" text-anchor="middle" id="p1_ptEff">--%</text>
+            <rect class="ptbox" x="488" y="100" width="62" height="40" stroke="#8b5cf6"/>
+            <text class="ptlbl" x="519" y="115" text-anchor="middle">3.3V 轨</text>
+            <text class="ptval" x="519" y="131" text-anchor="middle" id="p1_ptV33">-.--- V</text>
+            <path d="M519,82 L519,100" stroke="#546e7a" stroke-width="3" fill="none"/>
+            <!-- 5V 轨负载 -->
+            <rect class="ptbox" x="324" y="100" width="118" height="40"/>
+            <text class="ptlbl" x="383" y="115" text-anchor="middle">8×阀线圈 + 泵</text>
+            <text class="ptval" x="383" y="131" text-anchor="middle" id="p1_ptP5">-.-- W</text>
+            <path d="M383,82 L383,100" stroke="#546e7a" stroke-width="3" fill="none"/>
+            <!-- 温度区 -->
+            <rect class="ptbox" x="20" y="100" width="278" height="52" stroke="#21262d"/>
+            <text class="ptlbl" x="34" y="118">结温估计</text>
+            <text class="ptval" x="34" y="138">CPU <tspan id="p1_tcpu">--</tspan> ℃ · buck <tspan id="p1_tbuck">--</tspan> ℃ · MOS <tspan id="p1_tmos">--</tspan> ℃</text>
+          </svg>
+          <div class="row" style="margin-top:4px">
+            <span class="badge" style="font-family:Consolas">uptime <b id="p1_uptime">--</b> s</span>
+            <span class="badge" style="font-family:Consolas">tick <b id="p1_tick">--</b></span>
+            <span class="badge" id="p1_blenote" style="display:none;border-color:#8b5cf6;color:#c4b5fd">真机(BLE)模式：板级孪生轮询已暂停</span>
+            <span class="p1stale" id="p1_stale">⚠ 遥测冻结</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>双轨历史（60s 滚动 · 左轴 5V 电压 / 右轴 负载电流）</h3>
+          <div id="p1_histchart"></div>
+          <div class="row">
+            <a href="/api/board/history/export" download="flowio_p1_history.csv"
+               style="color:var(--accent);font-size:12px">⬇ 导出历史 CSV（600s 四通道）</a>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="card">
+          <h3>8 阀线圈电流（横向条 = i / 0.40A 满量程）</h3>
+          <div id="p1_valves"></div>
+        </div>
+
+        <div class="card">
+          <h3>时间控制（孪生时间基）</h3>
+          <div class="row">
+            <button id="p1_pauseBtn" onclick="p1_timePause()">⏸ 暂停</button>
+            <button id="p1_stepBtn" onclick="p1_timePost({step_once:true})">⏭ 单步</button>
+            <span style="color:var(--dim)">倍速</span>
+            <input type="range" id="p1_speedI" min="0.25" max="4" step="0.25" value="1" style="flex:1"
+                   onchange="p1_timePost({speed:+this.value})">
+            <b id="p1_speedV" style="color:var(--accent);font-family:Consolas;min-width:44px">×1.00</b>
+          </div>
+          <div class="hint">暂停后可用"单步"逐 tick 推进物理与板级模型；倍速同时作用于 DLL 与板级（时间基严格一致）。</div>
+        </div>
+
+        <div class="card">
+          <h3>命令录制 / 回放</h3>
+          <div class="row">
+            <button id="p1_recBtn" onclick="p1_recToggle()" style="background:#1a5c2e;border-color:#2ea043">⏺ 录制</button>
+            <button id="p1_replayBtn" onclick="p1_recReplay()" style="display:none">▶ 回放 <span id="p1_recN">0</span> 条</button>
+            <span id="p1_recState" style="color:var(--dim);font-size:11px">未录制</span>
+          </div>
+          <div class="hint">录制期间经本页面发出的全部 CLI 命令（含 Scheduler 序列）按墙钟时间戳镜像到浏览器与 recordings/ 两份；回放即重发。</div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- ── 子面板 2：电路仿真重算 ── -->
+  <div id="p1_panesim" style="display:none">
+    <div class="card">
+      <div class="p1simcards" id="p1_simcards"></div>
+    </div>
+    <div class="p1simgrid">
+      <section>
+        <div class="card">
+          <h3>参数（域约束来自 /api/board/sim/presets）</h3>
+          <div class="p1simform" id="p1_simform"></div>
+          <button id="p1_simRunBtn" onclick="p1_simRun()" style="margin-top:10px;width:100%">⟳ 重算</button>
+          <div class="p1err" id="p1_simerr" style="display:none"></div>
+        </div>
+      </section>
+      <section>
+        <div class="card">
+          <h3>波形与指标</h3>
+          <div id="p1_simchart" style="width:100%;height:300px"></div>
+          <table id="p1_simmets">
+            <thead><tr><th>指标</th><th>数值</th><th>判定</th></tr></thead>
+            <tbody></tbody>
+          </table>
+          <div class="hint" id="p1_simnotes"></div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- ── 子面板 3：3D 结构 ── -->
+  <div id="p1_pane3d" style="display:none">
+    <div class="card">
+      <div class="row">
+        <span style="color:var(--dim)">爆炸</span>
+        <input type="range" id="p1_explodeI" min="0" max="1" step="0.01" value="0" style="flex:1"
+               oninput="p1_explodeSet(+this.value)">
+        <b id="p1_explodeV" style="color:var(--accent);font-family:Consolas;min-width:36px">0%</b>
+        <button id="p1_play3dBtn" onclick="p1_3dPlay()">▶ 爆炸往返 (2s)</button>
+        <span id="p1_3dhint"></span>
+      </div>
+      <canvas id="p1_c3d"></canvas>
+      <div id="p1_3dfail" style="display:none"></div>
+      <div class="hint" id="p1_3dnote">拖拽旋转 · 滚轮缩放 · 右键平移 · 悬停部件高亮（左下显示名称）</div>
+    </div>
+  </div>
+</div>
+
 <script>
 'use strict';
 /* ═══════════════════════════════════════════════════════════
@@ -338,6 +546,12 @@ let S = { state: 0, valves: [0, 0, 0, 0, 0, 0, 0], pump: 0, sensors: [0, 0], cl:
 let mask = 7;                       /* 选中端口掩码，默认端口 1-3 */
 let prevCl = 'IDLE', prevErr = 0, connWarned = false;
 
+/* ── P1 跨 script 块共享状态（var 在此声明：send()/poll() 的门控在页面加载即同步执行，
+      而 P1 功能块在其后；真机 BLE 连接句柄 + 命令录制客户端镜像） ── */
+var p1_ble = { device: null, server: null, chCmd: null, chResp: null, chState: null, active: false };
+var p1_recording = false;
+var p1_recEvents = [];
+
 /* ═══ 日志（最新在上） ═══ */
 function dlog(msg, cls) {
   const box = $('devlog');
@@ -348,8 +562,19 @@ function dlog(msg, cls) {
   while (box.childElementCount > 200) box.removeChild(box.lastChild);
 }
 
-/* ═══ 命令发送 ═══ */
+/* ═══ 命令发送（孪生=HTTP /api/cmd；真机=BLE cmd 特征 ASCII 行，pn_cmd_feed 同入口） ═══ */
 async function send(line) {
+  if (typeof p1_recording !== 'undefined' && p1_recording)          /* 客户端镜像（回放用） */
+    p1_recEvents.push({ t: Date.now() / 1000, cmd: line });
+  if (p1_ble.active && p1_ble.chCmd) {
+    try {
+      await p1_ble.chCmd.writeValue(new TextEncoder().encode(line + '\n'));
+      dlog('▶ BLE ' + line, 'cmd');
+    } catch (e) {
+      dlog('✗ BLE 写失败 [' + line + '] ' + e.message, 'warn');
+    }
+    return;
+  }
   try {
     const r = await fetch('/api/cmd', { method: 'POST', body: line });
     if (!r.ok) throw new Error('HTTP ' + r.status);
@@ -370,11 +595,11 @@ async function vmReset() {
 }
 function pwShow(v) { $('pwmv').textContent = v; }
 function tShow(i, v) { $('pvtv' + i).textContent = v + ' kPa'; }
-function cmdI() { send('I ' + mask + ' ' + pw()); }
-function cmdV() { send('V ' + mask + ' ' + pw()); }
-function cmdR() { send('R ' + mask); }
-function cmdS() { send('S ' + mask); }
-function cmdX() { send('X'); }
+function cmdI() { p1_sendCmd('+', mask, +pw()); }
+function cmdV() { p1_sendCmd('-', mask, +pw()); }
+function cmdR() { p1_sendCmd('^', mask); }
+function cmdS() { p1_sendCmd('!', mask); }
+function cmdX() { p1_sendCmd('R'); }
 
 /* ═══ 端口控制卡片 ×5（Step 5） ═══ */
 const PORT_NAMES = ['端口 1', '端口 2', '端口 3', '端口 4', '端口 5'];
@@ -393,10 +618,10 @@ function buildCards() {
         <span class="psrc">端口压力</span>
       </div>
       <div class="pbtns">
-        <button onclick="send('I ${bit} '+pw())">充</button>
-        <button onclick="send('S ${bit}')">保</button>
-        <button onclick="send('R ${bit}')">释</button>
-        <button onclick="send('V ${bit} '+pw())">抽</button>
+        <button onclick="p1_sendCmd('+', ${bit}, +pw())">充</button>
+        <button onclick="p1_sendCmd('!', ${bit})">保</button>
+        <button onclick="p1_sendCmd('^', ${bit})">释</button>
+        <button onclick="p1_sendCmd('-', ${bit}, +pw())">抽</button>
       </div>
       <div class="clrow">
         <span>目标</span>
@@ -662,8 +887,11 @@ async function demoSeq() {
   }
 }
 
-/* ═══ 状态轮询 + 渲染（Step 3，200ms） ═══ */
+/* ═══ 状态轮询 + 渲染（Step 3，200ms） ═══
+   渲染核心抽出为 p1_renderState(stateObj)：孪生 HTTP 轮询与 BLE 真机 state
+   notify（20B 帧解出的同构对象）双模共用同一条渲染路径。 */
 async function poll() {
+  if (p1_ble.active) return;                    /* 真机模式：状态由 BLE notify 驱动 */
   let s;
   try {
     s = await (await fetch('/api/state', { cache: 'no-store' })).json();
@@ -673,11 +901,12 @@ async function poll() {
   }
   connWarned = false;
   S = s;
-  render();
+  p1_renderState(s);
 }
 
-function render() {
-  const s = S;
+function render() { p1_renderState(S); }
+
+function p1_renderState(s) {
   /* 顶栏 */
   $('tbstate').textContent = '0x' + (s.state & 0xFFFF).toString(16).toUpperCase().padStart(4, '0');
   if (s.cl !== prevCl) { dlog('闭环: ' + prevCl + ' → ' + s.cl); prevCl = s.cl; }
@@ -751,6 +980,581 @@ dlog('轮询 /api/state @200ms · 命令 POST /api/cmd');
 leakSel(0);   /* 泄漏部位默认端口1（chips 初始化） */
 poll();
 setInterval(poll, 200);
+</script>
+
+<script>
+'use strict';
+/* ═══════════════════════════════════════════════════════════
+   P1 板级面板（API v1.2）：顶层标签 + 遥测/仿真/结构三子面板
+   + Web Bluetooth 真机模式（BLE.md 契约：FLOWIO-P1-* / 0xA5 帧 / 20B state）
+   全部函数前缀 p1_ 防与气动台冲突；共享渲染入口 p1_renderState（第一块）。
+   ═══════════════════════════════════════════════════════════ */
+let p1_tab = 'pneu';            /* 'pneu' | 'p1' */
+let p1_sub = 'tel';             /* 'tel' | 'sim' | '3d' */
+
+/* ═══ 顶层标签 / 子面板切换（可见性节流入口） ═══ */
+function p1_switchTab(which) {
+  p1_tab = which;
+  $('p1_tabpneu').style.display = which === 'pneu' ? 'grid' : 'none';
+  $('p1_tabp1').style.display = which === 'p1' ? 'block' : 'none';
+  $('p1_tabbtnPneu').classList.toggle('sel', which === 'pneu');
+  $('p1_tabbtnP1').classList.toggle('sel', which === 'p1');
+  if (which !== 'p1') p1_3dStop();               /* 离开 P1：停 3D 循环（轮询在函数内自门控） */
+  else p1_subActivate();
+}
+function p1_switchSub(which) {
+  p1_sub = which;
+  [['tel', 'p1_panetel'], ['sim', 'p1_panesim'], ['3d', 'p1_pane3d']].forEach(([k, id]) => {
+    $(id).style.display = k === which ? 'block' : 'none';
+    $('p1_subbtn' + k).classList.toggle('sel', k === which);
+  });
+  p1_subActivate();
+}
+function p1_subActivate() {
+  if (p1_sub === 'tel') p1_ensureTelChart();
+  else if (p1_sub === 'sim') p1_simEnsure();
+  else if (p1_sub === '3d') { p1_3dEnsure(); p1_3dStart(); }
+  if (p1_sub !== '3d') p1_3dStop();
+}
+
+/* ══════════════════════ 子面板 1：板级遥测 ══════════════════════ */
+const P1_VALVE_NAMES = ['阀1·端口', '阀2·端口', '阀3·端口', '阀4·端口', '阀5·端口',
+                        '阀6·进气', '阀7·排气', '阀8·备用'];
+const P1_HIST_MAX = 600;                       /* 图表窗口 600 点 ≈ 60s */
+let p1_telChart = null;
+let p1_histLast = -Infinity;
+const p1_hist = { t: [], v5: [], load: [] };
+
+function p1_buildValveBars() {
+  $('p1_valves').innerHTML = P1_VALVE_NAMES.map((nm, i) => `
+    <div class="vbar">
+      <div class="vl"><span>${nm}</span><b id="p1_vi_t${i}">0.000 A · 0.00 W</b></div>
+      <div class="tr"><div class="fl" id="p1_vi_f${i}"></div></div>
+    </div>`).join('');
+}
+
+function p1_ensureTelChart() {
+  if (!window.echarts) return;
+  if (!p1_telChart) {
+    p1_telChart = echarts.init($('p1_histchart'));
+    p1_telChart.setOption({
+      animation: false,
+      grid: { left: 48, right: 52, top: 30, bottom: 20 },
+      legend: { data: ['5V 轨电压', '5V 轨负载'], textStyle: { color: '#8b949e', fontSize: 10 }, top: 2, itemWidth: 14 },
+      xAxis: { type: 'category', show: false, data: [] },
+      yAxis: [
+        { type: 'value', name: 'V', nameTextStyle: { color: '#8b949e', fontSize: 10 },
+          axisLabel: { color: '#8b949e', fontSize: 10, formatter: v => v.toFixed(2) },
+          splitLine: { lineStyle: { color: '#21262d' } }, scale: true },
+        { type: 'value', name: 'A', nameTextStyle: { color: '#8b949e', fontSize: 10 },
+          axisLabel: { color: '#8b949e', fontSize: 10, formatter: v => v.toFixed(1) },
+          splitLine: { show: false }, scale: true }
+      ],
+      series: [
+        { name: '5V 轨电压', type: 'line', showSymbol: false, yAxisIndex: 0, data: [],
+          lineStyle: { color: '#58a6ff', width: 1.5 } },
+        { name: '5V 轨负载', type: 'line', showSymbol: false, yAxisIndex: 1, data: [],
+          lineStyle: { color: '#e3b341', width: 1.5 } }
+      ]
+    });
+    window.addEventListener('resize', () => p1_telChart && p1_telChart.resize());
+  } else {
+    p1_telChart.resize();
+  }
+}
+
+async function p1_pollBoard() {
+  /* 可见性节流：P1 页未激活 / 遥测子面板未显示 / 页面隐藏 / 真机模式 → 不发请求 */
+  if (p1_ble.active || p1_tab !== 'p1' || p1_sub !== 'tel' || document.hidden) return;
+  let d;
+  try {
+    const url = isFinite(p1_histLast)
+      ? '/api/board/state?since=' + (p1_histLast + 0.001)   /* 增量：去重边界点 */
+      : '/api/board/state';
+    d = await (await fetch(url, { cache: 'no-store' })).json();
+  } catch (e) { return; }
+  if (d && d.rail_5v && d.history) p1_renderBoard(d);
+}
+
+function p1_renderBoard(d) {
+  /* 电源树实时值 */
+  $('p1_ptV5').textContent = d.rail_5v.v.toFixed(3) + ' V';
+  $('p1_ptI5').textContent = d.rail_5v.load_a.toFixed(2) + ' A';
+  $('p1_ptP5').textContent = d.rail_5v.p_w.toFixed(2) + ' W';
+  $('p1_ptV33').textContent = d.rail_3v3.v.toFixed(3) + ' V';
+  $('p1_ptEff').textContent = (d.rail_3v3.buck_eff * 100).toFixed(1) + '%';
+  $('p1_tcpu').textContent = d.temp_est_c.cpu.toFixed(1);
+  $('p1_tbuck').textContent = d.temp_est_c.buck.toFixed(1);
+  $('p1_tmos').textContent = d.temp_est_c.mos.toFixed(1);
+  $('p1_uptime').textContent = d.uptime_s;
+  $('p1_tick').textContent = d.tick;
+  $('p1_stale').style.display = d.stale ? 'inline-block' : 'none';
+
+  /* 8 阀电流条（0.40A 满量程 ≈ 稳态 0.356A 留裕量） */
+  const FSD = 0.40;
+  for (let i = 0; i < 8 && i < d.valves.length; ++i) {
+    const v = d.valves[i];
+    const f = document.getElementById('p1_vi_f' + i);
+    if (!f) break;
+    f.style.width = Math.min(100, v.i_A / FSD * 100).toFixed(1) + '%';
+    f.style.background = v.on ? 'linear-gradient(90deg,#1a5c2e,#3fb950)' : 'linear-gradient(90deg,#3a2d00,#e3b341)';
+    document.getElementById('p1_vi_t' + i).textContent =
+      v.i_A.toFixed(3) + ' A · ' + v.p_w.toFixed(2) + ' W' + (v.on ? '' : ' (关断尾流)');
+  }
+
+  /* 历史增量入图 */
+  const h = d.history;
+  for (let i = 0; i < h.t.length; ++i) {
+    if (h.t[i] <= p1_histLast) continue;
+    p1_histLast = h.t[i];
+    p1_hist.t.push(h.t[i]); p1_hist.v5.push(h.v5[i]); p1_hist.load.push(h.load[i]);
+  }
+  while (p1_hist.t.length > P1_HIST_MAX) { p1_hist.t.shift(); p1_hist.v5.shift(); p1_hist.load.shift(); }
+  if (p1_telChart) p1_telChart.setOption({
+    xAxis: { data: p1_hist.t.map(x => x.toFixed(1)) },
+    series: [{ data: p1_hist.v5.slice() }, { data: p1_hist.load.slice() }]
+  });
+}
+
+/* ── 时间控制（POST /api/time） ── */
+let p1_timeState = { paused: false, speed: 1 };
+async function p1_timePost(obj) {
+  try {
+    const j = await (await fetch('/api/time', { method: 'POST', body: JSON.stringify(obj) })).json();
+    p1_timeState = { paused: !!j.paused, speed: +j.speed };
+    $('p1_pauseBtn').textContent = p1_timeState.paused ? '▶ 继续' : '⏸ 暂停';
+    $('p1_speedV').textContent = '×' + p1_timeState.speed.toFixed(2);
+  } catch (e) { dlog('✗ 时间控制失败 ' + e.message, 'warn'); }
+}
+function p1_timePause() { p1_timePost({ paused: !p1_timeState.paused }); }
+
+/* ── 命令录制 / 回放 ── */
+function p1_recToggle() {
+  p1_recording = !p1_recording;
+  if (p1_recording) {
+    p1_recEvents = [];
+    fetch('/api/record', { method: 'POST', body: JSON.stringify({ action: 'start' }) }).catch(() => {});
+    $('p1_recBtn').textContent = '⏹ 停止录制';
+    $('p1_recBtn').style.background = '#5c1a1a';
+    $('p1_recBtn').style.borderColor = '#a03030';
+    $('p1_recState').textContent = '录制中…';
+    $('p1_replayBtn').style.display = 'none';
+  } else {
+    fetch('/api/record', { method: 'POST', body: JSON.stringify({ action: 'stop' }) }).catch(() => {});
+    $('p1_recBtn').textContent = '⏺ 录制';
+    $('p1_recBtn').style.background = '#1a5c2e';
+    $('p1_recBtn').style.borderColor = '#2ea043';
+    $('p1_recState').textContent = '已存 ' + p1_recEvents.length + ' 条（recordings/ + 浏览器镜像）';
+    if (p1_recEvents.length) {
+      $('p1_recN').textContent = p1_recEvents.length;
+      $('p1_replayBtn').style.display = 'inline-block';
+    }
+  }
+}
+function p1_recReplay() {
+  fetch('/api/record/replay', { method: 'POST', body: JSON.stringify({ events: p1_recEvents }) })
+    .then(r => r.json())
+    .then(j => { $('p1_recState').textContent = '已回放 ' + j.replayed + ' 条'; dlog('▶ 回放 ' + j.replayed + ' 条命令'); })
+    .catch(e => dlog('✗ 回放失败 ' + e.message, 'warn'));
+}
+
+/* ══════════════════════ 子面板 2：电路仿真重算 ══════════════════════ */
+const P1_SIM_CIRCUITS = [
+  { id: 'buck',  name: 'Buck 电源',      desc: 'TPS54331 → 3.3V/3A' },
+  { id: 'dior',  name: '双源二极管或',   desc: 'SS34×2 DC 座 / USB-C' },
+  { id: 'valve', name: '阀驱动',         desc: 'AO3400A 低边 + RL' },
+  { id: 'i2c',   name: 'I²C 上拉',       desc: 'TCA9548A 总线 RC' },
+];
+const P1_SIM_COLORS = ['#58a6ff', '#3fb950', '#e3b341'];
+let p1_simPresets = null;
+let p1_simCircuit = 'buck';
+let p1_simLoaded = false;
+let p1_simChart = null;
+
+async function p1_simEnsure() {
+  if (p1_simLoaded) return;
+  p1_simLoaded = true;
+  $('p1_simcards').innerHTML = P1_SIM_CIRCUITS.map(c => `
+    <div class="p1simcard" id="p1_simc-${c.id}" onclick="p1_simSel('${c.id}')">
+      <div class="t">${c.name}</div><div class="d">${c.desc}</div>
+    </div>`).join('');
+  try {
+    const j = await (await fetch('/api/board/sim/presets')).json();
+    p1_simPresets = j.presets;
+    p1_simSel('buck');
+  } catch (e) {
+    p1_simError('presets 加载失败：' + e.message);
+  }
+}
+function p1_simSel(c) {
+  if (!p1_simPresets || !p1_simPresets[c]) return;
+  p1_simCircuit = c;
+  P1_SIM_CIRCUITS.forEach(x =>
+    document.getElementById('p1_simc-' + x.id).classList.toggle('sel', x.id === c));
+  const p = p1_simPresets[c];
+  $('p1_simform').innerHTML = Object.keys(p.default).map(k => {
+    const b = p.bounds[k];
+    return `<label><span>${k}</span>
+      <input type="number" id="p1_sp_${k}" min="${b[0]}" max="${b[1]}" step="any" value="${p.default[k]}"></label>`;
+  }).join('');
+  p1_simRun();
+}
+function p1_simError(msg) {
+  $('p1_simerr').textContent = '⚠ ' + msg;
+  $('p1_simerr').style.display = 'block';
+}
+async function p1_simRun() {
+  if (!p1_simCircuit) return;
+  const btn = $('p1_simRunBtn');
+  btn.disabled = true;
+  btn.textContent = '计算中…';
+  $('p1_simerr').style.display = 'none';
+  const params = {};
+  document.querySelectorAll('#p1_simform input').forEach(inp => {
+    params[inp.id.slice(6)] = parseFloat(inp.value);
+  });
+  try {
+    const r = await fetch('/api/board/sim', {
+      method: 'POST', body: JSON.stringify({ circuit: p1_simCircuit, params })
+    });
+    const j = await r.json();
+    if (!r.ok) throw new Error(j.error || ('HTTP ' + r.status));   /* 400 参数域 / 504 超时 */
+    p1_simRender(j);
+  } catch (e) {
+    p1_simError(e.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '⟳ 重算';
+  }
+}
+function p1_simRender(j) {
+  if (!p1_simChart) {
+    p1_simChart = echarts.init($('p1_simchart'));
+    window.addEventListener('resize', () => p1_simChart && p1_simChart.resize());
+  }
+  p1_simChart.resize();
+  p1_simChart.setOption({
+    animation: false,
+    grid: { left: 58, right: 18, top: 30, bottom: 28 },
+    legend: { data: j.waves.map(w => w.name), textStyle: { color: '#8b949e', fontSize: 10 }, top: 2, itemWidth: 14 },
+    tooltip: { trigger: 'axis', axisPointer: { type: 'cross' },
+               backgroundColor: '#161b22', borderColor: '#30363d', textStyle: { color: '#e6edf3', fontSize: 11 } },
+    xAxis: { type: 'value', name: 't/s', scale: true,
+             nameTextStyle: { color: '#8b949e', fontSize: 10 },
+             axisLabel: { color: '#8b949e', fontSize: 10 }, splitLine: { lineStyle: { color: '#21262d' } } },
+    yAxis: { type: 'value', scale: true,
+             nameTextStyle: { color: '#8b949e', fontSize: 10 },
+             axisLabel: { color: '#8b949e', fontSize: 10,
+                          formatter: v => Math.abs(v) >= 1e-3 || v === 0 ? v : v.toExponential(1) },
+             splitLine: { lineStyle: { color: '#21262d' } } },
+    series: j.waves.map((w, i) => ({
+      name: w.name, type: 'line', showSymbol: false,
+      data: w.t.map((tv, k) => [tv, w.y[k]]),
+      lineStyle: { width: 1.5 }, color: P1_SIM_COLORS[i % P1_SIM_COLORS.length]
+    }))
+  }, true);
+  $('p1_simmets').querySelector('tbody').innerHTML = j.metrics.map(m => `
+    <tr><td>${m.name}</td><td class="v">${m.value} ${m.unit}</td>
+    <td class="${m.verdict.startsWith('✓') ? 'ok' : 'warn'}">${m.verdict}</td></tr>`).join('');
+  $('p1_simnotes').innerHTML = j.notes.map(n => '<div>· ' + n + '</div>').join('');
+}
+
+/* ══════════════════════ 子面板 3：3D 结构装配 ══════════════════════ */
+let p1_3d = null;                 /* {renderer,scene,camera,controls,parts[],kCur,kTarget,raf,playT0,ray,mouse} */
+
+function p1_3dEnsure() {
+  if (p1_3d) { p1_3dResize(); return; }
+  const cv = $('p1_c3d');
+  try {
+    if (!window.THREE) throw new Error('three.js 未加载（/lib/three.min.js 不可达）');
+    const renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true });
+    renderer.setPixelRatio(window.devicePixelRatio || 1);
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x0a0e14);
+    const camera = new THREE.PerspectiveCamera(45, 2, 1, 4000);
+    camera.up.set(0, 0, 1);                              /* STL 为壳坐标系 Z-up */
+    const controls = new THREE.OrbitControls(camera, cv);
+    controls.enableDamping = true;
+    scene.add(new THREE.AmbientLight(0x8090a0, 0.5));    /* 双灯：环境 + 主光 + 补光 */
+    const key = new THREE.DirectionalLight(0xffffff, 0.95);
+    key.position.set(120, -190, 260); scene.add(key);
+    const fill = new THREE.DirectionalLight(0x88aaff, 0.35);
+    fill.position.set(-170, 130, -90); scene.add(fill);
+    p1_3d = { renderer, scene, camera, controls, parts: [],
+              kCur: 0, kTarget: 0, raf: 0, playT0: -1,
+              ray: new THREE.Raycaster(), mouse: new THREE.Vector2() };
+    cv.addEventListener('mousemove', p1_3dHover);
+    cv.addEventListener('mouseleave', p1_3dClearHover);
+    window.addEventListener('resize', p1_3dResize);
+    p1_3dLoad();
+    p1_3dResize();
+  } catch (e) {
+    $('p1_3dfail').textContent = '⚠ 3D 视图不可用：' + e.message + '（其余面板不受影响）';
+    $('p1_3dfail').style.display = 'block';
+  }
+}
+async function p1_3dLoad() {
+  let man;
+  try {
+    man = await (await fetch('/api/board/assembly')).json();
+  } catch (e) {
+    $('p1_3dfail').textContent = '⚠ /api/board/assembly 加载失败：' + e.message;
+    $('p1_3dfail').style.display = 'block';
+    return;
+  }
+  if (!man || !Array.isArray(man.parts) || !man.parts.length) {
+    $('p1_3dfail').textContent = '⚠ 装配清单为空（meshes 未生成？）';
+    $('p1_3dfail').style.display = 'block';
+    return;
+  }
+  const bb = man.bbox_mm || [96, 81, 19];
+  const c = [bb[0] / 2, bb[1] / 2, bb[2] / 2];
+  p1_3d.camera.position.set(c[0] + 135, c[1] - 200, c[2] + 155);
+  p1_3d.controls.target.set(c[0], c[1], c[2]);
+  p1_3d.controls.update();
+  $('p1_3dnote').textContent =
+    (man.assembly_note ? man.assembly_note + ' · ' : '') +
+    '拖拽旋转 · 滚轮缩放 · 右键平移 · 悬停部件高亮（右侧显示名称）';
+  const loader = new THREE.STLLoader();
+  for (const part of man.parts) {
+    try {
+      const buf = await (await fetch(part.stl)).arrayBuffer();
+      const geo = loader.parse(buf);
+      geo.computeVertexNormals();                       /* 非索引几何 → 平面法线（CAD 外观） */
+      const mat = new THREE.MeshStandardMaterial({
+        color: new THREE.Color(part.color || '#888888'),
+        metalness: 0.25, roughness: 0.55,
+        transparent: (part.opacity === undefined ? 1 : part.opacity) < 1,
+        opacity: part.opacity === undefined ? 1 : part.opacity
+      });
+      const mesh = new THREE.Mesh(geo, mat);
+      mesh.userData.part = part;
+      p1_3d.scene.add(mesh);
+      p1_3d.parts.push({ mesh, explode: part.explode || [0, 0, 0], name: part.name });
+    } catch (e) {
+      dlog('✗ mesh ' + part.stl + ' 加载失败: ' + e.message, 'warn');
+    }
+  }
+  dlog('◆ P1 3D 装配就绪：' + p1_3d.parts.length + ' 部件（bbox ' + bb.join('×') + ' mm）');
+}
+function p1_3dResize() {
+  if (!p1_3d) return;
+  const cv = $('p1_c3d');
+  const w = cv.clientWidth || 800, h = cv.clientHeight || 480;
+  p1_3d.renderer.setSize(w, h, false);
+  p1_3d.camera.aspect = w / h;
+  p1_3d.camera.updateProjectionMatrix();
+}
+function p1_3dStart() {                                  /* 循环仅在结构页可见时存活 */
+  if (!p1_3d || p1_3d.raf) return;
+  const loop = () => {
+    p1_3d.raf = 0;
+    if (!p1_3d) return;
+    if (p1_3d.playT0 >= 0) {                             /* 播放：2s 三角波 0→1→0 */
+      const ph = (performance.now() - p1_3d.playT0) / 2000;
+      if (ph >= 1) {
+        p1_3d.playT0 = -1; p1_3d.kTarget = 0; p1_setExplodeUI(0);
+        $('p1_play3dBtn').disabled = false;
+      } else {
+        p1_3d.kTarget = 1 - Math.abs(1 - 2 * ph);
+        p1_setExplodeUI(p1_3d.kTarget);
+      }
+    }
+    p1_3d.kCur += (p1_3d.kTarget - p1_3d.kCur) * 0.14;   /* 缓动 lerp */
+    for (const pt of p1_3d.parts)
+      pt.mesh.position.set(pt.explode[0] * p1_3d.kCur, pt.explode[1] * p1_3d.kCur, pt.explode[2] * p1_3d.kCur);
+    p1_3d.controls.update();
+    p1_3d.renderer.render(p1_3d.scene, p1_3d.camera);
+    if (p1_tab === 'p1' && p1_sub === '3d' && !document.hidden)
+      p1_3d.raf = requestAnimationFrame(loop);
+  };
+  p1_3d.raf = requestAnimationFrame(loop);
+}
+function p1_3dStop() {
+  if (p1_3d && p1_3d.raf) { cancelAnimationFrame(p1_3d.raf); p1_3d.raf = 0; }
+}
+function p1_explodeSet(k) {
+  if (!p1_3d) return;
+  p1_3d.playT0 = -1;                                     /* 手动滑杆打断播放 */
+  $('p1_play3dBtn').disabled = false;
+  p1_3d.kTarget = k;
+  $('p1_explodeV').textContent = Math.round(k * 100) + '%';
+}
+function p1_setExplodeUI(k) {
+  $('p1_explodeI').value = k;
+  $('p1_explodeV').textContent = Math.round(k * 100) + '%';
+}
+function p1_3dPlay() {
+  if (!p1_3d) return;
+  p1_3d.playT0 = performance.now();
+  $('p1_play3dBtn').disabled = true;
+}
+function p1_3dHover(ev) {
+  if (!p1_3d || !p1_3d.parts.length) return;
+  const r = ev.target.getBoundingClientRect();
+  p1_3d.mouse.x = ((ev.clientX - r.left) / r.width) * 2 - 1;
+  p1_3d.mouse.y = -((ev.clientY - r.top) / r.height) * 2 + 1;
+  p1_3d.ray.setFromCamera(p1_3d.mouse, p1_3d.camera);
+  const hit = p1_3d.ray.intersectObjects(p1_3d.parts.map(p => p.mesh))[0];
+  const target = hit ? hit.object : null;
+  for (const pt of p1_3d.parts)
+    pt.mesh.material.emissive.setHex(pt.mesh === target ? 0x2a4d6e : 0x000000);
+  $('p1_3dhint').textContent = target ? '◆ ' + target.userData.part.name : '';
+}
+function p1_3dClearHover() {
+  if (!p1_3d) return;
+  for (const pt of p1_3d.parts) pt.mesh.material.emissive.setHex(0x000000);
+  $('p1_3dhint').textContent = '';
+}
+
+/* ══════════════════════ Web Bluetooth 真机模式 ══════════════════════
+   契约 = BLE.md：UUID 基址 f10a5c00-…-1b0fXXXX；广播名 FLOWIO-P1-*；
+   cmd 写 0xA5 帧（CRC-8 poly 0x07 init 0x00，同 pn_core/proto.c）；
+   state notify 20B LE（u16 状态字 + 5×i16 压力×10 + u16 tick + 6B 保留0）。 */
+const P1_BLE_UUID = suf => 'f10a5c00-0000-4b1e-9c2d-8e3a1b0f' + suf;
+const P1_CMD2CLI = {                                    /* 帧码 → 等价 CLI 行（BLE.md §3.2） */
+  '+': (p, w) => 'I ' + p + ' ' + w,
+  '-': (p, w) => 'V ' + p + ' ' + w,
+  '^': (p) => 'R ' + p,
+  '!': (p) => 'S ' + p,
+  'o': (p) => 'O ' + p,
+  'c': (p) => 'C ' + p,
+  '?': () => 'P',
+  'S': () => 'T',
+  'R': () => 'X',
+};
+function p1_crc8(bytes) {          /* 与 pn_core/proto.c pn_proto_crc8 同实现（MSB-first） */
+  let crc = 0;
+  for (let i = 0; i < bytes.length; ++i) {
+    crc ^= bytes[i];
+    for (let b = 0; b < 8; ++b)
+      crc = (crc & 0x80) ? ((crc << 1) ^ 0x07) & 0xFF : (crc << 1) & 0xFF;
+  }
+  return crc;
+}
+function p1_buildFrame(cmd, ports, pwm) {                          /* [A5 cmd ports pwm crc8] */
+  const f = new Uint8Array([0xA5, cmd.charCodeAt(0) & 0xFF, ports & 0xFF, pwm & 0xFF, 0]);
+  f[4] = p1_crc8(f.subarray(0, 4));
+  return f;
+}
+async function p1_sendCmd(cmd, ports = 0, pwm = 0) {               /* 双模命令路径 */
+  if (p1_ble.active && p1_ble.chCmd) {
+    try {
+      await p1_ble.chCmd.writeValue(p1_buildFrame(cmd, ports, pwm));
+      dlog('▶ BLE 帧 [' + cmd + '] ports=' + ports + ' pwm=' + pwm, 'cmd');
+    } catch (e) {
+      dlog('✗ BLE 帧写失败 [' + cmd + '] ' + e.message, 'warn');
+    }
+    return;
+  }
+  const mk = P1_CMD2CLI[cmd];
+  return send(mk ? mk(ports, pwm) : cmd);
+}
+function p1_bleToggle() { p1_ble.active ? p1_bleDisconnect() : p1_bleConnect(); }
+async function p1_bleConnect() {
+  if (!navigator.bluetooth) return;
+  try {
+    dlog('BLE: 扫描 FLOWIO-P1-* …（需真机上电广播）');
+    const device = await navigator.bluetooth.requestDevice({
+      filters: [{ namePrefix: 'FLOWIO-P1' }],
+      optionalServices: [P1_BLE_UUID('0001'), P1_BLE_UUID('0004'), P1_BLE_UUID('0007')],
+    });
+    p1_ble.device = device;
+    device.addEventListener('gattserverdisconnected', p1_bleOnDisconnect);
+    const server = await device.gatt.connect();
+    const [svcCmd, svcTel] = await Promise.all([
+      server.getPrimaryService(P1_BLE_UUID('0001')),
+      server.getPrimaryService(P1_BLE_UUID('0004')),
+    ]);
+    p1_ble.chCmd = await svcCmd.getCharacteristic(P1_BLE_UUID('0002'));
+    p1_ble.chResp = await svcCmd.getCharacteristic(P1_BLE_UUID('0003'));
+    p1_ble.chState = await svcTel.getCharacteristic(P1_BLE_UUID('0005'));
+    const chEn = await svcTel.getCharacteristic(P1_BLE_UUID('0006'));
+    await chEn.writeValue(new Uint8Array([1]));                    /* 应用级遥测开关 */
+    await p1_ble.chState.startNotifications();
+    p1_ble.chState.addEventListener('characteristicvaluechanged',
+      e => p1_bleOnState(e.target.value));
+    await p1_ble.chResp.startNotifications();
+    p1_ble.chResp.addEventListener('characteristicvaluechanged',
+      e => dlog('BLE◀ ' + new TextDecoder().decode(e.target.value), 'cmd'));
+    p1_ble.active = true;
+    p1_bleUi();
+    dlog('✅ BLE 真机已连接：' + (device.name || '(未知名)') + '，孪生 HTTP 轮询已停');
+  } catch (e) {
+    if (e && e.name === 'NotFoundError') dlog('BLE: 未选择设备（取消扫描）');
+    else dlog('✗ BLE 连接失败: ' + (e && e.message || e), 'warn');
+    p1_bleCleanup();
+  }
+}
+function p1_bleOnDisconnect() {
+  dlog('⚠ BLE 断开，回退孪生(HTTP)模式', 'warn');
+  p1_bleCleanup();
+}
+function p1_bleDisconnect() {
+  if (p1_ble.device && p1_ble.device.gatt && p1_ble.device.gatt.connected)
+    p1_ble.device.gatt.disconnect();      /* 触发 gattserverdisconnected → cleanup */
+  else p1_bleCleanup();
+}
+function p1_bleCleanup() {
+  p1_ble.device = null; p1_ble.server = null;
+  p1_ble.chCmd = null; p1_ble.chResp = null; p1_ble.chState = null;
+  p1_ble.active = false;
+  p1_bleUi();
+}
+function p1_bleUi() {
+  const on = p1_ble.active;
+  $('p1_modeBadge').textContent = on ? '模式 真机(BLE)' : '模式 孪生(HTTP)';
+  $('p1_modeBadge').style.borderColor = on ? '#8b5cf6' : '';
+  $('p1_modeBadge').style.color = on ? '#c4b5fd' : '';
+  $('p1_bleBtn').textContent = on ? '⏹ 断开真机(BLE)' : '⏺ 连接真机(BLE)';
+  $('p1_blenote').style.display = on ? 'inline-block' : 'none';
+}
+function p1_bleParseState(dv) {            /* 20B LE 帧 → {state, pressures[5], tick}；校验同 ble_frame.c */
+  if (dv.byteLength < 20) return null;
+  for (let i = 14; i < 20; ++i)
+    if (dv.getUint8(i) !== 0) return null; /* 保留字节必须全 0 */
+  const st = dv.getUint16(0, true);
+  const pressures = [];
+  for (let i = 0; i < 5; ++i) {
+    const raw = dv.getInt16(2 + i * 2, true);
+    pressures.push(raw === -32768 ? 0 : raw / 10);   /* 0x8000=无效 → 0 并显示 */
+  }
+  return { state: st, pressures, tick: dv.getUint16(12, true) };
+}
+function p1_bleOnState(dv) {
+  const f = p1_bleParseState(dv);
+  if (!f) return;
+  const valves = [];
+  for (let i = 0; i < 7; ++i) valves.push((f.state >> i) & 1 ? 255 : 0);   /* bit0-4 端口 / 5 进气 / 6 排气 */
+  p1_renderState({                                        /* 与 HTTP 轮询同一渲染入口 */
+    state: f.state,
+    valves,
+    pump: (f.state & 0x80) ? 255 : 0,
+    sensors: [f.pressures[0], f.pressures[1]],
+    ports_p: f.pressures,
+    cl: 'BLE',
+    err: (f.state & 0x8000) ? 1 : 0,
+  });
+}
+
+/* ═══ P1 初始化 ═══ */
+p1_buildValveBars();
+setInterval(p1_pollBoard, 200);            /* 函数内自门控：标签/子面板/隐藏/BLE */
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) p1_3dStop();
+  else if (p1_tab === 'p1' && p1_sub === '3d') p1_3dStart();
+});
+if (!navigator.bluetooth) {
+  $('p1_bleBtn').disabled = true;
+  $('p1_bleBtn').title = '此环境不支持 Web Bluetooth（需 Chrome/Edge 蓝牙 + localhost/HTTPS）';
+}
+dlog('✅ P1 板级面板就绪（遥测/仿真/结构 · BLE 待命）');
+/* URL 锚点直达：#p1（遥测）/ #p1-sim / #p1-3d —— 深链与无头截图入口 */
+if (location.hash === '#p1' || location.hash === '#p1-sim' || location.hash === '#p1-3d') {
+  p1_switchTab('p1');
+  if (location.hash === '#p1-sim') p1_switchSub('sim');
+  else if (location.hash === '#p1-3d') p1_switchSub('3d');
+}
 </script>
 </body>
 </html>
