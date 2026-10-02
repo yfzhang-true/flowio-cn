@@ -25,7 +25,6 @@
 #include "esp_timer.h"
 #include "esp_check.h"
 #include "hal/efuse_hal.h"
-#include "freertos/FreeRTOS.h"   /* pdMS_TO_TICKS（tca_hal_write 超时） */
 #include "led_strip.h"           /* WS2812 状态灯（managed component espressif/led_strip^2） */
 
 #include <string.h>
@@ -332,7 +331,7 @@ int tca_hal_write(uint8_t addr, uint8_t byte)
 {
     (void)addr;
     if (!s_tca_present || !s_tca_dev) return -1;
-    return (i2c_master_transmit(s_tca_dev, &byte, 1, pdMS_TO_TICKS(100)) == ESP_OK) ? 0 : -1;
+    return (i2c_master_transmit(s_tca_dev, &byte, 1, 100) == ESP_OK) ? 0 : -1;
 }
 
 /* TCA9548A 通道选择（hal 本地路径：init 期探测用，经 tca_hal_write 单点出总线）。
