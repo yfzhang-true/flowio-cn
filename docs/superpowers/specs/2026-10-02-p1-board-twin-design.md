@@ -197,3 +197,40 @@ CH340K 烧录与自动复位、74HCT245/MOS 触发波形、TCA 实测扫描 5 �
 ### 10.4 验收
 - 回板前：所有"假设"成色参数在 UI 有可视标记（黄）；spec/代码/呈现三处一致
 - 回板后（二期）：BRINGUP.md 校准动线跑完，假设参数清零或转"实测"，徽章转绿
+
+---
+
+## 11. 第五支柱 S5：BLE 无线链路（2026-10-02 用户裁定纳入本期）
+
+> 对标官方"任何设备无代码控制"核心卖点。P1 板载 ESP32-S3 天线，纯软件欠账。**自研 GATT 布局**（语义对标官方八服务、编码 100% 原创，符合项目宪法）；协议载荷与串口 0xA5 **单源共用**。
+
+### 11.1 固件侧（NimBLE，pn_core 零侵入）
+- 传输抽象：新增 `cmd_transport` 层——`serial_task` 与 `ble_task` 同入既有 pn_core 命令分发器；一份逻辑两个入口（孪生 dll 不受影响）。
+- GATT 服务布局（自定义 128-bit UUID，命名空间从项目名派生，规则写入 BLE.md）：
+
+| 服务 | 特征 | 属性 | 载荷 |
+|---|---|---|---|
+| DeviceInfo (0x180A+扩展) | fw_version / board_rev / serial_no | read | ASCII |
+| FlowIO Command | cmd | **write** | 0xA5 帧（≤MTU-3，默认 20B 够用） |
+| | resp | **notify** | 0xA5 应答帧 |
+| FlowIO Telemetry | state | **notify** | 二进制 20B：state_word u16 + 5×pressure i16LE(kPa×10) + tick u16，10Hz |
+| | notify_en | read/write | 订阅开关 |
+| FlowIO Config | pwm_params 等 | read/write | 参数块（与 CLI 配置命令同构） |
+
+- 广播名 `FLOWIO-P1-<序列后缀>`；配对 just-works（开发期），广播含电量/状态可选后续。
+- 组件依赖：`esp_nimble_hci` + `bt`（sdkconfig 增 bluetooth=y, host=nimble）。
+
+### 11.2 前端侧（Web Bluetooth）
+- gui.html 顶栏增 **"连接真实设备 (BLE)"** 按钮（Chrome/Edge Web Bluetooth）：
+  - 连接后**同一套 UI 状态机**：命令→BLE write(cmd)，状态→notify(state) 解析；孪生(HTTP)与真机(BLE)模式用徽章区分，防混淆。
+  - 浏览器不支持→按钮置灰+提示。孪生模式永远是默认（开发不依赖硬件）。
+- 10Hz notify 与现有 200ms 轮询并存：真机模式下禁用 HTTP 轮询。
+
+### 11.3 契约与测试
+- 新增 `firmware/twin/BLE.md`（GATT 服务/特征/UUID/载荷字节序——API.md 的姊妹契约，同受宪法第七章约束）。
+- 主机单测：BLE 载荷编解码（state 20B 打包/解包、0xA5 over write 分帧）与串口共用测试向量。
+- 真机验证入 BRINGUP.md：nRF Connect 三步（扫描→读写 cmd→订阅 notify）；QEMU 无射频，仅验证编译与初始化不崩溃。
+- SDK：本期仍 serial；`ble.py`(bleak) 列路线图（连同 OTA/HIL/报表/多设备）。
+
+### 11.4 本期范围外（路线图重申）
+OTA 升级、Web API 多设备同步、SDK BLE 传输、真机-孪生 HIL 对拍、治疗报表产品化。
