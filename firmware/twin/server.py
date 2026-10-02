@@ -35,6 +35,7 @@ API_VER = "1.2"
 BOARD = board_model.BoardModel()
 REC = {"on": False, "buf": []}                       # 命令录制 (wall-clock 时间戳)
 TIMECTL = {"paused": False, "speed": 1.0, "step_once": False}   # 时间控制
+CARRY = 0.0                                          # 分数倍速累加器 (tick_loop 专用)
 SIM_POOL = concurrent.futures.ThreadPoolExecutor(1)  # 仿真超时保护 (单工位串行)
 
 lib = ctypes.CDLL(str(ROOT / "pn_twin.dll"))
@@ -59,7 +60,14 @@ lib.pn_twin_ml_samples.restype = ctypes.c_int
 CL_NAMES = {0: "IDLE", 1: "RUNNING", 2: "DONE", 3: "TIMEOUT", 4: "ERR"}
 
 
+def _board_step(dt):
+    """板级电气孪生步进 (duty 为 c_uint8 无符号, >0 即激励)。"""
+    BOARD.step(dt, [lib.pn_twin_valve_duty(i) > 0 for i in range(8)],
+               lib.pn_twin_pump_duty() > 0)
+
+
 def tick_loop():
+    global CARRY
     while True:
         if TIMECTL["paused"] and not TIMECTL["step_once"]:
             time.sleep(0.05)
@@ -67,13 +75,18 @@ def tick_loop():
         if TIMECTL["step_once"]:                 # 暂停下单步：执行一次 tick 后清标志
             lib.pn_twin_tick()
             TIMECTL["step_once"] = False
-        else:                                    # 倍速：每 50ms 墙钟跑 n 次 dll tick
-            for _ in range(max(1, int(round(TIMECTL["speed"])))):
-                lib.pn_twin_tick()
-        # 板级电气孪生与 dll 同步推进 (duty 为 c_uint8 无符号, >0 即激励)
-        BOARD.step(0.05 * TIMECTL["speed"],
-                   [lib.pn_twin_valve_duty(i) > 0 for i in range(8)],
-                   lib.pn_twin_pump_duty() > 0)
+            _board_step(0.05)
+        else:
+            # 分数倍速累加器: n=本周期 dll tick 数, 可为 0 (speed<1 时隔周期才动)。
+            # dll 与板级同进同停 (n tick ↔ 板级 0.05n s), 时间基严格一致;
+            # 不再用 round 钳 1 —— 否则 speed<0.5 时 dll 仍 1× 而板级慢速, 两者发散。
+            CARRY += TIMECTL["speed"]
+            n = int(CARRY)
+            CARRY -= n
+            if n:
+                for _ in range(n):
+                    lib.pn_twin_tick()
+                _board_step(0.05 * n)
         time.sleep(0.05)
 
 

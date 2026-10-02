@@ -15,6 +15,7 @@
 """
 
 import math
+import threading
 from collections import deque
 
 # ESP32 峰值 (~0.24A) + TCA9548A + CH340 等逻辑负载估算
@@ -59,10 +60,16 @@ class BoardModel:
         self.stale = False                 # server 超时未收到命令时置 True
         self.temp = {"cpu": 25.0, "buck": 25.0, "mos": 25.0}  # 估计结温 (℃)
         self.hist = deque(maxlen=int(HIST_S / TICK))          # 环形历史
+        self._lock = threading.Lock()      # tick 线程 step() 与 HTTP 线程 telemetry() 互斥
+        self._acc = 0.0                    # 历史节流累加器 (满 TICK=0.1s 落一条)
 
     # ------------------------------------------------------------------ step
     def step(self, dt, valves, pump):
         """推进 dt 秒。valves: 8 元命令列表(真值=开), pump: 泵命令(真值=开)。"""
+        with self._lock:                   # 全程持锁: 状态写入与 telemetry 快照互斥
+            self._step_locked(dt, valves, pump)
+
+    def _step_locked(self, dt, valves, pump):
         p = BOARD_PARAMS
         tau_on = p["l_coil"] / (p["r_coil"] + p["rds"])   # 激励回路: L/(r_coil+rds)
         tau_off = p["l_coil"] / p["r_coil"]               # 续流回路: L/r_coil (SS14 钳位)
@@ -91,27 +98,43 @@ class BoardModel:
 
         self.t += dt
         self.stale = False  # 刚收到命令即视为新鲜
-        self.hist.append({"t": self.t, "v5": v5, "v33": v33,
-                          "load": load5, "vi": list(self.i)})
+        # 历史节流: step 周期 (50ms) < TICK=0.1s, 每步都 append 则 6000 条仅覆盖
+        # 300s; 累计满 TICK 才落一条 → 6000 条 = 600s 仿真时间。dt 可达 0.2s
+        # (speed=4), while 保证一步补齐 2 条; 时间戳取 0.1s 边界穿越时刻,
+        # uptime/tick 语义不变 (仍按真实累计时间)。
+        self._acc += dt
+        while self._acc >= TICK:
+            self._acc -= TICK
+            self.hist.append({"t": round(self.t - self._acc, 6), "v5": v5,
+                              "v33": v33, "load": load5, "vi": list(self.i)})
 
     # ------------------------------------------------------------- telemetry
     def telemetry(self):
-        """当前快照; 负载/轨压由当前 state 按与 step() 相同公式重算。"""
+        """当前快照; 负载/轨压由当前 state 按与 step() 相同公式重算。
+        历史快照段持锁拷贝——tick 线程并发 append 会使裸迭代 deque 抛
+        'deque mutated during iteration'; dict 组装在锁外做纯计算。"""
+        with self._lock:
+            i = list(self.i)
+            pump = self.pump
+            t = self.t
+            stale = self.stale
+            temp = dict(self.temp)
+            hist = list(self.hist)          # 落库后的 rec 不再被改, 浅拷贝即可
         p = BOARD_PARAMS
-        load5 = sum(self.i) + p["i_pump"] * self.pump + LOGIC_A
+        load5 = sum(i) + p["i_pump"] * pump + LOGIC_A
         v5 = p["vbus"] - (p["vf_ss34"] + p["r_ss34"] * load5)
         r_loop = p["r_coil"] + p["rds"]
         valves = [{"on": x > 0.01,
                    "i_A": round(x, 3),
-                   "p_w": round(x * x * r_loop, 2)} for x in self.i]
+                   "p_w": round(x * x * r_loop, 2)} for x in i]
         history = {"t": [], "v5": [], "v33": [], "load": [], "vi": []}
-        for rec in self.hist:
+        for rec in hist:
             for key in history:
                 history[key].append(rec[key])
         return {
-            "tick": int(self.t / TICK),
-            "uptime_s": round(self.t, 3),
-            "stale": self.stale,
+            "tick": int(t / TICK),
+            "uptime_s": round(t, 3),
+            "stale": stale,
             "valves": valves,
             "rail_5v": {"v": round(v5, 4), "load_a": round(load5, 4),
                         "p_w": round(v5 * load5, 3)},
@@ -120,6 +143,6 @@ class BoardModel:
                          "loss_mw": {"sw": 706, "dcr": 162, "diode": 436,
                                      "switching": 85}},
             "board_p_w": round(v5 * load5, 3),
-            "temp_est_c": {k: round(v, 2) for k, v in self.temp.items()},
+            "temp_est_c": {k: round(v, 2) for k, v in temp.items()},
             "history": history,
         }
