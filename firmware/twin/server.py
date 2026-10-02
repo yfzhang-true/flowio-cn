@@ -1,11 +1,24 @@
-"""FlowIO P0 数字孪生服务：pn_twin.dll (真实逻辑层) + 本地 Web UI
+"""FlowIO P0 数字孪生服务：pn_twin.dll (真实逻辑层) + 本地 Web UI  [API v1.2]
 
 启动:  python server.py   然后浏览器打开 http://127.0.0.1:8000
 依赖:  仅 Python 标准库 + pn_twin.dll（本目录，由 gcc 编译）
+
+v1.2 新增 (S1/S2 孪生平台扩展):
+  GET  /api/board/state[?since=s]     板级电气孪生快照 (board_model, 600s 历史)
+  GET  /api/board/sim/presets         仿真参数域表 (前端动态表单)
+  GET  /api/board/assembly            3D 装配 (meshes/assembly.json)
+  GET  /api/board/history/export      历史四通道 CSV 导出
+  GET  /lib/three.min.js /meshes/*.stl  静态资源 (three.js 3D 视图)
+  POST /api/board/sim                 参数化电路仿真重算 (buck/dior/valve/i2c)
+  POST /api/time                      时间控制 (暂停/倍速/单步)
+  POST /api/record | /api/record/replay  命令录制与回放
 """
+import concurrent.futures
 import ctypes
 import json
 import os
+import re
+import sys
 import threading
 import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -13,6 +26,16 @@ from pathlib import Path
 
 ROOT = Path(__file__).parent
 PORT = int(os.environ.get("TWIN_PORT", "8000"))
+
+sys.path.insert(0, str(ROOT))
+import board_model   # noqa: E402  (S2 板级电气孪生纯模型)
+import sim_engine    # noqa: E402  (S1 参数化仿真引擎)
+
+API_VER = "1.2"
+BOARD = board_model.BoardModel()
+REC = {"on": False, "buf": []}                       # 命令录制 (wall-clock 时间戳)
+TIMECTL = {"paused": False, "speed": 1.0, "step_once": False}   # 时间控制
+SIM_POOL = concurrent.futures.ThreadPoolExecutor(1)  # 仿真超时保护 (单工位串行)
 
 lib = ctypes.CDLL(str(ROOT / "pn_twin.dll"))
 lib.pn_twin_state.restype = ctypes.c_uint32
@@ -38,7 +61,19 @@ CL_NAMES = {0: "IDLE", 1: "RUNNING", 2: "DONE", 3: "TIMEOUT", 4: "ERR"}
 
 def tick_loop():
     while True:
-        lib.pn_twin_tick()
+        if TIMECTL["paused"] and not TIMECTL["step_once"]:
+            time.sleep(0.05)
+            continue
+        if TIMECTL["step_once"]:                 # 暂停下单步：执行一次 tick 后清标志
+            lib.pn_twin_tick()
+            TIMECTL["step_once"] = False
+        else:                                    # 倍速：每 50ms 墙钟跑 n 次 dll tick
+            for _ in range(max(1, int(round(TIMECTL["speed"])))):
+                lib.pn_twin_tick()
+        # 板级电气孪生与 dll 同步推进 (duty 为 c_uint8 无符号, >0 即激励)
+        BOARD.step(0.05 * TIMECTL["speed"],
+                   [lib.pn_twin_valve_duty(i) > 0 for i in range(8)],
+                   lib.pn_twin_pump_duty() > 0)
         time.sleep(0.05)
 
 
@@ -55,6 +90,17 @@ class Handler(BaseHTTPRequestHandler):
     def _json(self, obj):
         self._send(200, json.dumps(obj, ensure_ascii=False), "application/json; charset=utf-8")
 
+    def _err(self, code, msg):
+        self._send(code, json.dumps({"error": msg}, ensure_ascii=False), "application/json")
+
+    def _query(self, key):
+        """从 self.path 提取查询参数值 (无则 None)。"""
+        qs = self.path.partition("?")[2]
+        for kv in qs.split("&"):
+            if kv.startswith(key + "="):
+                return kv[len(key) + 1:]
+        return None
+
     def do_GET(self):
         path = self.path.split("?")[0]
         if path in ("/", "/index.html", "/gui", "/gui.html"):
@@ -62,6 +108,69 @@ class Handler(BaseHTTPRequestHandler):
         elif path == "/lib/echarts.min.js":
             self._send(200, (ROOT / "lib" / "echarts.min.js").read_bytes(),
                        "application/javascript; charset=utf-8")
+        elif path == "/lib/three.min.js":
+            f = ROOT / "lib" / "three.min.js"
+            if f.exists():
+                self._send(200, f.read_bytes(), "application/javascript; charset=utf-8")
+            else:
+                self._err(404, "three.min.js 未就绪 (放至 twin/lib/)")
+
+        # ------------------------------------------------ v1.2 板级电气孪生
+        elif path == "/api/board/state":
+            tel = BOARD.telemetry()
+            since = self._query("since")           # ?since=<秒>: 历史截取 t>=since
+            if since is not None:
+                try:
+                    s = float(since)
+                except ValueError:
+                    s = None
+                if s is not None:
+                    h = tel["history"]
+                    i0 = next((j for j, tv in enumerate(h["t"]) if tv >= s), len(h["t"]))
+                    tel["history"] = {k: v[i0:] for k, v in h.items()}
+            tel["api"] = API_VER
+            self._json(tel)
+
+        elif path == "/api/board/sim/presets":
+            presets = {}
+            for circuit, rows in sim_engine.SPEC.items():
+                presets[circuit] = {
+                    "default": {name: dflt for name, _lo, _hi, dflt in rows},
+                    "bounds": {name: [lo, hi] for name, lo, hi, _d in rows},
+                }
+            self._json({"api": API_VER, "presets": presets})
+
+        elif path == "/api/board/assembly":
+            f = ROOT / "meshes" / "assembly.json"
+            if not f.exists():
+                self._err(404, "meshes 未生成: 跑 enclosure/make_meshes.py")
+            else:
+                try:
+                    d = json.loads(f.read_bytes().decode("utf-8"))
+                except ValueError:
+                    self._err(500, "assembly.json 解析失败")
+                    return
+                d["api"] = API_VER
+                self._json(d)
+
+        elif path == "/api/board/history/export":
+            h = BOARD.telemetry()["history"]
+            lines = ["t_s,rail5v_v,rail3v3_v,load_a"]
+            for t, a, b, c in zip(h["t"], h["v5"], h["v33"], h["load"]):
+                lines.append(f"{t:.2f},{a:.3f},{b:.3f},{c:.3f}")
+            self._send(200, "\n".join(lines), "text/csv")
+
+        elif path.startswith("/meshes/"):
+            name = path[len("/meshes/"):]          # 防穿越: 仅字母数字下划线点 + .stl
+            if not (re.fullmatch(r"[A-Za-z0-9_.]+", name) and name.endswith(".stl")):
+                self._err(404, "非法 mesh 路径")
+                return
+            f = ROOT / "meshes" / name
+            if f.exists():
+                self._send(200, f.read_bytes(), "model/stl")
+            else:
+                self._err(404, f"mesh 不存在: {name}")
+
         elif path == "/api/state":
             self._json({
                 "state": lib.pn_twin_state(),
@@ -116,7 +225,10 @@ class Handler(BaseHTTPRequestHandler):
         n = int(self.headers.get("Content-Length", 0))
         body = self.rfile.read(n).decode("utf-8", errors="replace")
         if self.path == "/api/cmd":
-            lib.pn_twin_command(body.strip().encode("utf-8"))
+            cmd = body.strip()
+            if REC["on"]:                          # 录制旁路：墙钟时间戳 + 命令字符串
+                REC["buf"].append({"t": time.time(), "cmd": cmd})
+            lib.pn_twin_command(cmd.encode("utf-8"))
             self._json({"ok": True})
         elif self.path == "/api/reset":
             # 虚拟断电重启：超压等错误位是固件安全锁存（set 后不复位），
@@ -149,6 +261,78 @@ class Handler(BaseHTTPRequestHandler):
                     self._json({"ok": False})
             except ValueError:
                 self._json({"ok": False})
+
+        # ------------------------------------------------ v1.2 时间/仿真/录制
+        elif self.path == "/api/board/sim":
+            try:
+                req = json.loads(body) if body.strip() else {}
+            except ValueError:
+                req = None
+            if not isinstance(req, dict):
+                req = {}
+            try:
+                fut = SIM_POOL.submit(sim_engine.run, req.get("circuit"), req.get("params"))
+                r = fut.result(timeout=3)
+            except sim_engine.ParamError as e:      # 未知电路/参数/超域 → 400
+                self._send(400, json.dumps({"error": str(e)}, ensure_ascii=False),
+                           "application/json")
+                return
+            except concurrent.futures.TimeoutError:
+                self._err(504, "仿真超时 (>3s)")
+                return
+            r["api"] = API_VER
+            self._json(r)
+
+        elif self.path == "/api/time":
+            try:
+                req = json.loads(body) if body.strip() else {}
+            except ValueError:
+                req = None
+            if not isinstance(req, dict):
+                req = {}
+            if "paused" in req:
+                TIMECTL["paused"] = bool(req["paused"])
+            if "speed" in req:
+                try:
+                    TIMECTL["speed"] = min(4.0, max(0.25, float(req["speed"])))
+                except (TypeError, ValueError):
+                    pass
+            if "step_once" in req:
+                TIMECTL["step_once"] = bool(req["step_once"])
+            self._json({"api": API_VER, **TIMECTL})
+
+        elif self.path == "/api/record":
+            try:
+                req = json.loads(body) if body.strip() else {}
+            except ValueError:
+                req = None
+            if not isinstance(req, dict):
+                req = {}
+            action = req.get("action")
+            if action == "start":
+                REC["on"] = True
+                REC["buf"] = []
+            elif action == "stop":
+                REC["on"] = False
+                out = ROOT / "recordings" / f"rec_{time.strftime('%H%M%S')}.json"
+                out.parent.mkdir(parents=True, exist_ok=True)
+                out.write_bytes(json.dumps(REC["buf"], ensure_ascii=False).encode("utf-8"))
+            self._json({"api": API_VER, "recording": REC["on"], "n": len(REC["buf"])})
+
+        elif self.path == "/api/record/replay":
+            try:
+                req = json.loads(body) if body.strip() else {}
+            except ValueError:
+                req = None
+            if not isinstance(req, dict):
+                req = {}
+            replayed = 0
+            for ev in req.get("events") or []:
+                if isinstance(ev, dict) and isinstance(ev.get("cmd"), str):
+                    lib.pn_twin_command(ev["cmd"].encode("utf-8"))
+                    replayed += 1
+            self._json({"api": API_VER, "replayed": replayed})
+
         else:
             self._send(404, '{"error":"not found"}', "application/json")
 
@@ -159,5 +343,5 @@ class Handler(BaseHTTPRequestHandler):
 if __name__ == "__main__":
     lib.pn_twin_init()
     threading.Thread(target=tick_loop, daemon=True).start()
-    print(f"FlowIO P0 数字孪生服务 → http://127.0.0.1:{PORT}")
+    print(f"FlowIO P0 数字孪生服务 [API {API_VER}] → http://127.0.0.1:{PORT}")
     ThreadingHTTPServer(("127.0.0.1", PORT), Handler).serve_forever()
