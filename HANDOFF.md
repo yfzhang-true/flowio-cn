@@ -148,3 +148,38 @@ state api=1.2 且全 payload 无 leak 字样；assembly parts=5、bbox_mm=[95.8,
 | F4 | Minor 债（loss_mw 常量/SIM 挂死/replay 无时序/冒烟覆盖） | loss_mw 动态化同源引擎/SIM 忙锁 503/replay 后台时序+409/冒烟 7→11 | 81b0467 |
 
 剩余路线图不变：OTA/HIL/Web API 多设备/SDK BLE 传输/报表产品化（均需硬件或独立产品化决策）。
+
+
+## 前端 v2 交付（2026-10-02）
+
+按 spec/plan `docs/superpowers/{specs,plans}/2026-10-02-twin-frontend-v2*.md` 八任务全部完成。
+`/` = 产品爆炸视图核心 v2（零构建 ES Modules，`firmware/twin/webapp/` 直服），旧 gui.html 挂 `/classic` 过渡，**API v1.2 端点零改动**。
+
+### 任务-SHA 表
+
+| # | 任务 | SHA |
+|---|---|---|
+| T1 | v2 骨架：Liquid Glass 令牌/server 路由(`//classic`/301)/vendor three r160 | 5d8b323 |
+| T2 | 流拓扑同源：make_flows.py（pos.csv→flows.json/hotspots.json，同源断言测试） | d5161a2 |
+| T3 | 3D 主场景：装配叙事/爆炸滑杆/材质升级/热点拾取 | 4a5ff5d |
+| T4 | 电流辉光+气流粒子：遥测驱动长在产品上，爆炸跟随 | fb42c51 |
+| T5 | 遥测抽屉 sparkline/控制分段控件/热点卡：仪表盘降级为辅助 | 12c83a6 |
+| T6 | 仿真浮层+BLE 真机模式迁移+状态行 | d7565c8 |
+| T7 | test_webapp.js（44 断言全链）+ 旧三测试挂 /classic + 全回归 | b460a05 |
+| T8 | 目视 8 项+断连态像素审计 26/26 + fps 56.8 + 文档三处 | 本提交 |
+
+### 测试矩阵（T7/T8 全绿）
+
+- `node test_webapp.js` **44/44**（装配 5 部件/爆炸位移/`I 1 255`→gate1 uGain>0.5+port1 粒子/`S 1` 静默/`V 1 255` 真空 dir=-1 琥珀/抽屉开合/fetch 拦截 CLI/U3 中心 raycaster 点击热点卡/sim 400 红条/`/classic`）
+- 旧三套改挂 `/classic`：test_gui **28/28** · test_gui_p1 **40/40** · test_e2e **43/43**
+- `bash test_api.sh` **50/50** · `bash test_api_board.sh` 全 OK（exit 0，与 v2 无耦合原绿）
+- KPY：`test_sim_engine.py` OK · `test_board_model.py` OK · `test_flows.py` OK（同源断言）
+- 目视（`shots/v2_01..10.png`）：机内像素审计（直方图/色簇/差分+浏览器投影走廊）**26/26** + AI 视觉复核（装配材质/UI 布局/热点卡内容全对）
+- 性能：`?debug` 60s rAF 采样 **56.8 fps**（--use-angle=d3d11 与默认同值，≥45 达标；`?perf=low` 预留未启用）
+
+### 已知事项（记档）
+
+1. **air depthTest 覆盖渲染裁定**：气流底线/粒子 `depthTest:false`+高 renderOrder——开孔在 +Y 侧壁、默认视角管路被壳遮挡，叠加式辉光保证"通道存在/气流喷出"始终可见（spec §3.2 底光语义）；电流线保持深度遮挡。代价：亮壳表面上 additive 粒子对比度受限（像素审计走廊内 38px 青簇可检出、人眼观感偏克制，暗背景下清晰），维持裁定不改。
+2. **R/S CLI 语义注记**（固件实证，前端已对齐）：`S <ports>` 确定性关阀（隔离密封）；`R` 释放但不清 duty——UI「释」段映射 `S` 而非 `R`，测试用例避免依赖 R。
+3. **classic 退线决策待定**：`/classic`（gui.html+旧三套测试）保留为过渡；退线需先迁移 P1 面板独有的调试入口（泄漏注入/物理注入/scheduler 编排）再定时间表。
+4. 遥测抽屉默认收起、热点卡 live 值满量程横条为 spec §2/§5 语义；fps 受 headless vsync 钳制 ~57，真机浏览器更高。

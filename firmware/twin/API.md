@@ -1,13 +1,14 @@
 # FlowIO-CN 数字孪生 — 前后端接口文档（API.md）
 
-> 版本：v1.2（2026-10-02：P1 板级孪生/仿真/时间/录制端点收录；TinyML 泄漏检测端点 `/api/leakdetect` 下线——spec §12）
+> 版本：v1.2（2026-10-02：P1 板级孪生/仿真/时间/录制端点收录；TinyML 泄漏检测端点 `/api/leakdetect` 下线——spec §12。
+> 2026-10-02 晚：前端 v2 上线——入口改 `/`（webapp/），旧 gui.html 挂 `/classic` 过渡；**API 端点零改动**）
 > 本文档是前后端开发的**唯一契约来源**。改接口必须同步改本文档（宪法第七章）。
 
 ## 0. 架构与端口
 
 ```
-浏览器 gui.html（前端，无状态纯视图）
-   │  HTTP + JSON（localhost）
+浏览器 /（v2 webapp：3D 产品场景 + 玻璃抽屉）或 /classic（旧 gui.html，过渡期）
+   │  HTTP + JSON（localhost）·  v2 另取 /webapp/* 静态资源（js/css/json，零构建 ES Modules）
    ▼
 server.py（:8000 用户实例 / :8017 测试隔离实例）
    │  ctypes
@@ -21,8 +22,10 @@ pn_twin.dll（pn_core 控制逻辑【与 ESP32 固件同一份代码】+ 物理 
 
 ## 1. HTTP 端点
 
-### 1.1 `GET /` 和 `GET /gui`
-返回 gui.html（唯一前端）。`/` 重定向到 `/gui`。
+### 1.1 前端入口 `GET /` · `GET /classic` · `GET /gui`（301）
+`/`（及 `/index.html`、`/webapp`）返回 v2 前端 `webapp/index.html`（产品爆炸视图核心）；
+`/classic` 返回旧 gui.html（**过渡期保留**，退线时间待定）；`/gui` 与 `/gui.html` 301 → `/`。
+静态资源：`GET /webapp/<rel>`（vendor three r16x / js / css / flows.json / hotspots.json，防路径穿越）。
 
 ### 1.2 `GET /api/state` — 状态查询（前端每 200ms 轮询）
 
