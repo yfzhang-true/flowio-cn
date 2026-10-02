@@ -9,11 +9,25 @@
 \bioinfo{开源}{代码/图纸/STL 见配套仓库}
 \extrainfo{开源书稿：正文 CC BY-NC-ND 4.0，代码 MIT，硬件 CERN-OHL-S。}
 \setcounter{tocdepth}{2}
+\usepackage{longtable} % 36 行验收工单总表跨页
 \begin{document}
 \maketitle
 \frontmatter
 \tableofcontents
 \mainmatter
+\input{content/ch01-intro}
+\input{content/ch02-twin}
+\input{content/ch03-schematic}
+\input{content/ch04-pcb}
+\input{content/ch05-manufacturing}
+\input{content/ch06-enclosure}
+\input{content/ch07-firmware}
+\input{content/ch08-ble}
+\input{content/ch09-host}
+\input{content/ch10-sdk}
 \input{content/ch11-acceptance}
+\input{content/ch12-product}
+\appendix
+% 附录占位：回板后收录工单证据汇编与串口日志精选
 \backmatter
 \end{document}

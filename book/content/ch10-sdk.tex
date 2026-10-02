@@ -1,0 +1,11 @@
+\chapter{Python SDK}
+\label{ch:sdk}
+
+\section{flowio\_sdk 与协议双向编解码}
+\texttt{sdk/python/}：命令帧的构造与解析共用同一张向量表——\texttt{test\_protocol.py} 以 \texttt{vectors.json} 的 9 组向量做双向编解码回归（工单 A104）。
+
+\section{hello\_globe 冒烟}
+一条命令连接真机/孪生并点亮执行器的最小示例：白牌厂商集成的 5 分钟上手路径。
+
+\section{面向二次开发的接口面}
+串口与 BLE 双通道、状态字语义、压力单位约定（kPa$\times$10 整数传输）——开放 API 的边界即产品文档的边界。

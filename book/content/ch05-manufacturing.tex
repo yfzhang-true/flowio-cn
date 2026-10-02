@@ -1,0 +1,14 @@
+\chapter{制造：嘉立创全代工实战}
+\label{ch:fab}
+
+\section{BOM 带 LCSC 编码与基础库优先}
+\texttt{hardware/flowio-p1/fab/} 全套下单资产：BOM 逐行带 LCSC 编码，AO3400A/SS14 等优先选基础库降低贴装费。
+
+\section{SMT107+THT16 全代焊方案}
+标准版 PCBA 全代工：107 个 SMT 贴片 + 16 个 THT 插件全部由嘉立创代焊，白牌厂商零焊接门槛。
+
+\section{工艺注意事项}
+8 处 via-in-pad 需 IPC-4761 Type VII 填孔电镀；最小孔距 0.20\,mm 对齐 JLC 经济档能力（\texttt{README-jlc-order.md}）。
+
+\section{板 5 装 2 的下单策略}
+制板最低 5 片、贴装仅 2 片（主力+备用），费用约 360--720 元的取舍逻辑。

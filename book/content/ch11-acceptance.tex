@@ -30,3 +30,83 @@
   \item 软件侧（回板前）：装配叙事/爆炸跟随/流光联动/热点卡/仿真浮层/BLE 契约 —— 已由 44+111 断言与 26 项目视审计覆盖；
   \item 硬件侧（回板后）：按 \texttt{firmware/BRINGUP.md} 九章动线执行，产物（示波器照片/标定曲线/校准后黄徽转绿截图）直接补入本章各节。
 \end{itemize}
+
+\section{验收工单机制：一张工单，两份产物}
+\label{sec:acc-ticket}
+
+回板验收与书稿写作共用一套"验收工单"机制（spec \texttt{2026-10-02-acceptance-book-design.md}）：每项验收是一张工单——\texttt{book/tickets/A\#\#\#.yaml}，YAML 头记录元数据（相位/对应 BRINGUP 章节/汇入书稿章/状态/证据要求），Markdown 正文记录操作步骤、实测值与判定。一张工单完成等于两份产物落袋：BRINGUP 对应 checkbox 勾掉，书稿对应小节的图与数据就位。\textbf{fail 的工单同样入书}（"踩坑实录"专栏——比 pass 更有教学价值）。管理工具 \texttt{book/tools/ticket.py}（纯标准库）提供 \texttt{new}/\texttt{report}/\texttt{set\_status} 三个子命令，验收进度与写书进度一屏可见。
+
+\section{36 张验收工单总表}
+\label{sec:acc-table}
+
+表~\ref{tab:tickets} 为全部 36 张工单的当前状态：软件侧（sw）六张回板前已验证完毕（\ref{sec:acc-sw} 节），硬件侧（hw）二十四张与标定（cal）六张待回板执行。
+
+\begin{longtable}{llp{6.6cm}l}
+  \caption{36 张验收工单总表（2026-10-02：pass 6 / pending 30）}\label{tab:tickets}\\
+  \toprule
+  ID（相位 · BRINGUP） & 书章 & 工单内容 & 状态 \\
+  \midrule
+  \endfirsthead
+  \multicolumn{4}{l}{\tablename~\thetable{}（续）}\\
+  \toprule
+  ID（相位 · BRINGUP） & 书章 & 工单内容 & 状态 \\
+  \midrule
+  \endhead
+  \bottomrule
+  \endfoot
+  \endlastfoot
+  A101（sw · --） & 11 & 孪生 v2 首屏装配叙事 + 爆炸滑杆 & \texttt{pass} \\
+  A102（sw · --） & 11 & 电流/气流联动：I/V/S 命令差分截图 & \texttt{pass} \\
+  A103（sw · --） & 9 & 仿真实验室四电路重算（含 i2c 告警案例） & \texttt{pass} \\
+  A104（sw · --） & 10 & SDK 协议向量双向 + hello\_globe 冒烟 & \texttt{pass} \\
+  A105（sw · --） & 7 & 固件 QEMU 冒烟 + 主机 33 测试 & \texttt{pass} \\
+  A106（sw · --） & 8 & BLE 契约载荷向量（nRF Connect 待真机，向量先验） & \texttt{pass} \\
+  \midrule
+  A201（hw · 1） & 11 & 首电三测（万用表） & \texttt{pending} \\
+  A202（hw · 1） & 11 & CH340 烧录/自动复位 & \texttt{pending} \\
+  A203（hw · 2） & 11 & 74HCT245 电平迁移（示波器） & \texttt{pending} \\
+  A204（hw · 2） & 11 & MOS 触发栅极/Vds 波形（示波器） & \texttt{pending} \\
+  A205（hw · 4） & 11 & WS2812 状态灯 & \texttt{pending} \\
+  A206（hw · 3） & 11 & TCA 五通道扫描 & \texttt{pending} \\
+  A207（hw · 5） & 11 & 8 阀全功能（听声+电流） & \texttt{pending} \\
+  A208（hw · 6） & 11 & I2C tr 实测（100/400kHz 裁决） & \texttt{pending} \\
+  A209（hw · 8） & 11 & BLE 三步（扫描/写/订阅） & \texttt{pending} \\
+  A210（hw · 8） & 11 & gui 真机模式（Web Bluetooth） & \texttt{pending} \\
+  A211（hw · 7） & 11 & 电气校准①阀线圈 R/L（万用表+LCR） & \texttt{pending} \\
+  A212（hw · 7） & 11 & 电气校准②AO3400 RDS（示波器反推） & \texttt{pending} \\
+  A213（hw · 7） & 11 & 电气校准③buck ESR/Cout（纹波反推） & \texttt{pending} \\
+  A214（hw · 7） & 11 & 电气校准④负载调整率/效率（4 线法） & \texttt{pending} \\
+  A215（hw · 7） & 11 & 电气校准⑤⑥$\theta_{ja}$ 红外 + ESP32 电流钳 & \texttt{pending} \\
+  A216（hw · 9） & 11 & 泵实验A 充气死点（calibrate\_pump.py） & \texttt{pending} \\
+  A217（hw · 9） & 11 & 泵实验B 真空死点 & \texttt{pending} \\
+  A218（hw · 9） & 11 & 泵实验C 升压曲线 & \texttt{pending} \\
+  A219（hw · 9） & 11 & 闭环充气到目标 kPa & \texttt{pending} \\
+  A220（hw · 9+） & 11 & 外壳装配（M3 自攻 + 端子开孔对位） & \texttt{pending} \\
+  A221（hw · 9+） & 11 & 整机气密（保压 60s） & \texttt{pending} \\
+  A222（hw · 9+） & 11 & 长跑温升 & \texttt{pending} \\
+  A223（hw · 9+） & 11 & 8 阀轮巡 & \texttt{pending} \\
+  A224（hw · 9+） & 11 & 满载纹波 & \texttt{pending} \\
+  \midrule
+  A301（cal · 7） & 12 & 孪生对拍：阀驱动电流曲线（BOARD\_PARAMS 改后叠图） & \texttt{pending} \\
+  A302（cal · 7） & 12 & 孪生对拍：电源效率/纹波（4 线法实测叠图） & \texttt{pending} \\
+  A303（cal · 7） & 12 & 孪生对拍：热学温升（$\theta_{ja}$ 修正后叠图） & \texttt{pending} \\
+  A304（cal · 9） & 12 & 孪生对拍：充气升压曲线（实验C CSV 叠图） & \texttt{pending} \\
+  A305（cal · 9） & 12 & 孪生对拍：真空死点曲线（实验B CSV 叠图） & \texttt{pending} \\
+  A306（cal · 9） & 12 & 孪生对拍：闭环精度 + 数字孪生精度报告 & \texttt{pending} \\
+\end{longtable}
+
+\section{软件侧六项：预验证记录（回板前完成）}
+\label{sec:acc-sw}
+
+软件侧六张工单在回板前即可执行完毕，证据已归档，状态预填 \texttt{pass}：
+
+\begin{itemize}
+  \item \textbf{A101 孪生 v2 首屏装配叙事 + 爆炸滑杆}——\texttt{firmware/twin/shots/v2\_*.png} 26 项目视记录（机内像素审计 26/26 + AI 视觉复核，commit \texttt{ec3cefa}）；本章图~1--3 即其直接复用；
+  \item \textbf{A102 电流/气流联动}——\texttt{I/V/S} 三命令差分截图：\texttt{v2\_03\_inflate.png}（I 全充）/ \texttt{v2\_05\_vacuum.png}（V 抽真空）/ \texttt{v2\_04\_silent.png}（S 静默态）；
+  \item \textbf{A103 仿真实验室四电路重算}——\texttt{v2\_08\_simlab.png} 四电路重算记录 + \texttt{test\_webapp.js} 44 断言全绿（详见第~\ref{ch:host} 章）；
+  \item \textbf{A104 SDK 协议向量双向 + hello\_globe 冒烟}——\texttt{sdk/python/tests/} 以 \texttt{vectors.json} 9 组向量做双向编解码回归（详见第~\ref{ch:sdk} 章）；
+  \item \textbf{A105 固件 QEMU 冒烟 + 主机 33 测试}——\texttt{firmware/tests/} 33 个主机测试全绿 + \texttt{qemu\_smoke.sh}（详见第~\ref{ch:firmware} 章）；
+  \item \textbf{A106 BLE 契约载荷向量}——\texttt{twin/BLE.md} \S 4.1 命令帧（0xA5 前缀）与 \S 4.2 state 20B 小端载荷向量先验冻结；真机 nRF Connect 验证回板后归 A209（详见第~\ref{ch:ble} 章）。
+\end{itemize}
+
+回板后，硬件侧二十四张按 \texttt{firmware/BRINGUP.md} 各章标注的"对应工单"逐张执行；标定侧六张的产物汇入第~\ref{ch:product} 章精度报告。

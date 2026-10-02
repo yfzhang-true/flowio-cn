@@ -1,0 +1,11 @@
+\chapter{BLE 无线}
+\label{ch:ble}
+
+\section{NimBLE 服务树}
+四服务结构：Command（cmd 写特征 + resp 通知特征）与 Telemetry（state 10Hz 通知特征）的 UUID 设计。
+
+\section{契约先行：载荷向量}
+\texttt{twin/BLE.md} \S 4.1 的命令帧（0xA5 前缀，$\le$20B）与 \S 4.2 的 20 字节 state 帧（state u16 + 5$\times$pressure i16LE kPa$\times$10 + tick u16）在写代码前先冻结——软件侧工单 A106 的向量先验即由此而来。
+
+\section{真机验证三步}
+nRF Connect 扫描、写命令、订阅遥测（工单 A209），以及 Web Bluetooth 的浏览器直连（工单 A210）。

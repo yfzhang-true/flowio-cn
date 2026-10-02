@@ -1,0 +1,11 @@
+\chapter{结构：FreeCAD 参数化外壳}
+\label{ch:enclosure}
+
+\section{参数化建模与 PCB 联动}
+\texttt{hardware/flowio-p1/enclosure/}：外壳关键尺寸由 PCB 板框与连接器坐标驱动，改板不必重画壳。
+
+\section{M3 自攻柱与端子开孔}
+螺丝端子排的开孔对位公差；装配动线对应工单 A220（见第~\ref{ch:acceptance} 章）。
+
+\section{装配干涉检查}
+渲染装配图核对阀/泵接管方向与外壳开孔的一致性，装配零干涉是出 STL 前的最后一道闸。

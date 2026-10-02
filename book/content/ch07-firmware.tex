@@ -1,0 +1,14 @@
+\chapter{固件：ESP-IDF 分层架构}
+\label{ch:firmware}
+
+\section{pn\_core 分层与 HAL 抽象}
+核心逻辑（\texttt{pn\_core}）与硬件访问（\texttt{hal\_esp32.c}）分离：同一份核心代码可在主机 mock 与 QEMU 上运行，这是"33 个主机测试全绿"的前提。
+
+\section{CLI 十三条命令}
+\texttt{O/C/I/V/R/S/T/W/P} 等命令既是调试入口，也是回板验收的标准工具——BRINGUP 九章动线的每一步都靠它驱动（工单 A201--A224）。
+
+\section{主机测试与 QEMU 冒烟}
+\texttt{firmware/tests/} 33 个测试全绿 + \texttt{qemu\_smoke.sh} 冒烟，构成软件侧工单 A105 的证据链（见第~\ref{ch:acceptance} 章）。
+
+\section{PID 闭环与状态机}
+充气到目标 kPa 的闭环控制（工单 A219）：压力反馈、占空比输出与状态字的联动。
