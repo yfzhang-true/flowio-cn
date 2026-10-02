@@ -25,7 +25,7 @@ gui.html (现有气动台 + 新顶层标签页 "P1 板级", 内含三子面板: 
    │  HTTP+JSON + 静态文件 (API.md v1.2)
    ▼
 server.py  ——— 运行时切换: KiCad 自带 python (numpy 2.4.2 + ctypes 双能力)
-   ├─ 既有 v1.1 端点全部不动 (/api/state /api/cmd /api/reset /api/sim /api/leak /api/leakdetect / /gui)
+   ├─ 既有 v1.1 端点: /api/state /api/cmd /api/reset /api/sim /api/leak / /gui 保留; /api/leakdetect **下线** (见 §12)
    ├─ board_model.py (新)   ← 100ms tick: 读 pn_twin.dll 阀/泵状态 → 板级推演 → 环形历史 600s
    ├─ sim_engine.py  (新)   ← 参数化四电路模型 (从 tools/sim 重构 import, 去 report 化)
    └─ /lib/three.min.js + /meshes/*.stl (静态)
@@ -77,6 +77,20 @@ body: `{ "circuit": "buck|dior|valve|i2c", "params": {...} }`，响应：
              {"id":"parts_B","name":"器件阵-底面","stl":"/meshes/parts_b.stl","color":"#1565c0","explode":[0,0,-8]} ],
   "bbox_mm": [95.8, 80.8, 19], "assembly_note": "M3×2 螺丝自攻入下壳铜柱" }
 ```
+
+
+### 3.6 `GET/POST /api/time` — 孪生时间控制（差距项 #5）
+POST body `{"paused": bool, "speed": 0.25-4.0, "step_once": bool}` → 回显当前 `{api, paused, speed}`；GET 返回当前状态。暂停时 tick_loop 空转，step_once 单步一个 50ms tick，speed 为 tick 倍速。
+
+### 3.7 `POST /api/record` + `POST /api/record/replay` — 场景录制回放（差距项 #4）
+- record: `{"action":"start"|"stop"}`；start 起录（复用 /api/cmd 入口旁路环形缓冲），stop 落盘 `recordings/rec_HHMMSS.json`（事件数组 `[{t, cmd}]`），回 `{recording, n}`。
+- replay: `{"events":[...]}` → 逐条注入 `pn_twin_command` → 回 `{replayed}`。
+
+### 3.8 `GET /api/board/history/export` — 遥测 CSV（差距项 #6）
+`text/csv`：表头 `t_s,rail5v_v,rail3v3_v,load_a` + 600s 全量行。
+
+### 3.9 版本字段（差距项 #8）
+所有 v1.2 新端点响应含 `"api": "1.2"`；v1.1 既有端点不动（避免破坏 gui 现页）。
 
 ### 3.5 静态资源
 `/lib/three.min.js`（本地打包，同 echarts 模式）、`/meshes/*.stl`（二进制 STL）。
@@ -234,3 +248,21 @@ CH340K 烧录与自动复位、74HCT245/MOS 触发波形、TCA 实测扫描 5 �
 
 ### 11.4 本期范围外（路线图重申）
 OTA 升级、Web API 多设备同步、SDK BLE 传输、真机-孪生 HIL 对拍、治疗报表产品化。
+
+
+---
+
+## 12. TinyML 泄漏检测功能下线（2026-10-02 用户裁定：对标 FlowIO 无此功能）
+
+**范围 = 后端 + 接口 + 前端 全下线**，分层处置：
+
+| 层 | 处置 |
+|---|---|
+| server.py | 删 `/api/leakdetect` 分支；`/api/board/state` 不含 leak 字段 |
+| API.md | 删 §1.2b（leakdetect）；**保留** §1.5 `/api/leak`（物理故障注入=开发调试工具，非产品功能，v1.1 语义不变，加一行"开发工具"注记） |
+| gui.html | 删泄漏检测/注入面板中的检测呈现部分（注入开关若仅服务于检测演示一并删） |
+| firmware | `main.c` 删 `pn_ml_tick` 调用与 include；`components/pn_ml` 目录保留但不再被引用（构建系统零改动，git 历史留档） |
+| twin 资产 | `ml_*.py / dataset/ / model/ / ml_conformance* / leak_model_int8.tflite` → `deprecated/ml-leak/` 归档（git mv，不删历史） |
+| pn_twin.dll | `pn_twin_leak_detect/ml_samples` 导出保留（重编非必须，server 不再调用即功能下线） |
+
+**对 ML-PLAN 遗产的处置**：训练管线/数据集/模型归档不删——若未来客户要求差异化可复活；PHYSICS-SPEC 的泄漏注入语义随 /api/leak 保留。

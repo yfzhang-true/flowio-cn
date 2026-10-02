@@ -306,7 +306,7 @@ TIMECTL = {"paused": False, "speed": 1.0, "step_once": False}
             if "since" in q:
                 t0 = float(q["since"][0]); i = next((k for k,v in enumerate(d["history"]["t"]) if v>=t0), 0)
                 d = {**d, "history": {k: (v[i:] if k!="vi" else [row[i:] for row in v]) for k,v in d["history"].items()}}
-            d["api"] = API_VER; d["leak"] = {"conf": getattr(lib, "pn_twin_leak_detect", lambda c: 0)(ctypes.c_float())}
+            d["api"] = API_VER
             self._json(d)
         elif path == "/api/board/sim/presets":
             self._json({"api": API_VER, "presets": {c: {"default": {k: dv for k,_,_,dv in sim_engine.SPEC[c]},
@@ -355,7 +355,7 @@ TIMECTL = {"paused": False, "speed": 1.0, "step_once": False}
 ```bash
 # firmware/twin/test_api_board.sh
 KPY server.py & SRV=$!; sleep 2
-curl -s localhost:8000/api/board/state | python -c "import json,sys; d=json.load(sys.stdin); assert d['api']=='1.2' and 'rail_5v' in d and 'leak' in d; print('state OK')"
+curl -s localhost:8000/api/board/state | python -c "import json,sys; d=json.load(sys.stdin); assert d['api']=='1.2' and 'rail_5v' in d; print('state OK')"
 curl -s -X POST localhost:8000/api/board/sim -d '{"circuit":"buck","params":{"iload":2.0}}' | python -c "import json,sys; d=json.load(sys.stdin); assert d['waves']; print('sim OK')"
 curl -s -X POST localhost:8000/api/board/sim -d '{"circuit":"buck","params":{"vin":9}}' | grep -q 400 && echo "bounds OK"
 curl -s -X POST localhost:8000/api/time -d '{"paused":true}' | grep -q true && echo "time OK"
@@ -602,7 +602,7 @@ static void state_pack(const twin_snapshot_t *sn){   /* twin_snapshot_t 由 main
 - Vendor: `firmware/twin/lib/three.min.js` + `lib/OrbitControls.js`（r128 本地打包，来源 threejs.org releases，放入 lib/）
 
 - [ ] **Step 1: 顶层标签 + 三子面板骨架（结构）**——gui.html 外层包 `<nav id="topTabs">`（气动台 | P1 板级 | 连接真机(BLE)）；气动台为现有根 div 原样移入。P1 页三子卡：遥测 / 仿真 / 结构。
-- [ ] **Step 2: 遥测面板**——`pollBoard()`（可见时 200ms `fetch('/api/board/state?since=')`）；电源树 SVG（5V→[SS34]×2→buck→3.3V 节点 text 实时值）；ECharts 双 y 轴历史线（rail_5v.v / load_a）；8 阀电流条形；**泄漏检测卡**（`/api/board/state` 的 leak.conf → 正常/疑似 徽章）；角落固定黄徽章“模型参数：理论值（未本机标定）”；时间控制条（暂停/单步/速度 slider → POST /api/time）；录制按钮（→/api/record）。
+- [ ] **Step 2: 遥测面板**——`pollBoard()`（可见时 200ms `fetch('/api/board/state?since=')`）；电源树 SVG（5V→[SS34]×2→buck→3.3V 节点 text 实时值）；ECharts 双 y 轴历史线（rail_5v.v / load_a）；8 阀电流条形；角落固定黄徽章“模型参数：理论值（未本机标定）”；时间控制条（暂停/单步/速度 slider → POST /api/time）；录制按钮（→/api/record）。
 - [ ] **Step 3: 仿真面板**——四电路 select；参数表单由 `/api/board/sim/presets` 动态生成（每参数 number input，min/max 取自响应附域表——server 端 presets 增 `bounds` 字段随 Task 3 数据自然携带）；“重算”→POST，波形画 ECharts line、指标表带 verdict 徽章；按钮请求中 disabled，400/504 显示 error 文本。
 - [ ] **Step 4: 结构面板（Three.js）**——`fetch('/api/board/assembly')`→逐 part `THREE.STLLoader` 载入；爆炸滑杆 0-1 插值 `pos=explode*k`；播放按钮 2s 缓动往返；OrbitControls 旋转缩放；raycaster hover 高亮+tooltip 中文名；WebGL 不可用→文字提示。
 - [ ] **Step 5: Web Bluetooth（真机模式）**——`navigator.bluetooth.requestDevice({filters:[{namePrefix:'FLOWIO-P1'}]})`→connect GATT；命令路径改写 `ble.write(cmdChar, frame)`（帧由内置 0xA5 编码器——与 SDK protocol.py 同算法的 JS 版）；`stateChar.startNotifications`→解析 20B 更新同一 UI 状态机；顶栏模式徽章 孪生(HTTP)/真机(BLE)，真机模式下停 HTTP 轮询。浏览器不支持→按钮置灰。
@@ -614,7 +614,13 @@ static void state_pack(const twin_snapshot_t *sn){   /* twin_snapshot_t 由 main
 ### Task 9: 文档 — API.md v1.2 + BLE.md + README + BRINGUP.md
 
 - [ ] **Step 1: API.md** 增 §0 运行时注记（KPY 启动）、§新端点全量（Task 3 的五分支 + 版本字段语义 + 参数域表抄 spec §3.2）、版本号升 v1.2。
-- [ ] **Step 2: firmware/BRINGUP.md**（新建）——回板动线：CH340 烧录/自动复位→74HCT245/MOS 触发→TCA 实测扫描→WS2812→8 阀→I2C 首选 100kHz→BLE 三步（nRF Connect 扫描/写 cmd/订阅 notify）→ML 泄漏模型上机→电气校准 6 项（spec §10.2 表逐条→改 BOARD_PARAMS→徽章转绿）→泵三实验（calibrate_pump.py）。
+- [ ] **Step 1b: TinyML 泄漏检测下线（spec §12）**——
+  server.py 删 `/api/leakdetect` 分支；gui.html 删泄漏检测呈现；API.md 删 §1.2b（/api/leak 留+注记）；
+  `firmware/main/main.c` 删 `pn_ml_tick` 调用与 include（94 行附近）；归档:
+  `mkdir -p firmware/twin/deprecated/ml-leak && git mv firmware/twin/ml_*.py firmware/twin/ml_conformance* firmware/twin/leak_model_int8.tflite firmware/twin/deprecated/ml-leak/ && git mv firmware/twin/dataset firmware/twin/model firmware/twin/deprecated/ml-leak/`
+  验证: `bash test_api_board.sh` 仍全绿 + `curl -s localhost:8000/api/leakdetect` → 404
+
+- [ ] **Step 2: firmware/BRINGUP.md**（新建）——回板动线：CH340 烧录/自动复位→74HCT245/MOS 触发→TCA 实测扫描→WS2812→8 阀→I2C 首选 100kHz→BLE 三步（nRF Connect 扫描/写 cmd/订阅 notify）→电气校准 6 项（spec §10.2 表逐条→改 BOARD_PARAMS→徽章转绿）→泵三实验（calibrate_pump.py）。
 - [ ] **Step 3: twin/README 启动命令改 KPY**；根 README 增 sdk/python 一节。
 - [ ] **Step 4: 提交** — `git commit -m "docs: API v1.2/BLE.md/BRINGUP 回板动线/README 运行时"`
 
