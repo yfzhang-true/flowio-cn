@@ -53,9 +53,7 @@ lib.pn_twin_leak.restype = ctypes.c_float
 lib.pn_twin_leak.argtypes = [ctypes.c_uint8]
 lib.pn_twin_port_pressure.restype = ctypes.c_float
 lib.pn_twin_port_pressure.argtypes = [ctypes.c_uint8]
-lib.pn_twin_leak_detect.restype = ctypes.c_int
-lib.pn_twin_leak_detect.argtypes = [ctypes.POINTER(ctypes.c_float)]
-lib.pn_twin_ml_samples.restype = ctypes.c_int
+# TinyML 泄漏检测导出已随 spec §12 下线（2026-10-02）：pn_twin_leak_detect/pn_twin_ml_samples 原型一并移除
 
 CL_NAMES = {0: "IDLE", 1: "RUNNING", 2: "DONE", 3: "TIMEOUT", 4: "ERR"}
 
@@ -196,7 +194,6 @@ class Handler(BaseHTTPRequestHandler):
                 "cl": CL_NAMES.get(lib.pn_twin_cl_status(), "?"),
                 "err": 1 if (lib.pn_twin_state() & 0x8000) else 0,
                 "leaks": [round(lib.pn_twin_leak(i), 3) for i in range(7)],
-                "ml": lib.pn_twin_ml_samples(),
             })
         else:
             self._send(404, '{"error":"not found"}', "application/json")

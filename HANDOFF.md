@@ -133,7 +133,7 @@ state api=1.2 且全 payload 无 leak 字样；assembly parts=5、bbox_mm=[95.8,
 ### 遗留路线图（记档，非本期缺陷）
 
 1. **范围外路线图**（spec §11.4 重申）：OTA 升级、Web API 多设备同步、SDK BLE 传输（`sdk/python ble.py`+bleak）、真机-孪生 HIL 对拍、治疗报表产品化。
-2. `firmware/virtual/`：合并 subtree 时即预存损坏（陈旧 build/），本期未修，保持原样——如需虚拟设备调试入口先重建其 build。
+2. `firmware/virtual/`：合并 subtree 时即预存损坏（陈旧 build/）——**已修复（2026-10-02，根因=pn_core 泄漏检测耦合 pn_ml，F1 解耦后主机构建复活）**；`L` 命令保留并应答 `leak=off`。
 3. `firmware/build_n16r8.cmd`：曾出现 CRLF 行尾问题，已由根 `.gitattributes`（`* text=auto eol=lf`）统一修正并防复发；后续新增 Windows 批处理注意提交前归一。
-4. T1-T3 审查记档 Minor（未修，均为展示层/无控制风险）：telemetry `loss_mw` 四项损耗为 buck @3A 满载常量快照（706/162/436/85mW），不随实际 0.43A 负载重算；`r_coil/l_coil/i_pump` 为 [假设] 参数待回板标定（BRINGUP 六项校准后转绿）；board state 的 `ml:80` 字段保留属 DLL 导出遗留（API.md 已注记）。
+4. T1-T3 审查记档 Minor（未修，均为展示层/无控制风险）：telemetry `loss_mw` 四项损耗为 buck @3A 满载常量快照（706/162/436/85mW），不随实际 0.43A 负载重算；`r_coil/l_coil/i_pump` 为 [假设] 参数待回板标定（BRINGUP 六项校准后转绿）；board state 的 `ml:80` 字段已随 F1 泄漏解耦移除（2026-10-02，DLL 导出删除；API.md 已同步）。
 5. 回板实测对照清单见 §1 待完成第 3 条（效率 87.6%/纹波 ~1mV/阶跃 199mV；注：纹波对照值随本次修正由 3mV 更正为 ~1mV）。

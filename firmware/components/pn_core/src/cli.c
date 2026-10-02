@@ -1,10 +1,9 @@
 /**
  * pn_core/cli.c — CLI 分发实现（从 main.c 抽出，双宿主共用）
+ * 2026-10-02：TinyML 泄漏检测随 spec §12 全下线，'L' 改为应答 leak=off（pn_core 不再依赖 pn_ml）
  */
 #include "pn_core/cli.h"
 #include "pn_core/closedloop.h"
-#include "pn_core/leak_detect.h"
-#include "pn_ml/leak_infer.h"
 
 #include <stdarg.h>
 #include <stdio.h>
@@ -131,16 +130,10 @@ void pn_cli_process_line(char *line)
     case 'T':
         cli_out("state=0x%04X err=%d\n", (unsigned)pn_get_state(), pn_last_error());
         break;
-    case 'L': {   /* 泄漏检测（TinyML，需上电 ≥4s 采样）。
-                   * 旧 'L'=手动节能优化已删（tick 循环自动调用，冗余调试命令） */
-        float conf = 0.f;
-        int cls = pn_leak_detect(&conf);
-        if (cls < 0)
-            cli_out("leak=detecting samples=%d/80\n", pn_ml_samples());
-        else
-            cli_out("leak=%s conf=%.2f\n", pn_ml_class_name(cls), (double)conf);
+    case 'L':   /* 泄漏检测已随 TinyML 下线（spec §12，2026-10-02）。
+                 * 保留命令号不 404：应答告知语义，避免旧客户端/BLE 脚本拿到 '?' */
+        cli_out("leak=off (TinyML retired 2026-10-02)\n");
         break;
-    }
     default:
         cli_out("?\n");
     }

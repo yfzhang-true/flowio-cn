@@ -17,7 +17,6 @@
 #include "../components/pn_core/include/pn_core/actions.h"
 #include "../components/pn_core/include/pn_core/closedloop.h"
 #include "../components/pn_core/include/pn_core/cli.h"
-#include "../components/pn_core/include/pn_core/leak_detect.h"
 #include "../tests/mock_hal.h"
 
 #include <math.h>
@@ -54,7 +53,6 @@
 static float s_leak[7];            /* 泄漏系数：0-4 端口 / 5 进气 / 6 排气 */
 static uint32_t s_prev_ports;      /* 上拍端口阀位图（开阀混合/关阀快照检测） */
 static float s_port_p[5];          /* 端口侧独立气压节点（阀关后隔离容积，gauge kPa）——物理 v2.1 */
-static uint32_t s_twin_ms;         /* 虚拟时钟（TinyML 采样节流用，init 归零） */
 
 static float sq_pos(float v) { return v > 0.f ? v : 0.f; }
 
@@ -72,7 +70,6 @@ PN_TWIN_API void pn_twin_init(void)
     for (int i = 0; i < 7; ++i) s_leak[i] = 0.f;
     for (int i = 0; i < 5; ++i) s_port_p[i] = 0.f;
     s_prev_ports = 0;
-    s_twin_ms = 0;
 }
 
 PN_TWIN_API uint32_t pn_twin_state(void) { return pn_get_state(); }
@@ -204,8 +201,6 @@ PN_TWIN_API int pn_twin_tick(void)
     s_last_cl = (int)cl;
     pn_optimize_power(PN_HOLD_DEFAULT_DUTY, PN_HOLD_DEFAULT_DELAY_MS);
     pn_check_overpressure(120.f);
-    pn_ml_tick(s_twin_ms);          /* TinyML 20Hz 采样（内部 ≥45ms 节流） */
-    s_twin_ms += TICK_MS;
     return (int)cl;
 }
 
@@ -228,6 +223,5 @@ PN_TWIN_API float pn_twin_port_pressure(uint8_t idx)
     return (ports & (1u << idx)) ? pn_mock_sensor_kpa[0] : s_port_p[idx];
 }
 
-/* TinyML 泄漏检测（C 推理器 = 未来 ESP32 同一份代码；一致性 21/21 对齐 TFLite） */
-PN_TWIN_API int pn_twin_leak_detect(float *conf) { return pn_leak_detect(conf); }
-PN_TWIN_API int pn_twin_ml_samples(void) { return pn_ml_samples(); }
+/* TinyML 泄漏检测已随 spec §12 下线（2026-10-02）：pn_twin_leak_detect/pn_twin_ml_samples
+ * 导出删除，实现归档 twin/deprecated/ml-leak/。CLI 'L' 应答 leak=off。 */

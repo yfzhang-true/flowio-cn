@@ -26,7 +26,7 @@ int main(void)
     for (int i = 0; i < 160; ++i) pn_twin_tick();
     printf("after release 4s: sensor0=%.2f kPa (期望 <3)\n", (double)pn_twin_sensor(0));
 
-    /* TinyML Phase 0：泄漏注入 demo——H 诊断保压（泵侧密封+端口保持通），
+    /* 泄漏注入 demo（物理观测）——H 诊断保压（泵侧密封+端口保持通），
      * 端口泄漏可被汇流管传感器观测（物理 v2.1：S 隔离保压下端口侧泄漏不可见） */
     pn_twin_command("S 1");
     pn_twin_command("I 1 255");
@@ -48,23 +48,8 @@ int main(void)
            (double)pp1, (double)pp2);
     (void)pp0;
 
-    /* TinyML 泄漏检测（2026-09-23 部署）：CLI 'L' + API 两条路都验
-     * 上一段已注入 leak k=0.2 端口侧——但当前是 S 隔离态（端口泄漏汇流管不可见），
-     * 先清泄漏，重建 H 诊断保压工况分别测 normal / major 两档 */
+    /* TinyML 泄漏检测用例已随 spec §12 下线（2026-10-02）归档 deprecated/ml-leak/ */
     pn_twin_set_leak(0, 0.f);
-    pn_twin_command("I 1 255");
-    for (int i = 0; i < 60; ++i) pn_twin_tick();
-    pn_twin_command("H 1");
-    for (int i = 0; i < 100; ++i) pn_twin_tick();          /* 5s：窗口灌满 80 样本 */
-    float conf = 0.f;
-    int cls0 = pn_twin_leak_detect(&conf);
-    printf("ml detect (no leak): cls=%d conf=%.2f (期望 cls=0)\n", cls0, (double)conf);
-    pn_twin_set_leak(0, 0.5f);
-    for (int i = 0; i < 80; ++i) pn_twin_tick();           /* 4s：窗口全为大泄漏样本 */
-    int cls2 = pn_twin_leak_detect(&conf);
-    printf("ml detect (k=0.5):  cls=%d conf=%.2f (期望 cls=2)\n", cls2, (double)conf);
-    pn_twin_set_leak(0, 0.f);
-    if (cls0 != 0 || cls2 != 2) { printf("✗ ML 检测断言失败\n"); return 1; }
 
     return 0;
 }

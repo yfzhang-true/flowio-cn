@@ -1,4 +1,7 @@
 /**
+ * [ARCHIVED 2026-10-02, spec §12] 原位于 components/pn_core/include/pn_core/leak_detect.h。
+ * TinyML 泄漏检测全下线，随 pn_ml 资产归档；不再参与任何构建。
+ *
  * leak_detect.h — 泄漏检测动作层（TinyML 推理的 pn_core 集成）
  *
  * 采样：pn_ml_tick() 挂在控制节拍里（孪生 50ms tick / 真机 10ms 任务均可），

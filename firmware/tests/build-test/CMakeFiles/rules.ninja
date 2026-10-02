@@ -7,14 +7,14 @@
 
 # =============================================================================
 # Project: pn_tests
-# Configurations: Debug
+# Configurations: Release
 # =============================================================================
 # =============================================================================
 
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__pn_core_unscanned_Debug
+rule C_COMPILER__pn_core_unscanned_Release
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}C:\Strawberry\c\bin\gcc.exe $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -24,7 +24,7 @@ rule C_COMPILER__pn_core_unscanned_Debug
 #############################################
 # Rule for linking C static library.
 
-rule C_STATIC_LIBRARY_LINKER__pn_core_Debug
+rule C_STATIC_LIBRARY_LINKER__pn_core_Release
   command = C:\Windows\system32\cmd.exe /C "$PRE_LINK && C:\Strawberry\c\bin\cmake.exe -E rm -f $TARGET_FILE && C:\Strawberry\c\bin\ar.exe qc $TARGET_FILE $LINK_FLAGS $in && C:\Strawberry\c\bin\ranlib.exe $TARGET_FILE && $POST_BUILD"
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
@@ -33,7 +33,7 @@ rule C_STATIC_LIBRARY_LINKER__pn_core_Debug
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__pn_tests_unscanned_Debug
+rule C_COMPILER__pn_tests_unscanned_Release
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}C:\Strawberry\c\bin\gcc.exe $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -43,7 +43,7 @@ rule C_COMPILER__pn_tests_unscanned_Debug
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__pn_tests_Debug
+rule C_EXECUTABLE_LINKER__pn_tests_Release
   command = C:\Windows\system32\cmd.exe /C "$PRE_LINK && C:\Strawberry\c\bin\gcc.exe $FLAGS $LINK_FLAGS $in -o $TARGET_FILE -Wl,--out-implib,$TARGET_IMPLIB -Wl,--major-image-version,0,--minor-image-version,0 $LINK_PATH $LINK_LIBRARIES && $POST_BUILD"
   description = Linking C executable $TARGET_FILE
   restat = $RESTAT

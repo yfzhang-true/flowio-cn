@@ -12,7 +12,7 @@
 
 # =============================================================================
 # Project: pn_tests
-# Configurations: Debug
+# Configurations: Release
 # =============================================================================
 
 #############################################
@@ -24,7 +24,7 @@ ninja_required_version = 1.5
 #############################################
 # Set configuration variable for custom commands.
 
-CONFIGURATION = Debug
+CONFIGURATION = Release
 # =============================================================================
 # Include auxiliary files.
 
@@ -49,47 +49,59 @@ cmake_ninja_workdir = E$:/FLOWIO/firmware/tests/build-test/
 
 build cmake_object_order_depends_target_pn_core: phony || .
 
-build CMakeFiles/pn_core.dir/E_/FLOWIO/firmware/components/pn_core/src/actions.c.obj: C_COMPILER__pn_core_unscanned_Debug E$:/FLOWIO/firmware/components/pn_core/src/actions.c || cmake_object_order_depends_target_pn_core
+build CMakeFiles/pn_core.dir/E_/FLOWIO/firmware/components/pn_core/src/actions.c.obj: C_COMPILER__pn_core_unscanned_Release E$:/FLOWIO/firmware/components/pn_core/src/actions.c || cmake_object_order_depends_target_pn_core
   DEP_FILE = CMakeFiles\pn_core.dir\E_\FLOWIO\firmware\components\pn_core\src\actions.c.obj.d
-  FLAGS = -g -std=gnu11
+  FLAGS = -O3 -DNDEBUG -std=gnu11
   INCLUDES = -IE:/FLOWIO/firmware/tests/../components/pn_core/include
   OBJECT_DIR = CMakeFiles\pn_core.dir
   OBJECT_FILE_DIR = CMakeFiles\pn_core.dir\E_\FLOWIO\firmware\components\pn_core\src
+  TARGET_COMPILE_PDB = CMakeFiles\pn_core.dir\pn_core.pdb
+  TARGET_PDB = libpn_core.pdb
 
-build CMakeFiles/pn_core.dir/E_/FLOWIO/firmware/components/pn_core/src/closedloop.c.obj: C_COMPILER__pn_core_unscanned_Debug E$:/FLOWIO/firmware/components/pn_core/src/closedloop.c || cmake_object_order_depends_target_pn_core
+build CMakeFiles/pn_core.dir/E_/FLOWIO/firmware/components/pn_core/src/closedloop.c.obj: C_COMPILER__pn_core_unscanned_Release E$:/FLOWIO/firmware/components/pn_core/src/closedloop.c || cmake_object_order_depends_target_pn_core
   DEP_FILE = CMakeFiles\pn_core.dir\E_\FLOWIO\firmware\components\pn_core\src\closedloop.c.obj.d
-  FLAGS = -g -std=gnu11
+  FLAGS = -O3 -DNDEBUG -std=gnu11
   INCLUDES = -IE:/FLOWIO/firmware/tests/../components/pn_core/include
   OBJECT_DIR = CMakeFiles\pn_core.dir
   OBJECT_FILE_DIR = CMakeFiles\pn_core.dir\E_\FLOWIO\firmware\components\pn_core\src
+  TARGET_COMPILE_PDB = CMakeFiles\pn_core.dir\pn_core.pdb
+  TARGET_PDB = libpn_core.pdb
 
-build CMakeFiles/pn_core.dir/E_/FLOWIO/firmware/components/pn_core/src/proto.c.obj: C_COMPILER__pn_core_unscanned_Debug E$:/FLOWIO/firmware/components/pn_core/src/proto.c || cmake_object_order_depends_target_pn_core
+build CMakeFiles/pn_core.dir/E_/FLOWIO/firmware/components/pn_core/src/proto.c.obj: C_COMPILER__pn_core_unscanned_Release E$:/FLOWIO/firmware/components/pn_core/src/proto.c || cmake_object_order_depends_target_pn_core
   DEP_FILE = CMakeFiles\pn_core.dir\E_\FLOWIO\firmware\components\pn_core\src\proto.c.obj.d
-  FLAGS = -g -std=gnu11
+  FLAGS = -O3 -DNDEBUG -std=gnu11
   INCLUDES = -IE:/FLOWIO/firmware/tests/../components/pn_core/include
   OBJECT_DIR = CMakeFiles\pn_core.dir
   OBJECT_FILE_DIR = CMakeFiles\pn_core.dir\E_\FLOWIO\firmware\components\pn_core\src
+  TARGET_COMPILE_PDB = CMakeFiles\pn_core.dir\pn_core.pdb
+  TARGET_PDB = libpn_core.pdb
 
-build CMakeFiles/pn_core.dir/E_/FLOWIO/firmware/components/pn_core/src/tca9548.c.obj: C_COMPILER__pn_core_unscanned_Debug E$:/FLOWIO/firmware/components/pn_core/src/tca9548.c || cmake_object_order_depends_target_pn_core
+build CMakeFiles/pn_core.dir/E_/FLOWIO/firmware/components/pn_core/src/tca9548.c.obj: C_COMPILER__pn_core_unscanned_Release E$:/FLOWIO/firmware/components/pn_core/src/tca9548.c || cmake_object_order_depends_target_pn_core
   DEP_FILE = CMakeFiles\pn_core.dir\E_\FLOWIO\firmware\components\pn_core\src\tca9548.c.obj.d
-  FLAGS = -g -std=gnu11
+  FLAGS = -O3 -DNDEBUG -std=gnu11
   INCLUDES = -IE:/FLOWIO/firmware/tests/../components/pn_core/include
   OBJECT_DIR = CMakeFiles\pn_core.dir
   OBJECT_FILE_DIR = CMakeFiles\pn_core.dir\E_\FLOWIO\firmware\components\pn_core\src
+  TARGET_COMPILE_PDB = CMakeFiles\pn_core.dir\pn_core.pdb
+  TARGET_PDB = libpn_core.pdb
 
-build CMakeFiles/pn_core.dir/E_/FLOWIO/firmware/components/pn_core/src/sensor_if.c.obj: C_COMPILER__pn_core_unscanned_Debug E$:/FLOWIO/firmware/components/pn_core/src/sensor_if.c || cmake_object_order_depends_target_pn_core
+build CMakeFiles/pn_core.dir/E_/FLOWIO/firmware/components/pn_core/src/sensor_if.c.obj: C_COMPILER__pn_core_unscanned_Release E$:/FLOWIO/firmware/components/pn_core/src/sensor_if.c || cmake_object_order_depends_target_pn_core
   DEP_FILE = CMakeFiles\pn_core.dir\E_\FLOWIO\firmware\components\pn_core\src\sensor_if.c.obj.d
-  FLAGS = -g -std=gnu11
+  FLAGS = -O3 -DNDEBUG -std=gnu11
   INCLUDES = -IE:/FLOWIO/firmware/tests/../components/pn_core/include
   OBJECT_DIR = CMakeFiles\pn_core.dir
   OBJECT_FILE_DIR = CMakeFiles\pn_core.dir\E_\FLOWIO\firmware\components\pn_core\src
+  TARGET_COMPILE_PDB = CMakeFiles\pn_core.dir\pn_core.pdb
+  TARGET_PDB = libpn_core.pdb
 
-build CMakeFiles/pn_core.dir/E_/FLOWIO/firmware/components/pn_core/src/ble_frame.c.obj: C_COMPILER__pn_core_unscanned_Debug E$:/FLOWIO/firmware/components/pn_core/src/ble_frame.c || cmake_object_order_depends_target_pn_core
+build CMakeFiles/pn_core.dir/E_/FLOWIO/firmware/components/pn_core/src/ble_frame.c.obj: C_COMPILER__pn_core_unscanned_Release E$:/FLOWIO/firmware/components/pn_core/src/ble_frame.c || cmake_object_order_depends_target_pn_core
   DEP_FILE = CMakeFiles\pn_core.dir\E_\FLOWIO\firmware\components\pn_core\src\ble_frame.c.obj.d
-  FLAGS = -g -std=gnu11
+  FLAGS = -O3 -DNDEBUG -std=gnu11
   INCLUDES = -IE:/FLOWIO/firmware/tests/../components/pn_core/include
   OBJECT_DIR = CMakeFiles\pn_core.dir
   OBJECT_FILE_DIR = CMakeFiles\pn_core.dir\E_\FLOWIO\firmware\components\pn_core\src
+  TARGET_COMPILE_PDB = CMakeFiles\pn_core.dir\pn_core.pdb
+  TARGET_PDB = libpn_core.pdb
 
 
 # =============================================================================
@@ -99,13 +111,14 @@ build CMakeFiles/pn_core.dir/E_/FLOWIO/firmware/components/pn_core/src/ble_frame
 #############################################
 # Link the static library libpn_core.a
 
-build libpn_core.a: C_STATIC_LIBRARY_LINKER__pn_core_Debug CMakeFiles/pn_core.dir/E_/FLOWIO/firmware/components/pn_core/src/actions.c.obj CMakeFiles/pn_core.dir/E_/FLOWIO/firmware/components/pn_core/src/closedloop.c.obj CMakeFiles/pn_core.dir/E_/FLOWIO/firmware/components/pn_core/src/proto.c.obj CMakeFiles/pn_core.dir/E_/FLOWIO/firmware/components/pn_core/src/tca9548.c.obj CMakeFiles/pn_core.dir/E_/FLOWIO/firmware/components/pn_core/src/sensor_if.c.obj CMakeFiles/pn_core.dir/E_/FLOWIO/firmware/components/pn_core/src/ble_frame.c.obj
-  LANGUAGE_COMPILE_FLAGS = -g
+build libpn_core.a: C_STATIC_LIBRARY_LINKER__pn_core_Release CMakeFiles/pn_core.dir/E_/FLOWIO/firmware/components/pn_core/src/actions.c.obj CMakeFiles/pn_core.dir/E_/FLOWIO/firmware/components/pn_core/src/closedloop.c.obj CMakeFiles/pn_core.dir/E_/FLOWIO/firmware/components/pn_core/src/proto.c.obj CMakeFiles/pn_core.dir/E_/FLOWIO/firmware/components/pn_core/src/tca9548.c.obj CMakeFiles/pn_core.dir/E_/FLOWIO/firmware/components/pn_core/src/sensor_if.c.obj CMakeFiles/pn_core.dir/E_/FLOWIO/firmware/components/pn_core/src/ble_frame.c.obj
+  LANGUAGE_COMPILE_FLAGS = -O3 -DNDEBUG
   OBJECT_DIR = CMakeFiles\pn_core.dir
   POST_BUILD = cd .
   PRE_LINK = cd .
+  TARGET_COMPILE_PDB = CMakeFiles\pn_core.dir\pn_core.pdb
   TARGET_FILE = libpn_core.a
-  TARGET_PDB = pn_core.a.dbg
+  TARGET_PDB = libpn_core.pdb
 
 # =============================================================================
 # Object build statements for EXECUTABLE target pn_tests
@@ -116,61 +129,75 @@ build libpn_core.a: C_STATIC_LIBRARY_LINKER__pn_core_Debug CMakeFiles/pn_core.di
 
 build cmake_object_order_depends_target_pn_tests: phony || cmake_object_order_depends_target_pn_core
 
-build CMakeFiles/pn_tests.dir/test_main.c.obj: C_COMPILER__pn_tests_unscanned_Debug E$:/FLOWIO/firmware/tests/test_main.c || cmake_object_order_depends_target_pn_tests
+build CMakeFiles/pn_tests.dir/test_main.c.obj: C_COMPILER__pn_tests_unscanned_Release E$:/FLOWIO/firmware/tests/test_main.c || cmake_object_order_depends_target_pn_tests
   DEFINES = -D_CRT_SECURE_NO_WARNINGS
   DEP_FILE = CMakeFiles\pn_tests.dir\test_main.c.obj.d
-  FLAGS = -g -std=gnu11
+  FLAGS = -O3 -DNDEBUG -std=gnu11
   INCLUDES = -IE:/FLOWIO/firmware/tests/../components/pn_core/include -IE:/FLOWIO/firmware/tests
   OBJECT_DIR = CMakeFiles\pn_tests.dir
   OBJECT_FILE_DIR = CMakeFiles\pn_tests.dir
+  TARGET_COMPILE_PDB = CMakeFiles\pn_tests.dir\
+  TARGET_PDB = pn_tests.pdb
 
-build CMakeFiles/pn_tests.dir/test_actions.c.obj: C_COMPILER__pn_tests_unscanned_Debug E$:/FLOWIO/firmware/tests/test_actions.c || cmake_object_order_depends_target_pn_tests
+build CMakeFiles/pn_tests.dir/test_actions.c.obj: C_COMPILER__pn_tests_unscanned_Release E$:/FLOWIO/firmware/tests/test_actions.c || cmake_object_order_depends_target_pn_tests
   DEFINES = -D_CRT_SECURE_NO_WARNINGS
   DEP_FILE = CMakeFiles\pn_tests.dir\test_actions.c.obj.d
-  FLAGS = -g -std=gnu11
+  FLAGS = -O3 -DNDEBUG -std=gnu11
   INCLUDES = -IE:/FLOWIO/firmware/tests/../components/pn_core/include -IE:/FLOWIO/firmware/tests
   OBJECT_DIR = CMakeFiles\pn_tests.dir
   OBJECT_FILE_DIR = CMakeFiles\pn_tests.dir
+  TARGET_COMPILE_PDB = CMakeFiles\pn_tests.dir\
+  TARGET_PDB = pn_tests.pdb
 
-build CMakeFiles/pn_tests.dir/test_closedloop.c.obj: C_COMPILER__pn_tests_unscanned_Debug E$:/FLOWIO/firmware/tests/test_closedloop.c || cmake_object_order_depends_target_pn_tests
+build CMakeFiles/pn_tests.dir/test_closedloop.c.obj: C_COMPILER__pn_tests_unscanned_Release E$:/FLOWIO/firmware/tests/test_closedloop.c || cmake_object_order_depends_target_pn_tests
   DEFINES = -D_CRT_SECURE_NO_WARNINGS
   DEP_FILE = CMakeFiles\pn_tests.dir\test_closedloop.c.obj.d
-  FLAGS = -g -std=gnu11
+  FLAGS = -O3 -DNDEBUG -std=gnu11
   INCLUDES = -IE:/FLOWIO/firmware/tests/../components/pn_core/include -IE:/FLOWIO/firmware/tests
   OBJECT_DIR = CMakeFiles\pn_tests.dir
   OBJECT_FILE_DIR = CMakeFiles\pn_tests.dir
+  TARGET_COMPILE_PDB = CMakeFiles\pn_tests.dir\
+  TARGET_PDB = pn_tests.pdb
 
-build CMakeFiles/pn_tests.dir/test_proto.c.obj: C_COMPILER__pn_tests_unscanned_Debug E$:/FLOWIO/firmware/tests/test_proto.c || cmake_object_order_depends_target_pn_tests
+build CMakeFiles/pn_tests.dir/test_proto.c.obj: C_COMPILER__pn_tests_unscanned_Release E$:/FLOWIO/firmware/tests/test_proto.c || cmake_object_order_depends_target_pn_tests
   DEFINES = -D_CRT_SECURE_NO_WARNINGS
   DEP_FILE = CMakeFiles\pn_tests.dir\test_proto.c.obj.d
-  FLAGS = -g -std=gnu11
+  FLAGS = -O3 -DNDEBUG -std=gnu11
   INCLUDES = -IE:/FLOWIO/firmware/tests/../components/pn_core/include -IE:/FLOWIO/firmware/tests
   OBJECT_DIR = CMakeFiles\pn_tests.dir
   OBJECT_FILE_DIR = CMakeFiles\pn_tests.dir
+  TARGET_COMPILE_PDB = CMakeFiles\pn_tests.dir\
+  TARGET_PDB = pn_tests.pdb
 
-build CMakeFiles/pn_tests.dir/tca_tests.c.obj: C_COMPILER__pn_tests_unscanned_Debug E$:/FLOWIO/firmware/tests/tca_tests.c || cmake_object_order_depends_target_pn_tests
+build CMakeFiles/pn_tests.dir/tca_tests.c.obj: C_COMPILER__pn_tests_unscanned_Release E$:/FLOWIO/firmware/tests/tca_tests.c || cmake_object_order_depends_target_pn_tests
   DEFINES = -D_CRT_SECURE_NO_WARNINGS
   DEP_FILE = CMakeFiles\pn_tests.dir\tca_tests.c.obj.d
-  FLAGS = -g -std=gnu11
+  FLAGS = -O3 -DNDEBUG -std=gnu11
   INCLUDES = -IE:/FLOWIO/firmware/tests/../components/pn_core/include -IE:/FLOWIO/firmware/tests
   OBJECT_DIR = CMakeFiles\pn_tests.dir
   OBJECT_FILE_DIR = CMakeFiles\pn_tests.dir
+  TARGET_COMPILE_PDB = CMakeFiles\pn_tests.dir\
+  TARGET_PDB = pn_tests.pdb
 
-build CMakeFiles/pn_tests.dir/ble_tests.c.obj: C_COMPILER__pn_tests_unscanned_Debug E$:/FLOWIO/firmware/tests/ble_tests.c || cmake_object_order_depends_target_pn_tests
+build CMakeFiles/pn_tests.dir/ble_tests.c.obj: C_COMPILER__pn_tests_unscanned_Release E$:/FLOWIO/firmware/tests/ble_tests.c || cmake_object_order_depends_target_pn_tests
   DEFINES = -D_CRT_SECURE_NO_WARNINGS
   DEP_FILE = CMakeFiles\pn_tests.dir\ble_tests.c.obj.d
-  FLAGS = -g -std=gnu11
+  FLAGS = -O3 -DNDEBUG -std=gnu11
   INCLUDES = -IE:/FLOWIO/firmware/tests/../components/pn_core/include -IE:/FLOWIO/firmware/tests
   OBJECT_DIR = CMakeFiles\pn_tests.dir
   OBJECT_FILE_DIR = CMakeFiles\pn_tests.dir
+  TARGET_COMPILE_PDB = CMakeFiles\pn_tests.dir\
+  TARGET_PDB = pn_tests.pdb
 
-build CMakeFiles/pn_tests.dir/mock_hal.c.obj: C_COMPILER__pn_tests_unscanned_Debug E$:/FLOWIO/firmware/tests/mock_hal.c || cmake_object_order_depends_target_pn_tests
+build CMakeFiles/pn_tests.dir/mock_hal.c.obj: C_COMPILER__pn_tests_unscanned_Release E$:/FLOWIO/firmware/tests/mock_hal.c || cmake_object_order_depends_target_pn_tests
   DEFINES = -D_CRT_SECURE_NO_WARNINGS
   DEP_FILE = CMakeFiles\pn_tests.dir\mock_hal.c.obj.d
-  FLAGS = -g -std=gnu11
+  FLAGS = -O3 -DNDEBUG -std=gnu11
   INCLUDES = -IE:/FLOWIO/firmware/tests/../components/pn_core/include -IE:/FLOWIO/firmware/tests
   OBJECT_DIR = CMakeFiles\pn_tests.dir
   OBJECT_FILE_DIR = CMakeFiles\pn_tests.dir
+  TARGET_COMPILE_PDB = CMakeFiles\pn_tests.dir\
+  TARGET_PDB = pn_tests.pdb
 
 
 # =============================================================================
@@ -180,15 +207,16 @@ build CMakeFiles/pn_tests.dir/mock_hal.c.obj: C_COMPILER__pn_tests_unscanned_Deb
 #############################################
 # Link the executable pn_tests.exe
 
-build pn_tests.exe: C_EXECUTABLE_LINKER__pn_tests_Debug CMakeFiles/pn_tests.dir/test_main.c.obj CMakeFiles/pn_tests.dir/test_actions.c.obj CMakeFiles/pn_tests.dir/test_closedloop.c.obj CMakeFiles/pn_tests.dir/test_proto.c.obj CMakeFiles/pn_tests.dir/tca_tests.c.obj CMakeFiles/pn_tests.dir/ble_tests.c.obj CMakeFiles/pn_tests.dir/mock_hal.c.obj | libpn_core.a || libpn_core.a
-  FLAGS = -g
+build pn_tests.exe: C_EXECUTABLE_LINKER__pn_tests_Release CMakeFiles/pn_tests.dir/test_main.c.obj CMakeFiles/pn_tests.dir/test_actions.c.obj CMakeFiles/pn_tests.dir/test_closedloop.c.obj CMakeFiles/pn_tests.dir/test_proto.c.obj CMakeFiles/pn_tests.dir/tca_tests.c.obj CMakeFiles/pn_tests.dir/ble_tests.c.obj CMakeFiles/pn_tests.dir/mock_hal.c.obj | libpn_core.a || libpn_core.a
+  FLAGS = -O3 -DNDEBUG
   LINK_LIBRARIES = libpn_core.a  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\pn_tests.dir
   POST_BUILD = cd .
   PRE_LINK = cd .
+  TARGET_COMPILE_PDB = CMakeFiles\pn_tests.dir\
   TARGET_FILE = pn_tests.exe
   TARGET_IMPLIB = libpn_tests.dll.a
-  TARGET_PDB = pn_tests.exe.dbg
+  TARGET_PDB = pn_tests.pdb
 
 
 #############################################
@@ -249,14 +277,14 @@ build all: phony libpn_core.a pn_tests.exe
 #############################################
 # Re-run CMake if any of its inputs changed.
 
-build build.ninja: RERUN_CMAKE | C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeCInformation.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeCommonLanguageInclude.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeGenericSystem.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeInitializeConfigs.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeLanguageInformation.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeRCInformation.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeSystemSpecificInformation.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeSystemSpecificInitialize.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/CMakeCommonCompilerMacros.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/GNU-C.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/GNU.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Platform/Windows-GNU-C-ABI.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Platform/Windows-GNU-C.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Platform/Windows-GNU.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Platform/Windows-Initialize.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Platform/Windows-windres.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Platform/Windows.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Platform/WindowsPaths.cmake CMakeCache.txt CMakeFiles/3.29.2/CMakeCCompiler.cmake CMakeFiles/3.29.2/CMakeRCCompiler.cmake CMakeFiles/3.29.2/CMakeSystem.cmake E$:/FLOWIO/firmware/tests/CMakeLists.txt
+build build.ninja: RERUN_CMAKE | C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeCCompiler.cmake.in C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeCCompilerABI.c C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeCInformation.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeCommonLanguageInclude.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeCompilerIdDetection.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeDetermineCCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeDetermineCompileFeatures.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeDetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeDetermineCompilerABI.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeDetermineCompilerId.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeDetermineRCCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeDetermineSystem.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeFindBinUtils.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeGenericSystem.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeInitializeConfigs.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeLanguageInformation.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeNinjaFindMake.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeParseImplicitIncludeInfo.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeParseImplicitLinkInfo.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeParseLibraryArchitecture.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeRCCompiler.cmake.in C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeRCInformation.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeSystem.cmake.in C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeSystemSpecificInformation.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeSystemSpecificInitialize.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeTestCCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeTestCompilerCommon.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeTestRCCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/ADSP-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/ARMCC-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/ARMClang-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/AppleClang-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/Borland-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/Bruce-C-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/CMakeCommonCompilerMacros.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/Clang-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/Clang-DetermineCompilerInternal.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/Compaq-C-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/Cray-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/CrayClang-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/Embarcadero-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/Fujitsu-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/FujitsuClang-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/GHS-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/GNU-C-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/GNU-C.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/GNU-FindBinUtils.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/GNU.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/HP-C-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/IAR-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/IBMCPP-C-DetermineVersionInternal.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/IBMClang-C-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/Intel-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/IntelLLVM-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/LCC-C-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/MSVC-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/NVHPC-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/NVIDIA-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/OpenWatcom-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/OrangeC-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/PGI-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/PathScale-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/SCO-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/SDCC-C-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/SunPro-C-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/TI-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/TIClang-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/Tasking-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/TinyCC-C-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/VisualAge-C-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/Watcom-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/XL-C-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/XLClang-C-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/zOS-C-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Internal/CMakeDetermineLinkerId.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Internal/FeatureTesting.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Platform/Windows-GNU-C-ABI.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Platform/Windows-GNU-C.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Platform/Windows-GNU.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Platform/Windows-Initialize.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Platform/Windows-windres.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Platform/Windows.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Platform/WindowsPaths.cmake CMakeCache.txt CMakeFiles/3.29.2/CMakeCCompiler.cmake CMakeFiles/3.29.2/CMakeRCCompiler.cmake CMakeFiles/3.29.2/CMakeSystem.cmake E$:/FLOWIO/firmware/tests/CMakeLists.txt
   pool = console
 
 
 #############################################
 # A missing CMake input file is not an error.
 
-build C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeCInformation.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeCommonLanguageInclude.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeGenericSystem.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeInitializeConfigs.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeLanguageInformation.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeRCInformation.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeSystemSpecificInformation.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeSystemSpecificInitialize.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/CMakeCommonCompilerMacros.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/GNU-C.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/GNU.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Platform/Windows-GNU-C-ABI.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Platform/Windows-GNU-C.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Platform/Windows-GNU.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Platform/Windows-Initialize.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Platform/Windows-windres.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Platform/Windows.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Platform/WindowsPaths.cmake CMakeCache.txt CMakeFiles/3.29.2/CMakeCCompiler.cmake CMakeFiles/3.29.2/CMakeRCCompiler.cmake CMakeFiles/3.29.2/CMakeSystem.cmake E$:/FLOWIO/firmware/tests/CMakeLists.txt: phony
+build C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeCCompiler.cmake.in C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeCCompilerABI.c C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeCInformation.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeCommonLanguageInclude.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeCompilerIdDetection.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeDetermineCCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeDetermineCompileFeatures.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeDetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeDetermineCompilerABI.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeDetermineCompilerId.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeDetermineRCCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeDetermineSystem.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeFindBinUtils.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeGenericSystem.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeInitializeConfigs.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeLanguageInformation.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeNinjaFindMake.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeParseImplicitIncludeInfo.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeParseImplicitLinkInfo.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeParseLibraryArchitecture.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeRCCompiler.cmake.in C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeRCInformation.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeSystem.cmake.in C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeSystemSpecificInformation.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeSystemSpecificInitialize.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeTestCCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeTestCompilerCommon.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/CMakeTestRCCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/ADSP-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/ARMCC-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/ARMClang-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/AppleClang-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/Borland-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/Bruce-C-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/CMakeCommonCompilerMacros.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/Clang-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/Clang-DetermineCompilerInternal.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/Compaq-C-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/Cray-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/CrayClang-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/Embarcadero-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/Fujitsu-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/FujitsuClang-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/GHS-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/GNU-C-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/GNU-C.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/GNU-FindBinUtils.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/GNU.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/HP-C-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/IAR-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/IBMCPP-C-DetermineVersionInternal.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/IBMClang-C-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/Intel-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/IntelLLVM-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/LCC-C-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/MSVC-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/NVHPC-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/NVIDIA-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/OpenWatcom-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/OrangeC-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/PGI-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/PathScale-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/SCO-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/SDCC-C-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/SunPro-C-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/TI-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/TIClang-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/Tasking-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/TinyCC-C-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/VisualAge-C-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/Watcom-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/XL-C-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/XLClang-C-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Compiler/zOS-C-DetermineCompiler.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Internal/CMakeDetermineLinkerId.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Internal/FeatureTesting.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Platform/Windows-GNU-C-ABI.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Platform/Windows-GNU-C.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Platform/Windows-GNU.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Platform/Windows-Initialize.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Platform/Windows-windres.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Platform/Windows.cmake C$:/Strawberry/c/share/cmake-3.29/Modules/Platform/WindowsPaths.cmake CMakeCache.txt CMakeFiles/3.29.2/CMakeCCompiler.cmake CMakeFiles/3.29.2/CMakeRCCompiler.cmake CMakeFiles/3.29.2/CMakeSystem.cmake E$:/FLOWIO/firmware/tests/CMakeLists.txt: phony
 
 
 #############################################
