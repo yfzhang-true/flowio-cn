@@ -1,6 +1,7 @@
 <!DOCTYPE html><html lang="zh"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>FLOWIO-CN · 数字孪生</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='%230a0a0c' stroke='%236aa9ff'/%3E%3Cpath d='M8 8 L8 3 A5 5 0 0 1 12 5 Z' fill='%236ad4ff'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="/webapp/css/twin.css">
 <script type="importmap">{"imports":{"three":"/webapp/vendor/three.module.js"}}</script>
 </head><body>
@@ -12,7 +13,8 @@
   <div id="t2_transport" class="t2_pill"></div>
   <aside id="t2_tlmDrawer" class="t2_drawer right"></aside>
   <div id="t2_hotspotCard" class="t2_card"></div></main>
-<footer id="t2_statusbar"><span id="t2_calBadge" class="t2_badge warn">模型参数：理论值（未本机标定）</span>
+<footer id="t2_statusbar"><span id="t2_staleBadge" class="t2_badge err" hidden>● 遥测冻结</span>
+  <span id="t2_calBadge" class="t2_badge warn">模型参数：理论值（未本机标定）</span>
   <span id="t2_timeInfo"></span><button id="t2_simLabBtn" class="t2_btn ghost">仿真实验室</button></footer>
 <div id="t2_simOverlay" hidden></div>
 <script type="module" src="/webapp/js/main.js"></script></body></html>

@@ -1,6 +1,9 @@
-// firmware/twin/webapp/js/main.js — v2 应用壳 (Task5: 命令通道抽象 + panels/telemetry 挂载)
+// firmware/twin/webapp/js/main.js — v2 应用壳 (Task5: 命令通道抽象 + panels/telemetry 挂载;
+//                                             Task6: simlab 浮层 + BLE 真机模式 + debug 浮层扩展)
 import { initPanels, onPartClick } from "/webapp/js/panels.js";
-import { startTelemetry } from "/webapp/js/telemetry.js";
+import { startTelemetry, latencyMs } from "/webapp/js/telemetry.js";
+import { initSimLab } from "/webapp/js/simlab.js";
+import { initBLE } from "/webapp/js/ble.js";
 
 const $ = (id) => document.getElementById(id);
 export const store = { mode: "twin", explode: 0, telemetry: null, pnu: null,
@@ -28,7 +31,7 @@ export async function postJSON(url, body) {
   } catch (e) { return null; }
 }
 
-// ?debug: fps 浮层 (Task6 扩为 fps/粒子/延迟)
+// ?debug: fps/粒子/延迟浮层 (spec §6 性能预算观测; 读 __t2 + telemetry.latencyMs)
 function initDebug() {
   if (!location.search.includes("debug")) return;
   const el = document.createElement("div");
@@ -36,15 +39,24 @@ function initDebug() {
   el.style.cssText = "position:absolute;top:56px;left:16px;z-index:9;font:12px/1.6 ui-monospace,monospace;" +
     "color:#9fe08c;text-shadow:0 1px 2px #000;pointer-events:none;white-space:pre";
   $("t2_stage").appendChild(el);
-  setInterval(() => { el.textContent = "fps " + (window.__t2 && window.__t2.scene
-    ? window.__t2.scene.fps.toFixed(0) : "—") + "\nparts " + (window.__t2 && window.__t2.scene
-    ? window.__t2.scene.parts.length : 0); }, 500);
+  setInterval(() => {
+    const sc = window.__t2 && window.__t2.scene;
+    const fl = window.__t2 && window.__t2.flows;
+    const airOn = fl ? fl.airs.filter((a) => a.op > 0.01).length : 0;
+    el.textContent =
+      "fps " + (sc ? sc.fps.toFixed(0) : "—") +
+      "\nparts " + (sc ? sc.parts.length : 0) +
+      "\nair " + airOn + "/" + (fl ? fl.airs.length : 8) +
+      "\nlat " + latencyMs.toFixed(0) + " ms";
+  }, 500);
 }
 
 function initChrome() {
   for (const id of ["t2_ctrlDrawer", "t2_tlmDrawer", "t2_hotspotCard"]) $(id).classList.add("t2_glass");
   $("t2_hotspotCard").classList.add("hidden");
-  initPanels();                                       // 抽屉/运输条/热点卡 (panels.js)
+  initPanels();                                       // 抽屉/运输条/热点卡/状态行 (panels.js)
+  initSimLab();                                       // 仿真实验室浮层 (simlab.js)
+  initBLE();                                          // Web Bluetooth 真机模式 (ble.js)
   initDebug();
   startTelemetry();                                   // 200ms 交替轮询双源 (telemetry.js)
   createSceneGate();

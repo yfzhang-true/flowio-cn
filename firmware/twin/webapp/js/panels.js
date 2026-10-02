@@ -326,11 +326,39 @@ function refreshRecUI() {
   $("t2_recN").textContent = rec.events.length;
 }
 
+/* ══════════ 状态行 (Task6: stale 红点 / 时间与录制 / 黄徽常驻在 index.html) ══════════ */
+const fmtDur = (s) => {
+  const m = Math.floor(s / 60), r = Math.round(s % 60);
+  return m ? m + "m" + r + "s" : r + "s";
+};
+function refreshStatus() {
+  const el = $("t2_staleBadge");
+  if (!el) return;
+  const tel = store.telemetry;
+  el.hidden = !(!!store.stale || !!(tel && tel.stale));   // 网络断连 或 板级模型冻结
+}
+function tickTime() {
+  const info = $("t2_timeInfo");
+  if (!info) return;
+  const tel = store.telemetry;
+  const parts = [new Date().toLocaleTimeString("zh-CN", { hour12: false })];
+  if (store.mode === "real") parts.push("真机 BLE");
+  else if (tel && isFinite(tel.uptime_s)) parts.push("孪生 " + fmtDur(tel.uptime_s));
+  if (store.recording) parts.push("● 录制中");
+  else if (rec.events.length) parts.push("已录 " + rec.events.length + " 条");
+  info.textContent = parts.join(" · ");
+}
+function initStatusbar() {
+  setInterval(tickTime, 1000);
+  tickTime();
+}
+
 /* ══════════ 总装 ══════════ */
 export function initPanels() {
   initTlmDrawer();
   initCtrlDrawer();
   initTransport();
+  initStatusbar();
   // 收起态浮钮 (抽屉滑出后仍可唤回)
   for (const [id, drawer] of [["t2_ctrlTab", $("t2_ctrlDrawer")], ["t2_tlmTab", $("t2_tlmDrawer")]]) {
     const tab = document.createElement("button");
@@ -342,7 +370,13 @@ export function initPanels() {
     tab.onclick = () => drawerToggle(drawer, tab);
     $("t2_stage").appendChild(tab);
   }
-  onState(() => { refreshTlm(); refreshCtrl(); if (lastHotspot) onPartClick(lastHotspot); });
+  onState(() => {
+    refreshTlm();
+    refreshCtrl();
+    refreshStatus();
+    tickTime();
+    if (lastHotspot) onPartClick(lastHotspot);
+  });
   refreshTlm();
   refreshCtrl();
   window.__t2 = window.__t2 || {};
