@@ -44,7 +44,7 @@ function T(name, cond) {
     if (m.type() === 'error' && !m.text().startsWith('Failed to load resource')) errs.push(m.text());
   });
   try {
-    await p.goto(BASE + '/gui', { waitUntil: 'load', timeout: 8000 });
+    await p.goto(BASE + '/classic', { waitUntil: 'load', timeout: 8000 });
   } catch (e) {
     console.log('SKIP: 测试服务未启动。先在 8017 端口启动 server.py（bash run_tests.sh）');
     await b.close();

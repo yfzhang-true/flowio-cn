@@ -45,7 +45,7 @@ function T(name, cond) {
   /* 测试实例由 run_tests.sh 在 8017 端口拉起（与用户操作中的 8000 隔离） */
   const BASE = 'http://127.0.0.1:8017';
   try {
-    await p.goto(BASE + '/gui', { waitUntil: 'load', timeout: 8000 });
+    await p.goto(BASE + '/classic', { waitUntil: 'load', timeout: 8000 });
   } catch (e) {
     console.log('SKIP: 测试服务未启动。先运行 bash run_tests.sh（或在 8017 端口启动 server.py）');
     await b.close();

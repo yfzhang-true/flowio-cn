@@ -39,7 +39,7 @@ function T(name, cond) {
   const errs = [];
   p.on('pageerror', e => errs.push(e.message));
   try {
-    await p.goto(BASE + '/gui', { waitUntil: 'load', timeout: 8000 });
+    await p.goto(BASE + '/classic', { waitUntil: 'load', timeout: 8000 });
   } catch (e) {
     console.log('SKIP: 测试服务未启动。先运行 bash run_tests.sh（或在 8017 端口启动 server.py）');
     await b.close();
