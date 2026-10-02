@@ -54,7 +54,7 @@ if __name__ == "__main__":
 
 - [ ] **Step 3: 实现——把 tools/sim 四模型移植为纯函数**
 
-引擎骨架（四电路的 `run(params)` 返回 metrics/waves；物理内核从 `hardware/flowio-p1/tools/sim/sim_buck.py` 等逐函数拷贝，去掉 md/SVG 输出；此处列 buck 全文与公共框架，dior/valve/i2c 同法移植——参数域见 spec §3.2）:
+引擎骨架（四电路的 `run(params)` 返回 metrics/waves；物理内核从 `hardware/flowio-p1/tools/sim/sim_buck.py` 等（**该目录现已归档至 `firmware/twin/deprecated/sim-legacy/`，真源=firmware/twin/sim_engine.py**）逐函数拷贝，去掉 md/SVG 输出；此处列 buck 全文与公共框架，dior/valve/i2c 同法移植——参数域见 spec §3.2）:
 
 ```python
 # firmware/twin/sim_engine.py
@@ -167,7 +167,7 @@ def _i2c(p):
         "notes":["一阶 RC 模型"]}
 ```
 
-- [ ] **Step 4: 测试通过** — Run: `KPY test_sim_engine.py` → `sim_engine tests OK`（dior/valve/i2c 从 `hardware/flowio-p1/tools/sim/` 移植时逐行比对原 run()，锚点数值须与本测试一致）
+- [ ] **Step 4: 测试通过** — Run: `KPY test_sim_engine.py` → `sim_engine tests OK`（dior/valve/i2c 从 `hardware/flowio-p1/tools/sim/`（已归档 `firmware/twin/deprecated/sim-legacy/`）移植时逐行比对原 run()，锚点数值须与本测试一致）
 
 - [ ] **Step 5: 提交** — `git add firmware/twin/sim_engine.py firmware/twin/test_sim_engine.py && git commit -m "feat(twin): S1 仿真引擎参数化 (四电路纯函数+参数域校验)"`
 

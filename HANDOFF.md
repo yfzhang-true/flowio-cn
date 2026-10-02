@@ -17,7 +17,7 @@ P1 板主线**全部完成**：原理图（344 连接 0 错）、布局布线（
 | PCB 布局+层叠 90×75 | 同目录 `.kicad_pcb` | 41e697e |
 | freerouting 双轮布线 146→17 | + 天线禁布区丢失被抓回 | c3337a3 |
 | DRC 攻坚 17→6（error 类清零） | 自研 boardgeom/netdoctor | a38172a |
-| 电路仿真 4 电路（buck/二极管或/阀驱动/I2C） | `hardware/flowio-p1/tools/sim/out/` | bf48abd |
+| 电路仿真 4 电路（buck/二极管或/阀驱动/I2C） | `firmware/twin/sim_out/`（`sim_engine.py --export` 再生成；旧 tools/sim 已归档 `firmware/twin/deprecated/sim-legacy/`，真源=firmware/twin/sim_engine.py） | bf48abd+本次 |
 | JLC 打样包（Gerber/钻孔/坐标/BOM47行/装配PDF/zip/README） | `hardware/flowio-p1/fab/` | bf48abd |
 | FreeCAD 参数化外壳（FCStd+STEP+STL 水密，用户指定替代 OpenSCAD） | `hardware/flowio-p1/enclosure/` | bf48abd |
 | 自研脚本安全清零（exec/eval/路径穿越 7 处高危） | tools/ | a75578e |

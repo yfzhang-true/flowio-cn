@@ -11,3 +11,14 @@
 
 如需复用 3D 页面：`git show <历史提交>:firmware/twin/lib/babylon.min.js > babylon.min.js`
 取回库文件（Babylon.js 8.14, Apache 2.0），并在 server.py 恢复对应路由。
+
+## 仿真工具归档（2026-10-01）
+
+`sim-legacy/`（原 `hardware/flowio-p1/tools/sim/`，git mv 保留历史）是首版四电路仿真
+交付工具：run_all.py + sim_buck/dior/valve/i2c + simlib（依赖 KiCad python 的 numpy，
+report(md,png) 直接落盘式 API）。已被 `firmware/twin/sim_engine.py`（纯函数
+`run(circuit, params)`，真源）+ `firmware/twin/sim_export.py`（纯 stdlib SVG/md 导出，
+`python sim_engine.py --export` → `firmware/twin/sim_out/`）完整取代——消除双份仿真
+代码并存。旧版独有的 buck_loadstep（时变负载激励）不在新引擎参数域，等价检查由前端
+重算页 iload 参数扫描覆盖；旧交付物（out/ 下 2026-10-01 报告+6 SVG）随目录一并归档。
+

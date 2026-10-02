@@ -27,7 +27,7 @@ gui.html (现有气动台 + 新顶层标签页 "P1 板级", 内含三子面板: 
 server.py  ——— 运行时切换: KiCad 自带 python (numpy 2.4.2 + ctypes 双能力)
    ├─ 既有 v1.1 端点: /api/state /api/cmd /api/reset /api/sim /api/leak / /gui 保留; /api/leakdetect **下线** (见 §12)
    ├─ board_model.py (新)   ← 100ms tick: 读 pn_twin.dll 阀/泵状态 → 板级推演 → 环形历史 600s
-   ├─ sim_engine.py  (新)   ← 参数化四电路模型 (从 tools/sim 重构 import, 去 report 化)
+   ├─ sim_engine.py  (新)   ← 参数化四电路模型 (从 tools/sim 重构——已归档, 真源=本文件)
    └─ /lib/three.min.js + /meshes/*.stl (静态)
 ```
 
@@ -107,7 +107,7 @@ POST body `{"paused": bool, "speed": 0.25-4.0, "step_once": bool}` → 回显当
 - 纯函数核心（输入状态+参数→输出遥测），便于单测金样对照。
 
 ### 4.2 sim_engine.py（S1 核心）
-- 从 `hardware/flowio-p1/tools/sim/` 重构：`simlib`(SVG 绘图部分剥离到可选)、`sim_buck/dior/valve/i2c` 的 `report(md,png)` 改造为 `run(params) -> {metrics, waves, notes}`；md/SVG 输出保留为 `--export` 离线模式（既有交付物不变）。
+- 从 `hardware/flowio-p1/tools/sim/`（**已归档，真源=firmware/twin/sim_engine.py**，旧目录 git mv 至 `firmware/twin/deprecated/sim-legacy/`）重构：`simlib`(SVG 绘图部分剥离到可选)、`sim_buck/dior/valve/i2c` 的 `report(md,png)` 改造为 `run(params) -> {metrics, waves, notes}`；md/SVG 输出保留为 `--export` 离线模式——`python sim_engine.py --export` → `firmware/twin/sim_out/` 5 张 SVG（纯 stdlib `sim_export.py` 绘制，无 numpy）+ `sim-report.md`（替代旧 out/ 交付物，buck_loadstep 随归档工具下线）。
 - 参数校验、降采样（波形 ≤2000 点）、超时看门狗（`threading` 3s）。
 
 ### 4.3 网格生成管线（S3 数据源）

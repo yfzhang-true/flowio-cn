@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 """sim_engine — FLOWIO-CN 孪生平台 S1 参数化仿真引擎.
 
-把 hardware/flowio-p1/tools/sim 四电路仿真 (buck / dior / valve / i2c) 重构为
+把 hardware/flowio-p1/tools/sim (已归档 firmware/twin/deprecated/sim-legacy,
+真源=本文件) 四电路仿真 (buck / dior / valve / i2c) 重构为
 参数化纯函数模块, 供后端重算端点调用: run(circuit, params) 返回
 {circuit, params, metrics, waves, notes}, 无文件/全局副作用, 仅 stdlib math.
 
-物理内核与 tools/sim 逐函数对照移植, 数值锚点:
+物理内核与归档 sim-legacy 逐函数对照移植, 数值锚点:
   buck  : VOUT_T = 0.8*(1+10k/3.24k) = 3.269V, 稳态纹波 <50mV @3A,
           闭环 KP=0.3 KI=2500 D0=VOUT_T/vin, dt=TSW/140, ss=0.5ms,
           sim 2.5ms 取 T>2.2ms 稳态段; 效率含 Rsw/DCR/二极管/开关(20ns)/ESR 五项
@@ -338,8 +339,18 @@ def _i2c(p):
 _IMPL = {"buck": _buck, "dior": _dior, "valve": _valve, "i2c": _i2c}
 
 
-if __name__ == "__main__":                    # 手动冒烟: 打印各电路首指标
-    for c in ("buck", "dior", "valve", "i2c"):
-        r = run(c, {})
-        m = r["metrics"][0]
-        print("%-5s %-8s = %s %s  %s" % (c, m["name"], m["value"], m["unit"], m["verdict"]))
+if __name__ == "__main__":
+    import sys
+    argv = sys.argv[1:]
+    if argv[:1] == ["--export"]:              # 离线导出: 5 SVG + sim-report.md
+        import sim_export
+        for f in sim_export.export_all(argv[1] if len(argv) > 1 else None):
+            print("写出", f)
+    elif argv:                                # 未知参数: 提示用法
+        print("用法: python sim_engine.py [--export [输出目录]]")
+        raise SystemExit(2)
+    else:                                     # 无参: 冒烟打印各电路首指标
+        for c in ("buck", "dior", "valve", "i2c"):
+            r = run(c, {})
+            m = r["metrics"][0]
+            print("%-5s %-8s = %s %s  %s" % (c, m["name"], m["value"], m["unit"], m["verdict"]))
