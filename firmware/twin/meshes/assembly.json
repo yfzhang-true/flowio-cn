@@ -1,62 +1,70 @@
 {
-  "units": "mm",
-  "frame": "case (bottom shell at origin; board inset 2.9 XY, board underside z=2.4)",
-  "bbox": [
-    95.8,
-    80.8,
-    19.0
-  ],
-  "note": "M3×2 自攻入下壳铜柱; via-in-pad 已塞孔(见 fab README)",
   "parts": [
     {
-      "name": "case_top",
-      "file": "case_top.stl",
+      "id": "case_top",
+      "name": "上壳(通风栅)",
+      "stl": "/meshes/case_top.stl",
+      "color": "#9e9e9e",
       "explode": [
         0,
         0,
         28
       ],
-      "color": "#9e9e9e"
+      "opacity": 1.0
     },
     {
-      "name": "parts_f",
-      "file": "parts_f.stl",
+      "id": "parts_F",
+      "name": "器件阵-顶面",
+      "stl": "/meshes/parts_f.stl",
+      "color": "#c62828",
       "explode": [
         0,
         0,
         12
       ],
-      "color": "#c62828"
+      "opacity": 0.95
     },
     {
-      "name": "pcb",
-      "file": "pcb.stl",
+      "id": "pcb",
+      "name": "P1 主板",
+      "stl": "/meshes/pcb.stl",
+      "color": "#0d6b3f",
       "explode": [
         0,
         0,
         0
       ],
-      "color": "#0d6b3f"
+      "opacity": 1.0
     },
     {
-      "name": "parts_b",
-      "file": "parts_b.stl",
+      "id": "parts_B",
+      "name": "器件阵-底面",
+      "stl": "/meshes/parts_b.stl",
+      "color": "#1565c0",
       "explode": [
         0,
         0,
         -8
       ],
-      "color": "#1565c0"
+      "opacity": 1.0
     },
     {
-      "name": "case_bottom",
-      "file": "case_bottom.stl",
+      "id": "case_bottom",
+      "name": "下壳(铜柱)",
+      "stl": "/meshes/case_bottom.stl",
+      "color": "#757575",
       "explode": [
         0,
         0,
         -16
       ],
-      "color": "#757575"
+      "opacity": 1.0
     }
-  ]
+  ],
+  "bbox_mm": [
+    95.8,
+    80.8,
+    19
+  ],
+  "assembly_note": "M3×2 螺丝自攻入下壳铜柱"
 }
