@@ -43,7 +43,7 @@ Z-Height = 7mm**（模型显示 10.4）。模型普遍虚高 3~4mm——当前�
 
 ## 2. 基线研究结论（v2：已下载到本地并精读，笔记见 `docs/research/2026-10-03-baseline-reading.md`）
 
-| 需求 | 基线（本地路径 `E:/FLOWIO-3rdparty/`） | 精读结论 → 落地 |
+| 需求 | 基线（2026-10-03 已整合入仓：`E:/FLOWIO/third_party/repos/` + `E:/FLOWIO/literature/`） | 精读结论 → 落地 |
 |---|---|---|
 | 碰撞检测 | **python-fcl 0.7.0.11 + trimesh 5.1.1**（venv 实测：pip 直装 Windows wheel ✓） | `CollisionManager`：add_object/set_transform（爆炸态 O(1) 更新）/in_collision_internal(return_names)/min_distance_*（净空断言）；CCD 备用于装配扫掠 |
 | 定向包围盒 | trimesh `bounds.oriented_bounds`（源码精读+实测） | 3D 面法向角度搜索（angle_digits 可控）；旋转盒/圆柱实测恢复正确；对 KiCad STEP 实体做姿态校验；首选仍是 JLC 结构化尺寸直接构盒 |
@@ -96,8 +96,8 @@ Z-Height = 7mm**（模型显示 10.4）。模型普遍虚高 3~4mm——当前�
   全注册；`in_collision_internal(return_names=True)` 出冲突对名单（测试断言）；
   `min_distance_internal` 出净距（"器件间 ≥ x mm" 断言）；`set_transform` 支持
   爆炸态逐层扫掠（爆炸视图每层 k∈[0,1] 无穿模验证）；FCL CCD 留作阶段 2。
-- 运行环境：`E:/FLOWIO-3rdparty/venv-fcl-test`（或正式化为本仓 `tools/venv-cad`，
-  requirements: python-fcl/trimesh/networkx/scipy；run_tests.sh 探测该解释器跑 L5）。
+- 运行环境：`tools/venv-cad`（已建并冒烟通过；依赖清单 `tools/requirements-cad.txt`；
+  run_tests.sh 探测该解释器跑 L5）。
 
 ### D3 关系图 `enclosure/device_graph.py`（networkx）
 - 电气边（**决策 ④：解析网表**）：`kicad-cli sch export netlist` 导出 → S-expr
@@ -139,8 +139,7 @@ Z-Height = 7mm**（模型显示 10.4）。模型普遍虚高 3~4mm——当前�
    OUTER_H = 23.67+2.4 = **26.07**（v1 口算"24.2"有误，以本算式为准）；端子槽
    z_hi = 23.27；板到货实测二次校验后如需再调，只改 case_geom 常量全链重生成。
 2. **碰撞实现 ✓：直接引 trimesh+FCL**（pip 0.7.0.11 Windows wheel 实测可装；
-   依赖 scipy；venv 已建于 E:/FLOWIO-3rdparty/venv-fcl-test，实施时正式化为
-   tools/venv-cad 并提交 requirements）。
+   依赖 scipy；**venv 已正式建于 `tools/venv-cad` 并冒烟通过**，requirements 已提交）。
 3. **P2 范围 ✓：先出 FlowIO 差距文档，"8 路阀板载化"提上排期**（M2 里程碑，
    见 §7）。
 4. **电气边数据源 ✓：解析网表**（kicad-cli sch export netlist → S-expr 解析；

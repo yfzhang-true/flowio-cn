@@ -1,7 +1,9 @@
 # 基线精读笔记：trimesh+FCL / MacroPlacement-CT / DREAMPlace / OpenPARF / networkx
 
 > 日期: 2026-10-03 · 用途: 支撑 `specs/2026-10-03-device-geometry-framework.md` v2 决策
-> 资源根: `E:/FLOWIO-3rdparty/`（Mimosa 铁律: 第三方源码项目树外）
+> 资源根: 2026-10-03 已整合入仓——第三方仓库 `E:/FLOWIO/third_party/repos/`（gitignored）、
+> 文献 `E:/FLOWIO/literature/`（PDF 按惯例 gitignored）、几何核环境 `tools/venv-cad`。
+> （原 `E:/FLOWIO-3rdparty/` 树外布局经用户指示整合后废弃）
 
 ## 0. 本地资源清单（全部已下载可离线重读）
 

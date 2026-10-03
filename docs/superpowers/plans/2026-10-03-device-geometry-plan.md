@@ -5,7 +5,8 @@
 > 全程走 worktree `.worktrees/device-geometry`；每任务 TDD（先写失败断言再实现）；完成标准 = L5 层全绿 + 既有五层回归全绿。
 
 ## T0 基线下载与精读（✅ 已完成，2026-10-03）
-产物：`E:/FLOWIO-3rdparty/`（repos×4 + papers×3 + venv-fcl-test 冒烟通过）+
+产物（2026-10-03 已整合入仓）：`third_party/repos/`×7 + `literature/` 11 篇（原名→规范名映射见
+`literature/DOWNLOAD-LIST.md` 2026-10-03 节）+ `tools/venv-cad`（冒烟通过）+
 `docs/research/2026-10-03-baseline-reading.md`（精读笔记与落地映射表）。
 
 ## T1 器件数据层（~1 次会话）
