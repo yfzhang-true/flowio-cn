@@ -40,3 +40,4 @@ literature/*.pdf
 /资源/官方参考/
 /资源/开发板资料/
 .flowio-softrobotics-docs/
+.worktrees/
