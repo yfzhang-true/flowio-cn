@@ -49,5 +49,6 @@
 
 - **流水线**: kicad-cli 导出 PCB STEP（需 `KICAD9_3RD_PARTY=C:/Users/yuefe/Documents/KiCad/9.0/3rdparty`，否则 108 个 JLC 元件 3D 体缺失）→ `enclosure/make_assembly.py` 合并（离群过滤 136 个坏原点 JLC 模型）→ 装配体 **557 solids**，包围盒 95.8×80.8×19.1（与理论偏差 ≤0.11mm，断言通过）
 - **产物**: `hardware/flowio-p1/enclosure/flowio-p1-assembly.step`（**76MB**，已入 main 并 push；GitHub 提示 >50MB 建议但未拦截）；assembly STL 67MB 与 PCB 中间件 20MB 已 gitignore（可由脚本再生）
-- **平台侧待办（2026-10-03 晚复核：①已解决）**: ① ✅ **Files 区已同步到装配体 commit**（flowio-p1-assembly.step + make_assembly.py 均可见可下载；原理图/PCB/Gerber/固件/外壳全量在列）② 主模型仍为 case-top——文件详情仅有 Download，无"设为主模型"入口；退路 = 删除项目按 runbook 重建（5 分钟）③ Documentation 仍空、Overview 无 canvas（STEP→3D 转换平台侧未完成）
+- **平台侧待办（2026-10-03 晚二轮复核，重建路径已否决）**: ① ✅ Files 区已同步装配体 commit（四类资产全量）② 主模型仍为 case-top：**全站无删除/更换主模型入口**（项目页/项目卡/工作区设置均无；Manage 仅贡献者；Leo 为 alpha 且未挂载项目上下文、限额 10 条/会话）→ **重建 = 制造不可删除的重复项目，与"可控"相悖，已否决**；正解 = 等平台补齐功能或走支持渠道 ③ Documentation 空 + Overview 无 canvas（平台侧未完成）
+- **Onshape 结论**: 不需要注册关联——我们的 CAD 链是 FreeCAD→STEP→GitHub→Tnkr 已闭环；Onshape 集成仅服务"在 Onshape 里做设计"的用户
 - **运行约束备忘**: FreeCADCmd 对含中文注释脚本报"not readable"，用 `exec(compile(open(p, encoding='utf-8').read(), p, 'exec'), {'__file__': p})` 绕过
