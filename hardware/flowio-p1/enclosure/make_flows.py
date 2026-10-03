@@ -23,13 +23,15 @@ try:
 except Exception:
     pass
 
-ROOT = Path(__file__).resolve().parents[3]
+HERE = Path(__file__).resolve().parent
+sys.path.insert(0, str(HERE))
+import case_geom as G          # 装配常量单一真相源 (2026-10-03: Z_TOP 4.0 -> 9.0)
+
+ROOT = HERE.parents[2]
 POSCSV = ROOT / "hardware" / "flowio-p1" / "fab" / "flowio-p1-pos.csv"
 OUTDIR = ROOT / "firmware" / "twin" / "webapp"
 
-# ---------- 装配常量 (与 make_meshes.py / make_case.py 一致) ----------
-OX = 2.9          # WALL+CLR: 板原点在壳内偏移
-Z_TOP = 4.0       # WALL(2.4) + PCB_T(1.6): 顶面器件所在板面 z
+Z_TOP = G.Z_TOP                # 顶面器件所在板面 z (板坐铜柱顶, 见 case_geom)
 
 # ---------- 拓扑表 (板坐标 ref 序列; 数据源 = pos.csv + 引脚表) ----------
 ELEC = [
@@ -79,35 +81,10 @@ HOTSPOTS = [
         ("逻辑电流", "rail_3v3.load_a", "A")]),
 ]
 
-# Package 尺寸表 (与 make_meshes.py 同表同匹配逻辑 → 盒体与 parts_f.stl 逐面重合)
-H = {
-    "CONN-TH_2P": (11.6, 11.0, 11.0),
-    "TYPE-C":     (8.0, 10.3, 3.2),
-    "WROOM":      (18.0, 25.5, 3.1),
-    "XH":         (6.5, 13.3, 8.5),
-    "CONN-TH_4P": (13.3, 6.5, 8.5),
-    "SOT-23":     (2.9, 2.4, 1.2),
-    "C_0603":     (1.6, 0.8, 0.9),
-    "C1206":      (3.2, 1.6, 0.8),
-    "C_1206":     (3.2, 1.6, 6.5),
-    "SOP":        (4.9, 3.9, 1.75),
-    "MSOP":       (3.0, 5.0, 1.1),
-    "CDRH":       (10.0, 10.0, 4.0),
-    "DC005":      (10.9, 15.6, 7.0),
-    "TestPoint":  (1.0, 1.0, 0.5),
-    "R0603":      (1.6, 0.8, 0.6),
-    "SMA":        (4.3, 2.6, 1.1),
-    "SW-SMD":     (6.1, 3.8, 2.0),
-}
-ALIAS = {"IND-SMD": "CDRH", "SOIC": "SOP"}
-KEYWORDS = [(k, H[k]) for k in H] + [(a, H[b]) for a, b in ALIAS.items()]
-
+# Package 尺寸表 → case_geom.dims_for (与 parts_f.stl 盒体逐面重合, 单一来源)
 
 def dims_for(pkg):
-    for k, d in KEYWORDS:
-        if k in pkg:
-            return d
-    return (2.2, 2.2, 1.5)
+    return G.dims_for(pkg)
 
 
 def load_pos():
@@ -127,8 +104,8 @@ def load_pos():
 
 
 def shell_xy(p):
-    """板→壳坐标 (S3 定稿映射: x=PosX+OX, y=-PosY+OX)。"""
-    return p["x"] + OX, -p["y"] + OX
+    """板→壳坐标 (case_geom 定稿映射: x=PosX+OX, y=-PosY+OX)。"""
+    return G.board_to_case(p["x"], p["y"])
 
 
 def require_refs(pos, refs):

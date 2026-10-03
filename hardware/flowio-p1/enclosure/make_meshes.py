@@ -1,19 +1,17 @@
 # -*- coding: utf-8 -*-
-"""FLOWIO-P1 数字孪生网格 — S3 爆炸视图全套 STL + assembly.json.
+"""FLOWIO-P1 数字孪生网格 — S3 爆炸视图全套 STL + assembly.json (2026-10-03 装配栈统一).
 
-运行: E:/FreeCAD/bin/FreeCADCmd.exe hardware/flowio-p1/enclosure/make_meshes.py
-输出: firmware/twin/meshes/{case_bottom,case_top,pcb,parts_f,parts_b}.stl + assembly.json
+运行: E:/FreeCAD/bin/python.exe hardware/flowio-p1/enclosure/make_meshes.py
+输出: firmware/twin/meshes/{case_bottom,case_top,pcb,parts_f}.stl + assembly.json
 
-坐标系: 壳坐标系(底壳原点)。板原点在壳内 (OX, OX)=(2.9,2.9), 板底面 z=WALL=2.4。
-器件坐标映射 (KiCad pos -> 板坐标, 板外沿 X:0-90 Y:0-75):
-    x = PosX,  y = -PosY
-经 J10 端子 (6.5,-68.5)->(6.5,68.5) 与 J2 USB-C (86,-6)->(86,6) 验证;
-"-PosY+75" 翻转假设被证伪 (会给 143.5/81), 故弃用。
+坐标系: 壳系 (下壳外角原点, Z-up), 与 scene.js / flows.json 同源, 无任何翻转。
+装配栈 (case_geom 单一真相): 板坐铜柱顶 z=Z_BOARD=7.4, 器件基面 z=Z_TOP=9.0。
+  旧版错误: 板按"趴腔底 z=2.4"建模 (被铜柱穿透), 19 总高装不下 11mm 端子。
+BOM 无底面器件, 故不产出 parts_b.stl, assembly.json 亦不列该件 (旧版列了空件)。
 """
 import csv
 import json
 import shutil
-import struct
 import sys
 from pathlib import Path
 
@@ -27,47 +25,13 @@ import Mesh
 import MeshPart
 import Part
 
-ROOT = Path(__file__).resolve().parents[3]
-ENCL = ROOT / "hardware" / "flowio-p1" / "enclosure"
+HERE = Path(__file__).resolve().parent
+sys.path.insert(0, str(HERE))
+import case_geom as G
+
+ROOT = HERE.parents[2]
 POSCSV = ROOT / "hardware" / "flowio-p1" / "fab" / "flowio-p1-pos.csv"
 OUT = ROOT / "firmware" / "twin" / "meshes"
-
-# ---------- 装配常量 (与 make_case.py 一致) ----------
-BOARD_W, BOARD_D, BOARD_T = 90.0, 75.0, 1.6   # P1 板
-WALL = 2.4                                     # 壁厚 = 板底面 z
-OX = 2.9                                       # WALL+CLR: 板原点在壳内偏移
-
-# Package 关键字 -> (w, d, h) mm
-H = {
-    "CONN-TH_2P": (11.6, 11.0, 11.0),
-    "TYPE-C":     (8.0, 10.3, 3.2),
-    "WROOM":      (18.0, 25.5, 3.1),
-    "XH":         (6.5, 13.3, 8.5),
-    "CONN-TH_4P": (13.3, 6.5, 8.5),
-    "SOT-23":     (2.9, 2.4, 1.2),
-    "C_0603":     (1.6, 0.8, 0.9),
-    "C1206":      (3.2, 1.6, 0.8),
-    "C_1206":     (3.2, 1.6, 6.5),
-    "SOP":        (4.9, 3.9, 1.75),
-    "MSOP":       (3.0, 5.0, 1.1),
-    "CDRH":       (10.0, 10.0, 4.0),
-    "DC005":      (10.9, 15.6, 7.0),
-    "TestPoint":  (1.0, 1.0, 0.5),
-    "R0603":      (1.6, 0.8, 0.6),
-    "SMA":        (4.3, 2.6, 1.1),
-    "SW-SMD":     (6.1, 3.8, 2.0),
-}
-# BOM 实际封装的别名 -> H 条目 (L1 电感 10.2x10 / U3 SOIC-8)
-ALIAS = {"IND-SMD": "CDRH", "SOIC": "SOP"}
-KEYWORDS = [(k, H[k]) for k in H] + [(a, H[b]) for a, b in ALIAS.items()]
-DEFAULT = (2.2, 2.2, 1.5)
-
-
-def dims_for(pkg):
-    for k, d in KEYWORDS:
-        if k in pkg:
-            return d
-    return DEFAULT
 
 
 def load_pos():
@@ -75,7 +39,7 @@ def load_pos():
     with open(POSCSV, newline="", encoding="utf-8") as f:
         for row in csv.DictReader(f):
             ref = (row["Ref"] or "").strip()
-            if ref.upper().startswith("H"):   # 安装孔 HA..HD 不建模
+            if ref.upper().startswith("H"):   # 安装孔不建模 (pos 导出无 H 位, 防御保留)
                 continue
             parts.append({
                 "ref": ref,
@@ -89,29 +53,28 @@ def load_pos():
 
 
 def verify_mapping(parts):
-    """已知器件校验 pos.csv -> 板坐标映射, 定稿后供建模使用."""
+    """锚点校验 pos.csv -> 壳系映射 (case_geom.ANCHORS 黄金值)."""
     refs = {p["ref"]: p for p in parts}
-    checks = [("J10", 6.5, 68.5), ("J2", 86.0, 6.0), ("J1", 5.5, 27.0)]
-    for ref, ex, ey in checks:
+    for ref, px, py, ex, ey in G.ANCHORS:
         p = refs[ref]
-        x, y = p["x"], -p["y"]
+        x, y = G.board_to_case(p["x"], p["y"])
         ok = abs(x - ex) < 0.01 and abs(y - ey) < 0.01
-        print("[map] %s %-28s pos=(%.1f,%.1f) -> board=(%.1f,%.1f) expect=(%.1f,%.1f) %s"
-              % (ref, p["pkg"][:28], p["x"], p["y"], x, y, ex, ey, "OK" if ok else "FAIL"))
+        print("[map] %s pos=(%.1f,%.1f) -> case=(%.1f,%.1f) expect=(%.1f,%.1f) %s"
+              % (ref, p["x"], p["y"], x, y, ex, ey, "OK" if ok else "FAIL"))
         assert ok, "Y mapping verification failed for %s" % ref
-    print("[map] mapping FIXED: x=PosX, y=-PosY ('-PosY+75' rejected by J10/J2 checks)")
+    print("[map] mapping OK: x=PosX+OX, y=-PosY+OX (%d anchors)" % len(G.ANCHORS))
 
 
 def part_box(p):
-    """单器件盒体, 已变换到壳坐标系."""
-    w, d, h = dims_for(p["pkg"])
+    """单器件盒体, 已变换到壳坐标系 (z 基准 = case_geom 装配栈)."""
+    w, d, h = G.dims_for(p["pkg"])
     if int(round(p["rot"])) % 180 == 90:   # 90 度旋转交换 w/d
         w, d = d, w
-    cx, cy = p["x"] + OX, -p["y"] + OX     # 板坐标 + 壳偏移
+    cx, cy = G.board_to_case(p["x"], p["y"])
     if p["side"] == "top":
-        z = WALL + BOARD_T                 # 底 z = 4.0 向上
+        z = G.Z_TOP                        # 9.0 板面起向上
     else:
-        z = WALL - h                        # 自板底面向下
+        z = G.Z_BOARD - h                  # 自板底面向下 (当前 BOM 无底面件)
     return Part.makeBox(w, d, h, App.Vector(cx - w / 2.0, cy - d / 2.0, z))
 
 
@@ -121,75 +84,67 @@ def mesh_and_write(shape, path):
     return m
 
 
-def check_mesh(name, m, require_facets=True):
+def check_mesh(name, m):
     facets = m.CountFacets
     solid = m.isSolid()
     print("[mesh] %-16s facets=%-6d isSolid=%s" % (name, facets, solid))
-    assert facets > 0 or not require_facets, "%s: no facets" % name
-    if facets > 0:
-        assert solid, "%s: mesh not solid" % name
+    assert facets > 0, "%s: no facets" % name
+    assert solid, "%s: mesh not solid" % name
     return facets
-
-
-def write_empty_stl(path):
-    """空二进制 STL (84 字节): BOM 无底面器件时的 parts_b 占位."""
-    path.write_bytes(b"FLOWIO empty parts_b (no bottom-side components)".ljust(80, b"\0")[:80]
-                     + struct.pack("<I", 0))
 
 
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
 
-    # 1. 壳 STL 复制改名 (壳本身已是壳坐标系)
-    shutil.copyfile(ENCL / "case-bottom.stl", OUT / "case_bottom.stl")
-    shutil.copyfile(ENCL / "case-top.stl", OUT / "case_top.stl")
+    # 1. 壳 STL 复制改名 (make_case.py 产物, 壳系原生)
+    shutil.copyfile(HERE / "case-bottom.stl", OUT / "case_bottom.stl")
+    shutil.copyfile(HERE / "case-top.stl", OUT / "case_top.stl")
 
-    # 2. 坐标映射校验
+    # 2. 坐标映射锚点校验
     parts = load_pos()
     verify_mapping(parts)
     tops = [p for p in parts if p["side"] == "top"]
     bots = [p for p in parts if p["side"] != "top"]
     print("[pos] %d components (%d top / %d bottom), mounting holes skipped"
           % (len(parts), len(tops), len(bots)))
+    assert not bots, "出现底面器件: 需恢复 parts_b 通道并补 z 语义"
 
-    # 3. PCB (壳坐标系: 原点 (2.9,2.9), 底面 z=2.4, 厚 1.6)
-    pcb_shape = Part.makeBox(BOARD_W, BOARD_D, BOARD_T, App.Vector(OX, OX, WALL))
+    # 3. PCB (板底 = 铜柱顶 Z_BOARD, 旧版误用 Z_FLOOR=2.4)
+    pcb_shape = Part.makeBox(G.BW, G.BH, G.PCB_T, App.Vector(G.OX, G.OX, G.Z_BOARD))
 
-    # 4. 器件阵
-    if tops:
-        m_f = mesh_and_write(Part.makeCompound([part_box(p) for p in tops]), OUT / "parts_f.stl")
-        check_mesh("parts_f.stl", m_f)
-    else:
-        write_empty_stl(OUT / "parts_f.stl")
-        print("[mesh] parts_f.stl         empty (no top-side parts)")
-    if bots:
-        m_b = mesh_and_write(Part.makeCompound([part_box(p) for p in bots]), OUT / "parts_b.stl")
-        check_mesh("parts_b.stl", m_b)
-    else:
-        write_empty_stl(OUT / "parts_b.stl")
-        print("[mesh] parts_b.stl         empty (no bottom-side parts in BOM)")
+    # 4. 顶面器件阵 (基面 Z_TOP)
+    m_f = mesh_and_write(Part.makeCompound([part_box(p) for p in tops]), OUT / "parts_f.stl")
+    check_mesh("parts_f.stl", m_f)
 
     # 5. PCB 网格 + 壳网格校验
-    m_pcb = mesh_and_write(pcb_shape, OUT / "pcb.stl")
-    check_mesh("pcb.stl", m_pcb)
+    check_mesh("pcb.stl", mesh_and_write(pcb_shape, OUT / "pcb.stl"))
     check_mesh("case_bottom.stl", Mesh.Mesh(str(OUT / "case_bottom.stl")))
     check_mesh("case_top.stl", Mesh.Mesh(str(OUT / "case_top.stl")))
 
-    # 6. assembly.json — spec §3.4 契约 (id/name/stl/color/explode/opacity, bbox_mm, assembly_note)
+    # 6. 清理旧版遗留的空 parts_b.stl (BOM 无底面器件)
+    stale = OUT / "parts_b.stl"
+    if stale.exists():
+        stale.unlink()
+        print("[out] removed stale parts_b.stl (no bottom-side parts)")
+
+    # 7. assembly.json — spec §3.4 契约 (explode/bbox 全部来自 case_geom)
     assembly = {
         "parts": [
-            {"id": "case_top",    "name": "上壳(通风栅)",  "stl": "/meshes/case_top.stl",    "color": "#9e9e9e", "explode": [0, 0, 28],  "opacity": 1.0},
-            {"id": "parts_F",     "name": "器件阵-顶面",   "stl": "/meshes/parts_f.stl",     "color": "#c62828", "explode": [0, 0, 12],  "opacity": 0.95},
-            {"id": "pcb",         "name": "P1 主板",       "stl": "/meshes/pcb.stl",         "color": "#0d6b3f", "explode": [0, 0, 0],   "opacity": 1.0},
-            {"id": "parts_B",     "name": "器件阵-底面",   "stl": "/meshes/parts_b.stl",     "color": "#1565c0", "explode": [0, 0, -8],  "opacity": 1.0},
-            {"id": "case_bottom", "name": "下壳(铜柱)",   "stl": "/meshes/case_bottom.stl", "color": "#757575", "explode": [0, 0, -16], "opacity": 1.0},
+            {"id": "case_top",    "name": "上壳(通风栅)",  "stl": "/meshes/case_top.stl",    "color": "#9e9e9e",
+             "explode": G.EXPLODE["case_top"],    "opacity": 1.0},
+            {"id": "parts_F",     "name": "器件阵-顶面",   "stl": "/meshes/parts_f.stl",     "color": "#c62828",
+             "explode": G.EXPLODE["parts_F"],     "opacity": 0.95},
+            {"id": "pcb",         "name": "P1 主板",       "stl": "/meshes/pcb.stl",         "color": "#0d6b3f",
+             "explode": G.EXPLODE["pcb"],         "opacity": 1.0},
+            {"id": "case_bottom", "name": "下壳(铜柱)",   "stl": "/meshes/case_bottom.stl", "color": "#757575",
+             "explode": G.EXPLODE["case_bottom"], "opacity": 1.0},
         ],
-        "bbox_mm": [95.8, 80.8, 19],
-        "assembly_note": "M3×2 螺丝自攻入下壳铜柱",
+        "bbox_mm": G.BBOX_MM,
+        "assembly_note": "M3 螺丝穿板自攻入下壳铜柱 (板坐铜柱顶 z=7.4)",
     }
     (OUT / "assembly.json").write_bytes(json.dumps(assembly, ensure_ascii=False, indent=2).encode("utf-8"))
-    print("[out] assembly.json written ->", OUT / "assembly.json")
-    print("MESHES OK: 6 files in", OUT)
+    print("[out] assembly.json written -> %s (bbox %s)" % (OUT / "assembly.json", G.BBOX_MM))
+    print("MESHES OK: 5 files in", OUT)
 
 
 main()
