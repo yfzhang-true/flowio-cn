@@ -54,6 +54,30 @@ aminer 的 `pdf` 字段是 md5 引用非公开 URL → 全文以元数据+摘要
 被引 **101**；关键词 Platforms/Toolkits/Control Systems/Soft Robotics/Programmable
 Materials/Wearables/Arduino；一作 Shtarbanov（MIT Media Lab）。
 
+## 8. GitHub 系统检索全景（2026-10-03 补充，api.github.com 经代理）
+
+| 轴向 | 检索词 | 结果 |
+|---|---|---|
+| KiCad 3D 碰撞/装配 | kicad collision 3D assembly | **0**——KiCad 生态无 3D 装配碰撞工具 → 我们的 L5 填补真空 |
+| 电子外壳生成器 | electronic enclosure generator (pcb) / openscad cadquery | **0**——参数化电子外壳无现成轮子 → make_case.py 自研路线无替代品 |
+| FCL python 分叉 | python-fcl in:name | 9 个，皆陈旧（benureau 2014 / rxjia-octomap 2024）→ pip `python-fcl` 0.7.0.11 仍是实际最优 |
+| KiCad 自动布局 | kicad automatic component placement | 2 个小库 → **KiCad-Autoplace 已克隆**（见下） |
+| 装配序列/约束图 | assembly sequence planning python graph | 1 个 → **AOG-Generation 已克隆**（见下） |
+| PCB 布局 AI | pcb component placement optimization python | **pcb-designer-ai-agent 已克隆**（★131，LLM 端到端，背景参考） |
+
+### 8.1 新克隆三库精读要点
+- **DTU-EKB/KiCad-Autoplace**（★2，活跃 2026-09）：连接感知自动布局+布线桌面应用。
+  **"Connectors on edges"（点选连接器→自动贴边布置）正是我们 EDGE_OUT 的现成实现**；
+  多种子布局画廊、FreeRouting 联动、路由驱动再退火。规模小（教学向）但验证了
+  "连接度+贴边"路线可落地；其布局评分/退火实现可作 D3 placement_advice 的工程参考。
+- **wzl-muenker/AOG-Generation**（★8，2021）：从 CAD 提取 **liaison（连接图）+
+  moving wedge（可移除方向楔）** 约束 → AND/OR 图（自顶向下/自底向上两种生成法），
+  表征产品全部可行装配序列。**moving wedge 概念与我们 port_ray/装配方向语义同构**；
+  AOG 是 L5"装配顺序检查"的成熟数据结构（论文级实现，py3.7，含离心泵/离合器案例）。
+- **assalas/pcb-designer-ai-agent**（★131，活跃 2026-10）：LLM 自然语言→网表→IPC
+  封装→.kicad_pcb 端到端。无几何严谨性（无碰撞/朝向检查）——恰反衬我们框架的
+  价值定位：**AI 生成布局可以快，但"对不对"要靠几何约束测试层守门**。
+
 ## 1. trimesh + python-fcl（碰撞栈，已实测）
 
 ### 1.1 安装可行性（Windows 关键风险，已解除）
