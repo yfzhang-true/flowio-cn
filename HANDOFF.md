@@ -49,6 +49,7 @@
 
 | 工具 | 路径/命令 |
 |---|---|
+| **网络代理（github.com 阻断时用）** | 本机 Clash 系代理 `http://127.0.0.1:7877`（系统注册但 ProxyEnable=0，需显式指定）；git 用法：`git -c http.proxy=http://127.0.0.1:7877 push ...`；curl 加 `-x http://127.0.0.1:7877` |
 | KiCad python / kicad-cli | `"E:/Program Files/KiCad/10.0/bin/"`（STEP 导出需 `KICAD9_3RD_PARTY` 指向 Documents/KiCad/9.0/3rdparty） |
 | FreeCAD 1.1 | `E:/FreeCAD/bin/FreeCADCmd.exe`（中文脚本需 exec 注入法，见 archive 手册 §7） |
 | Pages 构建部署 | `python tools/build_site.py` → `git subtree split --prefix=site -b gh-pages` → push |
