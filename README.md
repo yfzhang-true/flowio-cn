@@ -2,6 +2,7 @@
 
 **Open-source pneumatic soft robotics control platform** — from 4-layer PCB to digital twin.
 
+[![Live Demo](https://img.shields.io/badge/Live_Demo-GitHub_Pages-2ea44f.svg)](https://yfzhang-true.github.io/flowio-cn/)
 [![License: MIT](https://img.shields.io/badge/Code-MIT-yellow.svg)](LICENSE)
 [![License: CERN OHL-S](https://img.shields.io/badge/Hardware-CERN--OHL--S-blue.svg)](LICENSE)
 [![License: CC BY-NC-ND 4.0](https://img.shields.io/badge/Docs-CC--BY--NC--ND--4.0-green.svg)](LICENSE)
