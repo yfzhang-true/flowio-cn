@@ -8,7 +8,7 @@
 ## 0. 一句话现状
 
 **产品线**：P1 板全设计完成（原理图 0 错/布线 0 未连接/仿真 4 电路达标/JLC 制造包就绪），**等用户下单打样（板 5 装 2，约 360-720 元）与实物到货** → 触发 A201-A224 硬件验收 + A301-A306 标定（= BRINGUP 30 检查项 = 专著 ch13/14 素材）。
-**展示线**：GitHub Pages 演示站上线 **https://yfzhang-true.github.io/flowio-cn/**（3D 爆炸 + 气流/电流 + 浏览器内四电路仿真，JS 移植与 Python 对拍零误差）；README 有 Live Demo 徽章。
+**展示线**：GitHub Pages 演示站上线 **https://yfzhang-true.github.io/flowio-cn/**（3D 爆炸 + 气流/电流 + 浏览器内四电路仿真，JS 移植与 Python 对拍零误差）；README 有 Live Demo 徽章。**2026-10-03 深夜 CAD 装配大修**：用户报障爆炸视图装配错误 → 根因四层（四源 z 基准矛盾/上壳是带底方盒/装配矩阵平移放错列/壳高装不下真实端子 17.5mm）→ 统一装配栈（板坐铜柱 7.4，总高 19→29.5）+ **CAD 测试体系 L1-L4 上线**（34 断言，干涉全 0.000mm³，入 run_tests.sh 第 2 层），spec 见 `docs/superpowers/specs/2026-10-03-cad-assembly-truth.md`。
 **求职线**：4 公司尽调完成（乐鑫第一优先 9/10）、双简历就绪（GitHub + Live Demo 双链接）；**唯一待办：用户投递**。
 **已关闭**：tnkr.ai 线（2026-10-03 放弃，档案在 `docs/archive/tnkr-2026-10/`，项目页已删，App 授权待用户手动卸载——见 §5）。
 
@@ -30,7 +30,7 @@
 1. **【用户动作】投递乐鑫**（原型验证/ESP-IDF SDK/AI 方案三岗，弹药=FLOWIO-CN 全栈）
 2. **【用户动作】JLC 下单**（fab 包参数见 `hardware/flowio-p1/fab/README-jlc-order.md`）
 3. **【用户动作 30 秒】卸载 GitHub App**：浏览器停在 github.com sudo 确认页 → 输密码 Confirm → installation 页 Uninstall "Tnkr AI"
-4. 板到货后：按 `firmware/BRINGUP.md` 走 30 检查项（票号 A201-A302）→ 同步产出专著 ch13/14
+4. 板到货后：按 `firmware/BRINGUP.md` 走 30 检查项（票号 A201-A302）→ 同步产出专著 ch13/14；**CAD 侧增补**：实测 WJ500V 端子体位（KiCad 模型带 +3.15mm 偏移 vs pos.csv 居中两说，角部 relief 已兼容两者；若实测仍偏，微调 `case_geom.TERM_RELIEF/TERM_SLOT` 重跑 make_case 即可）
 5. 可选 backlog：孪生 v2.1 三特性（`docs/superpowers/specs/2026-10-03-twin-v2.1-backlog.md`，BOM 面板/零件注释/分步装配）
 
 ## 2. 新会话必读文件
@@ -51,7 +51,8 @@
 |---|---|
 | **网络代理（github.com 阻断时用）** | 本机 Clash 系代理 `http://127.0.0.1:7877`（系统注册但 ProxyEnable=0，需显式指定）；git 用法：`git -c http.proxy=http://127.0.0.1:7877 push ...`；curl 加 `-x http://127.0.0.1:7877` |
 | KiCad python / kicad-cli | `"E:/Program Files/KiCad/10.0/bin/"`（STEP 导出需 `KICAD9_3RD_PARTY` 指向 Documents/KiCad/9.0/3rdparty） |
-| FreeCAD 1.1 | `E:/FreeCAD/bin/FreeCADCmd.exe`（中文脚本需 exec 注入法，见 archive 手册 §7） |
+| FreeCAD 1.1 | `E:/FreeCAD/bin/python.exe`（自带 py3.11 原生 UTF-8，`import FreeCAD` 即用；FreeCADCmd 中文脚本会 not readable） |
+| CAD 装配真相源 | `enclosure/case_geom.py`（装配栈/槽位/器件尺寸/爆炸契约）；测试 L1-L4：`enclosure/test_assembly.py` + `test_assembly_freecad.py`（已入 run_tests.sh 第 2 层） |
 | Pages 构建部署 | `python tools/build_site.py` → `git subtree split --prefix=site -b gh-pages` → push |
 | 装配体再生成 | 两条命令（kicad-cli 导出 + make_assembly.py），见 `docs/archive/tnkr-2026-10/asset-manifest.md` 顶部注记 |
 | tyc-cli / mcp-jobs | 已配置（尽调已毕，额度 100/天 VIP） |
@@ -66,6 +67,9 @@
 6. freerouting 火力：`-mp 200 -us hybrid -hr 1:1 --router.optimizer.improvement_threshold=0.0 --router.via_costs=80`。
 7. **凭据边界**：密码只经用户手（GitHub sudo/Tnkr OAuth 均为此例）；PAT/天眼查 key 只在 `简历/`（gitignored），永不入 git。
 8. 每步修复后 DRC 差分守门（净减不增）+ git 提交做回滚点。
+9. **FreeCAD Matrix 平移在第 4 列**（列向量约定）：`Matrix(1,0,0,tx, 0,-1,0,ty, 0,0,1,tz, 0,0,0,1)`——放第 4 行=平移静默失效（旧装配 STEP 之病根，最小实验已固化进 make_assembly 注释）。
+10. **CAD 必须有测试**（2026-10-03 教训）：几何断言要**分项核对**（pcb 自身 bbox/落位 z），总包围盒 ±2 的宽松断言看不见"板贴错墙穿底板"；竖直面 STL 顶点只在环带（探测窗口须贴环）；所有 CAD 常量走 `enclosure/case_geom.py` 单一真相源，四生成源禁止本地复制。
+11. **FreeCADCmd 中文脚本**：直接跑报 not readable——用 `E:/FreeCAD/bin/python.exe`（自带 python 3.11，原生 UTF-8，import FreeCAD 即可），比 exec 注入法干净。
 
 ## 5. MCP 状态（2026-10-03 复核）
 
