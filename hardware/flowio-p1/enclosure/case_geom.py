@@ -29,12 +29,40 @@ ST = [(4.0, 4.0), (3.0, 37.0), (86.0, 13.0), (68.0, 65.0)]  # 铜柱(板系); �
 Z_FLOOR = WALL                   # 2.4 腔底面
 Z_BOARD = WALL + PH              # 7.4 板底面 = 铜柱顶
 Z_TOP = Z_BOARD + PCB_T          # 9.0 板面 = 顶面器件基面
-TALLEST = 17.5                   # 最高器件 J10..J17 端子 WJ500V (KiCad 3D 模型实测 raw z 1.61..19.11)
 CEIL_CLR = 0.6                   # 天花板下净空
-Z_CEIL = Z_TOP + TALLEST + CEIL_CLR  # 27.1 内腔顶面 = 下壳壁顶 = 顶盖天花下表面
-OUTER_H = Z_CEIL + WALL          # 29.5 总高
+
+
+def _load_device_dims():
+    """devices.json -> (keyword 有序表, 最高器件). T5 真值切换: JLC 实测优先.
+    失败回退内置兜底 (FreeCAD 无 devices.json 环境的鲁棒性)."""
+    import json as _json
+    try:
+        dev = _json.loads((Path(__file__).parent / "devices.json").read_text(encoding="utf-8"))["devices"]
+        kw = []
+        for e in dev:
+            for k in e["pkg_keywords"]:
+                kw.append((k, (e["dims"]["w"], e["dims"]["d"], e["dims"]["h"])))
+        return kw, max(e["dims"]["h"] for e in dev)
+    except Exception:
+        fb = {"CONN-TH_2P": (10.2, 10.0, 14.07), "CONN-TH_4P": (5.9, 12.5, 7.0),
+              "TYPE-C": (8.0, 10.3, 3.2), "DC005": (9.9, 14.0, 10.9),
+              "WROOM": (18.0, 25.5, 3.1), "CDRH": (10.2, 10.2, 3.0),
+              "SOT-23": (2.9, 2.4, 1.2), "SOP": (4.9, 3.9, 1.75),
+              "TSSOP": (7.8, 4.4, 1.1), "ESSOP": (4.9, 3.9, 1.75),
+              "C1206": (3.2, 1.6, 1.6), "C_1206": (3.2, 1.6, 1.6),
+              "C_0603": (1.6, 0.8, 0.8), "SMA": (4.3, 2.6, 2.1),
+              "WS2812": (5.0, 5.0, 1.6), "SW-SMD": (4.0, 3.0, 2.0),
+              "R0603": (1.6, 0.8, 0.5), "0603WAF": (1.6, 0.8, 0.5),
+              "LED": (1.6, 0.8, 0.8), "SOT-23-6": (2.9, 2.4, 1.1),
+              "RC0603": (1.6, 0.8, 0.5), "XH": (5.9, 12.5, 7.0)}
+        return [(k, fb[k]) for k in fb], 14.07
+
+
+_KW_DIMS, TALLEST = _load_device_dims()   # TALLEST = 14.07 (WJ500V, JLC Height Above Board)
+Z_CEIL = Z_TOP + TALLEST + CEIL_CLR  # 23.67 内腔顶面 = 下壳壁顶 = 顶盖天花下表面
+OUTER_H = Z_CEIL + WALL          # 26.07 总高
 SKIRT = 7.0                      # 顶盖裙边下沉深度
-SKIRT_Z0 = Z_CEIL - SKIRT        # 20.1 裙边下端
+SKIRT_Z0 = Z_CEIL - SKIRT        # 16.67 裙边下端
 SKIRT_INSET = WALL + 0.4         # 2.8 裙环外缘离壳外缘 (贴入下壳腔, 与壁 0.4 间隙)
 SKIRT_T = 2.0                    # 裙环壁厚 (环带 2.8..4.8)
 
@@ -46,15 +74,15 @@ SLOT_DEPTH = SKIRT_INSET + SKIRT_T + 1.6   # 6.4: 自壳外缘 -1.2 起贯穿两
 # XY 已对拍: J1⊂L@27, J2⊂R@6, J5/6/7⊂R@22/32.5/46, J8⊂L@46, J9/J18/J19⊂T, J10..J17⊂B。
 SLOT_LO = Z_TOP - 0.2            # 8.8
 CUTS = [
-    ("L", 27.0, 11.2, SLOT_LO, Z_TOP + 15.3),   # J1 DC005 (模型实测 h15.1, 板边外伸)
-    ("L", 46.0, 8.0,  SLOT_LO, Z_TOP + 10.7),   # J8 4P (模型实测 h10.4)
-    ("R", 6.0,  10.0, SLOT_LO, Z_TOP + 3.4),    # J2 TYPE-C (h3.2, 外伸 1.15)
-    ("R", 22.0, 8.0,  SLOT_LO, Z_TOP + 10.7),   # J5 4P
-    ("R", 32.5, 8.0, SLOT_LO, Z_TOP + 10.7),    # J6 4P
-    ("R", 46.0, 8.0,  SLOT_LO, Z_TOP + 10.7),   # J7 4P
-    ("T", 46.0, 8.5,  SLOT_LO, Z_TOP + 10.7),   # J9 4P
-    ("T", 59.5, 8.5,  SLOT_LO, Z_TOP + 10.7),   # J18 4P
-    ("T", 73.0, 8.5,  SLOT_LO, Z_TOP + 10.7),   # J19 4P
+    ("L", 27.0, 11.2, SLOT_LO, Z_TOP + 11.1),   # J1 DC005 (JLC Body Height 10.9)
+    ("L", 46.0, 8.0,  SLOT_LO, Z_TOP + 7.2),    # J8 4P (JLC Z-Height 7.0)
+    ("R", 6.0,  10.0, SLOT_LO, Z_TOP + 3.4),    # J2 TYPE-C (h3.2 估, 外伸 1.15)
+    ("R", 22.0, 8.0,  SLOT_LO, Z_TOP + 7.2),    # J5 4P
+    ("R", 32.5, 8.0, SLOT_LO, Z_TOP + 7.2),     # J6 4P
+    ("R", 46.0, 8.0,  SLOT_LO, Z_TOP + 7.2),    # J7 4P
+    ("T", 46.0, 8.5,  SLOT_LO, Z_TOP + 7.2),    # J9 4P
+    ("T", 59.5, 8.5,  SLOT_LO, Z_TOP + 7.2),    # J18 4P
+    ("T", 73.0, 8.5,  SLOT_LO, Z_TOP + 7.2),    # J19 4P
 ]
 TERM_X = [6.5 + 11 * i for i in range(8)]       # 底边 8 端子 J10..J17
 TY = 68.5                                        # 端子排板系 y
@@ -63,38 +91,15 @@ TERM_SLOT = (10.8, SLOT_LO, Z_TOP + TALLEST + 0.2)  # (宽, z_lo, z_hi); 盒宽�
 # 真实 KiCad 模型 (+3.15 偏移) 在 J17 侧更甚。后壁两端开贯穿缺口 (壁+裙柱)。
 TERM_RELIEF = (5.6, 64.9, 77.9)     # (x 深自外缘, y_lo, y_hi) 壳系
 
-# ---------- 器件盒尺寸 (Package 关键字 -> w,d,h; make_meshes/make_flows/test 共用) ----------
-H = {
-    "CONN-TH_2P": (10.7, 10.0, 17.5),   # WJ500V 2P (KiCad 模型实测)
-    "TYPE-C":     (8.0, 10.3, 3.2),
-    "WROOM":      (18.0, 25.5, 3.1),
-    "XH":         (6.5, 13.3, 8.5),
-    "CONN-TH_4P": (6.0, 12.4, 10.5),    # 6173868 4P (模型实测 h10.4)
-    "SOT-23":     (2.9, 2.4, 1.2),
-    "C_0603":     (1.6, 0.8, 0.9),
-    "C1206":      (3.2, 1.6, 0.8),
-    "C_1206":     (3.2, 1.6, 6.5),
-    "SOP":        (4.9, 3.9, 1.75),
-    "MSOP":       (3.0, 5.0, 1.1),
-    "CDRH":       (10.0, 10.0, 4.0),
-    "DC005":      (9.8, 14.0, 15.1),    # DC005 (模型实测; 板边外伸朝 -X)
-    "TestPoint":  (1.0, 1.0, 0.5),
-    "R0603":      (1.6, 0.8, 0.6),
-    "SMA":        (4.3, 2.6, 1.1),
-    "SW-SMD":     (6.1, 3.8, 2.0),
-}
-ALIAS = {"IND-SMD": "CDRH", "SOIC": "SOP"}
+# ---------- 器件盒尺寸 (devices.json 单一数据层, T5 真值切换) ----------
 DEFAULT_DIM = (2.2, 2.2, 1.5)
-_KW = [(k, H[k]) for k in H] + [(a, H[b]) for a, b in ALIAS.items()]
 
-# ---------- 孪生爆炸视图契约 ----------
-BBOX_MM = [OW, OH, OUTER_H]      # [95.8, 80.8, 29.5]
-EXPLODE = {
-    "case_top":    [0, 0, 38],
-    "parts_F":     [0, 0, 18],
-    "pcb":         [0, 0, 0],
-    "case_bottom": [0, 0, -22],
-}
+
+def dims_for(pkg):
+    for k, d in _KW_DIMS:
+        if k in pkg:
+            return d
+    return DEFAULT_DIM
 
 # ---------- 映射与锚点 ----------
 def board_to_case(x, y):
@@ -107,11 +112,14 @@ ANCHORS = [  # (ref, PosX, PosY) -> 期望壳系坐标 (已人工对拍槽位)
     ("J1", 5.5, -27.0, 8.4, 29.9),
 ]
 
-def dims_for(pkg):
-    for k, d in _KW:
-        if k in pkg:
-            return d
-    return DEFAULT_DIM
+# ---------- 孪生爆炸视图契约 ----------
+BBOX_MM = [OW, OH, OUTER_H]      # [95.8, 80.8, 26.07]
+EXPLODE = {
+    "case_top":    [0, 0, 32],
+    "parts_F":     [0, 0, 14],
+    "pcb":         [0, 0, 0],
+    "case_bottom": [0, 0, -20],
+}
 
 # ---------- 纯 Python 二进制 STL 解析 (测试用, 无第三方依赖) ----------
 def parse_stl(path):

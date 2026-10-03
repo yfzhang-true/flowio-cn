@@ -1,0 +1,8 @@
+# tools/venv-cad — CAD 几何核运行环境 (spec: device-geometry D2/L5)
+# 重建: python -m venv tools/venv-cad && tools/venv-cad/Scripts/python -m pip install -r tools/requirements-cad.txt
+#   (需代理时加 --proxy http://127.0.0.1:7877)
+python-fcl==0.7.0.11
+trimesh==5.1.1
+networkx==3.7
+scipy
+numpy

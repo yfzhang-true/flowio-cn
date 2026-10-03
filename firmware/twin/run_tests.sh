@@ -61,6 +61,15 @@ else
   echo "（SKIP: 未找到 $FC_PY）"
 fi
 
+echo; echo "═══ 2c/5 器件几何层 L5 (venv-cad, 探测到才跑) ═══"
+VENV_CAD="$(git rev-parse --show-toplevel 2>/dev/null)/tools/venv-cad/Scripts/python.exe"
+[ -x "$VENV_CAD" ] || VENV_CAD="E:/FLOWIO/tools/venv-cad/Scripts/python.exe"
+if [ -x "$VENV_CAD" ]; then
+  "$VENV_CAD" "$ENC/test_device_geom.py" all || rc=1
+else
+  echo "（SKIP: 未找到 venv-cad）"
+fi
+
 echo; echo "═══ 3/5 接口测试 test_api.sh ═══"
 bash test_api.sh || rc=1
 
