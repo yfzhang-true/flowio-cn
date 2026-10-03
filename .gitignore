@@ -45,3 +45,5 @@ hardware/flowio-p1/enclosure/flowio-p1-assembly.stl
 hardware/flowio-p1/fab/flowio-p1.step
 hardware/flowio-p1/enclosure/flowio-p1-assembly.step
 *.FCBak
+third_party/
+tools/venv-cad/

@@ -2,6 +2,21 @@
 
 > 下载后放入本目录（E:\FLOWIO\literature\），AI 将继续提取阅读并纳入 SPEC。
 
+## ✅ 用户已解决（2026-10-03 · 器件几何框架基线 11 篇，已从 FLOWIO-3rdparty 归位并全文精读）
+
+- [x] AlphaChip 正主（Nature 2021）→ `2021-mirhoseini-nature-alphachip.pdf`（可行性掩码一手方法论）
+- [x] AlphaChip 官方 Addendum（Nature 2024）→ `2024-goldie-nature-alphachip-addendum.pdf`
+- [x] UCSD RL 宏布置更新评估（arXiv 2302.11014）→ `2023-cheng-arxiv-rl-macro-assessment.pdf`
+- [x] DREAMPlace（DAC'19）→ `2019-lin-dac-dreamplace.pdf`
+- [x] OpenPARF（arXiv 2306.16665）→ `2023-mai-arxiv-openparf-fpga.pdf`
+- [x] ODIM 斜方向几何可行性 ASP（JESTCH 2022）→ `2022-kumar-jestch-odim-oblique-asp.pdf`（P0，板级 GF 依据）
+- [x] SOS-ACO ASP（FME 2021）→ `2021-han-fme-sos-aco-asp.pdf`
+- [x] Expertise-RL（ICLR 2026）→ `2026-gao-iclr-expertise-rl-placement.pdf`（periphery bias/I-O keepout = EDGE_OUT 学名）
+- [x] RollPlace（TCAD 45(7) 2026）→ `2026-zhou-tcad-rollplace.pdf`
+- [x] VeoPlace（VLM 布局）→ `2026-uchendu-vlm-veoplace.pdf`
+- [x] OrderPlace（ICML'26，摆放顺序多米诺）→ `2026-mo-icml-orderplace.pdf`
+> 精读要点：`docs/research/2026-10-03-baseline-reading.md` §7/§9（device-geometry 分支）
+
 ## ✅ 用户已解决（2026-09-22）
 
 - [x] Xavier 等《Modelling and Simulation of Pneumatic Sources…》→ `xavier-pumpsources-2021.pdf`
