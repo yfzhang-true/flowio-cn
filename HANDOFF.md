@@ -196,3 +196,10 @@ state api=1.2 且全 payload 无 leak 字样；assembly parts=5、bbox_mm=[95.8,
 - **仓库侧 3 项处置**：① qemu 期望串已改 `leak=off`，复跑 **9/9 全绿**；② 呼吸周期为设计-实现偏差**记档待产品裁决**（实现 `sin(t/4)`≈25.1s 未改，书稿 ch09 已写实测口径）；③ 费用**双口径并列陈述**（README-jlc-order §3 全贴 5 片 550–1150 / HANDOFF·ch05 板 5 装 2 执行口径 360–720，各标出处）
 - **终验（T4 独立复核）**：检查器终态 const=0 path=0 cite=0 snippet=3（残余 3 条均为书稿 caption 已声明"节选/摘编"的窗口差异，非语义漂移）；检查器测试 11 用例 OK；xelatex 两遍零错 **87 页**；回归 `test_api_board.sh` 全 OK / `test_webapp.js` **44/44** / `qemu_smoke.sh` **9/9**
 - **一致性检查器用法**：`KPY book/tools/consistency_check.py`（常数/路径/cite/代码片段四类，书稿×真源；测试 `KPY book/tools/test_consistency_check.py`）
+
+
+## 信息源纳管与阻塞清单（2026-10-03）
+- **呼吸悬浮裁定**：按最佳实践采纳实现值（~25s 慢呼吸，避免与数据阅读争夺注意力）；AUDIT 复核表改 waived-adopted-impl（d85efb6）
+- **信息源纳管**：FlowIO 文档集（19 篇）/ESP32-S3 官方中文 PDF（datasheet/TRM/硬件设计指南/errata）/艾谷教程 → reference.bib 6 条 @misc + 书稿 6 处接线（ch1/7/9/11/12/14）；**回板前置阅读（errata+硬件设计指南）已入 ch14 校准清单**（d85efb6）
+- **阻塞核对**：pn_ml 解耦零功能残留（仅 cli.c 注释）；工单 36 张（pass 6/pending 30）；git 树净
+- **当前唯一硬阻塞**：等待 JLC 到板（板 5 装 2 已定）。到板后：BRINGUP 九章 = 工单 A201-A224 = 书稿 ch13 下篇 + ch14 素材
