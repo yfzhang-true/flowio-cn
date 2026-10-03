@@ -52,7 +52,9 @@
 | **网络代理（github.com 阻断时用）** | 本机 Clash 系代理 `http://127.0.0.1:7877`（系统注册但 ProxyEnable=0，需显式指定）；git 用法：`git -c http.proxy=http://127.0.0.1:7877 push ...`；curl 加 `-x http://127.0.0.1:7877` |
 | KiCad python / kicad-cli | `"E:/Program Files/KiCad/10.0/bin/"`（STEP 导出需 `KICAD9_3RD_PARTY` 指向 Documents/KiCad/9.0/3rdparty） |
 | FreeCAD 1.1 | `E:/FreeCAD/bin/python.exe`（自带 py3.11 原生 UTF-8，`import FreeCAD` 即用；FreeCADCmd 中文脚本会 not readable） |
-| CAD 装配真相源 | `enclosure/case_geom.py`（装配栈/槽位/器件尺寸/爆炸契约）；测试 L1-L4：`enclosure/test_assembly.py` + `test_assembly_freecad.py`（已入 run_tests.sh 第 2 层） |
+| CAD 装配真相源 | `enclosure/case_geom.py`（装配栈/槽位/爆炸契约，**高度链派生 devices.json**，总高 26.07=JLC 真值）；测试 L1-L4：`test_assembly.py`+`test_assembly_freecad.py`；**L5 器件几何层**：`test_device_geom.py`（13 断言：朝向/贴边/FCL 装配+爆炸扫掠/17↔17 匹配/钻孔避让），跑在 `tools/venv-cad`（fcl/trimesh/networkx/scipy，requirements-cad.txt） |
+| 器件数据层 | `enclosure/devices.json`（33 唯一 C 号/123 位号/17 连接器 port 定锚，jlcpcb MCP 摄取 + tools/ingest_device_dims.py 再生）；网表权威源 `fab/flowio-p1.net`+`fab/netlist.py`；钻孔 `fab/drl.py` |
+| P1 带病清单 | `docs/flowio-parity-gap.md` §5：C9 压 J9 壳/R3 藏 U1 罩下/J15-16 压 M3 孔/2 过孔擦铜柱环/端子高度两说（板到货实测终裁）——BRINGUP 时对照 |
 | Pages 构建部署 | `python tools/build_site.py` → `git subtree split --prefix=site -b gh-pages` → push |
 | 装配体再生成 | 两条命令（kicad-cli 导出 + make_assembly.py），见 `docs/archive/tnkr-2026-10/asset-manifest.md` 顶部注记 |
 | tyc-cli / mcp-jobs | 已配置（尽调已毕，额度 100/天 VIP） |
@@ -70,6 +72,7 @@
 9. **FreeCAD Matrix 平移在第 4 列**（列向量约定）：`Matrix(1,0,0,tx, 0,-1,0,ty, 0,0,1,tz, 0,0,0,1)`——放第 4 行=平移静默失效（旧装配 STEP 之病根，最小实验已固化进 make_assembly 注释）。
 10. **CAD 必须有测试**（2026-10-03 教训）：几何断言要**分项核对**（pcb 自身 bbox/落位 z），总包围盒 ±2 的宽松断言看不见"板贴错墙穿底板"；竖直面 STL 顶点只在环带（探测窗口须贴环）；所有 CAD 常量走 `enclosure/case_geom.py` 单一真相源，四生成源禁止本地复制。
 11. **FreeCADCmd 中文脚本**：直接跑报 not readable——用 `E:/FreeCAD/bin/python.exe`（自带 python 3.11，原生 UTF-8，import FreeCAD 即可），比 exec 注入法干净。
+12. **worktree 外层目录禁止 git add -A**：`.worktrees/<name>` 的父目录（.worktrees/）无 .git，git 向上解析到主仓——一次 add -A 把主树 933MB untracked（citers PDF）卷进历史，被 GitHub pre-receive 拒收。修复范式：`git filter-branch --index-filter "git rm -r --ignore-unmatch <路径>" -- origin/main..main`（仅重写未推送区间）+ `literature/**/*.pdf` 全层级忽略。提交前先看 `git pack-objects --revs --stdout <<< origin/main..main | wc -c`。
 
 ## 5. MCP 状态（2026-10-03 复核）
 
