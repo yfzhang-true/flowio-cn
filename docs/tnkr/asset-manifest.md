@@ -34,6 +34,13 @@
 
 ## 4. 发布记录（Task 5 完成后回填）
 
-- 项目页 URL: `____`（待用户注册账号后创建）
-- 发布日期: `____`
-- 3D/BOM 上传格式实测: `____`（回填 platform-notes §5 待核实项）
+- **项目页 URL**: https://tnkr.ai/yuefeizzzs-workspace/flowio-cn （2026-10-03 发布，Public）
+- **发布方式**: GitHub 导入路径（Connect to GitHub → 选 flowio-cn → 主 STEP 选 case-top.step → Project Details 表单）
+- **实测结论**（回填 platform-notes §5）:
+  - 项目名 FLOWIO-CN；描述 262/350 字符（含 MIT/CERN OHL-S 双声明）
+  - GitHub App 以**最小权限**安装（Selected repositories: 仅 flowio-cn，只读 actions/code/discussions 等）
+  - **整个仓库文件树自动导入 Files 区**（bom-jlc.csv / 双 STEP / pcb.stl / parts_f.stl / BRINGUP.md / README 全部在列，来源标记 github）——无需本地上传
+  - GitHub 链接自动接线（github.com/yfzhang-true/flowio-cn）
+  - Leo 项目助手自带 "Show me the BOM / How do I assemble this?" 按钮
+- **异步待完成（平台侧处理中，稍后自查）**: Leonardo processing——① Documentation 标签内容生成 ② STEP→3D viewer 渲染（Overview 当前无 canvas）
+- **后续可选**: ① 生成合并装配体 STEP（顶+底+PCB）替换单一 case-top 主模型 ② 补 assembly-steps-en.md 到 Documentation ③ Kits 标签当前 disabled，满足条件后可探索套件上架

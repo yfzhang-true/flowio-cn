@@ -42,14 +42,16 @@
 
 → 组织仅托管**示例运行时与文档**，平台本身不开源；无通用 CLI/SDK 可用于自动化发布。
 
-## 5. 待注册核实清单（Task 5 时补全）
+## 5. 待注册核实清单（2026-10-03 发布后已全部核实 ✅）
 
-1. 项目创建入口：字段清单、是否支持 GitHub repo 导入（抽样项目 repo 与平台文件疑似有同步关系）
-2. 3D 上传：格式（STL/STEP/GLB）与限额（本地 STL 总量约数 MB 级，风险低）
-3. BOM 导入：CSV schema 与供应商连接机制（LCSC 编码兼容性）
-4. Pricing：free tier 边界（项目数/存储/公开性）
-5. License 双声明（MIT + CERN OHL-S）展示方式
-6. 套件上架：佣金/流程（对标 $550/$600 先例，FLOWIO-CN ¥300-500 定价带可直接进入）
+1. 项目创建入口：`/projects/add-project` 两路径（GitHub 导入 / 从零手写）；GitHub 导入自动扫描 repo 内 STEP 并要求**恰好选 1 个主 STEP**（其余文件走 Files 区）
+2. 3D 上传：STP/STEP 支持，**单文件上限 100 MB**；仓库内自动发现；本地 STL 网格经仓库 Files 区直接可得
+3. BOM 导入：无专用导入步骤；BOM csv 随仓库文件树进入 Files 区，Leo 助手可 AI 解答（"Show me the BOM"）
+4. Pricing：**GitHub 导入 + 公开项目全流程零付费墙**（free tier 够用）
+5. License：无专用字段；以 description 文本承载双声明（已含 "Code MIT / HW CERN OHL-S"）
+6. 套件上架：项目列表有 Kits 标签（当前 disabled，疑似需条件解锁）；站内先例 XLeRobot $550 / Open Duck Mini $600
+7. 文档与 3D viewer 均为 **Leonardo 异步处理**（发布后 "Leonardo is processing…"，Documentation 与 canvas 稍后自动出现）
+8. 附加发现：GitHub App 安装支持最小权限（仅授权 flowio-cn 单仓库，只读）
 
 ## 6. 对本项目的三点策略修正（相对 spec §4）
 
