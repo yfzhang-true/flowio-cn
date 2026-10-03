@@ -1,0 +1,759 @@
+{
+ "_meta": {
+  "generated_by": "tools/ingest_device_dims.py",
+  "provenance": "devices_raw.json (jlcpcb MCP 2026-10-03) + curated datasheet dims",
+  "conventions": {
+   "dims": "w=封装rot0时X向, d=Y向, h=板上高度(above board), 单位mm",
+   "port.dir_local": "rot=0 时端口开口方向(板系x右/y上, KiCad y-down 取 -rot 变换)",
+   "port.exit_z": "相对板面 Z_TOP 的 [lo,hi] 开口z带"
+  }
+ },
+ "devices": [
+  {
+   "lcsc": "C8465",
+   "name": "WJ500V-5.08-2P-14-00A",
+   "refs": [
+    "J10",
+    "J11",
+    "J12",
+    "J13",
+    "J14",
+    "J15",
+    "J16",
+    "J17"
+   ],
+   "pkg_keywords": [
+    "CONN-TH_2P",
+    "WJ500V"
+   ],
+   "dims": {
+    "w": 10.2,
+    "d": 10.0,
+    "h": 14.07
+   },
+   "placement": "EDGE_OUT",
+   "datasheet": "",
+   "jlc_desc": "Screw terminal 2P, Height Above Board 14.07mm",
+   "port": {
+    "type": "pneumatic_wire",
+    "dir_local": [
+     0,
+     -1
+    ],
+    "exit_z": [
+     0.0,
+     14.07
+    ]
+   }
+  },
+  {
+   "lcsc": "C125100",
+   "name": "LTST-C191KSKT",
+   "refs": [
+    "LED4",
+    "LED5"
+   ],
+   "pkg_keywords": [
+    "LTST-C191"
+   ],
+   "dims": {
+    "w": 1.6,
+    "d": 0.8,
+    "h": 0.8
+   },
+   "placement": "INTERNAL",
+   "datasheet": "",
+   "jlc_desc": "Yellow LED 0603"
+  },
+  {
+   "lcsc": "C130026",
+   "name": "TCA9548APWR",
+   "refs": [
+    "U2"
+   ],
+   "pkg_keywords": [
+    "TSSOP",
+    "TCA9548"
+   ],
+   "dims": {
+    "w": 7.8,
+    "d": 4.4,
+    "h": 1.1
+   },
+   "placement": "INTERNAL",
+   "datasheet": "",
+   "jlc_desc": "I2C 8ch mux TSSOP-24"
+  },
+  {
+   "lcsc": "C13585",
+   "name": "CL31A106KBHNNNE",
+   "refs": [
+    "C1",
+    "C9",
+    "C17"
+   ],
+   "pkg_keywords": [
+    "C1206",
+    "CL31A106"
+   ],
+   "dims": {
+    "w": 3.2,
+    "d": 1.6,
+    "h": 1.6
+   },
+   "placement": "INTERNAL",
+   "datasheet": "",
+   "jlc_desc": "10uF 50V X5R 1206 MLCC"
+  },
+  {
+   "lcsc": "C14675",
+   "name": "RC0603FR-07100KL",
+   "refs": [
+    "R3"
+   ],
+   "pkg_keywords": [
+    "RC0603"
+   ],
+   "dims": {
+    "w": 1.6,
+    "d": 0.8,
+    "h": 0.5
+   },
+   "placement": "INTERNAL",
+   "datasheet": "",
+   "jlc_desc": "100k 0603 resistor"
+  },
+  {
+   "lcsc": "C15008",
+   "name": "CL31A107MQHNNNE",
+   "refs": [
+    "C7",
+    "C8"
+   ],
+   "pkg_keywords": [
+    "C_1206",
+    "CL31A107"
+   ],
+   "dims": {
+    "w": 3.2,
+    "d": 1.6,
+    "h": 1.6
+   },
+   "placement": "INTERNAL",
+   "datasheet": "",
+   "jlc_desc": "100uF 6.3V X5R 1206 MLCC"
+  },
+  {
+   "lcsc": "C15849",
+   "name": "CL10A105KB8NNNC",
+   "refs": [
+    "C14"
+   ],
+   "pkg_keywords": [
+    "CL10A105"
+   ],
+   "dims": {
+    "w": 1.6,
+    "d": 0.8,
+    "h": 0.8
+   },
+   "placement": "INTERNAL",
+   "datasheet": "",
+   "jlc_desc": "1uF 50V X5R 0603 MLCC"
+  },
+  {
+   "lcsc": "C1591",
+   "name": "CL10B104KB8NNNC",
+   "refs": [
+    "C2",
+    "C5",
+    "C6",
+    "C10",
+    "C11",
+    "C12",
+    "C13",
+    "C15",
+    "C16"
+   ],
+   "pkg_keywords": [
+    "C_0603",
+    "CL10B104"
+   ],
+   "dims": {
+    "w": 1.6,
+    "d": 0.8,
+    "h": 0.8
+   },
+   "placement": "INTERNAL",
+   "datasheet": "",
+   "jlc_desc": "100nF 50V X7R 0603 MLCC"
+  },
+  {
+   "lcsc": "C1653",
+   "name": "CL10C220JB8NNNC",
+   "refs": [
+    "C4"
+   ],
+   "pkg_keywords": [
+    "CL10C220"
+   ],
+   "dims": {
+    "w": 1.6,
+    "d": 0.8,
+    "h": 0.8
+   },
+   "placement": "INTERNAL",
+   "datasheet": "",
+   "jlc_desc": "22pF 50V C0G 0603 MLCC"
+  },
+  {
+   "lcsc": "C167253",
+   "name": "CDRH103RNP-6R8NC-B",
+   "refs": [
+    "L1"
+   ],
+   "pkg_keywords": [
+    "CDRH",
+    "IND-SMD"
+   ],
+   "dims": {
+    "w": 10.2,
+    "d": 10.2,
+    "h": 3.0
+   },
+   "placement": "SURFACE",
+   "datasheet": "",
+   "jlc_desc": "6.8uH 3.6A power inductor 10.2x10"
+  },
+  {
+   "lcsc": "C181160",
+   "name": "SS8050",
+   "refs": [
+    "Q11",
+    "Q12"
+   ],
+   "pkg_keywords": [
+    "SOT-23",
+    "SS8050"
+   ],
+   "dims": {
+    "w": 2.9,
+    "d": 2.4,
+    "h": 1.2
+   },
+   "placement": "INTERNAL",
+   "datasheet": "",
+   "jlc_desc": "NPN BJT SOT-23"
+  },
+  {
+   "lcsc": "C20917",
+   "name": "AO3400A",
+   "refs": [
+    "Q3",
+    "Q4",
+    "Q5",
+    "Q6",
+    "Q7",
+    "Q8",
+    "Q9",
+    "Q10"
+   ],
+   "pkg_keywords": [
+    "SOT-23",
+    "AO3400"
+   ],
+   "dims": {
+    "w": 2.9,
+    "d": 2.4,
+    "h": 1.2
+   },
+   "placement": "INTERNAL",
+   "datasheet": "",
+   "jlc_desc": "N-MOS 30V 5.7A SOT-23"
+  },
+  {
+   "lcsc": "C21190",
+   "name": "0603WAF1001T5E",
+   "refs": [
+    "R10",
+    "R11",
+    "R19",
+    "R20",
+    "R23",
+    "R24",
+    "R25",
+    "R26",
+    "R39",
+    "R40",
+    "R41",
+    "R42",
+    "R43",
+    "R44",
+    "R45",
+    "R46"
+   ],
+   "pkg_keywords": [
+    "0603WAF1001"
+   ],
+   "dims": {
+    "w": 1.6,
+    "d": 0.8,
+    "h": 0.5
+   },
+   "placement": "INTERNAL",
+   "datasheet": "",
+   "jlc_desc": "1k 0603 resistor"
+  },
+  {
+   "lcsc": "C2286",
+   "name": "KT-0603R",
+   "refs": [
+    "LED2"
+   ],
+   "pkg_keywords": [
+    "LED",
+    "KT-0603R"
+   ],
+   "dims": {
+    "w": 1.6,
+    "d": 0.8,
+    "h": 0.8
+   },
+   "placement": "INTERNAL",
+   "datasheet": "",
+   "jlc_desc": "Red LED 0603"
+  },
+  {
+   "lcsc": "C2288",
+   "name": "KT-0603B",
+   "refs": [
+    "LED3"
+   ],
+   "pkg_keywords": [
+    "KT-0603B"
+   ],
+   "dims": {
+    "w": 1.6,
+    "d": 0.8,
+    "h": 0.8
+   },
+   "placement": "INTERNAL",
+   "datasheet": "",
+   "jlc_desc": "Blue LED 0603"
+  },
+  {
+   "lcsc": "C22994",
+   "name": "0603WAF3241T5E",
+   "refs": [
+    "R5"
+   ],
+   "pkg_keywords": [
+    "0603WAF3241"
+   ],
+   "dims": {
+    "w": 1.6,
+    "d": 0.8,
+    "h": 0.5
+   },
+   "placement": "INTERNAL",
+   "datasheet": "",
+   "jlc_desc": "3.24k 0603 resistor"
+  },
+  {
+   "lcsc": "C23138",
+   "name": "0603WAF3300T5E",
+   "refs": [
+    "R12"
+   ],
+   "pkg_keywords": [
+    "0603WAF3300"
+   ],
+   "dims": {
+    "w": 1.6,
+    "d": 0.8,
+    "h": 0.5
+   },
+   "placement": "INTERNAL",
+   "datasheet": "",
+   "jlc_desc": "330R 0603 resistor"
+  },
+  {
+   "lcsc": "C23162",
+   "name": "0603WAF4701T5E",
+   "refs": [
+    "R8",
+    "R9"
+   ],
+   "pkg_keywords": [
+    "0603WAF4701"
+   ],
+   "dims": {
+    "w": 1.6,
+    "d": 0.8,
+    "h": 0.5
+   },
+   "placement": "INTERNAL",
+   "datasheet": "",
+   "jlc_desc": "4.7k 0603 resistor"
+  },
+  {
+   "lcsc": "C23186",
+   "name": "0603WAF5101T5E",
+   "refs": [
+    "R1",
+    "R2"
+   ],
+   "pkg_keywords": [
+    "R0603",
+    "0603WAF5101"
+   ],
+   "dims": {
+    "w": 1.6,
+    "d": 0.8,
+    "h": 0.5
+   },
+   "placement": "INTERNAL",
+   "datasheet": "",
+   "jlc_desc": "5.1k 0603 resistor"
+  },
+  {
+   "lcsc": "C23345",
+   "name": "0603WAF220JT5E",
+   "refs": [
+    "R17",
+    "R18"
+   ],
+   "pkg_keywords": [
+    "0603WAF220"
+   ],
+   "dims": {
+    "w": 1.6,
+    "d": 0.8,
+    "h": 0.5
+   },
+   "placement": "INTERNAL",
+   "datasheet": "",
+   "jlc_desc": "22R 0603 resistor"
+  },
+  {
+   "lcsc": "C2480",
+   "name": "SS14",
+   "refs": [
+    "D4",
+    "D5",
+    "D6",
+    "D7",
+    "D8",
+    "D9",
+    "D10",
+    "D11"
+   ],
+   "pkg_keywords": [
+    "SMA"
+   ],
+   "dims": {
+    "w": 4.3,
+    "d": 2.6,
+    "h": 2.1
+   },
+   "placement": "INTERNAL",
+   "datasheet": "",
+   "jlc_desc": "1A 40V Schottky SMA"
+  },
+  {
+   "lcsc": "C25804",
+   "name": "0603WAF1002T5E",
+   "refs": [
+    "R4",
+    "R6",
+    "R7",
+    "R13",
+    "R14",
+    "R15",
+    "R16",
+    "R21",
+    "R22",
+    "R27",
+    "R28",
+    "R29",
+    "R30",
+    "R31",
+    "R32",
+    "R33",
+    "R34",
+    "R35",
+    "R36",
+    "R37",
+    "R38",
+    "R47",
+    "R48",
+    "R49",
+    "R50",
+    "R51",
+    "R52",
+    "R53",
+    "R54"
+   ],
+   "pkg_keywords": [
+    "0603WAF1002"
+   ],
+   "dims": {
+    "w": 1.6,
+    "d": 0.8,
+    "h": 0.5
+   },
+   "placement": "INTERNAL",
+   "datasheet": "",
+   "jlc_desc": "10k 0603 resistor"
+  },
+  {
+   "lcsc": "C2843785",
+   "name": "XL-5050RGBC-WS2812B",
+   "refs": [
+    "LED1"
+   ],
+   "pkg_keywords": [
+    "WS2812",
+    "5050"
+   ],
+   "dims": {
+    "w": 5.0,
+    "d": 5.0,
+    "h": 1.6
+   },
+   "placement": "SURFACE",
+   "datasheet": "",
+   "jlc_desc": "WS2812B RGB 5050, L5 W5 H1.6"
+  },
+  {
+   "lcsc": "C2913202",
+   "name": "ESP32-S3-WROOM-1-N16R8",
+   "refs": [
+    "U1"
+   ],
+   "pkg_keywords": [
+    "WROOM",
+    "ESP32-S3"
+   ],
+   "dims": {
+    "w": 18.0,
+    "d": 25.5,
+    "h": 3.1
+   },
+   "placement": "SURFACE",
+   "datasheet": "",
+   "jlc_desc": "WROOM-1 module 25.5x18, h3.1"
+  },
+  {
+   "lcsc": "C33353",
+   "name": "CL10C222JB8NNNC",
+   "refs": [
+    "C3"
+   ],
+   "pkg_keywords": [
+    "CL10C222"
+   ],
+   "dims": {
+    "w": 1.6,
+    "d": 0.8,
+    "h": 0.8
+   },
+   "placement": "INTERNAL",
+   "datasheet": "",
+   "jlc_desc": "2.2nF 50V C0G 0603 MLCC"
+  },
+  {
+   "lcsc": "C431533",
+   "name": "DC005",
+   "refs": [
+    "J1"
+   ],
+   "pkg_keywords": [
+    "DC005"
+   ],
+   "dims": {
+    "w": 9.9,
+    "d": 14.0,
+    "h": 10.9
+   },
+   "placement": "EDGE_OUT",
+   "datasheet": "",
+   "jlc_desc": "DC jack RA, W9.9 L13.6, Body Height 10.9mm",
+   "port": {
+    "type": "barrel",
+    "dir_local": [
+     0,
+     1
+    ],
+    "exit_z": [
+     0.0,
+     10.9
+    ]
+   }
+  },
+  {
+   "lcsc": "C456012",
+   "name": "TYPE-C 6P",
+   "refs": [
+    "J2"
+   ],
+   "pkg_keywords": [
+    "TYPE-C"
+   ],
+   "dims": {
+    "w": 8.0,
+    "d": 10.3,
+    "h": 3.2
+   },
+   "placement": "EDGE_OUT",
+   "datasheet": "",
+   "jlc_desc": "USB-C 6P Female Right Angle, Length 6.8mm",
+   "port": {
+    "type": "usb",
+    "dir_local": [
+     0,
+     -1
+    ],
+    "exit_z": [
+     0.0,
+     3.2
+    ]
+   }
+  },
+  {
+   "lcsc": "C5359632",
+   "name": "WAFER-XH2.54-4PZZ",
+   "refs": [
+    "J5",
+    "J6",
+    "J7",
+    "J8",
+    "J9",
+    "J18",
+    "J19"
+   ],
+   "pkg_keywords": [
+    "CONN-TH_4P",
+    "6173868"
+   ],
+   "dims": {
+    "w": 5.9,
+    "d": 12.5,
+    "h": 7.0
+   },
+   "placement": "EDGE_OUT",
+   "datasheet": "",
+   "jlc_desc": "XH 4P TH, X12.5 Y5.9, Z-Height 7mm",
+   "port": {
+    "type": "electrical",
+    "dir_local": [
+     0,
+     -1
+    ],
+    "exit_z": [
+     0.0,
+     7.0
+    ]
+   }
+  },
+  {
+   "lcsc": "C589191",
+   "name": "ST-1185S",
+   "refs": [
+    "SW1",
+    "SW2",
+    "SW3"
+   ],
+   "pkg_keywords": [
+    "SW-SMD",
+    "ST-1185"
+   ],
+   "dims": {
+    "w": 4.0,
+    "d": 3.0,
+    "h": 2.0
+   },
+   "placement": "SURFACE",
+   "datasheet": "",
+   "jlc_desc": "Tactile switch SMD 4x3, Switch Height 2mm"
+  },
+  {
+   "lcsc": "C7519",
+   "name": "USBLC6-2SC6",
+   "refs": [
+    "U5"
+   ],
+   "pkg_keywords": [
+    "SOT-23-6",
+    "USBLC6"
+   ],
+   "dims": {
+    "w": 2.9,
+    "d": 2.4,
+    "h": 1.1
+   },
+   "placement": "INTERNAL",
+   "datasheet": "",
+   "jlc_desc": "ESD TVS SOT-23-6L"
+  },
+  {
+   "lcsc": "C8678",
+   "name": "SS34",
+   "refs": [
+    "D1",
+    "D2",
+    "D3"
+   ],
+   "pkg_keywords": [
+    "SMA"
+   ],
+   "dims": {
+    "w": 4.3,
+    "d": 2.6,
+    "h": 2.1
+   },
+   "placement": "INTERNAL",
+   "datasheet": "",
+   "jlc_desc": "3A 40V Schottky SMA"
+  },
+  {
+   "lcsc": "C968586",
+   "name": "CH340K",
+   "refs": [
+    "U4"
+   ],
+   "pkg_keywords": [
+    "ESSOP",
+    "CH340"
+   ],
+   "dims": {
+    "w": 4.9,
+    "d": 3.9,
+    "h": 1.75
+   },
+   "placement": "INTERNAL",
+   "datasheet": "",
+   "jlc_desc": "USB-serial ESSOP-10"
+  },
+  {
+   "lcsc": "C9865",
+   "name": "TPS54331DR",
+   "refs": [
+    "U3"
+   ],
+   "pkg_keywords": [
+    "SOP",
+    "TPS54331",
+    "SOIC"
+   ],
+   "dims": {
+    "w": 4.9,
+    "d": 3.9,
+    "h": 1.75
+   },
+   "placement": "INTERNAL",
+   "datasheet": "",
+   "jlc_desc": "Buck 3A SOIC-8"
+  }
+ ]
+}
