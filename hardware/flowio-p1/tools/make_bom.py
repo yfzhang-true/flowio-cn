@@ -8,9 +8,12 @@ ref/value/footprint/LCSC, 生成 JLC 上传格式的 BOM 与 CPL 注释版:
 """
 import ast
 import csv
+import io
 import os
 import re
 import sys
+
+from pathlib import Path
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 FAB = os.path.join(HERE, "..", "fab")
@@ -194,24 +197,24 @@ n_tht = sum(len(r["refs"]) for r in tht_rows)
 
 # ---------------------------------------------------------------- 写 BOM (JLC 模板 4 列)
 bom_path = os.path.join(FAB, "flowio-p1-bom-jlc.csv")
-with open(bom_path, "w", encoding="utf-8", newline="") as f:
-    w = csv.writer(f, lineterminator="\n")
-    w.writerow(["Comment", "Designator", "Footprint", "LCSC Part #"])
-    for r in rows:
-        w.writerow([r["comment"], ",".join(r["refs"]), r["fp"], r["lcsc"]])
+_bom_buf = io.StringIO()
+_bom_w = csv.writer(_bom_buf, lineterminator="\n")
+_bom_w.writerow(["Comment", "Designator", "Footprint", "LCSC Part #"])
+for r in rows:
+    _bom_w.writerow([r["comment"], ",".join(r["refs"]), r["fp"], r["lcsc"]])
+Path(bom_path).write_bytes(_bom_buf.getvalue().encode("utf-8"))
 
 # ---------------------------------------------------------------- 写 CPL 注释版 (pos 原样 + # 说明)
 pos_src = os.path.join(FAB, "flowio-p1-pos.csv")
 pos_dst = os.path.join(FAB, "flowio-p1-pos-jlc.csv")
-_pos = open(pos_src, encoding="utf-8-sig").read().rstrip("\n")
+_pos = Path(pos_src).read_text(encoding="utf-8-sig").rstrip("\n")
 _notes = "\n".join([
     "# FLOWIO-P1 贴片坐标 (JLC CPL 格式: Ref,Val,Package,PosX,PosY,Rot,Side)",
     "#   与 flowio-p1-pos.csv 内容一致; PosY 为负是 KiCad 向下 y 轴导出方向, JLC 直接接受,",
     "#   核对法: 任取 3 行与 fab/assembly-top.pdf 对照 (如 U1 应在板左上、J10-J17 在板底边)。",
     "#   若 JLC 上传器报表头错误: 删除本文件所有 # 行后再传 (原版无注释文件 flowio-p1-pos.csv 仍在)。",
 ])
-with open(pos_dst, "w", encoding="utf-8", newline="") as f:
-    f.write(_notes + "\n" + _pos + "\n")
+Path(pos_dst).write_bytes((_notes + "\n" + _pos + "\n").encode("utf-8"))
 
 # ---------------------------------------------------------------- 交叉验证
 pos_refs = {row["Ref"] for row in csv.DictReader(open(pos_src, encoding="utf-8-sig"))}

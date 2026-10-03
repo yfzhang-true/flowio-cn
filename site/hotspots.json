@@ -1,0 +1,185 @@
+{
+ "hotspots": [
+  {
+   "ref": "U1",
+   "name": "主控 ESP32-S3",
+   "center": [
+    30.9,
+    19.4,
+    5.55
+   ],
+   "size": [
+    18.0,
+    25.5,
+    3.1
+   ],
+   "live": [
+    {
+     "label": "3.3V 轨",
+     "field": "rail_3v3.v",
+     "unit": "V"
+    },
+    {
+     "label": "CPU 结温",
+     "field": "temp_est_c.cpu",
+     "unit": "℃"
+    },
+    {
+     "label": "运行时长",
+     "field": "uptime_s",
+     "unit": "s"
+    }
+   ]
+  },
+  {
+   "ref": "U3",
+   "name": "降压 TPS54331 (buck)",
+   "center": [
+    27.9,
+    47.9,
+    4.875
+   ],
+   "size": [
+    4.9,
+    3.9,
+    1.75
+   ],
+   "live": [
+    {
+     "label": "输入 5V",
+     "field": "rail_5v.v",
+     "unit": "V"
+    },
+    {
+     "label": "输出 3.3V",
+     "field": "rail_3v3.v",
+     "unit": "V"
+    },
+    {
+     "label": "效率",
+     "field": "rail_3v3.buck_eff",
+     "unit": "%"
+    },
+    {
+     "label": "结温",
+     "field": "temp_est_c.buck",
+     "unit": "℃"
+    }
+   ]
+  },
+  {
+   "ref": "Q3",
+   "name": "阀 1 驱动 MOSFET",
+   "center": [
+    7.0,
+    63.4,
+    4.6
+   ],
+   "size": [
+    2.9,
+    2.4,
+    1.2
+   ],
+   "live": [
+    {
+     "label": "阀 1 电流",
+     "field": "valves[0].i_A",
+     "unit": "A"
+    },
+    {
+     "label": "阀 1 功率",
+     "field": "valves[0].p_w",
+     "unit": "W"
+    },
+    {
+     "label": "MOS 结温",
+     "field": "temp_est_c.mos",
+     "unit": "℃"
+    }
+   ]
+  },
+  {
+   "ref": "J1",
+   "name": "DC 电源输入座",
+   "center": [
+    8.4,
+    29.9,
+    7.5
+   ],
+   "size": [
+    15.6,
+    10.9,
+    7.0
+   ],
+   "live": [
+    {
+     "label": "5V 轨",
+     "field": "rail_5v.v",
+     "unit": "V"
+    },
+    {
+     "label": "负载",
+     "field": "rail_5v.load_a",
+     "unit": "A"
+    },
+    {
+     "label": "功率",
+     "field": "rail_5v.p_w",
+     "unit": "W"
+    }
+   ]
+  },
+  {
+   "ref": "J10",
+   "name": "阀 1 端子",
+   "center": [
+    9.4,
+    71.4,
+    9.5
+   ],
+   "size": [
+    11.6,
+    11.0,
+    11.0
+   ],
+   "live": [
+    {
+     "label": "阀 1 电流",
+     "field": "valves[0].i_A",
+     "unit": "A"
+    },
+    {
+     "label": "阀 1 功率",
+     "field": "valves[0].p_w",
+     "unit": "W"
+    }
+   ]
+  },
+  {
+   "ref": "U2",
+   "name": "I2C 扩展 TCA9548A",
+   "center": [
+    76.9,
+    46.9,
+    4.875
+   ],
+   "size": [
+    4.9,
+    3.9,
+    1.75
+   ],
+   "live": [
+    {
+     "label": "3.3V 轨",
+     "field": "rail_3v3.v",
+     "unit": "V"
+    },
+    {
+     "label": "逻辑电流",
+     "field": "rail_3v3.load_a",
+     "unit": "A"
+    }
+   ]
+  }
+ ]
+}

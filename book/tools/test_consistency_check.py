@@ -8,6 +8,7 @@
   4. 代码片段模糊匹配：去空白去注释后首尾 5 行子串断言，书稿改一行语义 -> 检出
 """
 import sys, os, tempfile
+from pathlib import Path
 sys.path.insert(0, os.path.dirname(__file__))
 import consistency_check as cc
 
@@ -15,8 +16,7 @@ import consistency_check as cc
 def _write(root, rel, text):
     p = os.path.join(root, rel.replace("/", os.sep))
     os.makedirs(os.path.dirname(p), exist_ok=True)
-    with open(p, "w", encoding="utf-8") as f:
-        f.write(text)
+    Path(p).write_bytes(text.encode("utf-8"))
     return p
 
 
