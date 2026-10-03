@@ -78,6 +78,29 @@ Materials/Wearables/Arduino；一作 Shtarbanov（MIT Media Lab）。
   封装→.kicad_pcb 端到端。无几何严谨性（无碰撞/朝向检查）——恰反衬我们框架的
   价值定位：**AI 生成布局可以快，但"对不对"要靠几何约束测试层守门**。
 
+## 9. 付费墙论文全文精读（用户 2026-10-03 下载 8 篇至 papers/）
+
+### 9.1 逐篇要点
+| 论文（出处） | 方法核心 | 结果 | → 框架映射 |
+|---|---|---|---|
+| **ODIM 斜方向几何可行性**（JESTCH 2022, 16p） | 几何可行性 GF 是装配前置谓词（无碰撞路径）；自动化 GF 此前仅限主轴、斜方向需人工；提出斜方向干涉矩阵 ODIM 扩展到任意方向，接入既有装配规划器 | 真实产品验证 | **我们的 FCL 方向查询/CCD = 板级任意方向 GF 的现代实现**（比矩阵法直接）；L5 第 7 项 = GF 序列化 |
+| **SOS-ACO**（Front. Mech. Eng. 2021, 17p） | ASP 为 NP-complete；装配约束+规则建模进装配模型保证合理序列；SOS 自适应调 ACO 参数 | 迭代次数少于纯 ACO，鲁棒 | 约束图→元启发式的范式印证；33 器件用规则+SA 足矣 |
+| **AlphaChip**（Nature 2021, 23p，正主一手） | RL 顺序放宏到网格；状态=网表边 GCN 嵌入+当前宏嵌入+**可行性掩码（密度掩码定义合法放置）**；动作=网格单元；奖励=终态 −proxy cost；预训练 48h×20 worker（每人 1 Volta GPU+10 CPU），微调 16 worker≤6h | TPU 块（预训/测试宏数 107/131，生产>500） | CCC 一手确认；**可行性掩码=硬约束先于优化**（我们 L5 断言层即掩码）；其算力门槛反证"板级不引 RL" |
+| **AlphaChip Addendum**（Nature 2024, 2p） | 官方澄清：宏数更正、补充引文、共同一作说明 | — | 与 UCSD 评估（arXiv 2302.11014）构成争议两面，均已本地 |
+| **Expertise-RL**（**ICLR 2026**, 24p） | (1) 专家知识注入：dataflow guidance / **periphery bias** / macro grouping / **I/O keepout constraints**；(2) 专家工作流模仿（后端 PPA 反馈+偏好优化） | ICCAD2015+OpenROAD：TNS −32.53% / WNS −7.74% | **EDGE_OUT 的 EDA 学名实锤（periphery bias + I/O keepout）**；macro grouping ↔ 域亲和边（阀域/传感域） |
+| **OrderPlace**（ICML'26 投稿, 35p） | 摆放顺序=被静态启发式统治的"时间维"，次优早决策→**不可逆多米诺**；LLM 进化 code 级排序策略（静态打分→物理启发动态）；**greedy probe 代理评估**降序列评估成本 | ISPD2005：WL −34.04%/−14.08% vs WireMask-EA/EGPlace | L5 第 7 项（装配顺序逐态无碰撞）文献依据；greedy probe 思想可用于 placement_advice 的廉价评分 |
+| **RollPlace**（**IEEE TCAD 45(7) 2026**, 14p） | 两阶段：ML/启发式出初始布局→只精调特定宏；MCTS 平衡探索/利用+rollout 局部搜索，绕开 RL 顺序生成的约束传播 | ISPD2005 SOTA + OpenROAD 19 基准 e2e | "先粗后精+局部调整"与我们的 FD+SA 微调同构 |
+| **VeoPlace**（See It to Place It, 29p） | VLM 空间推理把基础策略约束到画布子区域；VLM 提案经进化搜索按布局质量迭代 | 7 基准中 4 个 SOTA（WL −10.9% 均值） | 远期备选（KiCad 截图+VLM 布局建议）已入档不排期 |
+
+### 9.2 全文精读后的增量结论
+1. **"可行性掩码先于优化"是一手方法论**（AlphaChip 的 density mask、Expertise-RL 的
+   I/O keepout、ODIM 的 GF 谓词三处同构）：我们的 L5 断言层本质就是板级可行性掩码，
+   placement_advice 只在掩码内搜索——设计定位获得三重文献背书。
+2. **EDGE_OUT 有了 ICLR 级定名的学术对应**（periphery bias + I/O keepout），
+   spec 与笔记中的术语表述可对外引用。
+3. **摆放/装配顺序是独立优化维**（OrderPlace 多米诺效应 + ODIM 的序列化 GF）：
+   L5 第 7 项从"可选"升为"应有"（spec v2.1 已含）。
+
 ## 1. trimesh + python-fcl（碰撞栈，已实测）
 
 ### 1.1 安装可行性（Windows 关键风险，已解除）
