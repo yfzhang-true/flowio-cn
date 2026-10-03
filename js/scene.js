@@ -244,7 +244,7 @@ export async function createScene(canvas, onPartClick = () => {}) {
 
   // ── Task4: 流光/粒子 (电流辉光 + 气流) — 挂 asm 随呼吸, 锚 pcb 部件随爆炸 ──
   try {
-    const { createFlows } = await import("js/flows.js");
+    const { createFlows } = await import("./flows.js");
     handle.flows = await createFlows(asm, { getPcb: () => (parts.find((p) => p.id === "pcb") || {}).mesh || null });
     flowsTick = handle.flows.tick;                // 渲染回调: render(t) 每帧驱动
   } catch (e) {

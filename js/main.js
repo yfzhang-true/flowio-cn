@@ -64,7 +64,7 @@ function initChrome() {
 
 // 场景挂载 (Task3 语义保持): WebGL/装配失败 → 优雅降级卡, 其余抽屉仍可用 (spec §6)
 function createSceneGate() {
-  import("js/scene.js")
+  import("./scene.js")
     .then(({ createScene }) => createScene($("t2_canvas"), onPartClick))
     .catch((e) => {
       const d = document.createElement("div");
