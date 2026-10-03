@@ -17,10 +17,42 @@
 | UCSD CT 评估（更新版） | `papers/arxiv_2302.11014.pdf`（16 页） | ✓ 已读 |
 | 可行性 venv | `venv-fcl-test/`（fcl 0.7.0.11 + trimesh 5.1.1 + networkx 3.7 + scipy） | 冒烟通过 |
 
-**检索通道记录**：aminer MCP 六类查询（英文标题/中文关键词/FlowIO 论文本身）均返回
-`no data`（服务侧覆盖问题，非本地故障）；论文改经 arXiv API 按标题精确定位下载（曾用
-猜测 ID 下载到 4 篇无关论文，已识别并删除，未引用）；本会话无 github MCP 挂载，git
-clone 经代理 7877 替代完成。**无未解决阻塞，无需向用户求助。**
+**检索通道记录（v2 修正——用户质疑正确，aminer MCP 可用）**：
+早前"六连 no data"是**查询姿势问题**：`search_paper` 的 keyword/长短语参数对本主题
+恒空，但以下三个通道工作良好——
+- `search_paper_by_title`（**短标题片段**）：FlowIO 论文秒中（DOI 10.1145/3411763.3451513，
+  **被引 101**，id 60a7892691e0110affd71d5）；"assembly sequence planning" 命中 **650 篇**；
+- `search_person`：Shtarbanov（MIT Media Lab，兴趣 Soft Robotics/Pneumatic/Programmable
+  Materials，被引 298，id 6380810dfc451b2d602abc55）；
+- `recommend_paper`（topics 数组）：推出 8+6 篇高相关论文（见 §7）。
+aminer 的 `pdf` 字段是 md5 引用非公开 URL → 全文以元数据+摘要入档；三篇核心基线
+的开放 PDF（arXiv/作者站）已在 `papers/` 本地化。
+
+## 7. aminer 新发现（2026-10-03 补充检索）
+
+### 7.1 装配序列规划（ASP，650 篇的领域）
+| 论文 | 年份/被引 | 对框架的价值 |
+|---|---|---|
+| A Novel Geometric Feasibility Method to Perform ASP Through **Oblique Orientations**（JESTCH, DOI 10.1016/j.jestch.2021.04.013） | 2022/46 | **几何可行性(GF)判定从主轴扩展到斜方向**（ODIM 干涉矩阵）——我们"任意 rot 的 OBB/端口射线"正是板级 GF；装配顺序可行性=序列化的无碰撞路径检查 |
+| SOS-ACO for ASP（Front. Mech. Eng., DOI 10.1007/s11465-020-0613-3） | 2021/41 | ASP 是 NP-complete；约束+规则建模进装配模型后用元启发式求解——印证"约束图+SA"路线 |
+| Pattern Recognition for Knowledge Transfer in Robotic ASP（RA-L 2020） | 11-50 | 知识迁移视角，备查 |
+
+### 7.2 2026 宏布置前沿（recommend_paper 推送，均为最新工作）
+| 论文 | 核心思想 | 对框架的映射 |
+|---|---|---|
+| VeoPlace: Evolving Macro Placements with **Vision-Language Models** | VLM 视觉空间推理引导布局，WL 再降 10.9% | 远期备选：KiCad 截图+VLM 给布局建议（记录不排期） |
+| **OrderPlace**: Placement **Sequences** Via Proxy-Guided LLM Evolution | 摆放**顺序**是决定性维度（次优早决策引发多米诺） | L5 可加"装配/摆放顺序检查"：按序放置逐件碰撞（FCL CCD/逐态）|
+| Expertise Can Be Helpful for RL-based Macro Placement | 专家知识注入：**periphery bias / I/O keepout constraints** / macro grouping | **periphery bias 与 I/O keepout 正是 EDGE_OUT 的 EDA 学名**——我们的贴边+禁布断言有文献依据 |
+| RollPlace（MCTS rollout） / MCTS-RL / LightPlace（轻量连接感知） | 搜索与轻量化范式 | 印证轻量路线；LightPlace"虚拟宏插入"对 P2 阀排预布局有启发 |
+
+### 7.3 软体机器人应用语境（FlowIO 差距文档的相关工作素材）
+- **Rehabilitation Hand Exoskeleton（EBPAM+ANFIS，2026）**：康复手套 <100g、自适应模糊神经控制——**正是 FLOWIO-CN 的 B2B 目标场景**，佐证"阀板载化+轻量化"路线的市场侧依据；
+- RehapSpine（PMA 背部助力）、BeetleBot（集成多模态软体平台）、Sumbrella（软体服饰 HRI）——
+  可穿戴气动平台的当代谱系，FlowIO（101 引）是其中的工具链标杆。
+
+### 7.4 FlowIO 权威画像（aminer 详情）
+被引 **101**；关键词 Platforms/Toolkits/Control Systems/Soft Robotics/Programmable
+Materials/Wearables/Arduino；一作 Shtarbanov（MIT Media Lab）。
 
 ## 1. trimesh + python-fcl（碰撞栈，已实测）
 

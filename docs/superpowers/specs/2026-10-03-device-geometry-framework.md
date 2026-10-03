@@ -52,7 +52,7 @@ Z-Height = 7mm**（模型显示 10.4）。模型普遍虚高 3~4mm——当前�
 | 可微目标思想 | DREAMPlace DAC'19（论文精读） | 把布局质量写成可计算加性评分函数即可，引擎不引 |
 | 异构域约束 | OpenPARF（论文精读） | P2 的"阀域/传感域/电源域/气口域"= resource legality + proximity 形式化，图边带域亲和权重 |
 | 真实尺寸源 | jlcpcb MCP（实证三例） | **主数据源**：WJ500V 14.07 / DC005 10.9 / XH4P 7.0（均 HAB 类字段）+ datasheet URL |
-| 检索通道 | aminer MCP 六类查询均 `no data`（含 FlowIO 论文本身，服务侧覆盖问题，如实入档）；论文经 arXiv API 标题定位下载；github 无 MCP 挂载，git clone 经代理替代 | **无未解决阻塞** |
+| 检索通道 | **aminer MCP 可用（v2 修正）**：`search_paper_by_title` 短标题片段 / `search_person` / `recommend_paper`(topics) 三通道有效；`search_paper` 的 keyword/长短语对本主题恒空（勿用）。FlowIO 论文命中（被引 101），ASP 领域 650 篇（斜方向几何可行性 ODIM 2022/46 引——板级 GF=我们的 OBB+端口射线），2026 宏布置前沿（**periphery bias / I/O keepout = EDGE_OUT 的 EDA 学名**；OrderPlace 证明摆放顺序是决定性维度→L5 增装配顺序检查）；康复手套 2026（<100g，B2B 场景佐证）。全文多为付费墙，以元数据+摘要入档；核心基线开放 PDF 已本地化 | 论文已本地化+摘要入档 |
 
 ## 3. 方案（v2 定案：用户已裁定）
 
@@ -115,14 +115,16 @@ Z-Height = 7mm**（模型显示 10.4）。模型普遍虚高 3~4mm——当前�
 
 ### L5 测试层 `test_device_geom.py`（入 run_tests.sh，用 venv-cad 解释器）
 1. 朝向断言：EDGE_OUT 器件 port_dir·所属壁外法向 > cos45°，且端口射线在 3mm 内
-   穿出板边；
+   穿出板边（EDA 文献依据：periphery bias / I/O keepout constraints，aminer 2026）；
 2. 贴边断言：EDGE_OUT 中心距最近边 < 该类阈值（连接器 8mm）；
 3. 碰撞断言（FCL）：装配态 `in_collision_internal` 无冲突（return_names 空表）；
    爆炸态沿 k∈{0,0.25,0.5,0.75,1} 逐层 `set_transform` 扫掠无穿模；
    `min_distance_internal` ≥ 关键对净距（如 U1↔L1 散热间隙）；
 4. 图闭环：`minimum_weight_full_matching` 完美匹配（器件↔唯一槽，双向无孤点）；
 5. 钻孔避让：D4 两断言；
-6. 真值一致性：devices.yaml.dims vs case_geom.H vs JLC 属性三方对拍（消除双源）。
+6. 真值一致性：devices.yaml.dims vs case_geom.H vs JLC 属性三方对拍（消除双源）；
+7. （T2 可选）装配顺序检查：按推荐序逐件放入，逐态无碰撞（依据 OrderPlace
+   "摆放顺序多米诺效应"+ ASP 几何可行性 ODIM）。
 
 ### 与 FlowIO 差距的落地方式（本框架如何服务 P2）
 框架就绪后，P2 集成路线（阀排/歧管/压力传感/LiPo 充电）的每一步都是**加数据+加断言**：
