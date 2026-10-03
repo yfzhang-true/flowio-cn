@@ -203,3 +203,9 @@ state api=1.2 且全 payload 无 leak 字样；assembly parts=5、bbox_mm=[95.8,
 - **信息源纳管**：FlowIO 文档集（19 篇）/ESP32-S3 官方中文 PDF（datasheet/TRM/硬件设计指南/errata）/艾谷教程 → reference.bib 6 条 @misc + 书稿 6 处接线（ch1/7/9/11/12/14）；**回板前置阅读（errata+硬件设计指南）已入 ch14 校准清单**（d85efb6）
 - **阻塞核对**：pn_ml 解耦零功能残留（仅 cli.c 注释）；工单 36 张（pass 6/pending 30）；git 树净
 - **当前唯一硬阻塞**：等待 JLC 到板（板 5 装 2 已定）。到板后：BRINGUP 九章 = 工单 A201-A224 = 书稿 ch13 下篇 + ch14 素材
+
+
+## 磁盘清理与资源整理（2026-10-03）
+- **E:/FLOWIO-外部参考: 23G→1.6G（释放 21.4G）**——删 freerouting-src(15G)/tar/jdk21×2/jre zip/KRT .git+tests+awx+py_placer(2.6G)/艾谷软件工具(1.5G)+示例(1.3G)；保留 jar/jdk25/KRT 工作区/kicad-libs/艾谷 PDF+PPT/papers/aeonlabs，根目录 README.md 有逐项用途表
+- **E:/FLOWIO/资源: 627M→401M，四类归档**——实物图(59)/器件规格书/官方参考(含 official-3mf 22 模型)/开发板资料，根目录 README.md 有书稿映射表；删嵌套残留/extracted/kicad 中间产物/zip/rar(226M)
+- 待执行：资源纳编 plan T1+T2（spec 2026-10-03-assets-triage 已批，bib+图+六章增补）
