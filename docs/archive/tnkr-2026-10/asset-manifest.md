@@ -1,4 +1,9 @@
-# Tnkr 发布资产清单（T1c）
+# Tnkr 发布资产清单（T1c）【已归档】
+
+> **[终局 2026-10-03]** 平台已放弃：项目页已删除、GitHub App 授权已卸载、本目录整体归档。
+> 装配体工件 `flowio-p1-assembly.step`（76MB）已移出 git HEAD（本地保留）；再生命令两条：
+> ① `KICAD9_3RD_PARTY=C:/Users/yuefe/Documents/KiCad/9.0/3rdparty` 前置下运行 `kicad-cli pcb export step --force -o hardware/flowio-p1/fab/flowio-p1.step hardware/flowio-p1/flowio-p1.kicad_pcb`
+> ② `"E:/FreeCAD/bin/FreeCADCmd.exe"` 经 exec 注入法运行 `hardware/flowio-p1/enclosure/make_assembly.py`（中文脚本绕法见操作手册 §7）
 
 > **日期**: 2026-10-03 · **安全检查**: 密钥模式扫描（`ghp_*` / `mcpk2_*`）对下列全部文件零命中
 > **BOM 口径**: 39 行物料项 / 107 个贴片位（"107 parts"指 placements）

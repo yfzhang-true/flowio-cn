@@ -1,5 +1,7 @@
 # Tnkr 主模型升级（合并装配体 STEP）+ Documentation 补全 — 设计规格书
 
+> **[已弃用 2026-10-03]** tnkr.ai 平台已放弃（展示切换 GitHub Pages）。本文仅作工程史留档，执行结论见 docs/archive/tnkr-2026-10/asset-manifest.md。
+
 > **日期**: 2026-10-03 · **状态**: 待用户审查
 > **背景**: FLOWIO-CN 已上线 Tnkr（/yuefeizzzs-workspace/flowio-cn）。当前主 STEP 为单一 case-top.step（平台规则"恰好一个主模型"），零件分解观感受限；Documentation 依赖 Leonardo 异步生成，质量待核。
 > **用户指令**: 认可"可选后续"①②，要求 using-superpowers + using-git-worktrees 流程。

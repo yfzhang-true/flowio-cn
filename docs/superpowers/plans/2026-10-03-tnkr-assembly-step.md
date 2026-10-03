@@ -1,5 +1,7 @@
 # Tnkr 主模型升级实施计划
 
+> **[已弃用 2026-10-03]** tnkr.ai 平台已放弃（展示切换 GitHub Pages）。本文仅作工程史留档，执行结论见 docs/archive/tnkr-2026-10/asset-manifest.md。
+
 > **For agentic workers:** REQUIRED SUB-SKILL: subagent-driven-development / executing-plans。
 > **前置**: spec `2026-10-03-tnkr-assembly-step-design.md` 获批 · REQUIRED: using-git-worktrees（Task 0 建隔离工作区）
 
