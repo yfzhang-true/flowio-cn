@@ -10,7 +10,7 @@
 ### 1.1 仓库结构（公开 repo `flowio-cn`）
 
 ```
-github.com/<user>/flowio-cn/
+github.com/yfzhang-true/flowio-cn/
 ├── README.md              ← 产品级 README（英文+中文，含架构图/视频链接/快速上手）
 ├── LICENSE                ← 三件套：代码 MIT / 硬件 CERN-OHL-S / 文档 CC BY-NC-ND
 ├── firmware/              ← 全部（含 twin/deprecated 归档标注）
@@ -70,7 +70,7 @@ curl -H "Authorization: token <PAT>" https://api.github.com/user/repos \
 | 核心定位 | "技术翻译者" | **"全栈嵌入式工程师——从 PCB 到云端孪生"** |
 | 关键词 | 需求/产品/MVP | ESP32/FreeRTOS/BLE/KiCad/数字孪生/自动化测试 |
 | 项目排序 | RFNext→AI助手→AG600 | **FLOWIO-CN（最新+最重）**→AG600（嵌入式本源）→RFNext（工具能力） |
-| GitHub | 无 | **github.com/<user>/flowio-cn（硬件+固件+SDK+专著 94 页全开源）** |
+| GitHub | 无 | **github.com/yfzhang-true/flowio-cn（硬件+固件+SDK+专著 94 页全开源）** |
 
 ### 2.3 履历时间线
 
@@ -89,7 +89,7 @@ curl -H "Authorization: token <PAT>" https://api.github.com/user/repos \
 结构：
 ```
 # 张越飞 — 嵌入式软件工程师
-联系方式 | GitHub: github.com/<user>/flowio-cn
+联系方式 | GitHub: github.com/yfzhang-true/flowio-cn
 ## 核心定位（3 行）
 ## 技术栈（表格）
 ## 项目经历
@@ -100,9 +100,19 @@ curl -H "Authorization: token <PAT>" https://api.github.com/user/repos \
 ## 教育经历
 ```
 
+## 2.5 已安装简历编制 Skills（cocoloop → skills.sh → GitHub）
+
+| Skill | 来源 | 用途 |
+|---|---|---|
+| `tech-resume-optimizer` | paramchoudhary/resumeskills (9434 安装) | 技术简历结构/ATS/关键词优化 |
+| `resume-tailor` | 同上 (9487 安装) | 按 JD 定制——重排经历/调整摘要/补关键词 |
+| `job-description-analyzer` | 同上 (8969 安装) | 解构 JD 提取核心要求与优先级 |
+
+安装位置：`~/.agents/skills/`（ZCode 兼容目录）。执行 Task 2 时**先调 job-description-analyzer 解构乐鑫 JD → 再调 resume-tailor 定位 → 最后 tech-resume-optimizer 结构化输出**。
+
 ## 3. 执行边界
 
-- GitHub push 后 PAT 从本地删除（安全）
+- PAT 保留在本地 `简历/github的PAT.txt`（用户裁定），但**必须**确保不被 git 跟踪和上传——加入 .gitignore + git ls-remote 确认
 - 简历不含虚构成分——所有技术声明可指认 repo 提交
 - 专著同步上传（用户裁定"项目和专著都开源"）
 

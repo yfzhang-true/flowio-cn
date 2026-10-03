@@ -18,7 +18,7 @@
 
 ### Task 2: 嵌入式简历 Markdown
 
-- [ ] Write `简历/嵌入式软件工程师_张越飞.md`
+- [ ] **先用已安装 skills**：job-description-analyzer 解构 JD → resume-tailor 对照旧简历定位 → tech-resume-optimizer 结构化输出 `简历/嵌入式软件工程师_张越飞.md`
   - 素材源：旧简历 PDF 提取文本 + 本 spec §2 对照表 + FLOWIO-CN 项目数据（DRC/测试/提交数）
   - FLOWIO-CN 项目节：架构图文字版 + 关键技术决策 5 条 + 数据（4 层 PCB/33 测试/BLE 四服务/94 页专著/GitHub 链接）
   - AG600 节：精简旧简历（保留 DO-178C/DSP/故障归零）
@@ -27,7 +27,7 @@
 
 ### Task 3: 安全收尾
 
-- [ ] `rm 简历/github的PAT.txt`（或移入系统密码管理器）
+- [ ] PAT 保留但确保排除：`grep PAT 简历/ .gitignore`；`git log --all --diff-filter=A -- 简历/` 确认 PAT 从未入库
 - [ ] `git log --all --diff-filter=A -- 简历/` 确认 PAT 从未入库
 - [ ] HANDOFF.md 记录 GitHub repo URL
 - [ ] 终提交
