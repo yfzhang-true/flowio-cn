@@ -270,7 +270,7 @@ A306  cal    pending  孪生对拍：闭环精度 + 数字孪生精度报告
 \subsection{硬件 24 张 + 标定 6 张工单总表}
 \label{sec:acc-hw-table}
 
-表~\ref{tab:acc-hw-tickets} 由 \texttt{book/tickets/A2*.yaml} 与 \texttt{A3*.yaml} 的元数据生成，列出回板后待执行的三十张工单。硬件侧按 BRINGUP 九章动线排序：先通电视频流（A201--A204），再外设逐个点亮（A205--A208），无线与上位机（A209--A210），然后是六章校准（A211--A215，产物改 \texttt{BOARD\_PARAMS} 使黄徽转绿）、泵三实验与闭环（A216--A219），最后整机四项（A220--A224）。标定侧六张（A301--A306）是硬件数据的\textbf{二次消费}：实测曲线回流孪生后的对拍叠图，产物汇入第~\ref{ch:product} 章精度报告。
+表~\ref{tab:acc-hw-tickets} 由 \texttt{book/tickets/A2*.yaml} 与 \texttt{A3*.yaml} 的元数据生成，列出回板后待执行的三十张工单。硬件侧按 BRINGUP 九章动线排序：先通电视频流（A201--A204），再外设逐个点亮（A205--A208），无线与上位机（A209--A210），然后是六章校准（A211--A215，产物改 \texttt{BOARD\_PARAMS} 使黄徽转绿）、泵三实验与闭环（A216--A219），最后整机四项（A220--A224）。动线之前还有一道案头前置：通读乐鑫官方勘误表与硬件设计指南（均中文版）~\cite{esp32s3-errata-cn,esp32s3-hw-guidelines-cn}——P1 在用的 I2C/LEDC/RMT/USB-Serial-JTAG 外设皆在勘误覆盖面内，这是回板前排障的第一手材料。标定侧六张（A301--A306）是硬件数据的\textbf{二次消费}：实测曲线回流孪生后的对拍叠图，产物汇入第~\ref{ch:product} 章精度报告。
 
 \begin{longtable}{@{}llc@{}l@{}}
   \caption{硬件（hw）24 张 + 标定（cal）6 张工单总表（2026-10-02 生成，均 pending）}\label{tab:acc-hw-tickets}\\

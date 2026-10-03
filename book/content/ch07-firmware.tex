@@ -35,7 +35,7 @@ tests/           主机单元测试（gcc/cmake/ninja，无需 ESP-IDF）
   \end{tabular}
 \end{table}
 
-HAL 契约小得出奇——四个函数指针就把"什么是一块 FlowIO"定义完了：\texttt{valve\_write}（阀/泵占空比）、\texttt{pump\_write}、\texttt{sensor\_read}（kPa）、\texttt{now\_ms}（时基）。真机实现把它们接到 LEDC/RMT/I2C——阀与泵的引脚表登记在 \texttt{hal\_esp32.c}：4/5/6/7/10/11/12/21（GPIO，前 7 位阀、末位泵，与第~\ref{ch:schematic} 章原理图分配同源）；测试的 \texttt{mock\_hal} 把它们接到内存里的假寄存器。动作层的一切语义——阀开多久了（\texttt{pn\_valve\_open\_ms}）、节能降额是否到期——都从这个 4 函数契约里长出来，因此换一个 HAL 就换一个世界，而逻辑一行不改。
+HAL 契约小得出奇——四个函数指针就把"什么是一块 FlowIO"定义完了：\texttt{valve\_write}（阀/泵占空比）、\texttt{pump\_write}、\texttt{sensor\_read}（kPa）、\texttt{now\_ms}（时基）。真机实现把它们接到 LEDC/RMT/I2C（三组外设的寄存器与驱动行为，以乐鑫官方技术参考手册中文版~\cite{esp32s3-trm-cn} 为准）——阀与泵的引脚表登记在 \texttt{hal\_esp32.c}：4/5/6/7/10/11/12/21（GPIO，前 7 位阀、末位泵，与第~\ref{ch:schematic} 章原理图分配同源）；测试的 \texttt{mock\_hal} 把它们接到内存里的假寄存器。动作层的一切语义——阀开多久了（\texttt{pn\_valve\_open\_ms}）、节能降额是否到期——都从这个 4 函数契约里长出来，因此换一个 HAL 就换一个世界，而逻辑一行不改。
 
 \section{主机 33 测试：逻辑层的证据链}
 \label{sec:fw-tests}
@@ -210,7 +210,7 @@ void pn_cmd_feed(const uint8_t *buf, size_t len)
 
 \texttt{control\_task} 以 10\,ms 周期轮转，每拍做七件事：闭环 \texttt{pn\_inflate\_to\_tick()}（完成/超时/传感器错三态打印）、泵 120\,s 护栏、阀保持节能 \texttt{pn\_optimize\_power}（参数改读 BLE Config 服务的 RAM 镜像，见第~\ref{ch:ble} 章）、超压保护、舵机 50\,Hz 脉冲流刷新、WS2812 状态灯节拍、BLE 遥测组帧（每 10 拍一次，10\,Hz）。闭环本体（\texttt{closedloop.c}）是个干净的非阻塞状态机：\texttt{G} 启动后不再占用主循环，每拍读传感器、比较目标、检查超时；完成闩锁 \texttt{s\_completed} 要求显式 \texttt{X} 复位才能再次启动；到达目标时\textbf{先}取进气阀开启时长\textbf{再}停止动作——停止会清时间表，顺序反了 \texttt{elapsed\_ms} 就永远是零。启动时若目标端口已在充气（状态字匹配）则沿用当前动作不重启，与 FlowIO \texttt{inflateP} 同款语义。
 
-WS2812 状态灯（GPIO48，板载 1 颗地址型 RGB）是这拍节拍里最"产品"的一件事。设计把\textbf{模式设置}与\textbf{节拍驱动}分开：\texttt{board\_led\_set(mode)} 只改模式变量，呼吸/闪烁动画由每 10\,ms 的 \texttt{board\_led\_tick\_10ms()} 推进相位，且只在 RGB 变化时才碰 RMT 总线。五模式映射见表~\ref{tab:fw-led}。
+WS2812 状态灯（GPIO48，板载 1 颗地址型 RGB）是这拍节拍里最"产品"的一件事。设计把\textbf{模式设置}与\textbf{节拍驱动}分开：\texttt{board\_led\_set(mode)} 只改模式变量，呼吸/闪烁动画由每 10\,ms 的 \texttt{board\_led\_tick\_10ms()} 推进相位，且只在 RGB 变化时才碰 RMT 总线（WS2812 的 RMT 时序与 TCA9548A 的 I2C 出总线，外设电气规格与时序参数均以 ESP32-S3 数据手册中文版~\cite{esp32s3-datasheet-cn} 为参照）。五模式映射见表~\ref{tab:fw-led}。
 
 \begin{table}[htbp]
   \centering

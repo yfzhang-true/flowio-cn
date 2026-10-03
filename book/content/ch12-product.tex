@@ -6,7 +6,7 @@
 \section{Phase CAL 六项对拍：实测数据回流孪生}
 \label{sec:product-cal}
 
-标定工单 A301--A306 是硬件数据的\textbf{二次消费}。执行前提是第~\ref{ch:acceptance} 章下篇的校准先行：A211--A215 六项电气校准把 \texttt{BOARD\_PARAMS} 的阀线圈 $R/L$、$R_\text{DS}$、ESR、效率与热阻逐个换成实测值，A216--A218 泵三实验把 $P_R$、$P_\text{min}$、$C_\text{pump}$ 从"借值"升为"实测"（第~\ref{ch:twin} 章 \S\ref{sec:twin-calib}）——黄徽章转绿之后，对拍才有意义：拿"理论值"对拍真机，量化的是假设的误差；拿"实测值"对拍真机，量化的才是模型的误差。六个维度各出一张"孪生曲线 vs 实测曲线"叠图（表~\ref{tab:product-cal}），证据统一为 CSV（\texttt{book/data/}）加叠图（\texttt{book/figures/}），由九步工单动线归档（第~\ref{ch:acceptance} 章 \S\ref{sec:acc-workflow}）。
+标定工单 A301--A306 是硬件数据的\textbf{二次消费}。案头前置阅读固定为两项：乐鑫官方勘误表与硬件设计指南（均中文版）~\cite{esp32s3-errata-cn,esp32s3-hw-guidelines-cn}——勘误表覆盖在用外设的已知缺陷，硬件设计指南则是首板电源/天线净空/USB 差分布局问题的第一排查手册；执行前提是第~\ref{ch:acceptance} 章下篇的校准先行：A211--A215 六项电气校准把 \texttt{BOARD\_PARAMS} 的阀线圈 $R/L$、$R_\text{DS}$、ESR、效率与热阻逐个换成实测值，A216--A218 泵三实验把 $P_R$、$P_\text{min}$、$C_\text{pump}$ 从"借值"升为"实测"（第~\ref{ch:twin} 章 \S\ref{sec:twin-calib}）——黄徽章转绿之后，对拍才有意义：拿"理论值"对拍真机，量化的是假设的误差；拿"实测值"对拍真机，量化的才是模型的误差。六个维度各出一张"孪生曲线 vs 实测曲线"叠图（表~\ref{tab:product-cal}），证据统一为 CSV（\texttt{book/data/}）加叠图（\texttt{book/figures/}），由九步工单动线归档（第~\ref{ch:acceptance} 章 \S\ref{sec:acc-workflow}）。
 
 \begin{table}[htbp]
   \centering

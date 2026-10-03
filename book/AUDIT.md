@@ -145,7 +145,7 @@
 | **Important** | ch00a"6 路 XGZP6897D 并行采样" | ch00a L73 改"XGZP6897D 经 TCA9548A **分时**采样（**P0 实装 2 只**：汇流管+端口侧，可扩 5 端口座）"，与 types.h L21 `PN_SENSOR_COUNT 2` 一致 | **已修复** |
 | Minor 1 | ch10 encode 签名缺注解（F13） | ch10 L48 = protocol.py L85 `def encode(cmd: _t.Union[str, int], ports: int = 0, pwm: int = 0) -> bytes:` 逐字一致；crc8 同步核对一致 | **已修复** |
 | Minor 2 | ch02 `/api/time` 方法 | ch02 L258 改"**POST** /api/time"（server.py 实为 POST-only） | **已修复** |
-| Minor 3 | ch09 呼吸周期 4s vs 实测≈25s（B2 书稿侧） | ch09 L17 改"低频呼吸，周期**约 25 s**"；实现侧 scene.js L202 `sin(t/4)*0.3` 未改，**记档为设计-实现偏差待产品裁决** | **已处置**（书稿写实测；实现裁决留产品） |
+| Minor 3 | ch09 呼吸周期 4s vs 实测≈25s（B2 书稿侧） | ch09 L17 改"低频呼吸，周期**约 25 s**"；实现侧 scene.js L202 `sin(t/4)*0.3` 维持；书稿补设计理由句（慢呼吸避免与数据阅读争夺注意力） | **waived-adopted-impl**（产品裁定：采纳实现值≈25s 为最佳实践） |
 | Minor 4 | ch09 缓动令牌表述 | ch09 L17 改"v2 设计令牌规划 cubic-bezier(0.22,1,0.36,1)…实现装配动画取同族 easeOutQuint"（令牌≠实现，分层表述） | **已修复** |
 | Minor 5 | ch11 BRINGUP checkbox 30→36 | ch11 L217 改"现有 36 个未勾 checkbox——工单生成时为 30 个，后清单扩充，以现数为准" | **已修复** |
 | Minor 6 | ch11 api.sh 项数 50 | ch11 L9 改"43 项 + 板级 11 项"（实测复核） | **已修复** |
@@ -156,7 +156,7 @@
 | Minor 11 | bib 孤立键 ESP32S3DS（F7） | ch03 L9 补 `\cite{ESP32S3DS}` | **已修复** |
 | Minor 12 | "十二章"计数 | ch00a L121 补说明："十二章"指实践篇十章+验收/产品化两章，理论篇 2 章不计入 | **已修复** |
 | Minor 13 | pn_core 路径层级简写（F5/F6）+ ch06 列表省略（F11） | ch07 L90 / ch08 L101 补 `components/pn_core/src/` 前缀；ch06 lst:mesh-verify 改 caption"摘自源码"并全文收录（含逐器打印行） | **已修复** |
-| 仓库侧 B2 | scene.js 呼吸周期实现 | 设计-实现偏差**记档待产品裁决**：书稿口径已写实测（≈25s），实现 `sin(t/4)` 维持（改动影响 v2 已验收视觉，需产品拍板改 4s 或维持） | **记档** |
+| 仓库侧 B2 | scene.js 呼吸周期实现 | 设计-实现偏差裁定落地：**采纳实现值**——`sin(t/4)`≈25.1s 慢呼吸即最佳实践（动画存在感 vs 干扰阅读的平衡），实现维持，ch09 已补设计理由句 | **waived-adopted-impl** |
 | 仓库侧 B3 | HANDOFF"README 已改"不实 | 处置为**双口径并列陈述**：README-jlc-order.md §3 维持"全贴 5 片 550–1150"，HANDOFF/ch05（tab:fab-cost）两口径并列且各标出处，现行执行口径 360–720 | **已处置** |
 
 ### T4.3 残余与备注

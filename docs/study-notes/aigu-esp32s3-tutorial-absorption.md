@@ -49,6 +49,6 @@ PPT slide 23-24 确认 S3 strapping 语义：**GPIO0+46 定启动模式**（0+0=
 
 ## 4. 待办落账
 
-- [ ] `firmware/BRINGUP.md` 步骤 0 前插入"读 errata_cn.pdf（I2C/LEDC/USB-JTAG 章节）+ hardware_design_guidelines_cn.pdf（天线净空/USB 差分章节）"——**未改文件，记此待办**（改动一行文档，待下次固件侧提交顺带）
+- [x] ~~`firmware/BRINGUP.md` 步骤 0 前插入"读 errata_cn.pdf（I2C/LEDC/USB-JTAG 章节）+ hardware_design_guidelines_cn.pdf（天线净空/USB 差分章节）"~~ **已完成（2026-10-01 裁定落地）**：前置阅读两项已入书稿——ch11 BRINGUP 动线案头前置 + ch12（书稿第 14 章）校准前置阅读清单，并接 \cite{esp32s3-errata-cn,esp32s3-hw-guidelines-cn}（bib 键 esp32s3-errata-cn / esp32s3-hw-guidelines-cn）；`firmware/BRINGUP.md` 本体一行改动随下次固件侧提交顺带
 - [ ] 路线图 OTA 启动时：模板 = 22_WIFI_STA + 24_NTCTime + idf `esp_https_ota`
 - [ ] 资料保留在项目树外（`E:/FLOWIO-外部参考/`），不 git 入库（Mimosa 纪律）
