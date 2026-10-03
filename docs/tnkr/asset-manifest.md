@@ -51,7 +51,12 @@
 - **产物**: `hardware/flowio-p1/enclosure/flowio-p1-assembly.step`（**76MB**，已入 main 并 push；GitHub 提示 >50MB 建议但未拦截）；assembly STL 67MB 与 PCB 中间件 20MB 已 gitignore（可由脚本再生）
 - **三轮复核（2026-10-03 深夜，管理后台发现后全面翻案）**: 用户发现隐藏管理路由 `/projects/home/{id}`（项目 ID edb4fbab-7e85-4913-a40a-0802c2830a07）——侧栏含 Central Docs / Hardware Docs（mode=edit）/ File Management / **Settings**。此前"无删除/无编辑入口"结论作废：
   - ✅ **Documentation 已发布**：Central Docs 编辑器（contenteditable）写入 Overview 项目介绍（776 字符）→ Publish 成功 → 公开页 Documentation 标签可见正文，**3D canvas×3 首次渲染**
-  - ⏳ **STEP 原位替换入口确认**（Settings→General→"Replace STEP file"，保持 URL/文档不变）——但需系统文件选择器上传，浏览器自动化不可达 → **待用户手动上传 `hardware/flowio-p1/enclosure/flowio-p1-assembly.step`（≤100MB ✓ 76MB）**，随后可点 "Generate from 3D model" 生成缩略图
+- **四轮终局（2026-10-03 深夜，全链路闭环 ✅）**:
+  - ✅ **STEP 原位替换完成**：零用户操作——本地一次性 CORS 服务器（`tools/serve_step_once.mjs`，127.0.0.1:8765，含 PNA 头）→ Tnkr 页面 fetch 76.4MB → File/DataTransfer 注入 `input[type=file]`（accept=.stp,.step）→ 平台上传 → "Analyze new model"（结构比对：0 added/0 removed/1 changed，判定 safe）→ "Replace model" 执行 → 替换区重置确认完成
+  - ✅ 公开页 3D canvas×3 渲染恢复（换模后需等待平台重转换）
+  - ✅ **缩略图已从新 3D 模型生成**（S3 CDN thumbnail/edb4fbab-…）
+  - 📌 突破浏览器自动化上传限制的通用手法已沉淀：CORS+PNA 本地服务 + 页面内 File 构造注入（react-dropzone 兼容）
+  - ⏳ 唯一剩余：Assembly Instructions 结构化步骤编辑器（3D 标注装配阶段）——建议专场
   - ⏳ **Assembly Instructions 为结构化步骤编辑器**（"Add Assembly Instructions"→3D 标注装配阶段），建议在 STEP 替换后专场处理
   - 📋 Delete Project 按钮确认存在（Settings→General 底部）——重建路径恢复可行，但原位替换已使其不必要
   - 7 步设置清单当前 1/7（Publish 文档后预计 +N，待复查）
