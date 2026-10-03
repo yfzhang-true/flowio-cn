@@ -164,6 +164,19 @@ if not only_pos and not only_bom:
 
 价格口径顺带一提：全板最贵单件 U1（ESP32-S3-WROOM-1-N16R8）在规格书记录为 5.14 元、下单页实时价一度约 26 元——LCSC 编码锁定的是\textbf{物料身份}，价格以下单页实时价为准，预算区间里已留了余量。
 
+\section{供应链实拍：国产平替的 B2B 叙事}
+\label{sec:fab-supply}
+
+BOM 上的 38 行料号最终要变成一箱到手的实物。下单同期的采购调研留下一组实物照片（存档 \texttt{资源/实物图/}：厂商 Listing 图 18 张、散件清点照 9 张，另有散件清单 PDF 存档于 \texttt{资源/器件规格书/}），给"国产 BOM"这个差异化卖点补上了实物注脚。图~\ref{fig:fab-handes} 是汉戴斯——B2B 平台上的气动器件供应商——Listing 页的实物图：0520 系列阀、微型泵与快插接头在这个生态里是\textbf{现货工业品}而非定制件。这正是白牌供应链的底色：执行器与气路器件早已被国产气动产业标准化，行业真正缺的是可靠的驱动与控制层——FLOWIO-CN 补的就是这一层。
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figures/fig-handes-pcb.png}
+  \caption{气动器件供应商（汉戴斯）Listing 实物图——0520 系列阀/微型泵/接头类器件在 B2B 平台现货供应（图源：采购调研存档，\texttt{资源/实物图/handes\_p2.png}；18 张系列图存档同目录）}\label{fig:fab-handes}
+\end{figure}
+
+散件清点照则是收货侧的对照工具：到货批次按清点照与 BOM 逐项核对，避免"贴装缺件"与"采购漏件"两类事故在上线当天才暴露。对 B2B 客户，"国产 BOM"的完整含义由此拆成三件可验证的事：\textbf{器件现货}（本节实拍）、\textbf{全代工制造}（本章下单实录）、\textbf{平替有据}（0520D/F 与 XGZP 的规格书级对照，第~\ref{ch:pneu-theory} 章）——三者合起来，才是"供应链交付"而非"料单交付"。
+
 \section{标准版是硬约束，不是省钱选项}
 \label{sec:fab-standard}
 

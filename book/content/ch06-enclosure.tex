@@ -233,6 +233,34 @@ $+75$ 翻转假设在 J10/J2 两个锚点上立刻露馅（会给出 143.5/81 �
   \caption{P1 装配的五部件结构视图：上壳（通风栅）、顶面器件阵、PCB、下壳（铜柱）——由 make\_meshes.py 从 pos.csv 与外壳 STL 同源生成}\label{fig:encl-assembly}
 \end{figure}
 
+\section{对照官方 3MF：模块化结构件 vs 单体外壳}
+\label{sec:encl-3mf}
+
+FlowIO 官方开源了全套结构件的 3MF 模型（22 件，本地存档 \texttt{资源/官方参考/official-3mf/}~\cite{flowio-3mf-set}）。本书\textbf{没有复用其中任何一个模型}——不是版权顾虑（模型随硬件以开放许可提供），而是产品形态的分野：官方走"主模块 + 三档泵模块磁吸互换"的模块化路线，壳体被拆成一族可组合构件；FLOWIO-CN 走"8 路驱动全在一张板"的单体路线，一只下壳加一只顶盖就是全部结构件。表~\ref{tab:encl-3mf} 从官方 3MF 的文件名与目录结构归纳其构件族，与本书两件套对照。
+
+\begin{table}[htbp]
+  \centering
+  \caption{官方 3MF 构件族（自文件名归纳~\cite{flowio-3mf-set}）与本书单体外壳对照}
+  \label{tab:encl-3mf}
+  \begin{tabular}{lp{5.4cm}p{3.8cm}}
+    \toprule
+    构件族 & 官方 3MF 构件（文件名） & 本书对应 \\
+    \midrule
+    Main（主模块） & Base / Box / Box with hooks / Btn / Separator & 下壳 + 顶盖吸收其主体功能 \\
+    S 档（小，推断） & base / box & 无对应：单体不换泵模块 \\
+    M 档（中，推断） & base / box（另含 old pcb 旧版）/ Insert & 无对应 \\
+    L 档（大，推断） & base / box / top（另含 old pcb 旧版）/ top batt（电池仓顶盖） & 无对应 \\
+    管路与阀帽 & TubeGuide Left/Right（另含 Config 版 $\times$2）/ ValveCap(New) / ValvePlug & 端子开孔带 + 侧开孔（表~\ref{tab:encl-cuts}） \\
+    \midrule
+    \textbf{本书合计} & \textbf{2 件}（case-bottom + case-top） & $95.8\times80.8\times19$\,mm 单体，8 路全集成 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+两点纪律先说清楚。其一，表中的 S/M/L 为大/中/小三档系\textbf{文件名推断}；官方文档未给各构件的外形尺寸，故本表只列构件名不列尺寸——无据的数字一个都不编。其二，"old pcb"字样的构件说明官方结构件同样经历了改版迭代，与本书 HD 移位（\S\ref{sec:encl-hd}）的动机同源：板改了，壳必须跟着改。
+
+取舍的论证：模块化买的是"秒级按压力/流量重组系统"，付的是 22 件构件的开模/打印/装配与磁吸机构的公差链；单体买的是制造最简与装配动线最短（四颗 M3 自攻即合壳，\S\ref{sec:encl-assembly}），付的是泵模块不可换。对白牌客户的一台康复设备而言，8 路分指闭环已覆盖目标工况，可换性溢价被换成了 BOM 密度与成本——这与第~\ref{ch:intro} 章的两个裁决同构：FlowIO 用第二台设备解决"同刻异动作"，我们用阀位图；FlowIO 用可换泵模块覆盖压力档位，我们用单体集成把档位做足。
+
 \section{3D 打印下单与水密自检}
 \label{sec:encl-print}
 

@@ -84,6 +84,8 @@ FlowIO 对这些短板的回应构成了它的设计基因：\textbf{模块化}�
 
 软件栈自底向上：固件层（稳定）、Arduino 库与 API（基本完备）、JavaScript API（演进中）、Web GUI（Chrome）。控制方式四种：网页 GUI、JS API over BLE、USB 串口命令、自写固件。这套"一份硬件、多层软件入口"的分层思想，直接映射为 FLOWIO-CN 的固件（pn\_core）/串口协议/上位机 SDK/Web GUI 四层。
 
+两条实物级参照也随资源库存档（\texttt{资源/官方参考/}）。其一，\textbf{官方 GUI}：浏览器形态、零安装，侧栏承担连接/电池/自动关机，调度表可编排毫秒级动作序列，中央是一张可切换五种气动配置的交互设备图（7 阀 2 泵实时联动）~\cite{flowio-docs-stack}——第~\ref{ch:host} 章前端的信息架构对标出处即此。其二，\textbf{官方演示视频}（FLOWIO.mp4，约 16\,MB）：以五指执行器为对象演示充气-保压-泄放的循环，五只端口对应的指腔依次鼓起再瘪回，GUI 上的端口状态同步点亮熄灭~\cite{Shtarbanov2021}——整段演示复现的平台主张正是"五个气动通道各自独立、又受同一界面指挥"。按版权纪律，本书以文字转述其场景、以自绘图表呈现时间线，不复用视频帧。官方 Arduino 库的 API 形态同样只对照不复刻：其动作族以 \texttt{startInflation()/startVacuum()/startRelease()} 加端口位图与 PWM 值参数表达，\texttt{openPorts()/closePorts()} 以位图开关端口~\cite{flowio-arduino-lib}——与表~\ref{tab:intro-api} 的 CLI 动词逐条平行，接口语义可以对照，源码实现一行不抄。
+
 FLOWIO-CN 继承的不只是分层，还有\textbf{动作语义}。FlowIO 为每个端口定义了六种动作：充气、抽真空、泄放、保压、测压、流量可变——这组动词是五年用户教育沉淀下来的公共词汇，白牌厂商的工程师大概率已经在 FlowIO 生态里见过它们。P1 的 CLI 命令动词与之逐一对应（表~\ref{tab:intro-api}），客户从 FlowIO 迁移的认知成本接近零；命令文法与 BLE 载荷共用同一份协议定义（第~\ref{ch:ble} 章），这是"开放 API"差异化的具体形态。
 
 \begin{table}[htbp]

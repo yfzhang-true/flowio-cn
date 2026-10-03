@@ -332,7 +332,19 @@ A306  cal    pending  孪生对拍：闭环精度 + 数字孪生精度报告
   \item \textbf{轨电压}：表笔确认 5V 与 3V3 电压在容差内（buck 空载输出对照第~\ref{ch:twin} 章 \S\ref{sec:twin-board} 的标称值），方可进入 A202 烧录。
 \end{enumerate}
 
-三测的实测读数与表笔照片按素材管线归档为 A201 证据。它是整条动线的第一张工单，也是"数字孪生验收（上篇）"与"实物验收（本篇）"的分界：从此以后，每一个数字都长在真板上。
+三测的实测读数与表笔照片按素材管线归档为 A201 证据。图~\ref{fig:acc-dmm} 与图~\ref{fig:acc-solder} 预置了它的取证形态——前者是万用表表笔对轨电压/对地阻抗的测量示例，后者是首电前的目检样张（U1 四侧焊脚与端子排焊接质量，正是收货三步中"目检"的放大版）；两张均为\textbf{实拍示例，回板执行 A201/A202 时替换为 P1 实测照}，图位与 caption 先行占座，素材管线（\S\ref{sec:acc-workflow}）到时只需换文件。它是整条动线的第一张工单，也是"数字孪生验收（上篇）"与"实物验收（本篇）"的分界：从此以后，每一个数字都长在真板上。
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.62\textwidth]{figures/fig-dmm-check.png}
+  \caption{A201 现场图位（预置）：万用表首电测量示例——轨电压/对地阻抗的表笔接法（实拍示例，验收时替换为 P1 实测照；图源 \texttt{资源/实物图/dmm.png}）}\label{fig:acc-dmm}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.62\textwidth]{figures/fig-solder-check.png}
+  \caption{A201 前置目检现场图位（预置）：焊点目检示例——U1 四侧焊脚/端子排焊接检查，A202 烧录前的一道闸（实拍示例，验收时替换；图源 \texttt{资源/实物图/solder\_check.png}）}\label{fig:acc-solder}
+\end{figure}
 
 \section*{本章小结}
 上篇用六张 \texttt{pass} 工单证明了"回板之前，软件无欠账"：装配叙事与爆炸跟随（A101）、三态差分联动（A102）、四电路重算（A103）、SDK 双向向量（A104）、固件两道防线（A105）、BLE 先验冻结（A106），背后是 44 断言矩阵、26 项目视审计与三层证据哲学（断言防逻辑错、像素防渲染错、AI 复核防语义错）。下篇用三十张 \texttt{pending} 工单规定了回板之后怎么还账：15--30 分钟一张的九步动线、按 BRINGUP 九章排序的总表、以及一只万用表守着的首电安全门。上下两篇合起来，才是"验收"的完整定义——\textbf{已完成的可复核，未完成的可执行}。

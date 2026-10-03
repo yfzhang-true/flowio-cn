@@ -92,6 +92,54 @@ R = \frac{128\,\mu\, l}{\pi d_h^4},
   \end{tabular}
 \end{table}
 
+\section{从方程到选型：0520D 与 0520F 的实物对照}
+\label{sec:pneu-valves}
+
+方程与谱系之后，落到采购单上的是两只具体的小电磁阀。FLOWIO-CN P1 的 7 只阀取自国产 0520 系列的两条产品线：\textbf{0520D（常闭二通）}与 \textbf{0520F（两位三通）}，两份中文规格书随采购件存档~\cite{valve-0520d-ds,valve-0520f-ds}。线圈侧两者同族：额定 DC 4.5\,V、240\,mA、1.6\,W、孔径 0.45\,mm、介质空气；分野在\textbf{流路拓扑}——二通常闭阀断电即密封，天然表达"保压"语义（FlowIO 的常闭阀选择~\cite{Shtarbanov2021} 在此获得国产现货对应物）；两位三通阀的通/断两态各接一个端口，一只阀即可完成方向切换。本书的用法：端口阀取 0520D（保压为默认态），进气/排气方向组合取 0520F。表~\ref{tab:pneu-valves} 把规格书首页可核参数与孪生物理（PHYSICS-SPEC）的派生采用值并排放置。
+
+\begin{table}[htbp]
+  \centering
+  \caption{0520D vs 0520F：规格书首页可核参数（上五行~\cite{valve-0520d-ds,valve-0520f-ds}）与孪生采用值（下三行，派生依据见第~\ref{ch:twin} 章参数表）}
+  \label{tab:pneu-valves}
+  \begin{tabular}{llp{5.2cm}}
+    \toprule
+    项 & 0520D & 0520F \\
+    \midrule
+    流路拓扑 & 常闭二通 & 两位三通 \\
+    额定/工作电压 & DC 4.5\,V / 4.1--5.0\,V & DC 4.5\,V / 4--5.5\,V \\
+    线圈电流/功率 & 240\,mA / 1.6\,W & 240\,mA / 1.6\,W \\
+    公称孔径 & 0.45\,mm & 0.45\,mm \\
+    介质 & 空气 & 空气 \\
+    \midrule
+    裸阀流导（孪生） & $C_v$ 0.05 & $C_v$ 0.10 \\
+    响应（孪生瞬时假设依据） & $\le$20\,ms & $\le$30\,ms \\
+    动作压力下限 & \multicolumn{2}{l}{$-53.3$\,kPa（400\,mmHg）——两型号同此约束} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.52\textwidth]{figures/fig-valve-0520d-top.png}
+  \caption{0520D 常闭二通电磁阀实物（顶视，采购件翻拍；源图 \texttt{资源/实物图/valve0520d\_p1\_top.png}，16 张系列图存档同目录）}\label{fig:pneu-valve-d}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.52\textwidth]{figures/fig-valve-0520f-3way.png}
+  \caption{0520F 两位三通电磁阀实物（中段视角，三通结构可见；源图 \texttt{资源/实物图/valve0520f\_p1\_mid.png}）}\label{fig:pneu-valve-f}
+\end{figure}
+
+两份规格书里最有分量的数字是\textbf{动作压力下限 $-53.3$\,kPa}：阀在这个深度以下不能可靠通电切换。它反过来裁决了整机可用真空——泵规格书的极限是 $-58$\,kPa，但闭环"关阀保压"若在 $-53.3$\,kPa 以下触发就会失败，系统真空渐近值因此取链路最弱环节 $\max(-58,\,-53.3)=-53.3$\,kPa，并作为孪生参数表的定稿值（第~\ref{ch:twin} 章）。文献出处课与工程参数表在这里会师：一条规格书条款，穿过建模层，最终落成闭环策略的边界条件。
+
+压力量程的实物印证来自另一颗采购器件：XGZP6897D-C 表压系列的量程分档覆盖 $-100\sim+200$\,kPa、I\textsuperscript{2}C 数字输出（手册 V1.1 首页）~\cite{xgzp6897d-v11}，孪生的 $\pm100$\,kPa 钳位取的正是其真空侧满量程；同系列 V2.5 版数据手册一并存档~\cite{xgzp6897d-v25}，第~\ref{ch:twin} 章驱动级三处修正对照的即此手册。
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.52\textwidth]{figures/fig-xgzp-sensor.png}
+  \caption{XGZP6897D-C 压力传感器实物（SOIC8 封装；源图 \texttt{资源/实物图/xgzp\_p3.png}）——孪生 $\pm100$\,kPa 量程的器件来源}\label{fig:pneu-xgzp}
+\end{figure}
+
 \section{控制器谱系：从 PID 到模型基非线性}
 \label{sec:pneu-control}
 
@@ -153,4 +201,4 @@ Yilmaz 等 2026 年在 \emph{Advanced Materials Technologies} 的织物外骨骼
 \end{table}
 
 \section*{本章小结}
-气动在软体驱动谱系中以"快响应、高力量重量比、执行器即气囊"胜出，其代价——一套泵阀传感系统——正是本书的产品本体~\cite{Xavier2022Frontiers,Sansone2022}。系统建模有三条公共方程：多变定律式~\eqref{eq:pneu-dpdt}（$\gamma{=}1.2$）、ANSI 孔口式~\eqref{eq:pneu-ansi}（含音速阻塞分支）与 RC 类化式~\eqref{eq:pneu-rc}~\cite{Xavier2020AIM,Xavier2022Frontiers,Stanley2021}；控制器谱系从实验整定 PI 到模型基非线性依次升高，本书按参数成色选保守端~\cite{Xavier2022Frontiers}。装置脉络 PneUI$\to$OmniFiber$\to$FlowIO 证明驱动器标准化是执行器多样性的必然反题~\cite{Yao2013,Afsar2021,Shtarbanov2021}；康复前沿的拇指手套与织物综述则把"分指闭环 + 测试标准"标成行业空白~\cite{Xie2026,Yilmaz2026}。下一章开始，这些坐标全部变成工程图纸。
+气动在软体驱动谱系中以"快响应、高力量重量比、执行器即气囊"胜出，其代价——一套泵阀传感系统——正是本书的产品本体~\cite{Xavier2022Frontiers,Sansone2022}。系统建模有三条公共方程：多变定律式~\eqref{eq:pneu-dpdt}（$\gamma{=}1.2$）、ANSI 孔口式~\eqref{eq:pneu-ansi}（含音速阻塞分支）与 RC 类化式~\eqref{eq:pneu-rc}~\cite{Xavier2020AIM,Xavier2022Frontiers,Stanley2021}；落到选型，0520D/0520F 规格书给出常闭二通与两位三通的国产现货对照，动作压力下限 $-53.3$\,kPa 裁决系统可用真空~\cite{valve-0520d-ds,valve-0520f-ds}，XGZP6897D 的量程分档实证了孪生的 $\pm100$\,kPa 钳位~\cite{xgzp6897d-v11}。控制器谱系从实验整定 PI 到模型基非线性依次升高，本书按参数成色选保守端~\cite{Xavier2022Frontiers}。装置脉络 PneUI$\to$OmniFiber$\to$FlowIO 证明驱动器标准化是执行器多样性的必然反题~\cite{Yao2013,Afsar2021,Shtarbanov2021}；康复前沿的拇指手套与织物综述则把"分指闭环 + 测试标准"标成行业空白~\cite{Xie2026,Yilmaz2026}。下一章开始，这些坐标全部变成工程图纸。
