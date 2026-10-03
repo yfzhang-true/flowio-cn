@@ -41,3 +41,5 @@ literature/*.pdf
 /资源/开发板资料/
 .flowio-softrobotics-docs/
 .worktrees/
+hardware/flowio-p1/enclosure/flowio-p1-assembly.stl
+hardware/flowio-p1/fab/flowio-p1.step
