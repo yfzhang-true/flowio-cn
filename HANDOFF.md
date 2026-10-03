@@ -229,3 +229,11 @@ E:/FLOWIO-外部参考 已并入 资源/工具链/（7 项短名迁移，源目�
   - 3 个 skill 安装于 ~/.agents/skills/ (cocoloop→skills.sh→GitHub codeload)
   - 目标岗位：乐鑫嵌入式原型验证(85%匹配) + ESP-IDF SDK(75%)
   - 占位符：[请填写] 手机号
+
+
+## 求职 MCP 工具链（2026-10-03）
+- **天眼查 MCP** (tyc-mcp): SSE + API Key → config.json 已写入；CLI 已验证（乐鑫工商+风险查询成功返回 JSON）
+- **mcp-jobs 职位聚合 MCP**: stdio + npx → config.json 已写入；零配置聚合多平台
+- **需重启 ZCode 会话使两个 MCP 生效**
+- 安全: 简历/ 整目录已出 git 索引（含天眼查 key + GitHub PAT），.gitignore /简历/ 生效
+- 安装后能力: 天眼查 162 工具(工商/风险/知产/经营/历史/董监高) + mcp-jobs 职位搜索 + 3 个简历 skill + bosszhipin/liepin-cli 浏览器 skill
