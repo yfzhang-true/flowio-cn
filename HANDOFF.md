@@ -220,3 +220,12 @@ E:/FLOWIO-外部参考 已并入 资源/工具链/（7 项短名迁移，源目�
 - FlowIO-Arduino-Libraries-master → 资源/官方参考/arduino-libraries（zip 删）
 同步改写：reference.bib ×2 / auto-finish plan ×4 / 工具链 README 重写
 清理：firmware/build 1.8G 删（idf 重编即得）/ ml-leak dataset+literature 103 PDF 出索引（磁盘留）
+
+
+## GitHub 开源 + 简历（2026-10-03）
+- **GitHub repo**: https://github.com/yfzhang-true/flowio-cn (public, 全栈开源)
+- push 历史 3 轮清洗：literature PDFs (110MB 超 GitHub 限) → PAT 从 git 历史完全清除 (filter-branch)
+- 简历：简历/嵌入式软件工程师_张越飞.md (Skills 三步: job-description-analyzer → resume-tailor → tech-resume-optimizer)
+  - 3 个 skill 安装于 ~/.agents/skills/ (cocoloop→skills.sh→GitHub codeload)
+  - 目标岗位：乐鑫嵌入式原型验证(85%匹配) + ESP-IDF SDK(75%)
+  - 占位符：[请填写] 手机号
