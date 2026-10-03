@@ -43,4 +43,11 @@
   - GitHub 链接自动接线（github.com/yfzhang-true/flowio-cn）
   - Leo 项目助手自带 "Show me the BOM / How do I assemble this?" 按钮
 - **异步待完成（平台侧处理中，稍后自查）**: Leonardo processing——① Documentation 标签内容生成 ② STEP→3D viewer 渲染（Overview 当前无 canvas）
-- **后续可选**: ① 生成合并装配体 STEP（顶+底+PCB）替换单一 case-top 主模型 ② 补 assembly-steps-en.md 到 Documentation ③ Kits 标签当前 disabled，满足条件后可探索套件上架
+- **后续可选**: ① ~~生成合并装配体 STEP~~ ✅ 已完成（2026-10-03，见下）② 补 assembly-steps-en.md 到 Documentation ③ Kits 标签当前 disabled，满足条件后可探索套件上架
+
+## 5. 装配体主模型升级（2026-10-03 第二轮）
+
+- **流水线**: kicad-cli 导出 PCB STEP（需 `KICAD9_3RD_PARTY=C:/Users/yuefe/Documents/KiCad/9.0/3rdparty`，否则 108 个 JLC 元件 3D 体缺失）→ `enclosure/make_assembly.py` 合并（离群过滤 136 个坏原点 JLC 模型）→ 装配体 **557 solids**，包围盒 95.8×80.8×19.1（与理论偏差 ≤0.11mm，断言通过）
+- **产物**: `hardware/flowio-p1/enclosure/flowio-p1-assembly.step`（**76MB**，已入 main 并 push；GitHub 提示 >50MB 建议但未拦截）；assembly STL 67MB 与 PCB 中间件 20MB 已 gitignore（可由脚本再生）
+- **平台侧待办（等 Tnkr 同步）**: ① Files 区尚未同步到含装配体的新 commit（平台轮询周期未知）② 主模型更换入口在当前 UI 未暴露（Manage 仅贡献者管理）③ Documentation 仍"No published"，作者入口未见于 UI——三者均为平台早期功能缺口，建议次日复查 Files；若长期不同步，退路 = 删除项目后按 publish-runbook 5 分钟重建（届时主 STEP 直接选装配体）
+- **运行约束备忘**: FreeCADCmd 对含中文注释脚本报"not readable"，用 `exec(compile(open(p, encoding='utf-8').read(), p, 'exec'), {'__file__': p})` 绕过
