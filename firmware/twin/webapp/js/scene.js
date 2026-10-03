@@ -8,11 +8,10 @@ import { RoomEnvironment } from "/webapp/vendor/addons/RoomEnvironment.js";
 
 const easeOutQuint = (t) => 1 - Math.pow(1 - t, 5);
 
-// 材质表 (plan Task3: 器件中性灰 / PCB 墨绿微金属 / 壳喷砂灰; 底面器件稍暗)
+// 材质表 (plan Task3: 器件中性灰 / PCB 墨绿微金属 / 壳喷砂灰)
 const PART_MATS = {
   parts_F:     { color: 0xb9bcc2, roughness: 0.50, metalness: 0.10, env: 0.85 },
   pcb:         { color: 0x0f3d2a, roughness: 0.65, metalness: 0.25, env: 0.75 },
-  parts_B:     { color: 0x8f939a, roughness: 0.50, metalness: 0.12, env: 0.70 },
   case_top:    { color: 0x9a9a9e, roughness: 0.55, metalness: 0.20, env: 0.90 },
   case_bottom: { color: 0x8f8f93, roughness: 0.55, metalness: 0.20, env: 0.80 },
 };
@@ -71,7 +70,7 @@ export async function createScene(canvas, onPartClick = () => {}) {
   // ── STL 装配 (assembly.json 同源) ──────────────────────────────
   const man = await (await fetch("/api/board/assembly")).json();
   if (!man || !Array.isArray(man.parts) || !man.parts.length) throw new Error("装配清单为空");
-  const bb = man.bbox_mm || [95.8, 80.8, 19];
+  const bb = man.bbox_mm || [95.8, 80.8, 29.5];   // case_geom.BBOX_MM 同源
   const center = new THREE.Vector3(bb[0] / 2, bb[1] / 2, bb[2] / 2);
 
   const loader = new STLLoader();

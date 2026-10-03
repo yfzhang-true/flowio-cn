@@ -1,60 +1,56 @@
 # -*- coding: utf-8 -*-
 """FLOWIO-P1 合并装配体 — PCB(含元件) + case-bottom + case-top -> 单一 STEP/STL.
-运行: E:/FreeCAD/bin/FreeCADCmd.exe make_assembly.py   (工作目录 = 本目录的上一级仓库根)
-输出: flowio-p1-assembly.step / flowio-p1-assembly.stl
-坐标系: 与 make_case.py 相同 (板左下角原点, x→右 y→上, z→高).
-  KiCad STEP 帧: 板 XY 平面, Y∈[-75,0] (y 已取负), Z 厚度向上.
-  变换: (x_k, y_k, z_k) -> (x_k+OX, -y_k+OX, z_k+Z_BOARD), 即 Y 翻转 + 平移.
-  板底面落位: Z_BOARD = WALL + PH = 2.4 + 5.0 = 7.4 (铜柱顶).
+运行: E:/FreeCAD/bin/python.exe hardware/flowio-p1/enclosure/make_assembly.py
+输出: flowio-p1-assembly.step / flowio-p1-assembly.stl (gitignore, 按需再生)
+
+坐标系: 壳系 (case_geom 单一真相).
+  KiCad STEP 帧: 板 XY 平面, Y∈[-75,0] (y 已取负), Z 厚度向上。
+  变换: (x_k, y_k, z_k) -> (x_k+OX, -y_k+OX, z_k+Z_BOARD), 即 Y 翻转 + 平移,
+        与 case_geom.board_to_case 同映射 (J10/J2/J1 三锚点已在 make_meshes 验证)。
+  板底面落位: Z_BOARD = WALL + PH = 7.4 (铜柱顶; 2026-10-03 装配栈统一)。
+  旧版 Y_FLIP 可切换分支已删: 映射经锚点+包围盒双重验证后不再需要人工目测选择。
 """
 import os
+import sys
+
 import FreeCAD as App
 import Part, Mesh
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-REPO = os.path.dirname(HERE)                            # .../hardware/flowio-p1
+sys.path.insert(0, HERE)
+import case_geom as G
+
+REPO = os.path.dirname(HERE)                           # .../hardware/flowio-p1
 PCB_STEP = os.path.join(REPO, "fab", "flowio-p1.step")
 
-# 与 make_case.py 一致的常量
-BW, BH = 90.0, 75.0
-WALL, OX = 2.4, 2.9
-PH = 5.0
-OW, OH = BW + 2 * OX, BH + 2 * OX          # 95.8 x 80.8
-Z_BOARD = WALL + PH                          # 7.4
-TOTAL_HZ = 13.5 + 1.6 + 1.5 + WALL          # 19.0 预期总高
-Y_FLIP = True                                # 预览若端子排未贴底边, 改 False 重跑
 
 def load_step(path):
     sh = Part.Shape()
     sh.read(path)
     return sh
 
-# ---------- 1. PCB: 离群过滤 ----------
+
+# ---------- 1. PCB: 离群过滤 (坏原点 JLC 模型) ----------
 pcb = load_step(PCB_STEP)
-solids = pcb.Solids
 keep, dropped = [], 0
-for s in solids:
+for s in pcb.Solids:
     b = s.BoundBox
     cx, cy = (b.XMin + b.XMax) / 2, (b.YMin + b.YMax) / 2
-    # 板区 X∈[0,90] Y∈[-75,0]; 容差 25mm 吸收连接器出脚
-    if -25 <= cx <= 115 and -100 <= cy <= 25:
+    if -25 <= cx <= 115 and -100 <= cy <= 25:          # 板区 X∈[0,90] Y∈[-75,0] ±25 容差
         keep.append(s)
     else:
         dropped += 1
 print("ASSEMBLY PCB solids: keep %d / drop %d (outlier)" % (len(keep), dropped))
 pcb_kept = Part.makeCompound(keep)
 
-# ---------- 2. 变换到外壳坐标系 ----------
-if Y_FLIP:
-    m = App.Matrix(1, 0, 0, 0,
-                   0, -1, 0, 0,
-                   0, 0, 1, 0,
-                   OX, OX, Z_BOARD)
-else:
-    m = App.Matrix(1, 0, 0, 0,
-                   0, 1, 0, 0,
-                   0, 0, 1, 0,
-                   OX, OX + BH, Z_BOARD)
+# ---------- 2. 变换到壳坐标系 (锚点已验证的定稿映射, 无分支) ----------
+# 注意: FreeCAD Matrix 的平移在第 4 列 (列向量约定, 已用最小实验验证):
+# 旧版把 (OX,OX,Z_BOARD) 放在第 4 行 -> 平移从未生效, PCB 一直贴错墙穿底板,
+# 而旧断言 (总包围盒 ±2.0) 看不见此错误 — 本次以 pcb 自身包围盒断言拦截。
+m = App.Matrix(1, 0, 0, G.OX,
+               0, -1, 0, G.OX,
+               0, 0, 1, G.Z_BOARD,
+               0, 0, 0, 1)
 pcb_placed = pcb_kept.transformGeometry(m)
 
 # ---------- 3. 合并 ----------
@@ -62,17 +58,30 @@ bottom = load_step(os.path.join(HERE, "case-bottom.step"))
 top = load_step(os.path.join(HERE, "case-top.step"))
 asm = Part.makeCompound([bottom, top, pcb_placed])
 
-# ---------- 4. 断言 ----------
-bb = asm.BoundBox
-dx, dy, dz = abs(bb.XLength - OW), abs(bb.YLength - OH), abs(bb.ZLength - TOTAL_HZ)
-print("ASSEMBLY bbox: %s  (dx=%.2f dy=%.2f dz=%.2f)" % (bb, dx, dy, dz))
-assert dx <= 2.0 and dy <= 2.0, "包围盒 X/Y 超差"
-assert dz <= 2.5, "包围盒 Z 超差"
-assert len(asm.Solids) >= 3, "solid 数不足"
-# 板体不应穿出顶盖: PCB 最高点 <= 总高
+# ---------- 4. 断言 (收紧: 旧 ±2.0/±2.5 -> 分项核对) ----------
+# 已知模型噪声: WJ500V 封装 offset(-0.3,0.5,3.5) + 模型内部原点 -> 实测端子体
+# 相对焊盘中心 +3.15mm (J17 体尖探入右壁 ~1.5mm), z 抬升 3.5 (真件高度或在 ~14)。
+# 设计真相 = pos.csv 居中 (case_geom 槽位/孪生盒体自洽); 板到货后实测再定槽位微调。
 pb = pcb_placed.BoundBox
-print("ASSEMBLY pcb placed z: %.2f .. %.2f (case total %.1f)" % (pb.ZMin, pb.ZMax, TOTAL_HZ))
-assert pb.ZMax <= TOTAL_HZ + 1.0, "元件超出外壳高度"
+print("ASSEMBLY pcb placed: x[%.2f..%.2f] y[%.2f..%.2f] z[%.2f..%.2f]"
+      % (pb.XMin, pb.XMax, pb.YMin, pb.YMax, pb.ZMin, pb.ZMax))
+assert abs(pb.XMin - G.OX) < 0.3 and abs(pb.YMin - G.OX) < 0.3, "PCB 原点落位超差 (平移未生效?)"
+assert pb.XMax <= G.OX + G.BW + 3.6, "PCB X 右探超限 (>3.6 = 新增模型偏移)"
+assert pb.YMax <= G.OX + G.BH + 0.3, "PCB Y 落位超差 (映射翻转?)"
+assert abs(pb.ZMin - G.Z_BOARD) < 0.3, "PCB 板底必须落在铜柱顶 Z_BOARD"
+assert pb.ZMax <= G.Z_CEIL + 0.3, "元件超出内腔顶 (装不下)"
+
+bb = asm.BoundBox
+dx = abs(bb.XLength - G.OW); dy = abs(bb.YLength - G.OH); dz = abs(bb.ZLength - G.OUTER_H)
+print("ASSEMBLY bbox: %s  (dx=%.2f dy=%.2f dz=%.2f)" % (bb, dx, dy, dz))
+assert dx <= 0.3 and dy <= 0.3 and dz <= 0.3, "装配体包围盒超差"
+assert len(asm.Solids) >= 500, "solid 数不足 (PCB 元件缺失?)"
+
+# 侧壁干涉: JLC 模型自带偏移噪声 (J17 +3.15 探壁 ~260mm^3), 阈值据此放宽;
+# 严格的零干涉校验在 test_assembly_freecad.py 用 pos.csv 盒子模型 (设计真相) 执行。
+inter_b = bottom.common(pcb_placed)
+print("ASSEMBLY 下壳∩PCB 体积 = %.3f mm^3 (含模型偏移噪声, 阈值 400)" % inter_b.Volume)
+assert inter_b.Volume < 400.0, "PCB 与下壳干涉超限"
 
 # ---------- 5. 输出 ----------
 out_step = os.path.join(HERE, "flowio-p1-assembly.step")

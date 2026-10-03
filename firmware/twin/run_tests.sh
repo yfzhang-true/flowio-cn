@@ -46,16 +46,28 @@ curl -s -m 2 -X POST "$BASE/api/reset" >/dev/null
 export TWIN_URL="$BASE"
 
 rc=0
-echo; echo "═══ 1/4 静态冒烟 check.js ═══"
+echo; echo "═══ 1/5 静态冒烟 check.js ═══"
 $NODE_BIN check.js gui.html || rc=1
 
-echo; echo "═══ 2/4 接口测试 test_api.sh ═══"
+echo; echo "═══ 2/5 CAD 装配测试 L1/L2/L3 (纯 python) ═══"
+ENC=../../hardware/flowio-p1/enclosure
+"$PY" "$ENC/test_assembly.py" || rc=1
+
+echo; echo "═══ 2b/5 CAD 干涉测试 L4 (FreeCAD, 探测到才跑) ═══"
+FC_PY="E:/FreeCAD/bin/python.exe"
+if [ -x "$FC_PY" ]; then
+  "$FC_PY" "$ENC/test_assembly_freecad.py" || rc=1
+else
+  echo "（SKIP: 未找到 $FC_PY）"
+fi
+
+echo; echo "═══ 3/5 接口测试 test_api.sh ═══"
 bash test_api.sh || rc=1
 
-echo; echo "═══ 3/4 单元测试 test_gui.js ═══"
+echo; echo "═══ 4/5 单元测试 test_gui.js ═══"
 $NODE_BIN test_gui.js || { [ $? -eq 2 ] && echo "（SKIP）" || rc=1; }
 
-echo; echo "═══ 4/4 功能测试 test_e2e.js ═══"
+echo; echo "═══ 5/5 功能测试 test_e2e.js ═══"
 $NODE_BIN test_e2e.js || rc=1
 
 echo; echo "═══ 完成（退出码 $rc）═══"
