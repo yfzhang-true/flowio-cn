@@ -238,3 +238,88 @@
   howpublished = {教学套件资料包, 本地存档 \texttt{E:/FLOWIO-外部参考/\_ref/【艾谷科技】ESP32S3入门视频教程资料/}},
   year         = {2024}
 }
+
+% ---------- 资源纳编（2026-10-03）：器件规格书 + 开发板资料 + FlowIO 官方资产 ----------
+% 转录纪律：题名/厂商/年份仅取文件名与 PDF 首页（或文档元数据）可核信息，版本号无据不编；
+% 厂商名未见于文档者不录 author（如 0520D/0520F 规格书与两份连接器档案）。
+
+@misc{valve-0520d-ds,
+  title        = {0520D 系列电磁阀规格书（常闭二通，DC 4.5V）},
+  howpublished = {Datasheet（中文），本地存档 \texttt{资源/器件规格书/电磁阀0520D规格书4.5V.pdf}},
+  note         = {首页可核参数：工作电压 DC 4.1--5.0V、线圈 240\,mA/1.6\,W、孔径 0.45\,mm、介质空气}
+}
+
+@misc{valve-0520f-ds,
+  title        = {0520F 系列电磁阀规格书（两位三通，DC 4.5V）},
+  howpublished = {Datasheet（中文），本地存档 \texttt{资源/器件规格书/电磁阀0520F两位三通4.5V规格书.pdf}},
+  note         = {首页可核参数：工作电压 DC 4--5.5V、线圈 240\,mA/1.6\,W、孔径 0.45\,mm、介质空气}
+}
+
+@misc{xgzp6897d-v11,
+  author       = {{CFSensor}},
+  title        = {XGZP6897D-C 压力传感器手册（V1.1）},
+  howpublished = {Datasheet, \texttt{www.CFSensor.com}; 本地存档 \texttt{资源/器件规格书/XGZP6897D-C压力传感器(V1.1).pdf}},
+  note         = {首页可核：表压量程分档 $-100$\,kPa$\sim$+200\,kPa、SOIC8、I\textsuperscript{2}C 数字输出}
+}
+
+@misc{xgzp6897d-v25,
+  author       = {{CFSensor}},
+  title        = {XGZP6897D 压力传感器数据手册（V2.5）},
+  howpublished = {Datasheet, 同系列 \texttt{xgzp6897d-v11} 之升级版; 本地存档 \texttt{资源/器件规格书/datasheets/XGZP6897D\_数据手册\_V2.5.pdf}}
+}
+
+@misc{ao3400a-ds,
+  author       = {{Alpha and Omega Semiconductor}},
+  title        = {AO3400A 30V N-Channel MOSFET},
+  howpublished = {Datasheet, Rev 3, \texttt{www.aosmd.com}; 本地存档 \texttt{资源/器件规格书/数据手册/AO3400A\_datasheet.pdf}},
+  year         = {2011}
+}
+
+@misc{cdrh103rnp-ds,
+  title        = {CDRH103RNP-6R8NC-B 功率电感规格书（SMD Power Inductor）},
+  howpublished = {Datasheet, 嘉立创商城商品档案 C167253; 本地存档 \texttt{资源/器件规格书/数据手册/}},
+  note         = {磁屏蔽铁氧体鼓芯，约 $10.5\times10.3\times3.1$\,mm}
+}
+
+@misc{dc005-ds,
+  title        = {DC-005 型 DC 电源连接器规格书},
+  howpublished = {Datasheet（工程图），嘉立创商城商品档案 C431533; 本地存档 \texttt{资源/器件规格书/数据手册/}}
+}
+
+@misc{xh254-ds,
+  author       = {{讯普电子（XunPu）}},
+  title        = {WAFER-XH2.54 线对板针座规格书},
+  howpublished = {Datasheet, \texttt{www.xunpudianzi.com}; 嘉立创商城商品档案 C5359632; 本地存档 \texttt{资源/器件规格书/数据手册/}},
+  year         = {2022}
+}
+
+@misc{ch340n-ds,
+  author       = {{南京沁恒微电子（WCH）}},
+  title        = {CH340 系列 USB 转串口芯片数据手册（中文）},
+  howpublished = {Datasheet, \texttt{https://wch.cn}; 本地存档 \texttt{资源/器件规格书/数据手册/CH340N\_datasheet.pdf} 与 \texttt{CH340\_family\_CH340DS1.pdf}},
+  note         = {覆盖 N/E/K 等封装的引脚级契约（本书原理图修正 \#10/\#12 的核对依据）}
+}
+
+@misc{devkitc1-sch,
+  author       = {{Espressif Systems}},
+  title        = {{ESP32-S3-DevKitC-1} 原理图（V1.1）},
+  howpublished = {Schematic, 图纸日期 2022-04-13; 本地存档 \texttt{资源/开发板资料/SCH\_ESP32-S3-DevKitC-1\_V1.1\_20221130.pdf}},
+  year         = {2022},
+  note         = {本书原理图 80\% 继承的设计基线（CP2102N 下载通路、双 USB 二极管或门、SGM2212 LDO）}
+}
+
+@misc{flowio-arduino-lib,
+  author       = {{Shtarbanov, Ali (FlowIO Project)}},
+  title        = {FlowIO Arduino Library},
+  howpublished = {Software library archive（发布包 2024.9.28 / 2024.11.11 / 2026.03.23）, \texttt{softrobotics.io}; 本地存档 \texttt{FlowIO-Arduino-Libraries-master/}},
+  year         = {2026},
+  note         = {仅作 API 形态对照，本书不摘录其源码实现}
+}
+
+@misc{flowio-3mf-set,
+  author       = {{Shtarbanov, Ali (FlowIO Project)}},
+  title        = {FlowIO 官方 3MF 结构件集（23 件）},
+  howpublished = {3D model files (3MF), \texttt{softrobotics.io}; 本地存档 \texttt{资源/官方参考/official-3mf/}},
+  year         = {2021},
+  note         = {含 Main/S/M/L 泵模块、TubeGuide、ValveCap、ValvePlug；模型元数据创建 2020-12-16、修改 2021-09-16}
+}
