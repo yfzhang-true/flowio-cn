@@ -10,7 +10,7 @@
 ## 1. 现状审计（本轮程序取证）
 
 ### 1.1 朝向正确性没有机器可读来源
-P1 的 15 个对外连接器（J1 DC005 / J2 USB-C / J5-J8 4P×4 / J9,J18,J19 4P×3 / J10-J17 2P×8）
+P1 的 17 个对外连接器（J1 DC005 / J2 USB-C / J5-J8 4P×4 / J9,J18,J19 4P×3 / J10-J17 2P×8）
 物理上全部朝外（由侧槽吻合反推证实），但这是**手工布局的巧合正确**：
 - pos.csv 只有 (x, y, rot)，无端口法向语义；
 - 本轮审计脚本试算朝向时，基准方向只能靠猜（猜错 5/11）——**没有权威数据源**；
@@ -60,8 +60,8 @@ Z-Height = 7mm**（模型显示 10.4）。模型普遍虚高 3~4mm——当前�
 `devices.yaml`（JLC 真实尺寸+端口语义）+ `device_geom.py`（OBB/端口射线/凸包，
 基于 trimesh）+ FCL `CollisionManager` 碰撞/净空/（阶段 2）CCD + `networkx`
 关系图（网表电气边+空间边）+ L5 测试层。
-- 不引 RL/GPU 求解器（UCSD 精读结论：优化好的 SA/规则 ≥ RL 且 1/4 资源；33 类
-  器件规模更不需要）；
+- 不引 RL/GPU 求解器（UCSD 精读结论：优化好的 SA/规则 ≥ RL 且 1/4 资源；38 行
+  BOM 的器件规模更不需要）；
 - VLSI 引擎（DREAMPlace/OpenPARF/CT）作为**评分函数与约束形式化**的思想来源，
   不作运行时依赖；
 - FCL 归档风险已由 Windows wheel 实测解除（0.7.0.11）。
@@ -72,7 +72,7 @@ Z-Height = 7mm**（模型显示 10.4）。模型普遍虚高 3~4mm——当前�
 ## 4. 方案 A 设计
 
 ### D1 器件数据层 `enclosure/devices.yaml`
-每器件（33 唯一行 × 字段）：
+每器件（bom-jlc.csv 实测 38 唯一行 × 字段）：
 ```yaml
 - ref: J10                    # 或 ref_group: [J10..J17]
   lcsc: C8465                 # bom-jlc.csv 键

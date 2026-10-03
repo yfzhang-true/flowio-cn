@@ -10,16 +10,16 @@
 `docs/research/2026-10-03-baseline-reading.md`（精读笔记与落地映射表）。
 
 ## T1 器件数据层（~1 次会话）
-1. `tools/ingest_device_dims.py`：读 `bom-jlc.csv` 33 行 C 号 → jlcpcb MCP
+1. `tools/ingest_device_dims.py`：读 `bom-jlc.csv` 38 行 C 号 → jlcpcb MCP
    → 抽取 Height Above Board / 长宽 / 安装朝向类 / datasheet URL → 生成
    `enclosure/devices.yaml` 骨架。
-2. 人工钉 15 个连接器的 `port.dir_local`（datasheet 一次定锚，来源写注释）。
-3. **测试先行**：`test_device_geom.py::test_schema` —— 33 行全覆盖、字段类型、
+2. 人工钉 17 个连接器的 `port.dir_local`（datasheet 一次定锚，来源写注释）。
+3. **测试先行**：`test_device_geom.py::test_schema` —— 38 行全覆盖、字段类型、
    EDGE_OUT 必有 port.dir_local 与 exit_z。先红后绿。
 
 ## T2 几何核（trimesh+FCL，venv-cad 正式化）
-1. `tools/venv-cad` 建仓内说明 + `requirements-cad.txt`（python-fcl/trimesh/
-   networkx/scipy）；run_tests.sh 探测该解释器。
+1. ✅ 环境已就绪（2026-10-03 整合时完成）：`tools/venv-cad` 已建并冒烟通过、
+   `requirements-cad.txt` 已提交；run_tests.sh 探测该解释器在 T7 接线。
 2. `device_geom.py`：`obb()`（JLC 构盒首选 / STEP→oriented_bounds 校验）、
    `port_ray()`、`hull()`；`CollisionManager` 注册 case STL+器件体。
 3. 测试：J10 port_ray·(+Y 壁法向) > cos45°；相交/分离盒冒烟已过的等价断言；
@@ -31,7 +31,8 @@
 2. `device_graph.py`：电气边 + 空间边（EDGE_OUT→槽，槽清单 import case_geom）。
 3. `slots_satisfied()`：`minimum_weight_full_matching`（权=端口射线到槽中心距离）；
    flows 拓扑表降级为交叉校验（不一致即红）。
-4. 测试：15 连接器↔15 槽完美匹配；人为删槽必红。
+4. 测试：17 连接器↔17 槽（9 侧槽 + 8 端子槽；角部 relief 为附属几何不计槽）完美
+   匹配；人为删槽必红。
 
 ## T4 钻孔/禁布层
 1. `drl.py` 全刀径段解析 → 孔位+孔径表；courtyard 阶段 1 用 pos+OBB 替代。
@@ -62,5 +63,6 @@ devices.yaml）→ M2-2 布局约束（域亲和/EDGE_OUT/气口阵列）→ M2-
 
 ## 依赖与风险
 - python-fcl Windows wheel 已实测（0.7.0.11）；trimesh 克隆损坏已弃，读 pip 版源码；
-- aminer MCP 持续 no data —— 论文已本地化，后续检索走 arXiv API/WebSearch；
+- aminer MCP 可用但仅限三通道（title 短片段 / person / recommend；search_paper 的
+  keyword/长短语恒空勿用）——后续文献检索照此姿势；
 - 壳收紧改 3D 打印件尺寸 —— 已获用户批准（板到货实测二次校验）。
