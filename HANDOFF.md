@@ -188,5 +188,5 @@ state api=1.2 且全 payload 无 leak 字样；assembly parts=5、bbox_mm=[95.8,
 - `book/`：ElegantBook v4.7 模板（CTAN 开源）+ main.tex + content/ch11-acceptance.tex（验收章先行，与产品验收同步产出图源）+ figures/（v2 验收截图 4 张已入）
 - 编译：MiKTeX xelatex，`cd book && xelatex -output-directory=build main.tex` 两遍，main.pdf 已出
 - 计划：章 11（验收）随回板验收同步写；其余章按 12 章骨架（见 2026-10-02 会话）待用户重启指令
-- JLC 下单策略更新：板 5 片（制板最低）+ **贴装仅 2 片**（主力+备用），费用 ≈360-720 元（README-jlc-order.md 已改）
+- JLC 下单策略更新：板 5 片（制板最低）+ **贴装仅 2 片**（主力+备用），费用 ≈360-720 元（执行口径，板 5 装 2，HANDOFF 记录值；README-jlc-order.md §3 载"全贴 5 片"估算 550-1150，两口径并列，书稿 ch05 表 tab:fab-cost 同）
 - 验收×专著一体化已落地：36 张工单 `book/tickets/A*.yaml`（双产物=BRINGUP 勾选+书稿素材，`python book/tools/ticket.py report` 看进度：pass 6/pending 30）+ 书稿 12 章骨架（ch3/4/11 实文，xelatex 22 页零错）+ BRINGUP 九章已注"对应工单"行；下一步=回板执行 A2xx 工单

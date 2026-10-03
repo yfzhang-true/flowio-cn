@@ -6,7 +6,7 @@
 \section{设计基线：80\% 继承与总体拓扑}
 \label{sec:sch-baseline}
 
-原理图以 ESP32-S3-DevKitC-1 官方原理图为 baseline：模组连接、EN 复位电路（RC+按钮）、strapping 偏置、自动下载（SS8050$\times$2）、USB 差分对与 ESD 全部继承，约占 80\%；FLOWIO-CN 特有的 8 路 AO3400 阀驱动、TCA9548A 五通道 I2C、五路 XH2.54 传感器座、WS2812B 状态灯与 12 个测试焊盘为新增。
+原理图以 ESP32-S3-DevKitC-1 官方原理图为 baseline~\cite{ESP32S3DS}：模组连接、EN 复位电路（RC+按钮）、strapping 偏置、自动下载（SS8050$\times$2）、USB 差分对与 ESD 全部继承，约占 80\%；FLOWIO-CN 特有的 8 路 AO3400 阀驱动、TCA9548A 五通道 I2C、五路 XH2.54 传感器座、WS2812B 状态灯与 12 个测试焊盘为新增。
 
 电源拓扑（修正后）如下：DC-005 座（5V/3A）与 USB-C VBUS 各经一颗肖特基二极管做 Diode-OR 汇入 5V 共用轨；5V 轨经 TPS54331DR Buck 降至 3.3V/3A，供 ESP32-S3、TCA9548A、CH340K、WS2812B 与五路传感器；8 路 AO3400A 直接驱动 7 阀 + 1 泵。阀 GPIO 分配为 4/5/6/7/10/11/12/21，I2C 主总线在 GPIO8/9（各 4.7\,k$\Omega$ 上拉），WS2812B 在 GPIO48。
 

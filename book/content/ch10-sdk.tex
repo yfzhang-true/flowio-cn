@@ -45,7 +45,7 @@ def crc8(data: bytes) -> int:
     return crc
 
 
-def encode(cmd, ports: int = 0, pwm: int = 0) -> bytes:
+def encode(cmd: _t.Union[str, int], ports: int = 0, pwm: int = 0) -> bytes:
     """构造 5 字节帧（等价 proto.c ``pn_proto_build``）。
 
     :param cmd:   单字符 str（如 ``'+'``）或命令字节 int（如 CMD_INFLATE）

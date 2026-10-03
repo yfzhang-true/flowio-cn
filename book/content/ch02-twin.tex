@@ -79,7 +79,7 @@ v2 重构（\texttt{PHYSICS-SPEC.md}）的原则是\textbf{每条规律给出文
 v2 的每个 50\,ms tick 做四件事：容积合成、孔口流量求和、多变定律积分、传感器钳位。核心代码（\texttt{twin\_api.c}，注释为源码原有）：
 
 \begin{lstlisting}[language=C, basicstyle=\small\ttfamily, breaklines=true,
-  caption={twin\_api.c 物理积分核心：孔口流量、choked 钳位与多变定律}]
+  caption={twin\_api.c 物理积分核心：孔口流量、choked 钳位与多变定律（节选，泄漏项从略）}]
 float V = V_MANIFOLD_L + popcount(ports) * V_PORT_L;   /* V = V_m + n·V_p（L） */
 float P = p + P_ATM_KPA;          /* 表压 -> 绝对压 */
 float net_q = 0.f;                /* 净流量 L/s，充为正 */
@@ -218,7 +218,11 @@ BOARD_PARAMS = {
     "vout3v3": 3.269,  # [实测] buck 标称输出
     "load_reg": 0.012, # [仿真] buck 负载调整率 (V/A)
     "i_pump": 0.35,    # [假设] 泵电机平均电流
-    "theta": {"cpu": 35.0, "buck": 130.0, "mos": 350.0},  # [手册] 热阻 ℃/W
+    "theta": {         # [手册] 热阻 ℃/W
+        "cpu": 35.0,
+        "buck": 130.0,
+        "mos": 350.0,
+    },
 }
 BUCK_EFF = 0.876      # [仿真] buck 效率
 \end{lstlisting}
@@ -251,7 +255,7 @@ BUCK_EFF = 0.876      # [仿真] buck 效率
     \texttt{POST /api/board/sim} & 参数重算：改元件值即时重跑四电路仿真 \\
     \texttt{GET /api/board/sim/presets} & 预设参数集（BOM 实值 / 手册 / 假设三档标签） \\
     \texttt{GET /api/board/assembly} & 结构件清单（3D 爆炸视图数据源，第~\ref{ch:enclosure} 章） \\
-    \texttt{GET/POST /api/time} & 孪生时间控制（暂停/倍速——真机没有的调试自由度） \\
+    \texttt{POST /api/time} & 孪生时间控制（暂停/倍速——真机没有的调试自由度） \\
     \texttt{POST /api/record} + \texttt{replay} & 场景录制回放：一次复现，永远复现 \\
     \texttt{GET /api/board/history/export} & 遥测 CSV 导出（对拍数据就地落盘） \\
     \bottomrule

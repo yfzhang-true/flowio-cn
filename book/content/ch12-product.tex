@@ -1,11 +1,71 @@
 \chapter{产品化：标定、精度与路线}
 \label{ch:product}
 
-\section{Phase CAL 六项对拍}
-A301--A306：改 \texttt{BOARD\_PARAMS} 与 \texttt{PHYSICS} 常数后，孪生曲线与实测曲线叠图——阀电流、电源效率、温升、充气升压、真空死点、闭环精度六个维度。
+前三章把"验收"定义成一件可执行的事：上篇六张软件工单已经清账，下篇三十张硬件与标定工单在等一块回板的 P1（第~\ref{ch:acceptance} 章）。本章是全书的最后一站，回答"验收之后是什么"。第一节展开 Phase CAL 六项对拍——实测数据回流孪生、逐维度出叠图的标定闭环；第二节把六张叠图汇成一份数字孪生精度报告，即第~\ref{ch:twin} 章"偏差本身就是交付物"承诺的兑现，也是第~\ref{ch:acceptance} 章工单 A306 的终点；第三节交代实施计划里明确"本期不做"的遗留路线图五项（板级孪生设计规格书 \S11.4、HANDOFF 记档）：OTA 升级、Web API 多设备同步、SDK BLE 传输、真机--孪生 HIL 对拍、治疗报表产品化——逐项给出\textbf{现状、方案与门槛}。这五项无一缺失素材：每一项的契约或数据底座都已在前面各章落地，它们排进 P2 的理由只有两个——需要真硬件，或需要一次独立的产品化决策。
 
-\section{数字孪生精度报告}
-对拍偏差的量化呈现：产品级的"模型可信度"文档，是 FLOWIO-CN 区别于普通开源套件的核心卖点。
+\section{Phase CAL 六项对拍：实测数据回流孪生}
+\label{sec:product-cal}
 
-\section{路线图}
-P2 方向：更多执行器通道、无线同步、批量产线标定工装；以及从单板到整机的供应链收敛。
+标定工单 A301--A306 是硬件数据的\textbf{二次消费}。执行前提是第~\ref{ch:acceptance} 章下篇的校准先行：A211--A215 六项电气校准把 \texttt{BOARD\_PARAMS} 的阀线圈 $R/L$、$R_\text{DS}$、ESR、效率与热阻逐个换成实测值，A216--A218 泵三实验把 $P_R$、$P_\text{min}$、$C_\text{pump}$ 从"借值"升为"实测"（第~\ref{ch:twin} 章 \S\ref{sec:twin-calib}）——黄徽章转绿之后，对拍才有意义：拿"理论值"对拍真机，量化的是假设的误差；拿"实测值"对拍真机，量化的才是模型的误差。六个维度各出一张"孪生曲线 vs 实测曲线"叠图（表~\ref{tab:product-cal}），证据统一为 CSV（\texttt{book/data/}）加叠图（\texttt{book/figures/}），由九步工单动线归档（第~\ref{ch:acceptance} 章 \S\ref{sec:acc-workflow}）。
+
+\begin{table}[htbp]
+  \centering
+  \caption{Phase CAL 六项对拍（工单 A301--A306；每项证据=csv + plot）}
+  \label{tab:product-cal}
+  \begin{tabular}{llp{6.8cm}}
+    \toprule
+    工单 & 对拍维度 & 数据来源与看点 \\
+    \midrule
+    A301 & 阀驱动电流曲线 & A211 实测 $R/L$ 写回后，开通 $\tau_\text{on}\approx1.78$\,ms 与关断 SS14 续流钳位（第~\ref{ch:firmware} 章非对称模型）逐段叠合——形状对不对，这一张图终审 \\
+    A302 & 电源效率/纹波 & A214 四线法实测对照 \texttt{sim\_engine} buck（仿真基准 87.6\%@3A、纹波 $\sim$1\,mVpp）与 \texttt{board\_model} 动态损耗分解 \\
+    A303 & 热学温升 & A215 红外热像修正 $\theta_{ja}$（CPU 35 / buck 130 / MOS 350\,$^\circ$C/W）后，长跑温升曲线对照一阶热惯性模型 \\
+    A304 & 充气升压曲线 & A218 实验 C 的 CSV 拟合 $C_\text{pump}$，对照 FlowIO 文档级参照（2\,s$\to$19 / 4\,s$\to$35\,kPa）与孪生时标 \\
+    A305 & 真空死点曲线 & A217 实验 B 的渐近值验证 $-53.3$\,kPa 阀窗假设（$\max$(泵 $-58$, 阀 $-53.3$)） \\
+    A306 & 闭环精度 & A219 的 \texttt{G} 闭环到压实验：超调、稳态差、超时率三项对照孪生闭环；并汇总前五张叠图 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+这张表有一条隐含的排序纪律：A301--A303（电与热）只依赖 A211--A215，A304--A306（气与闭环）还要等执行器到货与泵三实验——回板不等于开工，\textbf{校准链走完才有对拍的入场券}。六张叠图全部落袋后，本节的六行表格就从"计划"变成"实录"，各自补上实测列与偏差列——素材管线（图入 \texttt{book/figures/}、数入 \texttt{book/data/}、本章增引）正是第~\ref{ch:acceptance} 章"一张工单、两份产物"机制在本章的延续。
+
+\section{数字孪生精度报告：模型可信度的量化文档}
+\label{sec:product-report}
+
+六张叠图是原料，精度报告是产品。它回答一个白牌客户与审稿人都会问、而普通开源套件从不回答的问题：\textbf{这台设备的数字孪生，可信到什么程度？}第~\ref{ch:dt-theory} 章引陶飞团队综述时说过，数字孪生的领域级挑战之一就是"模型可信度"~\cite{Tao2019}——本书的答卷不是一句口号，而是一份可复核的文档：每个维度给出实测曲线与孪生曲线的偏差量化（最大偏差、稳态偏差、形状判据），偏差所用的每个常数都能沿"参数成色四档"（实测 $>$ 手册 $>$ 仿真 $>$ 假设，第~\ref{ch:twin} 章 \S\ref{sec:twin-board}）追溯到出处与工单号。
+
+报告的结构就是本书的论证结构：封面结论（六维偏差一览表）、逐节叠图与偏差表、常数溯源链（\texttt{BOARD\_PARAMS}/PHYSICS 每个改值的实验依据）、以及\textbf{已知偏差的如实登记}——比如 $C_\text{vent}$ 的演示时间尺度假设若在实验 C 后仍未重标，报告必须写明，而不是藏进平均数。这份文档同时是 PHM（预测性健康管理）的基线：\cite{Tao2019} 把 PHM 列为孪生的一级应用方向，而对拍偏差正是"健康"的定义域——日后同一台设备复测偏差超包络，即可作为性能退化的早期信号。它也是 A306 的收官产物：工单判定 \texttt{pass} 的那一刻，第~\ref{ch:twin} 章"孪生不是被抛弃的脚手架，而是与真机对拍的标尺"完成闭环。
+
+\section{遗留路线图：本期不做的五件事}
+\label{sec:product-roadmap}
+
+板级孪生设计规格书 \S11.4 与 HANDOFF 都记档了同一份"范围外路线图"，并注明\textbf{均需硬件或独立产品化决策}。把它们逐项写清是本章的义务：前向引用（第~\ref{ch:acceptance} 章 A306、第~\ref{ch:twin} 章精度报告）不能悬空在一句话上，P2 开工时也不该靠考古 git 历史找方案。五项的现状、方案与门槛见表~\ref{tab:product-roadmap}，以下按依赖关系展开。
+
+\begin{table}[htbp]
+  \centering
+  \caption{遗留路线图五项（spec 2026-10-02-p1-board-twin \S11.4 / HANDOFF 记档）}
+  \label{tab:product-roadmap}
+  \begin{tabular}{lp{5.4cm}p{4.6cm}}
+    \toprule
+    方向 & 现状（已落地） & 门槛 \\
+    \midrule
+    OTA 升级 & 版本号经 BLE DeviceInfo fw\_version (0x2A26) 暴露；WS2812 预留 OTA 紫闪模式（第~\ref{ch:firmware} 章表~\ref{tab:fw-led}）；固件现为单应用分区 & 真机 + WiFi 现场，双分区改造 \\
+    多设备同步 & 状态字预留设备 ID 字段位（第~\ref{ch:firmware} 章）；广播名 FLOWIO-P1-XXXX 按 MAC 区分（第~\ref{ch:ble} 章）；\texttt{since} 游标与 \texttt{record/replay} 可复用 & 第二块真板（贴装备用片） \\
+    SDK BLE 传输 & 传输接缝 \texttt{send/readline} 已抽象（第~\ref{ch:sdk} 章）；浏览器侧 \texttt{ble.js} 已验同一契约 & 真机 BLE；纯工作量 \\
+    HIL 对拍 & 孪生与真机共用 \texttt{pn\_core} 与同一命令文法；遥测同构；CSV 导出齐备 & 真板 + 六项校准先行 \\
+    治疗报表 & 数据底座：600\,s 历史、CSV 导出、录制回放（第~\ref{ch:twin} 章表~\ref{tab:twin-apis}） & 独立产品化决策 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\textbf{OTA 升级。}现状是"接口面已留、机制未动"：BLE DeviceInfo 服务把 \texttt{fw\_version}（0x2A26）暴露给上位机做版本比对，WS2812 状态灯的模式表里 OTA 是既定的第四模式（紫闪 1\,Hz），但固件仍是单应用分区镜像，没有 ota\_0/ota\_1 双槽。方案走 ESP-IDF 标准路径：分区表扩双 OTA 槽 + \texttt{esp\_ota\_ops} 流式写槽 + 启动确认/回滚（新固件自验证失败自动回滚旧槽），传输通道复用既有 WiFi（HTTP(S) 拉取）而非塞进 BLE 20\,B 帧——8\,MB PSRAM/16\,MB Flash 的 N16R8 对双槽镜像毫无压力。门槛是\textbf{真机与现场供电}：QEMU 能验分区切换逻辑，但"升级中断电"这类真实故障注入只能在硬件上做；升降级各过一轮、断电重启必回滚，才允许给白牌客户开这个口子。
+
+\textbf{Web API 多设备同步。}一条产线或一台康复设备不会只有一节硬件。契约侧其实早已预埋：状态字预留设备 ID 字段位（对标 FlowIO JS API 的多机语义，第~\ref{ch:firmware} 章），BLE 广播名 FLOWIO-P1-XXXX 以 MAC 尾字节区分单板；上位机侧 \texttt{server.py} 目前是单设备单实例、\texttt{/api/state} 的 \texttt{since} 游标与 \texttt{record/replay} 场景复原都是为"一份权威历史"设计的。方案是给 \texttt{server.py} 加设备注册表（串口枚举 + BLE 扫描双发现），API 按设备 ID 路由（\texttt{/api/device/\{id\}/state}），\texttt{since} 游标与录制回放逐设备隔离，前端徽章从"孪生/真机"扩展为"孪生/真机@设备号"。门槛是\textbf{第二块真板}——贴装 2 片的备用片正好当第二节点，多机语义没有两台设备就无从验收。
+
+\textbf{SDK BLE 传输。}第~\ref{ch:sdk} 章把话说满过："Python 侧经 \texttt{transport} 接缝留给 P1——契约（UUID、载荷）都已冻结，接入只是工作量而非设计题。"现状正是如此：\texttt{FlowIO(transport=...)} 只要求 \texttt{send(bytes)} 与 \texttt{readline()} 两个方法，浏览器端 \texttt{ble.js} 已对同一契约实现 CRC、20\,B 帧解析与命令帧化。方案是新增 \texttt{ble.py}（bleak 后端）：\texttt{cmd} 特征 write 即 \texttt{send}，\texttt{resp} 特征 notify 拼 \texttt{readline}，\texttt{state} 20\,B 帧走 \texttt{parseState20} 同构解析；\texttt{vectors.json} 与 \texttt{test\_protocol.py} 的四层测试网原样复用——把假传输换成 \texttt{BleTransport} 即完成回归。门槛最低：一块开着 BLE 的真板（A209 三步验过的那台），纯工作量，无设计风险。
+
+\textbf{真机--孪生 HIL 对拍。}Phase CAL 的六张叠图目前由人工执行：分别跑真机与孪生、各自导 CSV、手工叠图。HIL（hardware-in-the-loop）把这层自动化补上——孪生与真机共用 \texttt{pn\_core} 逻辑层、命令走同一 \texttt{pn\_cmd\_feed} 文法、遥测同构（第~\ref{ch:twin} 章 API v1.2 表），这些前提取全了，缺的只是\textbf{一个同步驱动器}：同一份命令脚本同时馈真机串口与孪生 DLL，按 tick 对齐双路 CSV，差值曲线与包络判定自动产出偏差报告——精度报告从"六张手绘图"升级为"一条命令可再生的流水线产物"。门槛是\textbf{真板与校准先行}：黄徽没转绿就上 HIL，对拍量化的是假设的误差（\S\ref{sec:product-cal} 的排序纪律）；此外真机 50\,ms tick 与孪生节拍的时钟漂移需要一个对齐策略，这恰是对齐器要解决的核心工程题。
+
+\textbf{治疗报表产品化。}五项里唯一"不缺硬件、缺决策"的一项。数据底座已经齐备：600\,s 环形历史与 CSV 导出（第~\ref{ch:twin} 章）、录制回放、200\,ms 双源遥测；第~\ref{ch:dt-theory} 章样本三（物理--虚拟机器人手~\cite{Singh2024}）预演过它的产品形态——白牌厂商的客户（康复科）最终要的不是压力曲线，而是\textbf{疗程数据}。方案是上位机侧的会话模型（疗程开始/结束标记）加聚合报表：压力包络与占空比统计、泵运行时长（120\,s 护栏的运行账本）、按端口分解的使用热图，导出为可归档的 PDF。它被明确划出本期，理由写在规格书里：这是\textbf{独立的产品化决策}——面向哪类科室、什么合规口径、报表算固件交付物还是上位机增值服务，都是商业问题而非工程问题；工程侧唯一要守住的底线是数据底座不被后续改动破坏，本报告不复述这些决策，只登记"数据底座已就绪"这一事实。
+
+\section*{本章小结}
+本章把"验收之后"写成三条可执行的线：Phase CAL 六项对拍让实测数据回流孪生、逐维度出叠图（A301--A306，校准链走完才有入场券）；六张叠图汇成数字孪生精度报告——每个偏差可沿参数成色四档溯源，这是本书区别于普通开源套件的核心交付物；遗留路线图五项（OTA、多设备同步、SDK BLE 传输、HIL 对拍、治疗报表）逐项交代现状、方案与门槛，其中四项卡在"需要真硬件"、一项卡在"需要产品化决策"——但它们的契约、接缝与数据底座都已在本期落地。至此全书收束：从一道孔口方程到一台可对拍、可验收、可交棒的产品，每一步都有编号、有出处、有测试。剩下的路，等板子回来接着走。

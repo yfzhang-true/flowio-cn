@@ -27,7 +27,7 @@ echo "── 合并烧录镜像"
   0x10000 build/flowio_p0.bin > /dev/null 2>&1 || { echo "✗ merge_bin 失败"; exit 1; }
 truncate -s 16M "$IMG"
 
-echo "── QEMU 启动 + CLI 冒烟（F 自检 / I 充气 / H 保压+采样 / L 泄漏检测 / S 停止）"
+echo "── QEMU 启动 + CLI 冒烟（F 自检 / I 充气 / H 保压+采样 / L 路由(=off) / S 停止）"
 for i in 1 2 3 4 5; do
   (sleep 10; printf "F\n"; sleep 5; printf "I 1 255\n"; sleep 3; printf "H 1\n"; sleep 6; printf "L\n"; sleep 2; printf "S 1\n"; sleep 2) | \
   timeout 35 "$QEMU" -M esp32s3 -m 8M \
@@ -49,7 +49,7 @@ check "valve click test"    "阀咔哒测试执行"
 check "manifold delta-P"    "汇流管 ΔP 测试执行"
 check "inflate=0"           "I 1 255 命令响应"
 check "hold_open=0"         "H 1 诊断保压响应"
-check "leak=detecting samples=0/80" "L 命令路由+采样器故障路径（QEMU 无 I2C 传感器模型→样本恒 0；int8 推理数值由 host 一致性 21/21+自测覆盖）"
+check "leak=off"            "L 命令路由（TinyML 2026-10-02 下线，cli 应答 leak=off (TinyML retired 2026-10-02)）"
 check "stop=0"              "S 1 命令响应"
 
 echo "── 结果: $pass 通过 / $fail 失败"

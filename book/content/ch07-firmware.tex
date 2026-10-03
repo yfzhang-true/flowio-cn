@@ -35,7 +35,7 @@ tests/           主机单元测试（gcc/cmake/ninja，无需 ESP-IDF）
   \end{tabular}
 \end{table}
 
-HAL 契约小得出奇——四个函数指针就把"什么是一块 FlowIO"定义完了：\texttt{valve\_write}（阀/泵占空比）、\texttt{pump\_write}、\texttt{sensor\_read}（kPa）、\texttt{now\_ms}（时基）。真机实现把它们接到 LEDC/RMT/I2C；测试的 \texttt{mock\_hal} 把它们接到内存里的假寄存器。动作层的一切语义——阀开多久了（\texttt{pn\_valve\_open\_ms}）、节能降额是否到期——都从这个 4 函数契约里长出来，因此换一个 HAL 就换一个世界，而逻辑一行不改。
+HAL 契约小得出奇——四个函数指针就把"什么是一块 FlowIO"定义完了：\texttt{valve\_write}（阀/泵占空比）、\texttt{pump\_write}、\texttt{sensor\_read}（kPa）、\texttt{now\_ms}（时基）。真机实现把它们接到 LEDC/RMT/I2C——阀与泵的引脚表登记在 \texttt{hal\_esp32.c}：4/5/6/7/10/11/12/21（GPIO，前 7 位阀、末位泵，与第~\ref{ch:schematic} 章原理图分配同源）；测试的 \texttt{mock\_hal} 把它们接到内存里的假寄存器。动作层的一切语义——阀开多久了（\texttt{pn\_valve\_open\_ms}）、节能降额是否到期——都从这个 4 函数契约里长出来，因此换一个 HAL 就换一个世界，而逻辑一行不改。
 
 \section{主机 33 测试：逻辑层的证据链}
 \label{sec:fw-tests}
@@ -87,7 +87,7 @@ $ cd firmware/tests && cmake --build build-test && ./build-test/pn_tests.exe
 \section{CLI：十三条命令的调试与验收两用}
 \label{sec:fw-cli}
 
-CLI 分发器 \texttt{pn\_core/cli.c} 从 main.c 抽出后就是双宿主共用——真机串口、虚拟设备、孪生 DLL 走同一个 \texttt{pn\_cli\_process\_line()}。表~\ref{tab:fw-cli} 是完整命令表：前九条对标 FlowIO 动作语义，后四条是本项目自己的运维入口。
+CLI 分发器 \texttt{components/pn\_core/src/cli.c} 从 main.c 抽出后就是双宿主共用——真机串口、虚拟设备、孪生 DLL 走同一个 \texttt{pn\_cli\_process\_line()}。表~\ref{tab:fw-cli} 是完整命令表：前九条对标 FlowIO 动作语义，后四条是本项目自己的运维入口。
 
 \begin{table}[htbp]
   \centering
@@ -103,7 +103,7 @@ CLI 分发器 \texttt{pn\_core/cli.c} 从 main.c 抽出后就是双宿主共用�
     \texttt{S <ports>} & \texttt{S 1} & 停止/隔离保压 \\
     \texttt{H <ports>} & \texttt{H 1} & 诊断保压（端口保持通） \\
     \texttt{O/C <ports>} & \texttt{O 7} & 只开/关端口阀 \\
-    \texttt{G <ports> <kPa> <s>} & \texttt{G 1 40 0} & 闭环充气到目标压力 \\
+    \texttt{G <ports> <kPa> <sensor>} & \texttt{G 1 40 0} & 闭环充气到目标压力（第三参为传感器号，0=汇流管） \\
     \texttt{X} & & 闭环复位（完成闩锁解除） \\
     \texttt{F} & & 三步自检（见下） \\
     \texttt{P} & & 读全部传感器（kPa） \\

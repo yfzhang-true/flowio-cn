@@ -37,7 +37,7 @@ BLE 接入的第一条设计决策写在 BLE.md \S1 第一句：\textbf{命令�
   \end{tabular}
 \end{table}
 
-两处设计取舍值得展开。\textbf{resp 特征}是 CLI 应答行（如 \texttt{inflate=0}、\texttt{state=0x0221 err=0}）的镜像——第~\ref{ch:firmware} 章讲过的 \texttt{cli\_out()} 应答挂钩（\texttt{pn\_cli\_set\_resp\_sink}）在这里落地：每条新应答存入 64 字节环形缓冲并在已订阅时 notify；未产生应答时 read 返回 \texttt{boot}。BLE 由此拿到的不是一套新协议，而是串口体验的完整平移。\textbf{Config 服务}解决的是"编译期宏没有运行时接口"的欠账：P0 的保压降额参数 \texttt{PN\_HOLD\_DEFAULT\_DUTY/\dots\_DELAY\_MS} 原是编译期常量，S5 用 4 字节 RAM 镜像补上——read 返回镜像（初值 = 宏默认 255/170/500），write 立即生效（10\,ms 节拍的 \texttt{pn\_optimize\_power} 改读 \texttt{ble\_twin\_hold\_duty()}），掉电不保存（NVS 持久化留 P1）。契约对"未完成"同样诚实：\texttt{pump\_max\_pwm} 字段预留未接线。
+两处设计取舍值得展开。\textbf{resp 特征}是 CLI 应答行（如 \texttt{inflate=0}、\texttt{state=0x0221 err=0}）的镜像——第~\ref{ch:firmware} 章讲过的 \texttt{cli\_out()} 应答挂钩（\texttt{pn\_cli\_set\_resp\_sink}）在这里落地：每条新应答存入 64 字节行缓冲（单行存储，最近一条应答）并在已订阅时 notify；未产生应答时 read 返回 \texttt{boot}。BLE 由此拿到的不是一套新协议，而是串口体验的完整平移。\textbf{Config 服务}解决的是"编译期宏没有运行时接口"的欠账：P0 的保压降额参数 \texttt{PN\_HOLD\_DEFAULT\_DUTY/\dots\_DELAY\_MS} 原是编译期常量，S5 用 4 字节 RAM 镜像补上——read 返回镜像（初值 = 宏默认 255/170/500），write 立即生效（10\,ms 节拍的 \texttt{pn\_optimize\_power} 改读 \texttt{ble\_twin\_hold\_duty()}），掉电不保存（NVS 持久化留 P1）。契约对"未完成"同样诚实：\texttt{pump\_max\_pwm} 字段预留未接线。
 
 UUID 在代码里有一个必踩的字节序坑：NimBLE 把 128 bit UUID 存成\textbf{小端字节数组}——\texttt{value[0]} 是 UUID 最低位字节（即后缀的低字节）。\texttt{ble\_twin.c} 的宏 \texttt{PN\_BLE\_UUID\_BASE\_LE(sfx)} 把后缀拼在数组头部、基址逐字节倒序排列，九个 UUID 常量由此展开；文档 \S2 表与代码宏一一对应，"表里哪个后缀"与"代码哪个常量"不会走失。
 
@@ -98,7 +98,7 @@ CRC 错的帧静默丢弃——与 \texttt{proto.c} 流式解析器同一策略�
 
 三个字段的语义都经过推敲。\textbf{压力用 i16 存 kPa$\times$10}：物理量程 $\pm100$\,kPa$\times$10 $=\pm1000$，16 位有符号数绰绰有余，整数传输免浮点；读失败的 slot 填哨兵 \texttt{0x8000}（$-32768$）——物理量程内的合法值永远到不了它，不会混淆；P0 现挂 2 只传感器，slot2--4 为 P1 预留恒 0。\textbf{tick 是 ms/100 mod 65536}：即 100\,ms 序号，接收端用它做丢帧检测与时序对齐——10\,Hz 流里 tick 不连续就知道丢了 notify。\textbf{6 字节保留恒 0}：给未来扩展开位，同时兼任帧校验——解包方检查保留字节非 0 即判非契约帧。
 
-打包纯逻辑放在 \texttt{pn\_core/ble\_frame.c}（不进 HAL，主机可测——\texttt{ble\_tests.c} 的 4 个测试就以 $\pm$压力、哨兵、保留字节违例为向量）：
+打包纯逻辑放在 \texttt{components/pn\_core/src/ble\_frame.c}（不进 HAL，主机可测——\texttt{ble\_tests.c} 的 4 个测试就以 $\pm$压力、哨兵、保留字节违例为向量）：
 
 \begin{lstlisting}[language=C, basicstyle=\small\ttfamily, breaklines=true,
   caption={ble\_frame.c 的 state\_pack / state\_unpack（摘自源码）}]

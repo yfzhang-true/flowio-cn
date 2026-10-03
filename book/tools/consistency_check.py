@@ -162,7 +162,7 @@ CONSTANTS = [
     ("orifice",     ["114.5"],                        ["book/content/ch00b*.tex"]),
     ("fee_low",     ["360"],                          ["book/content/ch05*.tex"]),
     ("fee_high",    ["720"],                          ["book/content/ch05*.tex"]),
-    ("explode_disp", ["10"],                          ["book/content/ch13*.tex"]),   # 计划原文指向 ch13（现书稿无此章）
+    ("explode_disp", ["10"],                          ["book/content/ch11*.tex"]),   # 现行映射：13 验收→ch11（原 ch13 为计划旧章号）
     ("test_count",  ["33"],                           ["book/content/ch07*.tex"]),
 ]
 

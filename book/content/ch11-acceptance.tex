@@ -6,7 +6,7 @@
 \section{上篇：数字孪生验收（已完成）}
 \label{sec:acc-sw}
 
-软件侧验收的总战场是 \texttt{firmware/twin/} 的回归矩阵：前端全链 \texttt{test\_webapp.js} 44 断言、经典版三套 \texttt{test\_gui}/\texttt{test\_gui\_p1}/\texttt{test\_e2e}（28/40/43）、API 两套 \texttt{test\_api.sh}/\texttt{test\_api\_board.sh}（50 项 + 板级全 OK）、Python 侧 \texttt{test\_sim\_engine.py}/\texttt{test\_board\_model.py}/\texttt{test\_flows.py}、固件主机 33 测试与 QEMU 冒烟、SDK \texttt{test\_protocol.py} 九用例。2026-10-02 交付日全绿（HANDOFF"前端 v2 交付"节）。六张工单各自从这张矩阵里取证，表~\ref{tab:acc-sw-overview} 先给总览，以下逐节实录。
+软件侧验收的总战场是 \texttt{firmware/twin/} 的回归矩阵：前端全链 \texttt{test\_webapp.js} 44 断言、经典版三套 \texttt{test\_gui}/\texttt{test\_gui\_p1}/\texttt{test\_e2e}（28/40/43）、API 两套 \texttt{test\_api.sh}/\texttt{test\_api\_board.sh}（43 项 + 板级 11 项）、Python 侧 \texttt{test\_sim\_engine.py}/\texttt{test\_board\_model.py}（\texttt{firmware/twin/}）与 \texttt{test\_flows.py}（\texttt{hardware/flowio-p1/enclosure/}，流拓扑同源断言）、固件主机 33 测试与 QEMU 冒烟、SDK \texttt{test\_protocol.py} 九用例。2026-10-02 交付日全绿（HANDOFF"前端 v2 交付"节）。六张工单各自从这张矩阵里取证，表~\ref{tab:acc-sw-overview} 先给总览，以下逐节实录。
 
 \begin{table}[htbp]
   \centering
@@ -175,7 +175,7 @@
   44 & 全程无页面 JS 错误 \\
 \end{longtable}
 
-矩阵之外，回归网还有三层：旧三套（\texttt{test\_gui} 28/28、\texttt{test\_gui\_p1} 40/40、\texttt{test\_e2e} 43/43）改挂 \texttt{/classic} 保证过渡版不坏；\texttt{test\_api.sh} 50/50 守住 API v1.2 端点零改动；性能用 \texttt{?debug} 浮层 60\,s rAF 采样，实测 56.8\,fps（预算 $\ge$45，headless 受 vsync 钳制，真机更高）。
+矩阵之外，回归网还有三层：旧三套（\texttt{test\_gui} 28/28、\texttt{test\_gui\_p1} 40/40、\texttt{test\_e2e} 43/43）改挂 \texttt{/classic} 保证过渡版不坏；\texttt{test\_api.sh} 43/43 守住 API v1.2 端点零改动；性能用 \texttt{?debug} 浮层 60\,s rAF 采样，实测 56.8\,fps（预算 $\ge$45，headless 受 vsync 钳制，真机更高）。
 
 \subsection{26 项目视审计：从截图到像素证据}
 \label{sec:acc-visual}
@@ -214,7 +214,7 @@
 \subsection{验收工单机制：一张工单，两份产物}
 \label{sec:acc-ticket}
 
-上篇六张工单能"验收完即写完书"，靠的是机制本身。设计规格（\texttt{2026-10-02-acceptance-book-design.md}）把 BRINGUP 的 30 个 checkbox 与书稿 12 章的素材需求合流成 36 张\textbf{验收工单}：每张是一个 YAML 文件，放在 \texttt{book/tickets/} 下、以工单号命名（\texttt{A\#\#\#.yaml}）——头部记录元数据（相位 \texttt{sw}/\texttt{hw}/\texttt{cal}、对应 BRINGUP 章节、汇入书稿章、状态、证据要求），\texttt{---} 之后是 Markdown 正文（操作步骤、实测值表、判定、素材管线指令）。一张工单完成等于两份产物落袋：BRINGUP 对应 checkbox 勾掉，书稿对应小节的图与数据就位。\textbf{fail 的工单同样入书}——"踩坑实录"专栏比 pass 更有教学价值。
+上篇六张工单能"验收完即写完书"，靠的是机制本身。设计规格（\texttt{2026-10-02-acceptance-book-design.md}）把 BRINGUP 的 checkbox 与书稿 12 章的素材需求合流成 36 张\textbf{验收工单}（BRINGUP 现有 36 个未勾 checkbox——工单生成时为 30 个，后清单扩充，以现数为准）：每张是一个 YAML 文件，放在 \texttt{book/tickets/} 下、以工单号命名（\texttt{A\#\#\#.yaml}）——头部记录元数据（相位 \texttt{sw}/\texttt{hw}/\texttt{cal}、对应 BRINGUP 章节、汇入书稿章、状态、证据要求），\texttt{---} 之后是 Markdown 正文（操作步骤、实测值表、判定、素材管线指令）。一张工单完成等于两份产物落袋：BRINGUP 对应 checkbox 勾掉，书稿对应小节的图与数据就位。\textbf{fail 的工单同样入书}——"踩坑实录"专栏比 pass 更有教学价值。
 
 管理工具 \texttt{ticket.py}（在 \texttt{book/tools/} 下，纯标准库实现，YAML 头按"一行一字段"手写格式解析、不依赖 PyYAML）用三个子命令覆盖全生命周期：
 

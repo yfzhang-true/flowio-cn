@@ -195,16 +195,17 @@ def verify_mapping(parts):
         p = refs[ref]
         x, y = p["x"], -p["y"]          # 候选映射: x=PosX, y=-PosY
         ok = abs(x - ex) < 0.01 and abs(y - ey) < 0.01
+        print("[map] %s %-28s pos=(%.1f,%.1f) -> board=(%.1f,%.1f) expect=(%.1f,%.1f) %s"
+              % (ref, p["pkg"][:28], p["x"], p["y"], x, y, ex, ey, "OK" if ok else "FAIL"))
         assert ok, "Y mapping verification failed for %s" % ref
-    print("[map] mapping FIXED: x=PosX, y=-PosY "
-          "('-PosY+75' rejected by J10/J2 checks)")
+    print("[map] mapping FIXED: x=PosX, y=-PosY ('-PosY+75' rejected by J10/J2 checks)")
 \end{lstlisting}
 
 $+75$ 翻转假设在 J10/J2 两个锚点上立刻露馅（会给出 143.5/81 这类板外坐标），被断言拒绝。三锚点、0.01\,mm 容差、失败即中止——这与第~\ref{ch:pcb} 章"目视检查抓出天线禁布区被删"是同一个信条：\textbf{凡是人推定的几何关系，都要有程序化的证伪手段}。
 
 器件几何按封装关键字查表（\texttt{H} 字典覆盖 CONN-TH、TYPE-C、WROOM、XH、SOP、CDRH 等 17 类，外加 L1 电感与 SOIC 两个别名），90° 旋转交换宽深，top 面器件自板面向上生长、bottom 面自板底向下生长；全部器件合成一个复合体再统一网格化（LinearDeflection 0.4 / AngularDeflection 0.5），逐一断言 \texttt{isSolid}。BOM 无底面器件时，\texttt{parts\_b.stl} 写入 84 字节的空二进制占位——下游加载器不需要特判。\texttt{assembly.json} 登记五部件（上壳/器件阵-顶/PCB/器件阵-底/下壳）、整机包围盒 $95.8\times80.8\times19$\,mm 与装配备注（M3 螺丝自攻入下壳铜柱）。五部件各自的爆炸位移也登记在同一文件里：上壳 $+28$\,mm、顶面器件阵 $+12$\,mm、PCB 不动、底面器件阵 $-8$\,mm、下壳 $-16$\,mm——前端爆炸滑杆从 0 拉到 100\%，装配体按这条轴线分解，装配顺序（下壳 $\to$ 板 $\to$ 器件 $\to$ 上壳）即拆卸顺序的倒放。
 
-同一份 \texttt{pos.csv} 还是前端\textbf{气流可视化}的数据源：气流拓扑与热点卡片（\texttt{flows/hotspots.json}）由脚本从坐标文件同源生成，并带同源断言防止拓扑与器件位漂移——充气时端子喷出的那束青色粒子（第~\ref{ch:acceptance} 章图）飞出的位置，就是 pos.csv 里那只端子的真实坐标。坐标文件驱动三处消费（贴装、网格、气流拓扑），一处生成、三处同源，这是"真值源"思想在结构-软件边界的延伸。
+同一份 \texttt{pos.csv} 还是前端\textbf{气流可视化}的数据源：气流拓扑与热点卡片（\texttt{flows.json} 与 \texttt{hotspots.json}）由脚本从坐标文件同源生成，并带同源断言防止拓扑与器件位漂移——充气时端子喷出的那束青色粒子（第~\ref{ch:acceptance} 章图）飞出的位置，就是 pos.csv 里那只端子的真实坐标。坐标文件驱动三处消费（贴装、网格、气流拓扑），一处生成、三处同源，这是"真值源"思想在结构-软件边界的延伸。
 
 网格管线的完整产出是六个文件加一个清单（表~\ref{tab:encl-mesh}），每个都有断言把守：面片数非零、\texttt{isSolid} 为真——空文件或破面网在生成当场就会让脚本失败，而不是等到前端渲染时才白屏。
 
