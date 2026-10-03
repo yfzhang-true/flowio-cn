@@ -209,3 +209,14 @@ state api=1.2 且全 payload 无 leak 字样；assembly parts=5、bbox_mm=[95.8,
 - **E:/FLOWIO-外部参考: 23G→1.6G（释放 21.4G）**——删 freerouting-src(15G)/tar/jdk21×2/jre zip/KRT .git+tests+awx+py_placer(2.6G)/艾谷软件工具(1.5G)+示例(1.3G)；保留 jar/jdk25/KRT 工作区/kicad-libs/艾谷 PDF+PPT/papers/aeonlabs，根目录 README.md 有逐项用途表
 - **E:/FLOWIO/资源: 627M→401M，四类归档**——实物图(59)/器件规格书/官方参考(含 official-3mf 22 模型)/开发板资料，根目录 README.md 有书稿映射表；删嵌套残留/extracted/kicad 中间产物/zip/rar(226M)
 - 待执行：资源纳编 plan T1+T2（spec 2026-10-03-assets-triage 已批，bib+图+六章增补）
+
+
+## 唯一入口达成（2026-10-03）
+E:/FLOWIO-外部参考 已并入 资源/工具链/（7 项短名迁移，源目录删除）。路径迁移对照：
+- jdk-25.0.4.1+1-jre → 资源/工具链/jdk-25
+- KiCadRoutingTools-main → 资源/工具链/KiCadRoutingTools
+- 【艾谷科技】ESP32S3入门视频教程资料 → 资源/工具链/艾谷-ESP32S3教程
+- freerouting jar / kicad-libs / papers / aeonlabs → 同名直迁
+- FlowIO-Arduino-Libraries-master → 资源/官方参考/arduino-libraries（zip 删）
+同步改写：reference.bib ×2 / auto-finish plan ×4 / 工具链 README 重写
+清理：firmware/build 1.8G 删（idf 重编即得）/ ml-leak dataset+literature 103 PDF 出索引（磁盘留）

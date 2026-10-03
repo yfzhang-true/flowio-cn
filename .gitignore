@@ -20,5 +20,11 @@ Desktop.ini
 .DS_Store
 # TinyML 数据集（306M，随泄漏检测下线移入 deprecated/ml-leak/，本地保留即可）
 firmware/twin/deprecated/ml-leak/dataset/
+literature/*.pdf
 firmware/twin/dataset_old58/
 flower-pet/
+
+# ── 构建产物与本地工具链（2026-10-03 唯一入口整理）──
+/firmware/build/
+firmware/twin/deprecated/ml-leak/dataset/
+literature/*.pdf

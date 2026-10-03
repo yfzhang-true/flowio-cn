@@ -4,14 +4,14 @@
 
 **Goal:** 用三引擎级联（KRT 平面修复 → freerouting 火力全开 → KRT 段级协商撕布）把 6 条未连接清零，全程零 GUI。
 
-**Architecture:** 每阶段独立可验证：CLI 工具吃 .kicad_pcb 文件，阶段间用 git 提交做回滚点；DRC JSON 差分做守门（净减不增）。KRT 栈（`E:/FLOWIO-外部参考/_ref/KiCadRoutingTools-main/py_router/`）独立解析板文件，与 pcbnew SWIG 管线通过文件传递协作，规避内存腐败。
+**Architecture:** 每阶段独立可验证：CLI 工具吃 .kicad_pcb 文件，阶段间用 git 提交做回滚点；DRC JSON 差分做守门（净减不增）。KRT 栈（`E:/FLOWIO/资源/工具链/KiCadRoutingTools/py_router/`）独立解析板文件，与 pcbnew SWIG 管线通过文件传递协作，规避内存腐败。
 
 **Tech Stack:** KiCadRoutingTools py_router CLI · freerouting v2.4.1 (Java 25 headless) · KiCad 10 kicad-cli/pcbnew · git
 
 **SPEC:** `docs/superpowers/specs/2026-10-01-p1-auto-finish-design.md`（方案 A，已含根因 R1-R5 对照）
 
 **基线**: 6 未连接 = R13/R29 strap 簇、C3-U3.2 buck 输入簇×2、GND F↔In1 岛对、3V3 岛对。其余 error 类全零。
-**约定**: 命令从 `E:/FLOWIO/hardware/flowio-p1/` 执行；KPY=`"E:/Program Files/KiCad/10.0/bin/python.exe"`；KRT=`E:/FLOWIO-外部参考/_ref/KiCadRoutingTools-main`；每 Task 结束 `DRC && 提交`。
+**约定**: 命令从 `E:/FLOWIO/hardware/flowio-p1/` 执行；KPY=`"E:/Program Files/KiCad/10.0/bin/python.exe"`；KRT=`E:/FLOWIO/资源/工具链/KiCadRoutingTools`；每 Task 结束 `DRC && 提交`。
 
 ---
 
@@ -26,7 +26,7 @@ Run: `KPY -c "import numpy; print(numpy.__version__)"` → Expected: `2.4.2`
 - [ ] **Step 2: repair_planes 冒烟（干跑当前板，输出到临时副本）**
 
 ```bash
-KPY "E:/FLOWIO-外部参考/_ref/KiCadRoutingTools-main/py_router/repair_planes.py" flowio-p1.kicad_pcb /tmp/smoke-p1.kicad_pcb --nets GND --plane-layers F.Cu
+KPY "E:/FLOWIO/资源/工具链/KiCadRoutingTools/py_router/repair_planes.py" flowio-p1.kicad_pcb /tmp/smoke-p1.kicad_pcb --nets GND --plane-layers F.Cu
 ```
 
 Expected: 正常退出并打印探测到的断区数量；若报 import 错误，将 KRT 的 `py_router` 与其 `kicad_parser` 等依赖目录加入 `PYTHONPATH` 重试；仍失败 → 记录并在 Task 3 改用移植路线（源码逻辑并入 netdoctor）。
@@ -76,7 +76,7 @@ git add flowio-p1.kicad_pcb drc.json && git commit -m "fix(pcb): KRT repair_plan
 
 ```bash
 KPY -c "import pcbnew; b=pcbnew.LoadBoard('flowio-p1.kicad_pcb'); pcbnew.ExportSpecctraDSN(b,'flowio-p1-round4.dsn')"
-"E:/FLOWIO-外部参考/_ref/jdk-25.0.4.1+1-jre/bin/java.exe" -Djava.awt.headless=true -jar "E:/FLOWIO-外部参考/_ref/freerouting-2.4.1.jar" \
+"E:/FLOWIO/资源/工具链/jdk-25/bin/java.exe" -Djava.awt.headless=true -jar "E:/FLOWIO/资源/工具链/freerouting-2.4.1.jar" \
   -de flowio-p1-round4.dsn -do flowio-p1-round4.ses -mp 200 -us hybrid -hr 1:1 \
   --router.optimizer.improvement_threshold=0.0 --router.via_costs=80 -l en
 ```
