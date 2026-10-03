@@ -1,6 +1,9 @@
 # Spec: 器件几何与拓扑约束框架（方向感知凸包 + 关系图 + 真实尺寸 + 钻孔避让）
 
-> 日期: 2026-10-03 · 分支: device-geometry · 状态: **待用户审查**
+> 日期: 2026-10-03 · 分支: device-geometry · 状态: **v2 — 决策点已由用户定案，待终审**
+> v2 变更: ①四决策点按用户指示定案（trimesh+FCL 直引 / 阀板载化上排期 / 解析网表 / 壳高收紧）；
+> ②基线资源已下载本地并精读（`docs/research/2026-10-03-baseline-reading.md`），设计按精读结论细化；
+> ③壳高收紧数字修正（v1 口算 24.2 有误，正确 26.07，算式见 §5.1）。
 > 触发: 用户指出——充电口/电磁阀等集成器件不能只看凸包，还要**方向、3D 空间位置、相对关系（图算法）、真实尺寸、PCB 打孔**；且不能忘记对标 FlowIO 的功能与集成度。
 > 上游: 2026-10-03 CAD 装配大修（spec: 2026-10-03-cad-assembly-truth.md）建立了 z 栈位真相；本框架把"凸包"升级为**带语义的定向几何**。
 
@@ -15,9 +18,11 @@ P1 的 15 个对外连接器（J1 DC005 / J2 USB-C / J5-J8 4P×4 / J9,J18,J19 4P
 
 ### 1.2 尺寸是估计值，不是器件真值
 `case_geom.H` 表的器件尺寸来自人工估值；KiCad 3D 模型又自带噪声（WJ500V 封装
-offset(+3.15, +3.5z) vs 焊盘中心，两说真相只能靠角部 relief 兼容）。本轮实测 **JLC
-官方属性：WJ500V-5.08-2P Height Above Board = 14.07mm**（KiCad 模型含 3.5 抬升
-显示 17.5；当前壳按 17.5 保守设计仍安全，但这是运气不是机制）。
+offset(+3.15, +3.5z) vs 焊盘中心，两说真相只能靠角部 relief 兼容）。本轮 JLC 官方
+属性实测三例：**WJ500V-5.08-2P Height Above Board = 14.07mm**（KiCad 模型含 3.5
+抬升显示 17.5）；**DC005 Body Height = 10.9mm**（模型显示 15.1）；**XH 4P 板上高
+Z-Height = 7mm**（模型显示 10.4）。模型普遍虚高 3~4mm——当前壳按 17.5 设计是
+"用错的模型保守地包住了"，不是机制。
 
 ### 1.3 对标 FlowIO（CHI'21, Shtarbanov, MIT Media Lab）的集成差距
 论文提取的主模块集成清单 vs FLOWIO-CN P1：
@@ -36,33 +41,33 @@ offset(+3.15, +3.5z) vs 焊盘中心，两说真相只能靠角部 relief 兼容
 **边缘布置+气口朝外**、电池必须**低矮置于阀下**（高度栈约束）、歧管必须**与阀同域**
 （拓扑约束）。这些正是"方向+3D位置+关系图"要形式化的东西。
 
-## 2. 基线研究结论（本轮检索）
+## 2. 基线研究结论（v2：已下载到本地并精读，笔记见 `docs/research/2026-10-03-baseline-reading.md`）
 
-| 需求 | 基线 | 结论 |
+| 需求 | 基线（本地路径 `E:/FLOWIO-3rdparty/`） | 精读结论 → 落地 |
 |---|---|---|
-| 凸包/定向包围盒 | scipy.spatial.ConvexHull；trimesh(`oriented_bounds`) | 板级 33 类器件用 OBB 足够，凸包留作非盒件（WROOM 天线、电感） |
-| 碰撞检测 | python-fcl (BerkeleyAutomation, **已归档**→fix-jie fork)；trimesh.CollisionManager | 阶段 1 自实现 OBB-SAT（~100 行零依赖）；阶段 2 再评估 FCL（mesh 级精确） |
-| 图算法/布局 | **DREAMPlace/AutoDMP**（GPU 解析式）、**OpenPARF**（FPGA GNN）、**Circuit Training**（RL）；TILOS/MacroPlacement 基准仓 | 面向百万单元 VLSI，杀鸡牛刀；借鉴**连接度驱动+约束求解**思想，用 networkx（二部匹配/力导向）落地板级规模 |
-| 装配约束图 | OpenCASCADE/FreeCAD Assembly 约束体系 | 思想对齐：我们的图边=几何约束（port→槽、贴边、避让） |
-| 真实尺寸源 | jlcpcb MCP（本轮实证：C8465→HAB 14.07mm、C456012→"Right Angle" 朝向语义、datasheet URL） | **主数据源**，bom-jlc.csv 33 行 C 号全量摄取可行 |
-| 检索说明 | aminer MCP 四查询（component placement / convex hull assembly / DREAMPlace / assembly sequence planning）均返回 no data | 本轮以 WebSearch+GitHub 检索替代（aminer 库覆盖面所致，如实记录） |
+| 碰撞检测 | **python-fcl 0.7.0.11 + trimesh 5.1.1**（venv 实测：pip 直装 Windows wheel ✓） | `CollisionManager`：add_object/set_transform（爆炸态 O(1) 更新）/in_collision_internal(return_names)/min_distance_*（净空断言）；CCD 备用于装配扫掠 |
+| 定向包围盒 | trimesh `bounds.oriented_bounds`（源码精读+实测） | 3D 面法向角度搜索（angle_digits 可控）；旋转盒/圆柱实测恢复正确；对 KiCad STEP 实体做姿态校验；首选仍是 JLC 结构化尺寸直接构盒 |
+| 图匹配 | networkx 3.7（实测签名） | `minimum_weight_full_matching`：器件↔壁槽最小权完美匹配，权=端口射线到槽中心距离 |
+| 布局范式 | MacroPlacement/CT（CCC 协议精读） | proxy cost = W_wl·HPWL + W_den·密度 + W_cong·拥塞 → **板级化三元组**（WL=网表边欧氏和 / 腔密度 / 槽拥塞）；UCSD 结论：优化好的 SA ≥ RL 且 1/4 资源 → 不引 RL/GPU |
+| 可微目标思想 | DREAMPlace DAC'19（论文精读） | 把布局质量写成可计算加性评分函数即可，引擎不引 |
+| 异构域约束 | OpenPARF（论文精读） | P2 的"阀域/传感域/电源域/气口域"= resource legality + proximity 形式化，图边带域亲和权重 |
+| 真实尺寸源 | jlcpcb MCP（实证三例） | **主数据源**：WJ500V 14.07 / DC005 10.9 / XH4P 7.0（均 HAB 类字段）+ datasheet URL |
+| 检索通道 | aminer MCP 六类查询均 `no data`（含 FlowIO 论文本身，服务侧覆盖问题，如实入档）；论文经 arXiv API 标题定位下载；github 无 MCP 挂载，git clone 经代理替代 | **无未解决阻塞** |
 
-## 3. 方案对比
+## 3. 方案（v2 定案：用户已裁定）
 
-**方案 A（推荐）：轻量自建框架，挂接现有单一真相源体系**
-`devices.yaml`（真实尺寸+端口语义）+ `device_geom.py`（OBB/端口射线/SAT 碰撞）+
-`networkx` 关系图（电气边+空间边）+ L5 测试层；不引入 FCL/求解器。
-- 优点：零重依赖；直接替换 case_geom.H 双源；33 器件规模下 force-directed+规则足够；
-  测试可入 run_tests.sh 常跑。
-- 缺点：mesh 级精确碰撞仍靠 L4 FreeCAD 布尔（保留现状即可）。
+**轻量数据/图框架 + trimesh+FCL 碰撞内核**：
+`devices.yaml`（JLC 真实尺寸+端口语义）+ `device_geom.py`（OBB/端口射线/凸包，
+基于 trimesh）+ FCL `CollisionManager` 碰撞/净空/（阶段 2）CCD + `networkx`
+关系图（网表电气边+空间边）+ L5 测试层。
+- 不引 RL/GPU 求解器（UCSD 精读结论：优化好的 SA/规则 ≥ RL 且 1/4 资源；33 类
+  器件规模更不需要）；
+- VLSI 引擎（DREAMPlace/OpenPARF/CT）作为**评分函数与约束形式化**的思想来源，
+  不作运行时依赖；
+- FCL 归档风险已由 Windows wheel 实测解除（0.7.0.11）。
 
-**方案 B：trimesh+python-fcl 全 mesh 级 + VLSI 求解器**
-- 优点：最精确；自动布局能力强。
-- 缺点：FCL 仓库已归档（维护风险）；DREAMPlace/OpenPARF 需 PyTorch/CUDA 环境；
-  对 33 器件是过度工程；与 Mimosa"第三方源码树外"约束摩擦大。
-
-**方案 C：KiCad 插件生态（courtyard 检查+freerouting）**
-- 只覆盖电气侧 2D，不覆盖 3D 装配/气路方向/外壳联动——不满足需求，弃。
+弃用方案（留档）：纯自实现 OBB-SAT（v1 推荐，被用户否——mesh 级精度与
+`min_distance` 净空断言的价值更大）；KiCad 插件生态（只覆盖电气 2D）。
 
 ## 4. 方案 A 设计
 
@@ -83,28 +88,39 @@ offset(+3.15, +3.5z) vs 焊盘中心，两说真相只能靠角部 relief 兼容
 属性映射（Height Above Board/尺寸/朝向类）→ 写 yaml（人工只补 port.dir_local）。
 
 ### D2 几何核 `enclosure/device_geom.py`（import case_geom，不复制常量）
-- `obb(ref)` → 中心/半轴/旋转角（任意 rot，不再只有 90° 特判）；
+- `obb(ref)` → JLC 尺寸直接构盒（首选）或 KiCad STEP 实体经 `trimesh.bounds.
+  oriented_bounds`（姿态校验，angle_digits=1）；任意 rot，不再只有 90° 特判；
 - `port_ray(ref)` → 端口射线（origin+direction 经 rot 变换到板系/壳系）；
-- `hull(ref)` → 非盒件凸包顶点（scipy ConvexHull，可选）；
-- `sat_overlap(a, b)` → OBB 分离轴碰撞测试（自实现，零依赖）。
+- `hull(ref)` → 非盒件凸包（trimesh convex hull）；
+- 碰撞/净空：`trimesh.collision.CollisionManager`——case STL + 器件 OBB/凸包
+  全注册；`in_collision_internal(return_names=True)` 出冲突对名单（测试断言）；
+  `min_distance_internal` 出净距（"器件间 ≥ x mm" 断言）；`set_transform` 支持
+  爆炸态逐层扫掠（爆炸视图每层 k∈[0,1] 无穿模验证）；FCL CCD 留作阶段 2。
+- 运行环境：`E:/FLOWIO-3rdparty/venv-fcl-test`（或正式化为本仓 `tools/venv-cad`，
+  requirements: python-fcl/trimesh/networkx/scipy；run_tests.sh 探测该解释器跑 L5）。
 
 ### D3 关系图 `enclosure/device_graph.py`（networkx）
-- 电气边：从 flows/网表拓扑（U1→R→Q→J*已存在）；
-- 空间边：port→wall slot 绑定（含 B 面 8 槽↔J10-17）、贴边约束、K1 远离热源类；
-- 查询：`slots_satisfied()`（二部匹配：每个 EDGE_OUT 器件必须命中一个槽）、
-  `placement_advice()`（力导向预布局建议，供人工/KiCad 推挤参考，非强制）。
+- 电气边（**决策 ④：解析网表**）：`kicad-cli sch export netlist` 导出 → S-expr
+  解析器 → 网络名→refs 边（剔除电源/地）；网表是权威源（flows 拓扑表仅覆盖主干）；
+- 空间边：port→wall slot 绑定（槽清单 import case_geom）、贴边约束、域亲和
+  （P2：阀域/传感域/电源域，OpenPARF 异构资源式）；
+- 查询：`slots_satisfied()`（`minimum_weight_full_matching`，权=端口射线到槽中心
+  距离）；`placement_advice()`（FD 弹簧-势场 + SA 微调 + proxy cost 板级三元组
+  评分：WL=网表边欧氏和 / 腔密度 / 槽拥塞）；输出建议与评分，不直接改布局。
 
 ### D4 钻孔/禁布层
 - drl 解析（T9 经验已有）→ NPTH/PTH 孔位+孔径；
 - courtyard（F/B_Courtyard.gbr）→ 禁布多边形；
 - 断言：器件 OBB ∩ 安装孔区 = ∅；TH 焊盘不落外壳铜柱/槽投影区。
 
-### L5 测试层 `test_device_geom.py`（入 run_tests.sh 第 2c 层）
+### L5 测试层 `test_device_geom.py`（入 run_tests.sh，用 venv-cad 解释器）
 1. 朝向断言：EDGE_OUT 器件 port_dir·所属壁外法向 > cos45°，且端口射线在 3mm 内
    穿出板边；
 2. 贴边断言：EDGE_OUT 中心距最近边 < 该类阈值（连接器 8mm）；
-3. 碰撞断言：顶面器件 OBB 两两无交（SAT）；KERPOUT_CENTER 类不落中心区；
-4. 图闭环：每个对外 port 有槽、每槽有器件（双向匹配）；
+3. 碰撞断言（FCL）：装配态 `in_collision_internal` 无冲突（return_names 空表）；
+   爆炸态沿 k∈{0,0.25,0.5,0.75,1} 逐层 `set_transform` 扫掠无穿模；
+   `min_distance_internal` ≥ 关键对净距（如 U1↔L1 散热间隙）；
+4. 图闭环：`minimum_weight_full_matching` 完美匹配（器件↔唯一槽，双向无孤点）；
 5. 钻孔避让：D4 两断言；
 6. 真值一致性：devices.yaml.dims vs case_geom.H vs JLC 属性三方对拍（消除双源）。
 
@@ -115,16 +131,31 @@ offset(+3.15, +3.5z) vs 焊盘中心，两说真相只能靠角部 relief 兼容
 - 泵模块接口：磁吸 4-pin + 双气口 = 新 port 类型，槽位匹配直接复用。
 差距表与 P2 候选清单写入 `docs/flowio-parity-gap.md`（本期只出文档不实施）。
 
-## 5. 决策点（请审查时裁定）
-1. **WJ500V 高度真值**：JLC 14.07 vs KiCad 模型 17.5。建议壳 TALLEST 收紧至
-   14.07+0.6=14.7（总高 29.5→24.2，更紧凑）？还是维持 17.5 保守？→ **建议收紧，
-   以 JLC 为准**（板到货实测二次校验）。
-2. **碰撞实现**：阶段 1 OBB-SAT 自实现（推荐）vs 直接引 trimesh+FCL。
-3. **P2 集成范围**：本期只出差距文档（推荐），还是把"8 路阀板载化"提上 P2 排期？
-4. 网表电气边数据源：直接解析 .kicad_sch 网表（准确但解析重）vs 复用 flows 拓扑
-   表（轻但仅覆盖主干）？→ 建议阶段 1 用 flows 拓扑，P2 前再上网表解析。
+## 5. 决策点（v2：已由用户定案，2026-10-03）
+1. **壳高收紧 ✓**：以 JLC 真值为准。TALLEST = max(器件真高) = WJ500V **14.07**
+   （DC005 10.9 / XH4P 7.0 均低于它）。高度链：Z_CEIL = 9.0+14.07+0.6 = **23.67**，
+   OUTER_H = 23.67+2.4 = **26.07**（v1 口算"24.2"有误，以本算式为准）；端子槽
+   z_hi = 23.27；板到货实测二次校验后如需再调，只改 case_geom 常量全链重生成。
+2. **碰撞实现 ✓：直接引 trimesh+FCL**（pip 0.7.0.11 Windows wheel 实测可装；
+   依赖 scipy；venv 已建于 E:/FLOWIO-3rdparty/venv-fcl-test，实施时正式化为
+   tools/venv-cad 并提交 requirements）。
+3. **P2 范围 ✓：先出 FlowIO 差距文档，"8 路阀板载化"提上排期**（M2 里程碑，
+   见 §7）。
+4. **电气边数据源 ✓：解析网表**（kicad-cli sch export netlist → S-expr 解析；
+   权威且覆盖全连接，flows 拓扑表降级为交叉校验）。
 
 ## 6. 不做的事（YAGNI）
-- 不引入 GPU 布局求解器/FCL/全 mesh 库（阶段 2 再评估）；
-- 不自动改 KiCad 布局（框架输出建议+断言，人工推挤保留决策权）；
-- 不在本期实施任何 P2 硬件集成。
+- 不引入 RL/GPU 布局求解器（UCSD 精读结论：优化好的 SA/规则 ≥ RL；板级规模更不需要）；
+- 不自动改 KiCad 布局（框架输出建议+评分+断言，人工推挤保留决策权）；
+- 本期不实施 P2 硬件集成（阀板载化按 §7 里程碑排期，前置依赖=本框架 + P1 到货验证）。
+
+## 7. P2 里程碑：8 路阀板载化（决策 ③，提上排期）
+- **M2-0 前置**：本框架（T1-T7）交付 + P1 板到货 BRINGUP 通过（供电/8 路驱动实测带载）。
+- **M2-1 选型**（JLC MCP 取真值入 devices.yaml）：12V 微型电磁阀（如 JUKA/SMC
+  微型，Ø2 快插口，EDGE_OUT+pneumatic 端口）；歧管（3D 打印集成流道或采购 8 联）；
+  压力传感（MPRLS 系 I2C，SURFACE 域）；
+- **M2-2 布局约束**（框架直接服务）：阀排在边缘带、气口朝外同侧；驱动 MOS（已有
+  Q3-Q10）与阀同列就近（域亲和边）；压力传感近歧管（SPATIAL_SAME_DOMAIN 边）；
+- **M2-3 交付**：P2 原理图增量 + 布局（placement_advice 评分迭代）+ 外壳重生成
+  （阀口槽→气口阵列）+ 孪生/装配全链 + L1-L5 全绿。
+- 排期建议：M2 启动于 P1 板验证后（用户 JLC 下单→到货周期内完成 T1-T7）。
