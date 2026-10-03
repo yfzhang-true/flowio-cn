@@ -117,3 +117,49 @@
 ---
 
 *审计完。机器检查器 13 条 findings 已全部复核（真 1 / 伪 12）；重点语义专项 9 项全部给出裁决；仓库侧问题 3 项单列待裁决。本报告仅报告，未修改任何书稿、代码或检查器。*
+
+---
+
+## 复核记录（T4）—— 终验（2026-10-03，独立复核代理）
+
+对 §5 处置清单（由修复代理于 commit `933d968` 执行）做独立复核：复跑机器检查与全部回归，并对修复项逐条人工抽样核验。**结论：16 项（Critical 2 / Important 1 / Minor 13）全部清零**；检查器残余 3 条 findings 均为书稿 caption 已声明的"节选/摘编"窗口差异，非语义漂移。
+
+### T4.1 复跑证据
+
+| 项 | 命令 | 终态 |
+|---|---|---|
+| 机器检查器 | `KPY book/tools/consistency_check.py` | **合计 3 项**（const=0 path=0 cite=0 snippet=3）；残余 3 条 = ch02（caption"节选，泄漏项从略"）/ ch05（caption"摘编"）/ ch09（`...` 省略，i_inf 公式在正文 L77 给出）——对应 §2 F8/F10/F12 维持"伪（声明省略）"裁决；§2 F1/F2 检查器映射已改（ch07→ch03、ch13→ch11），const/path/cite 归零 |
+| 检查器测试 | `KPY book/tools/test_consistency_check.py` | **OK（11 用例）** |
+| 工单工具测试 | `KPY book/tools/test_ticket.py` | **OK** |
+| 编译 | xelatex 两遍（MiKTeX，`-output-directory=build`） | 两遍 **exit 0、0 error、无 undefined/multiply defined**，**main.pdf 87 页** |
+| 回归① | `bash firmware/twin/test_api_board.sh`（cwd=firmware/twin，自起 :8000） | **全 OK**：state/sim/bounds/time/csv/assembly/record/presets/replay 200-409/traversal 404/since 全过 |
+| 回归② | `node firmware/twin/test_webapp.js`（:8017 隔离实例） | **44/44 通过** |
+| 回归③ | `bash firmware/qemu_smoke.sh` | **9 通过 / 0 失败**（第 7 项已按 B1 修复后复验：`leak=off (TinyML retired 2026-10-02)`） |
+
+### T4.2 逐项终态表
+
+| 级别 | 项 | 修复位置（抽样实读核验） | 终态 |
+|---|---|---|---|
+| **Critical ①** | ch12-product 11 行骨架、路线图五项与 HANDOFF 不符 | ch12-product.tex 实文化：§14.1 Phase CAL 六项对拍表（A301–A306，各含数据来源与看点）+ 校准链前提叙事 + §14.2 精度报告（兑现 ch02 前向引用）+ §14.3 路线图五项（OTA/多设备同步/SDK BLE 传输/HIL 对拍/报表产品化，逐项现状·方案·门槛） | **已修复**（前 30 行实读为完整成文，非占位） |
+| **Critical ②** | qemu_smoke.sh 第 7 项期望串过期（B1） | firmware/qemu_smoke.sh L52 期望改 `leak=off`；T4 复跑 9/9 | **已修复** |
+| **Important** | ch00a"6 路 XGZP6897D 并行采样" | ch00a L73 改"XGZP6897D 经 TCA9548A **分时**采样（**P0 实装 2 只**：汇流管+端口侧，可扩 5 端口座）"，与 types.h L21 `PN_SENSOR_COUNT 2` 一致 | **已修复** |
+| Minor 1 | ch10 encode 签名缺注解（F13） | ch10 L48 = protocol.py L85 `def encode(cmd: _t.Union[str, int], ports: int = 0, pwm: int = 0) -> bytes:` 逐字一致；crc8 同步核对一致 | **已修复** |
+| Minor 2 | ch02 `/api/time` 方法 | ch02 L258 改"**POST** /api/time"（server.py 实为 POST-only） | **已修复** |
+| Minor 3 | ch09 呼吸周期 4s vs 实测≈25s（B2 书稿侧） | ch09 L17 改"低频呼吸，周期**约 25 s**"；实现侧 scene.js L202 `sin(t/4)*0.3` 未改，**记档为设计-实现偏差待产品裁决** | **已处置**（书稿写实测；实现裁决留产品） |
+| Minor 4 | ch09 缓动令牌表述 | ch09 L17 改"v2 设计令牌规划 cubic-bezier(0.22,1,0.36,1)…实现装配动画取同族 easeOutQuint"（令牌≠实现，分层表述） | **已修复** |
+| Minor 5 | ch11 BRINGUP checkbox 30→36 | ch11 L217 改"现有 36 个未勾 checkbox——工单生成时为 30 个，后清单扩充，以现数为准" | **已修复** |
+| Minor 6 | ch11 api.sh 项数 50 | ch11 L9 改"43 项 + 板级 11 项"（实测复核） | **已修复** |
+| Minor 7 | ch11 test_flows.py 位置 | ch11 L9 补真实路径 `hardware/flowio-p1/enclosure/` | **已修复** |
+| Minor 8 | ch08"环形缓冲" | ch08 L40 改"64 字节**行缓冲**（单行存储，最近一条应答）"（ble_twin.c `s_resp_line[64]`） | **已修复** |
+| Minor 9 | ch07 `G` 第三参 `<s>` 记号 | ch07 L106 改"**G \<ports\> \<kPa\> \<sensor\>**（第三参为传感器号，0=汇流管）" | **已修复** |
+| Minor 10 | 两处文件名简写（F3/F4） | ch05 L25"assembly-top.pdf / assembly-bottom.pdf"；ch06 L208"flows.json 与 hotspots.json"——均两文件名并列 | **已修复** |
+| Minor 11 | bib 孤立键 ESP32S3DS（F7） | ch03 L9 补 `\cite{ESP32S3DS}` | **已修复** |
+| Minor 12 | "十二章"计数 | ch00a L121 补说明："十二章"指实践篇十章+验收/产品化两章，理论篇 2 章不计入 | **已修复** |
+| Minor 13 | pn_core 路径层级简写（F5/F6）+ ch06 列表省略（F11） | ch07 L90 / ch08 L101 补 `components/pn_core/src/` 前缀；ch06 lst:mesh-verify 改 caption"摘自源码"并全文收录（含逐器打印行） | **已修复** |
+| 仓库侧 B2 | scene.js 呼吸周期实现 | 设计-实现偏差**记档待产品裁决**：书稿口径已写实测（≈25s），实现 `sin(t/4)` 维持（改动影响 v2 已验收视觉，需产品拍板改 4s 或维持） | **记档** |
+| 仓库侧 B3 | HANDOFF"README 已改"不实 | 处置为**双口径并列陈述**：README-jlc-order.md §3 维持"全贴 5 片 550–1150"，HANDOFF/ch05（tab:fab-cost）两口径并列且各标出处，现行执行口径 360–720 | **已处置** |
+
+### T4.3 残余与备注
+
+- 检查器残余 3 条 snippet findings 为**有意保留**：三条书稿列表的 caption 均已声明"节选/摘编/从略"，机器窗口比对的中间行缺失属声明内省略；消除需检查器支持 caption 标记识别，收益低，不改。
+- T4 复核未修改任何书稿/代码；本节仅记录复核证据与终态。

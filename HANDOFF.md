@@ -190,3 +190,9 @@ state api=1.2 且全 payload 无 leak 字样；assembly parts=5、bbox_mm=[95.8,
 - 计划：章 11（验收）随回板验收同步写；其余章按 12 章骨架（见 2026-10-02 会话）待用户重启指令
 - JLC 下单策略更新：板 5 片（制板最低）+ **贴装仅 2 片**（主力+备用），费用 ≈360-720 元（执行口径，板 5 装 2，HANDOFF 记录值；README-jlc-order.md §3 载"全贴 5 片"估算 550-1150，两口径并列，书稿 ch05 表 tab:fab-cost 同）
 - 验收×专著一体化已落地：36 张工单 `book/tickets/A*.yaml`（双产物=BRINGUP 勾选+书稿素材，`python book/tools/ticket.py report` 看进度：pass 6/pending 30）+ 书稿 12 章骨架（ch3/4/11 实文，xelatex 22 页零错）+ BRINGUP 九章已注"对应工单"行；下一步=回板执行 A2xx 工单
+
+## 书稿一致性审查（2026-10-03）
+- **发现 16 项 → 处置 16/16 清零**：Critical 2（ch12-product 11 行骨架且路线图与 HANDOFF 五项不符；qemu_smoke.sh 第 7 项期望串过期）· Important 1（ch00a"6 路 XGZP6897D 并行采样"，实现为 TCA9548A 分时、P0 实装 2 只）· Minor 13（encode 签名注解、/api/time 方法、呼吸周期口径、缓动令牌表述、BRINGUP 36、api.sh 43+11、test_flows.py 路径、"环形缓冲"→行缓冲、G \<sensor\> 记号、两处文件名简写、ESP32S3DS 孤立 cite、"十二章"计数、pn_core 路径层级）——全部落书稿/检查器，报告见 `book/AUDIT.md`
+- **仓库侧 3 项处置**：① qemu 期望串已改 `leak=off`，复跑 **9/9 全绿**；② 呼吸周期为设计-实现偏差**记档待产品裁决**（实现 `sin(t/4)`≈25.1s 未改，书稿 ch09 已写实测口径）；③ 费用**双口径并列陈述**（README-jlc-order §3 全贴 5 片 550–1150 / HANDOFF·ch05 板 5 装 2 执行口径 360–720，各标出处）
+- **终验（T4 独立复核）**：检查器终态 const=0 path=0 cite=0 snippet=3（残余 3 条均为书稿 caption 已声明"节选/摘编"的窗口差异，非语义漂移）；检查器测试 11 用例 OK；xelatex 两遍零错 **87 页**；回归 `test_api_board.sh` 全 OK / `test_webapp.js` **44/44** / `qemu_smoke.sh` **9/9**
+- **一致性检查器用法**：`KPY book/tools/consistency_check.py`（常数/路径/cite/代码片段四类，书稿×真源；测试 `KPY book/tools/test_consistency_check.py`）
