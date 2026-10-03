@@ -28,17 +28,24 @@ SECRET_PAT = re.compile(r"ghp_[A-Za-z0-9]{20,}|mcpk2_[A-Za-z0-9_-]{10,}")
 def rewrite(text: str) -> str:
     text = text.replace('"/webapp/', '"')
     text = text.replace('"/meshes/', '"meshes/')
+    # import map 的地址必须是合法 URL (./ ../ / 开头); 通用剥前缀后产生的裸值
+    # "vendor/..." 会被浏览器判 null -> three 解析失败 (2026-10-03 事故第三层)
+    text = text.replace('"three":"vendor/', '"three":"./vendor/')
     return text
 
 
 def rewrite_js(text: str) -> str:
     """js 模块专用: ES import 裸说明符修正 ("js/x.js" 不走相对解析, 必须改 ./x.js).
-    注意: import 修正必须先于通用 rewrite, 否则 "/webapp/" 先被剥掉导致匹配不到."""
+    注意: import 修正必须先于通用 rewrite, 否则 "/webapp/" 先被剥掉导致匹配不到.
+    覆盖三种形态: 静态 from "..." / 副作用 import "..." / 动态 import("...")——
+    动态 import 常为惰性加载 (scene.js/flows.js), 静态扫描看不见, 生产才炸 (2026-10-03 事故)."""
     text = text.replace('from "/webapp/js/', 'from "./')
     text = text.replace('import "/webapp/js/', 'import "./')
+    text = text.replace('import("/webapp/js/', 'import("./')
     # vendor: js/ 下模块引 /site/vendor/ 需上一级 "../vendor/"
     text = text.replace('from "/webapp/vendor/', 'from "../vendor/')
     text = text.replace('import "/webapp/vendor/', 'import "../vendor/')
+    text = text.replace('import("/webapp/vendor/', 'import("../vendor/')
     return rewrite(text)
 
 
@@ -55,9 +62,9 @@ def main() -> int:
         (SITE / "js" / f.name).write_bytes(rewrite_js(f.read_text(encoding="utf-8")).encode("utf-8"))
     if (SITE / "js" / "demo_api.js").exists() is False:
         print("!! 缺少 site/js/demo_api.js (应先由仓库提供, 不从 webapp 同步覆盖)")
-    for f in (WEB / "vendor").glob("*"):
-        if f.is_file():
-            shutil.copyfile(f, SITE / "vendor" / f.name)
+    # vendor 含子目录 (addons/), 必须整树拷贝 —— 顶层 glob 会漏 addons 导致
+    # scene.js 的 ../vendor/addons/*.js 全 404, 动态 import 整图失败 (2026-10-03 事故第二层)
+    shutil.copytree(WEB / "vendor", SITE / "vendor", dirs_exist_ok=True)
     n_stl = 0
     for f in (SRC / "meshes").glob("*.stl"):
         shutil.copyfile(f, SITE / "meshes" / f.name)
