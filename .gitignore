@@ -28,3 +28,15 @@ flower-pet/
 /firmware/build/
 firmware/twin/deprecated/ml-leak/dataset/
 literature/*.pdf
+
+# ── GitHub 开源排除（2026-10-03）──
+/简历/
+/宪法.md
+/操作手册.md
+/study-notes/
+/资源/工具链/
+/资源/实物图/
+/资源/器件规格书/
+/资源/官方参考/
+/资源/开发板资料/
+.flowio-softrobotics-docs/
