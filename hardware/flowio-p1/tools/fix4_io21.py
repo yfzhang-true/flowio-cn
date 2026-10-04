@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-"""fix4b: IO21 东西轨贯通 — In2 微桥方案 (纯增量, 不动任何异网):
-  via1 (46.0,40.7) 落 In1 A-横线 y40.85 (IO21 自身) <-> In2
-  In2: (46.0,40.7)->(46.0,37.5)->(47.3,33.0) w=0.25 (仅有的 In2 走线全在板西北角)
-  via2 (47.3,33.0) 落 In1 B-竖线 x47.3 y32.55-43.6 (IO21 自身)
-  桥窗在 In2 +3V3 大平面 (30-79,20-58) 内刻 ~0.65x7.7 缺口."""
+"""fix4b: IO21 东西轨贯通 — In2 微桥·南线终态 (纯增量, 不动任何异网):
+  via1 (46.2,55.5) 落 In1 A-竖线 x46.2 (IO21 自身) <-> In2
+  In2: (46.2,55.5)->(62.8,51.4) w=0.25 对角微桥 (全板 In2 仅 7 线, 桥窗在 +3V3 平面空旷区)
+  via2 (62.8,51.4) 落 In1 B-竖线 x62.8 (IO21 自身)
+拓扑死局存档 (35a9628): 弃 In1 硬穿——SE 堡垒(S3/S1 对角阵)/IO11 墙(x46.8,y33-55)/
+  BTN_USER 阵 30+ 路径全败(0.02-0.3mm 近失是拓扑死局假象, 微调无解)→ In2 微桥, 最差净距 0.332."""
 import sys, math
 sys.path.insert(0, "tools")
 import pcbnew
@@ -176,6 +177,21 @@ def on_track(x, y):
 print(f"via1 落点: {on_track(*VIA1)}")
 print(f"via2 落点: {on_track(*VIA2)}")
 assert on_track(*VIA1) and on_track(*VIA2), "落点不在 IO21 In1 走线上!"
+
+# === 幂等重放守卫 (模式同 route_pcb._via_exists): 桥已在板则 no-op 退出,
+#     消除重跑 double-via 静默累积 —— 候选搜索对同网增量不敏感(同网不算障碍),
+#     重跑必然复选同一 (VIA1,VIA2), 守卫必命中; exit 0 前不触碰板文件。 ===
+def _via_exists(x, y, net, r=0.5):
+    for tr in b.GetTracks():
+        if tr.GetClass() == "PCB_VIA" and tr.GetNetname() == net:
+            q = tr.GetPosition()
+            if math.hypot(MM(q.x) - x, MM(q.y) - y) < r:
+                return True
+    return False
+
+if _via_exists(*VIA1, NET) or _via_exists(*VIA2, NET):
+    print(f"[SKIP] IO21 In2 桥已在板 (via@{VIA1}/{VIA2} 已存在) — 重放守卫生效, 不落盘")
+    sys.exit(0)
 
 # === 放置 ===
 netcode = None
