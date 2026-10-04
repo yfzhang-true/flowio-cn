@@ -88,14 +88,26 @@ def slots_satisfied(conn_refs=None, drop_slots=()):
 
 
 def flows_crosscheck():
-    """flows.json 的 ELEC 拓扑每对相邻 ref 必须在网表电气边上 (权威源校验)."""
-    edges = NL.electrical_edges()
+    """flows.json 的 ELEC 拓扑每对相邻 ref 必须共网 (权威源校验).
+
+    边集取全部网的共网对 (电源网在内) — flows 的电源段 (vin_pwr/vin_usb/buck_in
+    等) 相邻对共的是 +5V/GND/USB_VBUS 等电源网, 语义合法 (make_flows 注释约定);
+    电气图 build_graph() 仍用剔除电源的 electrical_edges() (器件关系图不吃电源)。
+    (T5 修复 netlist 多行解析后, 电源段相邻对首次被真实检验 — 旧解析器行分割
+    错位造成的"0 违例"是虚静默。)
+    """
+    pairs = set()
+    for _, refs in NL.nets():
+        uniq = sorted(set(refs))
+        for i in range(len(uniq)):
+            for j in range(i + 1, len(uniq)):
+                pairs.add(frozenset((uniq[i], uniq[j])))
     bad = []
     data = json.loads(FLOWS.read_text(encoding="utf-8"))
     for fl in data.get("elec", []):
         refs = fl.get("refs", [])
         for a, b in zip(refs, refs[1:]):
-            if frozenset((a, b)) not in edges:
+            if frozenset((a, b)) not in pairs:
                 bad.append("%s: %s-%s" % (fl.get("id"), a, b))
     return bad
 
