@@ -52,14 +52,22 @@ CURATED = {
     "C9865":   dict(dims=(4.9, 3.9, 1.75), placement="INTERNAL", pkg=["SOP", "TPS54331", "SOIC"]),
     "C968586": dict(dims=(4.9, 3.9, 1.75), placement="INTERNAL", pkg=["ESSOP", "CH340"]),
     "C7519":   dict(dims=(2.9, 2.4, 1.1),  placement="INTERNAL", pkg=["SOT-23-6", "USBLC6"]),
-    # ── 4 个对外连接器 (端口本地方向经 17↔17 槽位真值交叉验证) ──
-    "C431533": dict(dims=(9.9, 14.0, 10.9), placement="EDGE_OUT", pkg=["DC005"],
-                    port=dict(type="barrel", dir_local=[0, 1], exit_z=[0.0, 10.9])),
+    # ── 对外连接器 (端口本地方向经槽位真值交叉验证) ──
     "C5359632":dict(dims=(5.9, 12.5, 7.0), placement="EDGE_OUT", pkg=["CONN-TH_4P", "6173868"],
                     port=dict(type="electrical", dir_local=[0, -1], exit_z=[0.0, 7.0])),
-    "C8465":   dict(dims=(10.2, 10.0, 14.07), placement="EDGE_OUT", pkg=["CONN-TH_2P", "WJ500V"],
-                    port=dict(type="pneumatic_wire", dir_local=[0, -1], exit_z=[0.0, 14.07])),
+    # P1.1 T3 新增 (JLC 属性页真值):
+    "C165948": dict(dims=(8.94, 7.35, 3.26), placement="EDGE_OUT", pkg=["TYPE-C", "TYPE-C-31-M-12"],
+                    port=dict(type="usb", dir_local=[0, -1], exit_z=[0.0, 3.26])),
+    "C7429671":dict(dims=(10.0, 7.8, 6.2), placement="EDGE_OUT",
+                    pkg=["CONN-SMD_2P", "ZX-XH2.54"],
+                    port=dict(type="pneumatic_wire", dir_local=[0, -1], exit_z=[0.0, 6.2])),
 }
+
+# 淘宝件 (BOM 无 LCSC 码, 由 make_bom 排除; 几何真值进 devices 段供 L5 碰撞/贴边守门)
+CURATED_NOPART = [
+    dict(lcsc="", name="XGZP6897D (淘宝件 CFSensor 闽芯)", refs=["U6"],
+         pkg=["XGZP6897D-SOP8"], dims=(7.96, 10.6, 9.5), placement="INTERNAL"),
+]
 
 DS = "https://www.lcsc.com/datasheet/lcsc_datasheet"
 
@@ -77,7 +85,7 @@ def main():
                 refs_by_c.setdefault(c, []).append(ref)
 
     devices = []
-    for c in sorted(refs_by_c, key=lambda x: (x != "C8465", x)):
+    for c in sorted(refs_by_c, key=lambda x: (x != "C7429671", x)):
         cur = CURATED[c]
         r = raw.get(c, {})
         e = {
@@ -93,11 +101,20 @@ def main():
         if "port" in cur:
             e["port"] = cur["port"]
         devices.append(e)
+    # 淘宝件补段 (BOM 无码, 位姿仍来自 pos.csv; L5 dims_for 靠 pkg 关键词命中)
+    for cur in CURATED_NOPART:
+        devices.append({
+            "lcsc": cur["lcsc"], "name": cur["name"], "refs": cur["refs"],
+            "pkg_keywords": cur["pkg"],
+            "dims": {"w": cur["dims"][0], "d": cur["dims"][1], "h": cur["dims"][2]},
+            "placement": cur["placement"],
+            "datasheet": "", "jlc_desc": "淘宝件不入 JLC BOM",
+        })
 
     out = {
         "_meta": {
             "generated_by": "tools/ingest_device_dims.py",
-            "provenance": "devices_raw.json (jlcpcb MCP 2026-10-03) + curated datasheet dims",
+            "provenance": "devices_raw.json (jlcpcb MCP) + curated datasheet dims",
             "conventions": {
                 "dims": "w=封装rot0时X向, d=Y向, h=板上高度(above board), 单位mm",
                 "port.dir_local": "rot=0 时端口开口方向(板系x右/y上, KiCad y-down 取 -rot 变换)",
@@ -106,6 +123,15 @@ def main():
         },
         "devices": devices,
     }
+    # 保留既有 pneumatic_devices 段 (T1 入库, 本工具不产出 — 无此守卫会被覆写丢失)
+    old = ENC / "devices.json"
+    if old.exists():
+        try:
+            pn = json.loads(old.read_text(encoding="utf-8")).get("pneumatic_devices")
+            if pn:
+                out["pneumatic_devices"] = pn
+        except Exception:
+            pass
     (ENC / "devices.json").write_bytes(json.dumps(out, ensure_ascii=False, indent=1).encode("utf-8"))
     edge = [d["lcsc"] for d in devices if d["placement"] == "EDGE_OUT"]
     print("[ingest] devices.json: %d 条 (唯一C号), EDGE_OUT=%d, refs=%d"

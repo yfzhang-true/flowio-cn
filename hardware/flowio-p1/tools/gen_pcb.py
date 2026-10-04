@@ -363,7 +363,7 @@ for pt in PARTS:
             pad.SetNetCode(netcode(net))
 
 # ---- 安装孔 (P1.1 T3: HA 避 SW1 courtyard / HB 让左壁 J 带 / HD 避 J15/J16+D9) ----
-for hx, hy in [(3.4, 3.4), (83, 12), (3, 28), (73.5, 55.7)]:
+for hx, hy in [(3.4, 3.4), (83, 12.5), (3, 28), (73.5, 55.7)]:
     try:
         mh = pcbnew.FootprintLoad(os.path.join(STD, "MountingHole.pretty"),
                                   "MountingHole_3.2mm_M3")

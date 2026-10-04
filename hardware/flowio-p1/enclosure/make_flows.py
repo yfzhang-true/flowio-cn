@@ -33,22 +33,6 @@ OUTDIR = ROOT / "firmware" / "twin" / "webapp"
 
 Z_TOP = G.Z_TOP                # 顶面器件所在板面 z (板坐铜柱顶, 见 case_geom)
 
-# ---------- P1.1 过渡位姿表 (T3 重生成 pos.csv 后由 csv 覆盖, 届时删除) ----------
-# 背景: P1.1 原理图已加 J20-J23/R55-58/Q13-16 (S/V/F 主阀 + 泵), 但 PCB/pos.csv
-# 尚为 P1.0 版本 (T3 重布局后才含新 ref)。为让 flows 拓扑先行, 按既有 8 通道
-# 端子排 (J10-J17: x=6.5+11k, Q/R 列 x=4.1+11k) 向右延伸的过渡坐标生成;
-# load_pos 中 pos.csv 行优先, T3 重跑 make_flows 即自动切换为真实布局。
-def _p11_row(refs, x0, y, rot, pkg):
-    return {ref: {"pkg": pkg, "x": x0 + 11 * k, "y": y, "rot": rot, "side": "top"}
-            for k, ref in enumerate(refs)}
-
-POS_P11 = {}
-POS_P11.update(_p11_row(["J20", "J21", "J22", "J23"], 94.5, -68.5, 180,
-                        "CONN-TH_2P-P2.54_XH-2P"))
-POS_P11.update(_p11_row(["Q13", "Q14", "Q15", "Q16"], 92.1, -60.5, 0,
-                        "SOT-23-3_L2.9-W1.3-P1.90-LS2.4-BR"))
-POS_P11.update(_p11_row(["R55", "R56", "R57", "R58"], 92.1, -55.5, 90, "R0603"))
-
 # ---------- 拓扑表 (板坐标 ref 序列; 数据源 = pos.csv + 引脚表) ----------
 # 电源段语义说明: +5V/+3V3/USB_VBUS 均被 device_graph.netlist 判为电源网而不进
 # electrical_edges, 电源流 (vin_pwr/vin_usb/buck_in/rail3v3) 的相邻对沿用既有
@@ -128,8 +112,8 @@ def dims_for(pkg):
 
 
 def load_pos():
-    """pos.csv → {ref: row}; 仅读, 不写。P1.1: 新 ref 由 POS_P11 过渡表补,
-    pos.csv 行优先 (T3 重生成含新 ref 的 csv 后过渡表自动失效)。"""
+    """pos.csv → {ref: row}; 仅读, 不写。P1.1 T3: 真实布局 pos 已含全部新 ref
+    (J20-J23/Q13-16/R55-58 于右边缘带), P1.0 过渡位姿表 POS_P11 已删除。"""
     parts = {}
     with open(POSCSV, newline="", encoding="utf-8") as f:
         for row in csv.DictReader(f):
@@ -141,10 +125,6 @@ def load_pos():
                 "rot": float(row["Rot"]),
                 "side": (row["Side"] or "").strip().lower(),
             }
-    stale = sorted(set(POS_P11) & set(parts))
-    if stale:
-        print("[p11] pos.csv 已覆盖过渡表 ref: %s — 可删除 POS_P11" % ", ".join(stale))
-    parts.update({k: v for k, v in POS_P11.items() if k not in parts})
     return parts
 
 
@@ -192,18 +172,27 @@ def build_elec(pos):
     return out
 
 
+def _outward_dir(rot):
+    """连接器 rot → 壳系出线方向 (T3: J10-J17 rot180 朝 B 壁 +Y; J20-J23 pos 导出
+    rot=-90 ≡ 270 朝 R 壁 +X)。XH 座 rot0 口朝板顶(-Y), 壳系 y-up 取 -rot 变换。"""
+    deg = int(round(rot)) % 360
+    return {0: (0, -1), 90: (-1, 0), 180: (0, 1), 270: (1, 0)}[deg]
+
+
 def build_air(pos):
-    """端子中心出发的 QuadraticBezier: 沿 -Y (KiCad 系) = 壳 +Y 向外至执行器方向。"""
+    """端子中心出发的 QuadraticBezier: 沿端口朝向向外至执行器方向 (T3 起
+    底边 J10-J17 与右边 J20-J23 两带, 方向取各自 rot 推导)。"""
     out = []
     for pid, ref in AIR:
         x, y = shell_xy(pos[ref])
+        dx, dy = _outward_dir(pos[ref]["rot"])
         out.append({
             "id": pid,
             "ref": ref,
             "curve": "quadratic",
             "start": [round(x, 3), round(y, 3), Z_TOP],
-            "ctrl": [round(x, 3), round(y + AIR_CTRL, 3), Z_TOP],
-            "end": [round(x, 3), round(y + AIR_LEN, 3), Z_TOP],
+            "ctrl": [round(x + dx * AIR_CTRL, 3), round(y + dy * AIR_CTRL, 3), Z_TOP],
+            "end": [round(x + dx * AIR_LEN, 3), round(y + dy * AIR_LEN, 3), Z_TOP],
             "desc": AIR_DESC.get(pid, "端子→执行器"),
             "live": "valve_duty[%s]" % pid[4:],   # /api/state 阀 duty (0-255)
             "pressure": "/api/state p 符号",       # 正压青 / 真空琥珀

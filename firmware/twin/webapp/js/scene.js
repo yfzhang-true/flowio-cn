@@ -70,7 +70,7 @@ export async function createScene(canvas, onPartClick = () => {}) {
   // ── STL 装配 (assembly.json 同源) ──────────────────────────────
   const man = await (await fetch("/api/board/assembly")).json();
   if (!man || !Array.isArray(man.parts) || !man.parts.length) throw new Error("装配清单为空");
-  const bb = man.bbox_mm || [95.8, 80.8, 26.1];   // case_geom.BBOX_MM 同源
+  const bb = man.bbox_mm || [105.8, 85.8, 21.5];  // case_geom.BBOX_MM 同源 (P1.1 T3 100x80 板)
   const center = new THREE.Vector3(bb[0] / 2, bb[1] / 2, bb[2] / 2);
 
   const loader = new STLLoader();

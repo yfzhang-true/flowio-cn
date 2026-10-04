@@ -2,7 +2,7 @@
 """device_graph.py — 器件关系图 (plan T3): 电气边(网表) + 空间边(端口->槽) + 匹配.
 
   build_graph()      -> networkx.Graph (节点=ref; 边带 kind=elec/spatial)
-  slot_nodes()       -> 17 槽节点 (case_geom CUTS 9 + TERM 8; 角部 relief 为附属几何)
+  slot_nodes()       -> 21 槽节点 (case_geom CUTS 13 + TERM 8; 角部 relief 为附属几何)
   slots_satisfied()  -> minimum_weight_full_matching (权=端口面中心到槽中心距离)
   flows_crosscheck() -> flows.json 电气拓扑 vs 网表权威源 交叉校验 (plan T3.3)
 运行: tools/venv-cad (networkx).
@@ -105,5 +105,5 @@ if __name__ == "__main__":
     ok, pairs, diag = slots_satisfied()
     bad = flows_crosscheck()
     print("[graph] nodes=%d elec_edges=%d" % (g.number_of_nodes(), g.number_of_edges()))
-    print("[match] 17<->17 %s (%s); 示例 %s" % (ok, diag, list(pairs)[:3] if pairs else "-"))
+    print("[match] 21<->21 %s (%s); 示例 %s" % (ok, diag, list(pairs)[:3] if pairs else "-"))
     print("[flows] 交叉校验违例 %d: %s" % (len(bad), bad[:5]))

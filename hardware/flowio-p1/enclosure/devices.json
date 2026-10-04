@@ -1,7 +1,7 @@
 {
  "_meta": {
   "generated_by": "tools/ingest_device_dims.py",
-  "provenance": "devices_raw.json (jlcpcb MCP 2026-10-03) + curated datasheet dims",
+  "provenance": "devices_raw.json (jlcpcb MCP) + curated datasheet dims",
   "conventions": {
    "dims": "w=封装rot0时X向, d=Y向, h=板上高度(above board), 单位mm",
    "port.dir_local": "rot=0 时端口开口方向(板系x右/y上, KiCad y-down 取 -rot 变换)",
@@ -10,8 +10,8 @@
  },
  "devices": [
   {
-   "lcsc": "C8465",
-   "name": "WJ500V-5.08-2P-14-00A",
+   "lcsc": "C7429671",
+   "name": "ZX-XH2.54-2PWT",
    "refs": [
     "J10",
     "J11",
@@ -20,20 +20,24 @@
     "J14",
     "J15",
     "J16",
-    "J17"
+    "J17",
+    "J20",
+    "J21",
+    "J22",
+    "J23"
    ],
    "pkg_keywords": [
-    "CONN-TH_2P",
-    "WJ500V"
+    "CONN-SMD_2P",
+    "ZX-XH2.54"
    ],
    "dims": {
-    "w": 10.2,
-    "d": 10.0,
-    "h": 14.07
+    "w": 10.0,
+    "d": 7.8,
+    "h": 6.2
    },
    "placement": "EDGE_OUT",
-   "datasheet": "",
-   "jlc_desc": "Screw terminal 2P, Height Above Board 14.07mm",
+   "datasheet": "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2306191414_Megastar-ZX-XH2-54-2PWT_C7429671.pdf",
+   "jlc_desc": "XH SMD,P=2.5mm,卧贴 Wire To Board Connector ROHS (10x7.8x6.2, 3A/250V, Megastar 兆星)",
    "port": {
     "type": "pneumatic_wire",
     "dir_local": [
@@ -42,7 +46,7 @@
     ],
     "exit_z": [
      0.0,
-     14.07
+     6.2
     ]
    }
   },
@@ -173,7 +177,8 @@
     "C12",
     "C13",
     "C15",
-    "C16"
+    "C16",
+    "C18"
    ],
    "pkg_keywords": [
     "C_0603",
@@ -205,6 +210,36 @@
    "placement": "INTERNAL",
    "datasheet": "",
    "jlc_desc": "22pF 50V C0G 0603 MLCC"
+  },
+  {
+   "lcsc": "C165948",
+   "name": "TYPE-C-31-M-12",
+   "refs": [
+    "J1"
+   ],
+   "pkg_keywords": [
+    "TYPE-C",
+    "TYPE-C-31-M-12"
+   ],
+   "dims": {
+    "w": 8.94,
+    "d": 7.35,
+    "h": 3.26
+   },
+   "placement": "EDGE_OUT",
+   "datasheet": "",
+   "jlc_desc": "USB-C 16P 5A 板面贴装电源口 (8.94x7.35x3.26, SHOUHAN/首韩)",
+   "port": {
+    "type": "usb",
+    "dir_local": [
+     0,
+     -1
+    ],
+    "exit_z": [
+     0.0,
+     3.26
+    ]
+   }
   },
   {
    "lcsc": "C167253",
@@ -256,7 +291,11 @@
     "Q7",
     "Q8",
     "Q9",
-    "Q10"
+    "Q10",
+    "Q13",
+    "Q14",
+    "Q15",
+    "Q16"
    ],
    "pkg_keywords": [
     "SOT-23",
@@ -290,7 +329,11 @@
     "R43",
     "R44",
     "R45",
-    "R46"
+    "R46",
+    "R55",
+    "R56",
+    "R57",
+    "R58"
    ],
    "pkg_keywords": [
     "0603WAF1001"
@@ -401,7 +444,9 @@
    "name": "0603WAF5101T5E",
    "refs": [
     "R1",
-    "R2"
+    "R2",
+    "R63",
+    "R64"
    ],
    "pkg_keywords": [
     "R0603",
@@ -446,7 +491,11 @@
     "D8",
     "D9",
     "D10",
-    "D11"
+    "D11",
+    "D12",
+    "D13",
+    "D14",
+    "D15"
    ],
    "pkg_keywords": [
     "SMA"
@@ -492,7 +541,11 @@
     "R51",
     "R52",
     "R53",
-    "R54"
+    "R54",
+    "R59",
+    "R60",
+    "R61",
+    "R62"
    ],
    "pkg_keywords": [
     "0603WAF1002"
@@ -561,35 +614,6 @@
    "placement": "INTERNAL",
    "datasheet": "",
    "jlc_desc": "2.2nF 50V C0G 0603 MLCC"
-  },
-  {
-   "lcsc": "C431533",
-   "name": "DC005",
-   "refs": [
-    "J1"
-   ],
-   "pkg_keywords": [
-    "DC005"
-   ],
-   "dims": {
-    "w": 9.9,
-    "d": 14.0,
-    "h": 10.9
-   },
-   "placement": "EDGE_OUT",
-   "datasheet": "",
-   "jlc_desc": "DC jack RA, W9.9 L13.6, Body Height 10.9mm",
-   "port": {
-    "type": "barrel",
-    "dir_local": [
-     0,
-     1
-    ],
-    "exit_z": [
-     0.0,
-     10.9
-    ]
-   }
   },
   {
    "lcsc": "C456012",
@@ -681,7 +705,8 @@
    "lcsc": "C7519",
    "name": "USBLC6-2SC6",
    "refs": [
-    "U5"
+    "U5",
+    "U7"
    ],
    "pkg_keywords": [
     "SOT-23-6",
@@ -700,7 +725,6 @@
    "lcsc": "C8678",
    "name": "SS34",
    "refs": [
-    "D1",
     "D2",
     "D3"
    ],
@@ -754,6 +778,24 @@
    "placement": "INTERNAL",
    "datasheet": "",
    "jlc_desc": "Buck 3A SOIC-8"
+  },
+  {
+   "lcsc": "",
+   "name": "XGZP6897D (淘宝件 CFSensor 闽芯)",
+   "refs": [
+    "U6"
+   ],
+   "pkg_keywords": [
+    "XGZP6897D-SOP8"
+   ],
+   "dims": {
+    "w": 7.96,
+    "d": 10.6,
+    "h": 9.5
+   },
+   "placement": "INTERNAL",
+   "datasheet": "",
+   "jlc_desc": "淘宝件不入 JLC BOM"
   }
  ],
  "pneumatic_devices": {

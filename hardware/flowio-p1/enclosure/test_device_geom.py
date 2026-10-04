@@ -2,11 +2,11 @@
 """test_device_geom.py — L5 器件几何层测试 (spec: 2026-10-03-device-geometry-framework §4-L5).
 
 分层追加 (TDD 先红后绿):
-  T1 test_schema          — devices.json 覆盖 38 行 BOM/字段完整/17 连接器有 port
+  T1 test_schema          — devices.json 覆盖 BOM 全行/字段完整/21 连接器有 port
      test_schema_pneumatic — pneumatic_devices 段: 4组完整/字段完整/负压阀域(spec 1f-β)/
                              DC4.5V 电压档/refs 唯一/泵压力包络 (+常驻坏副本负测试)
   T2 test_orientation     — 端口射线朝外 + 贴边 (periphery bias / I-O keepout 断言)
-  T3 test_matching        — 17 连接器 <-> 17 槽 完美匹配 (networkx)
+  T3 test_matching        — 21 连接器 <-> 21 槽 完美匹配 (networkx; P1.1 +J20-23/+J5B槽)
   T4 test_drill_keepout   — 器件 OBB 避让 M3 孔 + 铜柱投影
   T5 test_truth_sync      — devices.json <-> case_geom 三方真值一致
 
@@ -78,9 +78,11 @@ def test_schema():
     missing = sorted(bom_refs - covered)
     check("T1 schema: BOM %d 位号全覆盖" % len(bom_refs), not missing, "缺: %s" % missing[:8])
 
-    # 2) 唯一 C 号数 = 33, 每条含必需字段
+    # 2) 唯一 C 号数 = 34, 每条含必需字段
+    # P1.1 推导: 33 (P1.0) - DC005/C431533 - WJ500V/C8465 + USB-C/C165948
+    #   + XH-2P/C7429671 + U6 淘宝件 (lcsc="" 特例段, ingest CURATED_NOPART) = 34
     cn = {e["lcsc"] for e in entries}
-    check("T1 schema: 33 唯一 C 号", len(cn) == 33, "实际 %d" % len(cn))
+    check("T1 schema: 34 唯一 C 号 (33+U6 淘宝段)", len(cn) == 34, "实际 %d" % len(cn))
     need = {"lcsc", "name", "refs", "pkg_keywords", "dims", "placement", "datasheet"}
     bad = [e["lcsc"] for e in entries if not need <= set(e)]
     check("T1 schema: 字段完整 (7 必需)", not bad, "缺字段: %s" % bad[:4])
@@ -91,9 +93,10 @@ def test_schema():
                     and 0.2 <= e["dims"]["h"] <= 20)]
     check("T1 schema: dims 数值域 (0.2..40 / h<=20)", not badd, "异常: %s" % badd[:4])
 
-    # 4) 17 连接器必须有 port (dir_local 单位向量 + exit_z 带宽)
+    # 4) 21 连接器必须有 port (dir_local 单位向量 + exit_z 带宽)
+    # P1.1: +J20-J23 主阀/泵座 (12 阀座全 XH-2P SMD)
     CONN = {"J1", "J2", "J5", "J6", "J7", "J8", "J9", "J10", "J11", "J12", "J13",
-            "J14", "J15", "J16", "J17", "J18", "J19"}
+            "J14", "J15", "J16", "J17", "J18", "J19", "J20", "J21", "J22", "J23"}
     noport = []
     for e in entries:
         if CONN & set(e["refs"]):
@@ -104,7 +107,7 @@ def test_schema():
                 dx, dy = p["dir_local"][:2]
                 if abs(math.hypot(dx, dy) - 1.0) > 1e-6:
                     noport.append(e["lcsc"] + "(非单位向量)")
-    check("T1 schema: 17 连接器均有 port.dir_local/exit_z", not noport, "缺: %s" % noport)
+    check("T1 schema: 21 连接器均有 port.dir_local/exit_z", not noport, "缺: %s" % noport)
 
     # 5) placement 枚举合法
     LEGAL = {"EDGE_OUT", "SURFACE", "INTERNAL"}
@@ -281,17 +284,16 @@ def test_schema_pneumatic():
 
 # ══════════ T2: 几何核 — 朝向/贴边/FCL 碰撞 ══════════
 CONN_REFS = ["J1", "J2", "J5", "J6", "J7", "J8", "J9", "J10", "J11", "J12",
-             "J13", "J14", "J15", "J16", "J17", "J18", "J19"]
+             "J13", "J14", "J15", "J16", "J17", "J18", "J19", "J20", "J21",
+             "J22", "J23"]
 
-# 已知装配干涉 (板已下单, P1 带病放行 -> P2 工单; 证据见 2026-10-03 全量回归报告)
-# - C9  (1206, 板43,9)   压 J9  XH4P 壳体下方 ~1.5x1.6mm — XH 壳贴板无立高, 实装挤压
-# - R3  (100k, 板21,28)  藏 U1 WROOM 屏蔽罩正下方 — 违反模块禁布 (shield 无开窗)
-# - J19/R17 仅 0.05mm 擦边 — 盒模型容差内, 物理间隙存疑但不构成干涉
-# - J15/J16 壳体压 M3 安装孔(68,65): 螺丝头 Ø5.5 被两侧 WJ500V 壳卡住 (BRINGUP 注意)
-KNOWN_ISSUES = {frozenset(p) for p in [("C9", "J9"), ("R3", "U1"), ("J19", "R17")]}
-KNOWN_HOLE_CLASH = {("J15", (68.0, 65.0)), ("J16", (68.0, 65.0))}
-# 过孔擦铜柱接触环 (via 中心距柱心 ≈ 环外径, P2 工单: 移孔 0.5mm)
-KNOWN_VIA_BOSS = {((82.7, 12.9), (86.0, 13.0)), ((4.0, 40.0), (3.0, 37.0))}
+# P1.0 已知装配干涉白名单 — 2026-10-06 T3 全部修复并清零 (回归即红):
+# - C9/J9, R3/U1: T3 重布局移位; J19/R17: R17 移 (69,12.5) 消除擦边
+# - J15/J16 压 M3 孔: HD 移 (73.5,55.7) (铜柱 ST 同步, 钻孔对拍 L2 守门)
+# - 过孔擦铜柱环: gen_pcb 重生成清走线; route_pcb npth_min 2.0->3.5 防复发 (缺陷4)
+KNOWN_ISSUES = set()
+KNOWN_HOLE_CLASH = set()
+KNOWN_VIA_BOSS = set()
 
 
 def test_orientation():
@@ -316,7 +318,7 @@ def test_orientation():
         dist_out = t - 0.0
         if wdist - (ray["dir"][0] * nx + ray["dir"][1] * ny) * 0 > 8.0 and dist_out > 5.0:
             bad_edge.append("%s(壁%.1f/面%.1fmm)" % (ref, wdist, dist_out))
-    check("T2 朝向: 17 连接器端口指向壁 (dot>cos45, 按方向选壁)", not bad_dir, str(bad_dir))
+    check("T2 朝向: 21 连接器端口指向壁 (dot>cos45, 按方向选壁)", not bad_dir, str(bad_dir))
     check("T2 贴边: 端口面 5mm 内或已外伸", not bad_edge, str(bad_edge))
 
 
@@ -347,7 +349,7 @@ def test_collision_fcl():
 def test_matching():
     import device_graph as DGr
     ok, pairs, diag = DGr.slots_satisfied()
-    check("T3 匹配: 17 连接器↔17 槽完美匹配", ok, diag)
+    check("T3 匹配: 21 连接器↔21 槽完美匹配", ok, diag)
     if pairs:
         d = dict(pairs)
         slots = DGr.slot_nodes()
@@ -359,11 +361,13 @@ def test_matching():
             if w > worst:
                 worst, wref = w, ref
         check("T3 匹配: 最远端口-槽距 < 6mm", worst < 6.0, "worst %s %.2fmm" % (wref, worst))
+        # P1.1 抽样 12: 底带 J10/J17/J5 + 顶带 J9/J19/J7 + 左壁 J1/J8/J6 + 右壁 J2/J20/J23
         faces_ok = all(d[r].startswith(slots_face) for r, slots_face in
-                       [("J10", "B@"), ("J17", "B@"), ("J9", "T@"), ("J19", "T@"),
-                        ("J1", "L@"), ("J8", "L@"), ("J2", "R@"), ("J5", "R@")])
-        check("T3 匹配: 抽样 8 器件落位壁正确", faces_ok)
-    ok2, _, _ = DGr.slots_satisfied(drop_slots=("T@73.0",))
+                       [("J10", "B@"), ("J17", "B@"), ("J5", "B@"), ("J9", "T@"),
+                        ("J19", "T@"), ("J7", "T@"), ("J1", "L@"), ("J8", "L@"),
+                        ("J6", "L@"), ("J2", "R@"), ("J20", "R@"), ("J23", "R@")])
+        check("T3 匹配: 抽样 12 器件落位壁正确", faces_ok)
+    ok2, _, _ = DGr.slots_satisfied(drop_slots=("T@71.4",))
     check("T3 匹配: 删一槽必失配 (负测试)", not ok2)
 
 

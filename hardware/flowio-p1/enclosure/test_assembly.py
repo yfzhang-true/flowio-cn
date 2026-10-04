@@ -112,24 +112,30 @@ check("L1 top M3 过孔 x4", screw_ok == 4, "%d/4" % screw_ok)
 # ================= L2 接口: 装配一致性 =================
 print("== L2 接口: 装配一致性 ==")
 
-# 钻孔 T9 (NPTH 3.2) <-> 铜柱 ST 黄金对拍 (fab 数据 <-> CAD)
+# 钻孔 NPTH Ø3.2 <-> 铜柱 ST 黄金对拍 (fab 数据 <-> CAD)
+# P1.1 T3: M3 孔工具号从 T9 变为 T5 (XH-2P 无 TH 孔, 工具集变化) -> 按
+# 直径检索工具而非硬编码序号, 对拍语义不变 (仍 4 孔 Δ<0.2)
 drl_txt = open(DRL, encoding="utf-8", errors="replace").read()
-cur, t9 = None, []
+dia, cur, t32 = {}, None, []
 for ln in drl_txt.splitlines():
     s = ln.strip()
+    m = re.match(r"^T(\d+)C([\d.]+)$", s)
+    if m:
+        dia[m.group(1)] = float(m.group(2))
+        continue
     m = re.match(r"^T(\d+)$", s)
     if m:
-        cur = int(m.group(1))
+        cur = m.group(1)
         continue
     m = re.match(r"^X(-?[\d.]+)Y(-?[\d.]+)$", s)
-    if m and cur == 9:
-        t9.append((float(m.group(1)), -float(m.group(2))))
-check("L2 钻孔 T9 共 4 孔", len(t9) == 4, str(t9))
+    if m and cur and abs(dia.get(cur, 0) - 3.2) < 0.01:
+        t32.append((float(m.group(1)), -float(m.group(2))))
+check("L2 钻孔 Ø3.2 共 4 孔 (按直径检索工具)", len(t32) == 4, str(t32))
 dmax = 0.0
-for hx, hy in t9:
+for hx, hy in t32:
     dmin_st = min(((sx - hx) ** 2 + (sy - hy) ** 2) ** 0.5 for sx, sy in G.ST)
     dmax = max(dmax, dmin_st)
-check("L2 铜柱 ST <-> 钻孔 Δ<0.2", len(t9) == 4 and dmax < 0.2, "max Δ=%.3f" % dmax)
+check("L2 铜柱 ST <-> 钻孔 Δ<0.2", len(t32) == 4 and dmax < 0.2, "max Δ=%.3f" % dmax)
 
 # pos.csv 锚点
 parts = []
