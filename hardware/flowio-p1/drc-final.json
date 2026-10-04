@@ -1,0 +1,427 @@
+{
+    "$schema": "https://schemas.kicad.org/drc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-10-04T21:31:53",
+    "ignored_checks": [
+        {
+            "description": "Footprint has no courtyard defined",
+            "key": "missing_courtyard"
+        },
+        {
+            "description": "Track endpoint not centered on via",
+            "key": "track_not_centered_on_via"
+        },
+        {
+            "description": "Tuning profile track geometries",
+            "key": "tuning_profile_track_geometries"
+        },
+        {
+            "description": "Footprint doesn't match symbol's footprint filters",
+            "key": "footprint_filters_mismatch"
+        },
+        {
+            "description": "Footprint component type doesn't match footprint pads",
+            "key": "footprint_type_mismatch"
+        }
+    ],
+    "included_severities": [
+        "error"
+    ],
+    "kicad_version": "10.0.6",
+    "schematic_parity": [],
+    "source": "flowio-p1.kicad_pcb",
+    "unconnected_items": [
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "填充区 'GND' [GND]在 F.Cu 上, 优先级 1",
+                    "pos": {
+                        "x": 0.5,
+                        "y": 0.5
+                    },
+                    "uuid": "ae7a7f76-8b8a-4fac-8da3-96334d56f01e"
+                },
+                {
+                    "description": "填充区 'GND' [GND]在 F.Cu 上, 优先级 1",
+                    "pos": {
+                        "x": 0.5,
+                        "y": 0.5
+                    },
+                    "uuid": "ae7a7f76-8b8a-4fac-8da3-96334d56f01e"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "填充区 'GND' [GND]在 B.Cu 上, 优先级 1",
+                    "pos": {
+                        "x": 0.5,
+                        "y": 0.5
+                    },
+                    "uuid": "ed45b359-c0e1-4a8c-9dbc-38bb20df5f9c"
+                },
+                {
+                    "description": "填充区 'GND' [GND]在 F.Cu 上, 优先级 1",
+                    "pos": {
+                        "x": 0.5,
+                        "y": 0.5
+                    },
+                    "uuid": "ae7a7f76-8b8a-4fac-8da3-96334d56f01e"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "走线 [+3V3] (F.Cu), 长度: 1.5000 mm",
+                    "pos": {
+                        "x": 36.1219,
+                        "y": 43.0
+                    },
+                    "uuid": "6eb19ee7-cae2-4b31-a907-c46e7491a520"
+                },
+                {
+                    "description": "过孔 [+3V3] (F.Cu - B.Cu)",
+                    "pos": {
+                        "x": 32.0,
+                        "y": 55.8
+                    },
+                    "uuid": "664bba1a-cc45-4bcd-8492-c7c67d8a2872"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "走线 [+3V3] (F.Cu), 长度: 1.5000 mm",
+                    "pos": {
+                        "x": 57.0,
+                        "y": 57.7534
+                    },
+                    "uuid": "d216e025-aa0f-497b-848a-ff5262af545d"
+                },
+                {
+                    "description": "走线 [+3V3] (F.Cu), 长度: 1.5000 mm",
+                    "pos": {
+                        "x": 63.0,
+                        "y": 56.5926
+                    },
+                    "uuid": "3b5e4697-1449-4d3e-907d-d23a7b6a5c74"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "走线 [+3V3] (F.Cu), 长度: 1.5000 mm",
+                    "pos": {
+                        "x": 63.0,
+                        "y": 56.5926
+                    },
+                    "uuid": "3b5e4697-1449-4d3e-907d-d23a7b6a5c74"
+                },
+                {
+                    "description": "过孔 [+3V3] (F.Cu - B.Cu)",
+                    "pos": {
+                        "x": 61.973354,
+                        "y": 50.671642
+                    },
+                    "uuid": "9e1ef221-5765-4383-8c4c-3548dbe25c95"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "F.Cu 上 U4 的焊盘 7 [+3V3]",
+                    "pos": {
+                        "x": 75.5,
+                        "y": 18.7501
+                    },
+                    "uuid": "78816760-2640-4e2c-a420-3ee0f5e2027f"
+                },
+                {
+                    "description": "过孔 [+3V3] (F.Cu - B.Cu)",
+                    "pos": {
+                        "x": 77.818221,
+                        "y": 19.371265
+                    },
+                    "uuid": "5672d195-2392-4001-9676-e4683192d4b1"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "J5 的PTH 焊盘 1 [+3V3]",
+                    "pos": {
+                        "x": 98.31,
+                        "y": 74.0001
+                    },
+                    "uuid": "cf529b0c-8f6a-4cf7-91e2-b4ae2b25c71f"
+                },
+                {
+                    "description": "走线 [+3V3] (F.Cu), 长度: 1.5000 mm",
+                    "pos": {
+                        "x": 76.225,
+                        "y": 51.5
+                    },
+                    "uuid": "2e1e28eb-71b8-4d01-979b-618f8e565d70"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "走线 [S3_SCL] (F.Cu), 长度: 1.1267 mm",
+                    "pos": {
+                        "x": 75.1251,
+                        "y": 47.0226
+                    },
+                    "uuid": "f568200b-8d81-461a-be50-6d9b509a8e3f"
+                },
+                {
+                    "description": "走线 [S3_SCL] (F.Cu), 长度: 1.7858 mm",
+                    "pos": {
+                        "x": 66.734,
+                        "y": 38.6321
+                    },
+                    "uuid": "05379f14-d3c3-4cc9-af0a-ca275f71a716"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "走线 [I2C_SDA] (F.Cu), 长度: 1.1726 mm",
+                    "pos": {
+                        "x": 69.0786,
+                        "y": 39.80475
+                    },
+                    "uuid": "7d267d56-80fc-441b-8366-b9ab1dcc03ad"
+                },
+                {
+                    "description": "走线 [I2C_SDA] (F.Cu), 长度: 2.5533 mm",
+                    "pos": {
+                        "x": 54.4214,
+                        "y": 25.0668
+                    },
+                    "uuid": "e97b4f39-5f79-4672-a882-83e3e3238f17"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "走线 [LED_USER] (F.Cu), 长度: 2.1659 mm",
+                    "pos": {
+                        "x": 49.9436,
+                        "y": 30.0473
+                    },
+                    "uuid": "3973b7e8-4524-469c-b541-0d14dcfbf7c8"
+                },
+                {
+                    "description": "走线 [LED_USER] (B.Cu), 长度: 2.0277 mm",
+                    "pos": {
+                        "x": 48.4121,
+                        "y": 26.4881
+                    },
+                    "uuid": "f70e892f-d9d4-4a43-88d3-b2fea97cbf0c"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "走线 [EN] (F.Cu), 长度: 2.7697 mm",
+                    "pos": {
+                        "x": 19.25,
+                        "y": 9.995
+                    },
+                    "uuid": "13696296-2e0e-411c-959d-3ae840ab0774"
+                },
+                {
+                    "description": "走线 [EN] (F.Cu), 长度: 2.9662 mm",
+                    "pos": {
+                        "x": 72.0,
+                        "y": 28.9637
+                    },
+                    "uuid": "5d6674c2-735c-4007-8c52-42bd28a5476b"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "走线 [IO21] (In1.Cu), 长度: 0.0340 mm",
+                    "pos": {
+                        "x": 39.9661,
+                        "y": 52.9082
+                    },
+                    "uuid": "08bd28f7-487d-4b11-9f7e-980cc672ec0e"
+                },
+                {
+                    "description": "走线 [IO21] (F.Cu), 长度: 2.9247 mm",
+                    "pos": {
+                        "x": 75.9783,
+                        "y": 61.6216
+                    },
+                    "uuid": "cbe160db-8320-42bb-8198-0c6661dcc269"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "走线 [BTN_USER] (In1.Cu), 长度: 1.6090 mm",
+                    "pos": {
+                        "x": 47.6127,
+                        "y": 32.0207
+                    },
+                    "uuid": "c907e522-e22c-4477-8dac-9d2664a26cb7"
+                },
+                {
+                    "description": "走线 [BTN_USER] (F.Cu), 长度: 3.3032 mm",
+                    "pos": {
+                        "x": 45.5,
+                        "y": 33.7466
+                    },
+                    "uuid": "c918a550-0120-499b-a575-3566a924bc81"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "走线 [I2C_SCL] (F.Cu), 长度: 0.7709 mm",
+                    "pos": {
+                        "x": 24.1001,
+                        "y": 26.8418
+                    },
+                    "uuid": "3b31f182-90db-4214-8c05-b085f22a5c4b"
+                },
+                {
+                    "description": "走线 [I2C_SCL] (F.Cu), 长度: 3.0097 mm",
+                    "pos": {
+                        "x": 49.9815,
+                        "y": 31.9113
+                    },
+                    "uuid": "7e7c2d07-010b-4328-b83b-4bfc60c313a1"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "走线 [I2C_SCL] (In1.Cu), 长度: 0.6238 mm",
+                    "pos": {
+                        "x": 49.5404,
+                        "y": 22.9536
+                    },
+                    "uuid": "a6aabc2d-ccbe-40a6-a269-65ab1661c040"
+                },
+                {
+                    "description": "走线 [I2C_SCL] (F.Cu), 长度: 0.3659 mm",
+                    "pos": {
+                        "x": 49.2817,
+                        "y": 22.6949
+                    },
+                    "uuid": "dd9fac05-9a63-4125-9115-cfcf570674e1"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "走线 [I2C_SCL] (F.Cu), 长度: 2.6117 mm",
+                    "pos": {
+                        "x": 57.2534,
+                        "y": 27.0
+                    },
+                    "uuid": "3036f6e4-1e91-4ad6-95e1-4635907a9e3b"
+                },
+                {
+                    "description": "走线 [I2C_SCL] (In1.Cu), 长度: 8.5166 mm",
+                    "pos": {
+                        "x": 49.9815,
+                        "y": 23.3947
+                    },
+                    "uuid": "860864fe-08f3-4177-8e44-f031ed66e608"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "走线 [BOOT] (F.Cu), 长度: 2.5003 mm",
+                    "pos": {
+                        "x": 21.7047,
+                        "y": 45.627
+                    },
+                    "uuid": "f3ddcbc9-cf54-4337-9a5e-a155bcc65830"
+                },
+                {
+                    "description": "走线 [BOOT] (In1.Cu), 长度: 15.5068 mm",
+                    "pos": {
+                        "x": 21.7047,
+                        "y": 45.627
+                    },
+                    "uuid": "79a837ec-d512-4ef4-ad5a-d7c09549bbb9"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        }
+    ],
+    "violations": []
+}
