@@ -8,7 +8,7 @@
     x = PosX + OX,  y = -PosY + OX,  OX = 2.9 (WALL+CLR)
     顶面器件 z = Z_TOP, 取 case_geom 单一真值 (Z_BOARD + PCB_T, 现 9.0)
 Y 方向语义 (KiCad Y 轴向下): "沿 -Y" = PosY 减小 = 壳 y 增大 = 穿出端子侧开孔
-(make_case.py side_cut("B",...) 在高 y 壁, TY=68.5) → 气流弧线朝执行器向外延伸。
+(make_case.py side_cut("B",...) 在高 y 壁, TY=74.0) → 气流弧线朝执行器向外延伸。
 
 拓扑数据源: fab/flowio-p1-pos.csv (器件坐标) + 引脚表 (走线顺序, 写死于 ELEC/AIR)。
 任一 ref 在 pos.csv 查不到 → 报错列出全部缺失, 不许静默跳过。
@@ -230,7 +230,7 @@ def main():
         "meta": {
             "coord": "shell: x=PosX+2.9, y=-PosY+2.9 (S3 make_meshes 同源)",
             "z_top": Z_TOP,
-            "air_frame": "-Y 为 KiCad/PosY 系 (壳 +Y, 穿端子侧开孔向外)",
+            "air_frame": "双带: J10-J17 底带 rot180 → 壳 +Y 穿底壁; J20-J23 右带 rot-90 → 壳 +X 穿右壁 (方向按端子 rot 推导, 见 _outward_dir)",
             "source": "hardware/flowio-p1/fab/flowio-p1-pos.csv",
         },
         "elec": build_elec(pos),

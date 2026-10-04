@@ -78,8 +78,9 @@ def seg_clear(x1, y1, x2, y2, net):
                     return False
     return True
 
-def spot_free(vx, vy, net, pad_min=1.7, same_min=0.9, npth_min=3.5):
-    # npth_min=3.5: M3 安装孔=铜柱心, 过孔需离柱环(Ø6.3)外缘≥0.2 (T3 缺陷4)
+def spot_free(vx, vy, net, pad_min=1.7, same_min=0.9, npth_min=3.7):
+    # npth_min=3.7: M3 安装孔=铜柱心; 净空 = npth_min - 柱外径半径3.15 - 过孔半径0.35
+    # = 0.2 真裕量 (3.5 时仅相切 0 裕量, T3 缺陷4 复审修正)
     if not (1.2 < vx < 98.8 and 1.2 < vy < 78.8):
         return False
     for qx, qy, qnet, is_npth in ALL_PADS:

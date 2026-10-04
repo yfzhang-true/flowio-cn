@@ -62,10 +62,10 @@ def _load_device_dims():
 
 _KW_DIMS, TALLEST = _load_device_dims()   # TALLEST = 9.5 (XGZP6897D 倒钩管, P1.1 最高件;
 # WJ500V 14.07 随端子排移除退役; 腔高随之 23.67 -> 19.1)
-Z_CEIL = Z_TOP + TALLEST + CEIL_CLR  # 23.67 内腔顶面 = 下壳壁顶 = 顶盖天花下表面
+Z_CEIL = Z_TOP + TALLEST + CEIL_CLR  # 19.1 内腔顶面 = 下壳壁顶 = 顶盖天花下表面
 OUTER_H = Z_CEIL + WALL          # 26.07 总高
 SKIRT = 7.0                      # 顶盖裙边下沉深度
-SKIRT_Z0 = Z_CEIL - SKIRT        # 16.67 裙边下端
+SKIRT_Z0 = Z_CEIL - SKIRT        # 12.1 裙边下端
 SKIRT_INSET = WALL + 0.4         # 2.8 裙环外缘离壳外缘 (贴入下壳腔, 与壁 0.4 间隙)
 SKIRT_T = 2.0                    # 裙环壁厚 (环带 2.8..4.8)
 
@@ -122,7 +122,7 @@ ANCHORS = [  # (ref, PosX, PosY) -> 期望壳系坐标 (已人工对拍槽位)
 ]
 
 # ---------- 孪生爆炸视图契约 ----------
-BBOX_MM = [OW, OH, OUTER_H]      # [95.8, 80.8, 26.07]
+BBOX_MM = [OW, OH, OUTER_H]      # 现值 [105.8, 85.8, 21.5] (派生自 OW/OH/OUTER_H, 随板改同步)
 EXPLODE = {
     "case_top":    [0, 0, 32],
     "parts_F":     [0, 0, 14],

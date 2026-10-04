@@ -92,6 +92,16 @@ def main():
         assert near(a["end"], expect_end), \
             "%s 终点 %s != 起点+dir×AIR_LEN %s (rot=%s dir=(%d,%d))" \
             % (a["id"], a["end"], expect_end, p["rot"], dx, dy)
+    # 3b. 独立带向不变量 (不依赖 _outward_dir 实现, 实现错则此处独立翻红):
+    #     底带 J10-J17 终点必须 +Y 向外; 右带 J20-J23 终点必须 +X 向外
+    by_ref = {a["ref"]: a for a in flows["air"]}
+    for i in range(8):
+        a = by_ref["J%d" % (10 + i)]
+        assert a["end"][1] > a["start"][1],             "%s 底带终点未 +Y 向外: %s -> %s" % (a["id"], a["start"], a["end"])
+    for i in range(4):
+        a = by_ref["J%d" % (20 + i)]
+        assert a["end"][0] > a["start"][0],             "%s 右带终点未 +X 向外: %s -> %s" % (a["id"], a["start"], a["end"])
+    print("[ok] 带向不变量: J10-J17 end.y>start.y (底壁 +Y), J20-J23 end.x>start.x (右壁 +X)")
     print("[ok] 12 条 air 起点=端子, end/ctrl = start+dir×AIR_LEN/CTRL "
           "(rot 推导出线, 底壁 +Y / 右壁 +X 双向同检)")
 

@@ -160,8 +160,12 @@ STD = r"E:/Program Files/KiCad/10.0/share/kicad/footprints"
 def load_fp(fp):
     if fp.startswith("JLC-MCP:"):
         return pcbnew.FootprintLoad(JLC, fp.split(":")[1])
-    if fp.startswith("LOCAL:"):                 # 手建封装 (U6 XGZP6897D, T3)
-        return _mk_xgzp6897d()
+    if fp.startswith("LOCAL:"):                 # 手建封装注册表 (T3: 仅 U6 XGZP6897D)
+        name = fp.split(":", 1)[1]
+        if name not in _LOCAL_FP_BUILDERS:
+            raise ValueError("LOCAL 手建封装未注册分发: %s (可用: %s)"
+                             % (fp, sorted(_LOCAL_FP_BUILDERS)))
+        return _LOCAL_FP_BUILDERS[name]()
     if fp.startswith("Capacitor_SMD:"):
         return pcbnew.FootprintLoad(os.path.join(STD, "Capacitor_SMD.pretty"), fp.split(":")[1])
     if fp.startswith("TestPoint:"):
@@ -179,8 +183,8 @@ def _mk_xgzp6897d():
     fp = pcbnew.FOOTPRINT(board)
     try:
         fp.SetFPID(pcbnew.LIB_ID("LOCAL", "XGZP6897D-SOP8-W7.96-P2.54"))
-    except Exception:
-        pass
+    except Exception as e:                       # 失败仅损 pos 导出 Package 列, 须可见
+        print("warn: U6 SetFPID 失败 (%r) — pos.csv Package 列将退化" % (e,))
     ls = pcbnew.LSET()
     for lay in (pcbnew.F_Cu, pcbnew.F_Mask, pcbnew.F_Paste):
         ls.AddLayer(lay)
@@ -214,6 +218,11 @@ def _mk_xgzp6897d():
     c.SetWidth(int(MM(0.15)))
     fp.Add(c)
     return fp
+
+
+# LOCAL: 前缀 -> 构造器注册表 (新增手建封装在此登记, 未登记名 load_fp 直接报错,
+# 防第二个手建件被静默换成既有封装)
+_LOCAL_FP_BUILDERS = {"XGZP6897D-SOP8-W7.96-P2.54": _mk_xgzp6897d}
 
 board = pcbnew.BOARD()
 board.SetFileName(os.path.join(HERE, "..", "flowio-p1.kicad_pcb"))

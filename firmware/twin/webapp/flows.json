@@ -2,7 +2,7 @@
  "meta": {
   "coord": "shell: x=PosX+2.9, y=-PosY+2.9 (S3 make_meshes 同源)",
   "z_top": 9.0,
-  "air_frame": "-Y 为 KiCad/PosY 系 (壳 +Y, 穿端子侧开孔向外)",
+  "air_frame": "双带: J10-J17 底带 rot180 → 壳 +Y 穿底壁; J20-J23 右带 rot-90 → 壳 +X 穿右壁 (方向按端子 rot 推导, 见 _outward_dir)",
   "source": "hardware/flowio-p1/fab/flowio-p1-pos.csv"
  },
  "elec": [
