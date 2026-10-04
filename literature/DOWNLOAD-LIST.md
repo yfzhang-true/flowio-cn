@@ -2,6 +2,17 @@
 
 > 下载后放入本目录（E:\FLOWIO\literature\），AI 将继续提取阅读并纳入 SPEC。
 
+## ✅ 已解决（2026-10-05 · P1.1 新增器件手册全量归档）
+
+- [x] **370 泵 A/B 调研** → `pump-370AB-spec.md`（A=正压/B=负压充吸两用；实泵 58×⌀27.4 双嘴 ⌀3.6 图源直读；
+      ⛔ 厂商一手参数表公开网不可得——威力兹官网停摆，**待用户从 listing 确认 A/B 命名**，不阻塞设计）
+- [x] **SS14**（MDD C2480）→ `C2480_SS14_MDD.pdf` + `ss14-spec.md`（1A/40V/SMA，基本库）
+- [x] **电源输入口** → `power-input-spec.md`（⚠ 现 C431533 DC005 仅 500mA=缺陷#6；
+      替代 C720575 DC-044A-A200 3A / C165948 TYPE-C-31-M-12 5A，PDF 均已下载）
+- [x] **竞品 HANDACE 汉戴斯康复手套**（18 页 listing）→ `competitor-handace-glove.md` + `extract/汉戴斯/`
+- [x] 散件.pdf（图片型）9 页抽图全读 → `extract/散件/`（370 充吸两用泵语义 + 卖家"5V2~3A 手机充电头"互证）
+- [x] AO3400A / 0520D / 0520F / XGZP6897D / TCA9548A：已在库核对完毕（见 ss14-spec.md §已核对）
+
 ## ✅ 用户已解决（2026-10-03 · 器件几何框架基线 11 篇，已从 FLOWIO-3rdparty 归位并全文精读）
 
 - [x] AlphaChip 正主（Nature 2021）→ `2021-mirhoseini-nature-alphachip.pdf`（可行性掩码一手方法论）
