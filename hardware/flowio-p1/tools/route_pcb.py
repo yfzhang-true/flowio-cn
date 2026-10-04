@@ -5,7 +5,8 @@
 阶段2+3: 通用网表驱动直布——收集全部非电源 SMD 焊盘按最近邻链式 L 形布线,
          无写死通道数 (P1.0 的 8 路 MANUAL 干线表已随 90x75 布局废弃,
          P1.1 12 路 J10-J23/J20-J23 驱动栅网由网表自动覆盖)
-用法: kiCad-python route_pcb.py [stage]   (stage 累积, 3=全流程)
+阶段4: SES 导入后电源收尾——J1 +5V 入口三通道 + In2 Z5a↔Z5b 颈桥
+用法: kiCad-python route_pcb.py [stage]   (stage 累积, 3=布线, 4=SES后收尾)
 """
 import os, sys, math
 import pcbnew
@@ -99,6 +100,12 @@ def _collect_pads():
                              max(hw, hh), hw, hh))
 _collect_pads()
 
+def _pd_seg(px, py, x1, y1, x2, y2):
+    dx, dy = x2 - x1, y2 - y1
+    L2 = dx * dx + dy * dy
+    tp = 0 if L2 == 0 else max(0, min(1, ((px - x1) * dx + (py - y1) * dy) / L2))
+    return math.hypot(px - (x1 + tp * dx), py - (y1 + tp * dy))
+
 def seg_clear(x1, y1, x2, y2, net, extra=0.75):
     """电源引线段不得扫过异网焊盘(采样 0.4mm)
     extra = 线半宽 + 铜间距 (0.8mm 线→0.75 / 1.0mm 线→0.85 / 1.5mm 线→1.1)"""
@@ -148,6 +155,153 @@ def zone(name, layer, pts, min_thickness=0.3, prio=0):
         ol.Append(int(MM(cx)), int(MM(cy)))
     board.Add(z)
     return z
+
+# ---- 公共收尾: 重合铜去重 + 平面填充 + 存盘 ----
+def _run_tail():
+    # 重合铜去重 (幂等硬化): 累积 stage 重跑时, 阶段1 电源过孔守卫
+    # (_via_exists r=1.3 < 候选最小 dist 1.5) 拦不住同位重放 (T4 实测一次
+    # 重跑翻出 68 枚同位同网过孔)。同网同位铜本就冗余, 存盘前统一归一:
+    # 过孔按 (网,坐标) 去重; 走线按 (网,层,端点无向) 去重留最宽。
+    _via_seen = {}
+    _nvd = 0
+    for tr in list(board.GetTracks()):
+        if tr.GetClass() != "PCB_VIA":
+            continue
+        q = tr.GetPosition()
+        k = (tr.GetNetname(), round(q.x), round(q.y))
+        if k in _via_seen:
+            board.Remove(tr)
+            _nvd += 1
+        else:
+            _via_seen[k] = tr
+    _trk_seen = {}
+    _ntd = 0
+    for tr in list(board.GetTracks()):
+        if tr.GetClass() != "PCB_TRACK":
+            continue
+        s, e = tr.GetStart(), tr.GetEnd()
+        # 端点无向键: 水平/垂直线用排序端点; 斜线 (不该出现) 保守按有向
+        k2 = (tr.GetNetname(), tr.GetLayer(),
+              min(s.x, e.x), min(s.y, e.y), max(s.x, e.x), max(s.y, e.y)) \
+             if (s.x == e.x or s.y == e.y) else \
+             (tr.GetNetname(), tr.GetLayer(), s.x, s.y, e.x, e.y)
+        if k2 in _trk_seen:
+            if tr.GetWidth() > _trk_seen[k2].GetWidth():
+                board.Remove(_trk_seen[k2])
+                _trk_seen[k2] = tr
+            else:
+                board.Remove(tr)
+            _ntd += 1
+        else:
+            _trk_seen[k2] = tr
+    print(f"[dedup] 同位过孔 -{_nvd}, 同位走线 -{_ntd}")
+    # 填充所有平面
+    try:
+        filler = pcbnew.ZONE_FILLER(board)
+        filler.Fill(list(board.Zones()))
+    except Exception as e:
+        print("zone fill:", e)
+    pcbnew.SaveBoard(BF, board)
+    print(f"[route] stage {STAGE} 完成")
+
+# ================= 阶段 4: SES 导入后电源收尾 (独立路径, 提前退出) =================
+# freerouting 只布 0.2mm 信号线, 电源容量必须脚本补; 且障碍模型只认焊盘/自家
+# 走线, 不能在已布板上重跑阶段 1-3 (会重复布线/压线出短路) —— 故 stage 4
+# 做完自己的事直接 _run_tail + exit, 不落入后续阶段。
+if STAGE == 4:
+    import math as _m4
+
+    def _in2_clear(pts, net, half_w):
+        """In2 中心线净空: 过孔(全层穿孔) + In2 走线 + NPTH 钻孔。
+        need = half_w + 障碍半径 + 0.25"""
+        for s, e in zip(pts[:-1], pts[1:]):
+            L = _m4.hypot(e[0] - s[0], e[1] - s[1])
+            n = max(2, int(L / 0.3))
+            for k in range(n + 1):
+                f = k / n
+                px, py = s[0] + (e[0] - s[0]) * f, s[1] + (e[1] - s[1]) * f
+                for tr in board.GetTracks():
+                    if tr.GetNetname() == net or not tr.GetNetname():
+                        continue
+                    if tr.GetClass() == "PCB_VIA":
+                        q = tr.GetPosition()
+                        if _m4.hypot(pcbnew.ToMM(q.x) - px, pcbnew.ToMM(q.y) - py) < half_w + 0.35 + 0.25:
+                            return False
+                    elif tr.GetLayer() == pcbnew.In2_Cu:
+                        st, en = tr.GetStart(), tr.GetEnd()
+                        hw2 = pcbnew.ToMM(tr.GetWidth()) / 2
+                        if _pd_seg(px, py, pcbnew.ToMM(st.x), pcbnew.ToMM(st.y),
+                                   pcbnew.ToMM(en.x), pcbnew.ToMM(en.y)) < half_w + hw2 + 0.25:
+                            return False
+                for qx, qy, qnet, is_np, _qr, qhw, qhh in ALL_PADS:
+                    if is_np:  # 钻孔穿 In2 (J1 固定孔等, 半径按孔径)
+                        if _pd_seg(qx, qy, s[0], s[1], e[0], e[1]) < qhw + half_w + 0.25:
+                            return False
+        return True
+
+    # (a) J1 +5V 入口 3 通道并联 (0.5mm 单列 USB-C: 焊盘间隙 0.2mm, F.Cu 正面
+    #     全宽逃逸几何不可行; 右侧 0.2mm 狗骨+过孔入 In2, 左缘 0.5mm 边带总线):
+    #       ch1/2: 右狗骨 (0.2 ext ~0.9A@10°C each) → via 0.7/0.35 → In2 1.0mm 入 Z5a
+    #       ch3:   左缘总线 0.5mm (x0.7 边带, J1 屏蔽腿以西全空) ~1.2A@10°C
+    #     合计 ≈3.0A@10°C / 4.4A@20°C ≥ 2.75A 设计; 分发主体 = In2 平面 (区宽数十 mm)
+    _J1_VIAS = [(4.40, 16.95), (4.40, 21.25)]
+    for _vx, _vy in _J1_VIAS:
+        if not _via_exists(_vx, _vy, "+5V", r=0.6):
+            v = pcbnew.PCB_VIA(board)
+            v.SetNetCode(netcode("+5V"))
+            v.SetPosition(pcbnew.VECTOR2I(int(MM(_vx)), int(MM(_vy))))
+            v.SetViaType(pcbnew.VIATYPE_THROUGH)
+            v.SetWidth(int(MM(0.7)))
+            v.SetDrill(int(MM(0.35)))
+            board.Add(v)
+            print(f"[stage4] J1 +5V 过孔 @({_vx},{_vy})")
+    _S4_FCU = [
+        (0.2, [(1.90, 16.70), (4.40, 16.95)]),                 # B4A9 右狗骨
+        (0.2, [(1.90, 21.25), (4.40, 21.25)]),                 # A4B9 右狗骨
+        (0.5, [(1.90, 16.60), (0.70, 16.60), (0.70, 25.50), (4.50, 25.50)]),  # 左缘总线
+        (0.5, [(1.90, 21.45), (0.70, 21.45)]),                 # A4B9 并入左总线
+    ]
+    for _w, _pts in _S4_FCU:
+        track("+5V", _pts, width=_w, layer=pcbnew.F_Cu)
+    _S4_IN2 = [
+        [(4.40, 16.95), (4.40, 18.30), (7.20, 18.30)],
+        [(4.40, 21.25), (4.40, 20.40), (7.20, 20.40)],   # y20.4: 避 P5_CC2 In2 线 (y19.2)
+    ]
+    for _pts in _S4_IN2:
+        if _in2_clear(_pts, "+5V", 0.5):
+            track("+5V", _pts, width=1.0, layer=pcbnew.In2_Cu)
+        else:
+            print(f"[stage4] In2 引入段 {_pts[0]} 被阻, 跳过")
+
+    # (b) In2 Z5a↔Z5b 颈桥: 两区共边仅 x14/y33.5-36 = 2.5mm (内层 ~1.2A@10°C),
+    #     且 freerouting 在该带布了 S4_SDA(y36.1)/+3V3(y34.2) 两条 In2 信号线,
+    #     任何粗走线桥都穿不过剩余窗口 → 新增一块跨颈 +5V 平面 (填充自动在
+    #     信号线周 carve 0.2 净空, 颈下带 y33.5-34 + 信号线间岛连通), 等效颈宽
+    #     2.5→~4.5mm ≈ 3A 内层档。矩形 x≤17 让开 +3V3 Z3b (x≥18)。
+    #     幂等: In2 层 +5V 区恰 4 块 (Z5a-d) 时才建, 建后变 5。
+    _n_5v_in2 = sum(1 for z in board.Zones()
+                    if (not z.GetIsRuleArea()) and z.GetNetname() == "+5V"
+                    and z.GetLayer() == pcbnew.In2_Cu)
+    if _n_5v_in2 == 4:
+        zone("+5V", pcbnew.In2_Cu,
+             [(6.0, 32.5), (17.0, 32.5), (17.0, 38.0), (6.0, 38.0)], prio=6)
+        print("[stage4] 颈桥平面 Z5NECK (6-17, 32.5-38) prio6 已建")
+    else:
+        print(f"[stage4] In2 +5V 区已有 {_n_5v_in2} 块 (≠4=颈桥已建), 跳过")
+
+    # (c) freerouting 扇出短桩加宽 0.15 → 0.2 (netclass 最小线宽)。
+    #     ⚠ 本进程不做任何 board.Remove (SWIG 堆毒化, T4 实测 Remove 后
+    #     GetTracks 返回不可迭代 SwigPyObject) —— 退化短段一并加宽即可
+    #     (0.006mm 段加宽后即同网铜点, 无害); 真要删另起进程。
+    _nwid = 0
+    for tr in board.GetTracks():
+        if tr.GetClass() == "PCB_TRACK" and pcbnew.ToMM(tr.GetWidth()) < 0.199:
+            tr.SetWidth(int(MM(0.2)))
+            _nwid += 1
+    print(f"[stage4] 扇出短桩加宽 {_nwid}")
+
+    _run_tail()
+    sys.exit(0)
 
 # ================= 阶段 1: 平面 + 过孔 =================
 if STAGE >= 1:
@@ -252,11 +406,6 @@ if STAGE >= 1:
 
 # ---- 阶段1.5: 电源引出线事后验证, 触碰异网者删除 ----
 import math as _m2
-def _pd_seg(px, py, x1, y1, x2, y2):
-    dx, dy = x2 - x1, y2 - y1
-    L2 = dx * dx + dy * dy
-    tp = 0 if L2 == 0 else max(0, min(1, ((px - x1) * dx + (py - y1) * dy) / L2))
-    return _m2.hypot(px - (x1 + tp * dx), py - (y1 + tp * dy))
 
 _pwr_items = []
 for tr in board.GetTracks():
@@ -583,49 +732,4 @@ for tr in list(board.GetTracks()):
             break
 print(f"[netfix] 删除异网传播过孔: {_net_bad}")
 
-# ---- 重合铜去重 (幂等硬化) ----
-# 累积 stage 重跑时, 阶段1 电源过孔守卫 (_via_exists r=1.3 < 候选最小 dist 1.5)
-# 拦不住同位重放 (T4 实测一次重跑翻出 68 枚同位同网过孔)。同网同位铜本就冗余,
-# 存盘前统一归一: 过孔按 (网,坐标) 去重; 走线按 (网,层,端点无向) 去重留最宽。
-_via_seen = {}
-_nvd = 0
-for tr in list(board.GetTracks()):
-    if tr.GetClass() != "PCB_VIA":
-        continue
-    q = tr.GetPosition()
-    k = (tr.GetNetname(), round(q.x), round(q.y))
-    if k in _via_seen:
-        board.Remove(tr)
-        _nvd += 1
-    else:
-        _via_seen[k] = tr
-_trk_seen = {}
-_ntd = 0
-for tr in list(board.GetTracks()):
-    if tr.GetClass() != "PCB_TRACK":
-        continue
-    s, e = tr.GetStart(), tr.GetEnd()
-    # 端点无向键: 水平/垂直线用排序端点; 斜线 (不该出现) 保守按有向
-    k2 = (tr.GetNetname(), tr.GetLayer(),
-          min(s.x, e.x), min(s.y, e.y), max(s.x, e.x), max(s.y, e.y)) \
-         if (s.x == e.x or s.y == e.y) else \
-         (tr.GetNetname(), tr.GetLayer(), s.x, s.y, e.x, e.y)
-    if k2 in _trk_seen:
-        if tr.GetWidth() > _trk_seen[k2].GetWidth():
-            board.Remove(_trk_seen[k2])
-            _trk_seen[k2] = tr
-        else:
-            board.Remove(tr)
-        _ntd += 1
-    else:
-        _trk_seen[k2] = tr
-print(f"[dedup] 同位过孔 -{_nvd}, 同位走线 -{_ntd}")
-
-# 填充所有平面
-try:
-    filler = pcbnew.ZONE_FILLER(board)
-    filler.Fill(list(board.Zones()))
-except Exception as e:
-    print("zone fill:", e)
-pcbnew.SaveBoard(BF, board)
-print(f"[route] stage {STAGE} 完成")
+_run_tail()
