@@ -41,6 +41,8 @@ def track(net, pts, width=0.25, layer=pcbnew.F_Cu, prio=1):
     t.SetWidth(int(MM(width)))
     t.SetLayer(layer)
     for a, b in zip(pts[:-1], pts[1:]):
+        if math.hypot(b[0] - a[0], b[1] - a[1]) < 0.05:
+            continue
         seg = pcbnew.PCB_TRACK(board)
         seg.SetNetCode(netcode(net))
         seg.SetWidth(int(MM(width)))
@@ -147,7 +149,10 @@ def seg_clear(x1, y1, x2, y2, net, extra=0.75, layer=pcbnew.F_Cu):
                     return False
     return True
 
-def spot_free(vx, vy, net, pad_gap=0.65, same_min=0.9, npth_min=3.7):
+def spot_free(vx, vy, net, pad_gap=0.65, same_min=0.9, npth_min=3.7, own=None, via_r=0.35):
+    # own=(x,y): via-in-pad 场景跳过源焊盘自身 (否则 same_min 必拒)
+    # via_r: 过孔环半径 (0.7 孔=0.35 默认; 0.6 孔 VIP 传 0.3 —— T4-r5 实测
+    #   R4.1 距 B.Cu S2_SCL 线 0.6497, 0.35 模型差 0.0003 误拒)
     # pad_gap=0.65: 0.5 板级铜间距 + 0.15 双模型误差裕量 (T4-r5 实测 0.55 时
     #   +3V3 逃逸线端头距 R9.2 0.18 出 clearance; 模型半径 vs 真焊盘圆角差);
     # npth_min=3.7: M3 安装孔=铜柱心; 净空 = npth_min - 柱外径半径3.15 - 过孔半径0.35
@@ -155,10 +160,12 @@ def spot_free(vx, vy, net, pad_gap=0.65, same_min=0.9, npth_min=3.7):
     # ⚠ 异网焊盘必须按真实半径 qr 判距: XH pad r=1.9 时固定 1.7 会让过孔物理
     #   压上焊盘, KiCad BOARD::Add 连通性会把异网名静默传播给过孔 (T4 实测:
     #   GND 缝合过孔压 DRV1/DRV2/+5V pad 后存盘即变网)
-    VIA_R = 0.35
+    VIA_R = via_r
     if not (1.2 < vx < 98.8 and 1.2 < vy < 78.8):
         return False
     for qx, qy, qnet, is_npth, qr, _hwx, _hhx in ALL_PADS:
+        if own is not None and abs(qx - own[0]) < 0.05 and abs(qy - own[1]) < 0.05:
+            continue
         d = math.hypot(qx - vx, qy - vy)
         if is_npth and d < npth_min:
             return False
@@ -408,6 +415,975 @@ if STAGE == 4:
         if not done:
             print(f"[stage4] GND 焊盘 {_ref}.{_pn} 无净空落点!")
     print(f"[stage4] GND FULL {_nf}, via-in-pad {_nv}, 逃逸系锚 {_nesc}")
+
+    _run_tail()
+    sys.exit(0)
+
+# ================= 阶段 5: 散件收尾 (round5 后残余, 独立路径提前退出) =================
+if STAGE == 5:
+    import math as _m5
+
+    # (a) 失败电源焊盘窄线重试: 焊盘无同网 F.Cu 逃逸线触达 (端点距焊盘心 <0.3)
+    #     → 以 0.6/0.4 两档线宽重搜 (轻载 pull-up/LED/去耦焊盘 0.4mm ≈1A 足够)
+    _5V_RECTS = [(3, 14, 13, 36), (14, 36, 33.5, 55), (0.5, 99.5, 53, 79.5),
+                 (79.5, 99.5, 14, 79.5)]
+    _3V3_RECTS = [(14, 99.5, 0.5, 20), (18, 30, 20, 33.5), (30, 79, 20, 58)]
+
+    def _in_r(rects, x, y):
+        return any(x1 <= x <= x2 and y1 <= y <= y2 for x1, x2, y1, y2 in rects)
+
+    _placed5 = 0
+    for ref5, fp5 in FP.items():
+        for pad5 in fp5.Pads():
+            nn5 = pad5.GetNetname()
+            if nn5 not in ("+3V3", "+5V") or pad5.GetAttribute() != pcbnew.PAD_ATTRIB_SMD:
+                continue
+            px5, py5 = pcbnew.ToMM(pad5.GetPosition().x), pcbnew.ToMM(pad5.GetPosition().y)
+            has_esc = False
+            for tr5 in board.GetTracks():
+                if tr5.GetNetname() == nn5 and tr5.GetClass() == "PCB_TRACK" and tr5.GetLayer() == pcbnew.F_Cu:
+                    s5, e5 = tr5.GetStart(), tr5.GetEnd()
+                    if (abs(pcbnew.ToMM(s5.x) - px5) < 0.3 and abs(pcbnew.ToMM(s5.y) - py5) < 0.3) or \
+                       (abs(pcbnew.ToMM(e5.x) - px5) < 0.3 and abs(pcbnew.ToMM(e5.y) - py5) < 0.3):
+                        has_esc = True
+                        break
+            if has_esc:
+                continue
+            done5 = False
+            for w5 in (0.6, 0.4):
+                ex5 = w5 / 2 + 0.4
+                for ang5 in range(0, 360, 10):
+                    for d5 in (1.5, 2.1, 2.7, 3.3, 4.2, 5.5, 6.5, 8.0):
+                        vx5 = px5 + d5 * _m5.cos(_m5.radians(ang5))
+                        vy5 = py5 + d5 * _m5.sin(_m5.radians(ang5))
+                        inz5 = _in_r(_3V3_RECTS if nn5 == "+3V3" else _5V_RECTS, vx5, vy5)
+                        if inz5 and spot_free(vx5, vy5, nn5) and                                seg_clear(px5, py5, vx5, vy5, nn5, ex5):
+                            track(nn5, [(px5, py5), (vx5, vy5)], width=w5, layer=pcbnew.F_Cu)
+                            via(nn5, vx5, vy5)
+                            _placed5 += 1
+                            done5 = True
+                            break
+                    if done5:
+                        break
+                if done5:
+                    break
+            if not done5:
+                # 终极兜底: via-in-pad (T4-r5 实测 R4.1 被 FB 走线三面围死,
+                # 0.4mm 逃逸走廊不存在; 0.6/0.3 孔在 0.81x0.86 焊盘内恰好净空)。
+                # 仅当焊盘位于本网 In2 平面矩形内 (孔穿 In2 即挨平面)。
+                if _in_r(_3V3_RECTS if nn5 == "+3V3" else _5V_RECTS, px5, py5) and                        spot_free(px5, py5, nn5, pad_gap=0.28, same_min=0.4, own=(px5, py5), via_r=0.3):
+                    v5 = pcbnew.PCB_VIA(board)
+                    v5.SetNetCode(netcode(nn5))
+                    v5.SetPosition(pcbnew.VECTOR2I(int(MM(px5)), int(MM(py5))))
+                    v5.SetViaType(pcbnew.VIATYPE_THROUGH)
+                    v5.SetWidth(int(MM(0.6)))
+                    v5.SetDrill(int(MM(0.3)))
+                    board.Add(v5)
+                    _placed5 += 1
+                    done5 = True
+            if not done5:
+                print(f"[stage5] 电源焊盘 {ref5}.{pad5.GetPadName()} {nn5} 窄线重试仍失败")
+    print(f"[stage5] 窄线重试逃逸: {_placed5}")
+
+    # (b) GND F.Cu 填充孤岛系锚: 无过孔的岛内放孔 (F 填充与 In1/B 平面失联根因)
+    def _pip(x, y, xs, ys):
+        n_, inside = len(xs), False
+        j_ = n_ - 1
+        for i_ in range(n_):
+            if (ys[i_] > y) != (ys[j_] > y) and \
+               x < (xs[j_] - xs[i_]) * (y - ys[i_]) / (ys[j_] - ys[i_] + 1e-12) + xs[i_]:
+                inside = not inside
+            j_ = i_
+        return inside
+
+    _gnd_vias5 = []
+    for tr5 in board.GetTracks():
+        if tr5.GetClass() == "PCB_VIA" and tr5.GetNetname() == "GND":
+            q5 = tr5.GetPosition()
+            _gnd_vias5.append((pcbnew.ToMM(q5.x), pcbnew.ToMM(q5.y)))
+    _stitch5 = 0
+    for z5 in board.Zones():
+        if z5.GetIsRuleArea() or z5.GetNetname() != "GND" or z5.GetLayer() != pcbnew.F_Cu:
+            continue
+        try:
+            polys5 = z5.GetFilledPolysList(pcbnew.F_Cu)
+        except Exception:
+            continue
+        for i5 in range(polys5.OutlineCount()):
+            ch5 = polys5.Outline(i5)
+            xs5 = [pcbnew.ToMM(ch5.CPoint(k5).x) for k5 in range(ch5.PointCount())]
+            ys5 = [pcbnew.ToMM(ch5.CPoint(k5).y) for k5 in range(ch5.PointCount())]
+            bw5, bh5 = max(xs5) - min(xs5), max(ys5) - min(ys5)
+            if bw5 * bh5 < 2.0:
+                continue  # 碎屑岛
+            if any(_pip(vx5, vy5, xs5, ys5) for vx5, vy5 in _gnd_vias5):
+                continue
+            hit5 = False
+            for kx5 in range(2, 8):
+                for ky5 in range(2, 8):
+                    gx5 = min(xs5) + bw5 * kx5 / 8.0
+                    gy5 = min(ys5) + bh5 * ky5 / 8.0
+                    if not _pip(gx5, gy5, xs5, ys5):
+                        continue
+                    pt5 = pcbnew.VECTOR2I(int(MM(gx5)), int(MM(gy5)))
+                    if not z5.HitTestFilledArea(pcbnew.F_Cu, pt5):
+                        continue
+                    if spot_free(gx5, gy5, "GND", same_min=0.45):
+                        via("GND", gx5, gy5)
+                        _gnd_vias5.append((gx5, gy5))
+                        _stitch5 += 1
+                        hit5 = True
+                        break
+                if hit5:
+                    break
+    print(f"[stage5] GND 孤岛系锚: {_stitch5}")
+
+    # (c) 断层补孔: F.Cu 走线端点 ↔ In1/B 同网走线端点距 <0.6 且近旁无过孔
+    #     (freerouting 优化器留下的层切换残缺, GATE5/7/8/S1_*/S3_* 根因)
+    _f_ends, _ib_ends = [], []
+    for tr5 in board.GetTracks():
+        if tr5.GetClass() != "PCB_TRACK" or not tr5.GetNetname():
+            continue
+        s5, e5 = tr5.GetStart(), tr5.GetEnd()
+        if tr5.GetLayer() == pcbnew.F_Cu:
+            _f_ends.append((tr5.GetNetname(), pcbnew.ToMM(s5.x), pcbnew.ToMM(s5.y)))
+            _f_ends.append((tr5.GetNetname(), pcbnew.ToMM(e5.x), pcbnew.ToMM(e5.y)))
+        elif tr5.GetLayer() in (pcbnew.In1_Cu, pcbnew.B_Cu):
+            _ib_ends.append((tr5.GetNetname(), pcbnew.ToMM(s5.x), pcbnew.ToMM(s5.y)))
+            _ib_ends.append((tr5.GetNetname(), pcbnew.ToMM(e5.x), pcbnew.ToMM(e5.y)))
+    _via_pts5 = []
+    for tr5 in board.GetTracks():
+        if tr5.GetClass() == "PCB_VIA":
+            q5 = tr5.GetPosition()
+            _via_pts5.append((pcbnew.ToMM(q5.x), pcbnew.ToMM(q5.y)))
+    _j5 = 0
+    for nn5, fx5, fy5 in _f_ends:
+        for bn5, bx5, by5 in _ib_ends:
+            if bn5 != nn5:
+                continue
+            if _m5.hypot(fx5 - bx5, fy5 - by5) > 0.6:
+                continue
+            mx5, my5 = (fx5 + bx5) / 2, (fy5 + by5) / 2
+            if any(_m5.hypot(mx5 - ux5, my5 - uy5) < 0.7 for ux5, uy5 in _via_pts5):
+                continue
+            if not spot_free(mx5, my5, nn5, same_min=0.45):
+                continue
+            v5 = pcbnew.PCB_VIA(board)
+            v5.SetNetCode(netcode(nn5))
+            v5.SetPosition(pcbnew.VECTOR2I(int(MM(mx5)), int(MM(my5))))
+            v5.SetViaType(pcbnew.VIATYPE_THROUGH)
+            v5.SetWidth(int(MM(0.6)))
+            v5.SetDrill(int(MM(0.3)))
+            board.Add(v5)
+            _via_pts5.append((mx5, my5))
+            _j5 += 1
+    print(f"[stage5] 断层补孔: {_j5}")
+
+    # (e) L 型补线: 滞留电源焊盘 / 断链信号端点 → 最近同网"平面锚过孔/链端点"。
+    #     平面锚 = 位于本网 In2 平面矩形内的过孔 (孔穿 In2 即与平面连通)。
+    def _lay_clear(net, pts, layer, w):
+        """L 补线净空: 异网焊盘(矩形) + 同层走线 + 过孔(全层) + 板界"""
+        hw6 = w / 2
+        for x6, y6 in pts:
+            if not (0.55 < x6 < 99.45 and 0.55 < y6 < 79.45):
+                return False
+        for s6, e6 in zip(pts[:-1], pts[1:]):
+            L6 = _m5.hypot(e6[0] - s6[0], e6[1] - s6[1])
+            n6 = max(2, int(L6 / 0.25))
+            for k6 in range(n6 + 1):
+                f6 = k6 / n6
+                if 0.02 < f6 < 0.98:
+                    px6, py6 = s6[0] + (e6[0] - s6[0]) * f6, s6[1] + (e6[1] - s6[1]) * f6
+                    for qx6, qy6, qn6, _np6, _qr6, qhw6, qhh6 in ALL_PADS:
+                        if qn6 == net:
+                            continue
+                        if _pt_r6(px6, py6, qx6, qy6, qhw6, qhh6) < hw6 + 0.22:
+                            return False
+            for tr6 in board.GetTracks():
+                tn6 = tr6.GetNetname()
+                if tn6 == net or not tn6:
+                    continue
+                if tr6.GetClass() == "PCB_VIA":
+                    q6 = tr6.GetPosition()
+                    if _pd_seg(pcbnew.ToMM(q6.x), pcbnew.ToMM(q6.y), s6[0], s6[1], e6[0], e6[1]) < 0.35 + hw6 + 0.2:
+                        return False
+        # 同层走线检查用采样
+        for s6, e6 in zip(pts[:-1], pts[1:]):
+            L6 = _m5.hypot(e6[0] - s6[0], e6[1] - s6[1])
+            n6 = max(2, int(L6 / 0.25))
+            for tr6 in board.GetTracks():
+                tn6 = tr6.GetNetname()
+                if tn6 == net or not tn6 or tr6.GetClass() != "PCB_TRACK" or tr6.GetLayer() != layer:
+                    continue
+                st6, en6 = tr6.GetStart(), tr6.GetEnd()
+                tx6, ty6, ux6, uy6 = pcbnew.ToMM(st6.x), pcbnew.ToMM(st6.y), pcbnew.ToMM(en6.x), pcbnew.ToMM(en6.y)
+                if max(s6[0], e6[0]) + 1.0 < min(tx6, ux6) or min(s6[0], e6[0]) - 1.0 > max(tx6, ux6):
+                    continue
+                if max(s6[1], e6[1]) + 1.0 < min(ty6, uy6) or min(s6[1], e6[1]) - 1.0 > max(ty6, uy6):
+                    continue
+                hwT6 = pcbnew.ToMM(tr6.GetWidth()) / 2
+                for k6 in range(n6 + 1):
+                    f6 = k6 / n6
+                    px6, py6 = s6[0] + (e6[0] - s6[0]) * f6, s6[1] + (e6[1] - s6[1]) * f6
+                    if _pd_seg(px6, py6, tx6, ty6, ux6, uy6) < hwT6 + hw6 + 0.22:
+                        return False
+                for k6 in range(2):
+                    px6, py6 = (tx6, ty6) if k6 == 0 else (ux6, uy6)
+                    if _pd_seg(px6, py6, s6[0], s6[1], e6[0], e6[1]) < hwT6 + hw6 + 0.22:
+                        return False
+        return True
+
+    def _pt_r6(px, py, qx, qy, hw, hh):
+        dx = max(abs(px - qx) - hw, 0.0)
+        dy = max(abs(py - qy) - hh, 0.0)
+        return _m5.hypot(dx, dy)
+
+    def _L_try(net, src, dst, layer, w=0.25):
+        mx6, my6 = (src[0] + dst[0]) / 2, (src[1] + dst[1]) / 2
+        cands = [[src, dst],
+                 [src, (dst[0], src[1]), dst],
+                 [src, (src[0], dst[1]), dst],
+                 [src, (dst[0], src[1] + 0.6), dst],
+                 [src, (src[0] + 0.6, dst[1]), dst],
+                 [src, (dst[0], src[1] - 0.6), dst],
+                 [src, (src[0] - 0.6, dst[1]), dst],
+                 # 阶梯: 中点偏移的 4 弯绕行 (正面 L 被阻时的旁路)
+                 [src, (mx6, src[1]), (mx6, dst[1]), dst],
+                 [src, (src[0], my6), (dst[0], my6), dst],
+                 [src, (mx6, src[1] + 1.0), (mx6, dst[1]), dst],
+                 [src, (mx6, src[1] - 1.0), (mx6, dst[1]), dst],
+                 [src, (src[0] + 1.0, my6), (dst[0], my6), dst],
+                 [src, (src[0] - 1.0, my6), (dst[0], my6), dst]]
+        for pts in cands:
+            pp = [pts[0]]
+            for q6 in pts[1:]:
+                if _m5.hypot(q6[0] - pp[-1][0], q6[1] - pp[-1][1]) > 0.05:
+                    pp.append(q6)
+            if len(pp) < 2:
+                continue
+            if _lay_clear(net, pp, layer, w):
+                track(net, pp, width=w, layer=layer)
+                return True
+        return False
+
+    # 平面锚过孔表
+    _anchors = {"+3V3": [], "+5V": []}
+    for tr6 in board.GetTracks():
+        if tr6.GetClass() == "PCB_VIA" and tr6.GetNetname() in _anchors:
+            q6 = tr6.GetPosition()
+            x6, y6 = pcbnew.ToMM(q6.x), pcbnew.ToMM(q6.y)
+            rr6 = _3V3_RECTS if tr6.GetNetname() == "+3V3" else _5V_RECTS
+            if _in_r(rr6, x6, y6):
+                _anchors[tr6.GetNetname()].append((x6, y6))
+    # (e1) 滞留电源焊盘 → 15mm 内最近平面锚 (F.Cu 0.3mm L)
+    # (只补"无任何同网铜触达"的焊盘 — 与 (a) 判据一致)
+    _fail_pads = []
+    for ref5, fp5 in FP.items():
+        for pad5 in fp5.Pads():
+            nn5 = pad5.GetNetname()
+            if nn5 in ("+3V3", "+5V") and pad5.GetAttribute() == pcbnew.PAD_ATTRIB_SMD:
+                _fail_pads.append((ref5, str(pad5.GetPadName()), nn5,
+                                   pcbnew.ToMM(pad5.GetPosition().x), pcbnew.ToMM(pad5.GetPosition().y)))
+    _patched = 0
+    for _pass5 in range(3):
+        # 目标 = 平面锚 + 已触达铜的电源焊盘 (迭代: 新补通的焊盘成为下一轮目标)
+        _targets = {n5: list(v5) for n5, v5 in _anchors.items()}
+        for ref5, pn5, nn5, px5, py5 in _fail_pads:
+            touched = False
+            for tr5 in board.GetTracks():
+                if tr5.GetNetname() != nn5:
+                    continue
+                if tr5.GetClass() == "PCB_VIA":
+                    q5 = tr5.GetPosition()
+                    if _m5.hypot(pcbnew.ToMM(q5.x) - px5, pcbnew.ToMM(q5.y) - py5) < 0.6:
+                        touched = True
+                        break
+                elif tr5.GetLayer() == pcbnew.F_Cu:
+                    s5, e5 = tr5.GetStart(), tr5.GetEnd()
+                    if _pd_seg(px5, py5, pcbnew.ToMM(s5.x), pcbnew.ToMM(s5.y),
+                               pcbnew.ToMM(e5.x), pcbnew.ToMM(e5.y)) < 0.45:
+                        touched = True
+                        break
+            if touched:
+                _targets.setdefault(nn5, []).append((px5, py5))
+        _added = 0
+        for ref5, pn5, nn5, px5, py5 in _fail_pads:
+            touched = False
+            for tr5 in board.GetTracks():
+                if tr5.GetNetname() != nn5:
+                    continue
+                if tr5.GetClass() == "PCB_VIA":
+                    q5 = tr5.GetPosition()
+                    if _m5.hypot(pcbnew.ToMM(q5.x) - px5, pcbnew.ToMM(q5.y) - py5) < 0.6:
+                        touched = True
+                        break
+                elif tr5.GetLayer() == pcbnew.F_Cu:
+                    s5, e5 = tr5.GetStart(), tr5.GetEnd()
+                    if _pd_seg(px5, py5, pcbnew.ToMM(s5.x), pcbnew.ToMM(s5.y),
+                               pcbnew.ToMM(e5.x), pcbnew.ToMM(e5.y)) < 0.45:
+                        touched = True
+                        break
+            if touched:
+                continue
+            best = None
+            for ax, ay in _targets.get(nn5, []):
+                d = _m5.hypot(ax - px5, ay - py5)
+                if d < 22 and d > 0.5 and (best is None or d < best[0]):
+                    best = (d, ax, ay)
+            if best and _L_try(nn5, (px5, py5), (best[1], best[2]), pcbnew.F_Cu):
+                _patched += 1
+                _added += 1
+        if not _added:
+            break
+    for ref5, pn5, nn5, px5, py5 in _fail_pads:
+        touched = any(False for _ in ())
+        for tr5 in board.GetTracks():
+            if tr5.GetNetname() == nn5 and tr5.GetClass() == "PCB_VIA":
+                q5 = tr5.GetPosition()
+                if _m5.hypot(pcbnew.ToMM(q5.x) - px5, pcbnew.ToMM(q5.y) - py5) < 0.6:
+                    touched = True
+                    break
+            if touched:
+                break
+        if not touched:
+            for tr5 in board.GetTracks():
+                if tr5.GetNetname() == nn5 and tr5.GetClass() == "PCB_TRACK" and tr5.GetLayer() == pcbnew.F_Cu:
+                    s5, e5 = tr5.GetStart(), tr5.GetEnd()
+                    if _pd_seg(px5, py5, pcbnew.ToMM(s5.x), pcbnew.ToMM(s5.y),
+                               pcbnew.ToMM(e5.x), pcbnew.ToMM(e5.y)) < 0.45:
+                        touched = True
+                        break
+            if not touched:
+                print(f"[stage5] {ref5}.{pn5} {nn5} 补线失败 (无锚/L 无净空)")
+    print(f"[stage5] 电源补线: {_patched}")
+
+    # (e2) 跨层断头缝合: F 端 ↔ In1/B 端距 0.4-2.0 → 孔@F端 + 内层 jog
+    _f_ends2, _ib_ends2 = [], []
+    for tr5 in board.GetTracks():
+        if tr5.GetClass() != "PCB_TRACK" or not tr5.GetNetname() or tr5.GetNetname() in ("GND", "+3V3", "+5V"):
+            continue
+        s5, e5 = tr5.GetStart(), tr5.GetEnd()
+        for ptx, pty in ((pcbnew.ToMM(s5.x), pcbnew.ToMM(s5.y)), (pcbnew.ToMM(e5.x), pcbnew.ToMM(e5.y))):
+            if tr5.GetLayer() == pcbnew.F_Cu:
+                _f_ends2.append((tr5.GetNetname(), ptx, pty))
+            else:
+                _ib_ends2.append((tr5.GetNetname(), ptx, pty, tr5.GetLayer()))
+    _st2 = 0
+    for nn5, fx5, fy5 in _f_ends2:
+        for bn5, bx5, by5, bl5 in _ib_ends2:
+            if bn5 != nn5:
+                continue
+            d5 = _m5.hypot(fx5 - bx5, fy5 - by5)
+            if not (0.4 < d5 < 2.0):
+                continue
+            if any(_m5.hypot(fx5 - ux5, fy5 - uy5) < 0.55 for ux5, uy5 in _via_pts5):
+                continue
+            if not spot_free(fx5, fy5, nn5, same_min=0.4):
+                continue
+            if not _lay_clear(nn5, [(fx5, fy5), (bx5, by5)], bl5, 0.3):
+                continue  # jog 必须过同层净空 (T4-r5 实测盲 jog 短路 S2_SDA/压 IO6)
+            v5 = pcbnew.PCB_VIA(board)
+            v5.SetNetCode(netcode(nn5))
+            v5.SetPosition(pcbnew.VECTOR2I(int(MM(fx5)), int(MM(fy5))))
+            v5.SetViaType(pcbnew.VIATYPE_THROUGH)
+            v5.SetWidth(int(MM(0.6)))
+            v5.SetDrill(int(MM(0.3)))
+            board.Add(v5)
+            _via_pts5.append((fx5, fy5))
+            track(nn5, [(fx5, fy5), (bx5, by5)], width=0.3, layer=bl5)
+            _st2 += 1
+            break
+    print(f"[stage5] 跨层断头缝合: {_st2}")
+
+    # (e3) 同层断段 L 补线: 仅补"真悬空端"(触接图度=1, 即只被自身段触碰的端点),
+    #      且两端点分属不同连通分量 —— 否则会给已连通链布冗余平行线 (T4-r5
+    #      实测无差别配对炸出 5830 段补线 + 63 条 clearance)
+    _lay_ends = {}
+    for tr5 in board.GetTracks():
+        if tr5.GetClass() != "PCB_TRACK" or not tr5.GetNetname() or tr5.GetNetname() in ("GND", "+3V3", "+5V"):
+            continue
+        s5, e5 = tr5.GetStart(), tr5.GetEnd()
+        for ptx, pty in ((pcbnew.ToMM(s5.x), pcbnew.ToMM(s5.y)), (pcbnew.ToMM(e5.x), pcbnew.ToMM(e5.y))):
+            _lay_ends.setdefault((tr5.GetNetname(), tr5.GetLayer()), []).append((ptx, pty))
+    _st3 = 0
+    for (nn5, ll5), ends5 in _lay_ends.items():
+        if len(ends5) < 2:
+            continue
+        m5 = len(ends5)
+        # union-find: 端点距 <0.45 视为相触 (段自身两端除外由距离自然排除)
+        par5 = list(range(m5))
+        def _find5(i_):
+            while par5[i_] != i_:
+                par5[i_] = par5[par5[i_]]
+                i_ = par5[i_]
+            return i_
+        for i5 in range(m5):
+            for j5 in range(i5 + 1, m5):
+                if _m5.hypot(ends5[i5][0] - ends5[j5][0], ends5[i5][1] - ends5[j5][1]) < 0.45:
+                    ri5, rj5 = _find5(i5), _find5(j5)
+                    if ri5 != rj5:
+                        par5[ri5] = rj5
+        # 度: 与该端点相触的其他端点数
+        deg5 = [sum(1 for j5 in range(m5) if j5 != i5 and
+                    _m5.hypot(ends5[i5][0] - ends5[j5][0], ends5[i5][1] - ends5[j5][1]) < 0.45)
+                for i5 in range(m5)]
+        dangle5 = [i5 for i5 in range(m5) if deg5[i5] == 0]
+        for _i5 in range(len(dangle5)):
+            for _j5 in range(_i5 + 1, len(dangle5)):
+                i5, j5 = dangle5[_i5], dangle5[_j5]
+                if _find5(i5) == _find5(j5):
+                    continue
+                ax5, ay5 = ends5[i5]
+                bx5, by5 = ends5[j5]
+                d5 = _m5.hypot(ax5 - bx5, ay5 - by5)
+                if not (0.4 < d5 < 9.0):
+                    continue
+                if _L_try(nn5, (ax5, ay5), (bx5, by5), ll5, w=0.2):
+                    _st3 += 1
+                    ri5, rj5 = _find5(i5), _find5(j5)
+                    if ri5 != rj5:
+                        par5[ri5] = rj5
+    print(f"[stage5] 同层断段补线: {_st3}")
+
+    # (d) 追加 FULL: C11.2 (GND 花焊盘单辐条)
+    if "C11" in FP:
+        _p5 = FP["C11"].FindPadByNumber("2")
+        if _p5 is not None and _p5.GetNetname() == "GND":
+            _p5.SetLocalZoneConnection(pcbnew.ZONE_CONNECTION_FULL)
+
+    _run_tail()
+    sys.exit(0)
+
+# ================= 阶段 6: 定点收尾 (显式坐标, 全部运行时核验) =================
+if STAGE == 6:
+    import math as _m6
+    X0c, Y0c = 0.55, 0.55
+
+    def _ok_via(x, y, net):
+        """0.6/0.3 孔落点核验: 异网焊盘/过孔/任意层走线"""
+        for qx, qy, qnet, _np6, qr, _hw, _hh in ALL_PADS:
+            if qnet == net or not qnet:
+                continue
+            if _m6.hypot(qx - x, qy - y) < qr + 0.3 + 0.203:
+                return False
+        for tr in board.GetTracks():
+            tn = tr.GetNetname()
+            if tn == net or not tn:
+                continue
+            if tr.GetClass() == "PCB_VIA":
+                q = tr.GetPosition()
+                if _m6.hypot(pcbnew.ToMM(q.x) - x, pcbnew.ToMM(q.y) - y) < 0.3 + 0.35 + 0.203:
+                    return False
+            elif tr.GetClass() == "PCB_TRACK":
+                s, e = tr.GetStart(), tr.GetEnd()
+                if _pd_seg(x, y, pcbnew.ToMM(s.x), pcbnew.ToMM(s.y),
+                           pcbnew.ToMM(e.x), pcbnew.ToMM(e.y)) < pcbnew.ToMM(tr.GetWidth()) / 2 + 0.3 + 0.203:
+                    return False
+        return 0.55 < x < 99.45 and 0.55 < y < 79.45
+
+    def _add_via6(x, y, net):
+        v = pcbnew.PCB_VIA(board)
+        v.SetNetCode(netcode(net))
+        v.SetPosition(pcbnew.VECTOR2I(int(MM(x)), int(MM(y))))
+        v.SetViaType(pcbnew.VIATYPE_THROUGH)
+        v.SetWidth(int(MM(0.6)))
+        v.SetDrill(int(MM(0.3)))
+        board.Add(v)
+
+    def _ok_route(net, pts, layer, w=0.25):
+        """折线核验: 板界 + 异网焊盘(矩形) + 同层走线 + 全层孔; 同网铜不算障"""
+        hw = w / 2
+        for x, y in pts:
+            if not (0.55 < x < 99.45 and 0.55 < y < 79.45):
+                return False
+        for s, e in zip(pts[:-1], pts[1:]):
+            L = _m6.hypot(e[0] - s[0], e[1] - s[1])
+            n = max(2, int(L / 0.2))
+            for k in range(n + 1):
+                f = k / n
+                if 0.02 < f < 0.98:
+                    px, py = s[0] + (e[0] - s[0]) * f, s[1] + (e[1] - s[1]) * f
+                    for qx, qy, qnet, _np6, _qr, qhw, qhh in ALL_PADS:
+                        if qnet == net:
+                            continue
+                        dx = max(abs(px - qx) - qhw, 0.0)
+                        dy = max(abs(py - qy) - qhh, 0.0)
+                        if _m6.hypot(dx, dy) < hw + 0.203:
+                            return False
+            for tr in board.GetTracks():
+                tn = tr.GetNetname()
+                if tn == net or not tn:
+                    continue
+                if tr.GetClass() == "PCB_VIA":
+                    q = tr.GetPosition()
+                    if _pd_seg(pcbnew.ToMM(q.x), pcbnew.ToMM(q.y), s[0], s[1], e[0], e[1]) < 0.35 + hw + 0.203:
+                        return False
+                elif tr.GetLayer() == layer and tr.GetClass() == "PCB_TRACK":
+                    st, en = tr.GetStart(), tr.GetEnd()
+                    tx, ty, ux, uy = pcbnew.ToMM(st.x), pcbnew.ToMM(st.y), pcbnew.ToMM(en.x), pcbnew.ToMM(en.y)
+                    if max(s[0], e[0]) + 1.0 < min(tx, ux) or min(s[0], e[0]) - 1.0 > max(tx, ux):
+                        continue
+                    if max(s[1], e[1]) + 1.0 < min(ty, uy) or min(s[1], e[1]) - 1.0 > max(ty, uy):
+                        continue
+                    hwT = pcbnew.ToMM(tr.GetWidth()) / 2
+                    for k in range(n + 1):
+                        f = k / n
+                        px, py = s[0] + (e[0] - s[0]) * f, s[1] + (e[1] - s[1]) * f
+                        if _pd_seg(px, py, tx, ty, ux, uy) < hwT + hw + 0.203:
+                            return False
+                    for px, py in ((tx, ty), (ux, uy)):
+                        if _pd_seg(px, py, s[0], s[1], e[0], e[1]) < hwT + hw + 0.203:
+                            return False
+        return True
+
+    def _apply(net, pts, layer, w=0.25, tag=""):
+        if _ok_route(net, pts, layer, w):
+            track(net, pts, width=w, layer=layer)
+            return True
+        print(f"[stage6] 路由受阻 {net} {tag} {pts[:2]}...")
+        # 诊断: 报出首个命中障碍
+        hw = w / 2
+        for s, e in zip(pts[:-1], pts[1:]):
+            for tr in board.GetTracks():
+                tn = tr.GetNetname()
+                if tn == net or not tn:
+                    continue
+                if tr.GetClass() == "PCB_VIA":
+                    q = tr.GetPosition()
+                    if _pd_seg(pcbnew.ToMM(q.x), pcbnew.ToMM(q.y), s[0], s[1], e[0], e[1]) < 0.35 + hw + 0.203:
+                        print(f"         障碍: via {tn} ({pcbnew.ToMM(q.x):.2f},{pcbnew.ToMM(q.y):.2f})")
+                        return False
+                elif tr.GetLayer() == layer and tr.GetClass() == "PCB_TRACK":
+                    st, en = tr.GetStart(), tr.GetEnd()
+                    tx, ty, ux, uy = pcbnew.ToMM(st.x), pcbnew.ToMM(st.y), pcbnew.ToMM(en.x), pcbnew.ToMM(en.y)
+                    if max(s[0], e[0]) + 1.0 < min(tx, ux) or min(s[0], e[0]) - 1.0 > max(tx, ux):
+                        continue
+                    if max(s[1], e[1]) + 1.0 < min(ty, uy) or min(s[1], e[1]) - 1.0 > max(ty, uy):
+                        continue
+                    hwT = pcbnew.ToMM(tr.GetWidth()) / 2
+                    L = _m6.hypot(e[0] - s[0], e[1] - s[1])
+                    n = max(2, int(L / 0.2))
+                    for k in range(n + 1):
+                        f = k / n
+                        px, py = s[0] + (e[0] - s[0]) * f, s[1] + (e[1] - s[1]) * f
+                        if _pd_seg(px, py, tx, ty, ux, uy) < hwT + hw + 0.203:
+                            print(f"         障碍: trk {tn} L{layer} ({tx:.1f},{ty:.1f})-({ux:.1f},{uy:.1f}) w={hwT*2:.2f} @({px:.1f},{py:.1f})")
+                            return False
+        for qx, qy, qnet, _np6, _qr, qhw, qhh in ALL_PADS:
+            if qnet == net:
+                continue
+            for s, e in zip(pts[:-1], pts[1:]):
+                L = _m6.hypot(e[0] - s[0], e[1] - s[1])
+                n = max(2, int(L / 0.2))
+                for k in range(n + 1):
+                    f = k / n
+                    if 0.02 < f < 0.98:
+                        px, py = s[0] + (e[0] - s[0]) * f, s[1] + (e[1] - s[1]) * f
+                        dx = max(abs(px - qx) - qhw, 0.0)
+                        dy = max(abs(py - qy) - qhh, 0.0)
+                        if _m6.hypot(dx, dy) < hw + 0.203:
+                            print(f"         障碍: pad {qnet} ({qx:.1f},{qy:.1f}) @({px:.1f},{py:.1f})")
+                            return False
+        return False
+
+
+    import heapq as _hq
+
+    def _obst6(net, x0_, y0_, x1_, y1_, layer):
+        """区域障碍表: 异网孔(全层)/同层异网走线/异网焊盘矩形 (bbox 外弃);
+        margin 随路径长放大 (绕行空间, T4-r6 实测 m=3 时 A* 借道无障碍区被终检拒)"""
+        m = max(3.0, 0.7 * _m6.hypot(x1_ - x0_, y1_ - y0_))
+        obs = []
+        for qx, qy, qnet, _np6, _qr, qhw, qhh in ALL_PADS:
+            if qnet == net or not qnet:
+                continue
+            if x0_ - m - qhw <= qx <= x1_ + m + qhw and y0_ - m - qhh <= qy <= y1_ + m + qhh:
+                obs.append(("P", qx, qy, qhw, qhh))
+        for tr in board.GetTracks():
+            tn = tr.GetNetname()
+            if tn == net or not tn:
+                continue
+            if tr.GetClass() == "PCB_VIA":
+                q = tr.GetPosition()
+                vx_, vy_ = pcbnew.ToMM(q.x), pcbnew.ToMM(q.y)
+                if x0_ - m <= vx_ <= x1_ + m and y0_ - m <= vy_ <= y1_ + m:
+                    obs.append(("V", vx_, vy_))
+            elif tr.GetLayer() == layer and tr.GetClass() == "PCB_TRACK":
+                s, e = tr.GetStart(), tr.GetEnd()
+                tx, ty, ux, uy = pcbnew.ToMM(s.x), pcbnew.ToMM(s.y), pcbnew.ToMM(e.x), pcbnew.ToMM(e.y)
+                if max(tx, ux) < x0_ - m or min(tx, ux) > x1_ + m or max(ty, uy) < y0_ - m or min(ty, uy) > y1_ + m:
+                    continue
+                obs.append(("T", tx, ty, ux, uy, pcbnew.ToMM(tr.GetWidth()) / 2))
+        return obs
+
+    def _cell_ok6(px, py, qx, qy, obs, hw):
+        """微线段 (px,py)-(qx,qy) vs 障碍表"""
+        for o in obs:
+            if o[0] == "V":
+                if _pd_seg(o[1], o[2], px, py, qx, qy) < 0.35 + hw + 0.2:
+                    return False
+            elif o[0] == "P":
+                dx = max(abs((px + qx) / 2 - o[1]) - o[3], 0.0)
+                dy = max(abs((py + qy) / 2 - o[2]) - o[4], 0.0)
+                if _m6.hypot(dx, dy) < hw + 0.21:
+                    return False
+                for sx_, sy_ in ((px, py), (qx, qy)):
+                    dx = max(abs(sx_ - o[1]) - o[3], 0.0)
+                    dy = max(abs(sy_ - o[2]) - o[4], 0.0)
+                    if _m6.hypot(dx, dy) < hw + 0.21:
+                        return False
+            else:
+                for sx_, sy_ in ((px, py), (qx, qy), ((px + qx) / 2, (py + qy) / 2)):
+                    if _pd_seg(sx_, sy_, o[1], o[2], o[3], o[4]) < o[5] + hw + 0.21:
+                        return False
+        return True
+
+    def _astar6(net, src, dst, layer, w=0.25):
+        """0.25mm 栅格 A*: 障碍=区域障碍表; 返回折线或 None"""
+        P = 0.25
+        obs = _obst6(net, min(src[0], dst[0]), min(src[1], dst[1]),
+                     max(src[0], dst[0]), max(src[1], dst[1]), layer)
+        hw = w / 2
+        def cell(x, y):
+            return (round((x - 0.55) / P), round((y - 0.55) / P))
+        sc, dc = cell(*src), cell(*dst)
+        if sc == dc:
+            return [src, dst]
+        open_ = [(0.0, sc)]
+        came = {}
+        gsc = {sc: 0.0}
+        def h(c):
+            return (abs(c[0] - dc[0]) + abs(c[1] - dc[1])) * P
+        while open_:
+            _, cur = _hq.heappop(open_)
+            if cur == dc:
+                path = [cur]
+                while path[-1] in came:
+                    path.append(came[path[-1]])
+                path.reverse()
+                pts = [(0.55 + c[0] * P, 0.55 + c[1] * P) for c in path]
+                pts[0], pts[-1] = src, dst
+                simp = [pts[0]]
+                for i in range(1, len(pts) - 1):
+                    a, b, c = simp[-1], pts[i], pts[i + 1]
+                    if (b[0] - a[0]) * (c[1] - b[1]) != (b[1] - a[1]) * (c[0] - b[0]):
+                        simp.append(b)
+                simp.append(pts[-1])
+                return simp
+            cx, cy = cur
+            for nb in ((cx + 1, cy), (cx - 1, cy), (cx, cy + 1), (cx, cy - 1)):
+                if nb in gsc and gsc[nb] <= gsc[cur] + P:
+                    continue
+                px, py = 0.55 + nb[0] * P, 0.55 + nb[1] * P
+                if not (0.55 <= px <= 99.45 and 0.55 <= py <= 79.45):
+                    continue
+                ppx, ppy = 0.55 + cx * P, 0.55 + cy * P
+                if not _cell_ok6(ppx, ppy, px, py, obs, hw):
+                    continue
+                ng = gsc[cur] + P
+                if ng < gsc.get(nb, 1e9):
+                    gsc[nb] = ng
+                    came[nb] = cur
+                    _hq.heappush(open_, (ng + h(nb), nb))
+        return None
+
+    def _auto6(net, via_from, via_to, layer, w=0.25, tag="", src=None, dst=None):
+        """双孔 + A* 寻路 (孔/端点均可传 None; src/dst 缺省取孔位)"""
+        s6 = src or via_from
+        d6 = dst or via_to
+        if not s6 or not d6:
+            print(f"[stage6] {tag} 缺端点")
+            return False
+        if via_from and not _ok_via(*via_from, net):
+            print(f"[stage6] {tag} 起点孔受阻")
+            return False
+        if via_to and not _ok_via(*via_to, net):
+            print(f"[stage6] {tag} 终点孔受阻")
+            return False
+        if via_from:
+            _add_via6(*via_from, net)
+        if via_to:
+            _add_via6(*via_to, net)
+        p = _astar6(net, s6, d6, layer, w)
+        if p and _ok_route(net, p, layer, w):
+            track(net, p, width=w, layer=layer)
+            return True
+        print(f"[stage6] {tag} A* 未果")
+        return False
+
+    # ---- (a) 同点异层补孔 (F 端与 In1/B 端坐标重合, 只差一颗孔) ----
+    _CO_INC = [("S1_SCL", 62.72, 31.78),
+               ("S3_SCL", 77.15, 48.85), ("GATE8", 81.16, 58.12),
+               ("BOOT", 21.70, 45.40)]
+    _nv6 = 0
+    for _n6, _x6, _y6 in _CO_INC:
+        if _ok_via(_x6, _y6, _n6):
+            _add_via6(_x6, _y6, _n6)
+            _nv6 += 1
+        else:
+            print(f"[stage6] 同点孔受阻 {_n6}@({_x6},{_y6})")
+    print(f"[stage6] 同点补孔 {_nv6}")
+
+    # S1_SDA 补: 孔@F 西端 (60,29.25) + In1 绕到同网竖线 (62.11,34.90 链)
+    if _ok_via(60.00, 29.25, "S1_SDA"):
+        _add_via6(60.00, 29.25, "S1_SDA")
+        _auto6("S1_SDA", (60.00, 29.25), None, pcbnew.In1_Cu, 0.25, "S1_SDA-west", dst=(62.11, 33.00))
+    # BOOT 补: 孔@F 簇枢纽 (23.09,46.43) + B.Cu 绕 S2_SCL 竖带到既有孔 (22.80,28.92)
+    if _ok_via(23.09, 46.43, "BOOT"):
+        _add_via6(23.09, 46.43, "BOOT")
+        _apply("BOOT", [(23.09, 46.43), (24.70, 45.30), (24.70, 29.40), (22.80, 28.92)], pcbnew.In1_Cu, 0.25, "BOOT-I1")
+
+    # ---- (b) BTN_USER: 孔@F端(46.82,33.16) + In1 jog 至 (48.75,33.16) ----
+    if _ok_via(46.82, 33.16, "BTN_USER"):
+        _add_via6(46.82, 33.16, "BTN_USER")
+        _apply("BTN_USER", [(46.82, 33.16), (48.75, 33.16)], pcbnew.In1_Cu, 0.25, "jog")
+
+    # ---- (c) S3_SCL A→B: 孔@A端 + In1 L 到 (76.46,48.15) 孔 ----
+    if _ok_via(64.95, 38.63, "S3_SCL"):
+        _add_via6(64.95, 38.63, "S3_SCL")
+        if _ok_via(76.46, 48.15, "S3_SCL"):
+            _add_via6(76.46, 48.15, "S3_SCL")
+            _apply("S3_SCL", [(64.95, 38.63), (76.46, 38.63), (76.46, 48.15)], pcbnew.In1_Cu, 0.25, "A-B")
+
+    # ---- (d) I2C_SDA U2 侧 → R8/R9 侧: 双孔 + In1 斜线 (与 SCL In1 斜线平行 ~2mm) ----
+    if _ok_via(70.58, 39.80, "I2C_SDA") and _ok_via(54.42, 25.07, "I2C_SDA"):
+        _add_via6(70.58, 39.80, "I2C_SDA")
+        _add_via6(54.42, 25.07, "I2C_SDA")
+        _apply("I2C_SDA", [(70.58, 39.80), (54.42, 25.07)], pcbnew.In1_Cu, 0.25, "U2-pullup")
+
+    # ---- (e) I2C_SCL 两段: U1.20→北簇 B.Cu; TP8 簇→R9.2 B.Cu ----
+    if _ok_via(24.10, 26.84, "I2C_SCL") and _ok_via(47.98, 20.73, "I2C_SCL"):
+        _add_via6(24.10, 26.84, "I2C_SCL")
+        _add_via6(47.98, 20.73, "I2C_SCL")
+        _apply("I2C_SCL", [(24.10, 26.84), (24.10, 21.00), (47.98, 21.00), (47.98, 20.73)], pcbnew.B_Cu, 0.25, "U1-north")
+    if _ok_via(47.00, 31.50, "I2C_SCL") and _ok_via(57.25, 27.00, "I2C_SCL"):
+        _add_via6(47.00, 31.50, "I2C_SCL")
+        _add_via6(57.25, 27.00, "I2C_SCL")
+        _apply("I2C_SCL", [(47.00, 31.50), (52.00, 31.50), (52.00, 27.00), (57.25, 27.00)], pcbnew.B_Cu, 0.25, "TP8-R9")
+
+    # ---- (f) LED_USER: B.Cu 直连两簇 (32.13,26.67)→(48.41,26.67) ----
+    _auto6("LED_USER", None, None, pcbnew.B_Cu, 0.25, "LED_USER-span", src=(32.13, 26.67), dst=(48.41, 28.52))
+
+    # ---- (g) EN 三段 B.Cu ----
+    if _ok_via(7.27, 10.62, "EN") and _ok_via(17.02, 16.00, "EN"):
+        _add_via6(7.27, 10.62, "EN")
+        _add_via6(17.02, 16.00, "EN")
+        _auto6("EN", (7.27, 10.62), (17.02, 16.00), pcbnew.B_Cu, 0.25, "EN-SW2")
+    if _ok_via(20.30, 9.99, "EN"):
+        _add_via6(20.30, 9.99, "EN")
+        _auto6("EN", (17.02, 16.00), (20.30, 9.99), pcbnew.B_Cu, 0.25, "EN-U1")
+    if _ok_via(22.00, 10.30, "EN") and _ok_via(69.16, 28.12, "EN"):
+        _add_via6(22.00, 10.30, "EN")
+        _add_via6(69.16, 28.12, "EN")
+        _apply("EN", [(22.00, 10.30), (22.00, 7.50), (66.50, 7.50), (66.50, 28.12), (69.16, 28.12)],
+               pcbnew.B_Cu, 0.25, "U1-east")
+
+    # ---- (h) IO21: 孔@In1 端 + 孔@F 端 + In1 绕行 (y53.1 让 S1_SCL In1 y52.53) ----
+    if _ok_via(39.97, 52.91, "IO21") and _ok_via(75.98, 61.62, "IO21"):
+        _add_via6(39.97, 52.91, "IO21")
+        _add_via6(75.98, 61.62, "IO21")
+        _apply("IO21", [(39.97, 52.91), (39.97, 53.10), (74.50, 53.10), (74.50, 61.62), (75.98, 61.62)],
+               pcbnew.In1_Cu, 0.25, "span")
+
+    # ---- (i) J5/J6/J8 3V3 THT: B.Cu 长线 + 入平面孔 ----
+    if _ok_via(19.00, 32.00, "+3V3"):
+        _add_via6(19.00, 32.00, "+3V3")
+        _apply("+3V3", [(5.00, 42.30), (3.20, 42.30), (3.20, 32.00), (19.00, 32.00)], pcbnew.B_Cu, 0.4, "J8")
+    if _ok_via(32.00, 55.80, "+3V3"):
+        _add_via6(32.00, 55.80, "+3V3")
+        _apply("+3V3", [(5.00, 55.80), (32.00, 55.80)], pcbnew.B_Cu, 0.4, "J6")
+    if _ok_via(77.20, 51.50, "+3V3"):
+        _add_via6(77.20, 51.50, "+3V3")
+        _apply("+3V3", [(98.30, 74.00), (98.30, 72.60), (96.00, 72.60), (96.00, 68.00), (77.20, 68.00), (77.20, 51.50)], pcbnew.B_Cu, 0.3, "J5")
+
+    # ---- (j) 电源滞留焊盘: 孔@焊盘近旁 + B.Cu 汇流到最近平面锚孔 ----
+    _3R = [(14, 99.5, 0.5, 20), (18, 30, 20, 33.5), (30, 79, 20, 58)]
+    _5R = [(3, 14, 13, 36), (14, 36, 33.5, 55), (0.5, 99.5, 53, 79.5), (79.5, 99.5, 14, 79.5)]
+    _pw_anch = {"+3V3": [], "+5V": []}
+    for z6a in board.Zones():
+        if z6a.GetIsRuleArea() or z6a.GetNetname() not in _pw_anch or z6a.GetLayer() != pcbnew.In2_Cu:
+            continue
+        for tr in board.GetTracks():
+            if tr.GetClass() == "PCB_VIA" and tr.GetNetname() == z6a.GetNetname():
+                q = tr.GetPosition()
+                x, y = pcbnew.ToMM(q.x), pcbnew.ToMM(q.y)
+                if z6a.HitTestFilledArea(pcbnew.In2_Cu, pcbnew.VECTOR2I(int(MM(x)), int(MM(y)))):
+                    _pw_anch[tr.GetNetname()].append((x, y))
+    _STRANDS = [("R31", "1", "+3V3"), ("R36", "1", "+3V3"), ("LED4", "1", "+3V3"),
+                ("LED5", "1", "+3V3"), ("C9", "1", "+3V3"), ("U2", "24", "+3V3"),
+                ("U3", "2", "+5V"), ("U7", "5", "+5V")]
+    _npw = 0
+    for _ref6, _pn6, _nn6 in _STRANDS:
+        if _ref6 not in FP:
+            continue
+        _p6 = FP[_ref6].FindPadByNumber(_pn6)
+        if _p6 is None or _p6.GetNetname() != _nn6:
+            continue
+        _q6 = _p6.GetPosition()
+        _px6, _py6 = pcbnew.ToMM(_q6.x), pcbnew.ToMM(_q6.y)
+        _spot6 = None
+        if _ok_via(_px6, _py6, _nn6):
+            _spot6 = (_px6, _py6)
+        else:
+            for _rr6 in (0.9, 1.3, 1.8, 2.4, 3.0):
+                for _a6 in range(0, 360, 15):
+                    _vx6 = _px6 + _rr6 * _m6.cos(_m6.radians(_a6))
+                    _vy6 = _py6 + _rr6 * _m6.sin(_m6.radians(_a6))
+                    if _ok_via(_vx6, _vy6, _nn6):
+                        _spot6 = (_vx6, _vy6)
+                        break
+                if _spot6:
+                    break
+        if not _spot6:
+            print(f"[stage6] {_ref6}.{_pn6} 无孔位")
+            continue
+        _best6 = None
+        for _ax6, _ay6 in _pw_anch.get(_nn6, []):
+            _d6 = _m6.hypot(_ax6 - _spot6[0], _ay6 - _spot6[1])
+            if _best6 is None or _d6 < _best6[0]:
+                _best6 = (_d6, _ax6, _ay6)
+        if _best6 is None:
+            print(f"[stage6] {_nn6} 无平面锚")
+            continue
+        _add_via6(_spot6[0], _spot6[1], _nn6)
+        if _spot6[0] == _best6[1] or _spot6[1] == _best6[2]:
+            _pts6 = [_spot6, (_best6[1], _best6[2])]
+        else:
+            _pts6 = [_spot6, (_spot6[0], _best6[2]), (_best6[1], _best6[2])]
+        if _auto6(_nn6, None, None, pcbnew.B_Cu, 0.25, _ref6, src=_spot6, dst=_best6[1:3]):
+            _apply(_nn6, [(_px6, _py6), _spot6], pcbnew.F_Cu, 0.3, _ref6 + "-esc")
+            _npw += 1
+    print(f"[stage6] 电源滞留 B.Cu 汇流 {_npw}")
+
+    # U4.7 专用: 北向孔 (RTS 走线东/南包围) + B.Cu 汇流
+    if _ok_via(75.50, 17.30, "+3V3"):
+        _add_via6(75.50, 17.30, "+3V3")
+        _apply("+3V3", [(75.50, 18.75), (75.50, 17.30)], pcbnew.F_Cu, 0.3, "U4-esc")
+        _best6 = min(_pw_anch["+3V3"], key=lambda a6: _m6.hypot(a6[0] - 75.5, a6[1] - 17.3)) if _pw_anch["+3V3"] else None
+        if _best6:
+            _apply("+3V3", [(75.50, 17.30), (75.50, _best6[1]), _best6], pcbnew.B_Cu, 0.3, "U4-bus")
+
+    # ---- (k) GND F.Cu 孤岛系锚 ----
+    def _pip6(x, y, xs, ys):
+        n_, ins = len(xs), False
+        j_ = n_ - 1
+        for i_ in range(n_):
+            if (ys[i_] > y) != (ys[j_] > y) and x < (xs[j_] - xs[i_]) * (y - ys[i_]) / (ys[j_] - ys[i_] + 1e-12) + xs[i_]:
+                ins = not ins
+            j_ = i_
+        return ins
+
+    _gpts6 = []
+    for t6 in board.GetTracks():
+        if t6.GetClass() == "PCB_VIA" and t6.GetNetname() == "GND":
+            q6 = t6.GetPosition()
+            _gpts6.append((pcbnew.ToMM(q6.x), pcbnew.ToMM(q6.y)))
+    _nis6 = 0
+    for z6 in board.Zones():
+        if z6.GetIsRuleArea() or z6.GetNetname() != "GND" or z6.GetLayer() != pcbnew.F_Cu:
+            continue
+        try:
+            polys6 = z6.GetFilledPolysList(pcbnew.F_Cu)
+        except Exception:
+            continue
+        for i6 in range(polys6.OutlineCount()):
+            ch6 = polys6.Outline(i6)
+            xs6 = [pcbnew.ToMM(ch6.CPoint(k).x) for k in range(ch6.PointCount())]
+            ys6 = [pcbnew.ToMM(ch6.CPoint(k).y) for k in range(ch6.PointCount())]
+            if (max(xs6) - min(xs6)) * (max(ys6) - min(ys6)) < 1.0:
+                continue
+            if any(_pip6(x, y, xs6, ys6) for x, y in _gpts6):
+                continue
+            done6 = False
+            for kx6 in range(2, 9):
+                for ky6 in range(2, 9):
+                    gx6 = min(xs6) + (max(xs6) - min(xs6)) * kx6 / 9.0
+                    gy6 = min(ys6) + (max(ys6) - min(ys6)) * ky6 / 9.0
+                    if not _pip6(gx6, gy6, xs6, ys6):
+                        continue
+                    pt6 = pcbnew.VECTOR2I(int(MM(gx6)), int(MM(gy6)))
+                    if not z6.HitTestFilledArea(pcbnew.F_Cu, pt6):
+                        continue
+                    if _ok_via(gx6, gy6, "GND"):
+                        _add_via6(gx6, gy6, "GND")
+                        _gpts6.append((gx6, gy6))
+                        _nis6 += 1
+                        done6 = True
+                        break
+                if done6:
+                    break
+    print(f"[stage6] GND 孤岛系锚 {_nis6}")
+
+    # ---- (l) 微缺口补跳: 同网同层端点对距 0.28-0.55 (段端头差一线之隔) ----
+    _mg = 0
+    _ends6 = {}
+    for tr in board.GetTracks():
+        if tr.GetClass() != "PCB_TRACK" or not tr.GetNetname() or tr.GetNetname() in ("GND", "+3V3", "+5V"):
+            continue
+        s, e = tr.GetStart(), tr.GetEnd()
+        for ptx, pty in ((pcbnew.ToMM(s.x), pcbnew.ToMM(s.y)), (pcbnew.ToMM(e.x), pcbnew.ToMM(e.y))):
+            _ends6.setdefault((tr.GetNetname(), tr.GetLayer()), []).append((ptx, pty))
+    for (nn6, ll6), ends6 in _ends6.items():
+        seen6 = set()
+        for i6 in range(len(ends6)):
+            for j6 in range(i6 + 1, len(ends6)):
+                ax6, ay6 = ends6[i6]
+                bx6, by6 = ends6[j6]
+                d6 = _m6.hypot(ax6 - bx6, ay6 - by6)
+                if not (0.05 < d6 < 0.52):
+                    continue
+                key6 = (round((ax6 + bx6) / 2, 1), round((ay6 + by6) / 2, 1))
+                if key6 in seen6:
+                    continue
+                seen6.add(key6)
+                track(nn6, [(ax6, ay6), (bx6, by6)], width=0.2, layer=ll6)
+                _mg += 1
+    print(f"[stage6] 微缺口跳线 {_mg}")
+
+    # ---- (m) U2.21 GND 逃逸: A* F.Cu 到最近 GND 平面孔 ----
+    _ganch6 = []
+    for tr in board.GetTracks():
+        if tr.GetClass() == "PCB_VIA" and tr.GetNetname() == "GND":
+            q = tr.GetPosition()
+            _ganch6.append((pcbnew.ToMM(q.x), pcbnew.ToMM(q.y)))
+    if _ganch6:
+        _b6 = min(_ganch6, key=lambda a6: _m6.hypot(a6[0] - 71.9, a6[1] - 41.0))
+        if _m6.hypot(_b6[0] - 71.9, _b6[1] - 41.0) < 12:
+            _auto6("GND", None, None, pcbnew.F_Cu, 0.25, "U2.21-esc", src=(71.9, 41.0), dst=_b6)
+
+    # ---- (n) 跨层同网端点重合/近失补孔 (F↔In1/B 差 0-0.6mm) ----
+    _cn = 0
+    _fe6, _ibe6 = [], []
+    for tr in board.GetTracks():
+        if tr.GetClass() != "PCB_TRACK" or not tr.GetNetname() or tr.GetNetname() in ("GND", "+3V3", "+5V"):
+            continue
+        s, e = tr.GetStart(), tr.GetEnd()
+        for ptx, pty in ((pcbnew.ToMM(s.x), pcbnew.ToMM(s.y)), (pcbnew.ToMM(e.x), pcbnew.ToMM(e.y))):
+            if tr.GetLayer() == pcbnew.F_Cu:
+                _fe6.append((tr.GetNetname(), ptx, pty))
+            elif tr.GetLayer() != pcbnew.In2_Cu:
+                _ibe6.append((tr.GetNetname(), ptx, pty, tr.GetLayer()))
+    _vp6 = []
+    for tr in board.GetTracks():
+        if tr.GetClass() == "PCB_VIA":
+            q = tr.GetPosition()
+            _vp6.append((pcbnew.ToMM(q.x), pcbnew.ToMM(q.y)))
+    for nn6, fx6, fy6 in _fe6:
+        for bn6, bx6, by6, bl6 in _ibe6:
+            if bn6 != nn6:
+                continue
+            d6 = _m6.hypot(fx6 - bx6, fy6 - by6)
+            if d6 > 0.6 or any(_m6.hypot(fx6 - ux6, fy6 - uy6) < 0.55 for ux6, uy6 in _vp6):
+                continue
+            if not _ok_via(fx6, fy6, nn6):
+                continue
+            _add_via6(fx6, fy6, nn6)
+            _vp6.append((fx6, fy6))
+            if d6 > 0.4:
+                track(nn6, [(fx6, fy6), (bx6, by6)], width=0.2, layer=bl6)
+            _cn += 1
+            break
+    print(f"[stage6] 跨层端点补孔 {_cn}")
 
     _run_tail()
     sys.exit(0)
