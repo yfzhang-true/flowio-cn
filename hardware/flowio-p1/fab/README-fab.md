@@ -11,7 +11,7 @@
 | 丝印 | 白色 |
 | 工艺边 | 无需（100×80 ≥ 常规夹持尺寸） |
 
-## 文件清单（check_fab.py 21 断言全绿）
+## 文件清单（check_fab.py 22 断言全绿）
 
 | 文件 | 说明 |
 |---|---|
@@ -25,7 +25,7 @@
 | flowio-p1-jlc.zip | **13 文件**（11 Gerber+gbrjob+drl；旧 P1 包仅 4Cu+Edge+drl 6 文件，Mask/Silk 缺失为隐患，已修复） |
 | flowio-p1.step | 20.7MB（按需再生不入库；`KICAD9_3RD_PARTY=C:/Users/yuefe/Documents/KiCad/9.0/3rdparty`） |
 
-钻孔谱：450 = 232×Ø0.3(信号孔) + 184×Ø0.35(电源孔) + 28×Ø0.9(XH-4P 插件孔) + 4×Ø3.2 NPTH(M3 铜柱孔，@ST 四角) + 2×Ø0.6 NPTH(J1 USB-C 外壳定位孔)。
+钻孔谱：450 = 232×Ø0.3(信号孔) + 184×Ø0.35(电源孔) + 28×Ø0.9(XH-4P 插件孔) + 4×Ø3.2 NPTH(M3 铜柱孔，@ST 四角) + 2×Ø0.6 NPTH(J1 USB-C 外壳定位孔)。**450 为圆孔口径、不含铣槽**：板内另有 8 条 G85 铣槽（PTH 段）= J2 USB-C 外壳脚 4×Ø0.6 + J1 USB-C 外壳脚 4×Ø0.8（drl.py 逐行正则不匹配 G85 行，check_fab 450 计数天然豁免槽）。
 
 ## via-in-pad 清单（IPC-4761 Type VII，13 处 · tools/scan_fab.py 重扫）
 
@@ -84,7 +84,7 @@
 
 - **12× XH-2P（C7429671）为 SMD 卧贴**（J10-J17 底壁 + J20-J23 右壁），回流焊，无波峰焊依赖；7× XH-4P（C5359632）为 THT 代插（J5-J9/J18/J19）。
 - 下单留言栏：13 处 via-in-pad 需 IPC-4761 Type VII（见上清单）；表面处理 ENIG。
-- `tools/check_fab.py` 为 fab 完整性守门（21 断言），任何 fab 重出后必须全绿。
+- `tools/check_fab.py` 为 fab 完整性守门（22 断言），任何 fab 重出后必须全绿。
 
 ## 再生命令（cwd = hardware/flowio-p1）
 
@@ -101,6 +101,6 @@ python tools/fix5_add_layers.py   # 幂等：层栈补全（若 gen_pcb 再生�
 (cd tools && python make_bom.py)          # bom-jlc + pos-jlc 注释版
 (cd fab && zip -j flowio-p1-jlc.zip <11 Gerber> flowio-p1-job.gbrjob flowio-p1.drl)
 KICAD9_3RD_PARTY=C:/Users/yuefe/Documents/KiCad/9.0/3rdparty kicad-cli pcb export step --output fab/flowio-p1.step --force flowio-p1.kicad_pcb
-python tools/check_fab.py                 # 21 断言守门
+python tools/check_fab.py                 # 22 断言守门
 "E:/Program Files/KiCad/10.0/bin/python.exe" tools/check_route.py   # 双绿守门
 ```
