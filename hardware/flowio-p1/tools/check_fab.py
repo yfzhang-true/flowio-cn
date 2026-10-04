@@ -4,6 +4,8 @@
 #   ③ JLC zip 13 文件与散件逐字节一致          ④ 钻孔 450 (NPTH 6 = 4xM3 + 2x0.6)
 #   ⑤ pos 行数  ⑥ gbrjob 4 层/尺寸             全绿 exit 0, 任一红 exit 1。
 # 用法: python tools/check_fab.py   (cwd = hardware/flowio-p1)
+# 全绿 exit 0 (22 断言 = 14 Gerber + Edge 1 + zip 2 + 钻孔 3 + pos 1 + gbrjob 1);
+# 挂 rebuild-matrix place_layout / footprint_rules 链尾 (fab 重出后必跑, 见 fab/README-fab)。
 import re
 import sys
 import zipfile

@@ -57,12 +57,15 @@
         "kicad-cli pcb drc --severity-error（0 门）",
         "pos 导出 → make_flows → test_flows",
         "L5 两档（T4 钻孔避让断言）",
-        "check_route 连通守门（KiCad python 运行 hardware/flowio-p1/tools/check_route.py：未连 0 + 铜柱环 0 双绿门，exit 0）"
+        "check_route 连通守门（KiCad python 运行 hardware/flowio-p1/tools/check_route.py：未连 0 + 铜柱环 0 双绿门，exit 0）",
+        "fab 重出（hardware/flowio-p1/fab/README-fab.md 再生命令全链：gerbers/drill/pos/bom/zip）",
+        "check_fab 制造包守门（python 运行 hardware/flowio-p1/tools/check_fab.py：22 断言 exit 0；红=fab 包与板不同步）"
       ],
       "sync": [
         "hardware/flowio-p1/standoffs.txt",
         "drc 差分基线 hardware/flowio-p1/drc-<阶段>.json",
-        "（若孔位/板边变）连带 devices_json_pcb 整行"
+        "（若孔位/板边变）连带 devices_json_pcb 整行",
+        "README-fab 钻孔谱/线宽谱黄金值 + check_fab 黄金计数（450 圆孔/148 pos 行，G85 槽不计入）"
       ]
     },
     "case_geom": {
@@ -121,10 +124,12 @@
         "tools/gen_pcb.py → DRC",
         "（若孔/板边变）pos → make_case 全链",
         "L5",
-        "check_route 连通守门（同 place_layout 链尾：check_route.py 未连 0 + 铜柱环 0 双绿门，exit 0）"
+        "check_route 连通守门（同 place_layout 链尾：check_route.py 未连 0 + 铜柱环 0 双绿门，exit 0）",
+        "fab 重出（README-fab 再生命令全链）→ check_fab 22 断言门（python tools/check_fab.py，exit 0）"
       ],
       "sync": [
-        "测试黄金值"
+        "测试黄金值",
+        "README-fab 钻孔谱/线宽谱黄金值 + check_fab 黄金计数"
       ]
     }
   },
