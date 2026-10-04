@@ -1,22 +1,70 @@
-ERC report (2026-10-01T14:56:03, Encoding UTF8)
+ERC report (2026-10-04T16:41:55, Encoding UTF8)
 Report includes: Errors, Warnings
 
 ***** Sheet /
+[footprint_link_issues]: 在库 'JLC-MCP' 中找不到封装 'CONN-TH_2P-P2.54_XH-2P'
+    ; warning
+    @(39.37 mm, 400.05 mm): Symbol J10 [WAFER-XH2_54-2PZZ]
+[lib_symbol_issues]: 在符号库中 'WAFER-XH2_54-2PZZ' 找不到符号 'JLC-MCP'
+    ; warning
+    @(39.37 mm, 400.05 mm): Symbol J10 [WAFER-XH2_54-2PZZ]
+[footprint_link_issues]: 在库 'JLC-MCP' 中找不到封装 'TYPE-C-SMD_TYPE-C-31-M-12'
+    ; warning
+    @(49.53 mm, 54.61 mm): Symbol J1 [TYPE-C-31-M-12]
+[lib_symbol_issues]: 在符号库中 'TYPE-C-31-M-12' 找不到符号 'JLC-MCP'
+    ; warning
+    @(49.53 mm, 54.61 mm): Symbol J1 [TYPE-C-31-M-12]
 [lib_symbol_mismatch]: 符号 '+3V3' 与来源库 'power' 中的符号存在差异
     ; warning
     @(68.58 mm, 251.46 mm): Symbol #PWR05 [+3V3]
+[lib_symbol_mismatch]: 符号 '+5V' 与来源库 'power' 中的符号存在差异
+    ; warning
+    @(74.93 mm, 41.91 mm): Symbol #PWR01 [+5V]
 [lib_symbol_mismatch]: 符号 'PWR_FLAG' 与来源库 'power' 中的符号存在差异
     ; warning
     @(74.93 mm, 67.31 mm): Symbol #FLG01 [PWR_FLAG]
-[lib_symbol_mismatch]: 符号 '+5V' 与来源库 'power' 中的符号存在差异
+[footprint_link_issues]: 在库 'JLC-MCP' 中找不到封装 'CONN-TH_2P-P2.54_XH-2P'
     ; warning
-    @(100.33 mm, 69.85 mm): Symbol #PWR01 [+5V]
+    @(76.20 mm, 400.05 mm): Symbol J11 [WAFER-XH2_54-2PZZ]
+[lib_symbol_issues]: 在符号库中 'WAFER-XH2_54-2PZZ' 找不到符号 'JLC-MCP'
+    ; warning
+    @(76.20 mm, 400.05 mm): Symbol J11 [WAFER-XH2_54-2PZZ]
+[footprint_link_issues]: 在库 'JLC-MCP' 中找不到封装 'CONN-TH_2P-P2.54_XH-2P'
+    ; warning
+    @(111.76 mm, 400.05 mm): Symbol J12 [WAFER-XH2_54-2PZZ]
+[lib_symbol_issues]: 在符号库中 'WAFER-XH2_54-2PZZ' 找不到符号 'JLC-MCP'
+    ; warning
+    @(111.76 mm, 400.05 mm): Symbol J12 [WAFER-XH2_54-2PZZ]
 [lib_symbol_mismatch]: 符号 'PWR_FLAG' 与来源库 'power' 中的符号存在差异
     ; warning
     @(124.46 mm, 77.47 mm): Symbol #FLG02 [PWR_FLAG]
+[footprint_link_issues]: 在库 'JLC-MCP' 中找不到封装 'CONN-TH_2P-P2.54_XH-2P'
+    ; warning
+    @(148.59 mm, 400.05 mm): Symbol J13 [WAFER-XH2_54-2PZZ]
+[lib_symbol_issues]: 在符号库中 'WAFER-XH2_54-2PZZ' 找不到符号 'JLC-MCP'
+    ; warning
+    @(148.59 mm, 400.05 mm): Symbol J13 [WAFER-XH2_54-2PZZ]
+[footprint_link_issues]: 在库 'JLC-MCP' 中找不到封装 'CONN-TH_2P-P2.54_XH-2P'
+    ; warning
+    @(184.15 mm, 400.05 mm): Symbol J14 [WAFER-XH2_54-2PZZ]
+[lib_symbol_issues]: 在符号库中 'WAFER-XH2_54-2PZZ' 找不到符号 'JLC-MCP'
+    ; warning
+    @(184.15 mm, 400.05 mm): Symbol J14 [WAFER-XH2_54-2PZZ]
+[footprint_link_issues]: 在库 'JLC-MCP' 中找不到封装 'SOP-8_L4.9-W3.9-P1.27-LS6.0-BL'
+    ; warning
+    @(185.42 mm, 240.03 mm): Symbol U6 [XGZP6897D]
+[lib_symbol_issues]: 在符号库中 'XGZP6897D' 找不到符号 'JLC-MCP'
+    ; warning
+    @(185.42 mm, 240.03 mm): Symbol U6 [XGZP6897D]
 [lib_symbol_mismatch]: 符号 'GND' 与来源库 'power' 中的符号存在差异
     ; warning
     @(199.39 mm, 109.22 mm): Symbol #PWR03 [GND]
+[footprint_link_issues]: 在库 'JLC-MCP' 中找不到封装 'CONN-TH_2P-P2.54_XH-2P'
+    ; warning
+    @(219.71 mm, 400.05 mm): Symbol J15 [WAFER-XH2_54-2PZZ]
+[lib_symbol_issues]: 在符号库中 'WAFER-XH2_54-2PZZ' 找不到符号 'JLC-MCP'
+    ; warning
+    @(219.71 mm, 400.05 mm): Symbol J15 [WAFER-XH2_54-2PZZ]
 [lib_symbol_issues]: 在符号库中 'PH' 找不到符号 'power'
     ; warning
     @(240.03 mm, 68.58 mm): Symbol #PWR02 [PH]
@@ -26,9 +74,45 @@ Report includes: Errors, Warnings
 [lib_symbol_mismatch]: 符号 'GND' 与来源库 'power' 中的符号存在差异
     ; warning
     @(242.57 mm, 180.34 mm): Symbol #PWR04 [GND]
+[footprint_link_issues]: 在库 'JLC-MCP' 中找不到封装 'CONN-TH_2P-P2.54_XH-2P'
+    ; warning
+    @(256.54 mm, 400.05 mm): Symbol J16 [WAFER-XH2_54-2PZZ]
+[lib_symbol_issues]: 在符号库中 'WAFER-XH2_54-2PZZ' 找不到符号 'JLC-MCP'
+    ; warning
+    @(256.54 mm, 400.05 mm): Symbol J16 [WAFER-XH2_54-2PZZ]
+[footprint_link_issues]: 在库 'JLC-MCP' 中找不到封装 'CONN-TH_2P-P2.54_XH-2P'
+    ; warning
+    @(292.10 mm, 400.05 mm): Symbol J17 [WAFER-XH2_54-2PZZ]
+[lib_symbol_issues]: 在符号库中 'WAFER-XH2_54-2PZZ' 找不到符号 'JLC-MCP'
+    ; warning
+    @(292.10 mm, 400.05 mm): Symbol J17 [WAFER-XH2_54-2PZZ]
 [lib_symbol_mismatch]: 符号 'PWR_FLAG' 与来源库 'power' 中的符号存在差异
     ; warning
     @(320.04 mm, 26.67 mm): Symbol #FLG04 [PWR_FLAG]
+[footprint_link_issues]: 在库 'JLC-MCP' 中找不到封装 'CONN-TH_2P-P2.54_XH-2P'
+    ; warning
+    @(327.66 mm, 400.05 mm): Symbol J20 [WAFER-XH2_54-2PZZ]
+[lib_symbol_issues]: 在符号库中 'WAFER-XH2_54-2PZZ' 找不到符号 'JLC-MCP'
+    ; warning
+    @(327.66 mm, 400.05 mm): Symbol J20 [WAFER-XH2_54-2PZZ]
+[footprint_link_issues]: 在库 'JLC-MCP' 中找不到封装 'CONN-TH_2P-P2.54_XH-2P'
+    ; warning
+    @(364.49 mm, 400.05 mm): Symbol J21 [WAFER-XH2_54-2PZZ]
+[lib_symbol_issues]: 在符号库中 'WAFER-XH2_54-2PZZ' 找不到符号 'JLC-MCP'
+    ; warning
+    @(364.49 mm, 400.05 mm): Symbol J21 [WAFER-XH2_54-2PZZ]
+[footprint_link_issues]: 在库 'JLC-MCP' 中找不到封装 'CONN-TH_2P-P2.54_XH-2P'
+    ; warning
+    @(400.05 mm, 400.05 mm): Symbol J22 [WAFER-XH2_54-2PZZ]
+[lib_symbol_issues]: 在符号库中 'WAFER-XH2_54-2PZZ' 找不到符号 'JLC-MCP'
+    ; warning
+    @(400.05 mm, 400.05 mm): Symbol J22 [WAFER-XH2_54-2PZZ]
+[footprint_link_issues]: 在库 'JLC-MCP' 中找不到封装 'CONN-TH_2P-P2.54_XH-2P'
+    ; warning
+    @(435.61 mm, 400.05 mm): Symbol J23 [WAFER-XH2_54-2PZZ]
+[lib_symbol_issues]: 在符号库中 'WAFER-XH2_54-2PZZ' 找不到符号 'JLC-MCP'
+    ; warning
+    @(435.61 mm, 400.05 mm): Symbol J23 [WAFER-XH2_54-2PZZ]
 [lib_symbol_issues]: 在符号库中 'TestPoint' 找不到符号 'Mechanical'
     ; warning
     @(459.74 mm, 299.72 mm): Symbol TP1 [TestPoint]
@@ -38,6 +122,9 @@ Report includes: Errors, Warnings
 [lib_symbol_issues]: 在符号库中 'TestPoint' 找不到符号 'Mechanical'
     ; warning
     @(459.74 mm, 351.79 mm): Symbol TP9 [TestPoint]
+[lib_symbol_issues]: 在符号库中 'TestPoint' 找不到符号 'Mechanical'
+    ; warning
+    @(459.74 mm, 378.46 mm): Symbol TP13 [TestPoint]
 [lib_symbol_issues]: 在符号库中 'TestPoint' 找不到符号 'Mechanical'
     ; warning
     @(491.49 mm, 299.72 mm): Symbol TP2 [TestPoint]
@@ -66,7 +153,7 @@ Report includes: Errors, Warnings
     ; warning
     @(556.26 mm, 351.79 mm): Symbol TP12 [TestPoint]
 
- ** ERC messages: 21  Errors 0  Warnings 21
+ ** ERC messages: 50  Errors 0  Warnings 50
 
  ** Ignored checks:
     - Global label only appears once in the schematic

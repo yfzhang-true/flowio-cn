@@ -1,8 +1,8 @@
 (export
 	(version "E")
 	(design
-		(source "E:\\FLOWIO\\hardware\\flowio-p1\\flowio-p1.kicad_sch")
-		(date "2026-10-01T14:56:14")
+		(source "E:\\FLOWIO\\.worktrees\\p1.1-spin-b\\hardware\\flowio-p1\\flowio-p1.kicad_sch")
+		(date "2026-10-04T16:41:55")
 		(tool "Eeschema 10.0.6")
 		(sheet
 			(number "1")
@@ -11,12 +11,12 @@
 			(title_block
 				(title "FLOWIO-CN P1 升级大脑")
 				(company "FLOWIO-CN")
-				(rev "1.0")
-				(date "2026-10-01")
+				(rev "1.1")
+				(date "2026-10-03")
 				(source "flowio-p1.kicad_sch")
 				(comment
 					(number "1")
-					(value "ESP32-S3 + TCA9548A + 8x AO3400 + TPS54331 + CH340K")
+					(value "ESP32-S3 + 11x valve drv + pump + XGZP + USB-C power")
 				)
 				(comment
 					(number "2")
@@ -81,7 +81,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -95,7 +95,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "87c75df2-18e3-4394-b3b0-e856cfccbd54")
+			(tstamps "078f50cb-78fd-4aed-bb00-3bb334d1afa4")
 			(units
 				(unit
 					(name "A")
@@ -137,7 +137,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -151,7 +151,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "2480d5f7-b72c-4435-9fb1-d13a23ea439d")
+			(tstamps "03a85d67-62e9-486e-b592-bdf697f3cd24")
 			(units
 				(unit
 					(name "A")
@@ -193,7 +193,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -207,7 +207,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "e00518c9-4889-4184-aa07-2f94a54a7356")
+			(tstamps "465c68f8-f73c-45e9-ba0c-b3159649624a")
 			(units
 				(unit
 					(name "A")
@@ -249,7 +249,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -263,7 +263,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "86e662af-e55b-4efa-bf3e-8e0ce27f9965")
+			(tstamps "82d8e082-8d9f-4a54-a35b-8cd33d58aef4")
 			(units
 				(unit
 					(name "A")
@@ -305,7 +305,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -319,7 +319,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "6436f0bf-5a93-4d02-90d4-f85fef9bbae8")
+			(tstamps "707d760a-5df2-4837-80b2-7d559e0501b9")
 			(units
 				(unit
 					(name "A")
@@ -361,7 +361,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -375,7 +375,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "ae483eb4-a78f-44ed-9f22-9c3474c9d40d")
+			(tstamps "04e82184-d371-4ff8-aa1d-369c2fb6dd8e")
 			(units
 				(unit
 					(name "A")
@@ -417,7 +417,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -431,7 +431,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "9f55686f-2509-49b1-8bb0-eb19df3930e6")
+			(tstamps "a4f866bd-2608-4e8a-a6af-6d2e157ef10e")
 			(units
 				(unit
 					(name "A")
@@ -473,7 +473,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -487,7 +487,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "33e5a81e-6d1d-44f5-9bb5-54fc19e88f8b")
+			(tstamps "f722088b-101b-49ab-aaf5-2b6f1fbfe042")
 			(units
 				(unit
 					(name "A")
@@ -529,7 +529,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -543,7 +543,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "8fa8391b-a5a6-4598-a35d-4f410fc35a89")
+			(tstamps "db9d6de0-7afd-4000-b875-e34bc53a28ab")
 			(units
 				(unit
 					(name "A")
@@ -585,7 +585,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -599,7 +599,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "0b73d678-0772-4d56-bacd-f21cbda2fbbc")
+			(tstamps "d459336c-f6e2-4a70-9b8d-f68c6c4b574c")
 			(units
 				(unit
 					(name "A")
@@ -641,7 +641,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -655,7 +655,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "0460d0dc-8058-4c45-920d-d5dba37bf67e")
+			(tstamps "954a5752-68f5-4833-993a-dd5d972da37d")
 			(units
 				(unit
 					(name "A")
@@ -697,7 +697,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -711,7 +711,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "f26637fa-596a-4113-9f7c-477aad4b2bdb")
+			(tstamps "05fca266-c813-4942-be3d-e9475854a793")
 			(units
 				(unit
 					(name "A")
@@ -753,7 +753,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -767,7 +767,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "19b2dfe8-1fe0-48c0-a8a4-ef7c708829be")
+			(tstamps "490d37f4-dade-4a94-bc61-0353cea6d5f7")
 			(units
 				(unit
 					(name "A")
@@ -809,7 +809,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -823,7 +823,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "d6a366dd-193b-4c02-9481-b1f5ce25cdba")
+			(tstamps "f745668f-7645-44b8-94b6-4c5eddb1b439")
 			(units
 				(unit
 					(name "A")
@@ -865,7 +865,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -879,7 +879,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "dff4031f-b966-4d6d-8715-7eee31407f39")
+			(tstamps "0ae5b00b-0dcb-4b17-a639-6c6c3b447d2a")
 			(units
 				(unit
 					(name "A")
@@ -921,7 +921,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -935,7 +935,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "61f62dbb-0672-4f1a-9128-7e740f71016c")
+			(tstamps "ec2fc0c4-2661-45a0-b64c-90f76f606b9d")
 			(units
 				(unit
 					(name "A")
@@ -977,7 +977,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -991,7 +991,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "6524c492-b786-44e9-a339-377783981835")
+			(tstamps "c36f6ac1-eb32-4cd6-a74f-f0cf11ea2c08")
 			(units
 				(unit
 					(name "A")
@@ -1007,14 +1007,14 @@
 			)
 		)
 		(comp
-			(ref "D1")
-			(value "SS34")
-			(footprint "JLC-MCP:SMA_L4.3-W2.6-LS5.2-RD")
+			(ref "C18")
+			(value "100nF")
+			(footprint "Capacitor_SMD:C_0603_1608Metric")
 			(fields
 				(field
-					(name "LCSC") "C8678")
+					(name "LCSC") "C1591")
 				(field
-					(name "Footprint") "JLC-MCP:SMA_L4.3-W2.6-LS5.2-RD")
+					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
 				(field
 					(name "Datasheet")
 				)
@@ -1024,16 +1024,16 @@
 			)
 			(libsource
 				(lib "JLC-MCP")
-				(part "SS34_C8678")
-				(description "3A 40V 500uA@40V 550mV@3A Independent SMA(DO-214AC) Schottky Diodes ROHS")
+				(part "CL10B104KB8NNNC")
+				(description "100nF 50V X7R ±10% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS")
 			)
 			(property
 				(name "LCSC")
-				(value "C8678")
+				(value "C1591")
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -1041,22 +1041,22 @@
 			)
 			(property
 				(name "ki_keywords")
-				(value "C8678")
+				(value "C1591")
 			)
 			(sheetpath
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "1f4f0925-1b88-4433-9bb2-990e1c880a5a")
+			(tstamps "bbe7ce8a-136f-4498-b9be-2a474101e2a5")
 			(units
 				(unit
 					(name "A")
 					(pins
 						(pin
-							(num "2")
+							(num "1")
 						)
 						(pin
-							(num "1")
+							(num "2")
 						)
 					)
 				)
@@ -1089,7 +1089,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -1103,7 +1103,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "ce1aeb6b-64de-4422-894c-f6d5c492d441")
+			(tstamps "5b5536bd-8b8f-44c3-903b-16882686238e")
 			(units
 				(unit
 					(name "A")
@@ -1145,7 +1145,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -1159,7 +1159,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "8f70cffc-f7cd-4c81-b890-e9eca0a463a1")
+			(tstamps "1573722d-d35c-4b4b-bae6-c409eef5cdaa")
 			(units
 				(unit
 					(name "A")
@@ -1201,7 +1201,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -1215,7 +1215,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "e6b4d4ed-7347-4c38-97f6-9f2b293159e8")
+			(tstamps "9686c9a0-078c-4e3d-aa68-d3bec715c951")
 			(units
 				(unit
 					(name "A")
@@ -1257,7 +1257,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -1271,7 +1271,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "93f0e40d-2033-4fe8-851f-0c61e84735c7")
+			(tstamps "706dd9dc-339f-490d-a5a9-8904edd11da5")
 			(units
 				(unit
 					(name "A")
@@ -1313,7 +1313,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -1327,7 +1327,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "61614c46-d8f5-4397-830f-c1043fa426b4")
+			(tstamps "db33d6cc-a9ce-4357-af6a-be3f1a0f1be9")
 			(units
 				(unit
 					(name "A")
@@ -1369,7 +1369,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -1383,7 +1383,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "3da26de9-1a96-44ad-ae13-8fd67e2dad21")
+			(tstamps "a334b279-8b7e-4ba2-b1c0-5eba6d6151f9")
 			(units
 				(unit
 					(name "A")
@@ -1425,7 +1425,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -1439,7 +1439,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "7a043e1b-edbd-4379-9a91-62acad5eb022")
+			(tstamps "ef690a3a-74b3-4d56-ac0e-39763a58c1c4")
 			(units
 				(unit
 					(name "A")
@@ -1481,7 +1481,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -1495,7 +1495,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "5b37044c-5c97-439a-92d2-0a1992dd3195")
+			(tstamps "4b8e18e2-49e4-4872-95ef-29614c9f19a0")
 			(units
 				(unit
 					(name "A")
@@ -1537,7 +1537,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -1551,7 +1551,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "e6f17a9b-cd07-4f5e-9f1a-568d44bc94bd")
+			(tstamps "1997daa8-b859-42ef-bbb4-16037dcd088c")
 			(units
 				(unit
 					(name "A")
@@ -1593,7 +1593,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -1607,7 +1607,231 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "8c4a8c26-2192-4577-ae12-1b1dc28a7421")
+			(tstamps "4d5e5fbf-9fae-488e-907c-4979776a0ca3")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "D12")
+			(value "SS14")
+			(footprint "JLC-MCP:SMA_L4.2-W2.6-LS5.0-RD_1")
+			(fields
+				(field
+					(name "LCSC") "C2480")
+				(field
+					(name "Footprint") "JLC-MCP:SMA_L4.2-W2.6-LS5.0-RD_1")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "SS14")
+				(description "1A 25A 300uA@40V 40V 550mV@1A Independent SMA(DO-214AC) Schottky Diodes ROHS")
+			)
+			(property
+				(name "LCSC")
+				(value "C2480")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "C2480")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "35bbdaf1-b8b5-4ca2-ba41-9f338e5829f3")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "D13")
+			(value "SS14")
+			(footprint "JLC-MCP:SMA_L4.2-W2.6-LS5.0-RD_1")
+			(fields
+				(field
+					(name "LCSC") "C2480")
+				(field
+					(name "Footprint") "JLC-MCP:SMA_L4.2-W2.6-LS5.0-RD_1")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "SS14")
+				(description "1A 25A 300uA@40V 40V 550mV@1A Independent SMA(DO-214AC) Schottky Diodes ROHS")
+			)
+			(property
+				(name "LCSC")
+				(value "C2480")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "C2480")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "bfd940fb-4645-4faf-a10c-656c5a0c431e")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "D14")
+			(value "SS14")
+			(footprint "JLC-MCP:SMA_L4.2-W2.6-LS5.0-RD_1")
+			(fields
+				(field
+					(name "LCSC") "C2480")
+				(field
+					(name "Footprint") "JLC-MCP:SMA_L4.2-W2.6-LS5.0-RD_1")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "SS14")
+				(description "1A 25A 300uA@40V 40V 550mV@1A Independent SMA(DO-214AC) Schottky Diodes ROHS")
+			)
+			(property
+				(name "LCSC")
+				(value "C2480")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "C2480")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "9093da68-56bc-4d67-8ba8-8b2cf161d05c")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "D15")
+			(value "SS14")
+			(footprint "JLC-MCP:SMA_L4.2-W2.6-LS5.0-RD_1")
+			(fields
+				(field
+					(name "LCSC") "C2480")
+				(field
+					(name "Footprint") "JLC-MCP:SMA_L4.2-W2.6-LS5.0-RD_1")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "SS14")
+				(description "1A 25A 300uA@40V 40V 550mV@1A Independent SMA(DO-214AC) Schottky Diodes ROHS")
+			)
+			(property
+				(name "LCSC")
+				(value "C2480")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "C2480")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "057826d4-7806-42ed-acd0-c89772f24a33")
 			(units
 				(unit
 					(name "A")
@@ -1624,13 +1848,13 @@
 		)
 		(comp
 			(ref "J1")
-			(value "DC-005")
-			(footprint "JLC-MCP:DC-IN-TH_DC005")
+			(value "USB-C PWR")
+			(footprint "JLC-MCP:TYPE-C-SMD_TYPE-C-31-M-12")
 			(fields
 				(field
-					(name "LCSC") "C431533")
+					(name "LCSC") "C165948")
 				(field
-					(name "Footprint") "JLC-MCP:DC-IN-TH_DC005")
+					(name "Footprint") "JLC-MCP:TYPE-C-SMD_TYPE-C-31-M-12")
 				(field
 					(name "Datasheet")
 				)
@@ -1640,16 +1864,16 @@
 			)
 			(libsource
 				(lib "JLC-MCP")
-				(part "DC005_C431533")
-				(description "12V 2mm 500mA 6.3mm DC Power Jack Right Angle Plugin DC Power Connectors ROHS")
+				(part "TYPE-C-31-M-12")
+				(description "")
 			)
 			(property
 				(name "LCSC")
-				(value "C431533")
+				(value "C165948")
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -1657,25 +1881,67 @@
 			)
 			(property
 				(name "ki_keywords")
-				(value "C431533")
+				(value "C165948")
 			)
 			(sheetpath
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "952bfc19-0448-4e37-bf1b-acaaf0762861")
+			(tstamps "bc710206-dc33-4453-b8d4-924dfbfde4c6")
 			(units
 				(unit
 					(name "A")
 					(pins
 						(pin
-							(num "1")
+							(num "A1")
 						)
 						(pin
-							(num "3")
+							(num "A4")
 						)
 						(pin
-							(num "2")
+							(num "A5")
+						)
+						(pin
+							(num "A6")
+						)
+						(pin
+							(num "A7")
+						)
+						(pin
+							(num "A8")
+						)
+						(pin
+							(num "A9")
+						)
+						(pin
+							(num "A12")
+						)
+						(pin
+							(num "SH")
+						)
+						(pin
+							(num "B12")
+						)
+						(pin
+							(num "B9")
+						)
+						(pin
+							(num "B8")
+						)
+						(pin
+							(num "B7")
+						)
+						(pin
+							(num "B6")
+						)
+						(pin
+							(num "B5")
+						)
+						(pin
+							(num "B4")
+						)
+						(pin
+							(num "B1")
 						)
 					)
 				)
@@ -1708,7 +1974,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -1722,7 +1988,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "c64d7010-d649-4eb4-8d11-95ec35b01b3c")
+			(tstamps "67037fb0-6236-4542-8900-0eae97623146")
 			(units
 				(unit
 					(name "A")
@@ -1779,7 +2045,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -1793,7 +2059,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "a40cb50e-9b87-46d9-83c6-f77909aac98e")
+			(tstamps "83093b9e-a6cc-4f49-8bbe-a95c4d10d5a9")
 			(units
 				(unit
 					(name "A")
@@ -1841,7 +2107,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -1855,7 +2121,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "460cbc34-2a9d-45bd-aede-024176cb9c1b")
+			(tstamps "c224e748-66d0-4513-9818-4282a73d5f20")
 			(units
 				(unit
 					(name "A")
@@ -1903,7 +2169,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -1917,7 +2183,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "d1659566-6098-406d-ae15-99ed6107a560")
+			(tstamps "d53bf4cd-0c74-48be-8ee1-4961564dab35")
 			(units
 				(unit
 					(name "A")
@@ -1965,7 +2231,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -1979,7 +2245,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "161260f5-661c-433e-a4ba-0e28e324252c")
+			(tstamps "47f83db5-f99f-4c27-94d6-827bd12db388")
 			(units
 				(unit
 					(name "A")
@@ -2027,7 +2293,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -2041,7 +2307,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "2b51fec4-a68a-41f0-bb6f-bffaf4aff25e")
+			(tstamps "d1476ffc-6787-4d1a-9e89-fc0573faad3a")
 			(units
 				(unit
 					(name "A")
@@ -2065,12 +2331,10 @@
 		(comp
 			(ref "J10")
 			(value "VALVE")
-			(footprint "JLC-MCP:CONN-TH_2P-P5.00_WJ500V-5.08-2P")
+			(footprint "JLC-MCP:CONN-TH_2P-P2.54_XH-2P")
 			(fields
 				(field
-					(name "LCSC") "C8465")
-				(field
-					(name "Footprint") "JLC-MCP:CONN-TH_2P-P5.00_WJ500V-5.08-2P")
+					(name "Footprint") "JLC-MCP:CONN-TH_2P-P2.54_XH-2P")
 				(field
 					(name "Datasheet")
 				)
@@ -2080,30 +2344,22 @@
 			)
 			(libsource
 				(lib "JLC-MCP")
-				(part "WJ500V-5_08-2P-14-00A")
-				(description "1 14~30 18A 1x2P 2 2.5 250V 2P 5.08mm Green M2.5 Through Hole 插件,P=5.08mm Screw Terminal Blocks ROHS")
-			)
-			(property
-				(name "LCSC")
-				(value "C8465")
+				(part "WAFER-XH2_54-2PZZ")
+				(description "")
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
 				(value "flowio-p1.kicad_sch")
 			)
-			(property
-				(name "ki_keywords")
-				(value "C8465")
-			)
 			(sheetpath
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "70262b12-d41c-4522-9a15-ae26b8e8fd1b")
+			(tstamps "90673f54-cfd7-4a6b-932a-03c34ffe7f39")
 			(units
 				(unit
 					(name "A")
@@ -2121,12 +2377,10 @@
 		(comp
 			(ref "J11")
 			(value "VALVE")
-			(footprint "JLC-MCP:CONN-TH_2P-P5.00_WJ500V-5.08-2P")
+			(footprint "JLC-MCP:CONN-TH_2P-P2.54_XH-2P")
 			(fields
 				(field
-					(name "LCSC") "C8465")
-				(field
-					(name "Footprint") "JLC-MCP:CONN-TH_2P-P5.00_WJ500V-5.08-2P")
+					(name "Footprint") "JLC-MCP:CONN-TH_2P-P2.54_XH-2P")
 				(field
 					(name "Datasheet")
 				)
@@ -2136,30 +2390,22 @@
 			)
 			(libsource
 				(lib "JLC-MCP")
-				(part "WJ500V-5_08-2P-14-00A")
-				(description "1 14~30 18A 1x2P 2 2.5 250V 2P 5.08mm Green M2.5 Through Hole 插件,P=5.08mm Screw Terminal Blocks ROHS")
-			)
-			(property
-				(name "LCSC")
-				(value "C8465")
+				(part "WAFER-XH2_54-2PZZ")
+				(description "")
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
 				(value "flowio-p1.kicad_sch")
 			)
-			(property
-				(name "ki_keywords")
-				(value "C8465")
-			)
 			(sheetpath
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "0e676e5a-90e6-44eb-813c-837297f81073")
+			(tstamps "e8e68ddb-dd42-499a-957c-48b770590fb5")
 			(units
 				(unit
 					(name "A")
@@ -2177,12 +2423,10 @@
 		(comp
 			(ref "J12")
 			(value "VALVE")
-			(footprint "JLC-MCP:CONN-TH_2P-P5.00_WJ500V-5.08-2P")
+			(footprint "JLC-MCP:CONN-TH_2P-P2.54_XH-2P")
 			(fields
 				(field
-					(name "LCSC") "C8465")
-				(field
-					(name "Footprint") "JLC-MCP:CONN-TH_2P-P5.00_WJ500V-5.08-2P")
+					(name "Footprint") "JLC-MCP:CONN-TH_2P-P2.54_XH-2P")
 				(field
 					(name "Datasheet")
 				)
@@ -2192,30 +2436,22 @@
 			)
 			(libsource
 				(lib "JLC-MCP")
-				(part "WJ500V-5_08-2P-14-00A")
-				(description "1 14~30 18A 1x2P 2 2.5 250V 2P 5.08mm Green M2.5 Through Hole 插件,P=5.08mm Screw Terminal Blocks ROHS")
-			)
-			(property
-				(name "LCSC")
-				(value "C8465")
+				(part "WAFER-XH2_54-2PZZ")
+				(description "")
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
 				(value "flowio-p1.kicad_sch")
 			)
-			(property
-				(name "ki_keywords")
-				(value "C8465")
-			)
 			(sheetpath
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "f380852a-6296-4a46-bfc1-3f85940b2c2f")
+			(tstamps "eb8be203-0739-4da5-b327-b95b705c8d3e")
 			(units
 				(unit
 					(name "A")
@@ -2233,12 +2469,10 @@
 		(comp
 			(ref "J13")
 			(value "VALVE")
-			(footprint "JLC-MCP:CONN-TH_2P-P5.00_WJ500V-5.08-2P")
+			(footprint "JLC-MCP:CONN-TH_2P-P2.54_XH-2P")
 			(fields
 				(field
-					(name "LCSC") "C8465")
-				(field
-					(name "Footprint") "JLC-MCP:CONN-TH_2P-P5.00_WJ500V-5.08-2P")
+					(name "Footprint") "JLC-MCP:CONN-TH_2P-P2.54_XH-2P")
 				(field
 					(name "Datasheet")
 				)
@@ -2248,30 +2482,22 @@
 			)
 			(libsource
 				(lib "JLC-MCP")
-				(part "WJ500V-5_08-2P-14-00A")
-				(description "1 14~30 18A 1x2P 2 2.5 250V 2P 5.08mm Green M2.5 Through Hole 插件,P=5.08mm Screw Terminal Blocks ROHS")
-			)
-			(property
-				(name "LCSC")
-				(value "C8465")
+				(part "WAFER-XH2_54-2PZZ")
+				(description "")
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
 				(value "flowio-p1.kicad_sch")
 			)
-			(property
-				(name "ki_keywords")
-				(value "C8465")
-			)
 			(sheetpath
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "60ec075d-a07c-46f3-b7de-dd332a4249e7")
+			(tstamps "e1a49786-f96e-48ca-9998-2d18802ed0b3")
 			(units
 				(unit
 					(name "A")
@@ -2289,12 +2515,10 @@
 		(comp
 			(ref "J14")
 			(value "VALVE")
-			(footprint "JLC-MCP:CONN-TH_2P-P5.00_WJ500V-5.08-2P")
+			(footprint "JLC-MCP:CONN-TH_2P-P2.54_XH-2P")
 			(fields
 				(field
-					(name "LCSC") "C8465")
-				(field
-					(name "Footprint") "JLC-MCP:CONN-TH_2P-P5.00_WJ500V-5.08-2P")
+					(name "Footprint") "JLC-MCP:CONN-TH_2P-P2.54_XH-2P")
 				(field
 					(name "Datasheet")
 				)
@@ -2304,30 +2528,22 @@
 			)
 			(libsource
 				(lib "JLC-MCP")
-				(part "WJ500V-5_08-2P-14-00A")
-				(description "1 14~30 18A 1x2P 2 2.5 250V 2P 5.08mm Green M2.5 Through Hole 插件,P=5.08mm Screw Terminal Blocks ROHS")
-			)
-			(property
-				(name "LCSC")
-				(value "C8465")
+				(part "WAFER-XH2_54-2PZZ")
+				(description "")
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
 				(value "flowio-p1.kicad_sch")
 			)
-			(property
-				(name "ki_keywords")
-				(value "C8465")
-			)
 			(sheetpath
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "c4900b93-f8c2-4588-a47c-e9ba8580d10e")
+			(tstamps "ef4c020d-2075-4795-a725-926d31aec3d9")
 			(units
 				(unit
 					(name "A")
@@ -2345,12 +2561,10 @@
 		(comp
 			(ref "J15")
 			(value "VALVE")
-			(footprint "JLC-MCP:CONN-TH_2P-P5.00_WJ500V-5.08-2P")
+			(footprint "JLC-MCP:CONN-TH_2P-P2.54_XH-2P")
 			(fields
 				(field
-					(name "LCSC") "C8465")
-				(field
-					(name "Footprint") "JLC-MCP:CONN-TH_2P-P5.00_WJ500V-5.08-2P")
+					(name "Footprint") "JLC-MCP:CONN-TH_2P-P2.54_XH-2P")
 				(field
 					(name "Datasheet")
 				)
@@ -2360,30 +2574,22 @@
 			)
 			(libsource
 				(lib "JLC-MCP")
-				(part "WJ500V-5_08-2P-14-00A")
-				(description "1 14~30 18A 1x2P 2 2.5 250V 2P 5.08mm Green M2.5 Through Hole 插件,P=5.08mm Screw Terminal Blocks ROHS")
-			)
-			(property
-				(name "LCSC")
-				(value "C8465")
+				(part "WAFER-XH2_54-2PZZ")
+				(description "")
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
 				(value "flowio-p1.kicad_sch")
 			)
-			(property
-				(name "ki_keywords")
-				(value "C8465")
-			)
 			(sheetpath
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "ff2c24df-8152-43e4-a2a9-71a8ed6e4370")
+			(tstamps "86ebdf4c-7639-4ae6-afa1-d4228cb21d24")
 			(units
 				(unit
 					(name "A")
@@ -2401,12 +2607,10 @@
 		(comp
 			(ref "J16")
 			(value "VALVE")
-			(footprint "JLC-MCP:CONN-TH_2P-P5.00_WJ500V-5.08-2P")
+			(footprint "JLC-MCP:CONN-TH_2P-P2.54_XH-2P")
 			(fields
 				(field
-					(name "LCSC") "C8465")
-				(field
-					(name "Footprint") "JLC-MCP:CONN-TH_2P-P5.00_WJ500V-5.08-2P")
+					(name "Footprint") "JLC-MCP:CONN-TH_2P-P2.54_XH-2P")
 				(field
 					(name "Datasheet")
 				)
@@ -2416,30 +2620,22 @@
 			)
 			(libsource
 				(lib "JLC-MCP")
-				(part "WJ500V-5_08-2P-14-00A")
-				(description "1 14~30 18A 1x2P 2 2.5 250V 2P 5.08mm Green M2.5 Through Hole 插件,P=5.08mm Screw Terminal Blocks ROHS")
-			)
-			(property
-				(name "LCSC")
-				(value "C8465")
+				(part "WAFER-XH2_54-2PZZ")
+				(description "")
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
 				(value "flowio-p1.kicad_sch")
 			)
-			(property
-				(name "ki_keywords")
-				(value "C8465")
-			)
 			(sheetpath
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "85440a2c-5e35-4753-bf13-a1a604d7e654")
+			(tstamps "cac2bd51-b6e0-4bdf-ab60-f9a736103d74")
 			(units
 				(unit
 					(name "A")
@@ -2457,12 +2653,10 @@
 		(comp
 			(ref "J17")
 			(value "VALVE")
-			(footprint "JLC-MCP:CONN-TH_2P-P5.00_WJ500V-5.08-2P")
+			(footprint "JLC-MCP:CONN-TH_2P-P2.54_XH-2P")
 			(fields
 				(field
-					(name "LCSC") "C8465")
-				(field
-					(name "Footprint") "JLC-MCP:CONN-TH_2P-P5.00_WJ500V-5.08-2P")
+					(name "Footprint") "JLC-MCP:CONN-TH_2P-P2.54_XH-2P")
 				(field
 					(name "Datasheet")
 				)
@@ -2472,30 +2666,22 @@
 			)
 			(libsource
 				(lib "JLC-MCP")
-				(part "WJ500V-5_08-2P-14-00A")
-				(description "1 14~30 18A 1x2P 2 2.5 250V 2P 5.08mm Green M2.5 Through Hole 插件,P=5.08mm Screw Terminal Blocks ROHS")
-			)
-			(property
-				(name "LCSC")
-				(value "C8465")
+				(part "WAFER-XH2_54-2PZZ")
+				(description "")
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
 				(value "flowio-p1.kicad_sch")
 			)
-			(property
-				(name "ki_keywords")
-				(value "C8465")
-			)
 			(sheetpath
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "197e7342-f474-43cf-95e6-0217a7c4b669")
+			(tstamps "d1d1bffa-d420-4504-bbc5-e9c1e8a5b5ac")
 			(units
 				(unit
 					(name "A")
@@ -2537,7 +2723,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -2551,7 +2737,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "6da3769b-662c-4963-94fb-af12ad5c86c5")
+			(tstamps "db6a7597-d535-4d7f-9cf5-21702e40a157")
 			(units
 				(unit
 					(name "A")
@@ -2599,7 +2785,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -2613,7 +2799,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "8fe776f4-1094-472b-9a45-6016f0ac1154")
+			(tstamps "883dff88-37ae-417c-b33b-5b5f4dfd5a42")
 			(units
 				(unit
 					(name "A")
@@ -2629,6 +2815,190 @@
 						)
 						(pin
 							(num "4")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J20")
+			(value "VALVE")
+			(footprint "JLC-MCP:CONN-TH_2P-P2.54_XH-2P")
+			(fields
+				(field
+					(name "Footprint") "JLC-MCP:CONN-TH_2P-P2.54_XH-2P")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "WAFER-XH2_54-2PZZ")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "355f00f3-dbf4-440d-ab0a-5fae8ea28be4")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J21")
+			(value "VALVE")
+			(footprint "JLC-MCP:CONN-TH_2P-P2.54_XH-2P")
+			(fields
+				(field
+					(name "Footprint") "JLC-MCP:CONN-TH_2P-P2.54_XH-2P")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "WAFER-XH2_54-2PZZ")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "ab30d4a9-1773-4fea-bcfd-343a275dee95")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J22")
+			(value "VALVE")
+			(footprint "JLC-MCP:CONN-TH_2P-P2.54_XH-2P")
+			(fields
+				(field
+					(name "Footprint") "JLC-MCP:CONN-TH_2P-P2.54_XH-2P")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "WAFER-XH2_54-2PZZ")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "f3395138-3a88-405f-ac0a-99b357db6ff9")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J23")
+			(value "PUMP")
+			(footprint "JLC-MCP:CONN-TH_2P-P2.54_XH-2P")
+			(fields
+				(field
+					(name "Footprint") "JLC-MCP:CONN-TH_2P-P2.54_XH-2P")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "WAFER-XH2_54-2PZZ")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "e40162aa-27a9-41b7-80ed-dc39bf7fd7d8")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
 						)
 					)
 				)
@@ -2661,7 +3031,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -2675,7 +3045,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "344cde7d-f45d-4497-be1e-56ed1bcbdaa2")
+			(tstamps "1803a3e9-005c-4f03-bf4b-8cbfca58c631")
 			(units
 				(unit
 					(name "A")
@@ -2717,7 +3087,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -2731,7 +3101,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "c13cc923-ad55-42c8-91ee-d66c37e9a0aa")
+			(tstamps "23f4fd2c-e301-41fb-bfc2-5f512a72db5b")
 			(units
 				(unit
 					(name "A")
@@ -2779,7 +3149,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -2793,7 +3163,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "ece1f6d4-aae8-4e13-9c75-b1f72bd9f111")
+			(tstamps "28079361-7cd8-44b5-ba97-a00313a2d220")
 			(units
 				(unit
 					(name "A")
@@ -2835,7 +3205,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -2849,7 +3219,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "79a9fe0f-769c-4126-bc4a-1c3410c8eec2")
+			(tstamps "0db0958f-00bb-4082-a77d-f1841313e777")
 			(units
 				(unit
 					(name "A")
@@ -2891,7 +3261,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -2905,7 +3275,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "69bc3125-a90b-4412-8db1-ab5012da0f3a")
+			(tstamps "ee079aea-2202-4379-a613-11696c61db81")
 			(units
 				(unit
 					(name "A")
@@ -2947,7 +3317,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -2961,7 +3331,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "6e78055e-ebd6-485f-bb0e-b0290a5990a1")
+			(tstamps "829be1a1-4a1b-45b4-9478-957a7ea4086e")
 			(units
 				(unit
 					(name "A")
@@ -3003,7 +3373,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -3017,7 +3387,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "c76ae4d9-0616-4ff8-b100-46b7929a3a16")
+			(tstamps "2daec47b-552f-47d7-a3c3-d86f4685b9b6")
 			(units
 				(unit
 					(name "A")
@@ -3062,7 +3432,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -3076,7 +3446,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "7838f018-c087-4884-a54d-eb9129bdcaa2")
+			(tstamps "5dd33823-fe49-406c-88f5-177213fdee37")
 			(units
 				(unit
 					(name "A")
@@ -3121,7 +3491,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -3135,7 +3505,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "e2c7d5e1-1fc1-403c-acf9-4db1f9e7d095")
+			(tstamps "c05faab8-a666-4caa-9f47-474e9dd8f2b1")
 			(units
 				(unit
 					(name "A")
@@ -3180,7 +3550,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -3194,7 +3564,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "b5a10c52-b70b-490c-800b-6d8b61ba6a89")
+			(tstamps "f0983901-a370-442f-b75c-bd01dcac906b")
 			(units
 				(unit
 					(name "A")
@@ -3239,7 +3609,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -3253,7 +3623,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "3953a3cd-6f42-45b0-ad9e-efce2774f20a")
+			(tstamps "7263bc14-d1b4-472c-b282-bc3518f884ab")
 			(units
 				(unit
 					(name "A")
@@ -3298,7 +3668,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -3312,7 +3682,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "9b90c35f-07d6-4929-9aa1-8464b66d53cd")
+			(tstamps "5e6da4d1-4cd9-4fd7-82cc-1a1dda373334")
 			(units
 				(unit
 					(name "A")
@@ -3357,7 +3727,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -3371,7 +3741,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "26510b93-51c7-487c-91e8-221ee21bbe92")
+			(tstamps "4ddd4ff4-a43d-4402-be44-4a9392f64802")
 			(units
 				(unit
 					(name "A")
@@ -3416,7 +3786,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -3430,7 +3800,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "17d261bf-9773-4a89-af8f-f90b5e3a3bc3")
+			(tstamps "cf24da71-81af-4a3d-bddf-5aa2a2dfd2a5")
 			(units
 				(unit
 					(name "A")
@@ -3475,7 +3845,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -3489,7 +3859,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "f3adeaba-2939-4157-b494-47f9b1d64185")
+			(tstamps "5c7026f0-58d0-4c1b-ae83-b12cbf9c06ad")
 			(units
 				(unit
 					(name "A")
@@ -3534,7 +3904,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -3548,7 +3918,243 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "059b7a5e-df28-44da-ba4e-4f011ce05215")
+			(tstamps "49d6e949-6f39-4fe5-b7b9-1d460e551474")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "Q13")
+			(value "AO3400A")
+			(footprint "JLC-MCP:SOT-23-3_L2.9-W1.3-P1.90-LS2.4-BR")
+			(fields
+				(field
+					(name "LCSC") "C20917")
+				(field
+					(name "Footprint") "JLC-MCP:SOT-23-3_L2.9-W1.3-P1.90-LS2.4-BR")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "AO3400A")
+				(description "1 N-channel 1.45V 1.4W 30V 48mΩ@2.5V 5.7A 50pF 630pF 75pF 7nC@10V N-Channel SOT-23 MOSFETs ROHS")
+			)
+			(property
+				(name "LCSC")
+				(value "C20917")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "C20917")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "7384b954-5ca1-4617-afc0-55b8c97bcb41")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "Q14")
+			(value "AO3400A")
+			(footprint "JLC-MCP:SOT-23-3_L2.9-W1.3-P1.90-LS2.4-BR")
+			(fields
+				(field
+					(name "LCSC") "C20917")
+				(field
+					(name "Footprint") "JLC-MCP:SOT-23-3_L2.9-W1.3-P1.90-LS2.4-BR")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "AO3400A")
+				(description "1 N-channel 1.45V 1.4W 30V 48mΩ@2.5V 5.7A 50pF 630pF 75pF 7nC@10V N-Channel SOT-23 MOSFETs ROHS")
+			)
+			(property
+				(name "LCSC")
+				(value "C20917")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "C20917")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "386b6cbd-e03e-4854-ac55-84972587be73")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "Q15")
+			(value "AO3400A")
+			(footprint "JLC-MCP:SOT-23-3_L2.9-W1.3-P1.90-LS2.4-BR")
+			(fields
+				(field
+					(name "LCSC") "C20917")
+				(field
+					(name "Footprint") "JLC-MCP:SOT-23-3_L2.9-W1.3-P1.90-LS2.4-BR")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "AO3400A")
+				(description "1 N-channel 1.45V 1.4W 30V 48mΩ@2.5V 5.7A 50pF 630pF 75pF 7nC@10V N-Channel SOT-23 MOSFETs ROHS")
+			)
+			(property
+				(name "LCSC")
+				(value "C20917")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "C20917")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "20377a0c-a1b4-48e4-aa97-ec71c6d202ea")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "Q16")
+			(value "AO3400A")
+			(footprint "JLC-MCP:SOT-23-3_L2.9-W1.3-P1.90-LS2.4-BR")
+			(fields
+				(field
+					(name "LCSC") "C20917")
+				(field
+					(name "Footprint") "JLC-MCP:SOT-23-3_L2.9-W1.3-P1.90-LS2.4-BR")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "AO3400A")
+				(description "1 N-channel 1.45V 1.4W 30V 48mΩ@2.5V 5.7A 50pF 630pF 75pF 7nC@10V N-Channel SOT-23 MOSFETs ROHS")
+			)
+			(property
+				(name "LCSC")
+				(value "C20917")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "C20917")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "492ac05c-733d-447b-ba38-b72d20038c58")
 			(units
 				(unit
 					(name "A")
@@ -3593,7 +4199,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -3607,7 +4213,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "f3d8c122-1808-49ec-97ea-6118bbe66ae7")
+			(tstamps "8b762ff3-91ed-4758-beab-3849324fe253")
 			(units
 				(unit
 					(name "A")
@@ -3649,7 +4255,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -3663,7 +4269,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "408f8c3c-5fb1-4006-b0d7-236005937958")
+			(tstamps "a183e251-6e35-4334-a5e2-fd14896e66d9")
 			(units
 				(unit
 					(name "A")
@@ -3705,7 +4311,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -3719,7 +4325,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "5de8709d-f5c0-4ac8-9758-08360082cdf8")
+			(tstamps "03f2997e-6706-478d-b0f4-66246e36a123")
 			(units
 				(unit
 					(name "A")
@@ -3761,7 +4367,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -3775,7 +4381,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "d5ada6cb-61ac-48ea-b224-0ddc24f6a3c1")
+			(tstamps "3d9b8dea-8558-445a-8c4c-895f68c04c0f")
 			(units
 				(unit
 					(name "A")
@@ -3817,7 +4423,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -3831,7 +4437,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "7fb069e7-d4d5-4e03-8fcc-7da106b3f3a8")
+			(tstamps "de94f437-0f25-4c70-b7f9-1dfb6cbbceae")
 			(units
 				(unit
 					(name "A")
@@ -3873,7 +4479,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -3887,7 +4493,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "5476866f-3f40-4e38-965d-dab685b99799")
+			(tstamps "41755822-757b-42a0-a233-bcb35666a0d9")
 			(units
 				(unit
 					(name "A")
@@ -3929,7 +4535,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -3943,7 +4549,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "542a98f4-e95f-4a81-99f5-8ed344ea2475")
+			(tstamps "9c79f01a-cbaa-4c0e-a2ff-34fc0b318c7a")
 			(units
 				(unit
 					(name "A")
@@ -3985,7 +4591,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -3999,7 +4605,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "fd3f008b-dbcf-4f07-bc0b-b392789b11ec")
+			(tstamps "5d6517ee-1500-4720-a979-8a3094cc0ac9")
 			(units
 				(unit
 					(name "A")
@@ -4041,7 +4647,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -4055,7 +4661,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "f1bf7e46-2fa9-4b0b-af2f-5555a02e58d8")
+			(tstamps "0c92cbbc-b30f-40bd-b51c-cc2b17290745")
 			(units
 				(unit
 					(name "A")
@@ -4097,7 +4703,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -4111,7 +4717,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "10eda187-bb73-49a0-99fd-46d7d30e90c2")
+			(tstamps "fb0669b8-8397-4563-9df6-2bea41f89fa0")
 			(units
 				(unit
 					(name "A")
@@ -4153,7 +4759,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -4167,7 +4773,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "fd291784-3cf3-4f1d-92d8-b98e0b285851")
+			(tstamps "97aa0770-2ac2-4c1c-8e3c-f2e6f6de72e6")
 			(units
 				(unit
 					(name "A")
@@ -4209,7 +4815,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -4223,7 +4829,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "ff327cff-425a-4d85-8bf4-0f2d92691abb")
+			(tstamps "8c0540f3-b980-4379-8db5-eea61cd0ed88")
 			(units
 				(unit
 					(name "A")
@@ -4265,7 +4871,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -4279,7 +4885,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "50eb9812-d194-4477-bdcc-6162f3d40d74")
+			(tstamps "8e6db2b0-0cd3-475c-bb5e-abab1e326dea")
 			(units
 				(unit
 					(name "A")
@@ -4321,7 +4927,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -4335,7 +4941,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "5a6c0b44-ed29-47c0-90af-7bd629f168d6")
+			(tstamps "279c48fa-8bd6-4849-a70f-455d36d6eaff")
 			(units
 				(unit
 					(name "A")
@@ -4377,7 +4983,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -4391,7 +4997,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "c43eb722-db1c-4dde-84e3-97988b2509fd")
+			(tstamps "926b97b8-5649-4695-ab41-4c3a578a69a6")
 			(units
 				(unit
 					(name "A")
@@ -4433,7 +5039,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -4447,7 +5053,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "b37e5944-3821-4415-a4ea-3760edfce7bd")
+			(tstamps "5f19dfc2-d639-485a-a1ce-2e77ee0cc0ee")
 			(units
 				(unit
 					(name "A")
@@ -4489,7 +5095,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -4503,7 +5109,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "60873a82-1fec-403c-9933-4fd9e049a68f")
+			(tstamps "99deb376-60a6-4f6b-8764-7b1d09954082")
 			(units
 				(unit
 					(name "A")
@@ -4545,7 +5151,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -4559,7 +5165,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "8a8c93a4-b1a0-4e0f-a8ee-38f32c70e3c0")
+			(tstamps "ada142c0-5f11-4326-8617-fe362ec60443")
 			(units
 				(unit
 					(name "A")
@@ -4601,7 +5207,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -4615,7 +5221,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "32fb78f2-e5d4-40d9-b7b9-52e0e3114f13")
+			(tstamps "c811e42e-4ba7-4a33-a390-09bc2c38a2c0")
 			(units
 				(unit
 					(name "A")
@@ -4657,7 +5263,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -4671,7 +5277,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "56e073e5-f497-4d91-ae05-f124761774db")
+			(tstamps "a715cd91-1f2b-4331-bbbb-843ef662da83")
 			(units
 				(unit
 					(name "A")
@@ -4713,7 +5319,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -4727,7 +5333,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "39b52c41-1f31-4aa8-94f7-5315ea34a82f")
+			(tstamps "eb828de6-c7da-4eda-ad14-11830b6715e2")
 			(units
 				(unit
 					(name "A")
@@ -4769,7 +5375,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -4783,7 +5389,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "9b7f7658-5b9c-4345-b4af-47e0bf6b23c7")
+			(tstamps "c3ba718f-c1d2-4ef4-bc89-72c9c724b58c")
 			(units
 				(unit
 					(name "A")
@@ -4825,7 +5431,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -4839,7 +5445,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "4f7eb724-d9fa-4df5-8863-20e9db1d2de7")
+			(tstamps "9a8baea7-3213-4328-a724-48519a36a691")
 			(units
 				(unit
 					(name "A")
@@ -4881,7 +5487,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -4895,7 +5501,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "11f35f65-e844-4a53-991c-ae2e98218c53")
+			(tstamps "3b073518-605e-4f2b-9ef8-3231ec7190b3")
 			(units
 				(unit
 					(name "A")
@@ -4937,7 +5543,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -4951,7 +5557,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "d6e0c31f-c912-4d22-950a-19e6e220a9fc")
+			(tstamps "f4d9a140-d000-415f-9e09-2a77dd7e37ce")
 			(units
 				(unit
 					(name "A")
@@ -4993,7 +5599,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -5007,7 +5613,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "94e76cc5-5ba0-4310-b97e-44d21d549d6e")
+			(tstamps "fb6fdcad-88a5-4106-b1c1-14a5b66c7f93")
 			(units
 				(unit
 					(name "A")
@@ -5049,7 +5655,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -5063,7 +5669,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "a660d51c-43d2-4343-b142-8c3a079117c5")
+			(tstamps "45902e1a-ceb9-43a1-8950-f34be1842cf6")
 			(units
 				(unit
 					(name "A")
@@ -5105,7 +5711,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -5119,7 +5725,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "4b6e5b92-a960-4b0f-a9bc-88fa4d0eba0f")
+			(tstamps "ca046b7c-dfe5-4b28-b27d-0855e4e48425")
 			(units
 				(unit
 					(name "A")
@@ -5161,7 +5767,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -5175,7 +5781,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "da700e67-5fed-4d9a-9d8d-d3c6e05b812d")
+			(tstamps "668fc30c-f97e-40e3-b2c0-a2909d4f2212")
 			(units
 				(unit
 					(name "A")
@@ -5217,7 +5823,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -5231,7 +5837,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "b9d56e4c-c310-4759-aeec-aa6bc3f0b277")
+			(tstamps "bcf92eef-cbd8-4f06-b81a-d271d6018dd3")
 			(units
 				(unit
 					(name "A")
@@ -5273,7 +5879,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -5287,7 +5893,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "8815ff62-ed38-4589-9e56-fb16ee3b12ee")
+			(tstamps "4d9eb9f6-64eb-4ac2-a4cb-8fc2122358e7")
 			(units
 				(unit
 					(name "A")
@@ -5329,7 +5935,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -5343,7 +5949,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "ce28b6d9-7c27-48e8-8398-3f32d9127afe")
+			(tstamps "681be09d-5635-44b7-b0f9-50d6dcfdd39b")
 			(units
 				(unit
 					(name "A")
@@ -5385,7 +5991,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -5399,7 +6005,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "22edd9eb-a380-4f5a-8a7f-a311468b2afd")
+			(tstamps "6b18c383-361e-444c-a602-1b8802b2d48a")
 			(units
 				(unit
 					(name "A")
@@ -5441,7 +6047,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -5455,7 +6061,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "c79f3bf9-d777-427e-8589-aa687988c337")
+			(tstamps "563bd58d-a2b1-4ba3-baa0-e60740c420f3")
 			(units
 				(unit
 					(name "A")
@@ -5497,7 +6103,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -5511,7 +6117,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "58cab7bd-94cd-4ee9-ba42-9f6015ba28e7")
+			(tstamps "67a8f4b6-fd87-4914-adff-f542f4361fe6")
 			(units
 				(unit
 					(name "A")
@@ -5553,7 +6159,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -5567,7 +6173,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "8d2adbc9-74e8-4f68-9858-c2e6aead5a74")
+			(tstamps "3802fa32-c429-45dc-9a79-340c00faedfb")
 			(units
 				(unit
 					(name "A")
@@ -5609,7 +6215,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -5623,7 +6229,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "35d61210-abf7-48be-baa9-9fcbaf78aab7")
+			(tstamps "34e5ac26-d5c1-4256-b5e7-00cb600a06b1")
 			(units
 				(unit
 					(name "A")
@@ -5665,7 +6271,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -5679,7 +6285,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "879a7913-69ea-40ea-b4fe-a8523a9a0637")
+			(tstamps "0efdad2d-92bf-448e-adf1-c508809e8fe1")
 			(units
 				(unit
 					(name "A")
@@ -5721,7 +6327,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -5735,7 +6341,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "abb34287-f793-4a69-ba48-1f1ffe978eb8")
+			(tstamps "2cacecc0-3d03-49f6-8a82-2d56bfe92ddb")
 			(units
 				(unit
 					(name "A")
@@ -5777,7 +6383,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -5791,7 +6397,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "35a61d7a-340a-4f76-bd71-41d9d0e6b6c6")
+			(tstamps "c9da2402-1de7-4512-9210-c85bd092672d")
 			(units
 				(unit
 					(name "A")
@@ -5833,7 +6439,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -5847,7 +6453,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "61af8894-e5ee-423f-8343-8c0a645336e0")
+			(tstamps "40e5ec2d-2310-4e80-9a01-7a594a3cd4dc")
 			(units
 				(unit
 					(name "A")
@@ -5889,7 +6495,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -5903,7 +6509,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "4f4fc259-0f47-4b6a-bd80-e499d46a80ca")
+			(tstamps "e1c9867c-333e-4b34-81b9-2b3ce96949cd")
 			(units
 				(unit
 					(name "A")
@@ -5945,7 +6551,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -5959,7 +6565,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "730a5b59-b39e-496e-860e-ac8c33395f7b")
+			(tstamps "73d96493-f4a2-4355-9403-3bfcffcda7a3")
 			(units
 				(unit
 					(name "A")
@@ -6001,7 +6607,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -6015,7 +6621,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "68c06467-4191-4c20-9d6b-af5e639fd000")
+			(tstamps "2ba6921f-86b3-4196-be83-16ceca6b165f")
 			(units
 				(unit
 					(name "A")
@@ -6057,7 +6663,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -6071,7 +6677,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "3f3729c7-9e6b-4849-abef-40d6b4baf0e9")
+			(tstamps "6be5b04e-0a62-48aa-959f-3b70c5690d41")
 			(units
 				(unit
 					(name "A")
@@ -6113,7 +6719,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -6127,7 +6733,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "d4049b8c-d219-41e2-a1fb-6233490234b9")
+			(tstamps "c7da3956-ad38-468b-b103-c0fc51f7fea7")
 			(units
 				(unit
 					(name "A")
@@ -6169,7 +6775,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -6183,7 +6789,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "95c537f7-e249-4e38-b2c7-650648ef93ac")
+			(tstamps "b02281ed-2286-496a-ac4a-5f203af91854")
 			(units
 				(unit
 					(name "A")
@@ -6225,7 +6831,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -6239,7 +6845,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "4edc5899-2d6f-4364-a6c0-e93856759936")
+			(tstamps "f8306f03-2c82-4266-acc1-e7b731c2482e")
 			(units
 				(unit
 					(name "A")
@@ -6281,7 +6887,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -6295,7 +6901,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "b547d279-44e8-4184-8f20-848b739c82fe")
+			(tstamps "22d6a0a7-911a-461b-870f-2c0952020533")
 			(units
 				(unit
 					(name "A")
@@ -6337,7 +6943,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -6351,7 +6957,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "aaf92b6a-ac29-45fe-9b04-c9f92dfbf2e2")
+			(tstamps "d3aca591-9603-410c-abe9-52df15ca5be6")
 			(units
 				(unit
 					(name "A")
@@ -6393,7 +6999,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -6407,7 +7013,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "09a11c70-1341-46fd-9049-89e364eb53ae")
+			(tstamps "0c6ab4be-1df9-4296-b45c-3c409337ed86")
 			(units
 				(unit
 					(name "A")
@@ -6449,7 +7055,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -6463,7 +7069,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "f24d7c72-5af5-4722-b5c7-0b5f9712fdb5")
+			(tstamps "7887aaf3-c13b-43dd-bf4e-61bd675ac845")
 			(units
 				(unit
 					(name "A")
@@ -6505,7 +7111,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -6519,7 +7125,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "6fd045aa-01b1-4a8d-a427-8ddc2b92a3d8")
+			(tstamps "fede24ed-f0cc-497e-b7cb-ac2eff77dfa8")
 			(units
 				(unit
 					(name "A")
@@ -6561,7 +7167,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -6575,7 +7181,567 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "51a7493e-3dbf-4f13-ab98-243770ccdd32")
+			(tstamps "d4a5f463-76cc-412e-9e19-c44cd53d5301")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R55")
+			(value "1k")
+			(footprint "JLC-MCP:R0603")
+			(fields
+				(field
+					(name "LCSC") "C21190")
+				(field
+					(name "Footprint") "JLC-MCP:R0603")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "0603WAF1001T5E")
+				(description "100mW 1kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS")
+			)
+			(property
+				(name "LCSC")
+				(value "C21190")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "C21190")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "c80141d0-6b90-4029-a64f-5e825c33d0ad")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R56")
+			(value "1k")
+			(footprint "JLC-MCP:R0603")
+			(fields
+				(field
+					(name "LCSC") "C21190")
+				(field
+					(name "Footprint") "JLC-MCP:R0603")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "0603WAF1001T5E")
+				(description "100mW 1kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS")
+			)
+			(property
+				(name "LCSC")
+				(value "C21190")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "C21190")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "9b32c7e2-f2d9-4889-94a7-76817454f7c8")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R57")
+			(value "1k")
+			(footprint "JLC-MCP:R0603")
+			(fields
+				(field
+					(name "LCSC") "C21190")
+				(field
+					(name "Footprint") "JLC-MCP:R0603")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "0603WAF1001T5E")
+				(description "100mW 1kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS")
+			)
+			(property
+				(name "LCSC")
+				(value "C21190")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "C21190")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "0303916c-801e-44cc-bb37-9d0f08ff1971")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R58")
+			(value "1k")
+			(footprint "JLC-MCP:R0603")
+			(fields
+				(field
+					(name "LCSC") "C21190")
+				(field
+					(name "Footprint") "JLC-MCP:R0603")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "0603WAF1001T5E")
+				(description "100mW 1kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS")
+			)
+			(property
+				(name "LCSC")
+				(value "C21190")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "C21190")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "44b7af9b-9dd5-4b94-9cf1-8b0535501f12")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R59")
+			(value "10k")
+			(footprint "JLC-MCP:R0603")
+			(fields
+				(field
+					(name "LCSC") "C25804")
+				(field
+					(name "Footprint") "JLC-MCP:R0603")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "0603WAF1002T5E")
+				(description "100mW 10kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS")
+			)
+			(property
+				(name "LCSC")
+				(value "C25804")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "C25804")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "552f6d35-61f2-4e32-803f-e1afb3e12f40")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R60")
+			(value "10k")
+			(footprint "JLC-MCP:R0603")
+			(fields
+				(field
+					(name "LCSC") "C25804")
+				(field
+					(name "Footprint") "JLC-MCP:R0603")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "0603WAF1002T5E")
+				(description "100mW 10kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS")
+			)
+			(property
+				(name "LCSC")
+				(value "C25804")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "C25804")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "dded65e9-7fba-439b-bf2d-4da570f8a0b3")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R61")
+			(value "10k")
+			(footprint "JLC-MCP:R0603")
+			(fields
+				(field
+					(name "LCSC") "C25804")
+				(field
+					(name "Footprint") "JLC-MCP:R0603")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "0603WAF1002T5E")
+				(description "100mW 10kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS")
+			)
+			(property
+				(name "LCSC")
+				(value "C25804")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "C25804")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "3ef1ab32-88e0-4da4-a4cf-1b0e504ab2b1")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R62")
+			(value "10k")
+			(footprint "JLC-MCP:R0603")
+			(fields
+				(field
+					(name "LCSC") "C25804")
+				(field
+					(name "Footprint") "JLC-MCP:R0603")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "0603WAF1002T5E")
+				(description "100mW 10kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS")
+			)
+			(property
+				(name "LCSC")
+				(value "C25804")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "C25804")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "8046153a-04c3-4b8e-b815-64a203c04201")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R63")
+			(value "5.1k")
+			(footprint "JLC-MCP:R0603")
+			(fields
+				(field
+					(name "LCSC") "C23186")
+				(field
+					(name "Footprint") "JLC-MCP:R0603")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "0603WAF5101T5E")
+				(description "100mW 5.1kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS")
+			)
+			(property
+				(name "LCSC")
+				(value "C23186")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "C23186")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "644799f5-1001-4d63-ae19-7b353c71d409")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R64")
+			(value "5.1k")
+			(footprint "JLC-MCP:R0603")
+			(fields
+				(field
+					(name "LCSC") "C23186")
+				(field
+					(name "Footprint") "JLC-MCP:R0603")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "0603WAF5101T5E")
+				(description "100mW 5.1kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS")
+			)
+			(property
+				(name "LCSC")
+				(value "C23186")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "C23186")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "c74666b4-4bec-4362-9ec4-052134923ff8")
 			(units
 				(unit
 					(name "A")
@@ -6617,7 +7783,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -6631,7 +7797,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "9a17ae67-9f17-4456-a082-73f96aa22cfb")
+			(tstamps "2df045c0-bee6-4850-bf55-d0b522fc7fd9")
 			(units
 				(unit
 					(name "A")
@@ -6673,7 +7839,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -6687,7 +7853,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "1f00c5a1-fa89-4e13-8548-b7b64c65dae6")
+			(tstamps "a2f8621f-c4a0-4322-a677-eb40ab0d7f45")
 			(units
 				(unit
 					(name "A")
@@ -6729,7 +7895,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -6743,7 +7909,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "9c263eb3-772c-4a5b-9d55-f3fbc0eb5b23")
+			(tstamps "6dd7d68f-61fe-43c6-80b6-ff229b6f073e")
 			(units
 				(unit
 					(name "A")
@@ -6779,7 +7945,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -6789,7 +7955,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "eef7cb7c-cd5b-4d4f-ac36-1202179fbb2d")
+			(tstamps "ab000b6e-80b2-4f64-8146-9874b196d65f")
 			(units
 				(unit
 					(name "A")
@@ -6822,7 +7988,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -6832,7 +7998,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "b0afbd33-af79-490a-ac32-ddeca3693d6b")
+			(tstamps "5804a404-6daf-4840-9217-4011fc8613e6")
 			(units
 				(unit
 					(name "A")
@@ -6865,7 +8031,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -6875,7 +8041,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "f9e736bb-6ee1-4e83-9a0a-587ecdd39d25")
+			(tstamps "c4eb4172-44c1-4199-a690-fb511f7f38ac")
 			(units
 				(unit
 					(name "A")
@@ -6908,7 +8074,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -6918,7 +8084,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "7e275498-e853-46b3-a76e-c94ddeeab6b4")
+			(tstamps "23004a44-b38b-475f-8b34-8fb953766d29")
 			(units
 				(unit
 					(name "A")
@@ -6951,7 +8117,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -6961,7 +8127,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "d435f768-d7ad-4db3-990d-b976611b13ea")
+			(tstamps "86bc5ad4-d040-4197-9730-42351f6fbd38")
 			(units
 				(unit
 					(name "A")
@@ -6994,7 +8160,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -7004,7 +8170,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "628a1f7f-a9d2-4225-9697-f36e27262fcb")
+			(tstamps "8be7e865-f7da-4d74-8ffe-e2d79de1d315")
 			(units
 				(unit
 					(name "A")
@@ -7037,7 +8203,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -7047,7 +8213,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "3419365d-c16d-42ed-aea4-f622e0059934")
+			(tstamps "9f73fab2-4076-4e17-a43a-23ab7fb6211b")
 			(units
 				(unit
 					(name "A")
@@ -7080,7 +8246,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -7090,7 +8256,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "c55d3a59-6818-4ea0-b456-aeb15f145a24")
+			(tstamps "78993a77-1303-4669-8300-9f7994320bd0")
 			(units
 				(unit
 					(name "A")
@@ -7123,7 +8289,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -7133,7 +8299,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "8ee9f8ed-615a-4d21-bae2-629b60d97c69")
+			(tstamps "a1185be6-397d-41b0-a5ac-0c0131b52dfe")
 			(units
 				(unit
 					(name "A")
@@ -7166,7 +8332,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -7176,7 +8342,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "bd3313f8-74fc-49b7-9819-50d1f06f6851")
+			(tstamps "3ccb6d8b-88af-4f3e-8af9-0d8c8a0f3ae1")
 			(units
 				(unit
 					(name "A")
@@ -7209,7 +8375,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -7219,7 +8385,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "1b41f0da-3fab-44bd-9874-2f8ae970c4ff")
+			(tstamps "9b13f86e-fb37-44dc-a5c6-ed8eba0b2bdf")
 			(units
 				(unit
 					(name "A")
@@ -7252,7 +8418,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -7262,7 +8428,50 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "9ed712cc-303e-4122-bd04-a9801b8e7c0a")
+			(tstamps "48a814c7-b1df-4341-a838-100ccc66e7cc")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "TP13")
+			(value "DRV_PUMP")
+			(footprint "TestPoint:TestPoint_Pad_D1.0mm")
+			(fields
+				(field
+					(name "Footprint") "TestPoint:TestPoint_Pad_D1.0mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Mechanical")
+				(part "TestPoint")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "176c9ad9-4666-4d64-9c69-ad19c3062e62")
 			(units
 				(unit
 					(name "A")
@@ -7301,7 +8510,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -7315,7 +8524,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "25eec0f7-d971-43ea-a821-4c0574caf649")
+			(tstamps "ea4d106a-6f5e-43d9-86da-1d8c1af3552a")
 			(units
 				(unit
 					(name "A")
@@ -7474,7 +8683,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -7488,7 +8697,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "9301d549-b8ed-4618-85a5-71ae5e0ec95b")
+			(tstamps "79a10e17-5c5f-4431-99dc-bd891fa0f327")
 			(units
 				(unit
 					(name "A")
@@ -7596,7 +8805,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -7610,7 +8819,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "3c02659c-e7c4-48ab-a7a8-72adbbae0360")
+			(tstamps "f9a791ba-7590-47cb-95c1-2ffca3cce841")
 			(units
 				(unit
 					(name "A")
@@ -7670,7 +8879,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -7684,7 +8893,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "c13a9c9e-a53b-46bc-9bd7-9efc89b09035")
+			(tstamps "1b00285e-c64f-4d18-9dde-225da180d093")
 			(units
 				(unit
 					(name "A")
@@ -7753,7 +8962,7 @@
 			)
 			(property
 				(name "Sheetname")
-				(value "Root")
+				(value "flowio-p1")
 			)
 			(property
 				(name "Sheetfile")
@@ -7767,7 +8976,139 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "8d5824de-262c-4305-9f6d-bb44f53a3fd2")
+			(tstamps "4563749b-1d64-4ec3-b5cd-ed85c1b900c0")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "6")
+						)
+						(pin
+							(num "5")
+						)
+						(pin
+							(num "4")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "U6")
+			(value "XGZP6897D")
+			(footprint "JLC-MCP:SOP-8_L4.9-W3.9-P1.27-LS6.0-BL")
+			(fields
+				(field
+					(name "Footprint") "JLC-MCP:SOP-8_L4.9-W3.9-P1.27-LS6.0-BL")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "XGZP6897D")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "54c47975-edc6-4fec-8c43-3affb691d424")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "8")
+						)
+						(pin
+							(num "7")
+						)
+						(pin
+							(num "6")
+						)
+						(pin
+							(num "5")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "U7")
+			(value "USBLC6-2SC6")
+			(footprint "JLC-MCP:SOT-23-6_L2.9-W1.6-P0.95-LS2.8-BL")
+			(fields
+				(field
+					(name "LCSC") "C7519")
+				(field
+					(name "Footprint") "JLC-MCP:SOT-23-6_L2.9-W1.6-P0.95-LS2.8-BL")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "USBLC6-2SC6")
+				(description "USBLC6-2SC6")
+			)
+			(property
+				(name "LCSC")
+				(value "C7519")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "C7519")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "8c650870-1461-4544-ae38-f95f85cc01d4")
 			(units
 				(unit
 					(name "A")
@@ -8916,81 +10257,6 @@
 		)
 		(libpart
 			(lib "JLC-MCP")
-			(part "DC005_C431533")
-			(description "12V 2mm 500mA 6.3mm DC Power Jack Right Angle Plugin DC Power Connectors ROHS")
-			(docs "https://www.lcsc.com/datasheet/lcsc_datasheet_1912111437_SHOU-HAN-DC005_C431533.pdf")
-			(fields
-				(field
-					(name "Reference") "DC")
-				(field
-					(name "Value") "DC005_C431533")
-				(field
-					(name "Footprint") "JLC-MCP:DC-IN-TH_DC005")
-				(field
-					(name "Datasheet") "https://www.lcsc.com/datasheet/lcsc_datasheet_1912111437_SHOU-HAN-DC005_C431533.pdf")
-				(field
-					(name "Description") "12V 2mm 500mA 6.3mm DC Power Jack Right Angle Plugin DC Power Connectors ROHS")
-				(field
-					(name "Product Page") "https://lcsc.com/product-detail/Power-Connectors_SHOU-HAN-DC005_C431533.html")
-				(field
-					(name "LCSC") "C431533")
-				(field
-					(name "Manufacturer") "SHOU HAN(首韩)")
-				(field
-					(name "Stock") "40")
-				(field
-					(name "Price") "0.0419USD")
-				(field
-					(name "Process") "SMT")
-				(field
-					(name "Minimum Qty") "10")
-				(field
-					(name "Attrition Qty") "0")
-				(field
-					(name "Class") "Extended Part")
-				(field
-					(name "Part") "DC005")
-				(field
-					(name "Operating Temperature") "-30℃~+70℃")
-				(field
-					(name "Voltage Rating (Max)") "12V")
-				(field
-					(name "Length") "13.6mm")
-				(field
-					(name "Current Rating") "500mA")
-				(field
-					(name "Connector Type") "DC Power Jack")
-				(field
-					(name "Body Height") "10.9mm")
-				(field
-					(name "Outside Contact Diameter") "6.3mm")
-				(field
-					(name "Mounting Type") "Right Angle")
-				(field
-					(name "Width") "9.9mm")
-				(field
-					(name "Inside Contact Diameter") "2mm")
-			)
-			(pins
-				(pin
-					(num "1")
-					(name "1")
-					(type "passive")
-				)
-				(pin
-					(num "2")
-					(name "2")
-					(type "passive")
-				)
-				(pin
-					(num "3")
-					(name "3")
-					(type "passive")
-				)
-			)
-		)
-		(libpart
-			(lib "JLC-MCP")
 			(part "ESP32-S3-WROOM-1_N16R8_")
 			(description "-103.5dBm -40℃~+65℃ 2.4GHz 20.5dBm 355mA 3V~3.6V 95mA ESP32-S3R8 On-board PCB Antenna UART、SPI、I2C、GPIO、I2S、USB SMD,25.5x18mm WiFi Modules ROHS")
 			(docs "https://www.lcsc.com/datasheet/lcsc_datasheet_2411121101_Espressif-Systems-ESP32-S3-WROOM-1-N16R8_C2913202.pdf")
@@ -9995,6 +11261,111 @@
 		)
 		(libpart
 			(lib "JLC-MCP")
+			(part "TYPE-C-31-M-12")
+			(fields
+				(field
+					(name "Reference") "USB")
+				(field
+					(name "Value") "TYPE-C 16P")
+				(field
+					(name "Footprint") "JLC-MCP:TYPE-C-SMD_TYPE-C-31-M-12")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "A1")
+					(name "GND")
+					(type "passive")
+				)
+				(pin
+					(num "A4")
+					(name "VBUS")
+					(type "passive")
+				)
+				(pin
+					(num "A5")
+					(name "CC1")
+					(type "passive")
+				)
+				(pin
+					(num "A6")
+					(name "DP")
+					(type "passive")
+				)
+				(pin
+					(num "A7")
+					(name "DN")
+					(type "passive")
+				)
+				(pin
+					(num "A8")
+					(name "SBU1")
+					(type "passive")
+				)
+				(pin
+					(num "A9")
+					(name "VBUS")
+					(type "passive")
+				)
+				(pin
+					(num "A12")
+					(name "GND")
+					(type "passive")
+				)
+				(pin
+					(num "B1")
+					(name "GND")
+					(type "passive")
+				)
+				(pin
+					(num "B4")
+					(name "VBUS")
+					(type "passive")
+				)
+				(pin
+					(num "B5")
+					(name "CC2")
+					(type "passive")
+				)
+				(pin
+					(num "B6")
+					(name "DN")
+					(type "passive")
+				)
+				(pin
+					(num "B7")
+					(name "DP")
+					(type "passive")
+				)
+				(pin
+					(num "B8")
+					(name "SBU2")
+					(type "passive")
+				)
+				(pin
+					(num "B9")
+					(name "VBUS")
+					(type "passive")
+				)
+				(pin
+					(num "B12")
+					(name "GND")
+					(type "passive")
+				)
+				(pin
+					(num "SH")
+					(name "SHIELD")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "JLC-MCP")
 			(part "TYPE-C_6P")
 			(description "1 3,000 Cycles 3A 5V 6P Black Female Surface Mount, Right Angle Type-C SMD USB Connectors ROHS")
 			(docs "https://www.lcsc.com/datasheet/lcsc_datasheet_2012031006_SHOU-HAN-TYPE-C-6P_C456012.pdf")
@@ -10162,6 +11533,36 @@
 		)
 		(libpart
 			(lib "JLC-MCP")
+			(part "WAFER-XH2_54-2PZZ")
+			(fields
+				(field
+					(name "Reference") "J")
+				(field
+					(name "Value") "XH 2P")
+				(field
+					(name "Footprint") "JLC-MCP:CONN-TH_2P-P2.54_XH-2P")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "JLC-MCP")
 			(part "WAFER-XH2_54-4PZZ")
 			(description "1 12.5mm 1x4P 2.5mm 250V 2A 4 4P 5.9mm 7mm Brass PA66 Through Hole Tin UL94V-0 White XH 插件,P=2.5mm Wire To Board Connector ROHS")
 			(docs "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2302211801_XUNPU-WAFER-XH2-54-4PZZ_C5359632.pdf")
@@ -10250,78 +11651,60 @@
 		)
 		(libpart
 			(lib "JLC-MCP")
-			(part "WJ500V-5_08-2P-14-00A")
-			(description "1 14~30 18A 1x2P 2 2.5 250V 2P 5.08mm Green M2.5 Through Hole 插件,P=5.08mm Screw Terminal Blocks ROHS")
-			(docs "https://www.lcsc.com/datasheet/lcsc_datasheet_1912251636_Ningbo-Kangnex-Elec-WJ500V-5-08-2P_C8465.pdf")
+			(part "XGZP6897D")
 			(fields
 				(field
-					(name "Reference") "P")
+					(name "Reference") "U")
 				(field
-					(name "Value") "WJ500V-5.08-2P-14-00A")
+					(name "Value") "XGZP6897D")
 				(field
-					(name "Footprint") "JLC-MCP:CONN-TH_2P-P5.00_WJ500V-5.08-2P")
+					(name "Footprint") "JLC-MCP:SOP-8_L4.9-W3.9-P1.27-LS6.0-BL")
 				(field
-					(name "Datasheet") "https://www.lcsc.com/datasheet/lcsc_datasheet_1912251636_Ningbo-Kangnex-Elec-WJ500V-5-08-2P_C8465.pdf")
+					(name "Datasheet")
+				)
 				(field
-					(name "Description") "1 14~30 18A 1x2P 2 2.5 250V 2P 5.08mm Green M2.5 Through Hole 插件,P=5.08mm Screw Terminal Blocks ROHS")
-				(field
-					(name "Product Page") "https://lcsc.com/product-detail/Terminal-Blocks_WJ500V-5-08-2P_C8465.html")
-				(field
-					(name "LCSC") "C8465")
-				(field
-					(name "Manufacturer") "KANGNEX(康奈克斯电气)")
-				(field
-					(name "Stock") "20510")
-				(field
-					(name "Price") "0.0819USD")
-				(field
-					(name "Process") "SMT")
-				(field
-					(name "Minimum Qty") "5")
-				(field
-					(name "Attrition Qty") "0")
-				(field
-					(name "Class") "Extended Part")
-				(field
-					(name "Part") "WJ500V-5.08-2P")
-				(field
-					(name "Operating Temperature") "-40℃~+105℃")
-				(field
-					(name "Number of Positions or Pins") "1x2P")
-				(field
-					(name "Voltage Rating (Max)") "250V")
-				(field
-					(name "Number of Rows") "1")
-				(field
-					(name "Color") "Green")
-				(field
-					(name "Current Rating") "18A")
-				(field
-					(name "Wire Gauge - AWG") "14~30")
-				(field
-					(name "Wire Gauge - mm2") "2.5")
-				(field
-					(name "Height Above Board") "14.07mm")
-				(field
-					(name "Mounting Type") "Through Hole")
-				(field
-					(name "Screw Specification") "M2.5")
-				(field
-					(name "Number of Pins") "2P")
-				(field
-					(name "Pitch") "5.08mm")
-				(field
-					(name "Number of PINs Per Row") "2")
+					(name "Description")
+				)
 			)
 			(pins
 				(pin
 					(num "1")
-					(name "1")
+					(name "NC")
 					(type "passive")
 				)
 				(pin
 					(num "2")
-					(name "2")
+					(name "VDD")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "NC")
+					(type "passive")
+				)
+				(pin
+					(num "4")
+					(name "NC")
+					(type "passive")
+				)
+				(pin
+					(num "5")
+					(name "NC")
+					(type "passive")
+				)
+				(pin
+					(num "6")
+					(name "SDA")
+					(type "passive")
+				)
+				(pin
+					(num "7")
+					(name "SCL")
+					(type "passive")
+				)
+				(pin
+					(num "8")
+					(name "GND")
 					(type "passive")
 				)
 			)
@@ -10479,6 +11862,12 @@
 			)
 			(node
 				(ref "C13")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "C18")
 				(pin "1")
 				(pinfunction "1_1")
 				(pintype "passive")
@@ -10729,6 +12118,12 @@
 				(pinfunction "VCC_7")
 				(pintype "passive")
 			)
+			(node
+				(ref "U6")
+				(pin "2")
+				(pinfunction "VDD_2")
+				(pintype "passive")
+			)
 		)
 		(net
 			(code "2")
@@ -10765,12 +12160,6 @@
 				(pintype "passive")
 			)
 			(node
-				(ref "D1")
-				(pin "1")
-				(pinfunction "K_1")
-				(pintype "passive")
-			)
-			(node
 				(ref "D10")
 				(pin "1")
 				(pinfunction "K_1")
@@ -10778,6 +12167,30 @@
 			)
 			(node
 				(ref "D11")
+				(pin "1")
+				(pinfunction "K_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "D12")
+				(pin "1")
+				(pinfunction "K_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "D13")
+				(pin "1")
+				(pinfunction "K_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "D14")
+				(pin "1")
+				(pinfunction "K_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "D15")
 				(pin "1")
 				(pinfunction "K_1")
 				(pintype "passive")
@@ -10822,6 +12235,30 @@
 				(ref "D9")
 				(pin "1")
 				(pinfunction "K_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J1")
+				(pin "A4")
+				(pinfunction "VBUS_A4")
+				(pintype "passive")
+			)
+			(node
+				(ref "J1")
+				(pin "A9")
+				(pinfunction "VBUS_A9")
+				(pintype "passive")
+			)
+			(node
+				(ref "J1")
+				(pin "B4")
+				(pinfunction "VBUS_B4")
+				(pintype "passive")
+			)
+			(node
+				(ref "J1")
+				(pin "B9")
+				(pinfunction "VBUS_B9")
 				(pintype "passive")
 			)
 			(node
@@ -10873,6 +12310,30 @@
 				(pintype "passive")
 			)
 			(node
+				(ref "J20")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J21")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J22")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J23")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
 				(ref "R3")
 				(pin "1")
 				(pinfunction "1_1")
@@ -10889,6 +12350,12 @@
 				(pin "2")
 				(pinfunction "VIN_2")
 				(pintype "power_in")
+			)
+			(node
+				(ref "U7")
+				(pin "5")
+				(pinfunction "5_5")
+				(pintype "passive")
 			)
 		)
 		(net
@@ -11117,23 +12584,6 @@
 		)
 		(net
 			(code "13")
-			(name "/DC_IN")
-			(class "Default")
-			(node
-				(ref "D1")
-				(pin "2")
-				(pinfunction "A_2")
-				(pintype "passive")
-			)
-			(node
-				(ref "J1")
-				(pin "1")
-				(pinfunction "1_1")
-				(pintype "passive")
-			)
-		)
-		(net
-			(code "14")
 			(name "/DRV1")
 			(class "Default")
 			(node
@@ -11162,7 +12612,7 @@
 			)
 		)
 		(net
-			(code "15")
+			(code "14")
 			(name "/DRV2")
 			(class "Default")
 			(node
@@ -11185,7 +12635,7 @@
 			)
 		)
 		(net
-			(code "16")
+			(code "15")
 			(name "/DRV3")
 			(class "Default")
 			(node
@@ -11208,7 +12658,7 @@
 			)
 		)
 		(net
-			(code "17")
+			(code "16")
 			(name "/DRV4")
 			(class "Default")
 			(node
@@ -11231,7 +12681,7 @@
 			)
 		)
 		(net
-			(code "18")
+			(code "17")
 			(name "/DRV5")
 			(class "Default")
 			(node
@@ -11254,7 +12704,7 @@
 			)
 		)
 		(net
-			(code "19")
+			(code "18")
 			(name "/DRV6")
 			(class "Default")
 			(node
@@ -11277,7 +12727,7 @@
 			)
 		)
 		(net
-			(code "20")
+			(code "19")
 			(name "/DRV7")
 			(class "Default")
 			(node
@@ -11300,7 +12750,7 @@
 			)
 		)
 		(net
-			(code "21")
+			(code "20")
 			(name "/DRV8")
 			(class "Default")
 			(node
@@ -11323,7 +12773,105 @@
 			)
 		)
 		(net
+			(code "21")
+			(name "/DRV_F")
+			(class "Default")
+			(node
+				(ref "D14")
+				(pin "2")
+				(pinfunction "A_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J22")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "Q15")
+				(pin "3")
+				(pinfunction "D_3")
+				(pintype "passive")
+			)
+		)
+		(net
 			(code "22")
+			(name "/DRV_PUMP")
+			(class "Default")
+			(node
+				(ref "D15")
+				(pin "2")
+				(pinfunction "A_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J23")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "Q16")
+				(pin "3")
+				(pinfunction "D_3")
+				(pintype "passive")
+			)
+			(node
+				(ref "TP13")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "23")
+			(name "/DRV_S")
+			(class "Default")
+			(node
+				(ref "D12")
+				(pin "2")
+				(pinfunction "A_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J20")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "Q13")
+				(pin "3")
+				(pinfunction "D_3")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "24")
+			(name "/DRV_V")
+			(class "Default")
+			(node
+				(ref "D13")
+				(pin "2")
+				(pinfunction "A_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J21")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "Q14")
+				(pin "3")
+				(pinfunction "D_3")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "25")
 			(name "/DTR")
 			(class "Default")
 			(node
@@ -11340,7 +12888,7 @@
 			)
 		)
 		(net
-			(code "23")
+			(code "26")
 			(name "/DTR_R")
 			(class "Default")
 			(node
@@ -11363,7 +12911,7 @@
 			)
 		)
 		(net
-			(code "24")
+			(code "27")
 			(name "/EN")
 			(class "Default")
 			(node
@@ -11404,7 +12952,7 @@
 			)
 		)
 		(net
-			(code "25")
+			(code "28")
 			(name "/FB")
 			(class "Default")
 			(node
@@ -11427,7 +12975,7 @@
 			)
 		)
 		(net
-			(code "26")
+			(code "29")
 			(name "/GATE1")
 			(class "Default")
 			(node
@@ -11456,7 +13004,7 @@
 			)
 		)
 		(net
-			(code "27")
+			(code "30")
 			(name "/GATE2")
 			(class "Default")
 			(node
@@ -11479,7 +13027,7 @@
 			)
 		)
 		(net
-			(code "28")
+			(code "31")
 			(name "/GATE3")
 			(class "Default")
 			(node
@@ -11502,7 +13050,7 @@
 			)
 		)
 		(net
-			(code "29")
+			(code "32")
 			(name "/GATE4")
 			(class "Default")
 			(node
@@ -11525,7 +13073,7 @@
 			)
 		)
 		(net
-			(code "30")
+			(code "33")
 			(name "/GATE5")
 			(class "Default")
 			(node
@@ -11548,7 +13096,7 @@
 			)
 		)
 		(net
-			(code "31")
+			(code "34")
 			(name "/GATE6")
 			(class "Default")
 			(node
@@ -11571,7 +13119,7 @@
 			)
 		)
 		(net
-			(code "32")
+			(code "35")
 			(name "/GATE7")
 			(class "Default")
 			(node
@@ -11594,7 +13142,7 @@
 			)
 		)
 		(net
-			(code "33")
+			(code "36")
 			(name "/GATE8")
 			(class "Default")
 			(node
@@ -11617,7 +13165,99 @@
 			)
 		)
 		(net
-			(code "34")
+			(code "37")
+			(name "/GATE_F")
+			(class "Default")
+			(node
+				(ref "Q15")
+				(pin "1")
+				(pinfunction "G_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R57")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R61")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "38")
+			(name "/GATE_PUMP")
+			(class "Default")
+			(node
+				(ref "Q16")
+				(pin "1")
+				(pinfunction "G_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R58")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R62")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "39")
+			(name "/GATE_S")
+			(class "Default")
+			(node
+				(ref "Q13")
+				(pin "1")
+				(pinfunction "G_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R55")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R59")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "40")
+			(name "/GATE_V")
+			(class "Default")
+			(node
+				(ref "Q14")
+				(pin "1")
+				(pinfunction "G_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R56")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R60")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "41")
 			(name "/I2C_SCL")
 			(class "Default")
 			(node
@@ -11644,9 +13284,15 @@
 				(pinfunction "SCL_22")
 				(pintype "passive")
 			)
+			(node
+				(ref "U6")
+				(pin "7")
+				(pinfunction "SCL_7")
+				(pintype "passive")
+			)
 		)
 		(net
-			(code "35")
+			(code "42")
 			(name "/I2C_SDA")
 			(class "Default")
 			(node
@@ -11673,9 +13319,15 @@
 				(pinfunction "SDA_23")
 				(pintype "passive")
 			)
+			(node
+				(ref "U6")
+				(pin "6")
+				(pinfunction "SDA_6")
+				(pintype "passive")
+			)
 		)
 		(net
-			(code "36")
+			(code "43")
 			(name "/IO4")
 			(class "Default")
 			(node
@@ -11692,7 +13344,7 @@
 			)
 		)
 		(net
-			(code "37")
+			(code "44")
 			(name "/IO5")
 			(class "Default")
 			(node
@@ -11709,7 +13361,7 @@
 			)
 		)
 		(net
-			(code "38")
+			(code "45")
 			(name "/IO6")
 			(class "Default")
 			(node
@@ -11726,7 +13378,7 @@
 			)
 		)
 		(net
-			(code "39")
+			(code "46")
 			(name "/IO7")
 			(class "Default")
 			(node
@@ -11743,7 +13395,7 @@
 			)
 		)
 		(net
-			(code "40")
+			(code "47")
 			(name "/IO10")
 			(class "Default")
 			(node
@@ -11760,7 +13412,7 @@
 			)
 		)
 		(net
-			(code "41")
+			(code "48")
 			(name "/IO11")
 			(class "Default")
 			(node
@@ -11777,7 +13429,7 @@
 			)
 		)
 		(net
-			(code "42")
+			(code "49")
 			(name "/IO12")
 			(class "Default")
 			(node
@@ -11794,7 +13446,75 @@
 			)
 		)
 		(net
-			(code "43")
+			(code "50")
+			(name "/IO15")
+			(class "Default")
+			(node
+				(ref "R55")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U1")
+				(pin "8")
+				(pinfunction "IO15_8")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "51")
+			(name "/IO16")
+			(class "Default")
+			(node
+				(ref "R56")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U1")
+				(pin "9")
+				(pinfunction "IO16_9")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "52")
+			(name "/IO17")
+			(class "Default")
+			(node
+				(ref "R57")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U1")
+				(pin "10")
+				(pinfunction "IO17_10")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "53")
+			(name "/IO18")
+			(class "Default")
+			(node
+				(ref "R58")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U1")
+				(pin "11")
+				(pinfunction "IO18_11")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "54")
 			(name "/IO21")
 			(class "Default")
 			(node
@@ -11811,7 +13531,7 @@
 			)
 		)
 		(net
-			(code "44")
+			(code "55")
 			(name "/IO48")
 			(class "Default")
 			(node
@@ -11828,7 +13548,7 @@
 			)
 		)
 		(net
-			(code "45")
+			(code "56")
 			(name "/LED_PWR_K")
 			(class "Default")
 			(node
@@ -11845,7 +13565,7 @@
 			)
 		)
 		(net
-			(code "46")
+			(code "57")
 			(name "/LED_RX_K")
 			(class "Default")
 			(node
@@ -11862,7 +13582,7 @@
 			)
 		)
 		(net
-			(code "47")
+			(code "58")
 			(name "/LED_TX_K")
 			(class "Default")
 			(node
@@ -11879,7 +13599,7 @@
 			)
 		)
 		(net
-			(code "48")
+			(code "59")
 			(name "/LED_USER")
 			(class "Default")
 			(node
@@ -11902,7 +13622,7 @@
 			)
 		)
 		(net
-			(code "49")
+			(code "60")
 			(name "/LED_USER_K")
 			(class "Default")
 			(node
@@ -11919,7 +13639,65 @@
 			)
 		)
 		(net
-			(code "50")
+			(code "61")
+			(name "/P5_CC1")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "A5")
+				(pinfunction "CC1_A5")
+				(pintype "passive")
+			)
+			(node
+				(ref "R63")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U7")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U7")
+				(pin "6")
+				(pinfunction "6_6")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "62")
+			(name "/P5_CC2")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "B5")
+				(pinfunction "CC2_B5")
+				(pintype "passive")
+			)
+			(node
+				(ref "R64")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U7")
+				(pin "3")
+				(pinfunction "3_3")
+				(pintype "passive")
+			)
+			(node
+				(ref "U7")
+				(pin "4")
+				(pinfunction "4_4")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "63")
 			(name "/RGB_R")
 			(class "Default")
 			(node
@@ -11936,7 +13714,7 @@
 			)
 		)
 		(net
-			(code "51")
+			(code "64")
 			(name "/RTS")
 			(class "Default")
 			(node
@@ -11953,7 +13731,7 @@
 			)
 		)
 		(net
-			(code "52")
+			(code "65")
 			(name "/RTS_R")
 			(class "Default")
 			(node
@@ -11976,7 +13754,7 @@
 			)
 		)
 		(net
-			(code "53")
+			(code "66")
 			(name "/S1_SCL")
 			(class "Default")
 			(node
@@ -11999,7 +13777,7 @@
 			)
 		)
 		(net
-			(code "54")
+			(code "67")
 			(name "/S1_SDA")
 			(class "Default")
 			(node
@@ -12022,7 +13800,7 @@
 			)
 		)
 		(net
-			(code "55")
+			(code "68")
 			(name "/S2_SCL")
 			(class "Default")
 			(node
@@ -12045,7 +13823,7 @@
 			)
 		)
 		(net
-			(code "56")
+			(code "69")
 			(name "/S2_SDA")
 			(class "Default")
 			(node
@@ -12068,7 +13846,7 @@
 			)
 		)
 		(net
-			(code "57")
+			(code "70")
 			(name "/S3_SCL")
 			(class "Default")
 			(node
@@ -12091,7 +13869,7 @@
 			)
 		)
 		(net
-			(code "58")
+			(code "71")
 			(name "/S3_SDA")
 			(class "Default")
 			(node
@@ -12114,7 +13892,7 @@
 			)
 		)
 		(net
-			(code "59")
+			(code "72")
 			(name "/S4_SCL")
 			(class "Default")
 			(node
@@ -12137,7 +13915,7 @@
 			)
 		)
 		(net
-			(code "60")
+			(code "73")
 			(name "/S4_SDA")
 			(class "Default")
 			(node
@@ -12160,7 +13938,7 @@
 			)
 		)
 		(net
-			(code "61")
+			(code "74")
 			(name "/S5_SCL")
 			(class "Default")
 			(node
@@ -12183,7 +13961,7 @@
 			)
 		)
 		(net
-			(code "62")
+			(code "75")
 			(name "/S5_SDA")
 			(class "Default")
 			(node
@@ -12206,7 +13984,7 @@
 			)
 		)
 		(net
-			(code "63")
+			(code "76")
 			(name "/STRAP3")
 			(class "Default")
 			(node
@@ -12223,7 +14001,7 @@
 			)
 		)
 		(net
-			(code "64")
+			(code "77")
 			(name "/STRAP45")
 			(class "Default")
 			(node
@@ -12240,7 +14018,7 @@
 			)
 		)
 		(net
-			(code "65")
+			(code "78")
 			(name "/STRAP46")
 			(class "Default")
 			(node
@@ -12257,7 +14035,7 @@
 			)
 		)
 		(net
-			(code "66")
+			(code "79")
 			(name "/TCA_RST")
 			(class "Default")
 			(node
@@ -12274,7 +14052,7 @@
 			)
 		)
 		(net
-			(code "67")
+			(code "80")
 			(name "/UART_RX")
 			(class "Default")
 			(node
@@ -12297,7 +14075,7 @@
 			)
 		)
 		(net
-			(code "68")
+			(code "81")
 			(name "/UART_TX")
 			(class "Default")
 			(node
@@ -12320,7 +14098,7 @@
 			)
 		)
 		(net
-			(code "69")
+			(code "82")
 			(name "/USB_DN")
 			(class "Default")
 			(node
@@ -12343,7 +14121,7 @@
 			)
 		)
 		(net
-			(code "70")
+			(code "83")
 			(name "/USB_DN_CH")
 			(class "Default")
 			(node
@@ -12360,7 +14138,7 @@
 			)
 		)
 		(net
-			(code "71")
+			(code "84")
 			(name "/USB_DP")
 			(class "Default")
 			(node
@@ -12383,7 +14161,7 @@
 			)
 		)
 		(net
-			(code "72")
+			(code "85")
 			(name "/USB_DP_CH")
 			(class "Default")
 			(node
@@ -12400,7 +14178,7 @@
 			)
 		)
 		(net
-			(code "73")
+			(code "86")
 			(name "/USB_VBUS")
 			(class "Default")
 			(node
@@ -12429,7 +14207,7 @@
 			)
 		)
 		(net
-			(code "74")
+			(code "87")
 			(name "GND")
 			(class "Default")
 			(node
@@ -12487,6 +14265,12 @@
 				(pintype "passive")
 			)
 			(node
+				(ref "C18")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
 				(ref "C2")
 				(pin "2")
 				(pinfunction "2_2")
@@ -12536,8 +14320,32 @@
 			)
 			(node
 				(ref "J1")
-				(pin "2")
-				(pinfunction "2_2")
+				(pin "A1")
+				(pinfunction "GND_A1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J1")
+				(pin "A12")
+				(pinfunction "GND_A12")
+				(pintype "passive")
+			)
+			(node
+				(ref "J1")
+				(pin "B1")
+				(pinfunction "GND_B1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J1")
+				(pin "B12")
+				(pinfunction "GND_B12")
+				(pintype "passive")
+			)
+			(node
+				(ref "J1")
+				(pin "SH")
+				(pinfunction "SHIELD_SH")
 				(pintype "passive")
 			)
 			(node
@@ -12622,6 +14430,30 @@
 				(ref "Q12")
 				(pin "2")
 				(pinfunction "E_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "Q13")
+				(pin "2")
+				(pinfunction "S_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "Q14")
+				(pin "2")
+				(pinfunction "S_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "Q15")
+				(pin "2")
+				(pinfunction "S_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "Q16")
+				(pin "2")
+				(pinfunction "S_2")
 				(pintype "passive")
 			)
 			(node
@@ -12751,6 +14583,42 @@
 				(pintype "passive")
 			)
 			(node
+				(ref "R59")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R60")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R61")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R62")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R63")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R64")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
 				(ref "SW1")
 				(pin "2")
 				(pinfunction "2_2")
@@ -12858,9 +14726,21 @@
 				(pinfunction "2_2")
 				(pintype "passive")
 			)
+			(node
+				(ref "U6")
+				(pin "8")
+				(pinfunction "GND_8")
+				(pintype "passive")
+			)
+			(node
+				(ref "U7")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
 		)
 		(net
-			(code "75")
+			(code "88")
 			(name "PH")
 			(class "Default")
 			(node
@@ -12895,18 +14775,73 @@
 			)
 		)
 		(net
-			(code "76")
-			(name "unconnected-(J1-Pad3)")
+			(code "89")
+			(name "unconnected-(J1-DN-PadA7)")
 			(class "Default")
 			(node
 				(ref "J1")
-				(pin "3")
-				(pinfunction "3_3")
+				(pin "A7")
+				(pinfunction "DN_A7")
 				(pintype "passive+no_connect")
 			)
 		)
 		(net
-			(code "77")
+			(code "90")
+			(name "unconnected-(J1-DN-PadB6)")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "B6")
+				(pinfunction "DN_B6")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "91")
+			(name "unconnected-(J1-DP-PadA6)")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "A6")
+				(pinfunction "DP_A6")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "92")
+			(name "unconnected-(J1-DP-PadB7)")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "B7")
+				(pinfunction "DP_B7")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "93")
+			(name "unconnected-(J1-SBU1-PadA8)")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "A8")
+				(pinfunction "SBU1_A8")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "94")
+			(name "unconnected-(J1-SBU2-PadB8)")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "B8")
+				(pinfunction "SBU2_B8")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "95")
 			(name "unconnected-(LED1-DOU-Pad2)")
 			(class "Default")
 			(node
@@ -12917,7 +14852,7 @@
 			)
 		)
 		(net
-			(code "78")
+			(code "96")
 			(name "unconnected-(U1-IO1-Pad39)")
 			(class "Default")
 			(node
@@ -12928,7 +14863,7 @@
 			)
 		)
 		(net
-			(code "79")
+			(code "97")
 			(name "unconnected-(U1-IO2-Pad38)")
 			(class "Default")
 			(node
@@ -12939,51 +14874,7 @@
 			)
 		)
 		(net
-			(code "80")
-			(name "unconnected-(U1-IO15-Pad8)")
-			(class "Default")
-			(node
-				(ref "U1")
-				(pin "8")
-				(pinfunction "IO15_8")
-				(pintype "passive+no_connect")
-			)
-		)
-		(net
-			(code "81")
-			(name "unconnected-(U1-IO16-Pad9)")
-			(class "Default")
-			(node
-				(ref "U1")
-				(pin "9")
-				(pinfunction "IO16_9")
-				(pintype "passive+no_connect")
-			)
-		)
-		(net
-			(code "82")
-			(name "unconnected-(U1-IO17-Pad10)")
-			(class "Default")
-			(node
-				(ref "U1")
-				(pin "10")
-				(pinfunction "IO17_10")
-				(pintype "passive+no_connect")
-			)
-		)
-		(net
-			(code "83")
-			(name "unconnected-(U1-IO18-Pad11)")
-			(class "Default")
-			(node
-				(ref "U1")
-				(pin "11")
-				(pinfunction "IO18_11")
-				(pintype "passive+no_connect")
-			)
-		)
-		(net
-			(code "84")
+			(code "98")
 			(name "unconnected-(U1-IO19-Pad13)")
 			(class "Default")
 			(node
@@ -12994,7 +14885,7 @@
 			)
 		)
 		(net
-			(code "85")
+			(code "99")
 			(name "unconnected-(U1-IO20-Pad14)")
 			(class "Default")
 			(node
@@ -13005,7 +14896,7 @@
 			)
 		)
 		(net
-			(code "86")
+			(code "100")
 			(name "unconnected-(U1-IO35-Pad28)")
 			(class "Default")
 			(node
@@ -13016,7 +14907,7 @@
 			)
 		)
 		(net
-			(code "87")
+			(code "101")
 			(name "unconnected-(U1-IO36-Pad29)")
 			(class "Default")
 			(node
@@ -13027,7 +14918,7 @@
 			)
 		)
 		(net
-			(code "88")
+			(code "102")
 			(name "unconnected-(U1-IO37-Pad30)")
 			(class "Default")
 			(node
@@ -13038,7 +14929,7 @@
 			)
 		)
 		(net
-			(code "89")
+			(code "103")
 			(name "unconnected-(U1-IO38-Pad31)")
 			(class "Default")
 			(node
@@ -13049,7 +14940,7 @@
 			)
 		)
 		(net
-			(code "90")
+			(code "104")
 			(name "unconnected-(U1-IO39-Pad32)")
 			(class "Default")
 			(node
@@ -13060,7 +14951,7 @@
 			)
 		)
 		(net
-			(code "91")
+			(code "105")
 			(name "unconnected-(U1-IO40-Pad33)")
 			(class "Default")
 			(node
@@ -13071,7 +14962,7 @@
 			)
 		)
 		(net
-			(code "92")
+			(code "106")
 			(name "unconnected-(U1-IO41-Pad34)")
 			(class "Default")
 			(node
@@ -13082,7 +14973,7 @@
 			)
 		)
 		(net
-			(code "93")
+			(code "107")
 			(name "unconnected-(U1-IO42-Pad35)")
 			(class "Default")
 			(node
@@ -13093,7 +14984,7 @@
 			)
 		)
 		(net
-			(code "94")
+			(code "108")
 			(name "unconnected-(U1-IO47-Pad24)")
 			(class "Default")
 			(node
@@ -13104,7 +14995,7 @@
 			)
 		)
 		(net
-			(code "95")
+			(code "109")
 			(name "unconnected-(U2-SC5-Pad16)")
 			(class "Default")
 			(node
@@ -13115,7 +15006,7 @@
 			)
 		)
 		(net
-			(code "96")
+			(code "110")
 			(name "unconnected-(U2-SC6-Pad18)")
 			(class "Default")
 			(node
@@ -13126,7 +15017,7 @@
 			)
 		)
 		(net
-			(code "97")
+			(code "111")
 			(name "unconnected-(U2-SC7-Pad20)")
 			(class "Default")
 			(node
@@ -13137,7 +15028,7 @@
 			)
 		)
 		(net
-			(code "98")
+			(code "112")
 			(name "unconnected-(U2-SD5-Pad15)")
 			(class "Default")
 			(node
@@ -13148,7 +15039,7 @@
 			)
 		)
 		(net
-			(code "99")
+			(code "113")
 			(name "unconnected-(U2-SD6-Pad17)")
 			(class "Default")
 			(node
@@ -13159,7 +15050,7 @@
 			)
 		)
 		(net
-			(code "100")
+			(code "114")
 			(name "unconnected-(U2-SD7-Pad19)")
 			(class "Default")
 			(node
@@ -13170,13 +15061,57 @@
 			)
 		)
 		(net
-			(code "101")
+			(code "115")
 			(name "unconnected-(U4-CTS#-Pad5)")
 			(class "Default")
 			(node
 				(ref "U4")
 				(pin "5")
 				(pinfunction "CTS#_5")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "116")
+			(name "unconnected-(U6-NC-Pad1)")
+			(class "Default")
+			(node
+				(ref "U6")
+				(pin "1")
+				(pinfunction "NC_1")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "117")
+			(name "unconnected-(U6-NC-Pad3)")
+			(class "Default")
+			(node
+				(ref "U6")
+				(pin "3")
+				(pinfunction "NC_3")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "118")
+			(name "unconnected-(U6-NC-Pad4)")
+			(class "Default")
+			(node
+				(ref "U6")
+				(pin "4")
+				(pinfunction "NC_4")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "119")
+			(name "unconnected-(U6-NC-Pad5)")
+			(class "Default")
+			(node
+				(ref "U6")
+				(pin "5")
+				(pinfunction "NC_5")
 				(pintype "passive+no_connect")
 			)
 		)
