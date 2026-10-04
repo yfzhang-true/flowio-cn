@@ -772,6 +772,37 @@
     "pump": {
      "max_duty": "95% (5.0V>4.95V 上限 1% 补偿)",
      "soft_start": "互锁：>=1 通道开启才起泵"
+    },
+    "voltage_adequacy": {
+     "min_actuation_v": 4.1,
+     "note": "规格书最低动作电压 4.1V（使用范围下限 4.05）；判定方向=防超压不防欠压，PWM 只向下调",
+     "states": [
+      {
+       "state": "吸入 pull-in",
+       "duty": "100% (≤100ms)",
+       "eff_v": 5.0,
+       "vs_rated": "+11%",
+       "vs_min_actuation": "+22%",
+       "verdict": "✓ 富余最大（吸合最有利）"
+      },
+      {
+       "state": "全开保持 full-open",
+       "duty": "90%",
+       "eff_v": 4.5,
+       "vs_rated": "0% (正好额定)",
+       "vs_min_actuation": "+10%",
+       "verdict": "✓ 额定点连续运行"
+      },
+      {
+       "state": "节能保持 economy",
+       "duty": "55%",
+       "eff_v": 2.75,
+       "vs_rated": "-39%",
+       "vs_min_actuation": "-33%",
+       "verdict": "⚠ 有意低于动作电压（保持力<吸合力，行业典型 40~60%），35kPa 背压下限 BRINGUP 实测；不足则升 65~70%（电流预算表联动）"
+      }
+     ],
+     "adapter_sag_check": "唯一欠压路径=适配器限流跌落（最坏 4.55A>3A 场景电压被拉低）→ 对策：5V/4A 适配器 或 充气并发≤4 通道（4×450+500=2.3A ✓）；§2.7.1 孪生仿真按母线电压轨迹量化"
     }
    },
    "power_budget_a": {
