@@ -6,7 +6,7 @@ import pcbnew
 
 b = pcbnew.LoadBoard("flowio-p1.kicad_pcb")
 MM, FM, VI = pcbnew.ToMM, pcbnew.FromMM, pcbnew.VECTOR2I
-F, B_, I1 = 0, 2, 4
+F = 0  # F.Cu 层号 (KiCad10 非连续: F=0/B=2/In1=4/In2=6)
 
 def pip(x, y, xs, ys):
     n_, ins = len(xs), False
@@ -95,7 +95,7 @@ def pt_seg(px, py, ax, ay, bx, by):
     dx, dy = bx-ax, by-ay
     L2 = dx*dx+dy*dy
     t = 0 if L2 == 0 else max(0, min(1, ((px-ax)*dx+(py-ay)*dy)/L2))
-    return math.hypot(px-ax-t*dx, py-ay-t*ty) if False else math.hypot(px-(ax+t*dx), py-(ay+t*dy))
+    return math.hypot(px-(ax+t*dx), py-(ay+t*dy))
 
 def pad_edge(x, y, pad):
     _n, px, py, hw, hh, c, s, _dr = pad

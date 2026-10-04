@@ -7,7 +7,7 @@ import pcbnew
 
 b = pcbnew.LoadBoard("flowio-p1.kicad_pcb")
 MM, FM, VI = pcbnew.ToMM, pcbnew.FromMM, pcbnew.VECTOR2I
-F, B_, I1 = 0, 2, 4
+F = 0  # F.Cu 层号 (KiCad10 非连续: F=0/B=2/In1=4/In2=6)
 
 def pip(x, y, xs, ys):
     n_, ins = len(xs), False

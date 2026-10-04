@@ -6,7 +6,6 @@ import pcbnew
 
 b = pcbnew.LoadBoard("flowio-p1.kicad_pcb")
 MM = pcbnew.ToMM
-LN = {0: "F", 1: "In2?", 2: "B", 3: "In1?", 4: "In1", 5: "In2?", 6: "In2"}
 
 def ln(l):
     return {0: "F", 2: "B", 4: "In1", 6: "In2"}.get(l, f"L{l}")

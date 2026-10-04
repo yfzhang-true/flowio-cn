@@ -14,7 +14,7 @@ print("unconnected:", bcc.GetUnconnectedCount(True))
 # 列出每条未连 (from -> to), 用 ratsnest edges
 try:
     for rn in bcc.GetRatsnest():
-        if rn.GetIsVisible() or True:
+        if rn.GetIsVisible():
             s, e = rn.GetSource(), rn.GetTarget()
             print(f"rat: ({MM(s.x):.3f},{MM(s.y):.3f}) -> ({MM(e.x):.3f},{MM(e.y):.3f}) net={rn.GetNet()}")
 except Exception as ex:
