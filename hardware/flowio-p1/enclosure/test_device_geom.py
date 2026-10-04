@@ -203,20 +203,22 @@ def _pneu_refs_dup(pn, pcb_refs):
 
 
 def _pneu_envelope_bad(pn):
-    """泵压力窗必须严格包络两类阀压力窗 (valve ⊂ pump, 余量>0)."""
+    """泵压力窗必须严格包络两类阀压力窗 (valve ⊂ pump, 余量>0).
+    返回 (违例列表, 全局最小余量 kPa; 无有效阀-泵对时为 None)."""
     pumps = [e for e in (pn.get("pump") or []) if e.get("pressure_kpa")]
-    bad = []
+    bad, margins = [], []
     for g in ("valves", "valve_vacuum_master"):
         for e in (pn.get(g) or []):
             pk = e.get("pressure_kpa")
             if not pk:
                 bad.append(_pneu_tag(g, e) + "(缺pressure_kpa)")
                 continue
-            margins = [min(pk[0] - p["pressure_kpa"][0], p["pressure_kpa"][1] - pk[1])
-                       for p in pumps]
-            if not margins or max(margins) <= 0:
-                bad.append("%s:%s %s" % (g, "/".join(e.get("refs") or ["?"]), pk))
-    return bad
+            m = [min(pk[0] - p["pressure_kpa"][0], p["pressure_kpa"][1] - pk[1])
+                 for p in pumps]
+            margins += m
+            if not m or max(m) <= 0:
+                bad.append("%s %s" % (_pneu_tag(g, e), pk))
+    return bad, (min(margins) if margins else None)
 
 
 def test_schema_pneumatic():
@@ -227,6 +229,9 @@ def test_schema_pneumatic():
     empty = [g for g in PNEU_GROUPS if not (isinstance((pn or {}).get(g), list) and pn[g])]
     check("T1 pneumatic: 段完整 (pneumatic_devices 4 列表组非空)", bool(pn) and not empty,
           "缺/空: %s" % empty)
+    if not pn or empty:
+        return          # 段残缺早退: 空结构会让 checks 3-7 空洞 PASS(假绿)或裸崩,
+                        # 负测试也无法构造 — 只留 check1 干净 FAIL 即为正确行为
 
     # 2) 字段完整: 每条气动 entry 必需字段无缺失
     bad = _pneu_completeness_bad(pn or {})
@@ -256,17 +261,9 @@ def test_schema_pneumatic():
     check("T1 pneumatic: refs 唯一 (气动四组内 + 不与 devices 段冲突)", not dups, str(dups[:6]))
 
     # 6) 压力包络 sanity: 两类阀压力窗 ⊂ 泵压力窗 (严格包含, 余量>0)
-    ebad = _pneu_envelope_bad(pn or {})
-    margins = []
-    for g in ("valves", "valve_vacuum_master"):
-        for e in (pn or {}).get(g) or []:
-            pk = e.get("pressure_kpa")
-            for p in (pn or {}).get("pump") or []:
-                if pk and p.get("pressure_kpa"):
-                    margins.append(min(pk[0] - p["pressure_kpa"][0],
-                                       p["pressure_kpa"][1] - pk[1]))
+    ebad, margin = _pneu_envelope_bad(pn)
     check("T1 pneumatic: 泵压力窗严格包络两类阀 (余量>0)", not ebad,
-          ("最小余量 %.1f kPa" % min(margins)) if margins else str(ebad[:4]))
+          str(ebad[:4]) if ebad else ("最小余量 %.1f kPa" % margin))
 
     # ── 常驻负测试 (TDD 红证明, 防未来退化): deepcopy 坏副本必须让断言翻红 ──
     b_dom = copy.deepcopy(pn)
