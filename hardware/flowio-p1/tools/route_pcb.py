@@ -106,23 +106,50 @@ def _pd_seg(px, py, x1, y1, x2, y2):
     tp = 0 if L2 == 0 else max(0, min(1, ((px - x1) * dx + (py - y1) * dy) / L2))
     return math.hypot(px - (x1 + tp * dx), py - (y1 + tp * dy))
 
-def seg_clear(x1, y1, x2, y2, net, extra=0.75):
-    """电源引线段不得扫过异网焊盘(采样 0.4mm)
-    extra = 线半宽 + 铜间距 (0.8mm 线→0.75 / 1.0mm 线→0.85 / 1.5mm 线→1.1)"""
+def seg_clear(x1, y1, x2, y2, net, extra=0.75, layer=pcbnew.F_Cu):
+    """电源/逃逸引线段 (默认 F.Cu) 不得扫过异网焊盘/同层走线/过孔(穿层, 采样 0.4mm)
+    extra = 线半宽 + 铜间距 (0.8mm 线→0.75 / 1.0mm 线→0.85 / 1.5mm 线→1.1)
+    (round5 后: freerouting 信号铜是真实障碍, T4-r4 曾因无视它把 +5V 过孔
+    压上 P5_CC1 拐线出 shorting; ⚠ 走线仅查同层 —— 异层从下方穿过无害,
+    全层检查会把密集内层布线区判成全堵, T4-r5 实测 6.5mm 环搜零落点)"""
     L = math.hypot(x2 - x1, y2 - y1)
     n = max(2, int(L / 0.4))
+    bx0, bx1 = min(x1, x2) - 1.2, max(x1, x2) + 1.2
+    by0, by1 = min(y1, y2) - 1.2, max(y1, y2) + 1.2
     for k in range(n + 1):
         f = k / n
         if 0.05 < f < 0.95:          # 起点在源焊盘上, 跳过
             sx, sy = x1 + (x2 - x1) * f, y1 + (y2 - y1) * f
-            for qx, qy, qnet, _np, qr, _hwx, _hhx in ALL_PADS:
+            for qx, qy, qnet, _np, qr, _hw, _hh in ALL_PADS:
                 d = math.hypot(qx - sx, qy - sy)
                 if qnet != net and d < qr + extra:
                     return False
+    for tr in board.GetTracks():
+        tn = tr.GetNetname()
+        if tn == net or not tn:
+            continue
+        if tr.GetClass() == "PCB_VIA":
+            q = tr.GetPosition()
+            if bx0 < pcbnew.ToMM(q.x) < bx1 and by0 < pcbnew.ToMM(q.y) < by1:
+                if _pd_seg(pcbnew.ToMM(q.x), pcbnew.ToMM(q.y), x1, y1, x2, y2) < 0.35 + extra + 0.2:
+                    return False
+        elif tr.GetClass() == "PCB_TRACK" and tr.GetLayer() == layer:
+            s, e = tr.GetStart(), tr.GetEnd()
+            tsx, tsy = pcbnew.ToMM(s.x), pcbnew.ToMM(s.y)
+            tex, tey = pcbnew.ToMM(e.x), pcbnew.ToMM(e.y)
+            if max(tsx, tex) < bx0 or min(tsx, tex) > bx1 or max(tsy, tey) < by0 or min(tsy, tey) > by1:
+                continue
+            hw = pcbnew.ToMM(tr.GetWidth()) / 2
+            for k in range(n + 1):
+                f = k / n
+                sx, sy = x1 + (x2 - x1) * f, y1 + (y2 - y1) * f
+                if _pd_seg(sx, sy, tsx, tsy, tex, tey) < hw + extra + 0.2:
+                    return False
     return True
 
-def spot_free(vx, vy, net, pad_gap=0.55, same_min=0.9, npth_min=3.7):
-    # pad_gap=0.55: 0.5 板级铜间距 + 0.05 余量; 过孔半径 0.35 计入
+def spot_free(vx, vy, net, pad_gap=0.65, same_min=0.9, npth_min=3.7):
+    # pad_gap=0.65: 0.5 板级铜间距 + 0.15 双模型误差裕量 (T4-r5 实测 0.55 时
+    #   +3V3 逃逸线端头距 R9.2 0.18 出 clearance; 模型半径 vs 真焊盘圆角差);
     # npth_min=3.7: M3 安装孔=铜柱心; 净空 = npth_min - 柱外径半径3.15 - 过孔半径0.35
     # = 0.2 真裕量 (3.5 时仅相切 0 裕量, T3 缺陷4 复审修正)
     # ⚠ 异网焊盘必须按真实半径 qr 判距: XH pad r=1.9 时固定 1.7 会让过孔物理
@@ -140,6 +167,24 @@ def spot_free(vx, vy, net, pad_gap=0.55, same_min=0.9, npth_min=3.7):
                 return False
         elif d < qr + VIA_R + pad_gap:
             return False
+    # freerouting 信号铜 (过孔穿全层, track 任意层) 也是障碍 (T4-r4 shorting 教训)
+    for tr in board.GetTracks():
+        tn = tr.GetNetname()
+        if tn == net or not tn:
+            continue
+        if tr.GetClass() == "PCB_VIA":
+            q = tr.GetPosition()
+            if math.hypot(pcbnew.ToMM(q.x) - vx, pcbnew.ToMM(q.y) - vy) < VIA_R + 0.35 + 0.2:
+                return False
+        elif tr.GetClass() == "PCB_TRACK":
+            s, e = tr.GetStart(), tr.GetEnd()
+            tsx, tsy = pcbnew.ToMM(s.x), pcbnew.ToMM(s.y)
+            tex, tey = pcbnew.ToMM(e.x), pcbnew.ToMM(e.y)
+            if max(tsx, tex) < vx - 1.2 or min(tsx, tex) > vx + 1.2 or max(tsy, tey) < vy - 1.2 or min(tsy, tey) > vy + 1.2:
+                continue
+            hw = pcbnew.ToMM(tr.GetWidth()) / 2
+            if _pd_seg(vx, vy, tsx, tsy, tex, tey) < hw + VIA_R + 0.2:
+                return False
     return True
 
 def zone(name, layer, pts, min_thickness=0.3, prio=0):
@@ -239,14 +284,16 @@ if STAGE == 4:
                             return False
         return True
 
-    # (a) J1 +5V 入口 3 通道并联 (0.5mm 单列 USB-C: 焊盘间隙 0.2mm, F.Cu 正面
-    #     全宽逃逸几何不可行; 右侧 0.2mm 狗骨+过孔入 In2, 左缘 0.5mm 边带总线):
-    #       ch1/2: 右狗骨 (0.2 ext ~0.9A@10°C each) → via 0.7/0.35 → In2 1.0mm 入 Z5a
-    #       ch3:   左缘总线 0.5mm (x0.7 边带, J1 屏蔽腿以西全空) ~1.2A@10°C
-    #     合计 ≈3.0A@10°C / 4.4A@20°C ≥ 2.75A 设计; 分发主体 = In2 平面 (区宽数十 mm)
-    _J1_VIAS = [(4.40, 16.95), (4.40, 21.25)]
+    # (a) J1 +5V 入口 (0.5mm 单列 USB-C: 焊盘间隙 0.2mm, F.Cu 正面
+    #     全宽逃逸几何不可行; 左缘 0.5mm 边带总线 + A4B9 右狗骨入 In2):
+    #       ch1: 左缘总线 0.5mm (x0.7 边带) ≈1.2A@10°C + Z5a 锚过孔
+    #       ch2: A4B9 右狗骨 0.2 → via 0.7/0.35 → In2 1.0mm ≈0.9A@10°C
+    #     合计 ≈2.1A@10°C / 3.2A@20°C; 分发主体 = In2 平面 (区宽数十 mm)。
+    #     ⚠ 过孔落点必须过 spot_free: freerouting 会在 J1 周边布信号
+    #     (T4-r5 实测其 P5_CC2 扇出过孔恰落 (4.4,16.9), 盲放 +5V 孔即短路)。
+    _J1_VIAS = [(4.40, 21.25)]
     for _vx, _vy in _J1_VIAS:
-        if not _via_exists(_vx, _vy, "+5V", r=0.6):
+        if not _via_exists(_vx, _vy, "+5V", r=0.6) and spot_free(_vx, _vy, "+5V"):
             v = pcbnew.PCB_VIA(board)
             v.SetNetCode(netcode("+5V"))
             v.SetPosition(pcbnew.VECTOR2I(int(MM(_vx)), int(MM(_vy))))
@@ -256,22 +303,25 @@ if STAGE == 4:
             board.Add(v)
             print(f"[stage4] J1 +5V 过孔 @({_vx},{_vy})")
     _S4_FCU = [
-        (0.2, [(1.90, 16.70), (4.40, 16.95)]),                 # B4A9 右狗骨
         (0.2, [(1.90, 21.25), (4.40, 21.25)]),                 # A4B9 右狗骨
         (0.5, [(1.90, 16.60), (0.70, 16.60), (0.70, 25.50), (4.50, 25.50)]),  # 左缘总线
         (0.5, [(1.90, 21.45), (0.70, 21.45)]),                 # A4B9 并入左总线
     ]
     for _w, _pts in _S4_FCU:
         track("+5V", _pts, width=_w, layer=pcbnew.F_Cu)
+    # 左总线的 Z5a 锚过孔 (总线是 F.Cu, 必须过孔才挨到 In2 平面; T4-r5 曾整条悬空)
+    for _vx, _vy in [(4.20, 25.50), (3.45, 25.50)]:
+        if not _via_exists(_vx, _vy, "+5V", r=0.6) and spot_free(_vx, _vy, "+5V"):
+            via("+5V", _vx, _vy)
+            print(f"[stage4] 左总线 Z5a 锚孔 @({_vx},{_vy})")
     _S4_IN2 = [
-        [(4.40, 16.95), (4.40, 18.30), (7.20, 18.30)],
         [(4.40, 21.25), (4.40, 20.40), (7.20, 20.40)],   # y20.4: 避 P5_CC2 In2 线 (y19.2)
     ]
     for _pts in _S4_IN2:
-        if _in2_clear(_pts, "+5V", 0.5):
+        if _via_exists(_pts[0][0], _pts[0][1], "+5V", r=0.6) and _in2_clear(_pts, "+5V", 0.5):
             track("+5V", _pts, width=1.0, layer=pcbnew.In2_Cu)
         else:
-            print(f"[stage4] In2 引入段 {_pts[0]} 被阻, 跳过")
+            print(f"[stage4] In2 引入段 {_pts[0]} 无锚孔或被阻, 跳过")
 
     # (b) In2 Z5a↔Z5b 颈桥: 两区共边仅 x14/y33.5-36 = 2.5mm (内层 ~1.2A@10°C),
     #     且 freerouting 在该带布了 S4_SDA(y36.1)/+3V3(y34.2) 两条 In2 信号线,
@@ -299,6 +349,65 @@ if STAGE == 4:
             tr.SetWidth(int(MM(0.2)))
             _nwid += 1
     print(f"[stage4] 扇出短桩加宽 {_nwid}")
+
+    # (d) GND 孤立焊盘修复: 自定义形状 PTH 屏蔽腿 (J1.1-4/J2.7, 热辐条算不出)
+    #     + 被 freerouting 走线围死的 GND 腿 → FULL 实连 + via-in-pad (0.6/0.3
+    #     恰容于 0.6 宽焊盘内, 零外溢) 系锚到 In1/B 平面。
+    _FULL_S4 = [("J1", "1"), ("J1", "2"), ("J1", "3"), ("J1", "4"), ("J1", "A1B12"), ("J1", "B1A12"),
+                ("J2", "7"),   # 4 枚同名屏蔽腿, 循环内全量命中
+                ("U2", "1"), ("U2", "2"), ("U2", "12"), ("U2", "21"),
+                ("Q12", "2"), ("U4", "3"), ("R64", "2"), ("R24", "2"), ("R23", "2"),
+                ("Q11", "2"), ("U5", "2"), ("R47", "2"), ("U7", "2"), ("Q13", "2"), ("Q14", "2"),
+                ("Q8", "2"), ("R54", "2"), ("U1", "40"), ("C2", "2")]
+    _VIP_S4 = [r for r in _FULL_S4 if r[0] not in ("J1",)]
+    _nf = 0
+    for _ref, _pn in _FULL_S4:
+        if _ref not in FP:
+            continue
+        for _p in FP[_ref].Pads():
+            if str(_p.GetPadName()) == _pn and _p.GetNetname() == "GND":
+                _p.SetLocalZoneConnection(pcbnew.ZONE_CONNECTION_FULL)
+                _nf += 1
+    _nv = 0
+    _nesc = 0
+    for _ref, _pn in _VIP_S4:
+        if _ref not in FP:
+            continue
+        _p = FP[_ref].FindPadByNumber(_pn)
+        if _p is None or _p.GetNetname() != "GND":
+            continue
+        _q = _p.GetPosition()
+        _x, _y = pcbnew.ToMM(_q.x), pcbnew.ToMM(_q.y)
+        if _via_exists(_x, _y, "GND", r=0.3):
+            continue
+        if spot_free(_x, _y, "GND", same_min=0.45):
+            v = pcbnew.PCB_VIA(board)
+            v.SetNetCode(netcode("GND"))
+            v.SetPosition(pcbnew.VECTOR2I(int(MM(_x)), int(MM(_y))))
+            v.SetViaType(pcbnew.VIATYPE_THROUGH)
+            v.SetWidth(int(MM(0.6)))
+            v.SetDrill(int(MM(0.3)))
+            board.Add(v)
+            _nv += 1
+            continue
+        # 焊盘中心不净空 (freerouting 内层信号骑上 GND 焊盘 / SOP-6 0.65 节距
+        # 邻腿太近): 环搜就近落点 + F.Cu 0.3mm 短逃逸线
+        done = False
+        for _rr in (0.8, 1.2, 1.6, 2.0, 2.6, 3.2, 4.0, 4.8, 5.6, 6.5):
+            for _a2 in range(0, 360, 15):
+                _vx = _x + _rr * _m4.cos(_m4.radians(_a2))
+                _vy = _y + _rr * _m4.sin(_m4.radians(_a2))
+                if spot_free(_vx, _vy, "GND", same_min=0.45) and                        seg_clear(_x, _y, _vx, _vy, "GND", 0.45):
+                    via("GND", _vx, _vy)
+                    track("GND", [(_x, _y), (_vx, _vy)], width=0.3, layer=pcbnew.F_Cu)
+                    _nesc += 1
+                    done = True
+                    break
+            if done:
+                break
+        if not done:
+            print(f"[stage4] GND 焊盘 {_ref}.{_pn} 无净空落点!")
+    print(f"[stage4] GND FULL {_nf}, via-in-pad {_nv}, 逃逸系锚 {_nesc}")
 
     _run_tail()
     sys.exit(0)
@@ -350,14 +459,29 @@ if STAGE >= 1:
     def in_3v3_zone(vx, vy):
         return _in_rects(_3V3_RECTS, vx, vy)
 
-    # GND 缝合过孔网格 (避开天线净空 x20.5-35.5/y<6.4)
+    # GND 缝合过孔网格 (避开天线净空 x20.5-35.5/y<6.4)。
+    # round5 后 freerouting 信号线常压住整格点 → 网格点被阻时环形搜附近净空
+    # (T4-r5 实测不搜索时缝合=0, F 填充与 In1/B 平面失联)
     n_st = 0
     for gx in range(4, 99, 12):
         for gy in range(4, 79, 12):
             if 20 <= gx <= 36 and gy <= 7:
                 continue
-            if spot_free(gx, gy, "GND") and not _via_exists(gx, gy, "GND"):
-                via("GND", gx, gy)
+            spot = None
+            if spot_free(gx, gy, "GND"):
+                spot = (gx, gy)
+            else:
+                for rr in (0.9, 1.7, 2.5):
+                    for a2 in range(0, 360, 30):
+                        cx2 = gx + rr * math.cos(math.radians(a2))
+                        cy2 = gy + rr * math.sin(math.radians(a2))
+                        if spot_free(cx2, cy2, "GND") and not _via_exists(cx2, cy2, "GND", r=0.8):
+                            spot = (cx2, cy2)
+                            break
+                    if spot:
+                        break
+            if spot and not _via_exists(spot[0], spot[1], "GND", r=0.5):
+                via("GND", *spot)
                 n_st += 1
     print(f"[stage1] GND 缝合过孔: {n_st}")
 
@@ -377,7 +501,7 @@ if STAGE >= 1:
             px, py = pcbnew.ToMM(pad.GetPosition().x), pcbnew.ToMM(pad.GetPosition().y)
             # In2 分割线附近归就近平面; 3V3 在左半/5V 在右半, 平面本身会处理连通
             w = 1.5 if ref == "J1" else PWR_W[nname]
-            extra = w / 2 + 0.3
+            extra = w / 2 + 0.4
             want2 = ref == "J1" and nname == "+5V"   # VBUS 双过孔分摊
             if _via_exists(px, py, nname, r=1.3):
                 continue  # 幂等: 该焊盘已打过孔
@@ -385,8 +509,8 @@ if STAGE >= 1:
             used = []
             for _try in range(2 if want2 else 1):
                 best = None
-                for ang in range(0, 360, 15):
-                    for dist in (1.5, 2.1, 2.7, 3.3, 4.2, 5.5):
+                for ang in range(0, 360, 10):
+                    for dist in (1.5, 2.1, 2.7, 3.3, 4.2, 5.5, 6.5, 8.0, 9.5, 11.0):
                         vx = px + dist * math.cos(math.radians(ang))
                         vy = py + dist * math.sin(math.radians(ang))
                         if any(math.hypot(vx - ux, vy - uy) < 1.1 for ux, uy in used):
