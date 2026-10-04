@@ -72,17 +72,31 @@ def _via_exists(x, y, net, r=0.5):
 
 ALL_PADS = []
 def _collect_pads():
-    # r = 焊盘外接圆半径 (XH 卧贴 pad 1.5x3.5 → r=1.9, 远超固定阈值假定的 ~0.6)
+    # 焊盘障碍模型两条真值 (T4 二轮 DRC 教训):
+    # 1) r = 外接圆半径 (XH 卧贴 pad 1.5x3.5 → r=1.75) — 供圆模型消费者
+    #    (seg_clear/spot_free); 2) hw/hh = 朝向半边长 — 供 stage2 矩形模型
+    #    (seg_pad_clear)。⚠ 自定义形状 pad (J2.7 屏蔽腿 x4) 的 GetSize 撒谎
+    #    (0.01x0.01), 必须回落 GetBoundingBox (真实 1.9x1.1, 否则走线穿屏蔽焊盘)。
     ALL_PADS.clear()
     for r2, fp2 in FP.items():
+        try:
+            _ang = fp2.GetOrientation()
+            _deg = _ang.AsDegrees() if hasattr(_ang, "AsDegrees") else float(_ang) / 10
+        except Exception:
+            _deg = 0
+        _odd = int(round(_deg)) % 180 == 90
         for p2 in fp2.Pads():
             w2, h2 = pcbnew.ToMM(p2.GetSize().x), pcbnew.ToMM(p2.GetSize().y)
-            if w2 <= 0:
-                w2 = 0.9
+            if max(w2, h2) < 0.2:  # 自定义形状: 尺寸退化, 用 bbox 真值
+                bb = p2.GetBoundingBox()
+                hw = pcbnew.ToMM(bb.GetWidth()) / 2
+                hh = pcbnew.ToMM(bb.GetHeight()) / 2
+            else:
+                hw, hh = (h2 / 2, w2 / 2) if _odd else (w2 / 2, h2 / 2)
             ALL_PADS.append((pcbnew.ToMM(p2.GetPosition().x),
                              pcbnew.ToMM(p2.GetPosition().y),
                              p2.GetNetname(), p2.GetAttribute() == pcbnew.PAD_ATTRIB_NPTH,
-                             max(w2, h2) / 2))
+                             max(hw, hh), hw, hh))
 _collect_pads()
 
 def seg_clear(x1, y1, x2, y2, net, extra=0.75):
@@ -94,7 +108,7 @@ def seg_clear(x1, y1, x2, y2, net, extra=0.75):
         f = k / n
         if 0.05 < f < 0.95:          # 起点在源焊盘上, 跳过
             sx, sy = x1 + (x2 - x1) * f, y1 + (y2 - y1) * f
-            for qx, qy, qnet, _np, qr in ALL_PADS:
+            for qx, qy, qnet, _np, qr, _hwx, _hhx in ALL_PADS:
                 d = math.hypot(qx - sx, qy - sy)
                 if qnet != net and d < qr + extra:
                     return False
@@ -110,7 +124,7 @@ def spot_free(vx, vy, net, pad_gap=0.55, same_min=0.9, npth_min=3.7):
     VIA_R = 0.35
     if not (1.2 < vx < 98.8 and 1.2 < vy < 78.8):
         return False
-    for qx, qy, qnet, is_npth, qr in ALL_PADS:
+    for qx, qy, qnet, is_npth, qr, _hwx, _hhx in ALL_PADS:
         d = math.hypot(qx - vx, qy - vy)
         if is_npth and d < npth_min:
             return False
@@ -137,34 +151,37 @@ def zone(name, layer, pts, min_thickness=0.3, prio=0):
 
 # ================= 阶段 1: 平面 + 过孔 =================
 if STAGE >= 1:
-    # 平面区幂等: 阶段1跑过后(>1 块 zone)跳过重建。判据用 COUNT 而非
+    # 幂等守卫: 阶段1跑过后(>1 块 zone)不再重建。判据用 COUNT 而非
     # SWIG getter——KiCad 10 python 的 ZONE.GetLayerName/GetIsRuleArea 在
     # 载入已填充板时会撒谎 (T4 实测: 新建 zone GetLayer()=4 正确而
     # GetLayerName() 报 F.Cu; 载入含填充板时 GetIsRuleArea 全真致幂等
     # 判空失效→zone 翻倍)。T3 新板恰好只有 keepout 一块。
     # board.Remove(zone) 亦会毒化 SWIG 堆, 本项目永远无需删除重建。
+    # ⚠ guard 必须真的跳过: 只 print 不跳会让每次累积重跑把 9 块平面
+    #   全部重建一遍 → 同网同优先级重叠 → 10 条 zones_intersect (T4 实测)
     _n_zones = len(list(board.Zones()))
     if _n_zones > 1:
         print(f"[stage1] zone 共 {_n_zones} 块 (>1=阶段1已跑), 跳过重建 (幂等)")
-    # 层叠: F=信号+GND填充 / In1=GND面 / In2=电源分区 / B=+3V3面外的GND面
-    # In2 分区按 T3b 100x80 布局重推导 (P1.0 L 形区不覆盖右带 J20-J23/D12-D15):
-    #   +5V: Z5a 左上(J1/U7/C17/TP2) + Z5b buck 输入带(R3/C1/C2/D2/U3/C15)
-    #        + Z5c 底带全宽(D4-D11/J10-J17) + Z5d 右带(J20-J23/D12-D15/C16)
-    #        — 四块两两共边连通 (a-b 共 x14 边, b-c 共 y53-55, c-d 大面积重叠)
-    #   +3V3: Z3a 顶带(x≥14, U1/R7/J7/J9/J18/J19/U4) + Z3b R13/R14 颈
-    #        + Z3c 中心大块(30-79/20-58, U2/U6/上拉阵/LED) — 共边连通
-    #   边界 x14 切在 U7.5(+5V,12.5) 与 R7.1(+3V3,15.7) 之间;
-    #   遗留 J5(98.3,74)/J6(5,55.8)/J8(5,42.3) 三枚 3V3 THT 无同网区, 归 freerouting F/B 收尾
-    zone("GND", pcbnew.In1_Cu, [(0.5, 0.5), (99.5, 0.5), (99.5, 79.5), (0.5, 79.5)], prio=1)
-    zone("+5V", pcbnew.In2_Cu, [(3, 13), (14, 13), (14, 36), (3, 36)], prio=2)          # Z5a
-    zone("+5V", pcbnew.In2_Cu, [(14, 33.5), (36, 33.5), (36, 55), (14, 55)], prio=3)    # Z5b
-    zone("+5V", pcbnew.In2_Cu, [(0.5, 53), (99.5, 53), (99.5, 79.5), (0.5, 79.5)], prio=4)  # Z5c
-    zone("+5V", pcbnew.In2_Cu, [(79.5, 14), (99.5, 14), (99.5, 79.5), (79.5, 79.5)], prio=5)  # Z5d
-    zone("+3V3", pcbnew.In2_Cu, [(14, 0.5), (99.5, 0.5), (99.5, 20), (14, 20)], prio=2)     # Z3a
-    zone("+3V3", pcbnew.In2_Cu, [(18, 20), (30, 20), (30, 33.5), (18, 33.5)], prio=3)   # Z3b
-    zone("+3V3", pcbnew.In2_Cu, [(30, 20), (79, 20), (79, 58), (30, 58)], prio=4)       # Z3c
-    zone("GND", pcbnew.F_Cu, [(0.5, 0.5), (99.5, 0.5), (99.5, 79.5), (0.5, 79.5)], prio=1)
-    zone("GND", pcbnew.B_Cu, [(0.5, 0.5), (99.5, 0.5), (99.5, 79.5), (0.5, 79.5)], prio=1)
+    else:
+        # 层叠: F=信号+GND填充 / In1=GND面 / In2=电源分区 / B=+3V3面外的GND面
+        # In2 分区按 T3b 100x80 布局重推导 (P1.0 L 形区不覆盖右带 J20-J23/D12-D15):
+        #   +5V: Z5a 左上(J1/U7/C17/TP2) + Z5b buck 输入带(R3/C1/C2/D2/U3/C15)
+        #        + Z5c 底带全宽(D4-D11/J10-J17) + Z5d 右带(J20-J23/D12-D15/C16)
+        #        — 四块两两共边连通 (a-b 共 x14 边, b-c 共 y53-55, c-d 大面积重叠)
+        #   +3V3: Z3a 顶带(x≥14, U1/R7/J7/J9/J18/J19/U4) + Z3b R13/R14 颈
+        #        + Z3c 中心大块(30-79/20-58, U2/U6/上拉阵/LED) — 共边连通
+        #   边界 x14 切在 U7.5(+5V,12.5) 与 R7.1(+3V3,15.7) 之间;
+        #   遗留 J5(98.3,74)/J6(5,55.8)/J8(5,42.3) 三枚 3V3 THT 无同网区, 归 freerouting F/B 收尾
+        zone("GND", pcbnew.In1_Cu, [(0.5, 0.5), (99.5, 0.5), (99.5, 79.5), (0.5, 79.5)], prio=1)
+        zone("+5V", pcbnew.In2_Cu, [(3, 13), (14, 13), (14, 36), (3, 36)], prio=2)          # Z5a
+        zone("+5V", pcbnew.In2_Cu, [(14, 33.5), (36, 33.5), (36, 55), (14, 55)], prio=3)    # Z5b
+        zone("+5V", pcbnew.In2_Cu, [(0.5, 53), (99.5, 53), (99.5, 79.5), (0.5, 79.5)], prio=4)  # Z5c
+        zone("+5V", pcbnew.In2_Cu, [(79.5, 14), (99.5, 14), (99.5, 79.5), (79.5, 79.5)], prio=5)  # Z5d
+        zone("+3V3", pcbnew.In2_Cu, [(14, 0.5), (99.5, 0.5), (99.5, 20), (14, 20)], prio=2)     # Z3a
+        zone("+3V3", pcbnew.In2_Cu, [(18, 20), (30, 20), (30, 33.5), (18, 33.5)], prio=3)   # Z3b
+        zone("+3V3", pcbnew.In2_Cu, [(30, 20), (79, 20), (79, 58), (30, 58)], prio=4)       # Z3c
+        zone("GND", pcbnew.F_Cu, [(0.5, 0.5), (99.5, 0.5), (99.5, 79.5), (0.5, 79.5)], prio=1)
+        zone("GND", pcbnew.B_Cu, [(0.5, 0.5), (99.5, 0.5), (99.5, 79.5), (0.5, 79.5)], prio=1)
 
     _5V_RECTS = [(3, 14, 13, 36), (14, 36, 33.5, 55), (0.5, 99.5, 53, 79.5),
                  (79.5, 99.5, 14, 79.5)]
@@ -301,7 +318,10 @@ print(f"[stage1.5] 清除孤立电源过孔: {_orphan}")
 # 布局把 6 枚 SMD GND 焊盘挤进铜口袋(四向仅 1 辐条 < DRC 最少 2), 改实连
 # 既消 starved_thermal 又利功率件散热 (U5 buck/T2 传感 GND 实连是常规做法)。
 # 幂等: 重复设置同值无害。
-_STARVED = [("J2", "A12"), ("J2", "B12"), ("U5", "2"), ("U2", "2"), ("U2", "12"), ("U7", "2")]
+# 第二批 (T4 stage2 后): stage2 走线把 F.Cu GND 填充切出单辐条口袋 —
+# R59/Q15/R23/Q16 的 GND 腿 (布局态本有 2+ 辐条, 被新走线割走)。
+_STARVED = [("J2", "A12"), ("J2", "B12"), ("U5", "2"), ("U2", "2"), ("U2", "12"), ("U7", "2"),
+            ("R59", "2"), ("Q15", "2"), ("R23", "2"), ("Q16", "2")]
 _nfull = 0
 for _ref, _pn in _STARVED:
     if _ref not in FP:
@@ -316,20 +336,36 @@ print(f"[stage1.8] GND 花焊盘改实连: {_nfull}")
 if STAGE >= 2:
     import math as _m
 
-    def seg_pad_clear(x1, y1, x2, y2, net, gap=0.25):
-        """线段到异网焊盘距离检查 (半径感知: qr + 线半宽 + gap)"""
-        dx, dy = x2 - x1, y2 - y1
-        L2 = dx * dx + dy * dy
+    # 板界 (100x80): 信号线中心线不得越 [0.55,99.45]x[0.55,79.45]
+    # (0.3 板边间距 + 0.125 半宽 + 0.125 余量; T4 实测无界检查把 J1 逃逸
+    #  拐角布到 x=100.45 板外 → copper_edge_clearance)
+    BX0, BX1, BY0, BY1 = 0.55, 99.45, 0.55, 79.45
+    # DRC 网络类铜间距 0.2; 检查模型一律留 0.05 余量
+    CLR_NET = 0.25
+
+    def _pt_rect_dist(px, py, qx, qy, hw, hh):
+        """点到轴对齐矩形 (中心 qx,qy 半边 hw,hh) 的距离, 入内为 0"""
+        dx = max(abs(px - qx) - hw, 0.0)
+        dy = max(abs(py - qy) - hh, 0.0)
+        return _m.hypot(dx, dy)
+
+    def seg_pad_clear(x1, y1, x2, y2, net, gap=CLR_NET):
+        """线段到异网焊盘距离检查 (矩形模型: 外接圆在长条 pad 角区欠保守,
+        XH 3.5x1.5 角区 0.5mm 死区曾放进 0.14 间距走线; 采样 0.15mm)"""
         half_w = 0.125  # 0.25mm 信号线半宽
-        for qx, qy, qnet, _np, qr in ALL_PADS:
-            if qnet == net:
-                continue
-            # ⚠ 无网焊盘(M3 安装孔/插座定位柱)也是障碍: 跳过会压孔短路
-            # (T4 实测 stage2 走线压 J23.4/U1.38 no-net pad 出 shorting_items)
-            t_par = 0 if L2 == 0 else max(0, min(1, ((qx - x1) * dx + (qy - y1) * dy) / L2))
-            px_, py_ = x1 + t_par * dx, y1 + t_par * dy
-            if _m.hypot(qx - px_, qy - py_) < qr + half_w + gap:
-                return False
+        L = _m.hypot(x2 - x1, y2 - y1)
+        n = max(2, int(L / 0.15))
+        for k in range(n + 1):
+            f = k / n
+            if 0.02 < f < 0.98:  # 端点落在源/目标焊盘上, 跳过
+                sx, sy = x1 + (x2 - x1) * f, y1 + (y2 - y1) * f
+                for qx, qy, qnet, _np, _qr, qhw, qhh in ALL_PADS:
+                    if qnet == net:
+                        continue
+                    # ⚠ 无网焊盘(M3 安装孔/插座定位柱)也是障碍: 跳过会压孔短路
+                    # (T4 实测 stage2 走线压 J23.4/U1.38 no-net pad 出 shorting_items)
+                    if _pt_rect_dist(sx, sy, qx, qy, qhw, qhh) < half_w + gap:
+                        return False
         return True
 
     def pad_exit(ref, padname):
@@ -340,13 +376,21 @@ if STAGE >= 2:
         a = a % 360
         return (_m.cos(_m.radians(a)), _m.sin(_m.radians(a)))
 
-    def _existing_tracks():
+    def _existing_obstacles():
+        """F.Cu 既有铜: (线段, 半宽, 网) + (过孔点, 半径, 网) — 宽度感知
+        (T4 实测 0.8mm 电源逃逸线旁仅按中心线 0.5 判距放进 0.073 间距)。
+        每次调用重建: stage2 自身新布的线对后续网络也是障碍。"""
         out = []
         for tr in board.GetTracks():
+            _nm = tr.GetNetname()
             if tr.GetClass() == "PCB_TRACK" and tr.GetLayer() == pcbnew.F_Cu:
                 s, e = tr.GetStart(), tr.GetEnd()
-                out.append((pcbnew.ToMM(s.x), pcbnew.ToMM(s.y),
-                            pcbnew.ToMM(e.x), pcbnew.ToMM(e.y), tr.GetNetname()))
+                out.append(("T", pcbnew.ToMM(s.x), pcbnew.ToMM(s.y),
+                            pcbnew.ToMM(e.x), pcbnew.ToMM(e.y),
+                            pcbnew.ToMM(tr.GetWidth()) / 2, _nm))
+            elif tr.GetClass() == "PCB_VIA":
+                q = tr.GetPosition()
+                out.append(("V", pcbnew.ToMM(q.x), pcbnew.ToMM(q.y), 0, 0, 0.35, _nm))
         return out
 
     def _pt_seg_dist(px, py, x1, y1, x2, y2):
@@ -355,24 +399,44 @@ if STAGE >= 2:
         tp = 0 if L2 == 0 else max(0, min(1, ((px - x1) * dx + (py - y1) * dy) / L2))
         return _m.hypot(px - (x1 + tp * dx), py - (y1 + tp * dy))
 
-    def seg_track_clear(x1, y1, x2, y2, net, clearance=0.5):
-        for tx1, ty1, tx2, ty2, tnet in _existing_tracks():
+    def seg_track_clear(x1, y1, x2, y2, net, new_half_w=0.125):
+        """与既有 F.Cu 铜的间距: 需要 = 新半宽 + 既有半宽 + 0.2 网络类间距;
+        双向密采样 0.3mm (T4 实测仅端点+中点采样漏检平行斜交)"""
+        L = _m.hypot(x2 - x1, y2 - y1)
+        n = max(2, int(L / 0.3))
+        for kind, tx1, ty1, tx2, ty2, hw, tnet in _existing_obstacles():
             if tnet == net or not tnet:
                 continue
+            need = new_half_w + hw + CLR_NET
             # 粗包围盒预筛
-            if max(x1, x2) + clearance < min(tx1, tx2) or min(x1, x2) - clearance > max(tx1, tx2):
+            if max(x1, x2) + need < min(tx1, tx2) or min(x1, x2) - need > max(tx1, tx2):
                 continue
-            if max(y1, y2) + clearance < min(ty1, ty2) or min(y1, y2) - clearance > max(ty1, ty2):
+            if max(y1, y2) + need < min(ty1, ty2) or min(y1, y2) - need > max(ty1, ty2):
                 continue
-            for px_, py_ in ((x1, y1), (x2, y2), ((x1+x2)/2, (y1+y2)/2)):
-                if _pt_seg_dist(px_, py_, tx1, ty1, tx2, ty2) < clearance:
-                    return False
-            for px_, py_ in ((tx1, ty1), (tx2, ty2)):
-                if _pt_seg_dist(px_, py_, x1, y1, x2, y2) < clearance:
-                    return False
+            hit = False
+            for k in range(n + 1):
+                f = k / n
+                if _pt_seg_dist(x1 + (x2 - x1) * f, y1 + (y2 - y1) * f,
+                                tx1, ty1, tx2, ty2) < need:
+                    hit = True
+                    break
+            if not hit:
+                # 反向: 既有铜采样点到新线段
+                m = max(2, int(_m.hypot(tx2 - tx1, ty2 - ty1) / 0.3))
+                for k in range(m + 1):
+                    f = k / m
+                    if _pt_seg_dist(tx1 + (tx2 - tx1) * f, ty1 + (ty2 - ty1) * f,
+                                    x1, y1, x2, y2) < need:
+                        hit = True
+                        break
+            if hit:
+                return False
         return True
 
-    def seg_ok(pts, net, gap=0.25):
+    def seg_ok(pts, net, gap=CLR_NET):
+        for a in pts:
+            if not (BX0 <= a[0] <= BX1 and BY0 <= a[1] <= BY1):
+                return False
         for s, e in zip(pts[:-1], pts[1:]):
             if not seg_pad_clear(s[0], s[1], e[0], e[1], net, gap):
                 return False
@@ -511,13 +575,51 @@ for tr in list(board.GetTracks()):
     q = tr.GetPosition()
     vx, vy = pcbnew.ToMM(q.x), pcbnew.ToMM(q.y)
     vnet = tr.GetNetname()
-    for qx, qy, qnet, _np, qr in ALL_PADS:
+    for qx, qy, qnet, _np, qr, _hwx, _hhx in ALL_PADS:
         if qnet and qnet != vnet and math.hypot(qx - vx, qy - vy) < qr + 0.30:
             print(f"[netfix] 删异网传播过孔 {vnet}@({vx:.1f},{vy:.1f}) 压 {qnet} pad")
             board.Remove(tr)
             _net_bad += 1
             break
 print(f"[netfix] 删除异网传播过孔: {_net_bad}")
+
+# ---- 重合铜去重 (幂等硬化) ----
+# 累积 stage 重跑时, 阶段1 电源过孔守卫 (_via_exists r=1.3 < 候选最小 dist 1.5)
+# 拦不住同位重放 (T4 实测一次重跑翻出 68 枚同位同网过孔)。同网同位铜本就冗余,
+# 存盘前统一归一: 过孔按 (网,坐标) 去重; 走线按 (网,层,端点无向) 去重留最宽。
+_via_seen = {}
+_nvd = 0
+for tr in list(board.GetTracks()):
+    if tr.GetClass() != "PCB_VIA":
+        continue
+    q = tr.GetPosition()
+    k = (tr.GetNetname(), round(q.x), round(q.y))
+    if k in _via_seen:
+        board.Remove(tr)
+        _nvd += 1
+    else:
+        _via_seen[k] = tr
+_trk_seen = {}
+_ntd = 0
+for tr in list(board.GetTracks()):
+    if tr.GetClass() != "PCB_TRACK":
+        continue
+    s, e = tr.GetStart(), tr.GetEnd()
+    # 端点无向键: 水平/垂直线用排序端点; 斜线 (不该出现) 保守按有向
+    k2 = (tr.GetNetname(), tr.GetLayer(),
+          min(s.x, e.x), min(s.y, e.y), max(s.x, e.x), max(s.y, e.y)) \
+         if (s.x == e.x or s.y == e.y) else \
+         (tr.GetNetname(), tr.GetLayer(), s.x, s.y, e.x, e.y)
+    if k2 in _trk_seen:
+        if tr.GetWidth() > _trk_seen[k2].GetWidth():
+            board.Remove(_trk_seen[k2])
+            _trk_seen[k2] = tr
+        else:
+            board.Remove(tr)
+        _ntd += 1
+    else:
+        _trk_seen[k2] = tr
+print(f"[dedup] 同位过孔 -{_nvd}, 同位走线 -{_ntd}")
 
 # 填充所有平面
 try:
