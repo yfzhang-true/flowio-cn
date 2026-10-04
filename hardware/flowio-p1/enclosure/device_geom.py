@@ -19,10 +19,12 @@ ROOT = HERE.parents[2]
 POS = ROOT / "hardware" / "flowio-p1" / "fab" / "flowio-p1-pos.csv"
 
 _DEV = json.loads((HERE / "devices.json").read_text(encoding="utf-8"))["devices"]
-_BY_KEYWORD = []            # (keyword, entry) 按出现序, 首个命中即用
+_BY_KEYWORD = []            # (keyword, entry); T6 起按关键词长度降序 (最具体优先,
+# 与 case_geom._load_device_dims 同策略 — J2 "TYPE-C-6P" 须先于泛词 "TYPE-C" 命中)
 for _e in _DEV:
     for _k in _e["pkg_keywords"]:
         _BY_KEYWORD.append((_k, _e))
+_BY_KEYWORD.sort(key=lambda t: -len(t[0]))
 
 _POS = {}
 for _r in csv.DictReader(open(POS, newline="", encoding="utf-8")):

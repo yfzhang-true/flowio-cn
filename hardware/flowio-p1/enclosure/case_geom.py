@@ -36,6 +36,11 @@ CEIL_CLR = 0.6                   # 天花板下净空
 
 def _load_device_dims():
     """devices.json -> (keyword 有序表, 最高器件). T5 真值切换: JLC 实测优先.
+    匹配策略 (T6 修复): 关键词按长度降序 —— 最具体者优先。首匹配按 devices 列表序
+    曾让 J2(pkg=TYPE-C-SMD_TYPE-C-6P_1) 误命中 J1 条目的泛关键词 "TYPE-C"
+    (J1 条目按 lcsc 序在前), 盒尺寸 8.94x7.35x3.26 顶到 12.26 探入裙环带
+    (SKIRT_Z0=12.1) 造成 L4 顶盖干涉 0.2945mm^3; J2 专有关键词 "TYPE-C-6P"
+    (9 字符) 长于 "TYPE-C" (6), 长者先试即各归各位 (J1->TYPE-C-31-M-12 同理).
     失败回退内置兜底 (FreeCAD 无 devices.json 环境的鲁棒性)."""
     import json as _json
     try:
@@ -44,10 +49,12 @@ def _load_device_dims():
         for e in dev:
             for k in e["pkg_keywords"]:
                 kw.append((k, (e["dims"]["w"], e["dims"]["d"], e["dims"]["h"])))
+        kw.sort(key=lambda t: -len(t[0]))          # 最长 (最具体) 关键词优先
         return kw, max(e["dims"]["h"] for e in dev)
     except Exception:
         fb = {"CONN-SMD_2P": (10.0, 7.8, 6.2), "CONN-TH_4P": (5.9, 12.5, 7.0),
-              "TYPE-C": (8.94, 7.35, 3.26), "XGZP6897D": (7.96, 10.6, 9.5),
+              "TYPE-C-6P": (8.0, 10.3, 3.2), "TYPE-C": (8.94, 7.35, 3.26),
+              "XGZP6897D": (7.96, 10.6, 9.5),
               "WROOM": (18.0, 25.5, 3.1), "CDRH": (10.2, 10.2, 3.0),
               "SOT-23": (2.9, 2.4, 1.2), "SOP": (4.9, 3.9, 1.75),
               "TSSOP": (7.8, 4.4, 1.1), "ESSOP": (4.9, 3.9, 1.75),
@@ -57,13 +64,13 @@ def _load_device_dims():
               "R0603": (1.6, 0.8, 0.5), "0603WAF": (1.6, 0.8, 0.5),
               "LED": (1.6, 0.8, 0.8), "SOT-23-6": (2.9, 2.4, 1.1),
               "RC0603": (1.6, 0.8, 0.5), "XH": (5.9, 12.5, 7.0)}
-        return [(k, fb[k]) for k in fb], 9.5
+        return sorted([(k, fb[k]) for k in fb], key=lambda t: -len(t[0])), 9.5
 
 
 _KW_DIMS, TALLEST = _load_device_dims()   # TALLEST = 9.5 (XGZP6897D 倒钩管, P1.1 最高件;
 # WJ500V 14.07 随端子排移除退役; 腔高随之 23.67 -> 19.1)
 Z_CEIL = Z_TOP + TALLEST + CEIL_CLR  # 19.1 内腔顶面 = 下壳壁顶 = 顶盖天花下表面
-OUTER_H = Z_CEIL + WALL          # 26.07 总高
+OUTER_H = Z_CEIL + WALL          # 21.5 总高
 SKIRT = 7.0                      # 顶盖裙边下沉深度
 SKIRT_Z0 = Z_CEIL - SKIRT        # 12.1 裙边下端
 SKIRT_INSET = WALL + 0.4         # 2.8 裙环外缘离壳外缘 (贴入下壳腔, 与壁 0.4 间隙)
