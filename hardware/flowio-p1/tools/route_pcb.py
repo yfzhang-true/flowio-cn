@@ -33,13 +33,7 @@ for _ni in board.GetNetInfo().NetsByName().values():
 def netcode(name):
     return _NET_CACHE.get(name)
 
-TRACK_PRIO = []
-def track(net, pts, width=0.25, layer=pcbnew.F_Cu, prio=1):
-    TRACK_PRIO.append(prio)
-    t = pcbnew.PCB_TRACK(board)
-    t.SetNetCode(netcode(net))
-    t.SetWidth(int(MM(width)))
-    t.SetLayer(layer)
+def track(net, pts, width=0.25, layer=pcbnew.F_Cu):
     for a, b in zip(pts[:-1], pts[1:]):
         if math.hypot(b[0] - a[0], b[1] - a[1]) < 0.05:
             continue
@@ -50,9 +44,6 @@ def track(net, pts, width=0.25, layer=pcbnew.F_Cu, prio=1):
         seg.SetStart(pcbnew.VECTOR2I(int(MM(a[0])), int(MM(a[1]))))
         seg.SetEnd(pcbnew.VECTOR2I(int(MM(b[0])), int(MM(b[1]))))
         board.Add(seg)
-        TRACK_PRIO.append(prio)
-    TRACK_PRIO.pop(0)  # 去掉函数开头多加的一个
-    return t
 
 def via(net, x, y):
     v = pcbnew.PCB_VIA(board)
@@ -347,9 +338,9 @@ if STAGE == 4:
         print(f"[stage4] In2 +5V 区已有 {_n_5v_in2} 块 (≠4=颈桥已建), 跳过")
 
     # (c) freerouting 扇出短桩加宽 0.15 → 0.2 (netclass 最小线宽)。
-    #     ⚠ 本进程不做任何 board.Remove (SWIG 堆毒化, T4 实测 Remove 后
-    #     GetTracks 返回不可迭代 SwigPyObject) —— 退化短段一并加宽即可
-    #     (0.006mm 段加宽后即同网铜点, 无害); 真要删另起进程。
+    #     ⚠ board.Remove 分型: zone Remove 必毒化 SWIG 堆; track Remove 实测
+    #     可用 (:1541 删/:1797 再遍历 GetTracks, 主路径在用); stage4/6 保守
+    #     全禁 Remove —— 退化短段一并加宽即可 (0.006mm 段加宽后即同网铜点, 无害)。
     _nwid = 0
     for tr in board.GetTracks():
         if tr.GetClass() == "PCB_TRACK" and pcbnew.ToMM(tr.GetWidth()) < 0.199:
@@ -1777,7 +1768,7 @@ if STAGE >= 2:
         # "IO4": [ ... P1.0 坐标, 仅存 git 历史: git show d4ee812:tools/route_pcb.py ]
     }
     for net, pts in MANUAL.items():
-        track(net, pts, width=0.25, prio=0)
+        track(net, pts, width=0.25)
     done2 = list(MANUAL)
     print(f"[manual] 干线 {len(done2)} 网 (P1.0 表已废弃=0)")
 
