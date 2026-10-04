@@ -78,8 +78,9 @@ def seg_clear(x1, y1, x2, y2, net):
                     return False
     return True
 
-def spot_free(vx, vy, net, pad_min=1.7, same_min=0.9, npth_min=2.0):
-    if not (1.2 < vx < 88.8 and 1.2 < vy < 73.8):
+def spot_free(vx, vy, net, pad_min=1.7, same_min=0.9, npth_min=3.5):
+    # npth_min=3.5: M3 安装孔=铜柱心, 过孔需离柱环(Ø6.3)外缘≥0.2 (T3 缺陷4)
+    if not (1.2 < vx < 98.8 and 1.2 < vy < 78.8):
         return False
     for qx, qy, qnet, is_npth in ALL_PADS:
         d = math.hypot(qx - vx, qy - vy)
@@ -111,24 +112,24 @@ if STAGE >= 1:
     for z in list(board.Zones()):
         board.Remove(z)
     # 层叠: F=信号+GND填充 / In1=GND面 / In2=+5V L形区 / B=+3V3面
-    zone("GND", pcbnew.In1_Cu, [(0.5, 0.5), (89.5, 0.5), (89.5, 74.5), (0.5, 74.5)])
+    zone("GND", pcbnew.In1_Cu, [(0.5, 0.5), (99.5, 0.5), (99.5, 79.5), (0.5, 79.5)])
     # In2: 5V L形区(同网多块) + 3V3 补充区(避开5V区)
     zone("+5V", pcbnew.In2_Cu, [(0.5, 21), (19, 21), (19, 55), (0.5, 55)])
     zone("+5V", pcbnew.In2_Cu, [(19, 28), (36, 28), (36, 55), (19, 55)])
-    zone("+5V", pcbnew.In2_Cu, [(0.5, 53), (89.5, 53), (89.5, 74.5), (0.5, 74.5)])
-    zone("+3V3", pcbnew.In2_Cu, [(0.5, 0.5), (89.5, 0.5), (89.5, 20.8), (0.5, 20.8)])
-    zone("+3V3", pcbnew.In2_Cu, [(19.2, 20.8), (89.5, 20.8), (89.5, 52.8), (36.2, 52.8),
+    zone("+5V", pcbnew.In2_Cu, [(0.5, 53), (99.5, 53), (99.5, 79.5), (0.5, 79.5)])
+    zone("+3V3", pcbnew.In2_Cu, [(0.5, 0.5), (99.5, 0.5), (99.5, 20.8), (0.5, 20.8)])
+    zone("+3V3", pcbnew.In2_Cu, [(19.2, 20.8), (99.5, 20.8), (99.5, 52.8), (36.2, 52.8),
                                  (36.2, 27.8), (19.2, 27.8)])
-    zone("GND", pcbnew.F_Cu, [(0.5, 0.5), (89.5, 0.5), (89.5, 74.5), (0.5, 74.5)])
-    zone("GND", pcbnew.B_Cu, [(0.5, 0.5), (89.5, 0.5), (89.5, 74.5), (0.5, 74.5)])
+    zone("GND", pcbnew.F_Cu, [(0.5, 0.5), (99.5, 0.5), (99.5, 79.5), (0.5, 79.5)])
+    zone("GND", pcbnew.B_Cu, [(0.5, 0.5), (99.5, 0.5), (99.5, 79.5), (0.5, 79.5)])
 
     def in_5v_zone(vx, vy):
         return (vy >= 53) or (vx <= 19 and vy >= 21) or (19 <= vx <= 36 and vy >= 28)
 
     # GND 缝合过孔网格 (避开天线净空 x20.5-35.5/y<6.4)
     n_st = 0
-    for gx in range(4, 89, 12):
-        for gy in range(4, 74, 12):
+    for gx in range(4, 99, 12):
+        for gy in range(4, 79, 12):
             if 20 <= gx <= 36 and gy <= 7:
                 continue
             if spot_free(gx, gy, "GND"):
@@ -370,6 +371,8 @@ if STAGE >= 2:
             done.append(net)
     # ---- 显式干线: 长距离网络(走廊布线) ----
     MANUAL = {
+        # ⚠ P1.0 坐标 (90x75 板) — T4 布线时须按 100x80 新布局重推导, 仅留作走廊风格参考
+
         # GPIO 总线: U1 -> 各通道栅极电阻 (走廊 + y52.4 分发道)
         "IO4":  [(19.2, 11.3), (17.5, 11.3), (17.5, 16.5), (13.5, 16.5), (13.5, 52.5), (4.1, 52.5), (4.1, 54.4)],
         "IO5":  [(19.2, 13.8), (17.8, 13.8), (17.8, 16.8), (16.4, 16.8), (16.4, 51.8), (15.1, 51.8), (15.1, 54.4)],

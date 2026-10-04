@@ -142,9 +142,9 @@
         "max_error": 0.005,
         "min_clearance": 0.2,
         "min_connection": 0.0,
-        "min_copper_edge_clearance": 0.5,
+        "min_copper_edge_clearance": 0.3,
         "min_groove_width": 0.0,
-        "min_hole_clearance": 0.2,
+        "min_hole_clearance": 0.25,
         "min_hole_to_hole": 0.25,
         "min_microvia_diameter": 0.2,
         "min_microvia_drill": 0.1,
@@ -157,8 +157,7 @@
         "min_via_annular_width": 0.1,
         "min_via_diameter": 0.6,
         "solder_mask_to_copper_clearance": 0.0,
-        "use_height_for_length_calcs": true,
-        "min_via_drill": 0.3
+        "use_height_for_length_calcs": true
       },
       "teardrop_options": [
         {
@@ -318,13 +317,7 @@
     "bus_aliases": {},
     "legacy_lib_dir": "",
     "legacy_lib_list": [],
-    "top_level_sheets": [
-      {
-        "filename": "flowio-p1.kicad_sch",
-        "name": "flowio-p1",
-        "uuid": "00000000-0000-0000-0000-000000000000"
-      }
-    ]
+    "top_level_sheets": []
   },
   "sheets": [],
   "text_variables": {},
@@ -333,14 +326,5 @@
       "version": 0
     },
     "tuning_profiles_impedance_geometric": []
-  },
-  "kicad_routing_tools": {
-    "fab_floor_origin": {
-      "min_hole_clearance": 0.25,
-      "min_through_hole_diameter": 0.3,
-      "min_track_width": 0.2,
-      "min_via_annular_width": 0.1,
-      "min_via_diameter": 0.6
-    }
   }
 }

@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 """FLOWIO-CN P1 PCB 生成器
 从 gen_sch.py 的 PARTS 单一真值源生成 4 层板。
-布局: 80×70mm · 天线朝板顶边(板外净空) · 左下电源 · 右上USB · 底部8路驱动
+布局 (P1.1 T3): 100×80mm · 天线朝板顶边(板外净空) · 左上 USB-C 电源 · 右上USB调试
+  · 底边 J10-J17 阀带 · 右边 J20-J23 主阀/泵带 · 左边 J1/J8/J6 + 顶边 J9/J18/J19/J7
 用法: "E:/Program Files/KiCad/10.0/bin/python.exe" gen_pcb.py
 """
 import os, re, sys
@@ -34,6 +35,16 @@ def _lit(n, env=None):
         return tuple(_lit(e, env) for e in n.elts)
     if isinstance(n, ast.Dict):
         return {_lit(k, env): _lit(v, env) for k, v in zip(n.keys, n.values)}
+    if isinstance(n, ast.IfExp):
+        return _lit(n.body, env) if _lit(n.test, env) else _lit(n.orelse, env)
+    if isinstance(n, ast.Compare):
+        import operator as _op
+        _cmps = {ast.Eq: _op.eq, ast.NotEq: _op.ne, ast.Lt: _op.lt,
+                 ast.LtE: _op.le, ast.Gt: _op.gt, ast.GtE: _op.ge}
+        left = _lit(n.left, env)
+        for op, cmp in zip(n.ops, n.comparators):
+            left = _cmps[type(op)](left, _lit(cmp, env))
+        return left
     if isinstance(n, ast.BinOp):
         import operator as _op
         _ops = {ast.Add: _op.add, ast.Sub: _op.sub, ast.Mult: _op.mul,
@@ -82,6 +93,14 @@ def _collect_partlist(val, env=None):
 def _targets(node):
     return node.targets if isinstance(node, ast.Assign) else [node.target]
 
+def _unpack(tgt, item, env):
+    """递归解包 for 目标 (支持嵌套元组, 如 `for i, (a, b) in enumerate(...)`)."""
+    if isinstance(tgt, ast.Name):
+        env[tgt.id] = item
+    elif isinstance(tgt, (ast.Tuple, ast.List)):
+        for _t, _v in zip(tgt.elts, item):
+            _unpack(_t, _v, env)
+
 for _node in _tree.body:
     if isinstance(_node, (ast.Assign, ast.AugAssign)):
         _t0 = _targets(_node)[0]
@@ -114,12 +133,7 @@ for _node in _tree.body:
         try:
             for _item in _iterable(_node):
                 _env = {}
-                _tgt = _node.target
-                if isinstance(_tgt, ast.Name):
-                    _env[_tgt.id] = _item
-                elif isinstance(_tgt, (ast.Tuple, ast.List)):
-                    for _t, _v in zip(_tgt.elts, _item):
-                        _env[_t.id] = _v
+                _unpack(_node.target, _item, _env)
                 for _stmt in _node.body:
                     if isinstance(_stmt, ast.Expr) and isinstance(_stmt.value, ast.Call):
                         _c = _stmt.value
@@ -146,6 +160,8 @@ STD = r"E:/Program Files/KiCad/10.0/share/kicad/footprints"
 def load_fp(fp):
     if fp.startswith("JLC-MCP:"):
         return pcbnew.FootprintLoad(JLC, fp.split(":")[1])
+    if fp.startswith("LOCAL:"):                 # 手建封装 (U6 XGZP6897D, T3)
+        return _mk_xgzp6897d()
     if fp.startswith("Capacitor_SMD:"):
         return pcbnew.FootprintLoad(os.path.join(STD, "Capacitor_SMD.pretty"), fp.split(":")[1])
     if fp.startswith("TestPoint:"):
@@ -153,6 +169,51 @@ def load_fp(fp):
     if fp.startswith("Connector:"):
         return pcbnew.FootprintLoad(os.path.join(STD, "Connector.pretty"), fp.split(":")[1])
     raise ValueError(fp)
+
+
+def _mk_xgzp6897d():
+    """U6 XGZP6897D 宽体 SOP-8 手建封装 (LCSC 无 CFSensor 现货, 淘宝件)。
+    datasheet 真值 (devices.json pneumatic_devices.sensor.mount 同源):
+      排距 7.96 / 节距 2.54 / 焊盘 0.9×2.0 / 本体 7.6×10.6。
+    坐标系: 引脚排沿 Y (4×2.54), 行在 x=±3.98; pin1 左上 (文件系 y 向下)。"""
+    fp = pcbnew.FOOTPRINT(board)
+    try:
+        fp.SetFPID(pcbnew.LIB_ID("LOCAL", "XGZP6897D-SOP8-W7.96-P2.54"))
+    except Exception:
+        pass
+    ls = pcbnew.LSET()
+    for lay in (pcbnew.F_Cu, pcbnew.F_Mask, pcbnew.F_Paste):
+        ls.AddLayer(lay)
+    for num, px, py in [("1", -3.98, -3.81), ("2", -3.98, -1.27),
+                        ("3", -3.98, 1.27), ("4", -3.98, 3.81),
+                        ("5", 3.98, 3.81), ("6", 3.98, 1.27),
+                        ("7", 3.98, -1.27), ("8", 3.98, -3.81)]:
+        pad = pcbnew.PAD(fp)
+        pad.SetNumber(num)
+        pad.SetAttribute(pcbnew.PAD_ATTRIB_SMD)
+        pad.SetShape(pcbnew.PAD_SHAPE_RECT)
+        pad.SetSize(pcbnew.VECTOR2I(MM(2.0), MM(0.9)))
+        # 封装未上板原点在 (0,0): 绝对坐标=封装本地坐标, 上板后随 SetPosition 平移
+        pad.SetPosition(pcbnew.VECTOR2I(MM(px), MM(py)))
+        pad.SetLayerSet(ls)
+        fp.Add(pad)
+    # 本体丝印/装配框 + 焊盘排外框 + courtyard (body 7.6×10.6 + 0.5)
+    def _rect(x1, y1, x2, y2, layer, w):
+        s = pcbnew.PCB_SHAPE(fp, pcbnew.SHAPE_T_RECT)
+        s.SetStart(pcbnew.VECTOR2I(MM(x1), MM(y1)))
+        s.SetEnd(pcbnew.VECTOR2I(MM(x2), MM(y2)))
+        s.SetLayer(layer)
+        s.SetWidth(int(MM(w)))
+        fp.Add(s)
+    _rect(-3.8, -5.3, 3.8, 5.3, pcbnew.F_SilkS, 0.15)
+    _rect(-5.0, -5.8, 5.0, 5.8, pcbnew.F_CrtYd, 0.05)
+    c = pcbnew.PCB_SHAPE(fp, pcbnew.SHAPE_T_CIRCLE)
+    c.SetStart(pcbnew.VECTOR2I(MM(-3.0), MM(-4.6)))
+    c.SetEnd(pcbnew.VECTOR2I(MM(-2.5), MM(-4.6)))
+    c.SetLayer(pcbnew.F_SilkS)
+    c.SetWidth(int(MM(0.15)))
+    fp.Add(c)
+    return fp
 
 board = pcbnew.BOARD()
 board.SetFileName(os.path.join(HERE, "..", "flowio-p1.kicad_pcb"))
@@ -166,6 +227,7 @@ board.SetEnabledLayers(pcbnew.LSET.AllCuMask(4))
 ds = board.GetDesignSettings()
 ds.m_TrackMinWidth, ds.m_ViasMinSize, ds.m_ViasMinDrill = MM(0.2), MM(0.6), MM(0.3)
 ds.m_MinClearance = MM(0.2)
+ds.m_CopperEdgeClearance = MM(0.3)   # 板边铜净空 (JLC ≥0.3)
 ds.m_TrackWidthList = pcbnew.intVector([int(MM(w)) for w in (0.25, 0.5, 0.8, 1.2, 2.0)])
 ds.SetCopperLayerCount(4)
 try:
@@ -177,8 +239,8 @@ try:
 except AttributeError:
     pass  # 默认网络类由设计规则字段覆盖
 
-# ---- 板框 90×75 (P1 直角, 简单可靠) ----
-W, H = MM(90), MM(75)
+# ---- 板框 100×80 (P1.1 T3: 底边 12 插座带 + 右边主阀带需要扩板) ----
+W, H = MM(100), MM(80)
 def add_seg(x1, y1, x2, y2, layer=pcbnew.Edge_Cuts):
     s = pcbnew.PCB_SHAPE(board, pcbnew.SHAPE_T_SEGMENT)
     s.SetStart(pcbnew.VECTOR2I(int(x1), int(y1)))
@@ -203,67 +265,83 @@ for pt in PARTS:
         if net:
             netcode(net)
 
-# ---- 器件放置表 (ref: x_mm, y_mm, 旋转°) ----
+# ---- 器件放置表 (ref: x_mm, y_mm, 旋转°) — P1.1 T3 布局 ------------------------
+# 变更要点 (对 P1.0):
+#   缺陷修复: C9 移出 J9 XH 壳体投影 / R3 移出 U1 WROOM 禁布(+3mm) / HD 移 (75,55.9)
+#             避 J15/J16 · Q-D 列距 ±2.4→±3.5 (SMA/SOT courtyard 修复) · WJ500V→XH-2P
+#   P1.1 新增: J20-J23 右边缘带 + Q13-16/D12-15/R55-64 驱动列 + U6/C18 + U7/R63/R64 + TP13
+#   传感带重排: J5→右壁, J6→左壁, J7→顶右角 (给主阀带让出右边缘)
 PLACE = {
     # ===== ESP32 主控(天线朝顶边, 净空 x20.5-35.5/y<6.4) =====
     "U1": (28, 16.5, 0),
-    "C9": (43, 9, 0), "C10": (43, 14, 0),
-    "SW1": (9, 8.5, 0), "SW2": (13.5, 12.5, 0), "C14": (6.5, 13, 0), "R7": (14, 19, 0),
+    "C9": (63, 55, 90), "C10": (43, 14, 0),
+    "SW1": (8, 8.5, 0), "SW2": (15, 10.5, 0), "C14": (6.5, 13, 0), "R7": (16.5, 19, 0),
     "R13": (24, 31, 0), "R14": (28.5, 31, 0),
     "R15": (34, 31, 0), "R16": (39, 31, 0),
-    "R8": (50, 27, 0), "R9": (54.5, 27, 0),
-    "LED1": (50, 14, 0), "R12": (50, 20.5, 90), "C13": (55.5, 17.5, 0),
-    "R27": (46.5, 34.5, 90), "SW3": (46.5, 51, 0),
-    "LED2": (58.5, 29, 90), "R23": (58.5, 33.5, 90),
-    "LED3": (48.5, 30, 90), "R24": (48.5, 35, 90),
-    # ===== 顶边: 5号传感器 + 调试排针 =====
-    "J9": (46, 4, 0), "J18": (59.5, 4, 0), "J19": (73, 4, 0),
+    "R8": (52, 27, 0), "R9": (56.5, 27, 0),
+    "LED1": (52.5, 14, 0), "R12": (52.5, 20.5, 90), "C13": (58, 17.5, 0),
+    "R27": (45.5, 34.5, 90), "SW3": (48, 51, 0),
+    "LED2": (56, 30.5, 90), "R23": (56, 35, 90),
+    "LED3": (50.5, 30, 90), "R24": (48.5, 35, 90),
+    # ===== U6 XGZP6897D 板载压力传感 (I2C 主控区, 倒钩管朝上) =====
+    "U6": (44, 22, 0), "C18": (42, 29, 0),
+    # ===== 顶边: 传感 J9 + 调试排针 J18/J19 + 传感 J7 =====
+    "J9": (44.8, 4, 0), "J18": (58.1, 4, 0), "J19": (71.4, 4, 0), "J7": (84.7, 4, 0),
     # ===== USB 右上 =====
-    "J2": (86, 6, 270),
-    "R1": (78.5, 10, 90), "R2": (78.5, 14, 90),
-    "U5": (74.5, 12, 0), "R17": (70, 11, 90), "R18": (70, 15, 90),
-    "U4": (75, 21.5, 0), "C12": (80, 25.5, 0),
-    "R10": (78.5, 31, 90), "R11": (78.5, 36, 90),
+    "J2": (96.4, 6, 270),
+    "R1": (90.5, 9, 90), "R2": (83, 19, 90),
+    "U5": (74.5, 14, 0), "R17": (69, 12.5, 90), "R18": (69, 16.5, 90),
+    "U4": (74.5, 21.5, 0), "C12": (79.5, 27, 0),
+    "R10": (76.5, 30, 90), "R11": (76.5, 34.5, 90),
     "R19": (62, 22, 0), "R20": (66.5, 22, 0),
     "R21": (62, 26, 0), "R22": (66.5, 26, 0),
-    "Q11": (69.5, 23.5, 0), "Q12": (69.5, 28.5, 0),
-    "LED4": (69.5, 34, 90), "R25": (69.5, 39, 90),
-    "LED5": (69.5, 44, 90), "R26": (69.5, 48.5, 90),
-    # ===== 传感连接器 右边 =====
-    "J5": (86.5, 22, 270), "J6": (86.5, 32.5, 270),
-    "J7": (86.5, 46, 270), "J8": (5, 46, 90),
-    # ===== 电源 左列竖排 =====
-    "J1": (5.5, 27, 270),
-    "C17": (17, 24, 90), "R3": (21, 28, 90),
-    "D1": (23.5, 33.5, 0), "C1": (30, 33.5, 0),
-    "D2": (24, 38.5, 0), "C2": (30, 38.5, 0),
+    "Q11": (72, 28, 90), "Q12": (72, 34, 90),
+    "LED4": (68, 34, 90), "R25": (68, 39, 90),
+    "LED5": (68, 44, 90), "R26": (68, 53, 90),
+    # ===== 传感连接器 (P1.1 重排: J5 底右角避 J23/J17 挤压, J8/J6 左壁) =====
+    "J5": (94.5, 74, 180),
+    "J8": (5, 38.5, 90), "J6": (5, 52, 90),
+    # ===== 电源 左壁 USB-C 5A (P1.1: DC005 移除) =====
+    "J1": (4.5, 19, 90),
+    "U7": (12.5, 19, 0), "R63": (11, 14.5, 90), "R64": (11, 23.5, 90),
+    "C17": (16, 24, 90),
+    "R3": (21, 34, 90),
+    "D2": (24, 38.5, 0), "C1": (30, 33.5, 0), "C2": (30, 38.5, 0),
     "U3": (25, 45, 0),
     "C6": (18.5, 45, 90), "R6": (18.5, 50, 90),
     "C5": (31.8, 41.5, 90),
-    "L1": (39.5, 43, 0), "D3": (48.5, 43, 0),
-    "R4": (51.5, 39.5, 90), "R5": (51.5, 44.5, 90),
-    "C3": (23, 50.5, 0), "C4": (27.5, 50.5, 0),
-    "C7": (56, 40, 90), "C8": (56, 45.5, 90),
+    "L1": (41, 43, 0), "D3": (40, 51.5, 0),
+    "R4": (52.5, 42, 90), "R5": (52.5, 47, 90),
+    "C3": (22, 53, 0), "C4": (27, 54, 0),
+    "C7": (56, 40.5, 90), "C8": (56, 47.5, 90),
     # ===== TCA + 上拉梯 =====
-    "U2": (74, 44, 0), "C11": (79.5, 50, 0), "R28": (56.5, 57.5, 90),
-    "C15": (34.5, 51.5, 90), "C16": (78.5, 56.5, 90),
+    "U2": (73.5, 44, 0), "C11": (77, 51.5, 0), "R28": (57, 57, 90),
+    "C15": (34.5, 51.5, 90), "C16": (81.5, 60.5, 0),
 }
 for i in range(5):
-    PLACE[f"R{29+i}"] = (62, 30 + i * 4.8, 90)
-    PLACE[f"R{34+i}"] = (66, 30 + i * 4.8, 90)
-# ===== ch1-8 全部底部单排 =====
-BOT_X = [6.5 + i * 11 for i in range(8)]
+    PLACE[f"R{29+i}"] = (60, 30 + i * 4.8, 90)
+    PLACE[f"R{34+i}"] = (64, 30 + i * 4.8, 90)
+# ===== ch1-8 阀通道 底边带 (R 行 y61 / Q-D 行 y66 / 插座 y74) =====
+BOT_X = [5.4 + i * 11 for i in range(8)]
 for i in range(8):
     x = BOT_X[i]
-    PLACE[f"R{39+i}"] = (x - 2.4, 55.5, 90)
-    PLACE[f"R{47+i}"] = (x + 2.4, 55.5, 90)
-    PLACE[f"Q{3+i}"] = (x - 2.4, 60.5, 0)
-    PLACE[f"D{4+i}"] = (x + 2.4, 60.5, 180)
-    PLACE[f"J{10+i}"] = (x, 68.5, 180)
+    PLACE[f"R{39+i}"] = (x - 3.5, 61, 90)
+    PLACE[f"R{47+i}"] = (x + 3.5, 61, 90)
+    PLACE[f"Q{3+i}"] = (x - 3.0, 66, 0)
+    PLACE[f"D{4+i}"] = (x + 2.5, 66, 180)
+    PLACE[f"J{10+i}"] = (x, 74, 180)
+# ===== P1.1: S/V/F 主阀 + 泵 右边缘带 (J20-J23 口朝 +X; 驱动列同域延伸) =====
+MAIN_Y = [17.5 + 11 * k for k in range(4)]
+for k in range(4):
+    PLACE[f"R{55+k}"] = (80, 18.5 + 11 * k, 90)
+    PLACE[f"R{59+k}"] = (86.5, 18.5 + 11 * k, 90)
+    PLACE[f"Q{13+k}"] = (86, 23 + 11 * k, 0)
+    PLACE[f"D{12+k}"] = (81, 23 + 11 * k, 180)
+    PLACE[f"J{20+k}"] = (94, MAIN_Y[k], 270)
 # ===== 测试点 =====
-for i, (tx, ty) in enumerate([(58.5, 21.5), (14, 33), (34, 57.5), (45, 57.5), (81.5, 57.5),
-                              (48.5, 47.5), (43.5, 31), (47.5, 31), (12, 63.5), (23.5, 59.5),
-                              (40, 50.5), (2.8, 11)]):
+for i, (tx, ty) in enumerate([(58.5, 21.5), (14, 33), (34, 57.5), (45, 57.5), (82, 63),
+                              (48.5, 47.5), (43.5, 31.5), (47, 31.5), (12, 57.5), (14.5, 57),
+                              (37, 55), (2.8, 11), (90.5, 63)]):
     PLACE[f"TP{i+1}"] = (tx, ty, 0)
 
 # ---- 放置封装并赋网络 ----
@@ -284,8 +362,8 @@ for pt in PARTS:
         if net:
             pad.SetNetCode(netcode(net))
 
-# ---- 安装孔: 顶两角 + 中部两侧 ----
-for hx, hy in [(4, 4), (86, 13), (3, 37), (77, 62)]:
+# ---- 安装孔 (P1.1 T3: HA 避 SW1 courtyard / HB 让左壁 J 带 / HD 避 J15/J16+D9) ----
+for hx, hy in [(3.4, 3.4), (83, 12), (3, 28), (73.5, 55.7)]:
     try:
         mh = pcbnew.FootprintLoad(os.path.join(STD, "MountingHole.pretty"),
                                   "MountingHole_3.2mm_M3")
