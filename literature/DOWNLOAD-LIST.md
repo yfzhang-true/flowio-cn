@@ -3,7 +3,14 @@
 > 下载后放入本目录（E:\FLOWIO\literature\），AI 将继续提取阅读并纳入 SPEC。
 
 > **查询渠道登记**：JLC MCP（器件属性/尺寸一手）+ **electromaker.io**（用户推荐，
-> DFRobot 系资料全）+ LCSC wmsc 直链（datasheet 下载破解会话墙）。
+> DFRobot 系资料全）+ **alldatasheet.com**（用户推荐，全品类 datasheet 检索）+
+> LCSC wmsc 直链（datasheet 下载破解会话墙）。
+
+## ✅ 已解决（2026-10-05c · TOY0058/BMP180 气压计评估）
+
+- [x] **TOY0058**（DFRobot BMP180 模块官方 PDF）→ `TOY0058.PDF` + 评估
+      `sensor-pressure-eval.md`（❌ 气路传感否决：绝对压 300~1100hPa 出程 37%/无气口/
+      模块形态；XGZP6897D-C 维持；BMP390 环境基准留 P2 可选）
 
 ## ✅ 已解决（2026-10-05b · FIT0801/DFR0866 官方 PDF，用户从 electromaker 渠道获取）
 
