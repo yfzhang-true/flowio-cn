@@ -3,12 +3,12 @@
 由 server.py 以 ~50ms (TICK=0.1s 对齐) 周期调用 step() 推进：
   阀线圈 RL 电流(解析式) -> 5V 轨负载/压降 -> 3V3 轨 -> 一阶热惯性 -> 600s 环形历史。
 
-设计笔记 (与 test_board_model.py 锚点对齐):
-  * 开通:  i = I_inf + (i0 - I_inf) * exp(-dt/tau_on),  tau_on = L/(r_coil+rds) ≈ 1.78ms
-           —— 100ms 内电流完全建立 (dt/tau ~ 56)。
+设计笔记 (与 test_board_model.py 锚点对齐; 参数来源见 BOARD_PARAMS 注释, [registry]=devices.json):
+  * 开通:  i = I_inf + (i0 - I_inf) * exp(-dt/tau_on),  tau_on = L/(r_coil+rds) ≈ 2.49ms
+           —— 100ms 吸入窗内电流完全建立 (dt/tau ~ 40)。
   * 关断:  MOS 已断开, 线圈经 SS14 续流回路释放: vcoil = -vf_fw,
            i = max(0, I_off + (i0 - I_off) * exp(-dt/tau_off)),
-           tau_off = L/r_coil ≈ 1.79ms,  I_off = -vf_fw/r_coil (负稳态,
+           tau_off = L/r_coil ≈ 2.5ms,  I_off = -vf_fw/r_coil (负稳态,
            电流过零即被二极管反向截止钳位) —— 与 sim_engine._valve 的
            续流 ODE (VF_FW=0.35, 钳 i>=0) 同一物理量, 防双源漂移。
 无文件 IO、无 numpy; telemetry() 从当前 state 以与 step() 相同的式子重算轨值。
@@ -21,18 +21,20 @@ from collections import deque
 # ESP32 峰值 (~0.24A) + TCA9548A + CH340 等逻辑负载估算
 LOGIC_A = 0.43
 
-# 板级参数 (含来源成色注释: [手册]=datasheet, [仿真]=电路仿真, [实测]=上表测量, [假设]=工程假设)
+# 板级参数 (含来源成色注释: [手册]=datasheet, [仿真]=电路仿真, [实测]=上表测量, [假设]=工程假设,
+#           [registry]=devices.json pneumatic_devices 真值——T7 2026-10-03 参数单源同步)
 BOARD_PARAMS = {
-    "r_coil": 14.0,    # [假设-行业典型] 阀线圈电阻 14Ω (5V/14Ω ≈ 0.356A 稳态)
+    "r_coil": 10.0,    # [registry] F0520D rated 4.5V/0.45A → 10Ω（原 14Ω 为行业典型假设已废弃；
+                       #           5V 全开拉入 ≈0.50A, 90% 保持=4.5V=额定 0.45A, 与 electrical_sim 同式）
     "l_coil": 25e-3,   # [假设] 阀线圈电感 25mH
     "rds": 0.040,      # [手册] AO3400 @ VGS=3.3V 导通电阻 ~40mΩ
-    "vbus": 5.0,       # [标称] USB 5V 总线
+    "vbus": 5.0,       # [registry] drive_policy.rail_v 5.0V
     "vf_ss34": 0.31,   # [手册] SS34 肖特基正向压降 (5V 轨串入)
     "r_ss34": 0.05,    # [手册] SS34 导通电阻
     "vf_fw": 0.35,     # [手册] SS14 续流二极管正向压降 (与 sim_engine VF_FW 同源)
     "vout3v3": 3.269,  # [实测] buck 标称输出
     "load_reg": 0.012, # [仿真] buck 负载调整率 (V/A)
-    "i_pump": 0.35,    # [假设] 泵电机平均电流
+    "i_pump": 0.50,    # [registry] ZR370-03PM load_current_a 0.5A（原 0.35 假设已废弃）
     "theta": {         # [手册] 热阻 ℃/W
         "cpu": 35.0,
         "buck": 130.0,

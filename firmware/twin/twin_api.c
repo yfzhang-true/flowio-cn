@@ -30,8 +30,12 @@
  * 每元件泄漏系数（TinyML Phase 0 标注数据工厂，SPEC 15） */
 #define GAMMA            1.2f
 #define P_ATM_KPA        101.325f
-#define PUMP_P_MAX_KPA   61.0f     /* 370 规格书正压无单值(60-100 型号相关)，暂用 FlowIO Small 实测死点（thesis Table 2），到货实测后定 */
-#define PUMP_P_MIN_KPA   (-58.0f)  /* 370 Mini Vacuum Pump 规格书 ≥-58kPa（DFRobot FIT0801，2026-09-22 修正；原 -38 为 FlowIO 借值） */
+#define PUMP_P_MAX_KPA   61.0f     /* 370 规格书正压无单值(60-100 型号相关)，暂用 FlowIO Small 实测死点（thesis Table 2），到货实测后定；
+                                    * registry 真值上限 120kPa（devices.json pump.pressure_kpa[1]，ZER370 死头能力）——远超阀额定，
+                                    * 过压防护走闭环工作带 ±35kPa + 停泵互锁（spec §2.6），不靠死点自然限压 */
+#define PUMP_P_MIN_KPA   (-60.0f)  /* ZR370-03PM 真值 ≥-60kPa（hardware/flowio-p1/enclosure/devices.json
+                                    * pneumatic_devices.pump.pressure_kpa[0]=-60，2026-10-05 T1 入库；原 -58 为
+                                    * DFRobot FIT0801 时代借值，2026-10-03 T7 参数单源同步修正） */
 #define VALVE_P_MIN_KPA  (-53.3f)  /* 0520D/F 电磁阀动作压力下限（规格书：-53.3~+300 / -53.3~+100 kPa，2026-09-23）
                                     * 真空渐近取 max(泵极限, 阀动作窗)——泵虽可到 -58，但阀在 -53.3 以下不能可靠
                                     * 通电切换（闭环"关阀保压"会失败），系统可用真空由阀窗决定；正压侧
@@ -145,7 +149,7 @@ PN_TWIN_API int pn_twin_tick(void)
         float PR = PUMP_P_MAX_KPA + P_ATM_KPA;
         net_q += PUMP_C * duty * sq_pos(P * (PR - P));
     } else if (pump_on && vent_on) {              /* 抽真空：对称形式渐近极限
-                                                   * 渐近 = max(泵 -58, 阀动作窗 -53.3) → -53.3（VALVE_P_MIN_KPA，
+                                                   * 渐近 = max(泵 -60, 阀动作窗 -53.3) → -53.3（VALVE_P_MIN_KPA，
                                                    * 0520D/F 规格书 2026-09-23：阀是链路最弱环节） */
         float Pm = ((PUMP_P_MIN_KPA > VALVE_P_MIN_KPA) ? PUMP_P_MIN_KPA : VALVE_P_MIN_KPA) + P_ATM_KPA;
         net_q -= PUMP_C * duty * sq_pos(P * (P - Pm));

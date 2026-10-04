@@ -20,9 +20,15 @@ extern "C" {
 #define PN_PUMP_COUNT     1              /* P0 单泵；P1 双泵时改 2 */
 #define PN_SENSOR_COUNT   2
 
-/* 阀保持电压节能：默认开启 500ms 后降至保持占空比（笔记 02 第 4 节） */
-#define PN_HOLD_DEFAULT_DUTY      170    /* 255 的 ~67%，按实物标定后可调 */
-#define PN_HOLD_DEFAULT_DELAY_MS  500
+/* 阀保持电压节能：开启后先 100%（吸入 pull-in），超过吸入窗再降至保持占空比（笔记 02 第 4 节）。
+ * 参数单源（T7 2026-10-03 同步）：hardware/flowio-p1/enclosure/devices.json
+ *   pneumatic_devices._meta.drive_policy.valve ——
+ *   pull_in "100% <=100ms" / full_open_hold "90% (等效4.5V=额定)"（双源核对见
+ *   firmware/twin/electrical_sim.py 场景矩阵与 test_electrical_sim.py 断言②）。
+ * 节能保持 55%（有意欠压 2.75V，受限/错峰模式用）经 BLE Config 服务 pwm_params 下发，
+ * 不作固件默认值。原 170/~500ms 为 FlowIO 借值，与冻结 drive_policy 不符，已对齐。 */
+#define PN_HOLD_DEFAULT_DUTY      230    /* 255 的 ~90%（230/255=90.2% → 4.51V≈额定4.5V） */
+#define PN_HOLD_DEFAULT_DELAY_MS  100    /* 吸入窗 ≤100ms（drive_policy valve.pull_in） */
 
 /* ---- 32 位状态字（对外广播用，协议层可直接回传） ---- */
 #define PN_SW_PORT1     (1u << 0)        /* 端口阀 1 开 */
