@@ -1,7 +1,7 @@
 {
     "$schema": "https://schemas.kicad.org/drc.v1.json",
     "coordinate_units": "mm",
-    "date": "2026-10-05T02:56:40",
+    "date": "2026-10-05T03:02:48",
     "ignored_checks": [
         {
             "description": "Footprint has no courtyard defined",
@@ -1323,6 +1323,2191 @@
             ],
             "severity": "warning",
             "type": "lib_footprint_issues"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "J14 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 52.649,
+                        "y": 68.793
+                    },
+                    "uuid": "1c4baddd-c9f6-4e06-a35f-c053e792d7c9"
+                },
+                {
+                    "description": "D8 的参考字段",
+                    "pos": {
+                        "x": 51.9,
+                        "y": 69.18
+                    },
+                    "uuid": "4525d574-7b58-433b-a88d-82afb4033440"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "Q8 的参考字段",
+                    "pos": {
+                        "x": 57.4,
+                        "y": 62.65
+                    },
+                    "uuid": "619a2e71-acac-4469-a5ee-79db6726c0a1"
+                },
+                {
+                    "description": "R44 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 57.5606,
+                        "y": 62.3851
+                    },
+                    "uuid": "72457521-ba48-4c69-85ff-6ad02dca6d13"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "Q8 的参考字段",
+                    "pos": {
+                        "x": 57.4,
+                        "y": 62.65
+                    },
+                    "uuid": "619a2e71-acac-4469-a5ee-79db6726c0a1"
+                },
+                {
+                    "description": "R44 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 57.5606,
+                        "y": 61.4262
+                    },
+                    "uuid": "ecf6e56c-ad94-40b9-81de-705c1ff4433d"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "D6 的参考字段",
+                    "pos": {
+                        "x": 29.9,
+                        "y": 69.18
+                    },
+                    "uuid": "80e26473-0032-4889-88c6-91a797a9c96d"
+                },
+                {
+                    "description": "J12 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 30.649,
+                        "y": 68.793
+                    },
+                    "uuid": "b0bd524d-50da-4d54-9cd2-8c4c6d624545"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "D5 的参考字段",
+                    "pos": {
+                        "x": 18.9,
+                        "y": 69.18
+                    },
+                    "uuid": "6c9caa52-6fcf-4bd4-b82b-fa914a448acc"
+                },
+                {
+                    "description": "J11 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 19.649,
+                        "y": 68.793
+                    },
+                    "uuid": "d29c30c9-2009-4cff-be6a-e0d1952288d6"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "R46 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 78.2394,
+                        "y": 62.3851
+                    },
+                    "uuid": "b5b882fc-09d6-4212-82fc-c3ee754ae5d0"
+                },
+                {
+                    "description": "Q10 的参考字段",
+                    "pos": {
+                        "x": 79.4,
+                        "y": 62.65
+                    },
+                    "uuid": "d4fed7f2-52c0-445f-9906-c99e158d5dd2"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "Q10 的参考字段",
+                    "pos": {
+                        "x": 79.4,
+                        "y": 62.65
+                    },
+                    "uuid": "d4fed7f2-52c0-445f-9906-c99e158d5dd2"
+                },
+                {
+                    "description": "R46 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 79.5606,
+                        "y": 62.3851
+                    },
+                    "uuid": "dcb41158-3164-4f59-a0bf-ff55fcb84e04"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "R46 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 79.5606,
+                        "y": 61.4262
+                    },
+                    "uuid": "355cd14f-361c-4e26-ba18-84218c72e7cf"
+                },
+                {
+                    "description": "Q10 的参考字段",
+                    "pos": {
+                        "x": 79.4,
+                        "y": 62.65
+                    },
+                    "uuid": "d4fed7f2-52c0-445f-9906-c99e158d5dd2"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "R54 的参考字段",
+                    "pos": {
+                        "x": 83.41,
+                        "y": 61.0
+                    },
+                    "uuid": "29fdc35b-228e-4caa-8e4e-cfe2f90201f4"
+                },
+                {
+                    "description": "TP5 的参考字段",
+                    "pos": {
+                        "x": 82.0,
+                        "y": 61.552
+                    },
+                    "uuid": "c0bc56ec-852f-45cf-8152-f03f0f87ceef"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "D11 的参考字段",
+                    "pos": {
+                        "x": 84.9,
+                        "y": 69.18
+                    },
+                    "uuid": "7a4afe69-fcc8-401a-a5eb-f6be072ca945"
+                },
+                {
+                    "description": "J17 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 85.649,
+                        "y": 68.793
+                    },
+                    "uuid": "f7b483a0-976b-451c-a05d-bde77382b3fd"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "TP5 的参考字段",
+                    "pos": {
+                        "x": 82.0,
+                        "y": 61.552
+                    },
+                    "uuid": "c0bc56ec-852f-45cf-8152-f03f0f87ceef"
+                },
+                {
+                    "description": "C16 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 81.35942,
+                        "y": 61.01
+                    },
+                    "uuid": "f54f91db-5a3d-48d0-8472-4e7c332e92b9"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "D3 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 37.4038,
+                        "y": 52.9262
+                    },
+                    "uuid": "dd960821-bc8b-4ddc-ada7-14e10f38378d"
+                },
+                {
+                    "description": "TP11 的参考字段",
+                    "pos": {
+                        "x": 37.0,
+                        "y": 53.552
+                    },
+                    "uuid": "f147510d-acd2-4dac-8020-b811e342bbdb"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "D3 的 多边形, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 37.4882,
+                        "y": 52.596
+                    },
+                    "uuid": "1bd95dbe-e71a-427f-8f9b-cd2de4818865"
+                },
+                {
+                    "description": "TP11 的参考字段",
+                    "pos": {
+                        "x": 37.0,
+                        "y": 53.552
+                    },
+                    "uuid": "f147510d-acd2-4dac-8020-b811e342bbdb"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "R43 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 46.5606,
+                        "y": 62.3851
+                    },
+                    "uuid": "18f225ae-0806-4ae6-90f4-b730073db1ab"
+                },
+                {
+                    "description": "Q7 的参考字段",
+                    "pos": {
+                        "x": 46.4,
+                        "y": 62.65
+                    },
+                    "uuid": "bd27adef-74fa-4329-a058-6f24d7732f96"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "Q7 的参考字段",
+                    "pos": {
+                        "x": 46.4,
+                        "y": 62.65
+                    },
+                    "uuid": "bd27adef-74fa-4329-a058-6f24d7732f96"
+                },
+                {
+                    "description": "R43 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 46.5606,
+                        "y": 61.4262
+                    },
+                    "uuid": "c856d44b-d5ad-4db6-81e2-1b885b2fe570"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "J13 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 41.649,
+                        "y": 68.793
+                    },
+                    "uuid": "70966a10-9c8c-47bc-a756-c1280b504dec"
+                },
+                {
+                    "description": "D7 的参考字段",
+                    "pos": {
+                        "x": 40.9,
+                        "y": 69.18
+                    },
+                    "uuid": "7729c4fe-a470-4418-b644-b421c837d2a6"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "R42 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 35.5606,
+                        "y": 62.3851
+                    },
+                    "uuid": "73997cf9-427b-4d88-b9e4-78aee654bb83"
+                },
+                {
+                    "description": "Q6 的参考字段",
+                    "pos": {
+                        "x": 35.4,
+                        "y": 62.65
+                    },
+                    "uuid": "eb7de031-d7b8-4520-86f8-73882bc3d357"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "R42 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 35.5606,
+                        "y": 61.4262
+                    },
+                    "uuid": "550a22ea-b43c-4249-9d66-134fd2fbcc64"
+                },
+                {
+                    "description": "Q6 的参考字段",
+                    "pos": {
+                        "x": 35.4,
+                        "y": 62.65
+                    },
+                    "uuid": "eb7de031-d7b8-4520-86f8-73882bc3d357"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "Q9 的参考字段",
+                    "pos": {
+                        "x": 68.4,
+                        "y": 62.65
+                    },
+                    "uuid": "14ad827e-9297-4820-900c-f5f7437b3c22"
+                },
+                {
+                    "description": "R45 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 68.5606,
+                        "y": 61.4262
+                    },
+                    "uuid": "31b3eb63-a2af-482c-830c-6f6545a01ce9"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "Q9 的参考字段",
+                    "pos": {
+                        "x": 68.4,
+                        "y": 62.65
+                    },
+                    "uuid": "14ad827e-9297-4820-900c-f5f7437b3c22"
+                },
+                {
+                    "description": "R45 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 68.5606,
+                        "y": 62.3851
+                    },
+                    "uuid": "996d905e-a61c-4241-85d7-6fe0bdfa1462"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "D10 的参考字段",
+                    "pos": {
+                        "x": 73.9,
+                        "y": 69.18
+                    },
+                    "uuid": "267457ad-a2e7-4824-a302-2706318d2355"
+                },
+                {
+                    "description": "J16 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 74.649,
+                        "y": 68.793
+                    },
+                    "uuid": "9048eef5-fe71-4256-bcdc-43f5aa470148"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "D9 的参考字段",
+                    "pos": {
+                        "x": 62.9,
+                        "y": 69.18
+                    },
+                    "uuid": "359b4033-47f6-42cc-9d42-eebc70babf03"
+                },
+                {
+                    "description": "J15 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 63.649,
+                        "y": 68.793
+                    },
+                    "uuid": "ab9f9c04-b20f-4ec6-884b-4463f046b436"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "D15 的参考字段",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 59.18
+                    },
+                    "uuid": "2213c8e1-cd6f-4bad-a93c-ef62a686e6a7"
+                },
+                {
+                    "description": "C16 的参考字段",
+                    "pos": {
+                        "x": 81.5,
+                        "y": 59.07
+                    },
+                    "uuid": "8aa07115-36f3-459a-88fb-f0da0da4e0e4"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "R58 的参考字段",
+                    "pos": {
+                        "x": 77.51,
+                        "y": 51.5
+                    },
+                    "uuid": "622b9703-5d64-4b71-8c70-d1736036bbaa"
+                },
+                {
+                    "description": "C11 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 76.85942,
+                        "y": 52.01
+                    },
+                    "uuid": "82b6ad26-d039-40ce-8824-b955c721baa1"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "R62 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 87.1606,
+                        "y": 52.8851
+                    },
+                    "uuid": "0cf6ce78-b434-4396-b6d3-44d43b05ba6d"
+                },
+                {
+                    "description": "Q16 的参考字段",
+                    "pos": {
+                        "x": 86.0,
+                        "y": 52.65
+                    },
+                    "uuid": "d1a63d0c-06ea-4ab4-98dc-4c605959bd4b"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "R62 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 85.8394,
+                        "y": 52.8851
+                    },
+                    "uuid": "08565d4f-2497-43f5-ae6f-9cca5056949c"
+                },
+                {
+                    "description": "Q16 的参考字段",
+                    "pos": {
+                        "x": 86.0,
+                        "y": 52.65
+                    },
+                    "uuid": "d1a63d0c-06ea-4ab4-98dc-4c605959bd4b"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "R62 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 87.1606,
+                        "y": 51.9262
+                    },
+                    "uuid": "49268bbd-11f5-46fe-b1c1-c62eb927228e"
+                },
+                {
+                    "description": "Q16 的参考字段",
+                    "pos": {
+                        "x": 86.0,
+                        "y": 52.65
+                    },
+                    "uuid": "d1a63d0c-06ea-4ab4-98dc-4c605959bd4b"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "C18 的参考字段",
+                    "pos": {
+                        "x": 42.0,
+                        "y": 27.57
+                    },
+                    "uuid": "b9fc5753-5285-48b2-be8e-1bd5654cc311"
+                },
+                {
+                    "description": "U6 的 矩形, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 40.2,
+                        "y": 16.7
+                    },
+                    "uuid": "d029f751-a79b-4c29-b5cd-e73738a0c6f2"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "TP7 的参考字段",
+                    "pos": {
+                        "x": 43.5,
+                        "y": 30.052
+                    },
+                    "uuid": "3fae18a0-6f82-4273-b381-5eaa52199259"
+                },
+                {
+                    "description": "C18 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 41.85942,
+                        "y": 29.51
+                    },
+                    "uuid": "63956d5e-697b-4132-b1ca-421a8fae4343"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "Q15 的参考字段",
+                    "pos": {
+                        "x": 86.0,
+                        "y": 41.65
+                    },
+                    "uuid": "041f399e-e931-4b74-976b-14edd2a79ad0"
+                },
+                {
+                    "description": "R61 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 85.8394,
+                        "y": 41.8851
+                    },
+                    "uuid": "28198c02-d625-481f-b26d-a8bfece00714"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "Q15 的参考字段",
+                    "pos": {
+                        "x": 86.0,
+                        "y": 41.65
+                    },
+                    "uuid": "041f399e-e931-4b74-976b-14edd2a79ad0"
+                },
+                {
+                    "description": "R61 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 87.1606,
+                        "y": 41.8851
+                    },
+                    "uuid": "b96b5b46-7634-4e39-84f8-1e910ea0986f"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "Q15 的参考字段",
+                    "pos": {
+                        "x": 86.0,
+                        "y": 41.65
+                    },
+                    "uuid": "041f399e-e931-4b74-976b-14edd2a79ad0"
+                },
+                {
+                    "description": "R61 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 87.1606,
+                        "y": 40.9262
+                    },
+                    "uuid": "6b3b75f7-c7ac-41f9-9c4d-c9637bc781de"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "C12 的参考字段",
+                    "pos": {
+                        "x": 79.5,
+                        "y": 25.57
+                    },
+                    "uuid": "24b5837d-29a8-497f-87f0-56f1c95475ce"
+                },
+                {
+                    "description": "D12 的参考字段",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 26.18
+                    },
+                    "uuid": "a6abb3ab-a03b-4f98-b2fb-2ead23c0b1ba"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "R10 的参考字段",
+                    "pos": {
+                        "x": 74.01,
+                        "y": 30.0
+                    },
+                    "uuid": "61ea103a-2f40-4ec7-984c-3c1aedd59a6c"
+                },
+                {
+                    "description": "Q11 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 73.5512,
+                        "y": 28.7262
+                    },
+                    "uuid": "cfd7bcd7-63e7-44d1-8717-7b6a595227a0"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "R10 的参考字段",
+                    "pos": {
+                        "x": 74.01,
+                        "y": 30.0
+                    },
+                    "uuid": "61ea103a-2f40-4ec7-984c-3c1aedd59a6c"
+                },
+                {
+                    "description": "Q11 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 73.5512,
+                        "y": 27.2738
+                    },
+                    "uuid": "877d8cc7-8b4c-4146-a151-8cac651c5557"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "R56 的参考字段",
+                    "pos": {
+                        "x": 77.51,
+                        "y": 29.5
+                    },
+                    "uuid": "7b64b7e5-63db-4e4b-88ef-2dc54ee7af1f"
+                },
+                {
+                    "description": "R10 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 77.1606,
+                        "y": 28.6149
+                    },
+                    "uuid": "b4b0a314-962e-4c3a-8c96-2470b44fa2f4"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "R10 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 77.1606,
+                        "y": 29.5738
+                    },
+                    "uuid": "648afcae-0135-45ef-adbc-27184705c289"
+                },
+                {
+                    "description": "R56 的参考字段",
+                    "pos": {
+                        "x": 77.51,
+                        "y": 29.5
+                    },
+                    "uuid": "7b64b7e5-63db-4e4b-88ef-2dc54ee7af1f"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "R10 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 77.1606,
+                        "y": 30.4262
+                    },
+                    "uuid": "13a495d2-ad8c-4146-be1c-c7e0cf4b0992"
+                },
+                {
+                    "description": "R56 的参考字段",
+                    "pos": {
+                        "x": 77.51,
+                        "y": 29.5
+                    },
+                    "uuid": "7b64b7e5-63db-4e4b-88ef-2dc54ee7af1f"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "LED4 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 68.4458,
+                        "y": 35.4896
+                    },
+                    "uuid": "1795984b-a5cc-48fd-b53b-aeee60df4327"
+                },
+                {
+                    "description": "Q12 的参考字段",
+                    "pos": {
+                        "x": 68.62,
+                        "y": 34.0
+                    },
+                    "uuid": "6275a9f1-b047-4764-b252-1b518c92c8b4"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "LED4 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 68.7458,
+                        "y": 34.1396
+                    },
+                    "uuid": "3d526362-acf4-4608-a573-5cbfdec6fd98"
+                },
+                {
+                    "description": "Q12 的参考字段",
+                    "pos": {
+                        "x": 68.62,
+                        "y": 34.0
+                    },
+                    "uuid": "6275a9f1-b047-4764-b252-1b518c92c8b4"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "LED4 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 67.9935,
+                        "y": 33.7796
+                    },
+                    "uuid": "158cf2be-4621-476b-9b71-9b5b4122ddc0"
+                },
+                {
+                    "description": "Q12 的参考字段",
+                    "pos": {
+                        "x": 68.62,
+                        "y": 34.0
+                    },
+                    "uuid": "6275a9f1-b047-4764-b252-1b518c92c8b4"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "LED4 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 68.3235,
+                        "y": 33.7895
+                    },
+                    "uuid": "4f036b54-a7e5-440d-bb6a-8292e4107191"
+                },
+                {
+                    "description": "Q12 的参考字段",
+                    "pos": {
+                        "x": 68.62,
+                        "y": 34.0
+                    },
+                    "uuid": "6275a9f1-b047-4764-b252-1b518c92c8b4"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "Q12 的参考字段",
+                    "pos": {
+                        "x": 68.62,
+                        "y": 34.0
+                    },
+                    "uuid": "6275a9f1-b047-4764-b252-1b518c92c8b4"
+                },
+                {
+                    "description": "LED4 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 67.2435,
+                        "y": 32.6095
+                    },
+                    "uuid": "a1934800-1b8d-4301-9ee6-c437ef598b82"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "LED4 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 68.7436,
+                        "y": 33.7596
+                    },
+                    "uuid": "44be2516-1ecb-4430-a525-59c835de3b54"
+                },
+                {
+                    "description": "Q12 的参考字段",
+                    "pos": {
+                        "x": 68.62,
+                        "y": 34.0
+                    },
+                    "uuid": "6275a9f1-b047-4764-b252-1b518c92c8b4"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "Q12 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 73.5512,
+                        "y": 33.2738
+                    },
+                    "uuid": "bbfadafc-f410-4999-a6be-71103463dc56"
+                },
+                {
+                    "description": "R11 的参考字段",
+                    "pos": {
+                        "x": 74.01,
+                        "y": 34.5
+                    },
+                    "uuid": "fb826920-57f2-4673-9080-1bb42b62fd1a"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "Q12 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 73.5512,
+                        "y": 34.7262
+                    },
+                    "uuid": "b7fb88be-8c18-48db-bc56-11582f34d66f"
+                },
+                {
+                    "description": "R11 的参考字段",
+                    "pos": {
+                        "x": 74.01,
+                        "y": 34.5
+                    },
+                    "uuid": "fb826920-57f2-4673-9080-1bb42b62fd1a"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "R58 的参考字段",
+                    "pos": {
+                        "x": 77.51,
+                        "y": 51.5
+                    },
+                    "uuid": "622b9703-5d64-4b71-8c70-d1736036bbaa"
+                },
+                {
+                    "description": "C11 的参考字段",
+                    "pos": {
+                        "x": 77.0,
+                        "y": 50.07
+                    },
+                    "uuid": "b9ff97fa-5ee3-4db6-8624-b5f537b80128"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "U3 的参考字段",
+                    "pos": {
+                        "x": 25.0,
+                        "y": 39.57
+                    },
+                    "uuid": "94640501-626a-41ab-91a9-81dbb656ff5f"
+                },
+                {
+                    "description": "D2 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 21.4038,
+                        "y": 39.9262
+                    },
+                    "uuid": "bc8d73c3-47c4-4dd2-b5c9-09ffb1776721"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "C1 的参考字段",
+                    "pos": {
+                        "x": 30.0,
+                        "y": 30.58
+                    },
+                    "uuid": "1dbb32a0-8dcb-4390-9251-641e14345318"
+                },
+                {
+                    "description": "R14 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 29.8851,
+                        "y": 31.6606
+                    },
+                    "uuid": "9b21edde-1b45-403f-a409-5556a49f4e36"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "C1 的参考字段",
+                    "pos": {
+                        "x": 30.0,
+                        "y": 30.58
+                    },
+                    "uuid": "1dbb32a0-8dcb-4390-9251-641e14345318"
+                },
+                {
+                    "description": "R14 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 29.8851,
+                        "y": 30.3394
+                    },
+                    "uuid": "a0d6b2c4-76f3-4491-acfd-34385a9d69b1"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "R63 的参考字段",
+                    "pos": {
+                        "x": 8.51,
+                        "y": 14.5
+                    },
+                    "uuid": "1f63abe6-d455-4d22-9a01-bb36ca916327"
+                },
+                {
+                    "description": "J1 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 9.4691,
+                        "y": 14.529
+                    },
+                    "uuid": "cfb1b5b0-7099-4520-95d5-6ef83ec24cd2"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "U7 的参考字段",
+                    "pos": {
+                        "x": 12.5,
+                        "y": 15.56
+                    },
+                    "uuid": "3d01a188-7125-4ef6-b39e-7f5d64fcc900"
+                },
+                {
+                    "description": "R63 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 11.6606,
+                        "y": 14.9262
+                    },
+                    "uuid": "9fbd9546-cd59-4cf9-b96e-6e455c212fd9"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "U7 的参考字段",
+                    "pos": {
+                        "x": 12.5,
+                        "y": 15.56
+                    },
+                    "uuid": "3d01a188-7125-4ef6-b39e-7f5d64fcc900"
+                },
+                {
+                    "description": "R63 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 11.6606,
+                        "y": 15.8851
+                    },
+                    "uuid": "c881c4ca-d434-4fb4-a401-2b9e0b06535c"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "R64 的参考字段",
+                    "pos": {
+                        "x": 8.51,
+                        "y": 23.5
+                    },
+                    "uuid": "9c340459-b838-40ab-b340-b0aa6c9b9b14"
+                },
+                {
+                    "description": "J1 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 9.4691,
+                        "y": 23.469
+                    },
+                    "uuid": "ce6ce9ce-2131-45ba-b2f1-e8467c986b6f"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "J1 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 5.7508,
+                        "y": 23.469
+                    },
+                    "uuid": "133e1d0e-1c6a-42cc-91c5-5dcbd069fca4"
+                },
+                {
+                    "description": "HB 的参考字段",
+                    "pos": {
+                        "x": 3.0,
+                        "y": 23.85
+                    },
+                    "uuid": "341d3cb4-68b1-4a8e-bee5-58676d42c01f"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "R41 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 24.5606,
+                        "y": 61.4262
+                    },
+                    "uuid": "0a397b49-516c-47e3-a842-121dac6fefe1"
+                },
+                {
+                    "description": "Q5 的参考字段",
+                    "pos": {
+                        "x": 24.4,
+                        "y": 62.65
+                    },
+                    "uuid": "4a654ba9-d3da-439b-ac5d-fe4bd1d16525"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "Q5 的参考字段",
+                    "pos": {
+                        "x": 24.4,
+                        "y": 62.65
+                    },
+                    "uuid": "4a654ba9-d3da-439b-ac5d-fe4bd1d16525"
+                },
+                {
+                    "description": "R41 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 24.5606,
+                        "y": 62.3851
+                    },
+                    "uuid": "f556e3c0-3b1e-4f26-bf58-11ae0b34358d"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "D3 的参考字段",
+                    "pos": {
+                        "x": 40.0,
+                        "y": 48.24
+                    },
+                    "uuid": "034a6a20-691a-4fe5-a816-dccee727744f"
+                },
+                {
+                    "description": "L1 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 35.8238,
+                        "y": 48.0762
+                    },
+                    "uuid": "6b9f50b5-914d-4f09-9cce-4bd32a783f61"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "TP10 的参考字段",
+                    "pos": {
+                        "x": 14.5,
+                        "y": 55.552
+                    },
+                    "uuid": "647b7f4b-0d76-4e62-9a67-1fde124601f3"
+                },
+                {
+                    "description": "TP9 的参考字段",
+                    "pos": {
+                        "x": 12.0,
+                        "y": 56.052
+                    },
+                    "uuid": "6c29a1c8-bfba-4b99-af65-cb5772c1dfe3"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "R40 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 13.5606,
+                        "y": 62.3851
+                    },
+                    "uuid": "1ff8dc14-47d7-49d3-9c07-6f3e549546a6"
+                },
+                {
+                    "description": "Q4 的参考字段",
+                    "pos": {
+                        "x": 13.4,
+                        "y": 62.65
+                    },
+                    "uuid": "2aa15922-9ccf-4b2f-a3d9-7a25bbda3655"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "TP8 的 圆形, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 47.0,
+                        "y": 31.5
+                    },
+                    "uuid": "920ffbe3-03ab-4f70-9964-29b5bc58b846"
+                },
+                {
+                    "description": "LED3 的参考字段",
+                    "pos": {
+                        "x": 47.92,
+                        "y": 30.0
+                    },
+                    "uuid": "bc3a8631-a7ab-4b6b-b3fd-e5487cf9b3fc"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "R24 的参考字段",
+                    "pos": {
+                        "x": 46.01,
+                        "y": 35.0
+                    },
+                    "uuid": "3cd8e7cc-985d-45dd-9ad5-68abb328e151"
+                },
+                {
+                    "description": "R27 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 46.1606,
+                        "y": 34.0738
+                    },
+                    "uuid": "e80bec14-6a95-4630-853e-1e71bd31373e"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "R24 的参考字段",
+                    "pos": {
+                        "x": 46.01,
+                        "y": 35.0
+                    },
+                    "uuid": "3cd8e7cc-985d-45dd-9ad5-68abb328e151"
+                },
+                {
+                    "description": "R27 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 46.1606,
+                        "y": 34.9262
+                    },
+                    "uuid": "5d8dea44-371f-414a-8ff8-66e31f1db19b"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "R24 的参考字段",
+                    "pos": {
+                        "x": 46.01,
+                        "y": 35.0
+                    },
+                    "uuid": "3cd8e7cc-985d-45dd-9ad5-68abb328e151"
+                },
+                {
+                    "description": "R27 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 46.1606,
+                        "y": 35.8851
+                    },
+                    "uuid": "d5f4e7c7-0b4e-4936-8aed-b808130671e3"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "R39 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 2.5606,
+                        "y": 61.4262
+                    },
+                    "uuid": "ac619808-acaf-4099-8953-51c62dc59215"
+                },
+                {
+                    "description": "Q3 的参考字段",
+                    "pos": {
+                        "x": 2.4,
+                        "y": 62.65
+                    },
+                    "uuid": "c7ef9e11-7ada-44d6-8ff3-dabf0dcb387c"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "Q3 的参考字段",
+                    "pos": {
+                        "x": 2.4,
+                        "y": 62.65
+                    },
+                    "uuid": "c7ef9e11-7ada-44d6-8ff3-dabf0dcb387c"
+                },
+                {
+                    "description": "R39 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 2.5606,
+                        "y": 62.3851
+                    },
+                    "uuid": "cfa8d133-b5bb-4c1e-bfad-10c20dfc241b"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "D4 的参考字段",
+                    "pos": {
+                        "x": 7.9,
+                        "y": 69.18
+                    },
+                    "uuid": "8e614874-2428-458f-9735-d11983ffaf5d"
+                },
+                {
+                    "description": "J10 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 8.649,
+                        "y": 68.793
+                    },
+                    "uuid": "ef2f7c37-4aab-456e-8e33-7774818e2868"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "TP8 的参考字段",
+                    "pos": {
+                        "x": 47.0,
+                        "y": 30.052
+                    },
+                    "uuid": "81c0438c-52f0-4227-b80a-58d4437baa84"
+                },
+                {
+                    "description": "LED3 的参考字段",
+                    "pos": {
+                        "x": 47.92,
+                        "y": 30.0
+                    },
+                    "uuid": "bc3a8631-a7ab-4b6b-b3fd-e5487cf9b3fc"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "R5 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 53.1606,
+                        "y": 47.4262
+                    },
+                    "uuid": "34aff813-4571-4743-8ddd-2fe20f5b9efd"
+                },
+                {
+                    "description": "C8 的参考字段",
+                    "pos": {
+                        "x": 53.08,
+                        "y": 47.5
+                    },
+                    "uuid": "fa688d5c-1c5a-46b9-be96-d0ac9d6b82a3"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "R5 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 53.1606,
+                        "y": 48.3851
+                    },
+                    "uuid": "4098dac0-ad22-4096-9591-3fcc9d2061b4"
+                },
+                {
+                    "description": "C8 的参考字段",
+                    "pos": {
+                        "x": 53.08,
+                        "y": 47.5
+                    },
+                    "uuid": "fa688d5c-1c5a-46b9-be96-d0ac9d6b82a3"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "R5 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 53.1606,
+                        "y": 46.5738
+                    },
+                    "uuid": "55c8f4d2-1f50-4328-8a67-5b805f34b649"
+                },
+                {
+                    "description": "C8 的参考字段",
+                    "pos": {
+                        "x": 53.08,
+                        "y": 47.5
+                    },
+                    "uuid": "fa688d5c-1c5a-46b9-be96-d0ac9d6b82a3"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "C7 的参考字段",
+                    "pos": {
+                        "x": 53.08,
+                        "y": 40.5
+                    },
+                    "uuid": "9d4d4567-e73d-49e4-853b-a0d032a7877c"
+                },
+                {
+                    "description": "R4 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 53.1606,
+                        "y": 41.5738
+                    },
+                    "uuid": "a6d9abcb-7c95-4b8f-ad2a-7392a570c7d4"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "R5 的参考字段",
+                    "pos": {
+                        "x": 50.01,
+                        "y": 47.0
+                    },
+                    "uuid": "23d762ce-ac10-4242-83b8-1ca6d3e41bba"
+                },
+                {
+                    "description": "SW3 的参考字段",
+                    "pos": {
+                        "x": 48.0,
+                        "y": 47.62
+                    },
+                    "uuid": "56db438a-33db-4f8a-85a2-d09bca7904c8"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "SW3 的参考字段",
+                    "pos": {
+                        "x": 48.0,
+                        "y": 47.62
+                    },
+                    "uuid": "56db438a-33db-4f8a-85a2-d09bca7904c8"
+                },
+                {
+                    "description": "TP6 的 圆形, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 48.5,
+                        "y": 47.5
+                    },
+                    "uuid": "f5644efd-55f9-48f4-b22c-6a618b409d40"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "R4 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 53.1606,
+                        "y": 40.6149
+                    },
+                    "uuid": "9b61f2a0-91f8-4ac7-a168-a6643eca4b0d"
+                },
+                {
+                    "description": "C7 的参考字段",
+                    "pos": {
+                        "x": 53.08,
+                        "y": 40.5
+                    },
+                    "uuid": "9d4d4567-e73d-49e4-853b-a0d032a7877c"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "C7 的 弧线, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 56.940326,
+                        "y": 42.911326
+                    },
+                    "uuid": "cb5510f8-152f-44ca-926e-e0b2e5fd9a75"
+                },
+                {
+                    "description": "R32 的参考字段",
+                    "pos": {
+                        "x": 57.51,
+                        "y": 44.4
+                    },
+                    "uuid": "f599a5a3-4bb0-4200-a878-a1c42c3fb1e8"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "R5 的参考字段",
+                    "pos": {
+                        "x": 50.01,
+                        "y": 47.0
+                    },
+                    "uuid": "23d762ce-ac10-4242-83b8-1ca6d3e41bba"
+                },
+                {
+                    "description": "TP6 的参考字段",
+                    "pos": {
+                        "x": 48.5,
+                        "y": 46.052
+                    },
+                    "uuid": "2e7ccd38-732f-4ede-8953-154efa8c018e"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "R31 的参考字段",
+                    "pos": {
+                        "x": 57.51,
+                        "y": 39.6
+                    },
+                    "uuid": "4029929e-73c2-48ef-a7cb-80c31729bee3"
+                },
+                {
+                    "description": "C7 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 57.0926,
+                        "y": 39.5738
+                    },
+                    "uuid": "7a525a78-e7c3-42a5-8528-3389cc0c32c0"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "C8 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 56.9402,
+                        "y": 50.0636
+                    },
+                    "uuid": "126054d0-899a-4f08-b0ce-05af2da1edbc"
+                },
+                {
+                    "description": "R33 的参考字段",
+                    "pos": {
+                        "x": 57.51,
+                        "y": 49.2
+                    },
+                    "uuid": "24f894d8-69de-42ca-ae94-152af0e4e20e"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "R33 的参考字段",
+                    "pos": {
+                        "x": 57.51,
+                        "y": 49.2
+                    },
+                    "uuid": "24f894d8-69de-42ca-ae94-152af0e4e20e"
+                },
+                {
+                    "description": "C8 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 57.0926,
+                        "y": 48.4262
+                    },
+                    "uuid": "cff6c026-2358-43db-9574-0205a3112bae"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "R33 的参考字段",
+                    "pos": {
+                        "x": 57.51,
+                        "y": 49.2
+                    },
+                    "uuid": "24f894d8-69de-42ca-ae94-152af0e4e20e"
+                },
+                {
+                    "description": "C8 的 弧线, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 56.940326,
+                        "y": 49.911326
+                    },
+                    "uuid": "7ea45696-9c45-41f7-95b2-b1d5535adbdd"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "C8 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 57.0926,
+                        "y": 46.5738
+                    },
+                    "uuid": "e6e8b8fc-33d4-4a97-8b73-40d02481b9c2"
+                },
+                {
+                    "description": "R32 的参考字段",
+                    "pos": {
+                        "x": 57.51,
+                        "y": 44.4
+                    },
+                    "uuid": "f599a5a3-4bb0-4200-a878-a1c42c3fb1e8"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "C8 的 弧线, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 56.9403,
+                        "y": 45.0887
+                    },
+                    "uuid": "f1c12391-631d-4f39-a015-8643e38c0e12"
+                },
+                {
+                    "description": "R32 的参考字段",
+                    "pos": {
+                        "x": 57.51,
+                        "y": 44.4
+                    },
+                    "uuid": "f599a5a3-4bb0-4200-a878-a1c42c3fb1e8"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "R59 的参考字段",
+                    "pos": {
+                        "x": 84.01,
+                        "y": 18.5
+                    },
+                    "uuid": "2b8307b0-86c3-4936-98fb-2f92e392eaa3"
+                },
+                {
+                    "description": "R2 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 83.6606,
+                        "y": 17.6149
+                    },
+                    "uuid": "c6b4a391-7278-4f32-ba1a-506ff19b2ed0"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "R59 的参考字段",
+                    "pos": {
+                        "x": 84.01,
+                        "y": 18.5
+                    },
+                    "uuid": "2b8307b0-86c3-4936-98fb-2f92e392eaa3"
+                },
+                {
+                    "description": "R2 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 83.6606,
+                        "y": 18.5738
+                    },
+                    "uuid": "73618405-c2b9-4823-8c9c-bd1b93222d70"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "R2 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 83.6606,
+                        "y": 19.4262
+                    },
+                    "uuid": "2b0aabf3-3c7c-46dc-8d77-6cdeea0a1195"
+                },
+                {
+                    "description": "R59 的参考字段",
+                    "pos": {
+                        "x": 84.01,
+                        "y": 18.5
+                    },
+                    "uuid": "2b8307b0-86c3-4936-98fb-2f92e392eaa3"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "Q13 的参考字段",
+                    "pos": {
+                        "x": 86.0,
+                        "y": 19.65
+                    },
+                    "uuid": "0fd9bccd-0f2f-44ac-9ccb-cc23f9817c49"
+                },
+                {
+                    "description": "R59 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 85.8394,
+                        "y": 19.8851
+                    },
+                    "uuid": "e1ae81d5-5f70-4089-8e3b-04e45a53cbe0"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "Q13 的参考字段",
+                    "pos": {
+                        "x": 86.0,
+                        "y": 19.65
+                    },
+                    "uuid": "0fd9bccd-0f2f-44ac-9ccb-cc23f9817c49"
+                },
+                {
+                    "description": "R59 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 87.1606,
+                        "y": 19.8851
+                    },
+                    "uuid": "7cd2d275-a3e9-439f-a9ca-ca28af0589ae"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "Q13 的参考字段",
+                    "pos": {
+                        "x": 86.0,
+                        "y": 19.65
+                    },
+                    "uuid": "0fd9bccd-0f2f-44ac-9ccb-cc23f9817c49"
+                },
+                {
+                    "description": "R59 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 87.1606,
+                        "y": 18.9262
+                    },
+                    "uuid": "4dc90ab9-ab3c-4bc7-99a6-646d36b148f7"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "R55 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 80.6606,
+                        "y": 19.8851
+                    },
+                    "uuid": "38dcee47-9976-496a-93a0-dc9c1c30cda9"
+                },
+                {
+                    "description": "R2 的参考字段",
+                    "pos": {
+                        "x": 80.51,
+                        "y": 19.0
+                    },
+                    "uuid": "78cc1efc-d5b3-4715-93e5-6043e43dcd48"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "R55 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 80.6606,
+                        "y": 18.9262
+                    },
+                    "uuid": "4d4f6441-77d8-4be5-82c9-80e09a9239fa"
+                },
+                {
+                    "description": "R2 的参考字段",
+                    "pos": {
+                        "x": 80.51,
+                        "y": 19.0
+                    },
+                    "uuid": "78cc1efc-d5b3-4715-93e5-6043e43dcd48"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "R55 的参考字段",
+                    "pos": {
+                        "x": 77.51,
+                        "y": 18.5
+                    },
+                    "uuid": "6156c3b9-3d22-4da2-9d26-d133e65dd382"
+                },
+                {
+                    "description": "U4 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 76.9999,
+                        "y": 19.5
+                    },
+                    "uuid": "d12270ff-6054-4c6f-a9a9-bdf021e40492"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "Q14 的参考字段",
+                    "pos": {
+                        "x": 86.0,
+                        "y": 30.65
+                    },
+                    "uuid": "15e062f9-ad41-46cf-a394-de2000e9a715"
+                },
+                {
+                    "description": "R60 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 85.8394,
+                        "y": 30.8851
+                    },
+                    "uuid": "517fd344-3679-4e88-845e-c6b01fbdb272"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "Q14 的参考字段",
+                    "pos": {
+                        "x": 86.0,
+                        "y": 30.65
+                    },
+                    "uuid": "15e062f9-ad41-46cf-a394-de2000e9a715"
+                },
+                {
+                    "description": "R60 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 87.1606,
+                        "y": 30.8851
+                    },
+                    "uuid": "36668fdf-82f3-482c-926d-f0ab526b00ac"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "Q14 的参考字段",
+                    "pos": {
+                        "x": 86.0,
+                        "y": 30.65
+                    },
+                    "uuid": "15e062f9-ad41-46cf-a394-de2000e9a715"
+                },
+                {
+                    "description": "R60 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 87.1606,
+                        "y": 29.9262
+                    },
+                    "uuid": "3c20b67a-f2c2-4757-b4ad-1db5e16ad75e"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
         },
         {
             "description": "Silkscreen clipped by solder mask",
