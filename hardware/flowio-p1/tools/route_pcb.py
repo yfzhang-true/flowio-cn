@@ -19,13 +19,18 @@ board = pcbnew.LoadBoard(BF)
 FP = {f.GetReference(): f for f in board.GetFootprints()}
 
 def pad_pos(ref, pad_name):
-    p = FP[ref].FindPadByName(str(pad_name))
+    p = FP[ref].FindPadByNumber(str(pad_name))
     pos = p.GetPosition()
     return pcbnew.ToMM(pos.x), pcbnew.ToMM(pos.y), p
 
+# 网号预缓存: 载入后立即抓取, 之后不再调 FindNet (board.Remove 系列操作后
+# SWIG FindNet 偶发返回坏对象 — T4 实测 zone 删除后 GetNetCode AttributeError)
+_NET_CACHE = {}
+for _ni in board.GetNetInfo().NetsByName().values():
+    _NET_CACHE[_ni.GetNetname()] = _ni.GetNetCode()
+
 def netcode(name):
-    ni = board.FindNet(name)
-    return ni.GetNetCode() if ni else None
+    return _NET_CACHE.get(name)
 
 TRACK_PRIO = []
 def track(net, pts, width=0.25, layer=pcbnew.F_Cu, prio=1):
@@ -132,14 +137,15 @@ def zone(name, layer, pts, min_thickness=0.3, prio=0):
 
 # ================= 阶段 1: 平面 + 过孔 =================
 if STAGE >= 1:
-    # 删除旧 zones (gen_pcb 外部脚本加的, 若有)——但保留规则区(天线净空 keepout)
-    _n_rule = 0
-    for z in list(board.Zones()):
-        if z.GetIsRuleArea():
-            _n_rule += 1
-            continue
-        board.Remove(z)
-    print(f"[stage1] 保留规则区(keepout): {_n_rule}")
+    # 平面区幂等: 阶段1跑过后(>1 块 zone)跳过重建。判据用 COUNT 而非
+    # SWIG getter——KiCad 10 python 的 ZONE.GetLayerName/GetIsRuleArea 在
+    # 载入已填充板时会撒谎 (T4 实测: 新建 zone GetLayer()=4 正确而
+    # GetLayerName() 报 F.Cu; 载入含填充板时 GetIsRuleArea 全真致幂等
+    # 判空失效→zone 翻倍)。T3 新板恰好只有 keepout 一块。
+    # board.Remove(zone) 亦会毒化 SWIG 堆, 本项目永远无需删除重建。
+    _n_zones = len(list(board.Zones()))
+    if _n_zones > 1:
+        print(f"[stage1] zone 共 {_n_zones} 块 (>1=阶段1已跑), 跳过重建 (幂等)")
     # 层叠: F=信号+GND填充 / In1=GND面 / In2=电源分区 / B=+3V3面外的GND面
     # In2 分区按 T3b 100x80 布局重推导 (P1.0 L 形区不覆盖右带 J20-J23/D12-D15):
     #   +5V: Z5a 左上(J1/U7/C17/TP2) + Z5b buck 输入带(R3/C1/C2/D2/U3/C15)
@@ -316,8 +322,10 @@ if STAGE >= 2:
         L2 = dx * dx + dy * dy
         half_w = 0.125  # 0.25mm 信号线半宽
         for qx, qy, qnet, _np, qr in ALL_PADS:
-            if qnet == net or qnet == "":
+            if qnet == net:
                 continue
+            # ⚠ 无网焊盘(M3 安装孔/插座定位柱)也是障碍: 跳过会压孔短路
+            # (T4 实测 stage2 走线压 J23.4/U1.38 no-net pad 出 shorting_items)
             t_par = 0 if L2 == 0 else max(0, min(1, ((qx - x1) * dx + (qy - y1) * dy) / L2))
             px_, py_ = x1 + t_par * dx, y1 + t_par * dy
             if _m.hypot(qx - px_, qy - py_) < qr + half_w + gap:
@@ -326,7 +334,7 @@ if STAGE >= 2:
 
     def pad_exit(ref, padname):
         """焊盘朝外的逃逸方向(单位向量)"""
-        pad = FP[ref].FindPadByName(str(padname))
+        pad = FP[ref].FindPadByNumber(str(padname))
         ang = pad.GetOrientation()
         a = pcbnew.ToDegrees(ang.AsRadians()) if hasattr(ang, "AsRadians") else float(ang) / 10
         a = a % 360
