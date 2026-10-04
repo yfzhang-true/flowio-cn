@@ -154,14 +154,16 @@ V_ROWS = [45.0, 70.0]
 M_X, M_YS = 96.0, [20.4, 31.4, 42.4]
 
 def valve_grid():
-    """11 阀 (x, y, is_master) 壳系坐标; V1-V8 通道 + VS/VV/VF 主阀."""
+    """11 阀 (x, y, kind) 壳系坐标; kind: 'D'=F0520D (V1-V8 + VS/VF), 'B'=F0520B (VV).
+    主阀序: (96,20.4)=VS 充气 / (96,31.4)=VV 真空 / (96,42.4)=VF 排气."""
     g = []
     for c in V_COLS:
-        g.append((c, V_ROWS[1], False))           # V1-V4 前行
+        g.append((c, V_ROWS[1], "D"))           # V1-V4 前行
     for c in V_COLS:
-        g.append((c, V_ROWS[0], False))           # V5-V8 后行
-    for y in M_YS:
-        g.append((M_X, y, True))                  # VS/VV/VF
+        g.append((c, V_ROWS[0], "D"))           # V5-V8 后行
+    g.append((M_X, M_YS[0], "D"))               # VS  充气主阀 (F0520D)
+    g.append((M_X, M_YS[1], "B"))               # VV  真空主阀 (F0520B)
+    g.append((M_X, M_YS[2], "D"))               # VF  排气主阀 (F0520D)
     return g
 
 # ---------- 歧管 (1f-β 公共歧管 M: 8 通道口 + 3 主阀口 + 1 测压口 = 12 口) ----------
@@ -171,8 +173,8 @@ def valve_grid():
 MAN_Z0 = TOWER_Z0 + VB_BODY_H + 0.5      # 44.0 块底 z
 MAN_H = 13.0                              # 块厚 (公共腔+流道+变径腔)
 MAN_Z1 = MAN_Z0 + MAN_H                   # 57.0 块顶 z
-MAN_X0, MAN_X1 = 11.0, 105.0              # 覆 11 承口 (通道阵 12.5..84.5 / 主阀 88.5..103.5)
-MAN_Y0, MAN_Y1 = 12.0, 78.0               # 覆主阀 y 20.4-8 .. 前行阀 70+8
+MAN_X0, MAN_X1 = 2.0, 105.0              # 覆 11 承口 + 4 支腿投影 (块底 z44 悬空, 腿接块)
+MAN_Y0, MAN_Y1 = 4.0, 84.0               # 同上; 块界不触壳壁 (OW/OH 105.8/85.8)
 SOCK_D_D = _PNEU["vd_noz"] + 0.2          # 3.2 F0520D 承口孔径 (嘴 3.0 + 0.2 间隙)
 SOCK_D_B = _PNEU["vb_noz"] + 0.2          # 4.8 F0520B 承口孔径 (嘴 4.6 + 0.2 间隙)
 SOCK_BOSS_D, SOCK_BOSS_Z1 = 6.2, 36.5     # D 阀承插短管: ⌀6.2 外径, 下端 z (嘴 36..42
@@ -215,20 +217,25 @@ def wall_holes():
 # ---------- 泵模块 (1h 分装式, 独立小盒) ----------
 PMOD_WALL = 2.4                            # 壁厚 (与主壳同工艺)
 PMOD_CLR = 2.0                             # 泵-壁装配间隙 (含嘴接管弯曲余量)
-PMOD_IN_L = _PNEU["pump_l"] + 2 * PMOD_CLR   # 62.1 内腔长 (X, 泵横躺轴向)
-PMOD_IN_W = _PNEU["pump_dia"] + 2 * PMOD_CLR # 28.0 内腔宽
-PMOD_IN_H = _PNEU["pump_h"] + 1.25           # 33.0 内腔高 (嘴顶 31.75 + 1.25 顶隙)
-PMOD_L = PMOD_IN_L + 2 * PMOD_WALL           # 66.9 外长
-PMOD_W = PMOD_IN_W + 2 * PMOD_WALL           # 32.8 外宽
-PMOD_H = PMOD_IN_H + 2 * PMOD_WALL           # 37.8 外高
 # 支架: 致荣硅胶环 ID23/OD26 (过盈夹持 ⌀24 泵体, devices.json bracket 真值);
 # 孪生建模取 ID24.2 (+0.2 装配间隙) 令 FCL 干涉守门 0.000 —— 真值在 devices.json,
 # 孪生是视觉件 (注释即推导)。脚距 46 = 两环 M3 脚沿泵轴间距, 环宽 8。
 BKT_ID, BKT_OD, BKT_W, BKT_SPAN = 24.2, 26.0, 8.0, 46.0
 BKT_FOOT_T = 3.0                            # 环下 M3 脚垫厚
-PUMP_AXIS_Z = BKT_FOOT_T + BKT_OD / 2.0     # 16.0 泵轴 z (脚垫顶 + 环外径半)
+PMOD_IN_L = _PNEU["pump_l"] + 2 * PMOD_CLR   # 62.1 内腔长 (X, 泵横躺轴向)
+PMOD_IN_W = _PNEU["pump_dia"] + 2 * PMOD_CLR # 28.0 内腔宽
+# 内腔高 = 腔底起: 脚垫 3 + 环外径半 13 (泵轴) + 轴上嘴顶 (总高 31.5 - ⌀24/2 = 19.5)
+#   + 1.0 顶隙 = 36.5
+PMOD_IN_H = BKT_FOOT_T + BKT_OD / 2.0 + (_PNEU["pump_h"] - _PNEU["pump_dia"] / 2.0) + 1.0
+PMOD_L = PMOD_IN_L + 2 * PMOD_WALL           # 66.9 外长
+PMOD_W = PMOD_IN_W + 2 * PMOD_WALL           # 32.8 外宽
+PMOD_H = PMOD_IN_H + 2 * PMOD_WALL           # 41.3 外高
+PUMP_AXIS_Z = PMOD_WALL + BKT_FOOT_T + BKT_OD / 2.0   # 18.4 泵轴 z (模块系: 腔底+脚+环)
+PMOD_CX, PMOD_CY = PMOD_L / 2.0, PMOD_W / 2.0         # 33.45 / 16.4 泵位心 (模块系)
+PUMP_NOZ_DX = [-14.0, -4.0]                 # 双顶嘴相对泵心 x 偏移 (头端 -X, 实物照估值)
 # 面板 (X+ 端面): 双快插 ⌀5.6 (充/吸 5mm 管, 内接跳管至双顶嘴) + JST 2P 出线孔 ⌀5.0
 PMOD_PORT_D, PMOD_PORT_DY, PMOD_WIRE_D = 5.6, 8.0, 5.0
+PMOD_WIRE_Z = 6.0                           # 出线孔 z (腔底带, 电机引线端)
 # 双体装配位姿 (孪生/装配契约): 泵模块置于主壳 +X 侧, 同桌面 z0=0, y 居中
 PMOD_OFF = (OW + 30.0, (OH - PMOD_W) / 2.0, 0.0)   # (135.8, 26.5, 0)
 
