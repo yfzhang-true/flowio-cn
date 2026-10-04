@@ -3,6 +3,8 @@
 
 分层追加 (TDD 先红后绿):
   T1 test_schema          — devices.json 覆盖 38 行 BOM/字段完整/17 连接器有 port
+     test_schema_pneumatic — pneumatic_devices 段: 4组完整/字段完整/负压阀域(spec 1f-β)/
+                             DC4.5V 电压档/refs 唯一/泵压力包络 (+常驻坏副本负测试)
   T2 test_orientation     — 端口射线朝外 + 贴边 (periphery bias / I-O keepout 断言)
   T3 test_matching        — 17 连接器 <-> 17 槽 完美匹配 (networkx)
   T4 test_drill_keepout   — 器件 OBB 避让 M3 孔 + 铜柱投影
@@ -10,6 +12,7 @@
 
 运行: tools/venv-cad/Scripts/python enclosure/test_device_geom.py
 """
+import copy
 import csv
 import json
 import math
@@ -107,6 +110,176 @@ def test_schema():
     LEGAL = {"EDGE_OUT", "SURFACE", "INTERNAL"}
     badp = [e["lcsc"] for e in entries if e["placement"] not in LEGAL]
     check("T1 schema: placement 枚举合法", not badp, str(badp[:4]))
+
+
+# ══════════ T1: 气动器件段 schema (pneumatic_devices, spec 1f-β) ══════════
+PNEU_GROUPS = ("valves", "valve_vacuum_master", "pump", "sensor")
+PNEU_ACTUATORS = ("valves", "valve_vacuum_master", "pump")   # DC4.5V 执行器; sensor 为 5V 轨直供 I2C 件
+PNEU_RATED_V = 4.5                                            # P1.1 定案: 全系 DC4.5V 变体
+PNEU_RAIL_V = 5.0                                             # _meta.drive_policy.rail_v
+
+
+def _pneu_tag(g, e):
+    return "%s:%s" % (g, "/".join(e.get("refs") or ["?"]))
+
+
+def _pneu_entries(pn):
+    """展平 (group, entry) 对; 组缺失按空处理."""
+    out = []
+    for g in PNEU_GROUPS:
+        for e in (pn.get(g) or []):
+            out.append((g, e))
+    return out
+
+
+def _pneu_completeness_bad(pn):
+    """每条气动 entry 必需字段: refs/model/manufacturer/datasheet/electrical/dims
+    + 阀/传感器单口 port + 泵双口 ports."""
+    bad = []
+    for g, e in _pneu_entries(pn):
+        tag = _pneu_tag(g, e)
+        if not (isinstance(e.get("refs"), list) and e["refs"]):
+            bad.append(tag + "(refs)")
+        for f in ("model", "manufacturer", "datasheet"):
+            if not (isinstance(e.get(f), str) and e[f].strip()):
+                bad.append(tag + "(%s)" % f)
+        if not isinstance(e.get("electrical"), dict):
+            bad.append(tag + "(electrical)")
+        dm = e.get("dims")
+        if not (isinstance(dm, dict) and all(isinstance(dm.get(k), (int, float)) and dm[k] > 0
+                                             for k in ("w", "d", "h"))):
+            bad.append(tag + "(dims)")
+        if g != "pump" and not e.get("port"):
+            bad.append(tag + "(port)")
+        if g == "pump" and not e.get("ports"):
+            bad.append(tag + "(ports)")
+    return bad
+
+
+def _pneu_domain_ok(pn):
+    """spec 1f-β 负压专用阀域: pressure_kpa 上限<=0 的阀 (F0520B) 只允许出现在
+    valve_vacuum_master 组; valves 组 (V1-V8/VS/VF 正压通用阀位) 不允许混入;
+    反向: valve_vacuum_master 组内必须全为负压域条目."""
+    for e in (pn.get("valves") or []):
+        pk = e.get("pressure_kpa")
+        if not pk or pk[1] <= 0:
+            return False
+    for e in (pn.get("valve_vacuum_master") or []):
+        pk = e.get("pressure_kpa")
+        if not pk or pk[1] > 0:
+            return False
+    return True
+
+
+def _pneu_voltage_bad(pn):
+    """电压档一致性 (P1.1 定案全系 DC4.5V): 执行器 (阀/泵) electrical.rated_v 必须为 4.5;
+    无 rated_v 的直供件 (sensor) 其 v_range 必须覆盖 5V 轨."""
+    rail = ((pn.get("_meta") or {}).get("drive_policy") or {}).get("rail_v")
+    bad = []
+    for g, e in _pneu_entries(pn):
+        el = e.get("electrical") or {}
+        tag = _pneu_tag(g, e)
+        if g in PNEU_ACTUATORS:
+            if "rated_v" not in el:
+                bad.append(tag + "(缺rated_v)")
+            elif el["rated_v"] != PNEU_RATED_V:
+                bad.append(tag + "(rated_v=%s≠%s)" % (el["rated_v"], PNEU_RATED_V))
+        else:
+            vr = el.get("v_range")
+            if not (vr and rail is not None and vr[0] <= rail <= vr[1]):
+                bad.append(tag + "(v_range=%s 不含rail=%s)" % (vr, rail))
+    return bad
+
+
+def _pneu_refs_dup(pn, pcb_refs):
+    """四组合计 refs 不得重复, 且不得与 devices 段 (PCB 贴装) refs 冲突."""
+    seen, dups = set(), set()
+    for g, e in _pneu_entries(pn):
+        for r in (e.get("refs") or []):
+            if r in seen or r in pcb_refs:
+                dups.add(r)
+            seen.add(r)
+    return sorted(dups)
+
+
+def _pneu_envelope_bad(pn):
+    """泵压力窗必须严格包络两类阀压力窗 (valve ⊂ pump, 余量>0)."""
+    pumps = [e for e in (pn.get("pump") or []) if e.get("pressure_kpa")]
+    bad = []
+    for g in ("valves", "valve_vacuum_master"):
+        for e in (pn.get(g) or []):
+            pk = e.get("pressure_kpa")
+            if not pk:
+                bad.append(_pneu_tag(g, e) + "(缺pressure_kpa)")
+                continue
+            margins = [min(pk[0] - p["pressure_kpa"][0], p["pressure_kpa"][1] - pk[1])
+                       for p in pumps]
+            if not margins or max(margins) <= 0:
+                bad.append("%s:%s %s" % (g, "/".join(e.get("refs") or ["?"]), pk))
+    return bad
+
+
+def test_schema_pneumatic():
+    dev = load_devices()
+    pn = dev.get("pneumatic_devices")
+
+    # 1) 段完整性: pneumatic_devices 存在且 4 列表组均非空
+    empty = [g for g in PNEU_GROUPS if not (isinstance((pn or {}).get(g), list) and pn[g])]
+    check("T1 pneumatic: 段完整 (pneumatic_devices 4 列表组非空)", bool(pn) and not empty,
+          "缺/空: %s" % empty)
+
+    # 2) 字段完整: 每条气动 entry 必需字段无缺失
+    bad = _pneu_completeness_bad(pn or {})
+    check("T1 pneumatic: 字段完整 (refs/model/manufacturer/datasheet/electrical/dims/port(s))",
+          not bad, str(bad[:6]))
+
+    # 3) 负压专用阀域 (spec 1f-β, 核心): 上限<=0 的阀只允许在 valve_vacuum_master
+    check("T1 pneumatic: 负压阀域 (pressure_kpa 上限≤0 仅 valve_vacuum_master)",
+          _pneu_domain_ok(pn or {}))
+
+    # 4) 电压档一致性 (P1.1 定案全系 DC4.5V): 执行器 rated_v=4.5; sensor v_range 覆盖 5V 轨
+    vbad = _pneu_voltage_bad(pn or {})
+    check("T1 pneumatic: 电压档一致 (执行器 rated_v=4.5, sensor v_range 覆盖 5V 轨)",
+          not vbad, str(vbad[:4]))
+    meta = (pn or {}).get("_meta") or {}
+    rail = (meta.get("drive_policy") or {}).get("rail_v")
+    variant = meta.get("voltage_variant") or ""
+    check("T1 pneumatic: drive_policy.rail_v=5.0 且 voltage_variant 含 DC4.5V",
+          rail == PNEU_RAIL_V and "DC4.5V" in variant,
+          "rail=%s variant=%s" % (rail, variant[:36]))
+
+    # 5) refs 唯一性: 四组合计不重复, 且不与 devices 段冲突
+    pcb_refs = set()
+    for e in dev["devices"]:
+        pcb_refs |= set(e["refs"])
+    dups = _pneu_refs_dup(pn or {}, pcb_refs)
+    check("T1 pneumatic: refs 唯一 (气动四组内 + 不与 devices 段冲突)", not dups, str(dups[:6]))
+
+    # 6) 压力包络 sanity: 两类阀压力窗 ⊂ 泵压力窗 (严格包含, 余量>0)
+    ebad = _pneu_envelope_bad(pn or {})
+    margins = []
+    for g in ("valves", "valve_vacuum_master"):
+        for e in (pn or {}).get(g) or []:
+            pk = e.get("pressure_kpa")
+            for p in (pn or {}).get("pump") or []:
+                if pk and p.get("pressure_kpa"):
+                    margins.append(min(pk[0] - p["pressure_kpa"][0],
+                                       p["pressure_kpa"][1] - pk[1]))
+    check("T1 pneumatic: 泵压力窗严格包络两类阀 (余量>0)", not ebad,
+          ("最小余量 %.1f kPa" % min(margins)) if margins else str(ebad[:4]))
+
+    # ── 常驻负测试 (TDD 红证明, 防未来退化): deepcopy 坏副本必须让断言翻红 ──
+    b_dom = copy.deepcopy(pn)
+    leak = copy.deepcopy(b_dom["valve_vacuum_master"][0])
+    leak["refs"] = ["VX"]                        # 改名隔离: 只打域断言, 不连坐 refs 唯一性
+    b_dom["valves"].append(leak)                 # 把 F0520B 负压阀混入正压阀组
+    check("T1 pneumatic: 负测试-负压阀混入 valves 组必失败", not _pneu_domain_ok(b_dom),
+          "domain_ok(坏副本)=%s (须 False)" % _pneu_domain_ok(b_dom))
+
+    b_vol = copy.deepcopy(pn)
+    b_vol["valves"][0]["electrical"]["rated_v"] = 3.7     # 电压档改坏 (非 4.5)
+    vbad2 = _pneu_voltage_bad(b_vol)
+    check("T1 pneumatic: 负测试-rated_v 改 3.7V 必失败", bool(vbad2), str(vbad2[:2]))
 
 
 # ══════════ T2: 几何核 — 朝向/贴边/FCL 碰撞 ══════════
@@ -250,6 +423,8 @@ if __name__ == "__main__":
     if "schema" in which:
         print("== T1 器件数据层 ==")
         test_schema()
+        print("== T1 气动器件段 (pneumatic_devices) ==")
+        test_schema_pneumatic()
     if "geom" in which or "all" in which:
         print("== T2 几何核 ==")
         test_orientation()
