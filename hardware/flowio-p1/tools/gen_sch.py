@@ -195,9 +195,18 @@ TP_DEF = _TP_FALLBACK
 
 # ---------------------------------------------------------------- 自建符号 (P1.1)
 # 本地 JLC-MCP 库缺以下符号, 按需内嵌生成 (pin 坐标=连接点, 本体外延 2.54):
-#   TYPE-C-31-M-12  电源 USB-C 16P (C165948): A 列左 / B 列右 / SH 屏蔽下
-#   WAFER-XH2_54-2PZZ  XH2.54-2P 卧贴插座 (footprint 库由 T3 建, 此处字符串先行)
-#   XGZP6897D  板载压力传感 SOP-8 (2=VDD 6=SDA 7=SCL 8=GND, 其余 NC)
+#   WAFER-XH2_54-2PZZ  XH2.54-2P 卧贴插座 (footprint=C7429671 真件, 焊盘 3/4 壳
+#                      体定位片无网 → 符号只建模信号 1/2)
+#   XGZP6897D  板载压力传感 宽体 SOP-8 (2=VDD 6=SDA 7=SCL 8=GND, 其余 NC)
+# 注: TYPE-C-31-M-12 曾为自建, T3 装 C165948 后 JLC 库有真符号 (引脚名与封装
+# 焊盘一一对应: A1B12/A4B9/B1A12/B4A9/EH1-4) → 改用库符号, 防遮蔽断言放行。
+
+# P1.1 选型定案 (T3): XH2.54-2P 卧贴插座 = Megastar ZX-XH2.54-2PWT (C7429671,
+# jlcpcb MCP 已装入全局 KiCad 库; 库存 13.9 万, 经济装配, SMD 右贴 3A/250V,
+# 本体 10.0×7.8×6.2mm; footprint 焊盘 1/2=信号(口侧) + 3/4=壳体定位焊片(背侧, 不布网))。
+FP_XH2P = "JLC-MCP:CONN-SMD_2P-P2.54_MEGASTAR_ZX-XH2.54-2PWT"
+LCSC_XH2P = "C7429671"
+
 def _mk_custom(name, ref_prefix, val, fp, pin_tab, rect, keywords=""):
     body = []
     a = body.append
@@ -236,27 +245,13 @@ def _mk_custom(name, ref_prefix, val, fp, pin_tab, rect, keywords=""):
     assert name not in LIBS, name
     LIBS[name] = dict(text="\n".join(body), pins=pins, bbox=bbox)
 
-_mk_custom("TYPE-C-31-M-12", "USB", "TYPE-C 16P",
-           "JLC-MCP:TYPE-C-SMD_TYPE-C-31-M-12",
-           # (编号, 名称, x, y, 角度)  角度 0=朝左 180=朝右 90=朝下 (符号系)
-           [("A1", "GND", -10.16, 8.89, 0), ("A4", "VBUS", -10.16, 6.35, 0),
-            ("A5", "CC1", -10.16, 3.81, 0), ("A6", "DP", -10.16, 1.27, 0),
-            ("A7", "DN", -10.16, -1.27, 0), ("A8", "SBU1", -10.16, -3.81, 0),
-            ("A9", "VBUS", -10.16, -6.35, 0), ("A12", "GND", -10.16, -8.89, 0),
-            ("B12", "GND", 10.16, 8.89, 180), ("B9", "VBUS", 10.16, 6.35, 180),
-            ("B8", "SBU2", 10.16, 3.81, 180), ("B7", "DP", 10.16, 1.27, 180),
-            ("B6", "DN", 10.16, -1.27, 180), ("B5", "CC2", 10.16, -3.81, 180),
-            ("B4", "VBUS", 10.16, -6.35, 180), ("B1", "GND", 10.16, -8.89, 180),
-            ("SH", "SHIELD", 0, -12.7, 90)],
-           (-7.62, 12.7, 7.62, -10.16), "C165948")
-
 _mk_custom("WAFER-XH2_54-2PZZ", "J", "XH 2P",
-           "JLC-MCP:CONN-TH_2P-P2.54_XH-2P",
+           FP_XH2P,
            [("1", "1", -5.08, 1.27, 0), ("2", "2", -5.08, -1.27, 0)],
            (-2.54, 3.81, 2.54, -3.81))
 
 _mk_custom("XGZP6897D", "U", "XGZP6897D",
-           "JLC-MCP:SOP-8_L4.9-W3.9-P1.27-LS6.0-BL",
+           "LOCAL:XGZP6897D-SOP8-W7.96-P2.54",
            [("1", "NC", -7.62, 3.81, 0), ("2", "VDD", -7.62, 1.27, 0),
             ("3", "NC", -7.62, -1.27, 0), ("4", "NC", -7.62, -3.81, 0),
             ("5", "NC", 7.62, -3.81, 180), ("6", "SDA", 7.62, -1.27, 180),
@@ -264,6 +259,7 @@ _mk_custom("XGZP6897D", "U", "XGZP6897D",
            (-5.08, 5.08, 5.08, -5.08))
 
 # ---------------------------------------------------------------- 器件清单
+
 P = lambda ref, sym, val, fp, lcsc, x, y, nets: dict(
     ref=ref, sym=sym, val=val, fp=fp, lcsc=lcsc, x=x, y=y, nets=nets)
 
@@ -279,10 +275,6 @@ LCSC = {R1k: "C21190", R10k: "C25804", R22: "C23345", R330: "C23138", R47K: "C23
         R51K: "C23186", R324K: "C22994", R100K: "C14675", C100N: "C1591", C1U: "C15849",
         C10U: "C13585", C100U: "C15008", C2N2: "C33353", C22P: "C1653"}
 
-# P1.1 待选型: XH2.54-2P 卧贴插座 (J10-J17 由 WJ500V/C8465 改型, J20-J23 新增)。
-# 置空期间 inst_text 不写 LCSC 属性 → BOM 静默缺这 12 只插座的物料编码
-# (连同 U6 XGZP6897D 共 13 个待补); T3 定型选型后回填, make_bom 重跑即恢复。
-LCSC_XH2P = ""  # TODO(T3): 选型补 C 号 (XH2.54-2P 卧贴)
 
 VALVE_GPIO = ["IO4", "IO5", "IO6", "IO7", "IO10", "IO11", "IO12", "IO21"]
 
@@ -291,12 +283,14 @@ PARTS = []
 # J1 VBUS 直挂 +5V (5A 路径, 无 OR 二极管); CC1/CC2 各 5.1k Rd 下拉 (免 PD 取 5V/3A)
 # D1(DC_IN OR) 随 DC005 一并移除; D2(调试口 OR) 保留 — 反向阻断, 仅调试单线供电时馈 +5V
 PARTS += [
-    P("J1", "TYPE-C-31-M-12", "USB-C PWR", "JLC-MCP:TYPE-C-SMD_TYPE-C-31-M-12",
+    P("J1", "TYPE-C-31-M-12", "USB-C PWR", "JLC-MCP:USB-C_SMD-TYPE-C-31-M-12_1",
       "C165948", 50, 55,
-      {"A1": "GND", "A4": "+5V", "A5": "P5_CC1", "A6": None, "A7": None,
-       "A8": None, "A9": "+5V", "A12": "GND",
-       "B1": "GND", "B4": "+5V", "B5": "P5_CC2", "B6": None, "B7": None,
-       "B8": None, "B9": "+5V", "B12": "GND", "SH": "GND"}),
+      # JLC 库符号引脚名=封装焊盘名 (A1B12/A4B9/B1A12/B4A9 合并焊盘 + EH1-4 屏蔽腿);
+      # DP/DN/SBU 本板不用 (电源口), NC 悬空
+      {"A1B12": "GND", "A4B9": "+5V", "B1A12": "GND", "B4A9": "+5V",
+       "A5": "P5_CC1", "B5": "P5_CC2",
+       "B8": None, "B7": None, "A6": None, "A7": None, "B6": None, "A8": None,
+       "1": "GND", "2": "GND", "3": "GND", "4": "GND"}),
     P("C17", C10U, "10uF", FC1206, LCSC[C10U], 75, 55, {"1": "+5V", "2": "GND"}),
     P("R63", R51K, "5.1k", FR, LCSC[R51K], 100, 42, {"1": "P5_CC1", "2": "GND"}),
     P("R64", R51K, "5.1k", FR, LCSC[R51K], 100, 68, {"1": "P5_CC2", "2": "GND"}),
@@ -446,7 +440,7 @@ for i in range(8):
         P(f"D{4+i}", "SS14", "SS14", "JLC-MCP:SMA_L4.2-W2.6-LS5.0-RD_1", "C2480",
           x0 + 16, 365, {"2": f"DRV{i+1}", "1": "+5V"}),
         P(f"J{10+i}", "WAFER-XH2_54-2PZZ", "VALVE",
-          "JLC-MCP:CONN-TH_2P-P2.54_XH-2P", LCSC_XH2P, x0, 400,
+          FP_XH2P, LCSC_XH2P, x0, 400,
           {"1": "+5V", "2": f"DRV{i+1}"}),
     ]
 # ---- P1.1: 3 路主阀 (S充气/V真空/F排气, 1f-β 公共歧管) + 1 路泵驱动 (底部右段) --
@@ -465,13 +459,17 @@ for k, (tag, gpio) in enumerate(MAIN_CH):
         P(f"D{12+k}", "SS14", "SS14", "JLC-MCP:SMA_L4.2-W2.6-LS5.0-RD_1", "C2480",
           x0 + 16, 365, {"2": f"DRV_{tag}", "1": "+5V"}),
         P(f"J{20+k}", "WAFER-XH2_54-2PZZ", "VALVE" if tag != "PUMP" else "PUMP",
-          "JLC-MCP:CONN-TH_2P-P2.54_XH-2P", LCSC_XH2P, x0, 400,
+          FP_XH2P, LCSC_XH2P, x0, 400,
           {"1": "+5V", "2": f"DRV_{tag}"}),
     ]
-# ---- P1.1: U6 XGZP6897D 板载压力传感 (SOP-8, +3V3 域 I2C 直挂主控) -------------
+# ---- P1.1: U6 XGZP6897D 板载压力传感 (宽体 SOP-8, +3V3 域 I2C 直挂主控) --------
+# LCSC 无 CFSensor 现货 (仅 JLC 扩展件 C99xxx 零库存无资料) → 淘宝件 (CFSensor
+# 深圳闽芯店, 见 devices.json pneumatic_devices.sensor), 不入 JLC BOM; footprint
+# 按 datasheet 手建 (LOCAL: 前缀, gen_pcb.py 内联生成): 排距 7.96 / 节距 2.54 /
+# 焊盘 0.9×2.0 / 本体 10.6×7.6。
 PARTS += [
-    P("U6", "XGZP6897D", "XGZP6897D", "JLC-MCP:SOP-8_L4.9-W3.9-P1.27-LS6.0-BL", "",
-      # TODO(T3): 选型补 C 号 (XGZP6897D I2C 版, SOP-8) — 置空即 BOM 缺该物料编码
+    P("U6", "XGZP6897D", "XGZP6897D", "LOCAL:XGZP6897D-SOP8-W7.96-P2.54", "",
+      # TODO(采购): 淘宝件 XGZP6897D100KPDPN (量程 -100~100kPa, I2C 0x6D) — 不入 JLC BOM
       185, 240, {"2": "+3V3", "6": "I2C_SDA", "7": "I2C_SCL", "8": "GND",
                  "1": None, "3": None, "4": None, "5": None}),
     P("C18", C100N, "100nF", FC0603, LCSC[C100N], 215, 240, {"1": "+3V3", "2": "GND"}),

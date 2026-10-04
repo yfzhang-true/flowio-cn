@@ -44,6 +44,16 @@ def _lit(n, env=None):
         return tuple(_lit(e, env) for e in n.elts)
     if isinstance(n, ast.Dict):
         return {_lit(k, env): _lit(v, env) for k, v in zip(n.keys, n.values)}
+    if isinstance(n, ast.IfExp):
+        return _lit(n.body, env) if _lit(n.test, env) else _lit(n.orelse, env)
+    if isinstance(n, ast.Compare):
+        import operator as _op
+        _cmps = {ast.Eq: _op.eq, ast.NotEq: _op.ne, ast.Lt: _op.lt,
+                 ast.LtE: _op.le, ast.Gt: _op.gt, ast.GtE: _op.ge}
+        left = _lit(n.left, env)
+        for op, cmp in zip(n.ops, n.comparators):
+            left = _cmps[type(op)](left, _lit(cmp, env))
+        return left
     if isinstance(n, ast.BinOp):
         import operator as _op
         _ops = {ast.Add: _op.add, ast.Sub: _op.sub, ast.Mult: _op.mul,
@@ -99,6 +109,15 @@ def _targets(node):
     return node.targets if isinstance(node, ast.Assign) else [node.target]
 
 
+def _unpack(tgt, item, env):
+    """递归解包 for 目标 (支持嵌套元组, 如 `for i, (a, b) in enumerate(...)`)."""
+    if isinstance(tgt, ast.Name):
+        env[tgt.id] = item
+    elif isinstance(tgt, (ast.Tuple, ast.List)):
+        for _t, _v in zip(tgt.elts, item):
+            _unpack(_t, _v, env)
+
+
 for _node in _tree.body:
     if isinstance(_node, (ast.Assign, ast.AugAssign)):
         _t0 = _targets(_node)[0]
@@ -131,12 +150,7 @@ for _node in _tree.body:
         try:
             for _item in _iterable(_node):
                 _env = {}
-                _tgt = _node.target
-                if isinstance(_tgt, ast.Name):
-                    _env[_tgt.id] = _item
-                elif isinstance(_tgt, (ast.Tuple, ast.List)):
-                    for _t, _v in zip(_tgt.elts, _item):
-                        _env[_t.id] = _v
+                _unpack(_node.target, _item, _env)
                 for _stmt in _node.body:
                     if isinstance(_stmt, ast.Expr) and isinstance(_stmt.value, ast.Call):
                         _c = _stmt.value
@@ -226,12 +240,14 @@ print(f"PARTS 总数: {len(PARTS)}  (可上贴 {len(placed)} / 无码器件 {len
 print(f"BOM 行数:   {len(rows)}  (SMT {len(smt_rows)} 行 {n_smt} 件 / THT {len(tht_rows)} 行 {n_tht} 件)")
 print(f"SMT LCSC 码覆盖率: {sum(1 for p in placed if not is_tht(p['fp']))}/{n_smt} = 100%"
       if all(p['lcsc'] for p in placed if not is_tht(p['fp'])) else "SMT 存在缺码!")
-print(f"THT LCSC 码覆盖率: {n_tht}/{n_tht} = 100%  "
-      f"(J1={rows and next(r['lcsc'] for r in tht_rows if 'DC' in r['fp'])}, "
-      f"XH={next(r['lcsc'] for r in tht_rows if '4P-P2.54' in r['fp'])}, "
-      f"端子={next(r['lcsc'] for r in tht_rows if 'P5.00' in r['fp'])})")
+# P1.1: 全 THT 件 = 7x XH-4P 传感/调试座; 电源口已换 USB-C SMD (C165948),
+# 12x 阀座换 XH-2P SMD (C7429671) — WJ500V 端子排移除
+if n_tht:
+    tht_tags = ", ".join(f"{r['lcsc']}({r['refs'][0]})" for r in tht_rows)
+    print(f"THT LCSC 码覆盖率: {n_tht}/{n_tht} = 100%  ({tht_tags})")
 print(f"无码不上贴: {', '.join(p['ref'] for p in noplace)}  "
-      f"(测试点=裸铜焊盘, 无实物件; 安装孔 HA-HD 为板件孔, 均不入 BOM)")
+      f"(测试点=裸铜焊盘; 安装孔 HA-HD 为板件孔; "
+      f"U6 XGZP6897D=淘宝件 CFSensor 闽芯, 不入 JLC BOM — 见 gen_sch.py 注释)")
 if only_pos:
     print(f"警告: pos 有而 BOM 无: {only_pos}")
 if only_bom:
