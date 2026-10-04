@@ -8,12 +8,18 @@ import { RoomEnvironment } from "../vendor/addons/RoomEnvironment.js";
 
 const easeOutQuint = (t) => 1 - Math.pow(1 - t, 5);
 
-// 材质表 (plan Task3: 器件中性灰 / PCB 墨绿微金属 / 壳喷砂灰)
+// 材质表 (plan Task3: 器件中性灰 / PCB 墨绿微金属 / 壳喷砂灰; T6 气动件分色)
 const PART_MATS = {
+  manifold:    { color: 0x6b7fa3, roughness: 0.45, metalness: 0.15, env: 0.85 },
+  valves:      { color: 0x4a6da7, roughness: 0.40, metalness: 0.35, env: 0.90 },
   parts_F:     { color: 0xb9bcc2, roughness: 0.50, metalness: 0.10, env: 0.85 },
   pcb:         { color: 0x0f3d2a, roughness: 0.65, metalness: 0.25, env: 0.75 },
   case_top:    { color: 0x9a9a9e, roughness: 0.55, metalness: 0.20, env: 0.90 },
   case_bottom: { color: 0x8f8f93, roughness: 0.55, metalness: 0.20, env: 0.80 },
+  pump_case:   { color: 0x8f8f93, roughness: 0.55, metalness: 0.20, env: 0.80 },
+  pump:        { color: 0x555b63, roughness: 0.35, metalness: 0.55, env: 0.95 },
+  brackets:    { color: 0xc9a06a, roughness: 0.85, metalness: 0.00, env: 0.50 },
+  tubes:       { color: 0x7ec8e3, roughness: 0.25, metalness: 0.00, env: 1.00 },
 };
 
 function makeGroundShadowTex() {
@@ -70,7 +76,7 @@ export async function createScene(canvas, onPartClick = () => {}) {
   // ── STL 装配 (assembly.json 同源) ──────────────────────────────
   const man = await (await fetch("/api/board/assembly")).json();
   if (!man || !Array.isArray(man.parts) || !man.parts.length) throw new Error("装配清单为空");
-  const bb = man.bbox_mm || [95.8, 80.8, 26.1];   // case_geom.BBOX_MM 同源
+  const bb = man.bbox_mm || [202.7, 85.8, 57.0];  // case_geom.BBOX_MM 同源 (P1.1 T6 双体: 主模块+气动塔+泵模块)
   const center = new THREE.Vector3(bb[0] / 2, bb[1] / 2, bb[2] / 2);
 
   const loader = new STLLoader();
