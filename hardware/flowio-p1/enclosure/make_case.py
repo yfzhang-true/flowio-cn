@@ -57,8 +57,10 @@ def hole_cut(face, u, z, dia):
     r = dia / 2.0
     if face == "B":      # 轴向 Y: 贯穿裙带 (81..83) + 壁带 (83.4..85.8)
         return Part.makeCylinder(r, 6.0, App.Vector(u, G.OH - 5.3, z), App.Vector(0, 1, 0))
-    if face == "R":      # 轴向 X: 仅下壳壁带 (102.9..105.8), 裙带 z 12.1 之上无此孔
-        return Part.makeCylinder(r, 4.9, App.Vector(G.OW - 1.6, u, z), App.Vector(-1, 0, 0))
+    if face == "R":      # 轴向 X: 仅下壳壁带 (103.4..105.8; z=5 在裙带 12.1 之下, 无裙可穿)。
+        # 起刀自外缘外 0.5、收刀入腔内 1.1 —— 旧版 (OW-1.6) 起刀点已在壁内, 向 -X 切
+        # 只覆盖 99.3..104.2, 漏切外缘 104.2..105.8 共 1.6mm 盲皮 (探针断言抓获, 39.4mm^3)。
+        return Part.makeCylinder(r, 4.0, App.Vector(G.OW + 0.5, u, z), App.Vector(-1, 0, 0))
     return None
 
 
@@ -67,8 +69,9 @@ def pneu_hole_cuts():
     cuts = []
     for face, u, z, dia, _tag in G.wall_holes():
         cuts.append(hole_cut(face, u, z, dia))
-    cx, cy = G.CEIL_SENS                     # 天花板过孔 (轴 Z, 贯穿 19.1..21.5)
-    cuts.append(Part.makeCylinder(G.PORT_D_SENS / 2.0, 4.0, App.Vector(cx, cy, G.OUTER_H - 2.0)))
+    cx, cy = G.CEIL_SENS                     # 天花板过孔 (轴 Z, 贯穿天花带 19.1..21.5);
+    #   旧版自 OUTER_H-2.0=19.5 起刀漏切内侧 19.1..19.5 共 0.4mm 盲皮 (探针断言抓获, 3.63mm^3)
+    cuts.append(Part.makeCylinder(G.PORT_D_SENS / 2.0, 4.0, App.Vector(cx, cy, G.Z_CEIL - 0.5)))
     return [c for c in cuts if c is not None]
 
 
@@ -123,6 +126,34 @@ assert abs(bb_t.ZMin - G.SKIRT_Z0) < 0.01 and abs(bb_t.ZMax - G.OUTER_H) < 0.01,
 inter = bottom.common(top)
 print("[case] 下壳∩顶盖 体积 = %.3f mm^3 (应为 0, 面接触)" % inter.Volume)
 assert inter.Volume < 1e-3, "上下壳穿插!"
+
+# ---------- T6 气口阵列贯通探针 (逐孔: 孔内无材料 / 孔侧有壁材; 参照 make_manifold §3) ----------
+# B 上带 CH×8 轴向 Y: 须同时穿 top 裙带 (81..83) 与 bottom 壁带 (83.4..85.8) 双层;
+# R 下带 S/V/F/XGZP 轴向 X: 仅穿 bottom 壁带 (103.4..105.8); 孔侧腹板探针证壁/裙未缺失。
+for face, u, z, dia, tag in G.wall_holes():
+    r = dia / 2.0
+    if face == "B":
+        prb = Part.makeCylinder(r, 5.6, App.Vector(u, G.OH - 5.2, z), App.Vector(0, 1, 0))
+        web = Part.makeCylinder(0.4, 5.6, App.Vector(u + r + 0.6, G.OH - 5.2, z), App.Vector(0, 1, 0))
+        for nm, sh in (("bottom", bottom), ("top", top)):
+            v = sh.common(prb).Volume
+            assert v < 1e-6, "气口 %s 未贯通 %s: %.4f mm^3" % (tag, nm, v)
+        assert bottom.common(web).Volume > 1e-6 and top.common(web).Volume > 1e-6, \
+            "气口 %s 孔侧无壁/裙材料 (带缺失)" % tag
+    else:                                   # R 下带: 探针全跨壁带 + 腹板证壁在
+        prb = Part.makeCylinder(r, 4.0, App.Vector(G.OW + 0.5, u, z), App.Vector(-1, 0, 0))
+        web = Part.makeCylinder(0.4, 2.4, App.Vector(G.OW - 0.1, u + r + 0.6, z), App.Vector(-1, 0, 0))
+        v = bottom.common(prb).Volume
+        assert v < 1e-6, "气口 %s 未贯通 bottom: %.4f mm^3" % (tag, v)
+        assert bottom.common(web).Volume > 1e-6, "气口 %s 孔侧无壁材料" % tag
+cx, cy = G.CEIL_SENS                         # 天花盖孔并入同段: 孔内空 + 孔侧为栅列实体
+prb = Part.makeCylinder(G.PORT_D_SENS / 2.0, 2.4, App.Vector(cx, cy, G.Z_CEIL - 0.1), App.Vector(0, 0, 1))
+v = top.common(prb).Volume
+assert v < 1e-6, "天花板测压孔未贯通 top: %.4f mm^3" % v
+web = Part.makeCylinder(0.4, 2.4, App.Vector(cx, cy + G.PORT_D_SENS / 2.0 + 0.6, G.Z_CEIL - 0.1),
+                        App.Vector(0, 0, 1))
+assert top.common(web).Volume > 1e-6, "天花板测压孔孔侧无栅列实体"
+print("[case] 气口阵列 13+1 探针全过 (8 CH 穿裙+壁双层 / R 下带 4 穿壁 / 1 天花穿盖)")
 
 doc = App.newDocument("flowio-p1-case")
 o1 = doc.addObject("Part::Feature", "Bottom"); o1.Shape = bottom

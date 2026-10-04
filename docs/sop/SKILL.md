@@ -65,7 +65,7 @@ POS_P11 过渡表（pos.csv 行优先+自动提示删除）、DSN 剥电源网�
 
 | 层 | 内容 | 运行 |
 |----|------|------|
-| L1-L3 | STL bbox/锚点/装配契约 29 断言 | `python hardware/flowio-p1/enclosure/test_assembly.py` |
+| L1-L3 | STL bbox/锚点/装配契约 30 断言 | `python hardware/flowio-p1/enclosure/test_assembly.py` |
 | L4 | FreeCAD OCC 干涉（0.000mm³） | 同上脚本内探测 FreeCAD 后自动跑 |
 | L5 | 器件几何/图匹配/钻孔避让（默认档 13）+ pneumatic schema（15） | `E:/FLOWIO/tools/venv-cad/Scripts/python.exe hardware/flowio-p1/enclosure/test_device_geom.py`（命令行参数 `all`=追加 T2 图匹配/T3 flows/T4 钻孔避让段，合计 13 条 geom 侧断言；无参数=仅 schema 15 条） |
 | flows | 流路与网表/pos 同源 | `python hardware/flowio-p1/enclosure/test_flows.py` |

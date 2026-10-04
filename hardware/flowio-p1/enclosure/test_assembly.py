@@ -250,12 +250,25 @@ def zrange(pid):
     return zz[0] + G.EXPLODE[pid][2], zz[1] + G.EXPLODE[pid][2]
 
 
-order = ["case_top", "parts_F", "pcb", "case_bottom"]
+# 主模块 6 件两两分离 (case_geom L264 分层契约: bottom < pcb < parts_F < case_top < valves < manifold)
+order = ["manifold", "valves", "case_top", "parts_F", "pcb", "case_bottom"]
 bands = {pid: zrange(pid) for pid in order}
 pairs = [(a, b) for i, a in enumerate(order) for b in order[i + 1:]]
 disjoint = all(bands[a][1] <= bands[b][0] or bands[b][1] <= bands[a][0] for a, b in pairs)
-check("L3 爆炸态层叠两两分离", disjoint,
+check("L3 爆炸态主模块 6 件两两分离", disjoint,
       " ".join("%s[%.1f..%.1f]" % (pid, *bands[pid]) for pid in order))
+
+# 泵模块 4 件: 揭盖件 pump_case (+Z46) 与留位 3 件 (泵/支架/气管) 两两分离;
+# 留位 3 件互嵌为设计 (环抱夹持/管入腔, case_geom L267-269 契约), 固体间隙由 FCL 守门。
+# 注: pump_case 件 id ≠ 文件名 (pump_module.stl), 经 assembly.json 清单解析。
+stl_of = {p["id"]: MESH / Path(p["stl"]).name for p in man["parts"]}
+pump_bands = {pid: (lambda zz: (zz[0] + G.EXPLODE[pid][2], zz[1] + G.EXPLODE[pid][2]))
+              (G.stl_bbox(stl_of[pid])[3]) for pid in ("pump_case", "pump", "brackets", "tubes")}
+lid_ok = all(pump_bands["pump_case"][1] <= pump_bands[p][0] or
+             pump_bands[p][1] <= pump_bands["pump_case"][0]
+             for p in ("pump", "brackets", "tubes"))
+check("L3 爆炸态泵模块揭盖分离 (pump_case vs 泵/支架/管)", lid_ok,
+      " ".join("%s[%.1f..%.1f]" % (pid, *pump_bands[pid]) for pid in pump_bands))
 
 # hotspots z 域
 hs = json.loads((WEB / "hotspots.json").read_text(encoding="utf-8"))["hotspots"]

@@ -62,20 +62,14 @@ manifold = load_step(os.path.join(HERE, "manifold.step"))
 valves_c = Part.makeCompound([vs for *_m, vs in valve_solids()])
 main_body = Part.makeCompound([bottom, top, pcb_placed, valves_c, manifold])
 
-# 泵模块: 壳取 STEP; 泵/支架无 STEP — Mesh 三角面转 Shape (视觉装配体, 干涉以
-# 生成器内 OCC 布尔 + L5 FCL (venv-cad) 双守门, 此处只做位姿/包围盒契约)
-import Mesh as _Mesh
-
-
-def mesh_to_shape(path):
-    m = _Mesh.Mesh(path)
-    m.harmonizeNormals()
-    return Part.Shape(m)
-
-
+# 泵模块: 壳与泵/支架均取 STEP (make_pump_module 同源产物, 壳系绝对坐标); 干涉以
+# 生成器内 OCC 布尔 + L5 FCL (venv-cad) 双守门, 此处只做位姿/包围盒契约。
+# 注: 旧路径 Mesh STL→Part.Shape 在 FreeCAD 1.1.4 (20260928 build) 原生崩溃
+# (rc=127 无 Python 异常, T6-4/5 的装配产物因此停留在 10-04 旧版), 改 STEP 直载。
 pump_case = load_step(os.path.join(HERE, "pump-module.step"))
-pump_body = Part.makeCompound([pump_case, mesh_to_shape(os.path.join(HERE, "pump.stl")),
-                               mesh_to_shape(os.path.join(HERE, "brackets.stl"))])
+pump_body = Part.makeCompound([pump_case,
+                               load_step(os.path.join(HERE, "pump.step")),
+                               load_step(os.path.join(HERE, "brackets.step"))])
 
 asm = Part.makeCompound([main_body, pump_body])
 

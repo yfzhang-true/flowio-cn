@@ -153,6 +153,10 @@ for nm, sh in (("Base", base), ("Lid", lid), ("Pump", pump_asm), ("Brackets", bk
 doc.recompute()
 doc.saveAs(os.path.join(HERE, "flowio-p1-pump-module.FCStd"))
 case_asm.exportStep(os.path.join(HERE, "pump-module.step"))
+# 泵/支架 STEP (与 STL 同一 solids; make_assembly 直载) — 旧 mesh→Part.Shape 转换路径
+# 在 FreeCAD 1.1.4 (20260928 build) 原生崩溃 (无 Python 异常), STEP 为唯一可靠载体
+pump_asm.exportStep(os.path.join(HERE, "pump.step"))
+bkt_asm.exportStep(os.path.join(HERE, "brackets.step"))
 
 
 def write_stl(shape, path, min_shells):
