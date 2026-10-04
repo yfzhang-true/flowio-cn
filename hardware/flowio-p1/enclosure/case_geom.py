@@ -107,6 +107,131 @@ TERM_SLOT = (10.8, SLOT_LO, Z_TOP + 6.4)  # (宽, z_lo, z_hi); XH-2P 本体宽 1
 # 后壁两端开贯穿缺口 (壁+裙柱)。y 带 = J 带+J5 本体 y (板系 68.8..76.55 → 壳 71.7..79.45)。
 TERM_RELIEF = (5.6, 70.5, 80.8)     # (x 深自外缘, y_lo, y_hi) 壳系
 
+# ═══════════════ T6 气动结构 (1a 竖装 + 1f-β 歧管 + 1h 泵模块) ═══════════════
+# 数据源 = devices.json pneumatic_devices 段 (T1 入库); 本段不参与壳高链
+# (壳高由板上器件 TALLEST 决定, 阀阵/歧管为壳盖之上的开放塔)。
+def _load_pneu():
+    """pneumatic_devices -> 尺寸真值 dict (失败回退手抄真值, 与 devices.json 等价)."""
+    import json as _json
+    try:
+        pn = _json.loads((Path(__file__).parent / "devices.json").read_text(
+            encoding="utf-8"))["pneumatic_devices"]
+        vd = pn["valves"][0]                       # F0520D 通道阀+充/排主阀
+        vb = pn["valve_vacuum_master"][0]          # F0520B 真空主阀
+        pp = pn["pump"][0]                         # ZR370-03PM
+        ps = pn["sensor"][0]                       # XGZP6897D
+        return {
+            "vd_w": vd["dims"]["w"], "vd_d": vd["dims"]["d"], "vd_h": vd["dims"]["h"],
+            "vd_noz": vd["port"]["dia_mm"],
+            "vb_w": vb["dims"]["w"], "vb_d": vb["dims"]["d"], "vb_h": vb["dims"]["h"],
+            "vb_noz": vb["port"]["dia_mm"],
+            "pump_l": pp["dims"]["w"], "pump_dia": pp["dims"]["d"], "pump_h": pp["dims"]["h"],
+            "pump_noz": pp["ports"]["dia_mm"], "pump_tube": pp["ports"]["tube_id_mm"],
+            "sens_noz": ps["port"]["dia_mm"],
+        }
+    except Exception:
+        return {"vd_w": 15.0, "vd_d": 13.0, "vd_h": 20.5, "vd_noz": 3.0,
+                "vb_w": 15.0, "vb_d": 13.0, "vb_h": 28.0, "vb_noz": 4.6,
+                "pump_l": 58.1, "pump_dia": 24.0, "pump_h": 31.5,
+                "pump_noz": 4.2, "pump_tube": 5.0, "sens_noz": 3.22}
+
+
+_PNEU = _load_pneu()
+
+# ---------- 气动塔 (主壳盖上, 1a 竖装 2×4 + 主阀 1×3) ----------
+TOWER_Z0 = OUTER_H                   # 21.5 阀基面 = 壳盖顶 (阀吊装于歧管, 基面为基准)
+NOZZLE_LEN = 6.0                     # 阀嘴伸出量: devices.json 仅总高, 6mm 为 F0520 系
+#   实物照估值 (推导注释; 若到货实测不符, 改此一处的连带头)。
+VD_BODY_H = _PNEU["vd_h"] - NOZZLE_LEN    # 14.5 F0520D 本体高 (总高 20.5 - 嘴 6)
+VB_BODY_H = _PNEU["vb_h"] - NOZZLE_LEN    # 22.0 F0520B 本体高 (总高 28 - 嘴 6)
+# 2×4 通道阀阵 V1-V8: 列 x 19mm 节距 (体宽 15 + 4 间隙), 行 y 25mm 节距 (体深 13+12);
+# 阵面 72×38 ≈ spec 1a "76×38"。V1-V4 前行 (y=70, 近 B 壁, 上方 J10-J13),
+# V5-V8 后行 (y=45, 上方 J14-J17) —— 引线跨前行折回底边 J 带 (软引线, 物理自由)。
+V_COLS = [20.0, 39.0, 58.0, 77.0]
+V_ROWS = [45.0, 70.0]
+# 主阀 1×3 (VS/VV/VF): x=96 (体 88.5..103.5, 右缘带, 与通道阵 x 间距 4),
+# y = J20/J21/J22 壳系 y (20.4/31.4/42.4) —— 引线垂直下落直插 R 壁三槽。
+M_X, M_YS = 96.0, [20.4, 31.4, 42.4]
+
+def valve_grid():
+    """11 阀 (x, y, is_master) 壳系坐标; V1-V8 通道 + VS/VV/VF 主阀."""
+    g = []
+    for c in V_COLS:
+        g.append((c, V_ROWS[1], False))           # V1-V4 前行
+    for c in V_COLS:
+        g.append((c, V_ROWS[0], False))           # V5-V8 后行
+    for y in M_YS:
+        g.append((M_X, y, True))                  # VS/VV/VF
+    return g
+
+# ---------- 歧管 (1f-β 公共歧管 M: 8 通道口 + 3 主阀口 + 1 测压口 = 12 口) ----------
+# 基座卡 2×4 阀阵顶部: F0520D 嘴尖 z = 21.5+14.5+6 = 42.0; F0520B 嘴尖 = 21.5+22+6 = 49.5。
+# 歧管底面须高于最高阀体顶 (F0520B 43.5) → MAN_Z0 = 44.0 (0.5 间隙);
+# F0520D 嘴 (36..42) 不及底面, 由下垂承插短管 (boss) 接至块底。
+MAN_Z0 = TOWER_Z0 + VB_BODY_H + 0.5      # 44.0 块底 z
+MAN_H = 13.0                              # 块厚 (公共腔+流道+变径腔)
+MAN_Z1 = MAN_Z0 + MAN_H                   # 57.0 块顶 z
+MAN_X0, MAN_X1 = 11.0, 105.0              # 覆 11 承口 (通道阵 12.5..84.5 / 主阀 88.5..103.5)
+MAN_Y0, MAN_Y1 = 12.0, 78.0               # 覆主阀 y 20.4-8 .. 前行阀 70+8
+SOCK_D_D = _PNEU["vd_noz"] + 0.2          # 3.2 F0520D 承口孔径 (嘴 3.0 + 0.2 间隙)
+SOCK_D_B = _PNEU["vb_noz"] + 0.2          # 4.8 F0520B 承口孔径 (嘴 4.6 + 0.2 间隙)
+SOCK_BOSS_D, SOCK_BOSS_Z1 = 6.2, 36.5     # D 阀承插短管: ⌀6.2 外径, 下端 z (嘴 36..42
+#   与孔 36.5..46 重叠 5.5mm = 插入深度, 合 1f-β "5-10mm 插入" 约定)
+SOCK_DEPTH_B = 6.0                        # B 阀承口深 (嘴 43.5..49.5 与孔 44..50 重叠 5.5)
+RUN_D = SOCK_D_D                          # 3.2 内流道 ⌀ (走道截面 ≥ 阀孔径 3.0)
+TAPER_IN_Z, TAPER_OUT_D = 50.0, RUN_D     # 变径腔: 真空侧 ⌀4.8 承口于 z50 收口至 ⌀3.2
+#   (泵侧 5→3 收口内化, Kamoer 变径转接替代; 腔体 z 50..53 锥收)
+PLENUM_Z = 54.5                           # 公共腔脊 z (块顶 57 - 2.5 壁)
+# 测压口: 右面 ⌀3.2 嘴 (XGZP 接管), y 对齐壳 R 壁 XGZP 引压孔 (53.4) 供管垂直下行
+SENS_TAP = (MAN_X1, 53.4, 50.0)           # (x, y, z) 嘴根心; 嘴伸出 5mm +X
+# 支腿 4× 8×8 (z 21.5..44): 仅立于盖沿实体带 (避通风栅 x 14.9..82.9/y 20.9..62.9)、
+# M3 螺丝头 (ST 壳系 ±2.5) 与阀足印 (通道阵 x 12.5..84.5 / 主阀 y 13.9..49.4)。
+MAN_LEGS = [(6.0, 16.0), (6.0, 74.0), (98.0, 8.0), (98.0, 80.0)]
+
+# ---------- 主壳壁气口阵列 (气路穿壁位, 位置按阀阵/主阀位推导) ----------
+# B 壁 8 通道管过孔 ⌀3.4 (3mm 管 + 0.4 双隙): x = 后行阀列影 + 前行阀列影(+半节距 9.5),
+#   z=17.25 = TERM 槽顶 15.4 与天花底 19.1 之间实体带中心 (⌀3.4 → 15.55..18.95,
+#   双侧 0.15 余隙, 与 8 槽/天花板均不连通)。
+PORT_D_CH, PORT_Z_CH = 3.4, 17.25
+CH_PORT_X = [c for cx in V_COLS for c in (cx, cx + 9.5)]   # 20,29.5,39,48.5,58,67.5,77,86.5
+# R 壁下带 (z=5.0, 槽底 8.8 之下/底板之上实体区): S/V 泵对接快插 ⌀5.6×2 (5mm 管) +
+#   F 排气 ⌀4.8 + XGZP 引压 ⌀3.4; y 与 J20/J21/J22 一致 (20.4/31.4/42.4), XGZP
+#   让 J23 槽带 (45..56) 下移至 53.4 (孔带 51.7..55.1 与槽 z 8.8..15.4 无叠)。
+PORT_Z_LOW = 5.0
+PORT_D_SV, PORT_D_F, PORT_D_SENS = 5.6, 4.8, 3.4
+# 天花板 XGZP 测压管过孔 ⌀3.4 @ (48.5, 27.0): 通风栅列隙 46.9..50.9 / 行隙 24.9..28.9
+#   交叉实体点 (孔带 46.8..50.2 / 25.3..28.7, 与栅孔四周 ≥0.2 不并孔)。
+CEIL_SENS = (48.5, 27.0)
+
+def wall_holes():
+    """[(face, u 沿边坐标, z, dia, tag)] — 壁面圆孔阵列 (make_case 圆柱贯穿 cut)."""
+    hs = [("B", x, PORT_Z_CH, PORT_D_CH, "CH%d" % (i + 1)) for i, x in enumerate(CH_PORT_X)]
+    hs += [("R", 20.4, PORT_Z_LOW, PORT_D_SV, "S"),
+           ("R", 31.4, PORT_Z_LOW, PORT_D_SV, "V"),
+           ("R", 42.4, PORT_Z_LOW, PORT_D_F, "F"),
+           ("R", 53.4, PORT_Z_LOW, PORT_D_SENS, "XGZP")]
+    return hs
+
+# ---------- 泵模块 (1h 分装式, 独立小盒) ----------
+PMOD_WALL = 2.4                            # 壁厚 (与主壳同工艺)
+PMOD_CLR = 2.0                             # 泵-壁装配间隙 (含嘴接管弯曲余量)
+PMOD_IN_L = _PNEU["pump_l"] + 2 * PMOD_CLR   # 62.1 内腔长 (X, 泵横躺轴向)
+PMOD_IN_W = _PNEU["pump_dia"] + 2 * PMOD_CLR # 28.0 内腔宽
+PMOD_IN_H = _PNEU["pump_h"] + 1.25           # 33.0 内腔高 (嘴顶 31.75 + 1.25 顶隙)
+PMOD_L = PMOD_IN_L + 2 * PMOD_WALL           # 66.9 外长
+PMOD_W = PMOD_IN_W + 2 * PMOD_WALL           # 32.8 外宽
+PMOD_H = PMOD_IN_H + 2 * PMOD_WALL           # 37.8 外高
+# 支架: 致荣硅胶环 ID23/OD26 (过盈夹持 ⌀24 泵体, devices.json bracket 真值);
+# 孪生建模取 ID24.2 (+0.2 装配间隙) 令 FCL 干涉守门 0.000 —— 真值在 devices.json,
+# 孪生是视觉件 (注释即推导)。脚距 46 = 两环 M3 脚沿泵轴间距, 环宽 8。
+BKT_ID, BKT_OD, BKT_W, BKT_SPAN = 24.2, 26.0, 8.0, 46.0
+BKT_FOOT_T = 3.0                            # 环下 M3 脚垫厚
+PUMP_AXIS_Z = BKT_FOOT_T + BKT_OD / 2.0     # 16.0 泵轴 z (脚垫顶 + 环外径半)
+# 面板 (X+ 端面): 双快插 ⌀5.6 (充/吸 5mm 管, 内接跳管至双顶嘴) + JST 2P 出线孔 ⌀5.0
+PMOD_PORT_D, PMOD_PORT_DY, PMOD_WIRE_D = 5.6, 8.0, 5.0
+# 双体装配位姿 (孪生/装配契约): 泵模块置于主壳 +X 侧, 同桌面 z0=0, y 居中
+PMOD_OFF = (OW + 30.0, (OH - PMOD_W) / 2.0, 0.0)   # (135.8, 26.5, 0)
+
 # ---------- 器件盒尺寸 (devices.json 单一数据层, T5 真值切换) ----------
 DEFAULT_DIM = (2.2, 2.2, 1.5)
 
@@ -128,13 +253,23 @@ ANCHORS = [  # (ref, PosX, PosY) -> 期望壳系坐标 (已人工对拍槽位)
     ("J1", 4.5, -19.0, 7.4, 21.9),
 ]
 
-# ---------- 孪生爆炸视图契约 ----------
-BBOX_MM = [OW, OH, OUTER_H]      # 现值 [105.8, 85.8, 21.5] (派生自 OW/OH/OUTER_H, 随板改同步)
+# ---------- 孪生爆炸视图契约 (T6 双体: 主模块塔层 + 泵模块 X 向分离) ----------
+# 主模块 z 分层 (爆炸后 z 带两两分离, 见 L3): bottom[-20..-0.9] < pcb[7.4..9] <
+# parts_F[23..32.5] < case_top[44.1..53.5] < valves[65.5..86] < manifold[89.5..125]。
+# 泵模块 (装配位 x 135.8..202.7): 泵壳整体 +Z46 揭盖, 泵/支架留位 (环抱嵌套按设计,
+# 固体间隙由 FCL 守门; 视觉气管 tubes 不爆)。
+BBOX_MM = [PMOD_OFF[0] + PMOD_L, OH, MAN_Z1]   # 双体装配态并包 [202.7, 85.8, 57.0]
 EXPLODE = {
+    "manifold":    [0, 0, 68],
+    "valves":      [0, 0, 44],
     "case_top":    [0, 0, 32],
     "parts_F":     [0, 0, 14],
     "pcb":         [0, 0, 0],
     "case_bottom": [0, 0, -20],
+    "pump_case":   [0, 0, 46],
+    "pump":        [0, 0, 0],
+    "brackets":    [0, 0, 0],
+    "tubes":       [0, 0, 0],
 }
 
 # ---------- 纯 Python 二进制 STL 解析 (测试用, 无第三方依赖) ----------

@@ -52,12 +52,34 @@ def all_cuts():
     return boxes
 
 
+def hole_cut(face, u, z, dia):
+    """壁面圆孔 (T6 气口阵列): 沿面法向圆柱贯穿壁+裙环 (B 上带孔穿双层, R 下带孔仅壁)."""
+    r = dia / 2.0
+    if face == "B":      # 轴向 Y: 贯穿裙带 (81..83) + 壁带 (83.4..85.8)
+        return Part.makeCylinder(r, 6.0, App.Vector(u, G.OH - 5.3, z), App.Vector(0, 1, 0))
+    if face == "R":      # 轴向 X: 仅下壳壁带 (102.9..105.8), 裙带 z 12.1 之上无此孔
+        return Part.makeCylinder(r, 4.9, App.Vector(G.OW - 1.6, u, z), App.Vector(-1, 0, 0))
+    return None
+
+
+def pneu_hole_cuts():
+    """气口阵列: B 壁 8 通道孔 + R 壁 S/V/F/XGZP + 天花 XGZP 测压管孔 (case_geom 推导)."""
+    cuts = []
+    for face, u, z, dia, _tag in G.wall_holes():
+        cuts.append(hole_cut(face, u, z, dia))
+    cx, cy = G.CEIL_SENS                     # 天花板过孔 (轴 Z, 贯穿 19.1..21.5)
+    cuts.append(Part.makeCylinder(G.PORT_D_SENS / 2.0, 4.0, App.Vector(cx, cy, G.OUTER_H - 2.0)))
+    return [c for c in cuts if c is not None]
+
+
 # ---------- 下壳: 底板 + 四壁 (0..Z_CEIL) + 铜柱 - 侧槽 ----------
 outer = Part.makeBox(G.OW, G.OH, G.Z_CEIL)
 cavity = Part.makeBox(G.OW - 2 * G.WALL, G.OH - 2 * G.WALL, G.Z_CEIL - G.WALL + 1.0,
                       App.Vector(G.WALL, G.WALL, G.Z_FLOOR))
 bottom = outer.cut(cavity)
 for c in all_cuts():
+    bottom = bottom.cut(c)
+for c in pneu_hole_cuts():                  # T6 气口阵列 (B 上带穿壁+裙; R 下带穿壁)
     bottom = bottom.cut(c)
 for sx, sy in G.ST:
     px, py = b2c(sx, sy)
@@ -76,6 +98,8 @@ skirt_hole = Part.makeBox(G.OW - 2 * (G.SKIRT_INSET + G.SKIRT_T),
 ceiling = Part.makeBox(G.OW, G.OH, G.WALL, App.Vector(0, 0, G.Z_CEIL))
 top = skirt_outer.cut(skirt_hole).fuse(ceiling).removeSplitter()
 for c in all_cuts():                      # 端子/4P 高槽穿过裙壁; 矮槽无材料可切, 无害
+    top = top.cut(c)
+for c in pneu_hole_cuts():                # B 上带孔穿裙环; R 下带/天花孔在此无材料, 无害
     top = top.cut(c)
 # 通风栅 8x6 (刻穿天花板, 自上方下刀)
 for i in range(8):
