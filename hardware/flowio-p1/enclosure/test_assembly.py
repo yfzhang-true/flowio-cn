@@ -60,7 +60,9 @@ for fname in ["pcb.stl", "parts_f.stl", "case_bottom.stl", "case_top.stl"]:
 
 # pcb: 精确黄金值 (板坐铜柱顶)
 cnt, bb, _ = load("pcb.stl")
-check("L1 pcb bbox 黄金值 (2.9..92.9, 2.9..77.9, 7.4..9.0)",
+_lbl = "L1 pcb bbox 黄金值 (%.1f..%.1f, %.1f..%.1f, %.1f..%.1f)" % (
+    G.OX, G.OX + G.BW, G.OX, G.OX + G.BH, G.Z_BOARD, G.Z_TOP)
+check(_lbl,
       approx(bb[0], G.OX, 0.05) and approx(bb[1], G.OX + G.BW, 0.05) and
       approx(bb[2], G.OX, 0.05) and approx(bb[3], G.OX + G.BH, 0.05) and
       approx(bb[4], G.Z_BOARD, 0.05) and approx(bb[5], G.Z_TOP, 0.05),
