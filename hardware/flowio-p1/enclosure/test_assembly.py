@@ -219,7 +219,13 @@ print("== L3 功能: 渲染资产契约 ==")
 
 man = json.loads((MESH / "assembly.json").read_text(encoding="utf-8"))
 ids = [p["id"] for p in man["parts"]]
-check("L3 装配清单 = 4 件 (无空 parts_B)", set(ids) == {"case_top", "parts_F", "pcb", "case_bottom"}, str(ids))
+# T6 双体装配契约: 主模块 6 件 + 泵模块 4 件 (bodies 分组在 assembly.json)
+DUAL_MAIN = {"manifold", "valves", "case_top", "parts_F", "pcb", "case_bottom"}
+DUAL_PUMP = {"pump_case", "pump", "brackets", "tubes"}
+check("L3 装配清单 = 10 件双体 (主 6 + 泵 4)",
+      set(ids) == DUAL_MAIN | DUAL_PUMP and
+      set(man["bodies"]["main"]) == DUAL_MAIN and set(man["bodies"]["pump"]) == DUAL_PUMP,
+      str(ids))
 stl_ok = True
 for p in man["parts"]:
     cnt, _x, _y, _z = G.stl_bbox(MESH / Path(p["stl"]).name)

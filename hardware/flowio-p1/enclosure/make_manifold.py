@@ -29,21 +29,7 @@ import Part, Mesh
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import case_geom as G
-
-
-def valve_solids():
-    """11 阀 (体盒 + 嘴圆柱) —— 干涉校验/孪生复用的单一实现 (make_meshes 同源).
-    kind: 'D'=F0520D (体 14.5 + 嘴 ⌀3.0), 'B'=F0520B (体 22 + 嘴 ⌀4.6)."""
-    solids = []
-    for x, y, kind in G.valve_grid():
-        is_b = kind == "B"
-        bh = G.VB_BODY_H if is_b else G.VD_BODY_H
-        nd = (G._PNEU["vb_noz"]) if is_b else G._PNEU["vd_noz"]
-        w, d = (G._PNEU["vb_w"], G._PNEU["vb_d"]) if is_b else (G._PNEU["vd_w"], G._PNEU["vd_d"])
-        body = Part.makeBox(w, d, bh, App.Vector(x - w / 2, y - d / 2, G.TOWER_Z0))
-        noz = Part.makeCylinder(nd / 2, G.NOZZLE_LEN, App.Vector(x, y, G.TOWER_Z0 + bh))
-        solids.append((x, y, kind, Part.makeCompound([body, noz])))
-    return solids
+from pneu_geom import valve_solids, tube          # 共享构建器 (阀体/流道管, 单一实现)
 
 
 # ---------- 1. 基块 + 支腿 + D 阀承插短管 ----------
@@ -60,13 +46,6 @@ sol = sol.removeSplitter()
 
 # ---------- 2. 流道网络 (布尔减, 内腔负空间) ----------
 PLEN = G.PLENUM_Z
-
-
-def tube(x0, y0, z0, x1, y1, z1, d):
-    """两点间 ⌀d 流道 (轴对齐或斜线一律圆柱放样)."""
-    p0, p1 = App.Vector(x0, y0, z0), App.Vector(x1, y1, z1)
-    return Part.makeCylinder(d / 2, p0.distanceToPoint(p1), p0, p1.sub(p0).normalize())
-
 
 cuts = []
 for x, y, kind in G.valve_grid():                # 11 承口 + 各自升管接公共腔

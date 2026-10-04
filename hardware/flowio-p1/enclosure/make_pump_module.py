@@ -140,13 +140,10 @@ print("[pump] 内部干涉 5 对全 0 (base/lid vs pump/brackets, pump vs bracke
 print("[pump] 面板: 快插 ⌀%.1fx2 @z=%.1f + 出线 ⌀%.1f; 嘴顶净空 1.0mm"
       % (G.PMOD_PORT_D, G.PUMP_AXIS_Z, G.PMOD_WIRE_D))
 
-# ---------- 6. 输出 (统一平移到壳系: Matrix 平移在第 4 列, 列向量约定) ----------
-MTX = App.Matrix(1, 0, 0, OX0,
-                 0, 1, 0, OY0,
-                 0, 0, 1, OZ0,
-                 0, 0, 0, 1)
-base, lid, pump_asm, bkt_asm = (sh.transformGeometry(MTX) for sh in
-                                (base, lid, pump_asm, bkt_asm))
+# ---------- 6. 输出 (统一平移到壳系; 纯平移用 Shape.translate 精确移位 —
+#     transformGeometry 会重建几何面, 薄壁裙环上曾产生破面 (34+10 facets 教训)) ----------
+for sh in (base, lid, pump_asm, bkt_asm):
+    sh.translate(App.Vector(OX0, OY0, OZ0))
 case_asm = Part.makeCompound([base, lid])
 
 doc = App.newDocument("flowio-p1-pump-module")
@@ -156,8 +153,29 @@ for nm, sh in (("Base", base), ("Lid", lid), ("Pump", pump_asm), ("Brackets", bk
 doc.recompute()
 doc.saveAs(os.path.join(HERE, "flowio-p1-pump-module.FCStd"))
 case_asm.exportStep(os.path.join(HERE, "pump-module.step"))
-o_case = doc.getObject("Base")
-Mesh.export([doc.getObject("Base"), doc.getObject("Lid")], os.path.join(HERE, "pump-module.stl"))
-Mesh.export([doc.getObject("Pump")], os.path.join(HERE, "pump.stl"))
-Mesh.export([doc.getObject("Brackets")], os.path.join(HERE, "brackets.stl"))
+
+
+def write_stl(shape, path, min_shells):
+    """逐 solid 细分 + addMesh 合并导出 — meshFromShape 直接吃复合体会产生破壳
+    (FreeCAD 1.1.4: 共面盒复合体 40 facets/4 open shells 实测), 逐体细分各闭合.
+    + 逐连通壳闭合自检."""
+    import MeshPart
+    out = None
+    for s in shape.Solids:
+        m = MeshPart.meshFromShape(Shape=s, LinearDeflection=0.4, AngularDeflection=0.5)
+        if out is None:
+            out = Mesh.Mesh(m)
+        else:
+            out.addMesh(m)
+    out.write(path)
+    comps = out.getSeparateComponents()
+    assert len(comps) >= min_shells and all(c.isSolid() for c in comps), \
+        "%s: shells=%d closed=%s" % (path, len(comps), [c.isSolid() for c in comps])
+    print("[pump-stl] %s shells=%d facets=%d" % (os.path.basename(path), len(comps), out.CountFacets))
+    return out
+
+
+write_stl(case_asm, os.path.join(HERE, "pump-module.stl"), 2)     # 底盒+裙盖
+write_stl(pump_asm, os.path.join(HERE, "pump.stl"), 3)            # 体+双嘴
+write_stl(bkt_asm, os.path.join(HERE, "brackets.stl"), 2)         # 支架×2
 print("PUMP MODULE OK: FCStd + pump-module.step/.stl + pump.stl + brackets.stl -> %s" % HERE)

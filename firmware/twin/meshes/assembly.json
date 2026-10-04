@@ -1,8 +1,32 @@
 {
   "parts": [
     {
+      "id": "manifold",
+      "name": "歧管 M (1f-β 12 口)",
+      "stl": "/meshes/manifold.stl",
+      "color": "#6b7fa3",
+      "explode": [
+        0,
+        0,
+        68
+      ],
+      "opacity": 1.0
+    },
+    {
+      "id": "valves",
+      "name": "阀阵 11 只 (1a 竖装)",
+      "stl": "/meshes/valves.stl",
+      "color": "#4a6da7",
+      "explode": [
+        0,
+        0,
+        44
+      ],
+      "opacity": 1.0
+    },
+    {
       "id": "case_top",
-      "name": "上壳(通风栅)",
+      "name": "上壳(通风栅+气口阵列)",
       "stl": "/meshes/case_top.stl",
       "color": "#9e9e9e",
       "explode": [
@@ -22,7 +46,7 @@
         0,
         14
       ],
-      "opacity": 0.95
+      "opacity": 1.0
     },
     {
       "id": "pcb",
@@ -38,7 +62,7 @@
     },
     {
       "id": "case_bottom",
-      "name": "下壳(铜柱)",
+      "name": "下壳(铜柱+泵对接孔)",
       "stl": "/meshes/case_bottom.stl",
       "color": "#757575",
       "explode": [
@@ -47,12 +71,76 @@
         -20
       ],
       "opacity": 1.0
+    },
+    {
+      "id": "pump_case",
+      "name": "泵模块壳 (1h 分装)",
+      "stl": "/meshes/pump_module.stl",
+      "color": "#8f8f93",
+      "explode": [
+        0,
+        0,
+        46
+      ],
+      "opacity": 1.0
+    },
+    {
+      "id": "pump",
+      "name": "泵 ZR370-03PM",
+      "stl": "/meshes/pump.stl",
+      "color": "#555b63",
+      "explode": [
+        0,
+        0,
+        0
+      ],
+      "opacity": 1.0
+    },
+    {
+      "id": "brackets",
+      "name": "硅胶支架 ×2",
+      "stl": "/meshes/brackets.stl",
+      "color": "#c9a06a",
+      "explode": [
+        0,
+        0,
+        0
+      ],
+      "opacity": 1.0
+    },
+    {
+      "id": "tubes",
+      "name": "供压/真空管 (视觉)",
+      "stl": "/meshes/tubes.stl",
+      "color": "#7ec8e3",
+      "explode": [
+        0,
+        0,
+        0
+      ],
+      "opacity": 1.0
     }
   ],
+  "bodies": {
+    "main": [
+      "manifold",
+      "valves",
+      "case_top",
+      "parts_F",
+      "pcb",
+      "case_bottom"
+    ],
+    "pump": [
+      "pump_case",
+      "pump",
+      "brackets",
+      "tubes"
+    ]
+  },
   "bbox_mm": [
-    105.8,
+    202.70000000000002,
     85.8,
-    21.5
+    57.0
   ],
-  "assembly_note": "M3 螺丝穿板自攻入下壳铜柱 (板坐铜柱顶 z=7.4)"
+  "assembly_note": "T6 双体装配: 主模块 (板+11 阀+歧管 M, 壳盖上气动塔) + 泵模块 (ZR370+硅胶支架, 分装式); 气管连 S/V 壁孔"
 }
