@@ -17,7 +17,10 @@
         "enclosure/test_assembly.py（L1-L3）",
         "venv-cad enclosure/test_device_geom.py（L5 两档）"
       ],
-      "sync": ["docs/component-registry.md", "standoffs.txt（若孔位变）"]
+      "sync": [
+        "docs/component-registry.md",
+        "standoffs.txt（若孔位变）"
+      ]
     },
     "devices_json_pneumatic": {
       "trigger": "devices.json pneumatic_devices 段（气动真值）",
@@ -26,7 +29,10 @@
         "结构件（T6 make_case/make_manifold/make_pump_module 如涉及几何）",
         "孪生/仿真参数（T7 board_model 物理参数）"
       ],
-      "sync": ["component-registry.md", "literature/component-param-audit.md"]
+      "sync": [
+        "component-registry.md",
+        "literature/component-param-audit.md"
+      ]
     },
     "gen_sch_electrical": {
       "trigger": "gen_sch.py 电气改动",
@@ -37,19 +43,26 @@
         "fab/netlist.py + enclosure/device_graph.py 断言",
         "enclosure/make_flows.py + test_flows.py"
       ],
-      "sync": ["黄金值 nets/refs/edges（附推导）", "erc.rpt"]
+      "sync": [
+        "黄金值 nets/refs/edges（附推导）",
+        "erc.rpt"
+      ]
     },
     "place_layout": {
       "trigger": "gen_pcb.py PLACE 坐标",
       "rerun": [
         "tools/gen_pcb.py",
-        "tools/route_pcb.py 阶段1-6（KiCad python，逐阶段）",
+        "hardware/flowio-p1/tools/route_pcb.py 阶段1-6（KiCad python，运行目录 hardware/flowio-p1；DSN/SES 封装在脚本内）",
         "freerouting round（DSN 含电源网！max_passes=3）",
         "kicad-cli pcb drc --severity-error（0 门）",
         "pos 导出 → make_flows → test_flows",
         "L5 两档（T4 钻孔避让断言）"
       ],
-      "sync": ["standoffs.txt", "drc 差分基线 json"]
+      "sync": [
+        "hardware/flowio-p1/standoffs.txt",
+        "drc 差分基线 hardware/flowio-p1/drc-<阶段>.json",
+        "（若孔位/板边变）连带 devices_json_pcb 整行"
+      ]
     },
     "case_geom": {
       "trigger": "case_geom.py 常量（板尺寸/高度链/ST/槽）",
@@ -60,7 +73,9 @@
         "test_assembly.py（L1-L4）",
         "webapp scene.js bbox 同源断言"
       ],
-      "sync": ["测试标签动态引 G 常量（禁写死数字文本）"]
+      "sync": [
+        "测试标签动态引 G 常量（禁写死数字文本）"
+      ]
     },
     "new_device_jlc": {
       "trigger": "新增 JLC 器件",
@@ -70,20 +85,34 @@
         "devices.json 条目 + registry 六元组",
         "datasheet wmsc 直链下载存 literature/"
       ],
-      "sync": ["DOWNLOAD-LIST.md", "component-param-audit.md", "BOM（make_bom.py）"]
+      "sync": [
+        "DOWNLOAD-LIST.md",
+        "component-param-audit.md",
+        "BOM（make_bom.py）"
+      ]
     },
     "new_device_taobao": {
       "trigger": "新增淘宝/1688 器件（气动三件硬约束国产）",
       "rerun": [
-        "ingest CURATED_NOPART 手工条目（含一手 datasheet 引用）",
+        "hardware/flowio-p1/tools/ingest_device_dims.py 的 CURATED_NOPART 手工条目（同一脚本，JLC 件走 MCP 摄取、淘宝件走此手工表；含一手 datasheet 相对路径引用）",
         "四类参数审计（电气/几何/协议/工艺）标证据级"
       ],
-      "sync": ["registry", "采购单（T9）", "BRINGUP 检查表增项"]
+      "sync": [
+        "registry",
+        "采购单（T9）",
+        "BRINGUP 检查表增项"
+      ]
     },
     "firmware_twin": {
       "trigger": "固件/孪生 js",
-      "rerun": ["firmware/twin/run_tests.sh（六段）", "build_site", "双态截图目视"],
-      "sync": ["HANDOFF.md"]
+      "rerun": [
+        "firmware/twin/run_tests.sh（六段）",
+        "build_site",
+        "双态截图目视"
+      ],
+      "sync": [
+        "HANDOFF.md"
+      ]
     },
     "gen_pcb_footprint_rules": {
       "trigger": "footprint/板规则",
@@ -92,7 +121,9 @@
         "（若孔/板边变）pos → make_case 全链",
         "L5"
       ],
-      "sync": ["测试黄金值"]
+      "sync": [
+        "测试黄金值"
+      ]
     }
   },
   "incidents": [

@@ -21,6 +21,11 @@ description: FLOWIO-CN 硬件工程全流程 SOP——真值链铁律、五层�
 | freerouting | `E:/FLOWIO/资源/工具链/jdk-25/bin/java.exe -jar E:/FLOWIO/资源/工具链/freerouting-2.4.1.jar` | 布线优化（KiCad10 无 dsn/ses 子命令，DSN/SES 走 pcbnew API） |
 | 工作根 | worktree（如 E:/FLOWIO/.worktrees/p1.1-spin-b） | **一切工作在 worktree，禁止直接改主树** |
 
+> **cwd 基准统一**：下列相对路径均以 worktree 根为基准；`tools/gen_sch.py`、`tools/gen_pcb.py`、
+> `tools/route_pcb.py`、`tools/ingest_device_dims.py` 实际位于 `hardware/flowio-p1/tools/`
+> （运行目录 `hardware/flowio-p1/`）；`make_*.py`/`test_*.py`/`case_geom.py`/`device_graph.py`
+> 位于 `hardware/flowio-p1/enclosure/`；netlist/drl 位于 `hardware/flowio-p1/fab/`。
+
 ## 1. 真值链铁律（数据流单向）
 
 ```
@@ -62,12 +67,16 @@ POS_P11 过渡表（pos.csv 行优先+自动提示删除）、DSN 剥电源网�
 |----|------|------|
 | L1-L3 | STL bbox/锚点/装配契约 29 断言 | `python hardware/flowio-p1/enclosure/test_assembly.py` |
 | L4 | FreeCAD OCC 干涉（0.000mm³） | 同上脚本内探测 FreeCAD 后自动跑 |
-| L5 | 器件几何/图匹配/钻孔避让+pneumatic schema（15+13） | `E:/FLOWIO/tools/venv-cad/Scripts/python.exe hardware/flowio-p1/enclosure/test_device_geom.py`（`all` 档含 T2/T3/T4 段） |
+| L5 | 器件几何/图匹配/钻孔避让（默认档 13）+ pneumatic schema（15） | `E:/FLOWIO/tools/venv-cad/Scripts/python.exe hardware/flowio-p1/enclosure/test_device_geom.py`（命令行参数 `all`=追加 T2 图匹配/T3 flows/T4 钻孔避让段，合计 13 条 geom 侧断言；无参数=仅 schema 15 条） |
 | flows | 流路与网表/pos 同源 | `python hardware/flowio-p1/enclosure/test_flows.py` |
 | graph | 网↔槽完美匹配+flows 交叉校验 | device_graph.py 入口 |
 | 全量 | 六段一键 | `firmware/twin/run_tests.sh`（自动探测 venv） |
 
-新断言必须带**常驻负测试**（deepcopy 坏数据验证会翻红），并防"空数据空洞 PASS"（段残缺早退）。
+**pneumatic schema 关键域约束（新增气动件必读）**：负压专用阀（pressure_kpa 上限 ≤0，
+如 F0520B）**只允许出现在 `valve_vacuum_master` 组**，正压通用阀组 `valves` 禁止混入；
+执行器 electrical.rated_v 必须全等 4.5（P1.1 定案）；泵压力窗必须严格包络全部阀压力窗；
+refs 四组内唯一且不与 devices 段冲突；负测试=deepcopy 坏数据翻红 + 段残缺早退防空洞 PASS。
+新断言必须带常驻负测试。
 
 ## 4. 环境铁律（血泪，违反必返工）
 
@@ -94,12 +103,12 @@ POS_P11 过渡表（pos.csv 行优先+自动提示删除）、DSN 剥电源网�
 | 1 | 平面区+GND 缝合过孔+电源焊盘过孔（净空搜索） |
 | 2-3 | 网表驱动直布（驱动通道/曼哈顿） |
 | 4 | SES 导入后电源重建 |
-| 5 | 通用修补 |
+| 5 | 通用修补（DSN 导出/SES 导入的 pcbnew API 封装在本文件内，grep `dsn` 定位） |
 | 6 | 定点收尾（0.25mm 栅格 A* `_auto6`，逐 rat 补线） |
 
-节奏：每阶段后 `kicad-cli pcb drc --severity-error` **差分净减不增** + git 回滚点；
+节奏：每阶段后 `kicad-cli pcb drc --severity-error` **差分净减不增** + git 回滚点；drc 基线 json 存 `hardware/flowio-p1/drc-*.json`（命名 drc-<阶段>.json）；
 拥挤区（如 BOOT 走廊）先挪无关走线开廊再补线；退化残段（<0.1mm）先删；
-验收=0 未连 + DRC 0 + L5 T4 钻孔避让断言绿。布线只动铜，**禁动 PLACE**。
+验收=0 未连 + DRC 0 + L5 T4 钻孔避让断言绿。布线只动铜，**禁动 PLACE**；standoffs 真值=`hardware/flowio-p1/standoffs.txt`（HD 孔位变更时重出）；**PLACE 若改了孔位/板边（如 HD 移位），连带触发 `devices_json_pcb` 整行**（make_case→meshes→flows→L1-L3）。
 
 ## 6. 双阶段评审（subagent 开发流程）
 
