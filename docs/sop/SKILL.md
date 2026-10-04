@@ -50,12 +50,12 @@ devices.json (devices 段: PCB 贴装 / pneumatic_devices 段: 气动)
 | devices.json `devices` 段 | gen_pcb→pos 导出→ingest_device_dims→make_case→make_meshes→make_flows→L1-L3+L5 | registry、standoffs（若孔变） |
 | devices.json `pneumatic_devices` 段 | L5 pneumatic 断言→(P1.1)T6 结构→T7 仿真参数 | registry、component-param-audit |
 | gen_sch.py（电气） | gen_sch→ERC→netlist 导出(net.net+fab/*.net)→device_graph→make_flows→test_flows | 黄金值（nets/refs/edges 数，附推导） |
-| PLACE 布局坐标 | gen_pcb→route_pcb 全阶段→freerouting→DRC→pos→make_flows→L5 | standoffs、drc 差分基线 |
+| PLACE 布局坐标 | gen_pcb→route_pcb 全阶段→freerouting→DRC→pos→make_flows→L5→check_route 双绿门（未连0+铜柱环0） | standoffs、drc 差分基线 |
 | case_geom.py 常量 | make_case→make_meshes→make_assembly→L1-L4；scene.js bbox 同源断言会抓 | 测试标签动态引 G 常量（禁写死数字文本） |
 | 新器件（JLC 件） | jlcpcb MCP 摄取→ingest→registry 六元组→datasheet 存 literature | DOWNLOAD-LIST、audit |
 | 新器件（淘宝件） | devices.json CURATED_NOPART 手工条目→同上 | 同上+采购单 |
 | 固件/孪生 js | firmware/twin/run_tests.sh 六段→build_site→双态截图目视 | HANDOFF |
-| gen_pcb.py footprint/规则 | gen_pcb→DRC→pos→（若孔/板变）make_case 链 | 测试黄金值 |
+| gen_pcb.py footprint/规则 | gen_pcb→DRC→pos→（若孔/板变）make_case 链→check_route 双绿门 | 测试黄金值 |
 
 历史返工案例（矩阵的来源，勿再踩）：壳高链漂移（Z_TOP 4.0→9.0 测试写死）、端子换型
 （WJ500V→XH-2P 连带 TERM 槽/锚点/TALLEST）、双带出线（右壁 +X 语义 vs 底壁公式断言）、

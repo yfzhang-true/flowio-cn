@@ -56,7 +56,8 @@
         "freerouting round（DSN 含电源网！max_passes=3）",
         "kicad-cli pcb drc --severity-error（0 门）",
         "pos 导出 → make_flows → test_flows",
-        "L5 两档（T4 钻孔避让断言）"
+        "L5 两档（T4 钻孔避让断言）",
+        "check_route 连通守门（KiCad python 运行 hardware/flowio-p1/tools/check_route.py：未连 0 + 铜柱环 0 双绿门，exit 0）"
       ],
       "sync": [
         "hardware/flowio-p1/standoffs.txt",
@@ -119,7 +120,8 @@
       "rerun": [
         "tools/gen_pcb.py → DRC",
         "（若孔/板边变）pos → make_case 全链",
-        "L5"
+        "L5",
+        "check_route 连通守门（同 place_layout 链尾：check_route.py 未连 0 + 铜柱环 0 双绿门，exit 0）"
       ],
       "sync": [
         "测试黄金值"
