@@ -1,0 +1,108 @@
+{
+  "_meta": {
+    "source": "docs/sop/SKILL.md §2",
+    "usage": "flowio rebuild --after <key> → 有序重跑链 + 同步更新面（期 B cli 消费；人读见 SKILL.md）",
+    "updated": "2026-10-05"
+  },
+  "changes": {
+    "devices_json_pcb": {
+      "trigger": "devices.json devices 段（贴装器件 dims/refs）",
+      "rerun": [
+        "tools/gen_pcb.py（KiCad python，hardware/flowio-p1 目录）",
+        "kicad-cli pcb export pos → fab/flowio-p1-pos.csv",
+        "tools/ingest_device_dims.py",
+        "enclosure/make_case.py",
+        "enclosure/make_meshes.py",
+        "enclosure/make_flows.py",
+        "enclosure/test_assembly.py（L1-L3）",
+        "venv-cad enclosure/test_device_geom.py（L5 两档）"
+      ],
+      "sync": ["docs/component-registry.md", "standoffs.txt（若孔位变）"]
+    },
+    "devices_json_pneumatic": {
+      "trigger": "devices.json pneumatic_devices 段（气动真值）",
+      "rerun": [
+        "venv-cad enclosure/test_device_geom.py（pneumatic schema 15 断言）",
+        "结构件（T6 make_case/make_manifold/make_pump_module 如涉及几何）",
+        "孪生/仿真参数（T7 board_model 物理参数）"
+      ],
+      "sync": ["component-registry.md", "literature/component-param-audit.md"]
+    },
+    "gen_sch_electrical": {
+      "trigger": "gen_sch.py 电气改动",
+      "rerun": [
+        "python tools/gen_sch.py",
+        "kicad-cli sch erc（0 error 门）",
+        "kicad-cli sch export netlist → net.net + fab/flowio-p1.net",
+        "fab/netlist.py + enclosure/device_graph.py 断言",
+        "enclosure/make_flows.py + test_flows.py"
+      ],
+      "sync": ["黄金值 nets/refs/edges（附推导）", "erc.rpt"]
+    },
+    "place_layout": {
+      "trigger": "gen_pcb.py PLACE 坐标",
+      "rerun": [
+        "tools/gen_pcb.py",
+        "tools/route_pcb.py 阶段1-6（KiCad python，逐阶段）",
+        "freerouting round（DSN 含电源网！max_passes=3）",
+        "kicad-cli pcb drc --severity-error（0 门）",
+        "pos 导出 → make_flows → test_flows",
+        "L5 两档（T4 钻孔避让断言）"
+      ],
+      "sync": ["standoffs.txt", "drc 差分基线 json"]
+    },
+    "case_geom": {
+      "trigger": "case_geom.py 常量（板尺寸/高度链/ST/槽）",
+      "rerun": [
+        "enclosure/make_case.py",
+        "enclosure/make_meshes.py",
+        "enclosure/make_assembly.py（FreeCAD python）",
+        "test_assembly.py（L1-L4）",
+        "webapp scene.js bbox 同源断言"
+      ],
+      "sync": ["测试标签动态引 G 常量（禁写死数字文本）"]
+    },
+    "new_device_jlc": {
+      "trigger": "新增 JLC 器件",
+      "rerun": [
+        "jlcpcb MCP component_search（属性/库/经济装配三查）+ library_install",
+        "tools/ingest_device_dims.py",
+        "devices.json 条目 + registry 六元组",
+        "datasheet wmsc 直链下载存 literature/"
+      ],
+      "sync": ["DOWNLOAD-LIST.md", "component-param-audit.md", "BOM（make_bom.py）"]
+    },
+    "new_device_taobao": {
+      "trigger": "新增淘宝/1688 器件（气动三件硬约束国产）",
+      "rerun": [
+        "ingest CURATED_NOPART 手工条目（含一手 datasheet 引用）",
+        "四类参数审计（电气/几何/协议/工艺）标证据级"
+      ],
+      "sync": ["registry", "采购单（T9）", "BRINGUP 检查表增项"]
+    },
+    "firmware_twin": {
+      "trigger": "固件/孪生 js",
+      "rerun": ["firmware/twin/run_tests.sh（六段）", "build_site", "双态截图目视"],
+      "sync": ["HANDOFF.md"]
+    },
+    "gen_pcb_footprint_rules": {
+      "trigger": "footprint/板规则",
+      "rerun": [
+        "tools/gen_pcb.py → DRC",
+        "（若孔/板边变）pos → make_case 全链",
+        "L5"
+      ],
+      "sync": ["测试黄金值"]
+    }
+  },
+  "incidents": [
+    "壳高链漂移：Z_TOP 4.0→9.0，test_flows 写死常量红 → 一切 z 引 case_geom",
+    "端子换型：WJ500V(14.07)→XH-2P 连带 TERM 槽/锚点/TALLEST/壳高全链",
+    "双带出线：右壁 +X 语义，断言仍按底壁 y-25 公式 → rot 推导方向+带向不变量",
+    "POS_P11 过渡表：pos.csv 行优先+stale 检测自动提示删",
+    "DSN 剥电源网：SES 导入连座清除全部电源铜 → 电源网必须留 DSN 或事后全量重建",
+    "SWIG zone getter 撒谎：填充探测用 HitTestFilledArea 多点",
+    "freerouting 缺 max_passes：默认 200 轮 5h 空转",
+    "worktree 外层 add -A：劫持主树 933MB untracked → filter-branch 修复范式"
+  ]
+}
