@@ -232,6 +232,8 @@ def _mk_custom(name, ref_prefix, val, fp, pin_tab, rect, keywords=""):
     a('\t)')
     bbox = (min(rect[0], rect[2]), min(rect[1], rect[3]),
             max(rect[0], rect[2]), max(rect[1], rect[3]))
+    # 防 JLC 库将来装入同名符号后被自建定义静默遮蔽 (遮蔽即 ERC 语义漂移)
+    assert name not in LIBS, name
     LIBS[name] = dict(text="\n".join(body), pins=pins, bbox=bbox)
 
 _mk_custom("TYPE-C-31-M-12", "USB", "TYPE-C 16P",
@@ -276,6 +278,11 @@ FR = "JLC-MCP:R0603"; FC0603 = "Capacitor_SMD:C_0603_1608Metric"; FC1206 = "JLC-
 LCSC = {R1k: "C21190", R10k: "C25804", R22: "C23345", R330: "C23138", R47K: "C23162",
         R51K: "C23186", R324K: "C22994", R100K: "C14675", C100N: "C1591", C1U: "C15849",
         C10U: "C13585", C100U: "C15008", C2N2: "C33353", C22P: "C1653"}
+
+# P1.1 待选型: XH2.54-2P 卧贴插座 (J10-J17 由 WJ500V/C8465 改型, J20-J23 新增)。
+# 置空期间 inst_text 不写 LCSC 属性 → BOM 静默缺这 12 只插座的物料编码
+# (连同 U6 XGZP6897D 共 13 个待补); T3 定型选型后回填, make_bom 重跑即恢复。
+LCSC_XH2P = ""  # TODO(T3): 选型补 C 号 (XH2.54-2P 卧贴)
 
 VALVE_GPIO = ["IO4", "IO5", "IO6", "IO7", "IO10", "IO11", "IO12", "IO21"]
 
@@ -439,7 +446,7 @@ for i in range(8):
         P(f"D{4+i}", "SS14", "SS14", "JLC-MCP:SMA_L4.2-W2.6-LS5.0-RD_1", "C2480",
           x0 + 16, 365, {"2": f"DRV{i+1}", "1": "+5V"}),
         P(f"J{10+i}", "WAFER-XH2_54-2PZZ", "VALVE",
-          "JLC-MCP:CONN-TH_2P-P2.54_XH-2P", "", x0, 400,
+          "JLC-MCP:CONN-TH_2P-P2.54_XH-2P", LCSC_XH2P, x0, 400,
           {"1": "+5V", "2": f"DRV{i+1}"}),
     ]
 # ---- P1.1: 3 路主阀 (S充气/V真空/F排气, 1f-β 公共歧管) + 1 路泵驱动 (底部右段) --
@@ -458,12 +465,13 @@ for k, (tag, gpio) in enumerate(MAIN_CH):
         P(f"D{12+k}", "SS14", "SS14", "JLC-MCP:SMA_L4.2-W2.6-LS5.0-RD_1", "C2480",
           x0 + 16, 365, {"2": f"DRV_{tag}", "1": "+5V"}),
         P(f"J{20+k}", "WAFER-XH2_54-2PZZ", "VALVE" if tag != "PUMP" else "PUMP",
-          "JLC-MCP:CONN-TH_2P-P2.54_XH-2P", "", x0, 400,
+          "JLC-MCP:CONN-TH_2P-P2.54_XH-2P", LCSC_XH2P, x0, 400,
           {"1": "+5V", "2": f"DRV_{tag}"}),
     ]
 # ---- P1.1: U6 XGZP6897D 板载压力传感 (SOP-8, +3V3 域 I2C 直挂主控) -------------
 PARTS += [
     P("U6", "XGZP6897D", "XGZP6897D", "JLC-MCP:SOP-8_L4.9-W3.9-P1.27-LS6.0-BL", "",
+      # TODO(T3): 选型补 C 号 (XGZP6897D I2C 版, SOP-8) — 置空即 BOM 缺该物料编码
       185, 240, {"2": "+3V3", "6": "I2C_SDA", "7": "I2C_SCL", "8": "GND",
                  "1": None, "3": None, "4": None, "5": None}),
     P("C18", C100N, "100nF", FC0603, LCSC[C100N], 215, 240, {"1": "+3V3", "2": "GND"}),

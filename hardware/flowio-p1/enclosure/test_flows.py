@@ -56,7 +56,8 @@ def main():
         assert near(e["points"][-1], shell(refs[-1])), \
             "%s 终点漂移: %s != %s" % (e["id"], e["points"][-1], shell(refs[-1]))
         for p in e["points"]:
-            assert abs(p[2] - Z_TOP) <= EPS, "%s: z 应为板面 4.0" % e["id"]
+            assert abs(p[2] - Z_TOP) <= EPS, \
+                "%s: z 应为板面 %.1f (case_geom.Z_TOP)" % (e["id"], Z_TOP)
     print("[ok] %d 条 elec 路径首尾与 pos.csv 同源 (±%.1fmm)" % (n_elec, EPS))
 
     # 2. gate 路径数 (P1.1: +gateS/gateV/gateF 三主阀) + 泵路径
@@ -89,9 +90,10 @@ def main():
     assert got == want, "hotspots ref 集合 %s != %s" % (sorted(got), sorted(want))
     for x in hs:
         assert len(x["center"]) == 3 and len(x["size"]) == 3, "%s 盒体字段不全" % x["ref"]
-        assert 0 < x["size"][0] <= 90 and 0 < x["size"][1] <= 75, "%s 尺寸越板" % x["ref"]
+        assert 0 < x["size"][0] <= G.BW and 0 < x["size"][1] <= G.BH, \
+            "%s 尺寸越板" % x["ref"]
         cx, cy = x["center"][0], x["center"][1]
-        assert OX - EPS <= cx <= 90 + OX + EPS and OX - EPS <= cy <= 75 + OX + EPS, \
+        assert OX - EPS <= cx <= G.BW + OX + EPS and OX - EPS <= cy <= G.BH + OX + EPS, \
             "%s 盒心不在板范围" % x["ref"]
         assert x["live"], "%s 无 live 映射" % x["ref"]
     print("[ok] hotspots = 6 项 (%s), center/live 齐备" % ",".join(sorted(want)))
@@ -99,4 +101,5 @@ def main():
     print("flows tests OK")
 
 
-main()
+if __name__ == "__main__":
+    main()

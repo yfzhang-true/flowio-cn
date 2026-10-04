@@ -6,7 +6,7 @@
 
 坐标系: 与 S3 make_meshes.py 完全一致 (壳坐标系, 底壳原点):
     x = PosX + OX,  y = -PosY + OX,  OX = 2.9 (WALL+CLR)
-    顶面器件 z = WALL + PCB_T = 4.0 (板面)
+    顶面器件 z = Z_TOP, 取 case_geom 单一真值 (Z_BOARD + PCB_T, 现 9.0)
 Y 方向语义 (KiCad Y 轴向下): "沿 -Y" = PosY 减小 = 壳 y 增大 = 穿出端子侧开孔
 (make_case.py side_cut("B",...) 在高 y 壁, TY=68.5) → 气流弧线朝执行器向外延伸。
 
