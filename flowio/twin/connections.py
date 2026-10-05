@@ -104,7 +104,16 @@ def resolve_endpoint(ep, devices, modules):
     if not mod or not sep or not rest:
         raise ValueError("端点语法非法: %r (须 <位号>.<接口面> 或 <模块>.<face>)" % ep)
     name, hsep, idx_s = rest.partition("#")
-    idx = int(idx_s) if hsep else None
+    if hsep:                                      # 输入卫生: #序号须非负整数 (D 审 Minor 1)
+        try:
+            idx = int(idx_s)
+        except ValueError:
+            raise ValueError("端点 %r: #序号 %r 非数字 (须 <位号>.<面>#<非负整数>)"
+                             % (ep, idx_s))
+        if idx < 0:                               # 负序号拒绝 —— 禁 Python 负索引静默别名到末位
+            raise ValueError("端点 %r: #序号 %d 非法 (负序号拒绝, 同名消歧从 #0 起)" % (ep, idx))
+    else:
+        idx = None
     if mod in devices:
         entry = devices[mod]
         geom = entry.get("geom3d") or entry       # D1 起接口面在 geom3d 块内
@@ -341,6 +350,9 @@ def validate(conn=None, conn_path=None, devices_path=None):
             fail.append("R3%s: %s (失败通道: %s)" % (act, a["desc"], bad or "-"))
 
     # ---- R4 悬空端点 ----
+    # universe 刻意不含器件 mech_mounts (比 spec §3④ 字面窄, 留档): 机械位由 mechanical_edges
+    # 显式全量覆盖 (当前 14 机械位全连接, 无假绿风险), 不参与本判定
+    # —— 见 connections.json _meta.conventions.r4_scope
     universe = set()
     for ref, entry in devices.items():
         geom = entry.get("geom3d") or entry       # 接口面单源: geom3d 块 (D1)

@@ -21,6 +21,9 @@ import 即败), 实现后全绿。
                 删 F→大气边 (排红) / 删测压管 (测红) / 阀旁通直连 (保红);
   R4 悬空端点  — 器件气动口 + {2P 壳, 焊片}端子 + 模块面 全部有边连接或显式 reserved;
                 红例: 删 S1.P2→ATM 边 (P2 悬空); reserved 机制绿例 + 无标注红例;
+  端点输入卫生 — resolve_endpoint: #-1 负序号必拒 (不得 Python 负索引静默别名到末位) /
+                #x 非数字报错带端点回显 (禁裸 "invalid literal"); 红例各一;
+  fit_pending 钉扎 — 白名单恰 2 条 = 泵双嘴跳管; 真值新增 fit_pending 边未同步必红;
   CLI         — python -m flowio connections --check (rc 0=绿 / 1=违例 / 2=文件错)。
 
 WARN 清单纪律 (不 FAIL, 机器可读): 端点/边引用 inferred 接口面 (D1 占位: VV.N2 /
@@ -110,6 +113,17 @@ def test_real_warn_inventory():
     assert len(fp) == 2, "泵跳管 fit_pending 恰 2 条 (CHG/SUCK): %r" % fp
 
 
+def test_fit_pending_whitelist_pinned():
+    """fit_pending 白名单钉扎: 允许挂 fit_pending 的边恰 2 条 = 泵双嘴跳管
+    (registry §6 'ID5×OD7 定案+到货试装 4/5 取一' 唯一在案项)。
+    真值数据新增 fit_pending 边而未同步本白名单必红 (对齐'恰 N 条'计数锚纪律)。"""
+    allow = {("P1.CHG", "PMod.S_panel"), ("P1.SUCK", "PMod.V_panel")}
+    got = {(e["from"], e["to"])
+           for cls in ("pneumatic_edges", "electrical_edges", "mechanical_edges")
+           for e in CONN[cls] if e.get("fit_pending")}
+    assert got == allow, "fit_pending 白名单漂移: 多出 %r / 缺少 %r" \
+        % (got - allow, allow - got)
+
 
 # ══════════ R1 端点存在 ══════════
 def test_r1_endpoint_missing_red():
@@ -144,6 +158,28 @@ def test_r1_bad_json_red():
     finally:
         os.remove(bad)
 
+
+def test_r1_endpoint_index_hygiene():
+    """红例: #-1 负序号必拒 (旧行为: Python 负索引静默别名到末位同名面) /
+    #x 非数字报错带端点回显 (禁裸 "invalid literal" ValueError)。"""
+    devs = C.load_devices()
+    mods = CONN["modules"]
+    try:
+        C.resolve_endpoint("P1.bracket_ring#-1", devs, mods)
+        raise AssertionError("#-1 必须拒绝 (不得静默解析)")
+    except ValueError as e:
+        assert "bracket_ring#-1" in str(e), "报错须带端点回显: %s" % e
+    try:
+        C.resolve_endpoint("V1.N1#x", devs, mods)
+        raise AssertionError("#x 必须报错")
+    except ValueError as e:
+        assert "V1.N1#x" in str(e), "报错须带端点上下文 (裸 invalid literal 不合格): %s" % e
+    # 经 validate 的红例: #-1 边必须翻 R1 红 (不得静默解析成功走后续规则)
+    _must_fail(_mut(lambda c: c["mechanical_edges"].append(
+        {"from": "P1.bracket_ring#-1", "to": "PMod.base", "kind": "silicone_clamp"})), "#-1")
+    # 双锚: 合法 #0/#1 消歧语义不受卫生收紧影响
+    assert C.resolve_endpoint("P1.bracket_ring#0", devs, mods)["kind"] == "mechanical"
+    assert C.resolve_endpoint("P1.bracket_ring#1", devs, mods)["kind"] == "mechanical"
 
 
 # ══════════ R2 口径匹配 ══════════
@@ -322,8 +358,10 @@ if __name__ == "__main__":
     test_truth_json_loadable()
     test_real_truth_passes_all_rules()
     test_real_warn_inventory()
+    test_fit_pending_whitelist_pinned()
     test_r1_endpoint_missing_red()
     test_r1_bad_json_red()
+    test_r1_endpoint_index_hygiene()
     test_r2_tube_dia_red()
     test_r2_fit_pending_warn_not_fail()
     test_r3_swap_sv_tubes_red()
@@ -335,5 +373,5 @@ if __name__ == "__main__":
     test_r4_reserved_mechanism()
     test_cli_connections_check()
     test_cli_connections_summary_mode()
-    print("flowio.twin.connections tests OK (16 testfns: 数据合法×3 + R1×2 + R2×2 "
-          "+ R3×5 + R4×2 + CLI×2)")
+    print("flowio.twin.connections tests OK (18 testfns: 数据合法×3 + fit_pending 钉扎×1 "
+          "+ R1×3 + R2×2 + R3×5 + R4×2 + CLI×2)")

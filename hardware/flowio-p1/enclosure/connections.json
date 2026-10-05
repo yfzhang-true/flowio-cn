@@ -16,7 +16,8 @@
    "fit_pending": "泵顶嘴 ⌀4.2 × ID5 管: id>嘴径 按 R2 本应 FAIL —— registry §6 'ID5×OD7 定案 + 到货试装 4/5 取一' 在案 → 挂 fit_pending 降级 WARN (真值不发明, 不确定性可见)",
    "atm_node": "ATM=大气环境节点 (非实体模块): 排气终端 (F 壁孔) 与传感表压基准 (S1.P2) 显式接地, 供 R3 排/保判据的可达目标",
    "elec_scope": "电气边范围=器件级线束/电缆 (spec §2.1 harness 域, D2-A 视觉桩深度); PCB 板内网络 (I2C/栅极/电源) 由 flowio/flows/device_graph.py 网表域管辖不入图谱 (spec §4.1 对内电气板载); 阀 COIL_RED/BLACK 引线端子被 CONN_2P 视觉桩组件包含, 不单列",
-   "lead_len": "阀引线 60 / 泵电缆 150 = D2-A 桩深 (flowio/twin/devices3d/harness.py DEFAULTS 同源; spec §3 electrical_edges 示例 len 150)"
+   "lead_len": "阀引线 60 / 泵电缆 150 = D2-A 桩深 (flowio/twin/devices3d/harness.py DEFAULTS 同源; spec §3 electrical_edges 示例 len 150)",
+   "r4_scope": "R4 universe 不含器件 mech_mounts (比 spec §3④ 字面窄, 留档): 机械位由 mechanical_edges 显式全量覆盖 (当前 14 机械位全连接, 无假绿风险), 不参与 R4 悬空判定"
   }
  },
  "modules": {
