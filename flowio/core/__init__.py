@@ -3,6 +3,7 @@
 from flowio.core.errors import (FlowioError, GeomError, RouteError, SimError,  # noqa: F401
                                 TruthError)
 from flowio.core.interfaces import BaseModel, IActuator, ISensor  # noqa: F401
+from flowio.core.truth import TruthSource  # noqa: F401
 
 __all__ = ["FlowioError", "TruthError", "GeomError", "RouteError", "SimError",
-           "IActuator", "ISensor", "BaseModel"]
+           "IActuator", "ISensor", "BaseModel", "TruthSource"]

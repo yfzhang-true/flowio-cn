@@ -12,8 +12,9 @@ M0 落地 core 抽象层 + truth 真值层, M1-M5 渐进迁入 hw/geom/flows/twi
 from flowio.core.errors import (FlowioError, GeomError, RouteError, SimError,  # noqa: F401
                                 TruthError)
 from flowio.core.interfaces import BaseModel, IActuator, ISensor  # noqa: F401
+from flowio.core.truth import TruthSource  # noqa: F401
 
 __version__ = "0.1.0"
 
 __all__ = ["FlowioError", "TruthError", "GeomError", "RouteError", "SimError",
-           "IActuator", "ISensor", "BaseModel", "__version__"]
+           "IActuator", "ISensor", "BaseModel", "TruthSource", "__version__"]

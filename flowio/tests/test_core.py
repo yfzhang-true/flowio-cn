@@ -13,7 +13,11 @@
                    错误路径 (缺文件/坏 JSON/校验失败 → TruthError fail-loud);
   4. views       — ValveSpec(r_coil 推导)/PumpSpec/SensorSpec/DrivePolicy 视图锚点值。
 """
+import copy
+import json
+import os
 import sys
+import tempfile
 from contextlib import contextmanager
 from pathlib import Path
 
@@ -21,7 +25,11 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
 from flowio import (BaseModel, FlowioError, GeomError, IActuator, ISensor,  # noqa: E402
-                    RouteError, SimError, TruthError)
+                    RouteError, SimError, TruthError, TruthSource)
+from flowio.truth import (DrivePolicy, PumpSpec, SensorSpec, ValveSpec,  # noqa: E402
+                          drive_policy, pump_spec, sensor_spec, valve_specs)
+
+TRUTH_JSON = ROOT / "hardware" / "flowio-p1" / "enclosure" / "devices.json"
 
 
 @contextmanager
@@ -155,6 +163,124 @@ def test_basemodel_contract():
     assert m.step(0.1, {})["t_s"] == 0.1           # reset 后从头计
 
 
+# ══════════ 3. TruthSource: 封装载载+校验+只读 ══════════
+def test_truthsource_default_path_and_sections():
+    """默认路径解析到仓库根真值文件; 两段属性可读且形态正确。"""
+    ts = TruthSource()
+    assert ts.path == TRUTH_JSON and ts.path.is_file()
+    devs = ts.devices
+    assert isinstance(devs, list) and len(devs) == 34       # T1 锚: 34 唯一 C 号条目
+    pn = ts.pneumatic_devices
+    assert isinstance(pn, dict)
+    assert {"valves", "valve_vacuum_master", "pump", "sensor"} <= set(pn)
+
+
+def test_truthsource_readonly():
+    """只读性: 公共属性赋值必抛 AttributeError; 深只读: 污染返回值不影响源。"""
+    ts = TruthSource()
+    for attr in ("devices", "pneumatic_devices", "path"):
+        with _must_raise(AttributeError, "TruthSource.%s 只读, 赋值必抛" % attr):
+            setattr(ts, attr, [])
+    ts.devices.append({"evil": True})                        # 改的是深拷贝
+    ts.pneumatic_devices["valves"] = []
+    assert len(ts.devices) == 34                             # 源未被污染
+    assert len(ts.pneumatic_devices["valves"]) == 1
+
+
+def test_truthsource_env_override():
+    """FLOWIO_TRUTH 环境变量覆盖默认路径 (副本亦可正常加载校验)。"""
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td) / "devices.json"
+        tmp.write_bytes(TRUTH_JSON.read_bytes())
+        os.environ["FLOWIO_TRUTH"] = str(tmp)
+        try:
+            ts = TruthSource()
+            assert ts.path == tmp
+            assert len(ts.devices) == 34
+        finally:
+            del os.environ["FLOWIO_TRUTH"]
+    assert TruthSource().path == TRUTH_JSON                  # 解除后回到默认
+
+
+def test_truthsource_fail_loud():
+    """错误路径一律 TruthError (缺文件/坏 JSON/缺段/校验失败), 禁静默兜底。"""
+    # a) 文件不存在
+    with _must_raise(TruthError, "缺文件"):
+        TruthSource(ROOT / ".tmp_no_such_truth.json").devices
+    with tempfile.TemporaryDirectory() as td:
+        # b) 非法 JSON
+        bad = Path(td) / "bad.json"
+        bad.write_text('{"devices": [  未闭合', encoding="utf-8")
+        with _must_raise(TruthError, "坏 JSON"):
+            TruthSource(bad).devices
+        # c) schema 校验失败: 执行器 rated_v 改 3.7V (≠DC4.5V 档)
+        doc = json.loads(TRUTH_JSON.read_text(encoding="utf-8"))
+        doc["pneumatic_devices"]["valves"][0]["electrical"]["rated_v"] = 3.7
+        bad2 = Path(td) / "rated.json"
+        bad2.write_text(json.dumps(doc, ensure_ascii=False), encoding="utf-8")
+        with _must_raise(TruthError, "电压档校验须失败"):
+            TruthSource(bad2).devices
+        # d) 缺 pneumatic_devices 段
+        doc2 = {"devices": doc["devices"]}
+        bad3 = Path(td) / "noseg.json"
+        bad3.write_text(json.dumps(doc2), encoding="utf-8")
+        with _must_raise(TruthError, "缺 pneumatic_devices 段"):
+            TruthSource(bad3).devices
+
+
+# ══════════ 4. views: pneumatic 条目视图 (锚点值 = devices.json 冻结基线) ══════════
+def test_views_valve_spec():
+    """11 阀 refs 全展开; F0520D 10Ω / F0520B 15Ω r_coil 推导单源。"""
+    specs = valve_specs(TruthSource().pneumatic_devices)
+    by_ref = {ref: s for s in specs for ref in s.refs}
+    assert set(by_ref) == {"V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8",
+                           "VS", "VF", "VV"}
+    d = by_ref["V1"]
+    assert d.model == "F0520D-DC4.5V" and d.group == "valves"
+    assert abs(d.rated_current_a - 0.45) < 1e-12 and abs(d.rated_v - 4.5) < 1e-12
+    assert abs(d.r_coil - 10.0) < 1e-9                       # 4.5/0.45 推导
+    assert tuple(d.pressure_kpa) == (0.0, 45.0) and tuple(d.v_range) == (4.05, 4.95)
+    b = by_ref["VV"]
+    assert b.model == "F0520B-DC4.5V" and b.group == "valve_vacuum_master"
+    assert abs(b.rated_current_a - 0.30) < 1e-12 and abs(b.r_coil - 15.0) < 1e-9
+    assert tuple(b.pressure_kpa) == (-45.0, 0.0)
+
+
+def test_views_pump_sensor_spec():
+    pn = TruthSource().pneumatic_devices
+    p = pump_spec(pn)
+    assert p.model == "ZR370-03PM-DC4.5V" and p.refs == ("P1",)
+    assert abs(p.load_current_a - 0.5) < 1e-12 and abs(p.flow_lpm - 2.8) < 1e-12
+    assert tuple(p.pressure_kpa) == (-60.0, 120.0)           # 死头包络两类阀
+    s = sensor_spec(pn)
+    assert s.model.startswith("XGZP6897D") and s.i2c_addr == "0x6D"
+    assert s.data_bits == 24 and tuple(s.v_range) == (2.5, 5.5)
+
+
+def test_views_drive_policy():
+    dp = drive_policy(TruthSource().pneumatic_devices)
+    assert isinstance(dp, DrivePolicy)
+    assert abs(dp.rail_v - 5.0) < 1e-12
+    assert abs(dp.duties["pull_in"] - 1.0) < 1e-9            # 100% ≤100ms
+    assert abs(dp.duties["full_open"] - 0.90) < 1e-9
+    assert abs(dp.duties["economy"] - 0.55) < 1e-9
+    assert dp.pull_in_ms == 100.0
+    assert abs(dp.pump_max_duty - 0.95) < 1e-9 and dp.pump_soft_start is True
+
+
+def test_views_fail_loud():
+    """视图解析失败 → TruthError (无百分比/缺泵段)。"""
+    pn = TruthSource().pneumatic_devices
+    bad = copy.deepcopy(pn)
+    bad["_meta"]["drive_policy"]["valve"]["pull_in"] = "满开"   # 无百分比
+    with _must_raise(TruthError, "pull_in 无百分比须 TruthError"):
+        drive_policy(bad)
+    bad2 = copy.deepcopy(pn)
+    del bad2["pump"]
+    with _must_raise(TruthError, "泵条目缺失须 TruthError"):
+        pump_spec(bad2)
+
+
 if __name__ == "__main__":
     test_errors_hierarchy()
     test_interfaces_abc_rejects_instantiation()
@@ -162,4 +288,12 @@ if __name__ == "__main__":
     test_iactuator_polymorphism_anchor()
     test_isensor_contract()
     test_basemodel_contract()
-    print("flowio core tests OK (errors hierarchy + interfaces ABC)")
+    test_truthsource_default_path_and_sections()
+    test_truthsource_readonly()
+    test_truthsource_env_override()
+    test_truthsource_fail_loud()
+    test_views_valve_spec()
+    test_views_pump_sensor_spec()
+    test_views_drive_policy()
+    test_views_fail_loud()
+    print("flowio core tests OK (errors + interfaces + TruthSource + views)")
