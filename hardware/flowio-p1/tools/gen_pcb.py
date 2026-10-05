@@ -9,12 +9,12 @@
 新调用一律改为: "E:/Program Files/KiCad/10.0/bin/python.exe" flowio/hw/pcb_gen.py
 M5 收单后删除本文件。
 """
-import os
 import runpy
 import sys
+from pathlib import Path
 
-_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-_TARGET = os.path.join(_ROOT, "flowio", "hw", "pcb_gen.py")
+_ROOT = str(Path(__file__).resolve().parents[3])   # tools -> flowio-p1 -> hardware -> 仓库根
+_TARGET = str(Path(_ROOT) / "flowio" / "hw" / "pcb_gen.py")
 
 if __name__ == "__main__":
     if _ROOT not in sys.path:

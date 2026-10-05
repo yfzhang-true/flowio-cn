@@ -9,12 +9,12 @@
     kiCad-python flowio/hw/route/route_pcb.py [stage]
 M5 收单后删除本文件。
 """
-import os
 import runpy
 import sys
+from pathlib import Path
 
-_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-_TARGET = os.path.join(_ROOT, "flowio", "hw", "route", "route_pcb.py")
+_ROOT = str(Path(__file__).resolve().parents[3])   # tools -> flowio-p1 -> hardware -> 仓库根
+_TARGET = str(Path(_ROOT) / "flowio" / "hw" / "route" / "route_pcb.py")
 
 if __name__ == "__main__":
     if _ROOT not in sys.path:

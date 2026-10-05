@@ -8,12 +8,12 @@ sys.argv 透传); 新调用一律改为:
 flowio/hw/sch_gen.py (本 shim 源码不含 PARTS, 不可作读源)。
 M5 收单后删除本文件 (spec 2026-10-05 §2 渐进迁移纪律)。
 """
-import os
 import runpy
 import sys
+from pathlib import Path
 
-_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-_TARGET = os.path.join(_ROOT, "flowio", "hw", "sch_gen.py")
+_ROOT = str(Path(__file__).resolve().parents[3])   # tools -> flowio-p1 -> hardware -> 仓库根
+_TARGET = str(Path(_ROOT) / "flowio" / "hw" / "sch_gen.py")
 
 if __name__ == "__main__":
     if _ROOT not in sys.path:
