@@ -1,8 +1,9 @@
 # pyproject.toml — flowio 内核包安装描述 (spec v2.1 §2: "可安装包 (pip -e)")。
 #
 # flowio/ 位于仓库根, 本文件与之同级; `pip install -e .` 即可开发态安装。
-# M0 仅含 core/truth 两子包 (stdlib-only, 无第三方依赖); M1-M5 迁入其余子包时
-# 在 [tool.setuptools].packages 追加, 不改本文件结构。
+# M0: core/truth 两子包 (stdlib-only); M1 追加 hw/geom/flows 三域 (同为
+# stdlib-only; FreeCAD/pcbnew/networkx 依赖的生成器为脚本形态, 不入包依赖);
+# M2-M5 迁入其余子包时继续在 [tool.setuptools].packages 追加。
 [build-system]
 requires = ["setuptools>=64"]
 build-backend = "setuptools.build_meta"
@@ -15,4 +16,5 @@ requires-python = ">=3.9"
 dependencies = []          # stdlib-only (与 firmware/twin 运行纪律一致)
 
 [tool.setuptools]
-packages = ["flowio", "flowio.core", "flowio.truth"]
+packages = ["flowio", "flowio.core", "flowio.truth",
+            "flowio.hw", "flowio.hw.route", "flowio.geom", "flowio.flows"]

@@ -24,11 +24,10 @@ import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-sys.path.insert(0, str(HERE))
-import case_geom as G
-
 ROOT = HERE.parents[2]
 sys.path.insert(0, str(ROOT))          # M0: flowio 内核包 (真值谓词单源)
+                                      # M1: geom/flows/hw 域一律经 flowio 包 (旧位 shim 只兜外部旧脚本)
+from flowio.geom import case_geom as G  # noqa: E402
 from flowio.truth import predicates as TP  # noqa: E402
 
 BOM = ROOT / "hardware" / "flowio-p1" / "fab" / "flowio-p1-bom-jlc.csv"
@@ -182,8 +181,8 @@ KNOWN_VIA_BOSS = set()
 
 
 def test_orientation():
-    import device_geom as DG
-    import case_geom as GG
+    from flowio.geom import device_geom as DG
+    from flowio.geom import case_geom as GG
     bad_dir, bad_edge = [], []
     for ref in CONN_REFS:
         ray = DG.port_ray(ref)
@@ -208,7 +207,7 @@ def test_orientation():
 
 
 def test_collision_fcl():
-    import device_geom as DG
+    from flowio.geom import device_geom as DG
 
     def active_hits(cm):
         res = cm.in_collision_internal(return_names=True)
@@ -232,14 +231,14 @@ def test_collision_fcl():
 
 # ══════════ T3: 关系图 — 匹配闭环 + flows 交叉校验 ══════════
 def test_matching():
-    import device_graph as DGr
+    from flowio.flows import device_graph as DGr
     ok, pairs, diag = DGr.slots_satisfied()
     check("T3 匹配: 21 连接器↔21 槽完美匹配", ok, diag)
     if pairs:
         d = dict(pairs)
         slots = DGr.slot_nodes()
         import math
-        import device_geom as DG
+        from flowio.geom import device_geom as DG
         worst, wref = 0.0, ""
         for ref, sid in d.items():
             w = math.dist(DG.port_ray(ref)["origin"], slots[sid]["center3"])
@@ -257,15 +256,15 @@ def test_matching():
 
 
 def test_flows_crosscheck():
-    import device_graph as DGr
+    from flowio.flows import device_graph as DGr
     bad = DGr.flows_crosscheck()
     check("T3 flows 电气拓扑 ↔ 网表权威源 0 违例", not bad, str(bad[:4]))
 
 
 # ══════════ T4: 钻孔/禁布 — M3 孔 + 铜柱避让 ══════════
 def test_drill_keepout():
-    import device_geom as DG
-    import drl
+    from flowio.geom import device_geom as DG
+    from flowio.hw import drill as drl  # M1: fab/drl.py -> flowio/hw/drill.py (旧 device_graph 注入 fab 的副作用取消)
     holes = drl.npth_holes()                    # [(x板, y板, dia)]
     m3 = [h for h in holes if 3.0 <= h[2] <= 3.4]
     check("T4 drl: NPTH Ø3.2 M3 孔 = 4", len(m3) == 4, str([(round(a,1),round(b,1)) for a,b,_ in m3]))

@@ -19,10 +19,10 @@ import FreeCAD as App
 import Part
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, HERE)
-import case_geom as G
-
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(HERE)))   # 仓库根 (enclosure 上三级)
+sys.path.insert(0, ROOT)              # M1: 几何单一真相源经 flowio.geom (FreeCAD python 免安装)
+from flowio.geom import case_geom as G  # noqa: E402
+
 POSCSV = os.path.join(ROOT, "hardware", "flowio-p1", "fab", "flowio-p1-pos.csv")
 
 PASS, FAIL = 0, 0
