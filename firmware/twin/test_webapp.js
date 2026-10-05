@@ -2,9 +2,19 @@
 /**
  * test_webapp.js — v2 webapp 前端全链测试（playwright 无头，静态回调）
  *
+ * M4 组件化语义迁移（2026-10-03, spec D2=B）: webapp 重写为 Custom Elements +
+ * shadow DOM（<twin-app> 组件树）后，47 条断言逐一映射到组件 DOM —— 原则:
+ *   · 断言语义零弱化（滑条值/命令行/双体装配数/bbox 位移等逐字保持）;
+ *   · 仅选择器适配: document.getElementById → window.__t2.dom.byId（影子根深穿
+ *     查询, js/dom.js 提供 —— playwright pierce 模式的页内等价物）; 复合后代
+ *     选择器去掉跨影前缀（如 '#t2_ctrlDrawer .t2_seg' → '.t2_seg', 唯一性不变）;
+ *   · 原 id 全部保留在各组件影子/宿主上（t2_pwmVac/t2_explodeRange/t2_hv_*…）。
+ * 新增「组件契约」节 7 条: 定义齐全 / open shadowRoot / 组装树 / 属性反映 /
+ * pwm-change / 标签联动 / valve-cmd→cmd-line 组装。合计 47+7=54。
+ *
  * 对象: / (webapp 零构建 ES Modules) 的 3D 场景 / 流光粒子 / 抽屉 / 热点卡 / 仿真浮层。
- * 方法: 经 window.__t2={scene,flows,panels,simlab} 调试钩读渲染态（uniforms/粒子相位/爆炸
- *       位移），真实 CLI 命令驱动固件 DLL 后由 200ms 遥测管道回流断言；控制命令用
+ * 方法: 经 window.__t2={scene,flows,panels,simlab,dom,ble} 调试钩读渲染态（uniforms/粒子
+ *       相位/爆炸位移），真实 CLI 命令驱动固件 DLL 后由 200ms 遥测管道回流断言；控制命令用
  *       patch fetch 采集（POST 拦截、GET 透传保持遥测存活）；热点卡用相机投影 U3 中心
  *       真实鼠标点击（raycaster 实证）；/classic 旧版可达性收尾。
  * CLI 语义注意: S=确定性关阀（R 不清 duty，用例避免依赖 R）。
@@ -56,7 +66,8 @@ const cmd = (p, line) => p.evaluate((l) => window.__t2.panels.sendCmd(l), line);
   } catch (e) {
     console.log('FATAL: 场景装配超时（__t2 不可用）: ' + (await p.evaluate(() => ({
       t2: !!window.__t2, keys: window.__t2 ? Object.keys(window.__t2).join(',') : '-',
-      fail: (document.querySelector('#t2_stage .t2_glass') || {}).textContent || '' })).fail));
+      fail: (window.__t2 && window.__t2.dom
+        ? window.__t2.dom.q('#t2_stage .t2_glass') : null) || '' }).fail)));
     await b.close();
     process.exit(1);
   }
@@ -65,6 +76,7 @@ const cmd = (p, line) => p.evaluate((l) => window.__t2.panels.sendCmd(l), line);
 
   console.log('─ 加载：场景/流光装配 ─');
   const load = await p.evaluate(() => {
+    const D = window.__t2.dom;                           // 影子深穿查询 (M4)
     const sc = window.__t2.scene, fl = window.__t2.flows;
     return {
       parts: sc.parts.length,
@@ -74,9 +86,9 @@ const cmd = (p, line) => p.evaluate((l) => window.__t2.panels.sendCmd(l), line);
       lines: Object.keys(fl.lines).length,
       airs: fl.airs.length,
       particles: fl.airs.every((a) => a.points.geometry.attributes.position.count === 50),
-      calBadge: document.getElementById('t2_calBadge').textContent.includes('未本机标定'),
-      staleHidden: document.getElementById('t2_staleBadge').hidden,
-      tlmCollapsed: document.getElementById('t2_tlmDrawer').classList.contains('collapsed'),
+      calBadge: D.byId('t2_calBadge').textContent.includes('未本机标定'),
+      staleHidden: D.byId('t2_staleBadge').hidden,
+      tlmCollapsed: D.byId('t2_tlmDrawer').classList.contains('collapsed'),
     };
   });
   T('10 部件 STL 装配在场 (T6 双体: 主6+泵4)', load.parts === 10
@@ -102,10 +114,11 @@ const cmd = (p, line) => p.evaluate((l) => window.__t2.panels.sendCmd(l), line);
   T('爆炸系数平滑跟随 (k≈1)', expl.k > 0.9);
   T('流组每帧复制 pcb 位移 (端点绑定不断线)', expl.flowsFollow);
   const slider = await p.evaluate(() => {
-    const r = document.getElementById('t2_explodeRange');
+    const D = window.__t2.dom;
+    const r = D.byId('t2_explodeRange');
     r.value = '0.5';
     r.dispatchEvent(new Event('input', { bubbles: true }));
-    return { label: document.getElementById('t2_explodeVal').textContent };
+    return { label: D.byId('t2_explodeVal').textContent };
   });
   T('滑杆 input → 百分比标签联动 (50%)', slider.label === '50%');
   await p.evaluate(() => window.__t2.scene.setExplode(0));
@@ -180,19 +193,20 @@ const cmd = (p, line) => p.evaluate((l) => window.__t2.panels.sendCmd(l), line);
 
   console.log('─ 抽屉开合 ─');
   const drw = await p.evaluate(() => {
+    const D = window.__t2.dom;                           // 影子深穿 (M4 选择器适配)
     const out = {};
-    const tlm = document.getElementById('t2_tlmDrawer');
-    const tab = document.getElementById('t2_tlmTab');
+    const tlm = D.byId('t2_tlmDrawer');
+    const tab = D.byId('t2_tlmTab');
     out.tabVisible = !tab.hidden;
     tab.click();
     out.tlmOpen = !tlm.classList.contains('collapsed') && tab.hidden;
-    out.sparks = document.querySelectorAll('#t2_tlmCards .t2_spark').length;
-    document.getElementById('t2_tlmCollapse').click();
+    out.sparks = D.qa('#t2_tlmCards .t2_spark').length;
+    D.byId('t2_tlmCollapse').click();
     out.tlmClosed = tlm.classList.contains('collapsed') && !tab.hidden;
-    const ctrl = document.getElementById('t2_ctrlDrawer');
-    document.getElementById('t2_ctrlCollapse').click();
+    const ctrl = D.byId('t2_ctrlDrawer');
+    D.byId('t2_ctrlCollapse').click();
     out.ctrlClosed = ctrl.classList.contains('collapsed');
-    document.getElementById('t2_ctrlTab').click();
+    D.byId('t2_ctrlTab').click();
     out.ctrlReopen = !ctrl.classList.contains('collapsed');
     return out;
   });
@@ -212,20 +226,23 @@ const cmd = (p, line) => p.evaluate((l) => window.__t2.panels.sendCmd(l), line);
       return orig(url, opts);                            // GET 透传 → 遥测管道存活
     };
     try {
-      const q = (sel) => document.querySelector(sel);
-      // 双 PWM 滑条在场 (对齐官方 GUI 参考: Inflation/Vacuum 两档)
+      const D = window.__t2.dom;
+      const q = (sel) => D.q(sel);
+      // 双 PWM 滑条在场 (对齐官方 GUI 参考: Inflation/Vacuum 两档; M4 迁入 <dual-pump-pwm>)
       const dualSliders = !!(q('#t2_pwmInfl') && q('#t2_pwmVac'));
-      q('#t2_ctrlDrawer .t2_seg[data-port="0"] button[data-cmd="I"]').click();   // 阀1 充 (默认 255)
+      // 复合选择器去 '#t2_ctrlDrawer ' 前缀 —— .t2_seg[data-port] 在 <channel-row>
+      // (端口行) 或 <control-drawer> (全局行) 影子内, data-port 全局唯一
+      q('.t2_seg[data-port="0"] button[data-cmd="I"]').click();        // 阀1 充 (默认 255)
       await new Promise((r) => setTimeout(r, 60));
-      q('#t2_pwmVac').value = '200';                                              // 真空档 200
-      q('#t2_ctrlDrawer .t2_seg[data-port="g"] button[data-cmd="V"]').click();   // 全局 抽
+      q('#t2_pwmVac').value = '200';                                   // 真空档 200
+      q('.t2_seg[data-port="g"] button[data-cmd="V"]').click();        // 全局 抽
       await new Promise((r) => setTimeout(r, 60));
-      q('#t2_pwmInfl').value = '208';                                             // 充气档 208 (官方参考截图同值)
-      q('#t2_ctrlDrawer .t2_seg[data-port="0"] button[data-cmd="I"]').click();   // 阀1 充
+      q('#t2_pwmInfl').value = '208';                                  // 充气档 208 (官方参考截图同值)
+      q('.t2_seg[data-port="0"] button[data-cmd="I"]').click();        // 阀1 充
       await new Promise((r) => setTimeout(r, 60));
-      q('#t2_ctrlDrawer .t2_seg[data-port="2"] button[data-cmd="S"]').click();   // 阀3 释
+      q('.t2_seg[data-port="2"] button[data-cmd="S"]').click();        // 阀3 释
       await new Promise((r) => setTimeout(r, 60));
-      q('#t2_ctrlDrawer .t2_ctrlFoot button[data-line="T"]').click();           // 状态字
+      q('.t2_ctrlFoot button[data-line="T"]').click();                 // 状态字
       await new Promise((r) => setTimeout(r, 60));
       // 滑条 input → 数值标签联动 (拖动即时反馈)
       q('#t2_pwmVac').value = '180';
@@ -251,66 +268,126 @@ const cmd = (p, line) => p.evaluate((l) => window.__t2.panels.sendCmd(l), line);
     const V3 = cam.position.constructor;                 // 借 Vector3 构造器做投影
     const v = new V3(hs.center[0], hs.center[1], hs.center[2]);
     v.applyMatrix4(cam.matrixWorldInverse).applyMatrix4(cam.projectionMatrix);  // Vector3 已含透视除法
-    const r = document.getElementById('t2_canvas').getBoundingClientRect();
+    const r = window.__t2.dom.byId('t2_canvas').getBoundingClientRect();
     return { x: r.left + ((v.x + 1) / 2) * r.width,
              y: r.top + ((1 - v.y) / 2) * r.height };
   });
   await p.mouse.click(pt.x, pt.y);
   await sleep(700);                                      // 等 200ms live 刷新填充数值
   const card = await p.evaluate(() => {
-    const c = document.getElementById('t2_hotspotCard');
-    const vals = [...c.querySelectorAll('[id^=t2_hv_]')].map((e) => e.textContent);
+    const D = window.__t2.dom;
+    const c = D.byId('t2_hotspotCard');                  // <hotspot-card> 宿主
+    const vals = D.sub(c, '[id^=t2_hv_]').map((e) => e.textContent);   // 穿入其影子根
     return {
       visible: !c.classList.contains('hidden'),
-      ref: c.textContent.includes('U3'),
+      ref: c.shadowRoot.textContent.includes('U3'),    // 宿主 textContent 不含影子内容 (M4 适配)
       live: vals.length > 0 && vals.every((t) => t && t !== '—'),
-      bars: c.querySelectorAll('#t2_hotspotCard .t2_hsBar i').length,
+      bars: D.qa('.t2_hsBar i').length,
     };
   });
   T('U3 点击 → 热点卡出现 (ref+器件)', card.visible && card.ref);
   T('热点卡 live 值全部填充 (非 —)', card.live);
   T('热点卡迷你横条渲染', card.bars > 0);
   T('热点卡 ✕ 关闭', await p.evaluate(() => {
-    document.getElementById('t2_hsClose').click();
-    return document.getElementById('t2_hotspotCard').classList.contains('hidden');
+    const D = window.__t2.dom;
+    D.byId('t2_hsClose').click();
+    return D.byId('t2_hotspotCard').classList.contains('hidden');
   }));
 
   console.log('─ 仿真实验室浮层 ─');
   await p.evaluate(() => window.__t2.simlab.open());
   await sleep(1400);                                     // presets + buck 首算
-  const sim = await p.evaluate(() => ({
-    open: !document.getElementById('t2_simOverlay').hidden,
-    cards: document.querySelectorAll('.t2_simCard').length,
-    inputs: document.querySelectorAll('#t2_simForm input').length,
-    rows: document.querySelectorAll('#t2_simMets tr').length,
-    canvas: !!document.querySelector('#t2_simWave'),
-    errHidden: document.getElementById('t2_simErr').hidden,
-  }));
+  const sim = await p.evaluate(() => {
+    const D = window.__t2.dom;
+    return {
+      open: !D.byId('t2_simOverlay').hidden,             // <sim-lab> 宿主
+      cards: D.qa('.t2_simCard').length,
+      inputs: D.qa('#t2_simForm input').length,
+      rows: D.qa('#t2_simMets tr').length,
+      canvas: !!D.q('#t2_simWave'),
+      errHidden: D.byId('t2_simErr').hidden,
+    };
+  });
   T('浮层升起 (非 hidden)', sim.open);
   T('四电路选择卡', sim.cards === 4);
   T('presets 动态表单 (buck 参数)', sim.inputs >= 6);
   T('自动重算指标表 + 波形 canvas', sim.rows > 0 && sim.canvas && sim.errHidden);
   const sim400 = await p.evaluate(async () => {
-    const inp = document.querySelector('#t2_simForm input[data-p=vin]');
+    const D = window.__t2.dom;
+    const inp = D.q('#t2_simForm input[data-p=vin]');
     inp.value = '9';                                     // 越域 [3.8,5.5]
     await window.__t2.simlab.run();
     const bad = {
-      visible: !document.getElementById('t2_simErr').hidden,
-      text: document.getElementById('t2_simErr').textContent,
-      btnOk: !document.getElementById('t2_simRun').disabled,
+      visible: !D.byId('t2_simErr').hidden,
+      text: D.byId('t2_simErr').textContent,
+      btnOk: !D.byId('t2_simRun').disabled,
     };
     inp.value = '5';
     await window.__t2.simlab.run();
-    bad.recovered = document.querySelectorAll('#t2_simMets tr').length > 0
-      && document.getElementById('t2_simErr').hidden;
+    bad.recovered = D.qa('#t2_simMets tr').length > 0
+      && D.byId('t2_simErr').hidden;
     return bad;
   });
   T('参数越域 → 400 红条含 vin', sim400.visible && sim400.text.includes('vin'));
   T('修正参数后指标回归 (红条收敛)', sim400.btnOk && sim400.recovered);
   T('ESC 关闭浮层', await p.evaluate(() => {
     document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
-    return document.getElementById('t2_simOverlay').hidden;
+    return window.__t2.dom.byId('t2_simOverlay').hidden;
   }));
+
+  console.log('─ 组件契约 (M4 新增) ─');
+  const CONTRACT_TAGS = ['twin-app', 'top-bar', 'scene-3d', 'control-drawer', 'dual-pump-pwm',
+    'channel-row', 'telemetry-panel', 'transport-pill', 'hotspot-card', 'status-bar', 'sim-lab'];
+  const contract = await p.evaluate((tags) => {
+    const D = window.__t2.dom;
+    const app = D.q('twin-app');
+    return {
+      defined: tags.every((t) => !!customElements.get(t)),
+      shadows: tags.every((t) => { const el = D.q(t);
+        return el && el.shadowRoot && el.shadowRoot.mode === 'open'; }),
+      compose: ['top-bar', 'scene-3d', 'control-drawer', 'transport-pill', 'telemetry-panel',
+        'hotspot-card', 'status-bar', 'sim-lab']
+        .every((t) => !!(app && app.shadowRoot && app.shadowRoot.querySelector(t))),
+      rows8: D.qa('channel-row').length === 8,
+      attrReflect: (() => { const r = D.qa('channel-row')[3];
+        return !!r && r.getAttribute('port') === '3'
+          && r.shadowRoot.querySelector('.nm').textContent === '阀4·端口'
+          && !!r.shadowRoot.getElementById('t2_vd_3'); })(),
+    };
+  }, CONTRACT_TAGS);
+  T('11 组件 customElements 定义齐全', contract.defined);
+  T('组件均挂 open shadowRoot (样式封装)', contract.shadows);
+  T('twin-app 组装 8 子组件 (布局树完整)', contract.compose);
+  T('8 通道 <channel-row> 在场', contract.rows8);
+  T('channel-row 属性反映 (port/name → 影内 DOM)', contract.attrReflect);
+  const pwmEvt = await p.evaluate(() => new Promise((res) => {
+    const got = [];
+    const h = (ev) => got.push({ kind: ev.detail.kind, value: ev.detail.value });
+    document.addEventListener('pwm-change', h);         // composed 事件穿影达 document
+    const D = window.__t2.dom;
+    const r = D.byId('t2_pwmInfl');
+    r.value = '208';
+    r.dispatchEvent(new Event('input', { bubbles: true }));
+    setTimeout(() => {
+      document.removeEventListener('pwm-change', h);
+      res({ got, label: D.byId('t2_pwmInflVal').textContent });
+    }, 80);
+  }));
+  T('dual-pump-pwm 发 pwm-change {kind,value} (穿影达 document)',
+    pwmEvt.got.length === 1 && pwmEvt.got[0].kind === 'infl' && pwmEvt.got[0].value === 208);
+  T('pwm-change 伴标签联动 (充气 208)', pwmEvt.label === '208');
+  const cmdEvt = await p.evaluate(() => new Promise((res) => {
+    const D = window.__t2.dom;
+    D.byId('t2_pwmInfl').value = '255';                 // 复位充气档, 断言默认值路径
+    const lines = [];
+    const h = (ev) => lines.push(ev.detail.line);
+    document.addEventListener('cmd-line', h);
+    D.q('.t2_seg[data-port="3"] button[data-cmd="H"]').click();   // 阀4 保
+    D.q('.t2_seg[data-port="0"] button[data-cmd="I"]').click();   // 阀1 充
+    setTimeout(() => { document.removeEventListener('cmd-line', h); res(lines); }, 80);
+  }));
+  T('channel-row valve-cmd → control-drawer 组装 cmd-line (掩码+PWM 档)',
+    cmdEvt[0] === 'H 8' && cmdEvt[1] === 'I 1 255');
 
   console.log('─ /classic 旧版可达 ─');
   await p.goto(BASE + '/classic', { waitUntil: 'load', timeout: 8000 });
@@ -323,7 +400,7 @@ const cmd = (p, line) => p.evaluate((l) => window.__t2.panels.sendCmd(l), line);
 
   T('全程无页面 JS 错误', errs.length === 0);
   if (errs.length) console.log('  错误: ' + errs.join(' | '));
-  console.log(`\n${fail ? '✗' : '✓'} v2 webapp 测试 ${pass}/${pass + fail}`);
+  console.log(`\n${fail ? '✗' : '✓'} v2 webapp 测试 ${pass}/${pass + fail} (47 迁移 + ${pass + fail - 47} 组件契约)`);
   await b.close();
   process.exit(fail ? 1 : 0);
 })().catch((e) => { console.error('FATAL', e.message); process.exit(1); });
