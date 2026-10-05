@@ -6,6 +6,9 @@
   slots_satisfied()  -> minimum_weight_full_matching (权=端口面中心到槽中心距离)
   flows_crosscheck() -> flows.json 电气拓扑 vs 网表权威源 交叉校验 (plan T3.3)
 运行: tools/venv-cad (networkx).
+M1 迁移 (2026-10): enclosure/device_graph.py -> flowio/flows/device_graph.py (逻辑零改动,
+依赖改经包: case_geom/device_geom <- flowio.geom, netlist <- flowio.hw;
+旧版顺带注入 fab/ 到 sys.path 的副作用取消 —— drl 消费者一律 from flowio.hw import drill)。
 """
 import json
 import math
@@ -13,14 +16,12 @@ from pathlib import Path
 
 import networkx as nx
 
-HERE = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[2]   # flowio/flows -> 仓库根
 import sys
-sys.path.insert(0, str(HERE))
-sys.path.insert(0, str(HERE.parents[0] / "fab"))   # enclosure 上一级 = flowio-p1
-import case_geom as G
-import netlist as NL
+sys.path.insert(0, str(ROOT))                # flowio 包 (venv-cad python 免安装)
+from flowio.geom import case_geom as G       # noqa: E402
+from flowio.hw import netlist as NL          # noqa: E402
 
-ROOT = HERE.parents[2]
 FLOWS = ROOT / "firmware" / "twin" / "webapp" / "flows.json"
 
 
@@ -52,7 +53,7 @@ def slot_nodes():
 
 
 def build_graph():
-    import device_geom as DG
+    from flowio.geom import device_geom as DG
     g = nx.Graph()
     for e in NL.electrical_edges():
         a, b = sorted(e)
@@ -66,7 +67,7 @@ def build_graph():
 
 def slots_satisfied(conn_refs=None, drop_slots=()):
     """器件<->槽 最小权完美匹配; 返回 (ok, matching, diag)."""
-    import device_geom as DG
+    from flowio.geom import device_geom as DG
     conns = conn_refs or [r for r in DG._POS
                           if "port" in DG.entry_for_ref(r)]
     slots = {k: v for k, v in slot_nodes().items() if k not in drop_slots}

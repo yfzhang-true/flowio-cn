@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """FLOWIO-P1 流拓扑同源生成 — pos.csv → webapp/flows.json + hotspots.json.
 
-运行: python make_flows.py   (纯标准库, 无 FreeCAD 依赖)
+运行: python flowio/flows/make_flows.py   (纯标准库, 无 FreeCAD 依赖)
 输出: firmware/twin/webapp/{flows.json,hotspots.json}
 
 坐标系: 与 S3 make_meshes.py 完全一致 (壳坐标系, 底壳原点):
@@ -12,6 +12,8 @@ Y 方向语义 (KiCad Y 轴向下): "沿 -Y" = PosY 减小 = 壳 y 增大 = 穿�
 
 拓扑数据源: fab/flowio-p1-pos.csv (器件坐标) + 引脚表 (走线顺序, 写死于 ELEC/AIR)。
 任一 ref 在 pos.csv 查不到 → 报错列出全部缺失, 不许静默跳过。
+M1 迁移 (2026-10): enclosure/make_flows.py -> flowio/flows/make_flows.py (逻辑零改动,
+ROOT 经包定位重解析; case_geom 改经 flowio.geom; 产物落位不变)。
 """
 import csv
 import json
@@ -23,11 +25,10 @@ try:
 except Exception:
     pass
 
-HERE = Path(__file__).resolve().parent
-sys.path.insert(0, str(HERE))
-import case_geom as G          # 装配常量单一真相源 (2026-10-03: Z_TOP 4.0 -> 9.0)
+ROOT = Path(__file__).resolve().parents[2]   # flowio/flows -> 仓库根
+sys.path.insert(0, str(ROOT))                # flowio 包 (任意 python 免安装)
+from flowio.geom import case_geom as G       # 装配常量单一真相源 (2026-10-03: Z_TOP 4.0 -> 9.0)
 
-ROOT = HERE.parents[2]
 POSCSV = ROOT / "hardware" / "flowio-p1" / "fab" / "flowio-p1-pos.csv"
 OUTDIR = ROOT / "firmware" / "twin" / "webapp"
 
