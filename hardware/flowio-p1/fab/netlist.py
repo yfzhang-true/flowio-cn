@@ -6,7 +6,9 @@
   nets()            -> [(net_name, [refs...])]
   power_nets()      -> 电源/地网络名集合 (按名称约定)
   electrical_edges()-> {frozenset({a,b}), ...} 剔除电源地后的共网器件对
-纯标准库; 解析用逐括号扫描而非正则嵌套, 抗格式微变.
+纯标准库; 逐 (net ...) 节点括号深度扫描切块后取字段, 而非行 split —
+KiCad10 网表为多行缩进 s-expr (net / code / name / node 各占一行), 旧版
+行分割对齐不到块边界会把"后续全部 node"误并进当前网 (T2 遗留 known-issue, T5 修复)。
 """
 import re
 from pathlib import Path
@@ -19,15 +21,39 @@ POWER_HINTS = ("GND", "+3V3", "+5V", "+BATT", "VBUS", "VIN", "+12V", "+VA",
                "VDD", "VSS", "/power/", "Earth", "PWR")
 
 
+def _find_block(text, start):
+    """text[start] == '(' 处的 s-expr 块结尾下标 (闭括号后一位); 括号深度扫描."""
+    depth = 0
+    for i in range(start, len(text)):
+        c = text[i]
+        if c == "(":
+            depth += 1
+        elif c == ")":
+            depth -= 1
+            if depth == 0:
+                return i + 1
+    return len(text)
+
+
 def _parse_nets(text):
-    """扫描 (net (code "..") (name "..") (node (ref "..") ...) ...) 顶层段."""
+    """顶层 (nets ...) 内逐 (net ...) 节点切块: 取 (name "..") 与全部 (node (ref ".."))."""
+    m = re.search(r"\(nets\b", text)
+    nets_body_start = m.end() if m else 0
     nets = []
-    for m in re.finditer(r'\(net\s+\(code\s+"[^"]*"\)\s+\(name\s+"([^"]*)"\)', text):
-        name = m.group(1)
-        seg = text[m.end(): text.find("\n\t(net ", m.end()) if text.find("\n\t(net ", m.end()) > 0 else len(text)]
-        refs = re.findall(r'\(node\s+\(ref\s+"([^"]+)"\)', seg)
-        if refs:
-            nets.append((name, refs))
+    pos = nets_body_start
+    pat = re.compile(r"\(net\b")
+    while True:
+        m = pat.search(text, pos)
+        if not m:
+            break
+        end = _find_block(text, m.start())
+        seg = text[m.start():end]
+        nm = re.search(r'\(name\s+"([^"]*)"\)', seg)
+        if nm:
+            refs = re.findall(r'\(node\s+\(ref\s+"([^"]+)"\)', seg)
+            if refs:
+                nets.append((nm.group(1), refs))
+        pos = end
     return nets
 
 

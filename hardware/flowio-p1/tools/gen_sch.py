@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""FLOWIO-CN P1 原理图生成器 v2
+"""FLOWIO-CN P1 原理图生成器 v2 (P1.1: 11 阀+泵+XGZP+USB-C 供电)
 单一真值源: PARTS 表同时供原理图与 PCB 生成使用。
 教训固化:
   - MCP 符号引脚 y 在放置时取反(符号库 y 向上, 图纸 y 向下)
@@ -193,7 +193,73 @@ _TP_FALLBACK = """	(symbol "Mechanical:TestPoint"
 
 TP_DEF = _TP_FALLBACK
 
+# ---------------------------------------------------------------- 自建符号 (P1.1)
+# 本地 JLC-MCP 库缺以下符号, 按需内嵌生成 (pin 坐标=连接点, 本体外延 2.54):
+#   WAFER-XH2_54-2PZZ  XH2.54-2P 卧贴插座 (footprint=C7429671 真件, 焊盘 3/4 壳
+#                      体定位片无网 → 符号只建模信号 1/2)
+#   XGZP6897D  板载压力传感 宽体 SOP-8 (2=VDD 6=SDA 7=SCL 8=GND, 其余 NC)
+# 注: TYPE-C-31-M-12 曾为自建, T3 装 C165948 后 JLC 库有真符号 (引脚名与封装
+# 焊盘一一对应: A1B12/A4B9/B1A12/B4A9/EH1-4) → 改用库符号, 防遮蔽断言放行。
+
+# P1.1 选型定案 (T3): XH2.54-2P 卧贴插座 = Megastar ZX-XH2.54-2PWT (C7429671,
+# jlcpcb MCP 已装入全局 KiCad 库; 库存 13.9 万, 经济装配, SMD 右贴 3A/250V,
+# 本体 10.0×7.8×6.2mm; footprint 焊盘 1/2=信号(口侧) + 3/4=壳体定位焊片(背侧, 不布网))。
+FP_XH2P = "JLC-MCP:CONN-SMD_2P-P2.54_MEGASTAR_ZX-XH2.54-2PWT"
+LCSC_XH2P = "C7429671"
+
+def _mk_custom(name, ref_prefix, val, fp, pin_tab, rect, keywords=""):
+    body = []
+    a = body.append
+    a('\t(symbol "%s"' % name)
+    a('\t\t(exclude_from_sim no)')
+    a('\t\t(in_bom yes)')
+    a('\t\t(on_board yes)')
+    a('\t\t(property "Reference" "%s" (at 1.27 %s 0) (effects (font (size 1.27 1.27))))'
+      % (ref_prefix, fnum(rect[3] + 2.54)))
+    a('\t\t(property "Value" "%s" (at 1.27 %s 0) (effects (font (size 1.27 1.27))))'
+      % (val, fnum(rect[1] - 2.54)))
+    a('\t\t(property "Footprint" "%s" (at 0 0 0) (hide yes) (effects (font (size 1.27 1.27))))' % fp)
+    a('\t\t(property "Datasheet" "" (at 0 0 0) (hide yes) (effects (font (size 1.27 1.27))))')
+    if keywords:
+        a('\t\t(property "ki_keywords" "%s" (at 0 0 0) (hide yes) (effects (font (size 1.27 1.27))))'
+          % keywords)
+    a('\t\t(symbol "%s_0_1"' % name)
+    a('\t\t\t(rectangle (start %s %s) (end %s %s)'
+      % (fnum(rect[0]), fnum(rect[1]), fnum(rect[2]), fnum(rect[3]))
+      + ' (stroke (width 0.254) (type default)) (fill (type background)))')
+    a('\t\t)')
+    a('\t\t(symbol "%s_1_1"' % name)
+    pins = []
+    for num, pname, px, py, ang in pin_tab:
+        a('\t\t\t(pin passive line (at %s %s %d) (length 2.54)'
+          % (fnum(px), fnum(py), ang))
+        a('\t\t\t\t(name "%s" (effects (font (size 1.27 1.27))))' % pname)
+        a('\t\t\t\t(number "%s" (effects (font (size 1.27 1.27))))' % num)
+        a('\t\t\t)')
+        pins.append(dict(num=num, name=pname, x=px, y=py, ang=ang, etype="passive"))
+    a('\t\t)')
+    a('\t)')
+    bbox = (min(rect[0], rect[2]), min(rect[1], rect[3]),
+            max(rect[0], rect[2]), max(rect[1], rect[3]))
+    # 防 JLC 库将来装入同名符号后被自建定义静默遮蔽 (遮蔽即 ERC 语义漂移)
+    assert name not in LIBS, name
+    LIBS[name] = dict(text="\n".join(body), pins=pins, bbox=bbox)
+
+_mk_custom("WAFER-XH2_54-2PZZ", "J", "XH 2P",
+           FP_XH2P,
+           [("1", "1", -5.08, 1.27, 0), ("2", "2", -5.08, -1.27, 0)],
+           (-2.54, 3.81, 2.54, -3.81))
+
+_mk_custom("XGZP6897D", "U", "XGZP6897D",
+           "LOCAL:XGZP6897D-SOP8-W7.96-P2.54",
+           [("1", "NC", -7.62, 3.81, 0), ("2", "VDD", -7.62, 1.27, 0),
+            ("3", "NC", -7.62, -1.27, 0), ("4", "NC", -7.62, -3.81, 0),
+            ("5", "NC", 7.62, -3.81, 180), ("6", "SDA", 7.62, -1.27, 180),
+            ("7", "SCL", 7.62, 1.27, 180), ("8", "GND", 7.62, 3.81, 180)],
+           (-5.08, 5.08, 5.08, -5.08))
+
 # ---------------------------------------------------------------- 器件清单
+
 P = lambda ref, sym, val, fp, lcsc, x, y, nets: dict(
     ref=ref, sym=sym, val=val, fp=fp, lcsc=lcsc, x=x, y=y, nets=nets)
 
@@ -209,16 +275,29 @@ LCSC = {R1k: "C21190", R10k: "C25804", R22: "C23345", R330: "C23138", R47K: "C23
         R51K: "C23186", R324K: "C22994", R100K: "C14675", C100N: "C1591", C1U: "C15849",
         C10U: "C13585", C100U: "C15008", C2N2: "C33353", C22P: "C1653"}
 
+
 VALVE_GPIO = ["IO4", "IO5", "IO6", "IO7", "IO10", "IO11", "IO12", "IO21"]
 
 PARTS = []
-# ---- 电源输入 + Diode-OR (左上) ---------------------------------------------
+# ---- 电源输入 USB-C 5A (左上, P1.1: DC005 移除, 仅 USB-C 供电) ----------------
+# J1 VBUS 直挂 +5V (5A 路径, 无 OR 二极管); CC1/CC2 各 5.1k Rd 下拉 (免 PD 取 5V/3A)
+# D1(DC_IN OR) 随 DC005 一并移除; D2(调试口 OR) 保留 — 反向阻断, 仅调试单线供电时馈 +5V
 PARTS += [
-    P("J1", "DC005_C431533", "DC-005", "JLC-MCP:DC-IN-TH_DC005", "C431533", 50, 55,
-      {"1": "DC_IN", "2": "GND", "3": None}),
-    P("D1", "SS34_C8678", "SS34", "JLC-MCP:SMA_L4.3-W2.6-LS5.2-RD", "C8678", 100, 55,
-      {"2": "DC_IN", "1": "+5V"}),
+    P("J1", "TYPE-C-31-M-12", "USB-C PWR", "JLC-MCP:USB-C_SMD-TYPE-C-31-M-12_1",
+      "C165948", 50, 55,
+      # JLC 库符号引脚名=封装焊盘名 (A1B12/A4B9/B1A12/B4A9 合并焊盘 + EH1-4 屏蔽腿);
+      # DP/DN/SBU 本板不用 (电源口), NC 悬空
+      {"A1B12": "GND", "A4B9": "+5V", "B1A12": "GND", "B4A9": "+5V",
+       "A5": "P5_CC1", "B5": "P5_CC2",
+       "B8": None, "B7": None, "A6": None, "A7": None, "B6": None, "A8": None,
+       "1": "GND", "2": "GND", "3": "GND", "4": "GND"}),
     P("C17", C10U, "10uF", FC1206, LCSC[C10U], 75, 55, {"1": "+5V", "2": "GND"}),
+    P("R63", R51K, "5.1k", FR, LCSC[R51K], 100, 42, {"1": "P5_CC1", "2": "GND"}),
+    P("R64", R51K, "5.1k", FR, LCSC[R51K], 100, 68, {"1": "P5_CC2", "2": "GND"}),
+    P("U7", "USBLC6-2SC6", "USBLC6-2SC6",
+      "JLC-MCP:SOT-23-6_L2.9-W1.6-P0.95-LS2.8-BL", "C7519", 135, 55,
+      {"1": "P5_CC1", "2": "GND", "3": "P5_CC2", "4": "P5_CC2", "5": "+5V",
+       "6": "P5_CC1"}),
     P("D2", "SS34_C8678", "SS34", "JLC-MCP:SMA_L4.3-W2.6-LS5.2-RD", "C8678", 100, 130,
       {"2": "USB_VBUS", "1": "+5V"}),
     P("J2", "TYPE-C_6P", "USB-C", "JLC-MCP:TYPE-C-SMD_TYPE-C-6P_1", "C456012", 50, 130,
@@ -283,12 +362,14 @@ PARTS += [
       "C181160", 230, 205, {"1": "RTS_R", "2": "GND", "3": "BOOT"}),
 ]
 # ---- ESP32-S3 主控 + strapping (左中) ---------------------------------------
+# P1.1: 引脚 8/9/10/11 (IO15/16/17/18) → S/V/F 主阀 + 泵 驱动 (非 STRAP, 未占用)
 ESP_NETS = {
     "1": "GND", "2": "+3V3", "3": "EN", "4": "IO4", "5": "IO5", "6": "IO6", "7": "IO7",
+    "8": "IO15", "9": "IO16", "10": "IO17", "11": "IO18",
     "12": "I2C_SDA", "17": "I2C_SCL", "18": "IO10", "19": "IO11", "20": "IO12",
     "23": "IO21", "36": "UART_RX", "37": "UART_TX", "25": "IO48", "27": "BOOT",
     "15": "STRAP3", "26": "STRAP45", "16": "STRAP46", "21": "LED_USER", "22": "BTN_USER",
-    "8": None, "9": None, "10": None, "11": None, "13": None, "14": None,
+    "13": None, "14": None,
     "24": None, "28": None, "29": None, "30": None, "31": None, "32": None,
     "33": None, "34": None, "35": None, "38": None, "39": None,
     "40": "GND", "41": "GND",
@@ -358,23 +439,54 @@ for i in range(8):
           {"1": f"GATE{i+1}", "2": "GND", "3": f"DRV{i+1}"}),
         P(f"D{4+i}", "SS14", "SS14", "JLC-MCP:SMA_L4.2-W2.6-LS5.0-RD_1", "C2480",
           x0 + 16, 365, {"2": f"DRV{i+1}", "1": "+5V"}),
-        P(f"J{10+i}", "WJ500V-5_08-2P-14-00A", "VALVE",
-          "JLC-MCP:CONN-TH_2P-P5.00_WJ500V-5.08-2P", "C8465", x0, 400,
+        P(f"J{10+i}", "WAFER-XH2_54-2PZZ", "VALVE",
+          FP_XH2P, LCSC_XH2P, x0, 400,
           {"1": "+5V", "2": f"DRV{i+1}"}),
     ]
+# ---- P1.1: 3 路主阀 (S充气/V真空/F排气, 1f-β 公共歧管) + 1 路泵驱动 (底部右段) --
+# 编号连续: 栅阻 R55-R58 / 下拉 R59-R62 / Q13-Q16 / D12-D15 / J20-J23
+MAIN_CH = [("S", "IO15"), ("V", "IO16"), ("F", "IO17"), ("PUMP", "IO18")]
+for k, (tag, gpio) in enumerate(MAIN_CH):
+    x0 = 328 + k * 36
+    PARTS += [
+        P(f"R{55+k}", R1k, "1k", FR, LCSC[R1k], x0, 310,
+          {"1": gpio, "2": f"GATE_{tag}"}),
+        P(f"R{59+k}", R10k, "10k", FR, LCSC[R10k], x0, 335,
+          {"1": f"GATE_{tag}", "2": "GND"}),
+        P(f"Q{13+k}", "AO3400A", "AO3400A", "JLC-MCP:SOT-23-3_L2.9-W1.3-P1.90-LS2.4-BR",
+          "C20917", x0, 365,
+          {"1": f"GATE_{tag}", "2": "GND", "3": f"DRV_{tag}"}),
+        P(f"D{12+k}", "SS14", "SS14", "JLC-MCP:SMA_L4.2-W2.6-LS5.0-RD_1", "C2480",
+          x0 + 16, 365, {"2": f"DRV_{tag}", "1": "+5V"}),
+        P(f"J{20+k}", "WAFER-XH2_54-2PZZ", "VALVE" if tag != "PUMP" else "PUMP",
+          FP_XH2P, LCSC_XH2P, x0, 400,
+          {"1": "+5V", "2": f"DRV_{tag}"}),
+    ]
+# ---- P1.1: U6 XGZP6897D 板载压力传感 (宽体 SOP-8, +3V3 域 I2C 直挂主控) --------
+# LCSC 无 CFSensor 现货 (仅 JLC 扩展件 C99xxx 零库存无资料) → 淘宝件 (CFSensor
+# 深圳闽芯店, 见 devices.json pneumatic_devices.sensor), 不入 JLC BOM; footprint
+# 按 datasheet 手建 (LOCAL: 前缀, gen_pcb.py 内联生成): 排距 7.96 / 节距 2.54 /
+# 焊盘 0.9×2.0 / 本体 10.6×7.6。
+PARTS += [
+    P("U6", "XGZP6897D", "XGZP6897D", "LOCAL:XGZP6897D-SOP8-W7.96-P2.54", "",
+      # TODO(采购): 淘宝件 XGZP6897D100KPDPN (量程 -100~100kPa, I2C 0x6D) — 不入 JLC BOM
+      185, 240, {"2": "+3V3", "6": "I2C_SDA", "7": "I2C_SCL", "8": "GND",
+                 "1": None, "3": None, "4": None, "5": None}),
+    P("C18", C100N, "100nF", FC0603, LCSC[C100N], 215, 240, {"1": "+3V3", "2": "GND"}),
+]
 PARTS += [
     P("C15", C100N, "100nF", FC0603, LCSC[C100N], 40, 160, {"1": "+5V", "2": "GND"}),
     P("C16", C100N, "100nF", FC0603, LCSC[C100N], 292, 160, {"1": "+5V", "2": "GND"}),
 ]
-# ---- 调试排针 + 测试点 (右下) --------------------------------------------------
+# ---- 调试排针 + 测试点 (右中/右下; P1.1 让位主阀通道列右移至此) -----------------
 PARTS += [
     P("J18", "WAFER-XH2_54-4PZZ", "DEBUG-UART", "JLC-MCP:CONN-TH_4P-P2.54_6173868",
-      "C5359632", 400, 335, {"1": "UART_TX", "2": "GND", "3": "UART_RX", "4": "+3V3"}),
+      "C5359632", 505, 160, {"1": "UART_TX", "2": "GND", "3": "UART_RX", "4": "+3V3"}),
     P("J19", "WAFER-XH2_54-4PZZ", "DEBUG-GPIO", "JLC-MCP:CONN-TH_4P-P2.54_6173868",
-      "C5359632", 440, 335, {"1": "LED_USER", "2": "+3V3", "3": "GND", "4": "BTN_USER"}),
+      "C5359632", 505, 200, {"1": "LED_USER", "2": "+3V3", "3": "GND", "4": "BTN_USER"}),
 ]
 TP_NETS = ["+3V3", "+5V", "GND", "GND", "GND", "GND", "I2C_SDA", "I2C_SCL",
-           "GATE1", "DRV1", "PH", "EN"]
+           "GATE1", "DRV1", "PH", "EN", "DRV_PUMP"]
 for i, net in enumerate(TP_NETS):
     PARTS.append(P(f"TP{i+1}", "Mechanical:TestPoint", net,
                    "TestPoint:TestPoint_Pad_D1.0mm", "",
@@ -388,7 +500,7 @@ POWER_SPOTS = [
     ("Q11", "2", "GND", "gnd", None),
     ("U4", "11", "GND", "gnd", None),
     ("U1", "2", "+3V3", "rail", "U"),
-    ("D1", "1", "+5V", "rail", None),
+    ("C17", "1", "+5V", "rail", None),   # P1.1: D1 移除, +5V 电源箭头挂输入电容
     ("L1", "1", "PH", "rail", None),
     # PWR_FLAG: power_out 引脚, 满足 ERC "电源网络须有驱动" (官方惯例)
     ("C7", "1", "+3V3", "flag", None),
@@ -642,11 +754,11 @@ def pwr_inst_text(x, y, net, kind, pref):
     return "".join(b)
 
 NOTES = [
-    (30, 22, "FLOWIO-CN P1 电源输入 + TPS54331 Buck"),
+    (30, 22, "USB-C 5A 供电 (J1: Rd 5.1k x2 + U7 ESD) + TPS54331 Buck"),
     (340, 22, "USB-UART CH340K + SS8050 自动下载"),
     (30, 140, "ESP32-S3-WROOM-1-N16R8 主控 + Strapping"),
-    (250, 140, "TCA9548A 五通道 I2C 传感链"),
-    (30, 280, "8 路 AO3400A 阀/泵驱动 (IO4/5/6/7/10/11/12/21)"),
+    (250, 140, "TCA9548A 五通道 I2C 传感链 + U6 XGZP6897D 板载压力传感"),
+    (30, 280, "12 路 AO3400A 驱动: 8x 阀 + S/V/F 主阀 + 泵 (1f-β, XH-2P 插座 J10-J23)"),
     (380, 280, "调试排针 + 测试点"),
 ]
 
@@ -751,10 +863,10 @@ sch = ["(kicad_sch",
        '\t(paper "A2")',
        '\t(title_block',
        '\t\t(title "FLOWIO-CN P1 升级大脑")',
-       '\t\t(date "2026-10-01")',
-       '\t\t(rev "1.0")',
+       '\t\t(date "2026-10-03")',
+       '\t\t(rev "1.1")',
        '\t\t(company "FLOWIO-CN")',
-       '\t\t(comment 1 "ESP32-S3 + TCA9548A + 8x AO3400 + TPS54331 + CH340K")',
+       '\t\t(comment 1 "ESP32-S3 + 11x valve drv + pump + XGZP + USB-C power")',
        '\t)',
        '\t(lib_symbols',
        "\n".join(uniq),

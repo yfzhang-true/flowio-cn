@@ -28,6 +28,7 @@ import Part
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import case_geom as G
+from pneu_geom import valve_solids, tube          # T6 共享构建器 (单一实现)
 
 ROOT = HERE.parents[2]
 POSCSV = ROOT / "hardware" / "flowio-p1" / "fab" / "flowio-p1-pos.csv"
@@ -84,12 +85,20 @@ def mesh_and_write(shape, path):
     return m
 
 
-def check_mesh(name, m):
+def check_mesh(name, m, min_shells=1, closed_required=True):
+    """网格健全: 非空 + 壳数下限 + 逐连通壳闭合 (多件合体 STL 如 pump_module 底+盖 /
+    valves 11 只按'逐壳闭合'校验 — 合体件 isSolid 必假是语义不是缺陷).
+    closed_required=False: float32 STL 往返会把共面融合件的焊接点拆出 1-ULP 缝
+    (pump_module 实测 2 闭壳写盘重载变 3 壳 2 开) — 闭合真值以生成器写时断言
+    (make_pump_module write_stl / OCC solid isValid) 为准, 此处退守壳数+面数."""
     facets = m.CountFacets
-    solid = m.isSolid()
-    print("[mesh] %-16s facets=%-6d isSolid=%s" % (name, facets, solid))
+    comps = m.getSeparateComponents()
+    all_closed = all(c.isSolid() for c in comps)
+    print("[mesh] %-16s facets=%-6d shells=%-3d closed=%s" % (name, facets, len(comps), all_closed))
     assert facets > 0, "%s: no facets" % name
-    assert solid, "%s: mesh not solid" % name
+    assert len(comps) >= min_shells, "%s: shells %d < %d" % (name, len(comps), min_shells)
+    if closed_required:
+        assert all_closed, "%s: 未闭合壳" % name
     return facets
 
 
@@ -99,6 +108,11 @@ def main():
     # 1. 壳 STL 复制改名 (make_case.py 产物, 壳系原生)
     shutil.copyfile(HERE / "case-bottom.stl", OUT / "case_bottom.stl")
     shutil.copyfile(HERE / "case-top.stl", OUT / "case_top.stl")
+
+    # 1b. T6 气动结构件 STL 复制 (make_manifold / make_pump_module 产物, 壳系绝对坐标)
+    for src, dst in (("manifold.stl", "manifold.stl"), ("pump-module.stl", "pump_module.stl"),
+                     ("pump.stl", "pump.stl"), ("brackets.stl", "brackets.stl")):
+        shutil.copyfile(HERE / src, OUT / dst)
 
     # 2. 坐标映射锚点校验
     parts = load_pos()
@@ -116,10 +130,36 @@ def main():
     m_f = mesh_and_write(Part.makeCompound([part_box(p) for p in tops]), OUT / "parts_f.stl")
     check_mesh("parts_f.stl", m_f)
 
-    # 5. PCB 网格 + 壳网格校验
+    # 4b. T6 阀阵 11 只 (体+嘴, pneu_geom 单一实现 — 与歧管自检同源)
+    m_v = mesh_and_write(Part.makeCompound([vs for *_m, vs in valve_solids()]), OUT / "valves.stl")
+    check_mesh("valves.stl", m_v, min_shells=22)      # 11 阀 × (体+嘴) 双壳
+
+    # 4c. T6 视觉气管 ×2 (泵模块面板 ↔ 主壳 S/V 壁孔, ⌀5 管视觉件)
+    pmx = G.PMOD_OFF[0] + G.PMOD_L - 1.2      # 管端收 1.2: 斜轴圆柱端面圆盘外缘 x=b.x+r√(1-nx²),
+                                               # 实测外伸 0.96 (r=2.5, nx≈0.92), 保 BBOX=壳外廓契约
+    pmy, pmz = G.PMOD_OFF[1] + G.PMOD_CY, G.PMOD_OFF[2] + G.PUMP_AXIS_Z
+    segs = []
+    for k, (y_case, dy) in enumerate(((20.4, -G.PMOD_PORT_DY), (31.4, G.PMOD_PORT_DY))):
+        a = App.Vector(G.OW, y_case, G.PORT_Z_LOW)
+        mid = App.Vector(G.OW + 44.0, y_case, G.PORT_Z_LOW + 3.0)
+        b = App.Vector(pmx, pmy + dy, pmz)
+        segs.append(tube(a.x, a.y, a.z, mid.x, mid.y, mid.z, 5.0))
+        segs.append(tube(mid.x, mid.y, mid.z, b.x, b.y, b.z, 5.0))
+        segs.append(Part.makeSphere(2.6, mid))
+    m_t = mesh_and_write(Part.makeCompound(segs), OUT / "tubes.stl")
+    check_mesh("tubes.stl", m_t)
+
+    # 5. PCB 网格 + 壳网格校验 (T6 多壳件闭合以生成器写时断言为准, 见 check_mesh)
     check_mesh("pcb.stl", mesh_and_write(pcb_shape, OUT / "pcb.stl"))
     check_mesh("case_bottom.stl", Mesh.Mesh(str(OUT / "case_bottom.stl")))
     check_mesh("case_top.stl", Mesh.Mesh(str(OUT / "case_top.stl")))
+    check_mesh("manifold.stl", Mesh.Mesh(str(OUT / "manifold.stl")))
+    check_mesh("pump_module.stl", Mesh.Mesh(str(OUT / "pump_module.stl")), min_shells=2,
+               closed_required=False)                                              # 底盒+裙盖
+    check_mesh("pump.stl", Mesh.Mesh(str(OUT / "pump.stl")), min_shells=3,
+               closed_required=False)                                              # 体+双嘴
+    check_mesh("brackets.stl", Mesh.Mesh(str(OUT / "brackets.stl")), min_shells=2,
+               closed_required=False)                                              # 支架×2
 
     # 6. 清理旧版遗留的空 parts_b.stl (BOM 无底面器件)
     stale = OUT / "parts_b.stl"
@@ -127,24 +167,38 @@ def main():
         stale.unlink()
         print("[out] removed stale parts_b.stl (no bottom-side parts)")
 
-    # 7. assembly.json — spec §3.4 契约 (explode/bbox 全部来自 case_geom)
+    # 7. assembly.json — spec §3.4 契约 + T6 双体 (explode/bbox 全部来自 case_geom)
+    #    主模块 6 件 (板+器件+底+盖+阀阵+歧管) + 泵模块 4 件 (壳+泵+支架+气管)
+    PARTS = [
+        ("manifold",    "歧管 M (1f-β 12 口)",   "/meshes/manifold.stl",     "#6b7fa3"),
+        ("valves",      "阀阵 11 只 (1a 竖装)",   "/meshes/valves.stl",       "#4a6da7"),
+        ("case_top",    "上壳(通风栅+气口阵列)",  "/meshes/case_top.stl",     "#9e9e9e"),
+        ("parts_F",     "器件阵-顶面",            "/meshes/parts_f.stl",      "#c62828"),
+        ("pcb",         "P1 主板",                "/meshes/pcb.stl",          "#0d6b3f"),
+        ("case_bottom", "下壳(铜柱+泵对接孔)",    "/meshes/case_bottom.stl",  "#757575"),
+        ("pump_case",   "泵模块壳 (1h 分装)",     "/meshes/pump_module.stl",  "#8f8f93"),
+        ("pump",        "泵 ZR370-03PM",          "/meshes/pump.stl",         "#555b63"),
+        ("brackets",    "硅胶支架 ×2",            "/meshes/brackets.stl",     "#c9a06a"),
+        ("tubes",       "供压/真空管 (视觉)",     "/meshes/tubes.stl",        "#7ec8e3"),
+    ]
     assembly = {
         "parts": [
-            {"id": "case_top",    "name": "上壳(通风栅)",  "stl": "/meshes/case_top.stl",    "color": "#9e9e9e",
-             "explode": G.EXPLODE["case_top"],    "opacity": 1.0},
-            {"id": "parts_F",     "name": "器件阵-顶面",   "stl": "/meshes/parts_f.stl",     "color": "#c62828",
-             "explode": G.EXPLODE["parts_F"],     "opacity": 0.95},
-            {"id": "pcb",         "name": "P1 主板",       "stl": "/meshes/pcb.stl",         "color": "#0d6b3f",
-             "explode": G.EXPLODE["pcb"],         "opacity": 1.0},
-            {"id": "case_bottom", "name": "下壳(铜柱)",   "stl": "/meshes/case_bottom.stl", "color": "#757575",
-             "explode": G.EXPLODE["case_bottom"], "opacity": 1.0},
+            {"id": pid, "name": nm, "stl": stl, "color": col,
+             "explode": G.EXPLODE[pid], "opacity": 1.0}
+            for pid, nm, stl, col in PARTS
         ],
+        "bodies": {
+            "main": ["manifold", "valves", "case_top", "parts_F", "pcb", "case_bottom"],
+            "pump": ["pump_case", "pump", "brackets", "tubes"],
+        },
         "bbox_mm": G.BBOX_MM,
-        "assembly_note": "M3 螺丝穿板自攻入下壳铜柱 (板坐铜柱顶 z=7.4)",
+        "assembly_note": "T6 双体装配: 主模块 (板+11 阀+歧管 M, 壳盖上气动塔) + "
+                         "泵模块 (ZR370+硅胶支架, 分装式); 气管连 S/V 壁孔",
     }
     (OUT / "assembly.json").write_bytes(json.dumps(assembly, ensure_ascii=False, indent=2).encode("utf-8"))
-    print("[out] assembly.json written -> %s (bbox %s)" % (OUT / "assembly.json", G.BBOX_MM))
-    print("MESHES OK: 5 files in", OUT)
+    print("[out] assembly.json written -> %s (bbox %s, 2 bodies x %d+%d parts)"
+          % (OUT / "assembly.json", G.BBOX_MM, 6, 4))
+    print("MESHES OK: 11 files in", OUT)
 
 
 main()

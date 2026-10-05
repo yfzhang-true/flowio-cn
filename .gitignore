@@ -48,3 +48,6 @@ hardware/flowio-p1/enclosure/flowio-p1-assembly.step
 third_party/
 tools/venv-cad/
 literature/**/*.pdf
+
+# PDF 抽图提取产物（可由用户 PDF 重新生成）
+literature/extract/

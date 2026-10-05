@@ -68,6 +68,7 @@ const cmd = (p, line) => p.evaluate((l) => window.__t2.panels.sendCmd(l), line);
     const sc = window.__t2.scene, fl = window.__t2.flows;
     return {
       parts: sc.parts.length,
+      partIds: sc.parts.map((x) => x.id),
       assembled: sc.parts.every((x) => x.mesh.position.length() < 3),   // 叙事收敛回 0
       hotspots: sc.hotspots.length,
       lines: Object.keys(fl.lines).length,
@@ -78,11 +79,12 @@ const cmd = (p, line) => p.evaluate((l) => window.__t2.panels.sendCmd(l), line);
       tlmCollapsed: document.getElementById('t2_tlmDrawer').classList.contains('collapsed'),
     };
   });
-  T('5 部件 STL 装配在场 (__t2.scene.parts)', load.parts === 5);
+  T('10 部件 STL 装配在场 (T6 双体: 主6+泵4)', load.parts === 10
+    && ['manifold', 'pcb', 'pump', 'tubes'].every((id) => load.partIds.includes(id)));
   T('装配叙事收敛 (部件位移<3mm)', load.assembled);
   T('热点器件 6 个 (hotspots.json)', load.hotspots === 6);
-  T('电流线 12 条 (4 电源 + 8 栅极)', load.lines === 12);
-  T('气流端口 8 组 × 50 粒', load.airs === 8 && load.particles);
+  T('电流线 16 条 (4 电源 + 12 栅极: 8通道+S/V/F/泵)', load.lines === 16);
+  T('气流端口 12 组 × 50 粒 (β 8通道+S/V/F+测)', load.airs === 12 && load.particles);
   T('状态行: 未标定黄徽常驻 / stale 隐藏', load.calBadge && load.staleHidden);
   T('遥测抽屉默认收起 (spec §2)', load.tlmCollapsed);
 
@@ -198,7 +200,7 @@ const cmd = (p, line) => p.evaluate((l) => window.__t2.panels.sendCmd(l), line);
   T('遥测抽屉 5 张 sparkline 卡', drw.sparks === 5);
   T('遥测/控制抽屉 收起↔展开 往返', drw.tlmClosed && drw.ctrlClosed && drw.ctrlReopen);
 
-  console.log('─ 控制命令通道 (fetch 拦截) ─');
+  console.log('─ 控制命令通道 (fetch 拦截): 双 PWM 滑条 ─');
   const ctrl = await p.evaluate(async () => {
     const log = [];
     const orig = window.fetch;
@@ -211,23 +213,35 @@ const cmd = (p, line) => p.evaluate((l) => window.__t2.panels.sendCmd(l), line);
     };
     try {
       const q = (sel) => document.querySelector(sel);
-      q('#t2_ctrlDrawer .t2_seg[data-port="0"] button[data-cmd="I"]').click();   // 阀1 充
+      // 双 PWM 滑条在场 (对齐官方 GUI 参考: Inflation/Vacuum 两档)
+      const dualSliders = !!(q('#t2_pwmInfl') && q('#t2_pwmVac'));
+      q('#t2_ctrlDrawer .t2_seg[data-port="0"] button[data-cmd="I"]').click();   // 阀1 充 (默认 255)
       await new Promise((r) => setTimeout(r, 60));
-      q('#t2_pwmRange').value = '200';
+      q('#t2_pwmVac').value = '200';                                              // 真空档 200
       q('#t2_ctrlDrawer .t2_seg[data-port="g"] button[data-cmd="V"]').click();   // 全局 抽
       await new Promise((r) => setTimeout(r, 60));
-      q('#t2_pwmRange').value = '255';
+      q('#t2_pwmInfl').value = '208';                                             // 充气档 208 (官方参考截图同值)
+      q('#t2_ctrlDrawer .t2_seg[data-port="0"] button[data-cmd="I"]').click();   // 阀1 充
+      await new Promise((r) => setTimeout(r, 60));
       q('#t2_ctrlDrawer .t2_seg[data-port="2"] button[data-cmd="S"]').click();   // 阀3 释
       await new Promise((r) => setTimeout(r, 60));
       q('#t2_ctrlDrawer .t2_ctrlFoot button[data-line="T"]').click();           // 状态字
       await new Promise((r) => setTimeout(r, 60));
-      return log.map((x) => x.url + ' ' + x.body);
+      // 滑条 input → 数值标签联动 (拖动即时反馈)
+      q('#t2_pwmVac').value = '180';
+      q('#t2_pwmVac').dispatchEvent(new Event('input', { bubbles: true }));
+      const vacLabel = q('#t2_pwmVacVal').textContent;
+      return { dualSliders, vacLabel, cmds: log.map((x) => x.url + ' ' + x.body) };
     } finally { window.fetch = orig; }
   });
-  T('阀1 充 → POST /api/cmd "I 1 255"', ctrl[0] === '/api/cmd I 1 255');
-  T('PWM 滑杆并入命令 (全局抽 → "V 31 200")', ctrl[1] === '/api/cmd V 31 200');
-  T('阀3 释 → "S 4" (确定性关阀掩码)', ctrl[2] === '/api/cmd S 4');
-  T('脚部按钮 状态字 → "T"', ctrl[3] === '/api/cmd T');
+  const ctrlCmds = ctrl.cmds;
+  T('双 PWM 滑条在场 (充气 #t2_pwmInfl / 真空 #t2_pwmVac)', ctrl.dualSliders);
+  T('滑条 input → 数值标签联动 (真空 180)', ctrl.vacLabel === '180');
+  T('阀1 充(默认充气档) → POST /api/cmd "I 1 255"', ctrlCmds[0] === '/api/cmd I 1 255');
+  T('真空滑杆并入 V 命令 (全局抽 → "V 31 200")', ctrlCmds[1] === '/api/cmd V 31 200');
+  T('充气滑杆独立调档 (→ "I 1 208")', ctrlCmds[2] === '/api/cmd I 1 208');
+  T('阀3 释 → "S 4" (确定性关阀掩码)', ctrlCmds[3] === '/api/cmd S 4');
+  T('脚部按钮 状态字 → "T"', ctrlCmds[4] === '/api/cmd T');
 
   console.log('─ 热点卡: U3 中心真实点击 (raycaster) ─');
   const pt = await p.evaluate(() => {

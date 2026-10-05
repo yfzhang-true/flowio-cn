@@ -70,7 +70,7 @@ sleep 1.5
 s=$(state); p2=$(sens 1 "$s")
 ok "持续充气上升(>+8)" "$(awk -v a="$p2" -v b="$p1" 'BEGIN{exit !(a>b+8)}' && echo 1 || echo 0)"
 v=($(grep -o '"valves": \[[^]]*\]' <<<"$s" | grep -o '[0-9]*'))
-ok "阀节能：500ms 后 duty 降为保持值≤170" "$([ "${v[0]}" -gt 0 ] && [ "${v[0]}" -le 170 ] && echo 1 || echo 0)"
+ok "阀节能：100ms 吸入窗后 duty 降为保持值 230(90%, registry drive_policy)" "$([ "${v[0]}" -gt 0 ] && [ "${v[0]}" -le 230 ] && echo 1 || echo 0)"
 
 echo "─ 接口：保压 S（全关+微漏） ─"
 cmd 'S 7'; sleep 0.3

@@ -2,6 +2,37 @@
 
 > 下载后放入本目录（E:\FLOWIO\literature\），AI 将继续提取阅读并纳入 SPEC。
 
+> **查询渠道登记**：JLC MCP（器件属性/尺寸一手）+ **electromaker.io**（用户推荐，
+> DFRobot 系资料全）+ **alldatasheet.com**（用户推荐，全品类 datasheet 检索）+
+> LCSC wmsc 直链（datasheet 下载破解会话墙）。
+
+## ✅ 已解决（2026-10-05c · TOY0058/BMP180 气压计评估）
+
+- [x] **TOY0058**（DFRobot BMP180 模块官方 PDF）→ `TOY0058.PDF` + 评估
+      `sensor-pressure-eval.md`（❌ 气路传感否决：绝对压 300~1100hPa 出程 37%/无气口/
+      模块形态；XGZP6897D-C 维持；BMP390 环境基准留 P2 可选）
+
+## ✅ 已解决（2026-10-05b · FIT0801/DFR0866 官方 PDF，用户从 electromaker 渠道获取）
+
+- [x] **FIT0801**（DFRobot 370 Mini Vacuum Pump 官方 PDF）→ `FIT0801.pdf` + 评估
+      `dfrobot-fit0801-dfr0866-eval.md`（✅ 采纳为正式采购件：1.5~5V/2.2LPM/-58kPa/
+      侧口吸中口出/⌀4.3 双嘴/⌀27×58）
+- [x] **DFR0866**（DFRobot 6V 二位三通阀官方 PDF）→ `DFR0866.pdf`（❌ 本版否决：
+      6V 欠压+40kPa 压比不足；保留为紧凑低压版候选——评估文档 §2 三条可推否决理由）
+- [x] **新决策点 1f（阀架构）**：公共歧管 11×0520D 单型号（推荐，六动作全通+单歧管）
+      vs 现案 8D+1F（缺每通道真空）——见评估文档 §4
+
+## ✅ 已解决（2026-10-05 · P1.1 新增器件手册全量归档）
+
+- [x] **370 泵 A/B 调研** → `pump-370AB-spec.md`（A=正压/B=负压充吸两用；实泵 58×⌀27.4 双嘴 ⌀3.6 图源直读；
+      ⛔ 厂商一手参数表公开网不可得——威力兹官网停摆，**待用户从 listing 确认 A/B 命名**，不阻塞设计）
+- [x] **SS14**（MDD C2480）→ `C2480_SS14_MDD.pdf` + `ss14-spec.md`（1A/40V/SMA，基本库）
+- [x] **电源输入口** → `power-input-spec.md`（⚠ 现 C431533 DC005 仅 500mA=缺陷#6；
+      替代 C720575 DC-044A-A200 3A / C165948 TYPE-C-31-M-12 5A，PDF 均已下载）
+- [x] **竞品 HANDACE 汉戴斯康复手套**（18 页 listing）→ `competitor-handace-glove.md` + `extract/汉戴斯/`
+- [x] 散件.pdf（图片型）9 页抽图全读 → `extract/散件/`（370 充吸两用泵语义 + 卖家"5V2~3A 手机充电头"互证）
+- [x] AO3400A / 0520D / 0520F / XGZP6897D / TCA9548A：已在库核对完毕（见 ss14-spec.md §已核对）
+
 ## ✅ 用户已解决（2026-10-03 · 器件几何框架基线 11 篇，已从 FLOWIO-3rdparty 归位并全文精读）
 
 - [x] AlphaChip 正主（Nature 2021）→ `2021-mirhoseini-nature-alphachip.pdf`（可行性掩码一手方法论）

@@ -1,8 +1,8 @@
 (export
 	(version "E")
 	(design
-		(source "E:\\FLOWIO\\.worktrees\\device-geometry\\hardware\\flowio-p1\\flowio-p1.kicad_sch")
-		(date "2026-10-03T23:14:12")
+		(source "E:\\FLOWIO\\.worktrees\\p1.1-spin-b\\hardware\\flowio-p1\\flowio-p1.kicad_sch")
+		(date "2026-10-04T17:34:04")
 		(tool "Eeschema 10.0.6")
 		(sheet
 			(number "1")
@@ -11,12 +11,12 @@
 			(title_block
 				(title "FLOWIO-CN P1 升级大脑")
 				(company "FLOWIO-CN")
-				(rev "1.0")
-				(date "2026-10-01")
+				(rev "1.1")
+				(date "2026-10-03")
 				(source "flowio-p1.kicad_sch")
 				(comment
 					(number "1")
-					(value "ESP32-S3 + TCA9548A + 8x AO3400 + TPS54331 + CH340K")
+					(value "ESP32-S3 + 11x valve drv + pump + XGZP + USB-C power")
 				)
 				(comment
 					(number "2")
@@ -95,7 +95,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "87c75df2-18e3-4394-b3b0-e856cfccbd54")
+			(tstamps "ab819f7a-d78c-4cd5-92ba-dc2505e1f410")
 			(units
 				(unit
 					(name "A")
@@ -151,7 +151,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "2480d5f7-b72c-4435-9fb1-d13a23ea439d")
+			(tstamps "d3901a91-f37e-4667-9533-77f7b57d35bb")
 			(units
 				(unit
 					(name "A")
@@ -207,7 +207,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "e00518c9-4889-4184-aa07-2f94a54a7356")
+			(tstamps "1f4edd0d-64d5-46f5-98a1-16397df770f3")
 			(units
 				(unit
 					(name "A")
@@ -263,7 +263,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "86e662af-e55b-4efa-bf3e-8e0ce27f9965")
+			(tstamps "be2e661c-085f-499f-a2fd-a245a1c42fbd")
 			(units
 				(unit
 					(name "A")
@@ -319,7 +319,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "6436f0bf-5a93-4d02-90d4-f85fef9bbae8")
+			(tstamps "1a2311a7-13a1-42e9-968b-2f27ce61dd9c")
 			(units
 				(unit
 					(name "A")
@@ -375,7 +375,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "ae483eb4-a78f-44ed-9f22-9c3474c9d40d")
+			(tstamps "4d657f4f-7529-4b7e-ae8f-f6b1e48afbde")
 			(units
 				(unit
 					(name "A")
@@ -431,7 +431,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "9f55686f-2509-49b1-8bb0-eb19df3930e6")
+			(tstamps "437d49e4-f126-4d21-886f-639fb437114d")
 			(units
 				(unit
 					(name "A")
@@ -487,7 +487,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "33e5a81e-6d1d-44f5-9bb5-54fc19e88f8b")
+			(tstamps "4948f94f-88b1-4e3a-8586-8948efaaca21")
 			(units
 				(unit
 					(name "A")
@@ -543,7 +543,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "8fa8391b-a5a6-4598-a35d-4f410fc35a89")
+			(tstamps "df379c5a-6383-4e27-b41e-340bb7387fe1")
 			(units
 				(unit
 					(name "A")
@@ -599,7 +599,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "0b73d678-0772-4d56-bacd-f21cbda2fbbc")
+			(tstamps "06dc8c44-87f9-4f21-85d2-845b393244f3")
 			(units
 				(unit
 					(name "A")
@@ -655,7 +655,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "0460d0dc-8058-4c45-920d-d5dba37bf67e")
+			(tstamps "2e4bfbe2-9b2e-423e-bf06-49fe5f871a7f")
 			(units
 				(unit
 					(name "A")
@@ -711,7 +711,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "f26637fa-596a-4113-9f7c-477aad4b2bdb")
+			(tstamps "d5fec89d-68b6-468b-9eaa-f5e4b28578ab")
 			(units
 				(unit
 					(name "A")
@@ -767,7 +767,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "19b2dfe8-1fe0-48c0-a8a4-ef7c708829be")
+			(tstamps "12591aad-d5b3-4532-a3f5-474d79d79059")
 			(units
 				(unit
 					(name "A")
@@ -823,7 +823,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "d6a366dd-193b-4c02-9481-b1f5ce25cdba")
+			(tstamps "1adc8f7e-5cf0-4f9f-aee8-332e5a4cb65e")
 			(units
 				(unit
 					(name "A")
@@ -879,7 +879,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "dff4031f-b966-4d6d-8715-7eee31407f39")
+			(tstamps "abc9b931-b6b0-4be6-a365-88ee1bcb85bd")
 			(units
 				(unit
 					(name "A")
@@ -935,7 +935,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "61f62dbb-0672-4f1a-9128-7e740f71016c")
+			(tstamps "f960fcf5-f51d-4bfe-bb52-3ef282ddb8fa")
 			(units
 				(unit
 					(name "A")
@@ -991,7 +991,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "6524c492-b786-44e9-a339-377783981835")
+			(tstamps "4618e0ce-378f-4ab1-ac15-fbbee0333ed3")
 			(units
 				(unit
 					(name "A")
@@ -1007,14 +1007,14 @@
 			)
 		)
 		(comp
-			(ref "D1")
-			(value "SS34")
-			(footprint "JLC-MCP:SMA_L4.3-W2.6-LS5.2-RD")
+			(ref "C18")
+			(value "100nF")
+			(footprint "Capacitor_SMD:C_0603_1608Metric")
 			(fields
 				(field
-					(name "LCSC") "C8678")
+					(name "LCSC") "C1591")
 				(field
-					(name "Footprint") "JLC-MCP:SMA_L4.3-W2.6-LS5.2-RD")
+					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
 				(field
 					(name "Datasheet")
 				)
@@ -1024,12 +1024,12 @@
 			)
 			(libsource
 				(lib "JLC-MCP")
-				(part "SS34_C8678")
-				(description "3A 40V 500uA@40V 550mV@3A Independent SMA(DO-214AC) Schottky Diodes ROHS")
+				(part "CL10B104KB8NNNC")
+				(description "100nF 50V X7R ±10% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS")
 			)
 			(property
 				(name "LCSC")
-				(value "C8678")
+				(value "C1591")
 			)
 			(property
 				(name "Sheetname")
@@ -1041,22 +1041,22 @@
 			)
 			(property
 				(name "ki_keywords")
-				(value "C8678")
+				(value "C1591")
 			)
 			(sheetpath
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "1f4f0925-1b88-4433-9bb2-990e1c880a5a")
+			(tstamps "193a0385-b7ee-465b-a795-1daa4930e5de")
 			(units
 				(unit
 					(name "A")
 					(pins
 						(pin
-							(num "2")
+							(num "1")
 						)
 						(pin
-							(num "1")
+							(num "2")
 						)
 					)
 				)
@@ -1103,7 +1103,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "ce1aeb6b-64de-4422-894c-f6d5c492d441")
+			(tstamps "3030a71c-6940-4f4c-8d6d-f6645cc82acc")
 			(units
 				(unit
 					(name "A")
@@ -1159,7 +1159,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "8f70cffc-f7cd-4c81-b890-e9eca0a463a1")
+			(tstamps "817a73e3-5297-44b4-87dd-5c85ff9a236f")
 			(units
 				(unit
 					(name "A")
@@ -1215,7 +1215,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "e6b4d4ed-7347-4c38-97f6-9f2b293159e8")
+			(tstamps "0adca675-070b-4902-b3f3-e8fd17a427c2")
 			(units
 				(unit
 					(name "A")
@@ -1271,7 +1271,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "93f0e40d-2033-4fe8-851f-0c61e84735c7")
+			(tstamps "ca2ec89a-34b9-4807-aea1-4569268a8fb3")
 			(units
 				(unit
 					(name "A")
@@ -1327,7 +1327,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "61614c46-d8f5-4397-830f-c1043fa426b4")
+			(tstamps "ec393541-eb53-4026-b55e-056ce58cc4ab")
 			(units
 				(unit
 					(name "A")
@@ -1383,7 +1383,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "3da26de9-1a96-44ad-ae13-8fd67e2dad21")
+			(tstamps "938a5b42-016b-46aa-8ad1-05da2dcd2f0c")
 			(units
 				(unit
 					(name "A")
@@ -1439,7 +1439,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "7a043e1b-edbd-4379-9a91-62acad5eb022")
+			(tstamps "55b681e9-9811-4d3b-ba0b-9bccf2b9387e")
 			(units
 				(unit
 					(name "A")
@@ -1495,7 +1495,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "5b37044c-5c97-439a-92d2-0a1992dd3195")
+			(tstamps "c26fcea4-8a1f-407f-b151-7681cebc7d75")
 			(units
 				(unit
 					(name "A")
@@ -1551,7 +1551,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "e6f17a9b-cd07-4f5e-9f1a-568d44bc94bd")
+			(tstamps "70634f52-0140-487e-9d9b-2a321835c6a9")
 			(units
 				(unit
 					(name "A")
@@ -1607,7 +1607,231 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "8c4a8c26-2192-4577-ae12-1b1dc28a7421")
+			(tstamps "d872e055-e74b-44d9-8742-c918dc41bd97")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "D12")
+			(value "SS14")
+			(footprint "JLC-MCP:SMA_L4.2-W2.6-LS5.0-RD_1")
+			(fields
+				(field
+					(name "LCSC") "C2480")
+				(field
+					(name "Footprint") "JLC-MCP:SMA_L4.2-W2.6-LS5.0-RD_1")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "SS14")
+				(description "1A 25A 300uA@40V 40V 550mV@1A Independent SMA(DO-214AC) Schottky Diodes ROHS")
+			)
+			(property
+				(name "LCSC")
+				(value "C2480")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "C2480")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "2a612362-5076-48f6-b5a7-6a688f2888d2")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "D13")
+			(value "SS14")
+			(footprint "JLC-MCP:SMA_L4.2-W2.6-LS5.0-RD_1")
+			(fields
+				(field
+					(name "LCSC") "C2480")
+				(field
+					(name "Footprint") "JLC-MCP:SMA_L4.2-W2.6-LS5.0-RD_1")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "SS14")
+				(description "1A 25A 300uA@40V 40V 550mV@1A Independent SMA(DO-214AC) Schottky Diodes ROHS")
+			)
+			(property
+				(name "LCSC")
+				(value "C2480")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "C2480")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "aa36260b-71da-465f-a39e-10fd5a9ef783")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "D14")
+			(value "SS14")
+			(footprint "JLC-MCP:SMA_L4.2-W2.6-LS5.0-RD_1")
+			(fields
+				(field
+					(name "LCSC") "C2480")
+				(field
+					(name "Footprint") "JLC-MCP:SMA_L4.2-W2.6-LS5.0-RD_1")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "SS14")
+				(description "1A 25A 300uA@40V 40V 550mV@1A Independent SMA(DO-214AC) Schottky Diodes ROHS")
+			)
+			(property
+				(name "LCSC")
+				(value "C2480")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "C2480")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "b0b86ec3-da53-486a-a284-2ccf6ff06db7")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "D15")
+			(value "SS14")
+			(footprint "JLC-MCP:SMA_L4.2-W2.6-LS5.0-RD_1")
+			(fields
+				(field
+					(name "LCSC") "C2480")
+				(field
+					(name "Footprint") "JLC-MCP:SMA_L4.2-W2.6-LS5.0-RD_1")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "SS14")
+				(description "1A 25A 300uA@40V 40V 550mV@1A Independent SMA(DO-214AC) Schottky Diodes ROHS")
+			)
+			(property
+				(name "LCSC")
+				(value "C2480")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "C2480")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "28a6da34-06a9-4970-b546-279ea9e4c8a4")
 			(units
 				(unit
 					(name "A")
@@ -1624,13 +1848,13 @@
 		)
 		(comp
 			(ref "J1")
-			(value "DC-005")
-			(footprint "JLC-MCP:DC-IN-TH_DC005")
+			(value "USB-C PWR")
+			(footprint "JLC-MCP:USB-C_SMD-TYPE-C-31-M-12_1")
 			(fields
 				(field
-					(name "LCSC") "C431533")
+					(name "LCSC") "C165948")
 				(field
-					(name "Footprint") "JLC-MCP:DC-IN-TH_DC005")
+					(name "Footprint") "JLC-MCP:USB-C_SMD-TYPE-C-31-M-12_1")
 				(field
 					(name "Datasheet")
 				)
@@ -1640,12 +1864,12 @@
 			)
 			(libsource
 				(lib "JLC-MCP")
-				(part "DC005_C431533")
-				(description "12V 2mm 500mA 6.3mm DC Power Jack Right Angle Plugin DC Power Connectors ROHS")
+				(part "TYPE-C-31-M-12")
+				(description "1 10,000 cycles 16P 20V 5A 7.35mm Female Surface Mount, Right Angle Type-C SMD USB Connectors ROHS")
 			)
 			(property
 				(name "LCSC")
-				(value "C431533")
+				(value "C165948")
 			)
 			(property
 				(name "Sheetname")
@@ -1657,25 +1881,64 @@
 			)
 			(property
 				(name "ki_keywords")
-				(value "C431533")
+				(value "C165948")
 			)
 			(sheetpath
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "952bfc19-0448-4e37-bf1b-acaaf0762861")
+			(tstamps "2311f92d-dc87-4fb5-b1d3-09e07dba4229")
 			(units
 				(unit
 					(name "A")
 					(pins
 						(pin
-							(num "1")
+							(num "A1B12")
+						)
+						(pin
+							(num "A4B9")
+						)
+						(pin
+							(num "B8")
+						)
+						(pin
+							(num "A5")
+						)
+						(pin
+							(num "B7")
+						)
+						(pin
+							(num "A6")
+						)
+						(pin
+							(num "A7")
+						)
+						(pin
+							(num "B6")
+						)
+						(pin
+							(num "A8")
+						)
+						(pin
+							(num "B5")
+						)
+						(pin
+							(num "B4A9")
+						)
+						(pin
+							(num "B1A12")
+						)
+						(pin
+							(num "4")
 						)
 						(pin
 							(num "3")
 						)
 						(pin
 							(num "2")
+						)
+						(pin
+							(num "1")
 						)
 					)
 				)
@@ -1722,7 +1985,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "c64d7010-d649-4eb4-8d11-95ec35b01b3c")
+			(tstamps "61a90939-b005-4cb0-a5f5-9f002bda67b5")
 			(units
 				(unit
 					(name "A")
@@ -1793,7 +2056,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "a40cb50e-9b87-46d9-83c6-f77909aac98e")
+			(tstamps "37840702-e1ae-46b7-9473-255b5ffc59e7")
 			(units
 				(unit
 					(name "A")
@@ -1855,7 +2118,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "460cbc34-2a9d-45bd-aede-024176cb9c1b")
+			(tstamps "30a71b92-f0ef-42de-9d76-3c342956d223")
 			(units
 				(unit
 					(name "A")
@@ -1917,7 +2180,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "d1659566-6098-406d-ae15-99ed6107a560")
+			(tstamps "1f433f00-921d-44d5-b5da-315e4bc5e50f")
 			(units
 				(unit
 					(name "A")
@@ -1979,7 +2242,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "161260f5-661c-433e-a4ba-0e28e324252c")
+			(tstamps "45b87242-9865-4e7a-a88b-5ec6addacd0b")
 			(units
 				(unit
 					(name "A")
@@ -2041,7 +2304,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "2b51fec4-a68a-41f0-bb6f-bffaf4aff25e")
+			(tstamps "047d2487-bdc2-44cc-a3b3-afe5f65169f8")
 			(units
 				(unit
 					(name "A")
@@ -2065,12 +2328,12 @@
 		(comp
 			(ref "J10")
 			(value "VALVE")
-			(footprint "JLC-MCP:CONN-TH_2P-P5.00_WJ500V-5.08-2P")
+			(footprint "JLC-MCP:CONN-SMD_2P-P2.54_MEGASTAR_ZX-XH2.54-2PWT")
 			(fields
 				(field
-					(name "LCSC") "C8465")
+					(name "LCSC") "C7429671")
 				(field
-					(name "Footprint") "JLC-MCP:CONN-TH_2P-P5.00_WJ500V-5.08-2P")
+					(name "Footprint") "JLC-MCP:CONN-SMD_2P-P2.54_MEGASTAR_ZX-XH2.54-2PWT")
 				(field
 					(name "Datasheet")
 				)
@@ -2080,12 +2343,12 @@
 			)
 			(libsource
 				(lib "JLC-MCP")
-				(part "WJ500V-5_08-2P-14-00A")
-				(description "1 14~30 18A 1x2P 2 2.5 250V 2P 5.08mm Green M2.5 Through Hole 插件,P=5.08mm Screw Terminal Blocks ROHS")
+				(part "WAFER-XH2_54-2PZZ")
+				(description "")
 			)
 			(property
 				(name "LCSC")
-				(value "C8465")
+				(value "C7429671")
 			)
 			(property
 				(name "Sheetname")
@@ -2095,15 +2358,11 @@
 				(name "Sheetfile")
 				(value "flowio-p1.kicad_sch")
 			)
-			(property
-				(name "ki_keywords")
-				(value "C8465")
-			)
 			(sheetpath
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "70262b12-d41c-4522-9a15-ae26b8e8fd1b")
+			(tstamps "2aebff2f-eb0f-49a9-8fc3-3940b23cc7f9")
 			(units
 				(unit
 					(name "A")
@@ -2121,12 +2380,12 @@
 		(comp
 			(ref "J11")
 			(value "VALVE")
-			(footprint "JLC-MCP:CONN-TH_2P-P5.00_WJ500V-5.08-2P")
+			(footprint "JLC-MCP:CONN-SMD_2P-P2.54_MEGASTAR_ZX-XH2.54-2PWT")
 			(fields
 				(field
-					(name "LCSC") "C8465")
+					(name "LCSC") "C7429671")
 				(field
-					(name "Footprint") "JLC-MCP:CONN-TH_2P-P5.00_WJ500V-5.08-2P")
+					(name "Footprint") "JLC-MCP:CONN-SMD_2P-P2.54_MEGASTAR_ZX-XH2.54-2PWT")
 				(field
 					(name "Datasheet")
 				)
@@ -2136,12 +2395,12 @@
 			)
 			(libsource
 				(lib "JLC-MCP")
-				(part "WJ500V-5_08-2P-14-00A")
-				(description "1 14~30 18A 1x2P 2 2.5 250V 2P 5.08mm Green M2.5 Through Hole 插件,P=5.08mm Screw Terminal Blocks ROHS")
+				(part "WAFER-XH2_54-2PZZ")
+				(description "")
 			)
 			(property
 				(name "LCSC")
-				(value "C8465")
+				(value "C7429671")
 			)
 			(property
 				(name "Sheetname")
@@ -2151,15 +2410,11 @@
 				(name "Sheetfile")
 				(value "flowio-p1.kicad_sch")
 			)
-			(property
-				(name "ki_keywords")
-				(value "C8465")
-			)
 			(sheetpath
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "0e676e5a-90e6-44eb-813c-837297f81073")
+			(tstamps "9703f848-b94c-4863-b57a-b6f4bb41dbdb")
 			(units
 				(unit
 					(name "A")
@@ -2177,12 +2432,12 @@
 		(comp
 			(ref "J12")
 			(value "VALVE")
-			(footprint "JLC-MCP:CONN-TH_2P-P5.00_WJ500V-5.08-2P")
+			(footprint "JLC-MCP:CONN-SMD_2P-P2.54_MEGASTAR_ZX-XH2.54-2PWT")
 			(fields
 				(field
-					(name "LCSC") "C8465")
+					(name "LCSC") "C7429671")
 				(field
-					(name "Footprint") "JLC-MCP:CONN-TH_2P-P5.00_WJ500V-5.08-2P")
+					(name "Footprint") "JLC-MCP:CONN-SMD_2P-P2.54_MEGASTAR_ZX-XH2.54-2PWT")
 				(field
 					(name "Datasheet")
 				)
@@ -2192,12 +2447,12 @@
 			)
 			(libsource
 				(lib "JLC-MCP")
-				(part "WJ500V-5_08-2P-14-00A")
-				(description "1 14~30 18A 1x2P 2 2.5 250V 2P 5.08mm Green M2.5 Through Hole 插件,P=5.08mm Screw Terminal Blocks ROHS")
+				(part "WAFER-XH2_54-2PZZ")
+				(description "")
 			)
 			(property
 				(name "LCSC")
-				(value "C8465")
+				(value "C7429671")
 			)
 			(property
 				(name "Sheetname")
@@ -2207,15 +2462,11 @@
 				(name "Sheetfile")
 				(value "flowio-p1.kicad_sch")
 			)
-			(property
-				(name "ki_keywords")
-				(value "C8465")
-			)
 			(sheetpath
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "f380852a-6296-4a46-bfc1-3f85940b2c2f")
+			(tstamps "595d18ef-ef4e-4685-af3a-092168035114")
 			(units
 				(unit
 					(name "A")
@@ -2233,12 +2484,12 @@
 		(comp
 			(ref "J13")
 			(value "VALVE")
-			(footprint "JLC-MCP:CONN-TH_2P-P5.00_WJ500V-5.08-2P")
+			(footprint "JLC-MCP:CONN-SMD_2P-P2.54_MEGASTAR_ZX-XH2.54-2PWT")
 			(fields
 				(field
-					(name "LCSC") "C8465")
+					(name "LCSC") "C7429671")
 				(field
-					(name "Footprint") "JLC-MCP:CONN-TH_2P-P5.00_WJ500V-5.08-2P")
+					(name "Footprint") "JLC-MCP:CONN-SMD_2P-P2.54_MEGASTAR_ZX-XH2.54-2PWT")
 				(field
 					(name "Datasheet")
 				)
@@ -2248,12 +2499,12 @@
 			)
 			(libsource
 				(lib "JLC-MCP")
-				(part "WJ500V-5_08-2P-14-00A")
-				(description "1 14~30 18A 1x2P 2 2.5 250V 2P 5.08mm Green M2.5 Through Hole 插件,P=5.08mm Screw Terminal Blocks ROHS")
+				(part "WAFER-XH2_54-2PZZ")
+				(description "")
 			)
 			(property
 				(name "LCSC")
-				(value "C8465")
+				(value "C7429671")
 			)
 			(property
 				(name "Sheetname")
@@ -2263,15 +2514,11 @@
 				(name "Sheetfile")
 				(value "flowio-p1.kicad_sch")
 			)
-			(property
-				(name "ki_keywords")
-				(value "C8465")
-			)
 			(sheetpath
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "60ec075d-a07c-46f3-b7de-dd332a4249e7")
+			(tstamps "2890adfe-4ed3-4c93-a95c-420837fd8813")
 			(units
 				(unit
 					(name "A")
@@ -2289,12 +2536,12 @@
 		(comp
 			(ref "J14")
 			(value "VALVE")
-			(footprint "JLC-MCP:CONN-TH_2P-P5.00_WJ500V-5.08-2P")
+			(footprint "JLC-MCP:CONN-SMD_2P-P2.54_MEGASTAR_ZX-XH2.54-2PWT")
 			(fields
 				(field
-					(name "LCSC") "C8465")
+					(name "LCSC") "C7429671")
 				(field
-					(name "Footprint") "JLC-MCP:CONN-TH_2P-P5.00_WJ500V-5.08-2P")
+					(name "Footprint") "JLC-MCP:CONN-SMD_2P-P2.54_MEGASTAR_ZX-XH2.54-2PWT")
 				(field
 					(name "Datasheet")
 				)
@@ -2304,12 +2551,12 @@
 			)
 			(libsource
 				(lib "JLC-MCP")
-				(part "WJ500V-5_08-2P-14-00A")
-				(description "1 14~30 18A 1x2P 2 2.5 250V 2P 5.08mm Green M2.5 Through Hole 插件,P=5.08mm Screw Terminal Blocks ROHS")
+				(part "WAFER-XH2_54-2PZZ")
+				(description "")
 			)
 			(property
 				(name "LCSC")
-				(value "C8465")
+				(value "C7429671")
 			)
 			(property
 				(name "Sheetname")
@@ -2319,15 +2566,11 @@
 				(name "Sheetfile")
 				(value "flowio-p1.kicad_sch")
 			)
-			(property
-				(name "ki_keywords")
-				(value "C8465")
-			)
 			(sheetpath
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "c4900b93-f8c2-4588-a47c-e9ba8580d10e")
+			(tstamps "c378642a-374e-4995-9aaf-20e76cf731e7")
 			(units
 				(unit
 					(name "A")
@@ -2345,12 +2588,12 @@
 		(comp
 			(ref "J15")
 			(value "VALVE")
-			(footprint "JLC-MCP:CONN-TH_2P-P5.00_WJ500V-5.08-2P")
+			(footprint "JLC-MCP:CONN-SMD_2P-P2.54_MEGASTAR_ZX-XH2.54-2PWT")
 			(fields
 				(field
-					(name "LCSC") "C8465")
+					(name "LCSC") "C7429671")
 				(field
-					(name "Footprint") "JLC-MCP:CONN-TH_2P-P5.00_WJ500V-5.08-2P")
+					(name "Footprint") "JLC-MCP:CONN-SMD_2P-P2.54_MEGASTAR_ZX-XH2.54-2PWT")
 				(field
 					(name "Datasheet")
 				)
@@ -2360,12 +2603,12 @@
 			)
 			(libsource
 				(lib "JLC-MCP")
-				(part "WJ500V-5_08-2P-14-00A")
-				(description "1 14~30 18A 1x2P 2 2.5 250V 2P 5.08mm Green M2.5 Through Hole 插件,P=5.08mm Screw Terminal Blocks ROHS")
+				(part "WAFER-XH2_54-2PZZ")
+				(description "")
 			)
 			(property
 				(name "LCSC")
-				(value "C8465")
+				(value "C7429671")
 			)
 			(property
 				(name "Sheetname")
@@ -2375,15 +2618,11 @@
 				(name "Sheetfile")
 				(value "flowio-p1.kicad_sch")
 			)
-			(property
-				(name "ki_keywords")
-				(value "C8465")
-			)
 			(sheetpath
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "ff2c24df-8152-43e4-a2a9-71a8ed6e4370")
+			(tstamps "b281a1a8-e400-4022-aaba-84eca17d2115")
 			(units
 				(unit
 					(name "A")
@@ -2401,12 +2640,12 @@
 		(comp
 			(ref "J16")
 			(value "VALVE")
-			(footprint "JLC-MCP:CONN-TH_2P-P5.00_WJ500V-5.08-2P")
+			(footprint "JLC-MCP:CONN-SMD_2P-P2.54_MEGASTAR_ZX-XH2.54-2PWT")
 			(fields
 				(field
-					(name "LCSC") "C8465")
+					(name "LCSC") "C7429671")
 				(field
-					(name "Footprint") "JLC-MCP:CONN-TH_2P-P5.00_WJ500V-5.08-2P")
+					(name "Footprint") "JLC-MCP:CONN-SMD_2P-P2.54_MEGASTAR_ZX-XH2.54-2PWT")
 				(field
 					(name "Datasheet")
 				)
@@ -2416,12 +2655,12 @@
 			)
 			(libsource
 				(lib "JLC-MCP")
-				(part "WJ500V-5_08-2P-14-00A")
-				(description "1 14~30 18A 1x2P 2 2.5 250V 2P 5.08mm Green M2.5 Through Hole 插件,P=5.08mm Screw Terminal Blocks ROHS")
+				(part "WAFER-XH2_54-2PZZ")
+				(description "")
 			)
 			(property
 				(name "LCSC")
-				(value "C8465")
+				(value "C7429671")
 			)
 			(property
 				(name "Sheetname")
@@ -2431,15 +2670,11 @@
 				(name "Sheetfile")
 				(value "flowio-p1.kicad_sch")
 			)
-			(property
-				(name "ki_keywords")
-				(value "C8465")
-			)
 			(sheetpath
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "85440a2c-5e35-4753-bf13-a1a604d7e654")
+			(tstamps "4abd5a18-99f2-443b-bbec-c09b63b4b7b6")
 			(units
 				(unit
 					(name "A")
@@ -2457,12 +2692,12 @@
 		(comp
 			(ref "J17")
 			(value "VALVE")
-			(footprint "JLC-MCP:CONN-TH_2P-P5.00_WJ500V-5.08-2P")
+			(footprint "JLC-MCP:CONN-SMD_2P-P2.54_MEGASTAR_ZX-XH2.54-2PWT")
 			(fields
 				(field
-					(name "LCSC") "C8465")
+					(name "LCSC") "C7429671")
 				(field
-					(name "Footprint") "JLC-MCP:CONN-TH_2P-P5.00_WJ500V-5.08-2P")
+					(name "Footprint") "JLC-MCP:CONN-SMD_2P-P2.54_MEGASTAR_ZX-XH2.54-2PWT")
 				(field
 					(name "Datasheet")
 				)
@@ -2472,12 +2707,12 @@
 			)
 			(libsource
 				(lib "JLC-MCP")
-				(part "WJ500V-5_08-2P-14-00A")
-				(description "1 14~30 18A 1x2P 2 2.5 250V 2P 5.08mm Green M2.5 Through Hole 插件,P=5.08mm Screw Terminal Blocks ROHS")
+				(part "WAFER-XH2_54-2PZZ")
+				(description "")
 			)
 			(property
 				(name "LCSC")
-				(value "C8465")
+				(value "C7429671")
 			)
 			(property
 				(name "Sheetname")
@@ -2487,15 +2722,11 @@
 				(name "Sheetfile")
 				(value "flowio-p1.kicad_sch")
 			)
-			(property
-				(name "ki_keywords")
-				(value "C8465")
-			)
 			(sheetpath
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "197e7342-f474-43cf-95e6-0217a7c4b669")
+			(tstamps "12b0c05c-1a9c-43a8-8ebf-6d013745d6d9")
 			(units
 				(unit
 					(name "A")
@@ -2551,7 +2782,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "6da3769b-662c-4963-94fb-af12ad5c86c5")
+			(tstamps "491dfbe4-207c-4b16-9d37-6f020d83ebef")
 			(units
 				(unit
 					(name "A")
@@ -2613,7 +2844,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "8fe776f4-1094-472b-9a45-6016f0ac1154")
+			(tstamps "b3ef4345-f298-40d2-bc62-991e137f4ac4")
 			(units
 				(unit
 					(name "A")
@@ -2629,6 +2860,214 @@
 						)
 						(pin
 							(num "4")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J20")
+			(value "VALVE")
+			(footprint "JLC-MCP:CONN-SMD_2P-P2.54_MEGASTAR_ZX-XH2.54-2PWT")
+			(fields
+				(field
+					(name "LCSC") "C7429671")
+				(field
+					(name "Footprint") "JLC-MCP:CONN-SMD_2P-P2.54_MEGASTAR_ZX-XH2.54-2PWT")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "WAFER-XH2_54-2PZZ")
+				(description "")
+			)
+			(property
+				(name "LCSC")
+				(value "C7429671")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "542e3185-22c8-4c85-8e90-c3160b35535a")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J21")
+			(value "VALVE")
+			(footprint "JLC-MCP:CONN-SMD_2P-P2.54_MEGASTAR_ZX-XH2.54-2PWT")
+			(fields
+				(field
+					(name "LCSC") "C7429671")
+				(field
+					(name "Footprint") "JLC-MCP:CONN-SMD_2P-P2.54_MEGASTAR_ZX-XH2.54-2PWT")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "WAFER-XH2_54-2PZZ")
+				(description "")
+			)
+			(property
+				(name "LCSC")
+				(value "C7429671")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "2d480a1c-f2b7-4a57-b943-0135e3480051")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J22")
+			(value "VALVE")
+			(footprint "JLC-MCP:CONN-SMD_2P-P2.54_MEGASTAR_ZX-XH2.54-2PWT")
+			(fields
+				(field
+					(name "LCSC") "C7429671")
+				(field
+					(name "Footprint") "JLC-MCP:CONN-SMD_2P-P2.54_MEGASTAR_ZX-XH2.54-2PWT")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "WAFER-XH2_54-2PZZ")
+				(description "")
+			)
+			(property
+				(name "LCSC")
+				(value "C7429671")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "9c02003f-1195-47c4-8adb-6a4e29dc379a")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J23")
+			(value "PUMP")
+			(footprint "JLC-MCP:CONN-SMD_2P-P2.54_MEGASTAR_ZX-XH2.54-2PWT")
+			(fields
+				(field
+					(name "LCSC") "C7429671")
+				(field
+					(name "Footprint") "JLC-MCP:CONN-SMD_2P-P2.54_MEGASTAR_ZX-XH2.54-2PWT")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "WAFER-XH2_54-2PZZ")
+				(description "")
+			)
+			(property
+				(name "LCSC")
+				(value "C7429671")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "be7c0ec9-1a37-4af3-81e1-cc072408b943")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
 						)
 					)
 				)
@@ -2675,7 +3114,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "344cde7d-f45d-4497-be1e-56ed1bcbdaa2")
+			(tstamps "5c46e890-0ade-402f-8239-c65bcdc9cec9")
 			(units
 				(unit
 					(name "A")
@@ -2731,7 +3170,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "c13cc923-ad55-42c8-91ee-d66c37e9a0aa")
+			(tstamps "68a86f2b-605e-4065-9544-a9a684b5bf36")
 			(units
 				(unit
 					(name "A")
@@ -2793,7 +3232,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "ece1f6d4-aae8-4e13-9c75-b1f72bd9f111")
+			(tstamps "903cb640-54d8-4a67-92a7-3777e43c1776")
 			(units
 				(unit
 					(name "A")
@@ -2849,7 +3288,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "79a9fe0f-769c-4126-bc4a-1c3410c8eec2")
+			(tstamps "5d15eea5-4299-4bce-af5f-4c701f6a00c7")
 			(units
 				(unit
 					(name "A")
@@ -2905,7 +3344,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "69bc3125-a90b-4412-8db1-ab5012da0f3a")
+			(tstamps "a18780bc-c00b-44ea-9776-271160f5f834")
 			(units
 				(unit
 					(name "A")
@@ -2961,7 +3400,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "6e78055e-ebd6-485f-bb0e-b0290a5990a1")
+			(tstamps "33b796ee-ca30-4794-a4ba-8ce56b66049a")
 			(units
 				(unit
 					(name "A")
@@ -3017,7 +3456,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "c76ae4d9-0616-4ff8-b100-46b7929a3a16")
+			(tstamps "3d739a22-e60b-4571-8ea1-0bf4dac2a9a4")
 			(units
 				(unit
 					(name "A")
@@ -3076,7 +3515,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "7838f018-c087-4884-a54d-eb9129bdcaa2")
+			(tstamps "a2cefba6-d00b-4297-8d71-6560aaba8a52")
 			(units
 				(unit
 					(name "A")
@@ -3135,7 +3574,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "e2c7d5e1-1fc1-403c-acf9-4db1f9e7d095")
+			(tstamps "9d29c23f-0441-460d-b442-1d5f94d37593")
 			(units
 				(unit
 					(name "A")
@@ -3194,7 +3633,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "b5a10c52-b70b-490c-800b-6d8b61ba6a89")
+			(tstamps "67a52bf3-3f08-46cc-91e7-b2586ef6d983")
 			(units
 				(unit
 					(name "A")
@@ -3253,7 +3692,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "3953a3cd-6f42-45b0-ad9e-efce2774f20a")
+			(tstamps "3d30feb2-42de-4e31-ba63-e6bfd287d790")
 			(units
 				(unit
 					(name "A")
@@ -3312,7 +3751,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "9b90c35f-07d6-4929-9aa1-8464b66d53cd")
+			(tstamps "864c68d7-17bb-44ee-84d7-a384d3e7b5ac")
 			(units
 				(unit
 					(name "A")
@@ -3371,7 +3810,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "26510b93-51c7-487c-91e8-221ee21bbe92")
+			(tstamps "d89a8427-615c-455c-b1d4-ac09be03a2cb")
 			(units
 				(unit
 					(name "A")
@@ -3430,7 +3869,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "17d261bf-9773-4a89-af8f-f90b5e3a3bc3")
+			(tstamps "c432da12-3b0a-4aa4-b5bd-e56f43341770")
 			(units
 				(unit
 					(name "A")
@@ -3489,7 +3928,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "f3adeaba-2939-4157-b494-47f9b1d64185")
+			(tstamps "c4356674-cd1b-43bd-925b-ac2fbbe29324")
 			(units
 				(unit
 					(name "A")
@@ -3548,7 +3987,243 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "059b7a5e-df28-44da-ba4e-4f011ce05215")
+			(tstamps "9a598f91-9d09-4bee-b49a-741d21b04680")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "Q13")
+			(value "AO3400A")
+			(footprint "JLC-MCP:SOT-23-3_L2.9-W1.3-P1.90-LS2.4-BR")
+			(fields
+				(field
+					(name "LCSC") "C20917")
+				(field
+					(name "Footprint") "JLC-MCP:SOT-23-3_L2.9-W1.3-P1.90-LS2.4-BR")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "AO3400A")
+				(description "1 N-channel 1.45V 1.4W 30V 48mΩ@2.5V 5.7A 50pF 630pF 75pF 7nC@10V N-Channel SOT-23 MOSFETs ROHS")
+			)
+			(property
+				(name "LCSC")
+				(value "C20917")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "C20917")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "b559b89b-9f06-4914-80e8-beba21e29770")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "Q14")
+			(value "AO3400A")
+			(footprint "JLC-MCP:SOT-23-3_L2.9-W1.3-P1.90-LS2.4-BR")
+			(fields
+				(field
+					(name "LCSC") "C20917")
+				(field
+					(name "Footprint") "JLC-MCP:SOT-23-3_L2.9-W1.3-P1.90-LS2.4-BR")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "AO3400A")
+				(description "1 N-channel 1.45V 1.4W 30V 48mΩ@2.5V 5.7A 50pF 630pF 75pF 7nC@10V N-Channel SOT-23 MOSFETs ROHS")
+			)
+			(property
+				(name "LCSC")
+				(value "C20917")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "C20917")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "b5de8dd7-d157-4c15-a444-c16628a006b1")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "Q15")
+			(value "AO3400A")
+			(footprint "JLC-MCP:SOT-23-3_L2.9-W1.3-P1.90-LS2.4-BR")
+			(fields
+				(field
+					(name "LCSC") "C20917")
+				(field
+					(name "Footprint") "JLC-MCP:SOT-23-3_L2.9-W1.3-P1.90-LS2.4-BR")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "AO3400A")
+				(description "1 N-channel 1.45V 1.4W 30V 48mΩ@2.5V 5.7A 50pF 630pF 75pF 7nC@10V N-Channel SOT-23 MOSFETs ROHS")
+			)
+			(property
+				(name "LCSC")
+				(value "C20917")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "C20917")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "1a1a476b-1048-4636-9d76-4178be9d7251")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "Q16")
+			(value "AO3400A")
+			(footprint "JLC-MCP:SOT-23-3_L2.9-W1.3-P1.90-LS2.4-BR")
+			(fields
+				(field
+					(name "LCSC") "C20917")
+				(field
+					(name "Footprint") "JLC-MCP:SOT-23-3_L2.9-W1.3-P1.90-LS2.4-BR")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "AO3400A")
+				(description "1 N-channel 1.45V 1.4W 30V 48mΩ@2.5V 5.7A 50pF 630pF 75pF 7nC@10V N-Channel SOT-23 MOSFETs ROHS")
+			)
+			(property
+				(name "LCSC")
+				(value "C20917")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "C20917")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "0227c3fd-9c50-495c-b441-091681d94114")
 			(units
 				(unit
 					(name "A")
@@ -3607,7 +4282,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "f3d8c122-1808-49ec-97ea-6118bbe66ae7")
+			(tstamps "1be15edb-d53a-4bdd-857e-e6107b6f22ba")
 			(units
 				(unit
 					(name "A")
@@ -3663,7 +4338,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "408f8c3c-5fb1-4006-b0d7-236005937958")
+			(tstamps "70ef277c-5768-4753-8d5e-d859a5b8b821")
 			(units
 				(unit
 					(name "A")
@@ -3719,7 +4394,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "5de8709d-f5c0-4ac8-9758-08360082cdf8")
+			(tstamps "3a7f4f3c-3526-474e-b0e4-d8f18fc2a7d6")
 			(units
 				(unit
 					(name "A")
@@ -3775,7 +4450,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "d5ada6cb-61ac-48ea-b224-0ddc24f6a3c1")
+			(tstamps "16d53873-8425-4edd-8529-019b5d66316b")
 			(units
 				(unit
 					(name "A")
@@ -3831,7 +4506,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "7fb069e7-d4d5-4e03-8fcc-7da106b3f3a8")
+			(tstamps "1a7c9267-891a-482e-96b4-6aafe3e63b01")
 			(units
 				(unit
 					(name "A")
@@ -3887,7 +4562,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "5476866f-3f40-4e38-965d-dab685b99799")
+			(tstamps "6265c758-f5b4-4498-a5cb-c0c01abc5e0f")
 			(units
 				(unit
 					(name "A")
@@ -3943,7 +4618,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "542a98f4-e95f-4a81-99f5-8ed344ea2475")
+			(tstamps "5792779b-fc21-4310-843b-c23e51512ed0")
 			(units
 				(unit
 					(name "A")
@@ -3999,7 +4674,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "fd3f008b-dbcf-4f07-bc0b-b392789b11ec")
+			(tstamps "659267d3-dd1a-4e8b-ab57-1d58fdc8c573")
 			(units
 				(unit
 					(name "A")
@@ -4055,7 +4730,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "f1bf7e46-2fa9-4b0b-af2f-5555a02e58d8")
+			(tstamps "d3b2d3aa-0d06-48d8-95c3-942a49f6202e")
 			(units
 				(unit
 					(name "A")
@@ -4111,7 +4786,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "10eda187-bb73-49a0-99fd-46d7d30e90c2")
+			(tstamps "917f0c0e-45c7-4365-9cbd-4f8f87053f06")
 			(units
 				(unit
 					(name "A")
@@ -4167,7 +4842,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "fd291784-3cf3-4f1d-92d8-b98e0b285851")
+			(tstamps "6a787493-569d-475b-822a-a69cad49642f")
 			(units
 				(unit
 					(name "A")
@@ -4223,7 +4898,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "ff327cff-425a-4d85-8bf4-0f2d92691abb")
+			(tstamps "67fdbd7b-d557-4236-a3cc-e408859db485")
 			(units
 				(unit
 					(name "A")
@@ -4279,7 +4954,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "50eb9812-d194-4477-bdcc-6162f3d40d74")
+			(tstamps "5e97352f-9625-492c-9259-e839152bbdd9")
 			(units
 				(unit
 					(name "A")
@@ -4335,7 +5010,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "5a6c0b44-ed29-47c0-90af-7bd629f168d6")
+			(tstamps "a02f2ff5-a485-41f0-ac78-be387f808d76")
 			(units
 				(unit
 					(name "A")
@@ -4391,7 +5066,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "c43eb722-db1c-4dde-84e3-97988b2509fd")
+			(tstamps "f9754fc3-b467-4114-92c0-cdec626be4d7")
 			(units
 				(unit
 					(name "A")
@@ -4447,7 +5122,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "b37e5944-3821-4415-a4ea-3760edfce7bd")
+			(tstamps "8b5a363f-de4d-4bec-8788-15a8092cf96c")
 			(units
 				(unit
 					(name "A")
@@ -4503,7 +5178,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "60873a82-1fec-403c-9933-4fd9e049a68f")
+			(tstamps "3729c99a-4c37-4988-a3ed-2339413521b1")
 			(units
 				(unit
 					(name "A")
@@ -4559,7 +5234,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "8a8c93a4-b1a0-4e0f-a8ee-38f32c70e3c0")
+			(tstamps "0858f191-8557-4e71-bd75-7dd2a534dac0")
 			(units
 				(unit
 					(name "A")
@@ -4615,7 +5290,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "32fb78f2-e5d4-40d9-b7b9-52e0e3114f13")
+			(tstamps "8300b5e5-7874-4b29-8ef5-08a4434d85d2")
 			(units
 				(unit
 					(name "A")
@@ -4671,7 +5346,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "56e073e5-f497-4d91-ae05-f124761774db")
+			(tstamps "30e83250-8dc0-47a4-ae20-67dd53afd270")
 			(units
 				(unit
 					(name "A")
@@ -4727,7 +5402,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "39b52c41-1f31-4aa8-94f7-5315ea34a82f")
+			(tstamps "61d0a244-387a-4ea9-bf6a-dff520d5dc90")
 			(units
 				(unit
 					(name "A")
@@ -4783,7 +5458,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "9b7f7658-5b9c-4345-b4af-47e0bf6b23c7")
+			(tstamps "8180e96c-246a-4368-aa3d-cdd94b081d69")
 			(units
 				(unit
 					(name "A")
@@ -4839,7 +5514,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "4f7eb724-d9fa-4df5-8863-20e9db1d2de7")
+			(tstamps "c5c0b10d-cf40-4b22-86d9-c9a99b2509e6")
 			(units
 				(unit
 					(name "A")
@@ -4895,7 +5570,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "11f35f65-e844-4a53-991c-ae2e98218c53")
+			(tstamps "98186913-c4fd-40e2-b041-9845793b8701")
 			(units
 				(unit
 					(name "A")
@@ -4951,7 +5626,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "d6e0c31f-c912-4d22-950a-19e6e220a9fc")
+			(tstamps "5f51b2b1-e4b2-44a6-b11c-9ddfb42ecba4")
 			(units
 				(unit
 					(name "A")
@@ -5007,7 +5682,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "94e76cc5-5ba0-4310-b97e-44d21d549d6e")
+			(tstamps "97f50582-f243-45c0-9c83-c46085b5a7c4")
 			(units
 				(unit
 					(name "A")
@@ -5063,7 +5738,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "a660d51c-43d2-4343-b142-8c3a079117c5")
+			(tstamps "88a921e0-39cf-4b57-b296-c5dbf21c6f02")
 			(units
 				(unit
 					(name "A")
@@ -5119,7 +5794,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "4b6e5b92-a960-4b0f-a9bc-88fa4d0eba0f")
+			(tstamps "13f45aaa-86bb-45ea-a352-cbcb8aaab33a")
 			(units
 				(unit
 					(name "A")
@@ -5175,7 +5850,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "da700e67-5fed-4d9a-9d8d-d3c6e05b812d")
+			(tstamps "fd90490c-713f-47d9-b763-733280293b99")
 			(units
 				(unit
 					(name "A")
@@ -5231,7 +5906,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "b9d56e4c-c310-4759-aeec-aa6bc3f0b277")
+			(tstamps "e7b06671-ee4a-4777-9ba0-3c3636991b86")
 			(units
 				(unit
 					(name "A")
@@ -5287,7 +5962,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "8815ff62-ed38-4589-9e56-fb16ee3b12ee")
+			(tstamps "22ccc873-c8b6-48d0-ac2b-856cef9aed0b")
 			(units
 				(unit
 					(name "A")
@@ -5343,7 +6018,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "ce28b6d9-7c27-48e8-8398-3f32d9127afe")
+			(tstamps "6830a03a-cddc-4bbd-bb5b-487cff7ad774")
 			(units
 				(unit
 					(name "A")
@@ -5399,7 +6074,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "22edd9eb-a380-4f5a-8a7f-a311468b2afd")
+			(tstamps "f54e69f6-500e-4356-9220-59f86a7985aa")
 			(units
 				(unit
 					(name "A")
@@ -5455,7 +6130,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "c79f3bf9-d777-427e-8589-aa687988c337")
+			(tstamps "fc402cfb-41b0-466d-9fde-1d98473bf69d")
 			(units
 				(unit
 					(name "A")
@@ -5511,7 +6186,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "58cab7bd-94cd-4ee9-ba42-9f6015ba28e7")
+			(tstamps "16bc91b2-f439-47a6-9824-820afe6f0bde")
 			(units
 				(unit
 					(name "A")
@@ -5567,7 +6242,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "8d2adbc9-74e8-4f68-9858-c2e6aead5a74")
+			(tstamps "272aa530-91ab-44ed-85d4-4028c6b26300")
 			(units
 				(unit
 					(name "A")
@@ -5623,7 +6298,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "35d61210-abf7-48be-baa9-9fcbaf78aab7")
+			(tstamps "da917207-b558-4c06-85a3-8432beeff21c")
 			(units
 				(unit
 					(name "A")
@@ -5679,7 +6354,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "879a7913-69ea-40ea-b4fe-a8523a9a0637")
+			(tstamps "857208c0-cf6a-4696-9c01-41c7046d5c97")
 			(units
 				(unit
 					(name "A")
@@ -5735,7 +6410,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "abb34287-f793-4a69-ba48-1f1ffe978eb8")
+			(tstamps "1265ee97-8237-45c2-a8b2-ede9ca86c807")
 			(units
 				(unit
 					(name "A")
@@ -5791,7 +6466,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "35a61d7a-340a-4f76-bd71-41d9d0e6b6c6")
+			(tstamps "b6488e21-ddaa-4e05-b20c-ddf9d514e46e")
 			(units
 				(unit
 					(name "A")
@@ -5847,7 +6522,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "61af8894-e5ee-423f-8343-8c0a645336e0")
+			(tstamps "0ec5a4a5-3234-4471-9710-b58b811fc0c6")
 			(units
 				(unit
 					(name "A")
@@ -5903,7 +6578,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "4f4fc259-0f47-4b6a-bd80-e499d46a80ca")
+			(tstamps "d903f8b6-f583-4c4a-961a-8ee6a5d77f78")
 			(units
 				(unit
 					(name "A")
@@ -5959,7 +6634,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "730a5b59-b39e-496e-860e-ac8c33395f7b")
+			(tstamps "22aab037-a79d-4d16-97ba-6fe410af2802")
 			(units
 				(unit
 					(name "A")
@@ -6015,7 +6690,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "68c06467-4191-4c20-9d6b-af5e639fd000")
+			(tstamps "a4c021aa-9c39-4bbe-9562-f89c12bfc7ad")
 			(units
 				(unit
 					(name "A")
@@ -6071,7 +6746,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "3f3729c7-9e6b-4849-abef-40d6b4baf0e9")
+			(tstamps "7d2715b0-8bf2-43d4-9e8c-88ea5213c7ae")
 			(units
 				(unit
 					(name "A")
@@ -6127,7 +6802,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "d4049b8c-d219-41e2-a1fb-6233490234b9")
+			(tstamps "2224409d-519a-4165-87a7-851aa5a18276")
 			(units
 				(unit
 					(name "A")
@@ -6183,7 +6858,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "95c537f7-e249-4e38-b2c7-650648ef93ac")
+			(tstamps "94ab0e2b-65df-4585-91d6-9feb0183b183")
 			(units
 				(unit
 					(name "A")
@@ -6239,7 +6914,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "4edc5899-2d6f-4364-a6c0-e93856759936")
+			(tstamps "8373d456-5f67-4f73-a5d5-7cd23ad9111d")
 			(units
 				(unit
 					(name "A")
@@ -6295,7 +6970,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "b547d279-44e8-4184-8f20-848b739c82fe")
+			(tstamps "a649efd4-7bdc-46b8-9241-110a10f62c35")
 			(units
 				(unit
 					(name "A")
@@ -6351,7 +7026,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "aaf92b6a-ac29-45fe-9b04-c9f92dfbf2e2")
+			(tstamps "d3a819de-c751-4c73-9b86-13cc4b6e1ff2")
 			(units
 				(unit
 					(name "A")
@@ -6407,7 +7082,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "09a11c70-1341-46fd-9049-89e364eb53ae")
+			(tstamps "f6335d97-62a1-4da7-975c-f1ec1b9afd6a")
 			(units
 				(unit
 					(name "A")
@@ -6463,7 +7138,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "f24d7c72-5af5-4722-b5c7-0b5f9712fdb5")
+			(tstamps "114cbb54-f6e7-4764-b995-f3d5866de4aa")
 			(units
 				(unit
 					(name "A")
@@ -6519,7 +7194,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "6fd045aa-01b1-4a8d-a427-8ddc2b92a3d8")
+			(tstamps "62f5697d-8a6b-4365-8112-ddcbad881506")
 			(units
 				(unit
 					(name "A")
@@ -6575,7 +7250,567 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "51a7493e-3dbf-4f13-ab98-243770ccdd32")
+			(tstamps "cf77f8b2-70ed-44d1-84ea-18da8a2a1ca4")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R55")
+			(value "1k")
+			(footprint "JLC-MCP:R0603")
+			(fields
+				(field
+					(name "LCSC") "C21190")
+				(field
+					(name "Footprint") "JLC-MCP:R0603")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "0603WAF1001T5E")
+				(description "100mW 1kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS")
+			)
+			(property
+				(name "LCSC")
+				(value "C21190")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "C21190")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "0af77bd9-8263-43aa-8654-af63b7296e6c")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R56")
+			(value "1k")
+			(footprint "JLC-MCP:R0603")
+			(fields
+				(field
+					(name "LCSC") "C21190")
+				(field
+					(name "Footprint") "JLC-MCP:R0603")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "0603WAF1001T5E")
+				(description "100mW 1kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS")
+			)
+			(property
+				(name "LCSC")
+				(value "C21190")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "C21190")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "758946c5-c337-49d4-9a1e-b76d9c3d7a98")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R57")
+			(value "1k")
+			(footprint "JLC-MCP:R0603")
+			(fields
+				(field
+					(name "LCSC") "C21190")
+				(field
+					(name "Footprint") "JLC-MCP:R0603")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "0603WAF1001T5E")
+				(description "100mW 1kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS")
+			)
+			(property
+				(name "LCSC")
+				(value "C21190")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "C21190")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "95bee58b-91e5-4c8e-9122-e3a069a32658")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R58")
+			(value "1k")
+			(footprint "JLC-MCP:R0603")
+			(fields
+				(field
+					(name "LCSC") "C21190")
+				(field
+					(name "Footprint") "JLC-MCP:R0603")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "0603WAF1001T5E")
+				(description "100mW 1kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS")
+			)
+			(property
+				(name "LCSC")
+				(value "C21190")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "C21190")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "b850fec6-6014-42d8-b208-2aedf8439bad")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R59")
+			(value "10k")
+			(footprint "JLC-MCP:R0603")
+			(fields
+				(field
+					(name "LCSC") "C25804")
+				(field
+					(name "Footprint") "JLC-MCP:R0603")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "0603WAF1002T5E")
+				(description "100mW 10kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS")
+			)
+			(property
+				(name "LCSC")
+				(value "C25804")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "C25804")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "2251079b-e79e-4415-bbcd-9032bb699d67")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R60")
+			(value "10k")
+			(footprint "JLC-MCP:R0603")
+			(fields
+				(field
+					(name "LCSC") "C25804")
+				(field
+					(name "Footprint") "JLC-MCP:R0603")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "0603WAF1002T5E")
+				(description "100mW 10kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS")
+			)
+			(property
+				(name "LCSC")
+				(value "C25804")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "C25804")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "3b1b1a20-65e8-43e3-8749-dc096357a839")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R61")
+			(value "10k")
+			(footprint "JLC-MCP:R0603")
+			(fields
+				(field
+					(name "LCSC") "C25804")
+				(field
+					(name "Footprint") "JLC-MCP:R0603")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "0603WAF1002T5E")
+				(description "100mW 10kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS")
+			)
+			(property
+				(name "LCSC")
+				(value "C25804")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "C25804")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "ab4b7b69-44d5-4002-8fb3-45e1602d5473")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R62")
+			(value "10k")
+			(footprint "JLC-MCP:R0603")
+			(fields
+				(field
+					(name "LCSC") "C25804")
+				(field
+					(name "Footprint") "JLC-MCP:R0603")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "0603WAF1002T5E")
+				(description "100mW 10kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS")
+			)
+			(property
+				(name "LCSC")
+				(value "C25804")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "C25804")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "42dd6db9-be4a-463b-8588-7cf8c4f669e7")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R63")
+			(value "5.1k")
+			(footprint "JLC-MCP:R0603")
+			(fields
+				(field
+					(name "LCSC") "C23186")
+				(field
+					(name "Footprint") "JLC-MCP:R0603")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "0603WAF5101T5E")
+				(description "100mW 5.1kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS")
+			)
+			(property
+				(name "LCSC")
+				(value "C23186")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "C23186")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "ae7215fa-55a2-405f-8f15-4115605db7ba")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R64")
+			(value "5.1k")
+			(footprint "JLC-MCP:R0603")
+			(fields
+				(field
+					(name "LCSC") "C23186")
+				(field
+					(name "Footprint") "JLC-MCP:R0603")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "0603WAF5101T5E")
+				(description "100mW 5.1kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS")
+			)
+			(property
+				(name "LCSC")
+				(value "C23186")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "C23186")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "aff67176-5d5a-4126-ab3f-5867b2600233")
 			(units
 				(unit
 					(name "A")
@@ -6631,7 +7866,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "9a17ae67-9f17-4456-a082-73f96aa22cfb")
+			(tstamps "345a752a-4b10-4499-baa7-cc10a018a74c")
 			(units
 				(unit
 					(name "A")
@@ -6687,7 +7922,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "1f00c5a1-fa89-4e13-8548-b7b64c65dae6")
+			(tstamps "d46aa755-eb44-4e2e-82f2-4657746ad462")
 			(units
 				(unit
 					(name "A")
@@ -6743,7 +7978,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "9c263eb3-772c-4a5b-9d55-f3fbc0eb5b23")
+			(tstamps "070a46c7-1028-498f-b4b8-76cfe8ebb2ce")
 			(units
 				(unit
 					(name "A")
@@ -6789,7 +8024,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "eef7cb7c-cd5b-4d4f-ac36-1202179fbb2d")
+			(tstamps "78c9800f-ff92-4a04-8b15-823f392a1272")
 			(units
 				(unit
 					(name "A")
@@ -6832,7 +8067,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "b0afbd33-af79-490a-ac32-ddeca3693d6b")
+			(tstamps "5dc58a7e-5a6a-456e-b751-313f14c4753a")
 			(units
 				(unit
 					(name "A")
@@ -6875,7 +8110,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "f9e736bb-6ee1-4e83-9a0a-587ecdd39d25")
+			(tstamps "e36c023d-9a1a-4acb-8c4c-37aa687d0c1f")
 			(units
 				(unit
 					(name "A")
@@ -6918,7 +8153,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "7e275498-e853-46b3-a76e-c94ddeeab6b4")
+			(tstamps "8ee98fb3-643d-4554-81a5-64b106a61995")
 			(units
 				(unit
 					(name "A")
@@ -6961,7 +8196,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "d435f768-d7ad-4db3-990d-b976611b13ea")
+			(tstamps "c1554f73-ae15-49a9-954e-fb8417ca29c1")
 			(units
 				(unit
 					(name "A")
@@ -7004,7 +8239,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "628a1f7f-a9d2-4225-9697-f36e27262fcb")
+			(tstamps "5c13a051-43a4-43e4-a5ab-06d40da85a2b")
 			(units
 				(unit
 					(name "A")
@@ -7047,7 +8282,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "3419365d-c16d-42ed-aea4-f622e0059934")
+			(tstamps "8295ae41-5d62-4049-b620-346b42b85a3b")
 			(units
 				(unit
 					(name "A")
@@ -7090,7 +8325,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "c55d3a59-6818-4ea0-b456-aeb15f145a24")
+			(tstamps "53db042b-4ad3-4235-bf41-1d0c695b0c0f")
 			(units
 				(unit
 					(name "A")
@@ -7133,7 +8368,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "8ee9f8ed-615a-4d21-bae2-629b60d97c69")
+			(tstamps "3d3a04a1-09b0-4548-8f58-bf1255d33df2")
 			(units
 				(unit
 					(name "A")
@@ -7176,7 +8411,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "bd3313f8-74fc-49b7-9819-50d1f06f6851")
+			(tstamps "8bc8edf3-4389-44ec-8bf4-29a68cbb4660")
 			(units
 				(unit
 					(name "A")
@@ -7219,7 +8454,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "1b41f0da-3fab-44bd-9874-2f8ae970c4ff")
+			(tstamps "5e2fac7a-526b-442e-8ace-f494b8b65baf")
 			(units
 				(unit
 					(name "A")
@@ -7262,7 +8497,50 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "9ed712cc-303e-4122-bd04-a9801b8e7c0a")
+			(tstamps "2a9f7156-0b3a-4b2a-9047-13852032d78e")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "TP13")
+			(value "DRV_PUMP")
+			(footprint "TestPoint:TestPoint_Pad_D1.0mm")
+			(fields
+				(field
+					(name "Footprint") "TestPoint:TestPoint_Pad_D1.0mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Mechanical")
+				(part "TestPoint")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "ea622a88-f048-455b-8b45-3eb2b7f45bfa")
 			(units
 				(unit
 					(name "A")
@@ -7315,7 +8593,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "25eec0f7-d971-43ea-a821-4c0574caf649")
+			(tstamps "0074c153-6765-485d-93f6-477a6c19d5e4")
 			(units
 				(unit
 					(name "A")
@@ -7488,7 +8766,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "9301d549-b8ed-4618-85a5-71ae5e0ec95b")
+			(tstamps "60bc6994-3a28-4941-b33a-ac546a6356d5")
 			(units
 				(unit
 					(name "A")
@@ -7610,7 +8888,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "3c02659c-e7c4-48ab-a7a8-72adbbae0360")
+			(tstamps "cd28f7ab-d50c-47be-956b-41e69f222a98")
 			(units
 				(unit
 					(name "A")
@@ -7684,7 +8962,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "c13a9c9e-a53b-46bc-9bd7-9efc89b09035")
+			(tstamps "888ee33b-9987-4268-9458-8be842935d1a")
 			(units
 				(unit
 					(name "A")
@@ -7767,7 +9045,139 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "8d5824de-262c-4305-9f6d-bb44f53a3fd2")
+			(tstamps "913a1446-00ce-42dc-aef8-e86921ac4318")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "6")
+						)
+						(pin
+							(num "5")
+						)
+						(pin
+							(num "4")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "U6")
+			(value "XGZP6897D")
+			(footprint "LOCAL:XGZP6897D-SOP8-W7.96-P2.54")
+			(fields
+				(field
+					(name "Footprint") "LOCAL:XGZP6897D-SOP8-W7.96-P2.54")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "XGZP6897D")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "0c161e8a-3041-483e-9b5f-8167aa83dde7")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "8")
+						)
+						(pin
+							(num "7")
+						)
+						(pin
+							(num "6")
+						)
+						(pin
+							(num "5")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "U7")
+			(value "USBLC6-2SC6")
+			(footprint "JLC-MCP:SOT-23-6_L2.9-W1.6-P0.95-LS2.8-BL")
+			(fields
+				(field
+					(name "LCSC") "C7519")
+				(field
+					(name "Footprint") "JLC-MCP:SOT-23-6_L2.9-W1.6-P0.95-LS2.8-BL")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "JLC-MCP")
+				(part "USBLC6-2SC6")
+				(description "USBLC6-2SC6")
+			)
+			(property
+				(name "LCSC")
+				(value "C7519")
+			)
+			(property
+				(name "Sheetname")
+				(value "flowio-p1")
+			)
+			(property
+				(name "Sheetfile")
+				(value "flowio-p1.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "C7519")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "cb8abbef-0ca4-460f-8c85-f1d7983dd5de")
 			(units
 				(unit
 					(name "A")
@@ -8916,81 +10326,6 @@
 		)
 		(libpart
 			(lib "JLC-MCP")
-			(part "DC005_C431533")
-			(description "12V 2mm 500mA 6.3mm DC Power Jack Right Angle Plugin DC Power Connectors ROHS")
-			(docs "https://www.lcsc.com/datasheet/lcsc_datasheet_1912111437_SHOU-HAN-DC005_C431533.pdf")
-			(fields
-				(field
-					(name "Reference") "DC")
-				(field
-					(name "Value") "DC005_C431533")
-				(field
-					(name "Footprint") "JLC-MCP:DC-IN-TH_DC005")
-				(field
-					(name "Datasheet") "https://www.lcsc.com/datasheet/lcsc_datasheet_1912111437_SHOU-HAN-DC005_C431533.pdf")
-				(field
-					(name "Description") "12V 2mm 500mA 6.3mm DC Power Jack Right Angle Plugin DC Power Connectors ROHS")
-				(field
-					(name "Product Page") "https://lcsc.com/product-detail/Power-Connectors_SHOU-HAN-DC005_C431533.html")
-				(field
-					(name "LCSC") "C431533")
-				(field
-					(name "Manufacturer") "SHOU HAN(首韩)")
-				(field
-					(name "Stock") "40")
-				(field
-					(name "Price") "0.0419USD")
-				(field
-					(name "Process") "SMT")
-				(field
-					(name "Minimum Qty") "10")
-				(field
-					(name "Attrition Qty") "0")
-				(field
-					(name "Class") "Extended Part")
-				(field
-					(name "Part") "DC005")
-				(field
-					(name "Operating Temperature") "-30℃~+70℃")
-				(field
-					(name "Voltage Rating (Max)") "12V")
-				(field
-					(name "Length") "13.6mm")
-				(field
-					(name "Current Rating") "500mA")
-				(field
-					(name "Connector Type") "DC Power Jack")
-				(field
-					(name "Body Height") "10.9mm")
-				(field
-					(name "Outside Contact Diameter") "6.3mm")
-				(field
-					(name "Mounting Type") "Right Angle")
-				(field
-					(name "Width") "9.9mm")
-				(field
-					(name "Inside Contact Diameter") "2mm")
-			)
-			(pins
-				(pin
-					(num "1")
-					(name "1")
-					(type "passive")
-				)
-				(pin
-					(num "2")
-					(name "2")
-					(type "passive")
-				)
-				(pin
-					(num "3")
-					(name "3")
-					(type "passive")
-				)
-			)
-		)
-		(libpart
-			(lib "JLC-MCP")
 			(part "ESP32-S3-WROOM-1_N16R8_")
 			(description "-103.5dBm -40℃~+65℃ 2.4GHz 20.5dBm 355mA 3V~3.6V 95mA ESP32-S3R8 On-board PCB Antenna UART、SPI、I2C、GPIO、I2S、USB SMD,25.5x18mm WiFi Modules ROHS")
 			(docs "https://www.lcsc.com/datasheet/lcsc_datasheet_2411121101_Espressif-Systems-ESP32-S3-WROOM-1-N16R8_C2913202.pdf")
@@ -9995,6 +11330,146 @@
 		)
 		(libpart
 			(lib "JLC-MCP")
+			(part "TYPE-C-31-M-12")
+			(description "1 10,000 cycles 16P 20V 5A 7.35mm Female Surface Mount, Right Angle Type-C SMD USB Connectors ROHS")
+			(docs "https://www.lcsc.com/datasheet/lcsc_datasheet_2205251630_Korean-Hroparts-Elec-TYPE-C-31-M-12_C165948.pdf")
+			(fields
+				(field
+					(name "Reference") "USBC")
+				(field
+					(name "Value") "TYPE-C-31-M-12")
+				(field
+					(name "Footprint") "JLC-MCP:USB-C_SMD-TYPE-C-31-M-12_1")
+				(field
+					(name "Datasheet") "https://www.lcsc.com/datasheet/lcsc_datasheet_2205251630_Korean-Hroparts-Elec-TYPE-C-31-M-12_C165948.pdf")
+				(field
+					(name "Description") "1 10,000 cycles 16P 20V 5A 7.35mm Female Surface Mount, Right Angle Type-C SMD USB Connectors ROHS")
+				(field
+					(name "Product Page") "https://lcsc.com/product-detail/USB-Type-C_Korean-Hroparts-Elec-TYPE-C-31-M-12_C165948.html")
+				(field
+					(name "LCSC") "C165948")
+				(field
+					(name "Manufacturer") "韩国韩荣")
+				(field
+					(name "Stock") "3121")
+				(field
+					(name "Price") "0.3127USD")
+				(field
+					(name "Process") "SMT")
+				(field
+					(name "Minimum Qty") "1")
+				(field
+					(name "Attrition Qty") "0")
+				(field
+					(name "Class") "Extended Part")
+				(field
+					(name "Part") "TYPE-C-31-M-12")
+				(field
+					(name "Operating Temperature") "-30℃~+80℃")
+				(field
+					(name "Number of Ports") "1")
+				(field
+					(name "Length") "7.35mm")
+				(field
+					(name "Current Rating-Power") "5A")
+				(field
+					(name "Voltage Rating") "20V")
+				(field
+					(name "Connector Type") "Type-C")
+				(field
+					(name "Number of Contacts") "16P")
+				(field
+					(name "Gender") "Female")
+				(field
+					(name "Connect-Disconnect Life") "10,000 cycles")
+				(field
+					(name "Mounting Type") "Surface Mount, Right Angle")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "EH")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "EH")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "EH")
+					(type "passive")
+				)
+				(pin
+					(num "4")
+					(name "EH")
+					(type "passive")
+				)
+				(pin
+					(num "A1B12")
+					(name "GND")
+					(type "passive")
+				)
+				(pin
+					(num "A4B9")
+					(name "VBUS")
+					(type "passive")
+				)
+				(pin
+					(num "A5")
+					(name "CC1")
+					(type "passive")
+				)
+				(pin
+					(num "A6")
+					(name "DP1")
+					(type "passive")
+				)
+				(pin
+					(num "A7")
+					(name "DN1")
+					(type "passive")
+				)
+				(pin
+					(num "A8")
+					(name "SBU1")
+					(type "passive")
+				)
+				(pin
+					(num "B1A12")
+					(name "GND")
+					(type "passive")
+				)
+				(pin
+					(num "B4A9")
+					(name "VBUS")
+					(type "passive")
+				)
+				(pin
+					(num "B5")
+					(name "CC2")
+					(type "passive")
+				)
+				(pin
+					(num "B6")
+					(name "DP2")
+					(type "passive")
+				)
+				(pin
+					(num "B7")
+					(name "DN2")
+					(type "passive")
+				)
+				(pin
+					(num "B8")
+					(name "SBU2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "JLC-MCP")
 			(part "TYPE-C_6P")
 			(description "1 3,000 Cycles 3A 5V 6P Black Female Surface Mount, Right Angle Type-C SMD USB Connectors ROHS")
 			(docs "https://www.lcsc.com/datasheet/lcsc_datasheet_2012031006_SHOU-HAN-TYPE-C-6P_C456012.pdf")
@@ -10162,6 +11637,36 @@
 		)
 		(libpart
 			(lib "JLC-MCP")
+			(part "WAFER-XH2_54-2PZZ")
+			(fields
+				(field
+					(name "Reference") "J")
+				(field
+					(name "Value") "XH 2P")
+				(field
+					(name "Footprint") "JLC-MCP:CONN-SMD_2P-P2.54_MEGASTAR_ZX-XH2.54-2PWT")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "JLC-MCP")
 			(part "WAFER-XH2_54-4PZZ")
 			(description "1 12.5mm 1x4P 2.5mm 250V 2A 4 4P 5.9mm 7mm Brass PA66 Through Hole Tin UL94V-0 White XH 插件,P=2.5mm Wire To Board Connector ROHS")
 			(docs "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2302211801_XUNPU-WAFER-XH2-54-4PZZ_C5359632.pdf")
@@ -10250,78 +11755,60 @@
 		)
 		(libpart
 			(lib "JLC-MCP")
-			(part "WJ500V-5_08-2P-14-00A")
-			(description "1 14~30 18A 1x2P 2 2.5 250V 2P 5.08mm Green M2.5 Through Hole 插件,P=5.08mm Screw Terminal Blocks ROHS")
-			(docs "https://www.lcsc.com/datasheet/lcsc_datasheet_1912251636_Ningbo-Kangnex-Elec-WJ500V-5-08-2P_C8465.pdf")
+			(part "XGZP6897D")
 			(fields
 				(field
-					(name "Reference") "P")
+					(name "Reference") "U")
 				(field
-					(name "Value") "WJ500V-5.08-2P-14-00A")
+					(name "Value") "XGZP6897D")
 				(field
-					(name "Footprint") "JLC-MCP:CONN-TH_2P-P5.00_WJ500V-5.08-2P")
+					(name "Footprint") "LOCAL:XGZP6897D-SOP8-W7.96-P2.54")
 				(field
-					(name "Datasheet") "https://www.lcsc.com/datasheet/lcsc_datasheet_1912251636_Ningbo-Kangnex-Elec-WJ500V-5-08-2P_C8465.pdf")
+					(name "Datasheet")
+				)
 				(field
-					(name "Description") "1 14~30 18A 1x2P 2 2.5 250V 2P 5.08mm Green M2.5 Through Hole 插件,P=5.08mm Screw Terminal Blocks ROHS")
-				(field
-					(name "Product Page") "https://lcsc.com/product-detail/Terminal-Blocks_WJ500V-5-08-2P_C8465.html")
-				(field
-					(name "LCSC") "C8465")
-				(field
-					(name "Manufacturer") "KANGNEX(康奈克斯电气)")
-				(field
-					(name "Stock") "20510")
-				(field
-					(name "Price") "0.0819USD")
-				(field
-					(name "Process") "SMT")
-				(field
-					(name "Minimum Qty") "5")
-				(field
-					(name "Attrition Qty") "0")
-				(field
-					(name "Class") "Extended Part")
-				(field
-					(name "Part") "WJ500V-5.08-2P")
-				(field
-					(name "Operating Temperature") "-40℃~+105℃")
-				(field
-					(name "Number of Positions or Pins") "1x2P")
-				(field
-					(name "Voltage Rating (Max)") "250V")
-				(field
-					(name "Number of Rows") "1")
-				(field
-					(name "Color") "Green")
-				(field
-					(name "Current Rating") "18A")
-				(field
-					(name "Wire Gauge - AWG") "14~30")
-				(field
-					(name "Wire Gauge - mm2") "2.5")
-				(field
-					(name "Height Above Board") "14.07mm")
-				(field
-					(name "Mounting Type") "Through Hole")
-				(field
-					(name "Screw Specification") "M2.5")
-				(field
-					(name "Number of Pins") "2P")
-				(field
-					(name "Pitch") "5.08mm")
-				(field
-					(name "Number of PINs Per Row") "2")
+					(name "Description")
+				)
 			)
 			(pins
 				(pin
 					(num "1")
-					(name "1")
+					(name "NC")
 					(type "passive")
 				)
 				(pin
 					(num "2")
-					(name "2")
+					(name "VDD")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "NC")
+					(type "passive")
+				)
+				(pin
+					(num "4")
+					(name "NC")
+					(type "passive")
+				)
+				(pin
+					(num "5")
+					(name "NC")
+					(type "passive")
+				)
+				(pin
+					(num "6")
+					(name "SDA")
+					(type "passive")
+				)
+				(pin
+					(num "7")
+					(name "SCL")
+					(type "passive")
+				)
+				(pin
+					(num "8")
+					(name "GND")
 					(type "passive")
 				)
 			)
@@ -10479,6 +11966,12 @@
 			)
 			(node
 				(ref "C13")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "C18")
 				(pin "1")
 				(pinfunction "1_1")
 				(pintype "passive")
@@ -10729,6 +12222,12 @@
 				(pinfunction "VCC_7")
 				(pintype "passive")
 			)
+			(node
+				(ref "U6")
+				(pin "2")
+				(pinfunction "VDD_2")
+				(pintype "passive")
+			)
 		)
 		(net
 			(code "2")
@@ -10765,12 +12264,6 @@
 				(pintype "passive")
 			)
 			(node
-				(ref "D1")
-				(pin "1")
-				(pinfunction "K_1")
-				(pintype "passive")
-			)
-			(node
 				(ref "D10")
 				(pin "1")
 				(pinfunction "K_1")
@@ -10778,6 +12271,30 @@
 			)
 			(node
 				(ref "D11")
+				(pin "1")
+				(pinfunction "K_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "D12")
+				(pin "1")
+				(pinfunction "K_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "D13")
+				(pin "1")
+				(pinfunction "K_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "D14")
+				(pin "1")
+				(pinfunction "K_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "D15")
 				(pin "1")
 				(pinfunction "K_1")
 				(pintype "passive")
@@ -10822,6 +12339,18 @@
 				(ref "D9")
 				(pin "1")
 				(pinfunction "K_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J1")
+				(pin "A4B9")
+				(pinfunction "VBUS_A4B9")
+				(pintype "passive")
+			)
+			(node
+				(ref "J1")
+				(pin "B4A9")
+				(pinfunction "VBUS_B4A9")
 				(pintype "passive")
 			)
 			(node
@@ -10873,6 +12402,30 @@
 				(pintype "passive")
 			)
 			(node
+				(ref "J20")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J21")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J22")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J23")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
 				(ref "R3")
 				(pin "1")
 				(pinfunction "1_1")
@@ -10889,6 +12442,12 @@
 				(pin "2")
 				(pinfunction "VIN_2")
 				(pintype "power_in")
+			)
+			(node
+				(ref "U7")
+				(pin "5")
+				(pinfunction "5_5")
+				(pintype "passive")
 			)
 		)
 		(net
@@ -11117,23 +12676,6 @@
 		)
 		(net
 			(code "13")
-			(name "/DC_IN")
-			(class "Default")
-			(node
-				(ref "D1")
-				(pin "2")
-				(pinfunction "A_2")
-				(pintype "passive")
-			)
-			(node
-				(ref "J1")
-				(pin "1")
-				(pinfunction "1_1")
-				(pintype "passive")
-			)
-		)
-		(net
-			(code "14")
 			(name "/DRV1")
 			(class "Default")
 			(node
@@ -11162,7 +12704,7 @@
 			)
 		)
 		(net
-			(code "15")
+			(code "14")
 			(name "/DRV2")
 			(class "Default")
 			(node
@@ -11185,7 +12727,7 @@
 			)
 		)
 		(net
-			(code "16")
+			(code "15")
 			(name "/DRV3")
 			(class "Default")
 			(node
@@ -11208,7 +12750,7 @@
 			)
 		)
 		(net
-			(code "17")
+			(code "16")
 			(name "/DRV4")
 			(class "Default")
 			(node
@@ -11231,7 +12773,7 @@
 			)
 		)
 		(net
-			(code "18")
+			(code "17")
 			(name "/DRV5")
 			(class "Default")
 			(node
@@ -11254,7 +12796,7 @@
 			)
 		)
 		(net
-			(code "19")
+			(code "18")
 			(name "/DRV6")
 			(class "Default")
 			(node
@@ -11277,7 +12819,7 @@
 			)
 		)
 		(net
-			(code "20")
+			(code "19")
 			(name "/DRV7")
 			(class "Default")
 			(node
@@ -11300,7 +12842,7 @@
 			)
 		)
 		(net
-			(code "21")
+			(code "20")
 			(name "/DRV8")
 			(class "Default")
 			(node
@@ -11323,7 +12865,105 @@
 			)
 		)
 		(net
+			(code "21")
+			(name "/DRV_F")
+			(class "Default")
+			(node
+				(ref "D14")
+				(pin "2")
+				(pinfunction "A_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J22")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "Q15")
+				(pin "3")
+				(pinfunction "D_3")
+				(pintype "passive")
+			)
+		)
+		(net
 			(code "22")
+			(name "/DRV_PUMP")
+			(class "Default")
+			(node
+				(ref "D15")
+				(pin "2")
+				(pinfunction "A_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J23")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "Q16")
+				(pin "3")
+				(pinfunction "D_3")
+				(pintype "passive")
+			)
+			(node
+				(ref "TP13")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "23")
+			(name "/DRV_S")
+			(class "Default")
+			(node
+				(ref "D12")
+				(pin "2")
+				(pinfunction "A_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J20")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "Q13")
+				(pin "3")
+				(pinfunction "D_3")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "24")
+			(name "/DRV_V")
+			(class "Default")
+			(node
+				(ref "D13")
+				(pin "2")
+				(pinfunction "A_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J21")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "Q14")
+				(pin "3")
+				(pinfunction "D_3")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "25")
 			(name "/DTR")
 			(class "Default")
 			(node
@@ -11340,7 +12980,7 @@
 			)
 		)
 		(net
-			(code "23")
+			(code "26")
 			(name "/DTR_R")
 			(class "Default")
 			(node
@@ -11363,7 +13003,7 @@
 			)
 		)
 		(net
-			(code "24")
+			(code "27")
 			(name "/EN")
 			(class "Default")
 			(node
@@ -11404,7 +13044,7 @@
 			)
 		)
 		(net
-			(code "25")
+			(code "28")
 			(name "/FB")
 			(class "Default")
 			(node
@@ -11427,7 +13067,7 @@
 			)
 		)
 		(net
-			(code "26")
+			(code "29")
 			(name "/GATE1")
 			(class "Default")
 			(node
@@ -11456,7 +13096,7 @@
 			)
 		)
 		(net
-			(code "27")
+			(code "30")
 			(name "/GATE2")
 			(class "Default")
 			(node
@@ -11479,7 +13119,7 @@
 			)
 		)
 		(net
-			(code "28")
+			(code "31")
 			(name "/GATE3")
 			(class "Default")
 			(node
@@ -11502,7 +13142,7 @@
 			)
 		)
 		(net
-			(code "29")
+			(code "32")
 			(name "/GATE4")
 			(class "Default")
 			(node
@@ -11525,7 +13165,7 @@
 			)
 		)
 		(net
-			(code "30")
+			(code "33")
 			(name "/GATE5")
 			(class "Default")
 			(node
@@ -11548,7 +13188,7 @@
 			)
 		)
 		(net
-			(code "31")
+			(code "34")
 			(name "/GATE6")
 			(class "Default")
 			(node
@@ -11571,7 +13211,7 @@
 			)
 		)
 		(net
-			(code "32")
+			(code "35")
 			(name "/GATE7")
 			(class "Default")
 			(node
@@ -11594,7 +13234,7 @@
 			)
 		)
 		(net
-			(code "33")
+			(code "36")
 			(name "/GATE8")
 			(class "Default")
 			(node
@@ -11617,7 +13257,99 @@
 			)
 		)
 		(net
-			(code "34")
+			(code "37")
+			(name "/GATE_F")
+			(class "Default")
+			(node
+				(ref "Q15")
+				(pin "1")
+				(pinfunction "G_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R57")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R61")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "38")
+			(name "/GATE_PUMP")
+			(class "Default")
+			(node
+				(ref "Q16")
+				(pin "1")
+				(pinfunction "G_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R58")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R62")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "39")
+			(name "/GATE_S")
+			(class "Default")
+			(node
+				(ref "Q13")
+				(pin "1")
+				(pinfunction "G_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R55")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R59")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "40")
+			(name "/GATE_V")
+			(class "Default")
+			(node
+				(ref "Q14")
+				(pin "1")
+				(pinfunction "G_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R56")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R60")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "41")
 			(name "/I2C_SCL")
 			(class "Default")
 			(node
@@ -11644,9 +13376,15 @@
 				(pinfunction "SCL_22")
 				(pintype "passive")
 			)
+			(node
+				(ref "U6")
+				(pin "7")
+				(pinfunction "SCL_7")
+				(pintype "passive")
+			)
 		)
 		(net
-			(code "35")
+			(code "42")
 			(name "/I2C_SDA")
 			(class "Default")
 			(node
@@ -11673,9 +13411,15 @@
 				(pinfunction "SDA_23")
 				(pintype "passive")
 			)
+			(node
+				(ref "U6")
+				(pin "6")
+				(pinfunction "SDA_6")
+				(pintype "passive")
+			)
 		)
 		(net
-			(code "36")
+			(code "43")
 			(name "/IO4")
 			(class "Default")
 			(node
@@ -11692,7 +13436,7 @@
 			)
 		)
 		(net
-			(code "37")
+			(code "44")
 			(name "/IO5")
 			(class "Default")
 			(node
@@ -11709,7 +13453,7 @@
 			)
 		)
 		(net
-			(code "38")
+			(code "45")
 			(name "/IO6")
 			(class "Default")
 			(node
@@ -11726,7 +13470,7 @@
 			)
 		)
 		(net
-			(code "39")
+			(code "46")
 			(name "/IO7")
 			(class "Default")
 			(node
@@ -11743,7 +13487,7 @@
 			)
 		)
 		(net
-			(code "40")
+			(code "47")
 			(name "/IO10")
 			(class "Default")
 			(node
@@ -11760,7 +13504,7 @@
 			)
 		)
 		(net
-			(code "41")
+			(code "48")
 			(name "/IO11")
 			(class "Default")
 			(node
@@ -11777,7 +13521,7 @@
 			)
 		)
 		(net
-			(code "42")
+			(code "49")
 			(name "/IO12")
 			(class "Default")
 			(node
@@ -11794,7 +13538,75 @@
 			)
 		)
 		(net
-			(code "43")
+			(code "50")
+			(name "/IO15")
+			(class "Default")
+			(node
+				(ref "R55")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U1")
+				(pin "8")
+				(pinfunction "IO15_8")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "51")
+			(name "/IO16")
+			(class "Default")
+			(node
+				(ref "R56")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U1")
+				(pin "9")
+				(pinfunction "IO16_9")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "52")
+			(name "/IO17")
+			(class "Default")
+			(node
+				(ref "R57")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U1")
+				(pin "10")
+				(pinfunction "IO17_10")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "53")
+			(name "/IO18")
+			(class "Default")
+			(node
+				(ref "R58")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U1")
+				(pin "11")
+				(pinfunction "IO18_11")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "54")
 			(name "/IO21")
 			(class "Default")
 			(node
@@ -11811,7 +13623,7 @@
 			)
 		)
 		(net
-			(code "44")
+			(code "55")
 			(name "/IO48")
 			(class "Default")
 			(node
@@ -11828,7 +13640,7 @@
 			)
 		)
 		(net
-			(code "45")
+			(code "56")
 			(name "/LED_PWR_K")
 			(class "Default")
 			(node
@@ -11845,7 +13657,7 @@
 			)
 		)
 		(net
-			(code "46")
+			(code "57")
 			(name "/LED_RX_K")
 			(class "Default")
 			(node
@@ -11862,7 +13674,7 @@
 			)
 		)
 		(net
-			(code "47")
+			(code "58")
 			(name "/LED_TX_K")
 			(class "Default")
 			(node
@@ -11879,7 +13691,7 @@
 			)
 		)
 		(net
-			(code "48")
+			(code "59")
 			(name "/LED_USER")
 			(class "Default")
 			(node
@@ -11902,7 +13714,7 @@
 			)
 		)
 		(net
-			(code "49")
+			(code "60")
 			(name "/LED_USER_K")
 			(class "Default")
 			(node
@@ -11919,7 +13731,65 @@
 			)
 		)
 		(net
-			(code "50")
+			(code "61")
+			(name "/P5_CC1")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "A5")
+				(pinfunction "CC1_A5")
+				(pintype "passive")
+			)
+			(node
+				(ref "R63")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U7")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U7")
+				(pin "6")
+				(pinfunction "6_6")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "62")
+			(name "/P5_CC2")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "B5")
+				(pinfunction "CC2_B5")
+				(pintype "passive")
+			)
+			(node
+				(ref "R64")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U7")
+				(pin "3")
+				(pinfunction "3_3")
+				(pintype "passive")
+			)
+			(node
+				(ref "U7")
+				(pin "4")
+				(pinfunction "4_4")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "63")
 			(name "/RGB_R")
 			(class "Default")
 			(node
@@ -11936,7 +13806,7 @@
 			)
 		)
 		(net
-			(code "51")
+			(code "64")
 			(name "/RTS")
 			(class "Default")
 			(node
@@ -11953,7 +13823,7 @@
 			)
 		)
 		(net
-			(code "52")
+			(code "65")
 			(name "/RTS_R")
 			(class "Default")
 			(node
@@ -11976,7 +13846,7 @@
 			)
 		)
 		(net
-			(code "53")
+			(code "66")
 			(name "/S1_SCL")
 			(class "Default")
 			(node
@@ -11999,7 +13869,7 @@
 			)
 		)
 		(net
-			(code "54")
+			(code "67")
 			(name "/S1_SDA")
 			(class "Default")
 			(node
@@ -12022,7 +13892,7 @@
 			)
 		)
 		(net
-			(code "55")
+			(code "68")
 			(name "/S2_SCL")
 			(class "Default")
 			(node
@@ -12045,7 +13915,7 @@
 			)
 		)
 		(net
-			(code "56")
+			(code "69")
 			(name "/S2_SDA")
 			(class "Default")
 			(node
@@ -12068,7 +13938,7 @@
 			)
 		)
 		(net
-			(code "57")
+			(code "70")
 			(name "/S3_SCL")
 			(class "Default")
 			(node
@@ -12091,7 +13961,7 @@
 			)
 		)
 		(net
-			(code "58")
+			(code "71")
 			(name "/S3_SDA")
 			(class "Default")
 			(node
@@ -12114,7 +13984,7 @@
 			)
 		)
 		(net
-			(code "59")
+			(code "72")
 			(name "/S4_SCL")
 			(class "Default")
 			(node
@@ -12137,7 +14007,7 @@
 			)
 		)
 		(net
-			(code "60")
+			(code "73")
 			(name "/S4_SDA")
 			(class "Default")
 			(node
@@ -12160,7 +14030,7 @@
 			)
 		)
 		(net
-			(code "61")
+			(code "74")
 			(name "/S5_SCL")
 			(class "Default")
 			(node
@@ -12183,7 +14053,7 @@
 			)
 		)
 		(net
-			(code "62")
+			(code "75")
 			(name "/S5_SDA")
 			(class "Default")
 			(node
@@ -12206,7 +14076,7 @@
 			)
 		)
 		(net
-			(code "63")
+			(code "76")
 			(name "/STRAP3")
 			(class "Default")
 			(node
@@ -12223,7 +14093,7 @@
 			)
 		)
 		(net
-			(code "64")
+			(code "77")
 			(name "/STRAP45")
 			(class "Default")
 			(node
@@ -12240,7 +14110,7 @@
 			)
 		)
 		(net
-			(code "65")
+			(code "78")
 			(name "/STRAP46")
 			(class "Default")
 			(node
@@ -12257,7 +14127,7 @@
 			)
 		)
 		(net
-			(code "66")
+			(code "79")
 			(name "/TCA_RST")
 			(class "Default")
 			(node
@@ -12274,7 +14144,7 @@
 			)
 		)
 		(net
-			(code "67")
+			(code "80")
 			(name "/UART_RX")
 			(class "Default")
 			(node
@@ -12297,7 +14167,7 @@
 			)
 		)
 		(net
-			(code "68")
+			(code "81")
 			(name "/UART_TX")
 			(class "Default")
 			(node
@@ -12320,7 +14190,7 @@
 			)
 		)
 		(net
-			(code "69")
+			(code "82")
 			(name "/USB_DN")
 			(class "Default")
 			(node
@@ -12343,7 +14213,7 @@
 			)
 		)
 		(net
-			(code "70")
+			(code "83")
 			(name "/USB_DN_CH")
 			(class "Default")
 			(node
@@ -12360,7 +14230,7 @@
 			)
 		)
 		(net
-			(code "71")
+			(code "84")
 			(name "/USB_DP")
 			(class "Default")
 			(node
@@ -12383,7 +14253,7 @@
 			)
 		)
 		(net
-			(code "72")
+			(code "85")
 			(name "/USB_DP_CH")
 			(class "Default")
 			(node
@@ -12400,7 +14270,7 @@
 			)
 		)
 		(net
-			(code "73")
+			(code "86")
 			(name "/USB_VBUS")
 			(class "Default")
 			(node
@@ -12429,7 +14299,7 @@
 			)
 		)
 		(net
-			(code "74")
+			(code "87")
 			(name "GND")
 			(class "Default")
 			(node
@@ -12487,6 +14357,12 @@
 				(pintype "passive")
 			)
 			(node
+				(ref "C18")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
 				(ref "C2")
 				(pin "2")
 				(pinfunction "2_2")
@@ -12536,8 +14412,38 @@
 			)
 			(node
 				(ref "J1")
+				(pin "1")
+				(pinfunction "EH_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J1")
 				(pin "2")
-				(pinfunction "2_2")
+				(pinfunction "EH_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J1")
+				(pin "3")
+				(pinfunction "EH_3")
+				(pintype "passive")
+			)
+			(node
+				(ref "J1")
+				(pin "4")
+				(pinfunction "EH_4")
+				(pintype "passive")
+			)
+			(node
+				(ref "J1")
+				(pin "A1B12")
+				(pinfunction "GND_A1B12")
+				(pintype "passive")
+			)
+			(node
+				(ref "J1")
+				(pin "B1A12")
+				(pinfunction "GND_B1A12")
 				(pintype "passive")
 			)
 			(node
@@ -12622,6 +14528,30 @@
 				(ref "Q12")
 				(pin "2")
 				(pinfunction "E_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "Q13")
+				(pin "2")
+				(pinfunction "S_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "Q14")
+				(pin "2")
+				(pinfunction "S_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "Q15")
+				(pin "2")
+				(pinfunction "S_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "Q16")
+				(pin "2")
+				(pinfunction "S_2")
 				(pintype "passive")
 			)
 			(node
@@ -12751,6 +14681,42 @@
 				(pintype "passive")
 			)
 			(node
+				(ref "R59")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R60")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R61")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R62")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R63")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R64")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
 				(ref "SW1")
 				(pin "2")
 				(pinfunction "2_2")
@@ -12858,9 +14824,21 @@
 				(pinfunction "2_2")
 				(pintype "passive")
 			)
+			(node
+				(ref "U6")
+				(pin "8")
+				(pinfunction "GND_8")
+				(pintype "passive")
+			)
+			(node
+				(ref "U7")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
 		)
 		(net
-			(code "75")
+			(code "88")
 			(name "PH")
 			(class "Default")
 			(node
@@ -12895,18 +14873,73 @@
 			)
 		)
 		(net
-			(code "76")
-			(name "unconnected-(J1-Pad3)")
+			(code "89")
+			(name "unconnected-(J1-DN1-PadA7)")
 			(class "Default")
 			(node
 				(ref "J1")
-				(pin "3")
-				(pinfunction "3_3")
+				(pin "A7")
+				(pinfunction "DN1_A7")
 				(pintype "passive+no_connect")
 			)
 		)
 		(net
-			(code "77")
+			(code "90")
+			(name "unconnected-(J1-DN2-PadB7)")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "B7")
+				(pinfunction "DN2_B7")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "91")
+			(name "unconnected-(J1-DP1-PadA6)")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "A6")
+				(pinfunction "DP1_A6")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "92")
+			(name "unconnected-(J1-DP2-PadB6)")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "B6")
+				(pinfunction "DP2_B6")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "93")
+			(name "unconnected-(J1-SBU1-PadA8)")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "A8")
+				(pinfunction "SBU1_A8")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "94")
+			(name "unconnected-(J1-SBU2-PadB8)")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "B8")
+				(pinfunction "SBU2_B8")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "95")
 			(name "unconnected-(LED1-DOU-Pad2)")
 			(class "Default")
 			(node
@@ -12917,7 +14950,7 @@
 			)
 		)
 		(net
-			(code "78")
+			(code "96")
 			(name "unconnected-(U1-IO1-Pad39)")
 			(class "Default")
 			(node
@@ -12928,7 +14961,7 @@
 			)
 		)
 		(net
-			(code "79")
+			(code "97")
 			(name "unconnected-(U1-IO2-Pad38)")
 			(class "Default")
 			(node
@@ -12939,51 +14972,7 @@
 			)
 		)
 		(net
-			(code "80")
-			(name "unconnected-(U1-IO15-Pad8)")
-			(class "Default")
-			(node
-				(ref "U1")
-				(pin "8")
-				(pinfunction "IO15_8")
-				(pintype "passive+no_connect")
-			)
-		)
-		(net
-			(code "81")
-			(name "unconnected-(U1-IO16-Pad9)")
-			(class "Default")
-			(node
-				(ref "U1")
-				(pin "9")
-				(pinfunction "IO16_9")
-				(pintype "passive+no_connect")
-			)
-		)
-		(net
-			(code "82")
-			(name "unconnected-(U1-IO17-Pad10)")
-			(class "Default")
-			(node
-				(ref "U1")
-				(pin "10")
-				(pinfunction "IO17_10")
-				(pintype "passive+no_connect")
-			)
-		)
-		(net
-			(code "83")
-			(name "unconnected-(U1-IO18-Pad11)")
-			(class "Default")
-			(node
-				(ref "U1")
-				(pin "11")
-				(pinfunction "IO18_11")
-				(pintype "passive+no_connect")
-			)
-		)
-		(net
-			(code "84")
+			(code "98")
 			(name "unconnected-(U1-IO19-Pad13)")
 			(class "Default")
 			(node
@@ -12994,7 +14983,7 @@
 			)
 		)
 		(net
-			(code "85")
+			(code "99")
 			(name "unconnected-(U1-IO20-Pad14)")
 			(class "Default")
 			(node
@@ -13005,7 +14994,7 @@
 			)
 		)
 		(net
-			(code "86")
+			(code "100")
 			(name "unconnected-(U1-IO35-Pad28)")
 			(class "Default")
 			(node
@@ -13016,7 +15005,7 @@
 			)
 		)
 		(net
-			(code "87")
+			(code "101")
 			(name "unconnected-(U1-IO36-Pad29)")
 			(class "Default")
 			(node
@@ -13027,7 +15016,7 @@
 			)
 		)
 		(net
-			(code "88")
+			(code "102")
 			(name "unconnected-(U1-IO37-Pad30)")
 			(class "Default")
 			(node
@@ -13038,7 +15027,7 @@
 			)
 		)
 		(net
-			(code "89")
+			(code "103")
 			(name "unconnected-(U1-IO38-Pad31)")
 			(class "Default")
 			(node
@@ -13049,7 +15038,7 @@
 			)
 		)
 		(net
-			(code "90")
+			(code "104")
 			(name "unconnected-(U1-IO39-Pad32)")
 			(class "Default")
 			(node
@@ -13060,7 +15049,7 @@
 			)
 		)
 		(net
-			(code "91")
+			(code "105")
 			(name "unconnected-(U1-IO40-Pad33)")
 			(class "Default")
 			(node
@@ -13071,7 +15060,7 @@
 			)
 		)
 		(net
-			(code "92")
+			(code "106")
 			(name "unconnected-(U1-IO41-Pad34)")
 			(class "Default")
 			(node
@@ -13082,7 +15071,7 @@
 			)
 		)
 		(net
-			(code "93")
+			(code "107")
 			(name "unconnected-(U1-IO42-Pad35)")
 			(class "Default")
 			(node
@@ -13093,7 +15082,7 @@
 			)
 		)
 		(net
-			(code "94")
+			(code "108")
 			(name "unconnected-(U1-IO47-Pad24)")
 			(class "Default")
 			(node
@@ -13104,7 +15093,7 @@
 			)
 		)
 		(net
-			(code "95")
+			(code "109")
 			(name "unconnected-(U2-SC5-Pad16)")
 			(class "Default")
 			(node
@@ -13115,7 +15104,7 @@
 			)
 		)
 		(net
-			(code "96")
+			(code "110")
 			(name "unconnected-(U2-SC6-Pad18)")
 			(class "Default")
 			(node
@@ -13126,7 +15115,7 @@
 			)
 		)
 		(net
-			(code "97")
+			(code "111")
 			(name "unconnected-(U2-SC7-Pad20)")
 			(class "Default")
 			(node
@@ -13137,7 +15126,7 @@
 			)
 		)
 		(net
-			(code "98")
+			(code "112")
 			(name "unconnected-(U2-SD5-Pad15)")
 			(class "Default")
 			(node
@@ -13148,7 +15137,7 @@
 			)
 		)
 		(net
-			(code "99")
+			(code "113")
 			(name "unconnected-(U2-SD6-Pad17)")
 			(class "Default")
 			(node
@@ -13159,7 +15148,7 @@
 			)
 		)
 		(net
-			(code "100")
+			(code "114")
 			(name "unconnected-(U2-SD7-Pad19)")
 			(class "Default")
 			(node
@@ -13170,13 +15159,57 @@
 			)
 		)
 		(net
-			(code "101")
+			(code "115")
 			(name "unconnected-(U4-CTS#-Pad5)")
 			(class "Default")
 			(node
 				(ref "U4")
 				(pin "5")
 				(pinfunction "CTS#_5")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "116")
+			(name "unconnected-(U6-NC-Pad1)")
+			(class "Default")
+			(node
+				(ref "U6")
+				(pin "1")
+				(pinfunction "NC_1")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "117")
+			(name "unconnected-(U6-NC-Pad3)")
+			(class "Default")
+			(node
+				(ref "U6")
+				(pin "3")
+				(pinfunction "NC_3")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "118")
+			(name "unconnected-(U6-NC-Pad4)")
+			(class "Default")
+			(node
+				(ref "U6")
+				(pin "4")
+				(pinfunction "NC_4")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "119")
+			(name "unconnected-(U6-NC-Pad5)")
+			(class "Default")
+			(node
+				(ref "U6")
+				(pin "5")
+				(pinfunction "NC_5")
 				(pintype "passive+no_connect")
 			)
 		)

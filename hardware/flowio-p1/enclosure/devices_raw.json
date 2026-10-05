@@ -1,38 +1,215 @@
 {
-  "_provenance": "jlcpcb MCP component_search 逐 C 号快照, 2026-10-03, 33 唯一行; desc 截断",
-  "parts": [
-    {"id": "C13585",  "name": "CL31A106KBHNNNE",   "package": "1206",               "desc": "10uF 50V X5R 1206 MLCC"},
-    {"id": "C1591",   "name": "CL10B104KB8NNNC",   "package": "0603",               "desc": "100nF 50V X7R 0603 MLCC"},
-    {"id": "C33353",  "name": "CL10C222JB8NNNC",   "package": "0603",               "desc": "2.2nF 50V C0G 0603 MLCC"},
-    {"id": "C1653",   "name": "CL10C220JB8NNNC",   "package": "0603",               "desc": "22pF 50V C0G 0603 MLCC"},
-    {"id": "C15008",  "name": "CL31A107MQHNNNE",   "package": "1206",               "desc": "100uF 6.3V X5R 1206 MLCC"},
-    {"id": "C15849",  "name": "CL10A105KB8NNNC",   "package": "0603",               "desc": "1uF 50V X5R 0603 MLCC"},
-    {"id": "C8678",   "name": "SS34",              "package": "SMA(DO-214AC)",      "desc": "3A 40V Schottky SMA"},
-    {"id": "C2480",   "name": "SS14",              "package": "SMA(DO-214AC)",      "desc": "1A 40V Schottky SMA"},
-    {"id": "C456012", "name": "TYPE-C 6P",         "package": "SMD",                "desc": "USB-C 6P Female Right Angle, Length 6.8mm"},
-    {"id": "C167253", "name": "CDRH103RNP-6R8NC-B","package": "SMD,10.2x10mm",      "desc": "6.8uH 3.6A power inductor 10.2x10"},
-    {"id": "C2843785","name": "XL-5050RGBC-WS2812B","package": "SMD5050-4P",         "desc": "WS2812B RGB 5050, L5 W5 H1.6"},
-    {"id": "C2286",   "name": "KT-0603R",          "package": "0603",               "desc": "Red LED 0603"},
-    {"id": "C2288",   "name": "KT-0603B",          "package": "0603",               "desc": "Blue LED 0603"},
-    {"id": "C125100", "name": "LTST-C191KSKT",     "package": "0603",               "desc": "Yellow LED 0603"},
-    {"id": "C20917",  "name": "AO3400A",           "package": "SOT-23",             "desc": "N-MOS 30V 5.7A SOT-23"},
-    {"id": "C181160", "name": "SS8050",            "package": "SOT-23",             "desc": "NPN BJT SOT-23"},
-    {"id": "C23186",  "name": "0603WAF5101T5E",    "package": "0603",               "desc": "5.1k 0603 resistor"},
-    {"id": "C14675",  "name": "RC0603FR-07100KL",  "package": "0603",               "desc": "100k 0603 resistor"},
-    {"id": "C25804",  "name": "0603WAF1002T5E",    "package": "0603",               "desc": "10k 0603 resistor"},
-    {"id": "C22994",  "name": "0603WAF3241T5E",    "package": "0603",               "desc": "3.24k 0603 resistor"},
-    {"id": "C23162",  "name": "0603WAF4701T5E",    "package": "0603",               "desc": "4.7k 0603 resistor"},
-    {"id": "C21190",  "name": "0603WAF1001T5E",    "package": "0603",               "desc": "1k 0603 resistor"},
-    {"id": "C23138",  "name": "0603WAF3300T5E",    "package": "0603",               "desc": "330R 0603 resistor"},
-    {"id": "C23345",  "name": "0603WAF220JT5E",    "package": "0603",               "desc": "22R 0603 resistor"},
-    {"id": "C589191", "name": "ST-1185S",          "package": "SMD,4x3mm",          "desc": "Tactile switch SMD 4x3, Switch Height 2mm"},
-    {"id": "C2913202","name": "ESP32-S3-WROOM-1-N16R8", "package": "SMD,25.5x18mm", "desc": "WROOM-1 module 25.5x18, h3.1"},
-    {"id": "C130026", "name": "TCA9548APWR",       "package": "TSSOP-24",           "desc": "I2C 8ch mux TSSOP-24"},
-    {"id": "C9865",   "name": "TPS54331DR",        "package": "SOIC-8",             "desc": "Buck 3A SOIC-8"},
-    {"id": "C968586", "name": "CH340K",            "package": "ESSOP-10-150mil-1mm","desc": "USB-serial ESSOP-10"},
-    {"id": "C7519",   "name": "USBLC6-2SC6",       "package": "SOT-23-6L",          "desc": "ESD TVS SOT-23-6L"},
-    {"id": "C431533", "name": "DC005",             "package": "Plugin",             "desc": "DC jack RA, W9.9 L13.6, Body Height 10.9mm"},
-    {"id": "C5359632","name": "WAFER-XH2.54-4PZZ", "package": "Plugin,P=2.5mm",     "desc": "XH 4P TH, X12.5 Y5.9, Z-Height 7mm"},
-    {"id": "C8465",   "name": "WJ500V-5.08-2P-14-00A", "package": "Plugin,P=5.08mm","desc": "Screw terminal 2P, Height Above Board 14.07mm"}
-  ]
+ "_provenance": "jlcpcb MCP component_search 逐 C 号快照, 2026-10-03, 33 唯一行; desc 截断",
+ "parts": [
+  {
+   "id": "C13585",
+   "name": "CL31A106KBHNNNE",
+   "package": "1206",
+   "desc": "10uF 50V X5R 1206 MLCC"
+  },
+  {
+   "id": "C1591",
+   "name": "CL10B104KB8NNNC",
+   "package": "0603",
+   "desc": "100nF 50V X7R 0603 MLCC"
+  },
+  {
+   "id": "C33353",
+   "name": "CL10C222JB8NNNC",
+   "package": "0603",
+   "desc": "2.2nF 50V C0G 0603 MLCC"
+  },
+  {
+   "id": "C1653",
+   "name": "CL10C220JB8NNNC",
+   "package": "0603",
+   "desc": "22pF 50V C0G 0603 MLCC"
+  },
+  {
+   "id": "C15008",
+   "name": "CL31A107MQHNNNE",
+   "package": "1206",
+   "desc": "100uF 6.3V X5R 1206 MLCC"
+  },
+  {
+   "id": "C15849",
+   "name": "CL10A105KB8NNNC",
+   "package": "0603",
+   "desc": "1uF 50V X5R 0603 MLCC"
+  },
+  {
+   "id": "C8678",
+   "name": "SS34",
+   "package": "SMA(DO-214AC)",
+   "desc": "3A 40V Schottky SMA"
+  },
+  {
+   "id": "C2480",
+   "name": "SS14",
+   "package": "SMA(DO-214AC)",
+   "desc": "1A 40V Schottky SMA"
+  },
+  {
+   "id": "C456012",
+   "name": "TYPE-C 6P",
+   "package": "SMD",
+   "desc": "USB-C 6P Female Right Angle, Length 6.8mm"
+  },
+  {
+   "id": "C167253",
+   "name": "CDRH103RNP-6R8NC-B",
+   "package": "SMD,10.2x10mm",
+   "desc": "6.8uH 3.6A power inductor 10.2x10"
+  },
+  {
+   "id": "C2843785",
+   "name": "XL-5050RGBC-WS2812B",
+   "package": "SMD5050-4P",
+   "desc": "WS2812B RGB 5050, L5 W5 H1.6"
+  },
+  {
+   "id": "C2286",
+   "name": "KT-0603R",
+   "package": "0603",
+   "desc": "Red LED 0603"
+  },
+  {
+   "id": "C2288",
+   "name": "KT-0603B",
+   "package": "0603",
+   "desc": "Blue LED 0603"
+  },
+  {
+   "id": "C125100",
+   "name": "LTST-C191KSKT",
+   "package": "0603",
+   "desc": "Yellow LED 0603"
+  },
+  {
+   "id": "C20917",
+   "name": "AO3400A",
+   "package": "SOT-23",
+   "desc": "N-MOS 30V 5.7A SOT-23"
+  },
+  {
+   "id": "C181160",
+   "name": "SS8050",
+   "package": "SOT-23",
+   "desc": "NPN BJT SOT-23"
+  },
+  {
+   "id": "C23186",
+   "name": "0603WAF5101T5E",
+   "package": "0603",
+   "desc": "5.1k 0603 resistor"
+  },
+  {
+   "id": "C14675",
+   "name": "RC0603FR-07100KL",
+   "package": "0603",
+   "desc": "100k 0603 resistor"
+  },
+  {
+   "id": "C25804",
+   "name": "0603WAF1002T5E",
+   "package": "0603",
+   "desc": "10k 0603 resistor"
+  },
+  {
+   "id": "C22994",
+   "name": "0603WAF3241T5E",
+   "package": "0603",
+   "desc": "3.24k 0603 resistor"
+  },
+  {
+   "id": "C23162",
+   "name": "0603WAF4701T5E",
+   "package": "0603",
+   "desc": "4.7k 0603 resistor"
+  },
+  {
+   "id": "C21190",
+   "name": "0603WAF1001T5E",
+   "package": "0603",
+   "desc": "1k 0603 resistor"
+  },
+  {
+   "id": "C23138",
+   "name": "0603WAF3300T5E",
+   "package": "0603",
+   "desc": "330R 0603 resistor"
+  },
+  {
+   "id": "C23345",
+   "name": "0603WAF220JT5E",
+   "package": "0603",
+   "desc": "22R 0603 resistor"
+  },
+  {
+   "id": "C589191",
+   "name": "ST-1185S",
+   "package": "SMD,4x3mm",
+   "desc": "Tactile switch SMD 4x3, Switch Height 2mm"
+  },
+  {
+   "id": "C2913202",
+   "name": "ESP32-S3-WROOM-1-N16R8",
+   "package": "SMD,25.5x18mm",
+   "desc": "WROOM-1 module 25.5x18, h3.1"
+  },
+  {
+   "id": "C130026",
+   "name": "TCA9548APWR",
+   "package": "TSSOP-24",
+   "desc": "I2C 8ch mux TSSOP-24"
+  },
+  {
+   "id": "C9865",
+   "name": "TPS54331DR",
+   "package": "SOIC-8",
+   "desc": "Buck 3A SOIC-8"
+  },
+  {
+   "id": "C968586",
+   "name": "CH340K",
+   "package": "ESSOP-10-150mil-1mm",
+   "desc": "USB-serial ESSOP-10"
+  },
+  {
+   "id": "C7519",
+   "name": "USBLC6-2SC6",
+   "package": "SOT-23-6L",
+   "desc": "ESD TVS SOT-23-6L"
+  },
+  {
+   "id": "C431533",
+   "name": "DC005",
+   "package": "Plugin",
+   "desc": "DC jack RA, W9.9 L13.6, Body Height 10.9mm"
+  },
+  {
+   "id": "C5359632",
+   "name": "WAFER-XH2.54-4PZZ",
+   "package": "Plugin,P=2.5mm",
+   "desc": "XH 4P TH, X12.5 Y5.9, Z-Height 7mm"
+  },
+  {
+   "id": "C8465",
+   "name": "WJ500V-5.08-2P-14-00A",
+   "package": "Plugin,P=5.08mm",
+   "desc": "Screw terminal 2P, Height Above Board 14.07mm"
+  },
+  {
+   "id": "C7429671",
+   "name": "ZX-XH2.54-2PWT",
+   "desc": "XH SMD,P=2.5mm,卧贴 Wire To Board Connector ROHS (10x7.8x6.2, 3A/250V, Megastar 兆星)",
+   "datasheet": "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2306191414_Megastar-ZX-XH2-54-2PWT_C7429671.pdf"
+  },
+  {
+   "id": "C165948",
+   "name": "TYPE-C-31-M-12",
+   "desc": "USB-C 16P 5A 板面贴装电源口 (8.94x7.35x3.26, SHOUHAN/首韩)",
+   "datasheet": ""
+  }
+ ]
 }

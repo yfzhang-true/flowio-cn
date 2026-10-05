@@ -1,7 +1,7 @@
 {
  "_meta": {
   "generated_by": "tools/ingest_device_dims.py",
-  "provenance": "devices_raw.json (jlcpcb MCP 2026-10-03) + curated datasheet dims",
+  "provenance": "devices_raw.json (jlcpcb MCP) + curated datasheet dims",
   "conventions": {
    "dims": "w=封装rot0时X向, d=Y向, h=板上高度(above board), 单位mm",
    "port.dir_local": "rot=0 时端口开口方向(板系x右/y上, KiCad y-down 取 -rot 变换)",
@@ -10,8 +10,8 @@
  },
  "devices": [
   {
-   "lcsc": "C8465",
-   "name": "WJ500V-5.08-2P-14-00A",
+   "lcsc": "C7429671",
+   "name": "ZX-XH2.54-2PWT",
    "refs": [
     "J10",
     "J11",
@@ -20,20 +20,24 @@
     "J14",
     "J15",
     "J16",
-    "J17"
+    "J17",
+    "J20",
+    "J21",
+    "J22",
+    "J23"
    ],
    "pkg_keywords": [
-    "CONN-TH_2P",
-    "WJ500V"
+    "CONN-SMD_2P",
+    "ZX-XH2.54"
    ],
    "dims": {
-    "w": 10.2,
-    "d": 10.0,
-    "h": 14.07
+    "w": 10.0,
+    "d": 7.8,
+    "h": 6.2
    },
    "placement": "EDGE_OUT",
-   "datasheet": "",
-   "jlc_desc": "Screw terminal 2P, Height Above Board 14.07mm",
+   "datasheet": "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2306191414_Megastar-ZX-XH2-54-2PWT_C7429671.pdf",
+   "jlc_desc": "XH SMD,P=2.5mm,卧贴 Wire To Board Connector ROHS (10x7.8x6.2, 3A/250V, Megastar 兆星)",
    "port": {
     "type": "pneumatic_wire",
     "dir_local": [
@@ -42,7 +46,7 @@
     ],
     "exit_z": [
      0.0,
-     14.07
+     6.2
     ]
    }
   },
@@ -173,7 +177,8 @@
     "C12",
     "C13",
     "C15",
-    "C16"
+    "C16",
+    "C18"
    ],
    "pkg_keywords": [
     "C_0603",
@@ -205,6 +210,36 @@
    "placement": "INTERNAL",
    "datasheet": "",
    "jlc_desc": "22pF 50V C0G 0603 MLCC"
+  },
+  {
+   "lcsc": "C165948",
+   "name": "TYPE-C-31-M-12",
+   "refs": [
+    "J1"
+   ],
+   "pkg_keywords": [
+    "TYPE-C",
+    "TYPE-C-31-M-12"
+   ],
+   "dims": {
+    "w": 8.94,
+    "d": 7.35,
+    "h": 3.26
+   },
+   "placement": "EDGE_OUT",
+   "datasheet": "",
+   "jlc_desc": "USB-C 16P 5A 板面贴装电源口 (8.94x7.35x3.26, SHOUHAN/首韩)",
+   "port": {
+    "type": "usb",
+    "dir_local": [
+     0,
+     -1
+    ],
+    "exit_z": [
+     0.0,
+     3.26
+    ]
+   }
   },
   {
    "lcsc": "C167253",
@@ -256,7 +291,11 @@
     "Q7",
     "Q8",
     "Q9",
-    "Q10"
+    "Q10",
+    "Q13",
+    "Q14",
+    "Q15",
+    "Q16"
    ],
    "pkg_keywords": [
     "SOT-23",
@@ -290,7 +329,11 @@
     "R43",
     "R44",
     "R45",
-    "R46"
+    "R46",
+    "R55",
+    "R56",
+    "R57",
+    "R58"
    ],
    "pkg_keywords": [
     "0603WAF1001"
@@ -401,7 +444,9 @@
    "name": "0603WAF5101T5E",
    "refs": [
     "R1",
-    "R2"
+    "R2",
+    "R63",
+    "R64"
    ],
    "pkg_keywords": [
     "R0603",
@@ -446,7 +491,11 @@
     "D8",
     "D9",
     "D10",
-    "D11"
+    "D11",
+    "D12",
+    "D13",
+    "D14",
+    "D15"
    ],
    "pkg_keywords": [
     "SMA"
@@ -492,7 +541,11 @@
     "R51",
     "R52",
     "R53",
-    "R54"
+    "R54",
+    "R59",
+    "R60",
+    "R61",
+    "R62"
    ],
    "pkg_keywords": [
     "0603WAF1002"
@@ -563,41 +616,13 @@
    "jlc_desc": "2.2nF 50V C0G 0603 MLCC"
   },
   {
-   "lcsc": "C431533",
-   "name": "DC005",
-   "refs": [
-    "J1"
-   ],
-   "pkg_keywords": [
-    "DC005"
-   ],
-   "dims": {
-    "w": 9.9,
-    "d": 14.0,
-    "h": 10.9
-   },
-   "placement": "EDGE_OUT",
-   "datasheet": "",
-   "jlc_desc": "DC jack RA, W9.9 L13.6, Body Height 10.9mm",
-   "port": {
-    "type": "barrel",
-    "dir_local": [
-     0,
-     1
-    ],
-    "exit_z": [
-     0.0,
-     10.9
-    ]
-   }
-  },
-  {
    "lcsc": "C456012",
    "name": "TYPE-C 6P",
    "refs": [
     "J2"
    ],
    "pkg_keywords": [
+    "TYPE-C-6P",
     "TYPE-C"
    ],
    "dims": {
@@ -681,7 +706,8 @@
    "lcsc": "C7519",
    "name": "USBLC6-2SC6",
    "refs": [
-    "U5"
+    "U5",
+    "U7"
    ],
    "pkg_keywords": [
     "SOT-23-6",
@@ -700,7 +726,6 @@
    "lcsc": "C8678",
    "name": "SS34",
    "refs": [
-    "D1",
     "D2",
     "D3"
    ],
@@ -754,6 +779,265 @@
    "placement": "INTERNAL",
    "datasheet": "",
    "jlc_desc": "Buck 3A SOIC-8"
+  },
+  {
+   "lcsc": "",
+   "name": "XGZP6897D (淘宝件 CFSensor 闽芯)",
+   "refs": [
+    "U6"
+   ],
+   "pkg_keywords": [
+    "XGZP6897D-SOP8"
+   ],
+   "dims": {
+    "w": 7.96,
+    "d": 10.6,
+    "h": 9.5
+   },
+   "placement": "INTERNAL",
+   "datasheet": "",
+   "jlc_desc": "淘宝件不入 JLC BOM"
   }
- ]
+ ],
+ "pneumatic_devices": {
+  "_meta": {
+   "added": "2026-10-05 T1（spec v3.6 七项决策定案后入库）",
+   "provenance": "致荣华冠/闽芯 datasheet 一手（literature/*.pdf）+ component-registry.md",
+   "schema_note": "与 devices(PCB 贴装) 分段：本段不参与 case_geom 壳高链（T6 结构件算法另行消费）",
+   "voltage_variant": "全系选 DC4.5V 变体；5V 轨 + PWM 调制（见各 entry drive_policy）",
+   "drive_policy": {
+    "rail_v": 5.0,
+    "valve": {
+     "pull_in": "100% <=100ms",
+     "full_open_hold": "90% (等效4.5V=额定)",
+     "economy_hold": "55% (2.75V, BRINGUP 实测 35kPa 背压下限)"
+    },
+    "pump": {
+     "max_duty": "95% (5.0V>4.95V 上限 1% 补偿)",
+     "soft_start": "互锁：>=1 通道开启才起泵"
+    },
+    "voltage_adequacy": {
+     "min_actuation_v": 4.1,
+     "note": "规格书最低动作电压 4.1V（使用范围下限 4.05）；判定方向=防超压不防欠压，PWM 只向下调",
+     "states": [
+      {
+       "state": "吸入 pull-in",
+       "duty": "100% (≤100ms)",
+       "eff_v": 5.0,
+       "vs_rated": "+11%",
+       "vs_min_actuation": "+22%",
+       "verdict": "✓ 富余最大（吸合最有利）"
+      },
+      {
+       "state": "全开保持 full-open",
+       "duty": "90%",
+       "eff_v": 4.5,
+       "vs_rated": "0% (正好额定)",
+       "vs_min_actuation": "+10%",
+       "verdict": "✓ 额定点连续运行"
+      },
+      {
+       "state": "节能保持 economy",
+       "duty": "55%",
+       "eff_v": 2.75,
+       "vs_rated": "-39%",
+       "vs_min_actuation": "-33%",
+       "verdict": "⚠ 有意低于动作电压（保持力<吸合力，行业典型 40~60%），35kPa 背压下限 BRINGUP 实测；不足则升 65~70%（电流预算表联动）"
+      }
+     ],
+     "adapter_sag_check": "唯一欠压路径=适配器限流跌落（最坏 4.55A>3A 场景电压被拉低）→ 对策：5V/4A 适配器 或 充气并发≤4 通道（4×450+500=2.3A ✓）；§2.7.1 孪生仿真按母线电压轨迹量化"
+    }
+   },
+   "power_budget_a": {
+    "worst_full_hold_9v_plus_pump": 4.55,
+    "note": "9 阀全开保持(90%)+泵 = 4.55A > 3A 口 → 策略：并发全开保持为受限模式/错峰；典型充气 1-3 通道=1.85A ✓；BRINGUP 实测最小可靠保持占空比后再定适配器档(3A/4A/5A)",
+    "economy_hold_9v_plus_pump": 2.75
+   }
+  },
+  "valves": [
+   {
+    "refs": [
+     "V1",
+     "V2",
+     "V3",
+     "V4",
+     "V5",
+     "V6",
+     "V7",
+     "V8",
+     "VS",
+     "VF"
+    ],
+    "role": "V1-V8=通道阀; VS=充气主阀(泵出口↔M); VF=排气主阀(M↔大气)",
+    "model": "F0520D-DC4.5V",
+    "manufacturer": "东莞市政荣真空设备（致荣华冠淘宝企业店）",
+    "datasheet": "literature/F0520D.pdf",
+    "variant_note": "电压型号=DC4.5V（4.05~4.95V，<2W，450±15mA@4.5V）；5V 轨经 PWM 调制驱动：吸入 100%(<=100ms)/全开保持 90%(等效 4.5V)/节能保持 55%(BRINGUP 按 35kPa 背压实测下限)",
+    "electrical": {
+     "rated_v": 4.5,
+     "v_range": [
+      4.05,
+      4.95
+     ],
+     "rated_current_a": 0.45,
+     "power_w": 2.0
+    },
+    "pressure_kpa": [
+     0,
+     45
+    ],
+    "form": "C形硅钢架+红黑引线+2P白壳连接器（非THT直插）；PCB 经 2P 卧贴插座；阀体固定印刷支架（架顶 0.7 翻边）",
+    "mount": "vertical_2x4",
+    "install": "1a 竖装：13×15 底面着板方向，长轴 20.5 立起，嘴朝上",
+    "dims": {
+     "w": 15.0,
+     "d": 13.0,
+     "h": 20.5
+    },
+    "dims_flat": {
+     "l": 20.5,
+     "w": 15.0,
+     "h": 13.0
+    },
+    "port": {
+     "type": "pneumatic",
+     "dia_mm": 3.0,
+     "dir_local_mounted": [
+      0,
+      0,
+      1
+     ],
+     "tube_id_mm": 3.0
+    },
+    "mount_ref": "印刷支架/歧管，C架顶 0.7mm 翻边固定"
+   }
+  ],
+  "valve_vacuum_master": [
+   {
+    "refs": [
+     "VV"
+    ],
+    "role": "V=真空主阀(泵吸气口↔M)，负压域专用",
+    "model": "F0520B-DC4.5V",
+    "manufacturer": "东莞市政荣真空设备（致荣华冠）",
+    "datasheet": "literature/F0520B.pdf",
+    "variant_note": "电压型号=DC4.5V（4.05~4.95V，300±15mA）；驱动同 drive_policy",
+    "electrical": {
+     "rated_v": 4.5,
+     "v_range": [
+      4.05,
+      4.95
+     ],
+     "rated_current_a": 0.3,
+     "power_w": 2.0
+    },
+    "pressure_kpa": [
+     -45,
+     0
+    ],
+    "port_semantics": "断电 1↔3 通(NC侧)；通电 1↔2 通（1=COM）——一手标签+图纸确认",
+    "dims": {
+     "w": 15.0,
+     "d": 13.0,
+     "h": 28.0
+    },
+    "port": {
+     "type": "pneumatic",
+     "dia_mm": 4.6,
+     "dir_local_mounted": [
+      0,
+      0,
+      1
+     ],
+     "tube_id_mm": 4.0
+    },
+    "mount_ref": "有孔变体 ⌀2.0 孔×2（下单备注有孔版；孔距待问商家）"
+   }
+  ],
+  "pump": [
+   {
+    "refs": [
+     "P1"
+    ],
+    "role": "气源（充吸双口）：出口↔S 外侧、入口↔V 外侧；1h 分装式=独立泵模块（哑泵，电机 2 线回主板 Q12）",
+    "model": "ZR370-03PM-DC4.5V",
+    "manufacturer": "东莞市政荣真空设备（致荣华冠）",
+    "datasheet": "literature/ZR370-03PM.pdf",
+    "variant_note": "电压型号=DC4.5V（4.05~4.95V，负载<500mA，<2W）；PWM 上限 95%",
+    "electrical": {
+     "rated_v": 4.5,
+     "v_range": [
+      4.05,
+      4.95
+     ],
+     "load_current_a": 0.5,
+     "power_w": 2.0
+    },
+    "pressure_kpa": [
+     -60,
+     120
+    ],
+    "flow_lpm": 2.8,
+    "dims": {
+     "w": 58.1,
+     "d": 24.0,
+     "h": 31.5
+    },
+    "dims_note": "横躺安装姿态（硅胶支架环抱 ⌀24 泵头）：长 58.1 沿 X、本体 ⌀24、高含嘴 ≈31.5",
+    "ports": {
+     "count": 2,
+     "dia_mm": 4.2,
+     "dir": "顶置双嘴（充/吸固定，电机反接不换向）",
+     "tube_id_mm": 5.0
+    },
+    "bracket": "致荣硅胶支架 环ID23/OD26 脚距46mm M3 ×2 前后夹持",
+    "life": "3 万次循环（10s开/5s停）——间歇工况与孪生 duty 模型同源"
+   }
+  ],
+  "sensor": [
+   {
+    "refs": [
+     "S1"
+    ],
+    "role": "歧管 M 表压测量（1× 分时；P1 高压端接管、P2 低压端大气开放）",
+    "model": "XGZP6897D 100KPDPN（非-C）",
+    "manufacturer": "CFSensor（深圳闽芯半导体淘宝店）",
+    "datasheet": "literature/XGZP6897D微差压传感器.pdf",
+    "variant_note": "订货号=XGZP6897D100KPDPN（量程 -100~100kPa DPN，I2C 0x6D）；供电 5±0.25V",
+    "electrical": {
+     "v_range": [
+      2.5,
+      5.5
+     ],
+     "accuracy": "±2%Span",
+     "i2c_addr": "0x6D",
+     "data_bits": 24,
+     "resp_ms": 2.5
+    },
+    "regs": {
+     "cmd": "0x30",
+     "data": "0x06-08",
+     "temp": "0x09-0A",
+     "convert": "P=ADC/k（Span200→k=32，Pa）；温度/256"
+    },
+    "dims": {
+     "w": 7.0,
+     "d": 10.6,
+     "h": 9.5
+    },
+    "port": {
+     "type": "pneumatic",
+     "dia_mm": 3.22,
+     "bore_mm": 0.9,
+     "dir_local_mounted": [
+      0,
+      0,
+      1
+     ],
+     "tube_id_mm": 3.0
+    },
+    "mount": "SOIC8 板载（焊盘 2.54/排距 7.96）；N/C 1-3-4-5 禁连；VDD-GND 0.1µf"
+   }
+  ]
+ }
 }

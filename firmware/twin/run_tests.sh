@@ -70,6 +70,9 @@ else
   echo "（SKIP: 未找到 venv-cad）"
 fi
 
+echo; echo "═══ 2d/5 电气驱动仿真层 (spec §2.7.1, 参数单源 devices.json) ═══"
+"$PY" test_electrical_sim.py || rc=1
+
 echo; echo "═══ 3/5 接口测试 test_api.sh ═══"
 bash test_api.sh || rc=1
 

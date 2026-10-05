@@ -155,11 +155,20 @@ const SEGS = [                       // 分段语义 (固件实证): 释=S 确�
 
 function initCtrlDrawer() {
   const d = $("t2_ctrlDrawer");
+  // 双 PWM 滑条 —— 对齐官方 GUI 参考 (资源/官方参考/flowio-official-gui-reference.png):
+  // Vacuum PWM / Inflation PWM 两档泵功率 (官方 setPumpPower 语义: 充气/真空独立设压),
+  // I 命令携充气档、V 命令携真空档; 255 制与官方一致 (registry 泵上限 95%≈242,
+  // 固件侧钳位, 孪生保持全域可探索)。
   d.innerHTML = `
     <div class="t2_dHead"><h3>控制</h3><button id="t2_ctrlCollapse" class="t2_btn ghost">‹ 收起</button></div>
-    <label class="t2_pwmRow">泵 PWM
-      <input type="range" id="t2_pwmRange" min="80" max="255" step="1" value="255">
-      <b id="t2_pwmVal" class="t2_num">255</b></label>
+    <label class="t2_pwmRow">充气 PWM
+      <input type="range" id="t2_pwmInfl" min="80" max="255" step="1" value="255"
+             title="Inflation PWM —— 充气(I)命令的泵功率档">
+      <b id="t2_pwmInflVal" class="t2_num">255</b></label>
+    <label class="t2_pwmRow">真空 PWM
+      <input type="range" id="t2_pwmVac" min="80" max="255" step="1" value="255"
+             title="Vacuum PWM —— 真空(V)命令的泵功率档">
+      <b id="t2_pwmVacVal" class="t2_num">255</b></label>
     <div class="t2_vRow">
       <span class="nm">全局 1-5</span>
       <div class="t2_seg" data-port="g">${SEGS.map((s) =>
@@ -176,7 +185,8 @@ function initCtrlDrawer() {
       <button class="t2_btn ghost" data-line="X" title="闭环状态机复位">闭环复位</button>
       <button class="t2_btn ghost" data-line="F" title="硬件自检（输出在服务端控制台）">自检</button>
     </div>`;
-  $("t2_pwmRange").oninput = (ev) => { $("t2_pwmVal").textContent = ev.target.value; };
+  $("t2_pwmInfl").oninput = (ev) => { $("t2_pwmInflVal").textContent = ev.target.value; };
+  $("t2_pwmVac").oninput = (ev) => { $("t2_pwmVacVal").textContent = ev.target.value; };
   $("t2_ctrlCollapse").onclick = () => drawerToggle(d, $("t2_ctrlTab"));
 
   d.addEventListener("click", (ev) => {
@@ -187,8 +197,9 @@ function initCtrlDrawer() {
     const seg = b.closest(".t2_seg");
     const mask = seg.dataset.port === "g" ? 31 : (1 << parseInt(seg.dataset.port, 10));
     const cmd = b.dataset.cmd;
-    sendCmd(cmd === "I" || cmd === "V"
-      ? `${cmd} ${mask} ${$("t2_pwmRange").value}` : `${cmd} ${mask}`);
+    sendCmd(cmd === "I" ? `${cmd} ${mask} ${$("t2_pwmInfl").value}`       // 充气 → 充气档
+         : cmd === "V" ? `${cmd} ${mask} ${$("t2_pwmVac").value}`         // 真空 → 真空档
+         : `${cmd} ${mask}`);
     b.classList.add("hit");                              // 点击回执微光
     setTimeout(() => b.classList.remove("hit"), 260);
   });

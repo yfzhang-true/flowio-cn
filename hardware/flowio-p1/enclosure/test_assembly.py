@@ -60,7 +60,9 @@ for fname in ["pcb.stl", "parts_f.stl", "case_bottom.stl", "case_top.stl"]:
 
 # pcb: 精确黄金值 (板坐铜柱顶)
 cnt, bb, _ = load("pcb.stl")
-check("L1 pcb bbox 黄金值 (2.9..92.9, 2.9..77.9, 7.4..9.0)",
+_lbl = "L1 pcb bbox 黄金值 (%.1f..%.1f, %.1f..%.1f, %.1f..%.1f)" % (
+    G.OX, G.OX + G.BW, G.OX, G.OX + G.BH, G.Z_BOARD, G.Z_TOP)
+check(_lbl,
       approx(bb[0], G.OX, 0.05) and approx(bb[1], G.OX + G.BW, 0.05) and
       approx(bb[2], G.OX, 0.05) and approx(bb[3], G.OX + G.BH, 0.05) and
       approx(bb[4], G.Z_BOARD, 0.05) and approx(bb[5], G.Z_TOP, 0.05),
@@ -112,24 +114,30 @@ check("L1 top M3 过孔 x4", screw_ok == 4, "%d/4" % screw_ok)
 # ================= L2 接口: 装配一致性 =================
 print("== L2 接口: 装配一致性 ==")
 
-# 钻孔 T9 (NPTH 3.2) <-> 铜柱 ST 黄金对拍 (fab 数据 <-> CAD)
+# 钻孔 NPTH Ø3.2 <-> 铜柱 ST 黄金对拍 (fab 数据 <-> CAD)
+# P1.1 T3: M3 孔工具号从 T9 变为 T5 (XH-2P 无 TH 孔, 工具集变化) -> 按
+# 直径检索工具而非硬编码序号, 对拍语义不变 (仍 4 孔 Δ<0.2)
 drl_txt = open(DRL, encoding="utf-8", errors="replace").read()
-cur, t9 = None, []
+dia, cur, t32 = {}, None, []
 for ln in drl_txt.splitlines():
     s = ln.strip()
+    m = re.match(r"^T(\d+)C([\d.]+)$", s)
+    if m:
+        dia[m.group(1)] = float(m.group(2))
+        continue
     m = re.match(r"^T(\d+)$", s)
     if m:
-        cur = int(m.group(1))
+        cur = m.group(1)
         continue
     m = re.match(r"^X(-?[\d.]+)Y(-?[\d.]+)$", s)
-    if m and cur == 9:
-        t9.append((float(m.group(1)), -float(m.group(2))))
-check("L2 钻孔 T9 共 4 孔", len(t9) == 4, str(t9))
+    if m and cur and abs(dia.get(cur, 0) - 3.2) < 0.01:
+        t32.append((float(m.group(1)), -float(m.group(2))))
+check("L2 钻孔 Ø3.2 共 4 孔 (按直径检索工具)", len(t32) == 4, str(t32))
 dmax = 0.0
-for hx, hy in t9:
+for hx, hy in t32:
     dmin_st = min(((sx - hx) ** 2 + (sy - hy) ** 2) ** 0.5 for sx, sy in G.ST)
     dmax = max(dmax, dmin_st)
-check("L2 铜柱 ST <-> 钻孔 Δ<0.2", len(t9) == 4 and dmax < 0.2, "max Δ=%.3f" % dmax)
+check("L2 铜柱 ST <-> 钻孔 Δ<0.2", len(t32) == 4 and dmax < 0.2, "max Δ=%.3f" % dmax)
 
 # pos.csv 锚点
 parts = []
@@ -211,7 +219,13 @@ print("== L3 功能: 渲染资产契约 ==")
 
 man = json.loads((MESH / "assembly.json").read_text(encoding="utf-8"))
 ids = [p["id"] for p in man["parts"]]
-check("L3 装配清单 = 4 件 (无空 parts_B)", set(ids) == {"case_top", "parts_F", "pcb", "case_bottom"}, str(ids))
+# T6 双体装配契约: 主模块 6 件 + 泵模块 4 件 (bodies 分组在 assembly.json)
+DUAL_MAIN = {"manifold", "valves", "case_top", "parts_F", "pcb", "case_bottom"}
+DUAL_PUMP = {"pump_case", "pump", "brackets", "tubes"}
+check("L3 装配清单 = 10 件双体 (主 6 + 泵 4)",
+      set(ids) == DUAL_MAIN | DUAL_PUMP and
+      set(man["bodies"]["main"]) == DUAL_MAIN and set(man["bodies"]["pump"]) == DUAL_PUMP,
+      str(ids))
 stl_ok = True
 for p in man["parts"]:
     cnt, _x, _y, _z = G.stl_bbox(MESH / Path(p["stl"]).name)
@@ -236,12 +250,25 @@ def zrange(pid):
     return zz[0] + G.EXPLODE[pid][2], zz[1] + G.EXPLODE[pid][2]
 
 
-order = ["case_top", "parts_F", "pcb", "case_bottom"]
+# 主模块 6 件两两分离 (case_geom L264 分层契约: bottom < pcb < parts_F < case_top < valves < manifold)
+order = ["manifold", "valves", "case_top", "parts_F", "pcb", "case_bottom"]
 bands = {pid: zrange(pid) for pid in order}
 pairs = [(a, b) for i, a in enumerate(order) for b in order[i + 1:]]
 disjoint = all(bands[a][1] <= bands[b][0] or bands[b][1] <= bands[a][0] for a, b in pairs)
-check("L3 爆炸态层叠两两分离", disjoint,
+check("L3 爆炸态主模块 6 件两两分离", disjoint,
       " ".join("%s[%.1f..%.1f]" % (pid, *bands[pid]) for pid in order))
+
+# 泵模块 4 件: 揭盖件 pump_case (+Z46) 与留位 3 件 (泵/支架/气管) 两两分离;
+# 留位 3 件互嵌为设计 (环抱夹持/管入腔, case_geom L267-269 契约), 固体间隙由 FCL 守门。
+# 注: pump_case 件 id ≠ 文件名 (pump_module.stl), 经 assembly.json 清单解析。
+stl_of = {p["id"]: MESH / Path(p["stl"]).name for p in man["parts"]}
+pump_bands = {pid: (lambda zz: (zz[0] + G.EXPLODE[pid][2], zz[1] + G.EXPLODE[pid][2]))
+              (G.stl_bbox(stl_of[pid])[3]) for pid in ("pump_case", "pump", "brackets", "tubes")}
+lid_ok = all(pump_bands["pump_case"][1] <= pump_bands[p][0] or
+             pump_bands[p][1] <= pump_bands["pump_case"][0]
+             for p in ("pump", "brackets", "tubes"))
+check("L3 爆炸态泵模块揭盖分离 (pump_case vs 泵/支架/管)", lid_ok,
+      " ".join("%s[%.1f..%.1f]" % (pid, *pump_bands[pid]) for pid in pump_bands))
 
 # hotspots z 域
 hs = json.loads((WEB / "hotspots.json").read_text(encoding="utf-8"))["hotspots"]

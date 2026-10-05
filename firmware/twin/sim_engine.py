@@ -11,7 +11,7 @@
           闭环 KP=0.3 KI=2500 D0=VOUT_T/vin, dt=TSW/140, ss=0.5ms,
           sim 2.5ms 取 T>2.2ms 稳态段; 效率含 Rsw/DCR/二极管/开关(20ns)/ESR 五项
   dior  : SS34 指数模型 Is=1e-7 n=1.2, 不动点迭代 (vo += 0.05*(ΣI - vo/RL))
-  valve : 解析栅极 exp(±dt/τg) + RL 一阶欧拉 dt=2e-5, 3 周期取末周期峰值 ≈0.356A
+  valve : 解析栅极 exp(±dt/τg) + RL 一阶欧拉 dt=2e-5, 3 周期取末周期峰值 ≈0.498A (r_coil=10Ω registry)
   i2c   : 一阶 RC, tr = 2.2·τ, 波形取 8τ
 """
 from math import exp
@@ -40,7 +40,7 @@ SPEC = {
     "valve": [
         ("pwm_hz", 1, 50, 10.0),       # PWM 频率 (气动阀 10Hz)
         ("duty", 0.05, 0.95, 0.5),     # 占空比
-        ("r_coil", 8, 30, 14.0),       # 阀线圈电阻 (5V/0.35A)
+        ("r_coil", 8, 30, 10.0),       # 阀线圈电阻 [registry] F0520D 4.5V/0.45A=10Ω (原 14Ω 假设废弃, T7 单源同步)
         ("l_mh", 5, 60, 25.0),         # 阀线圈电感
         ("rg", 47, 330, 100.0),        # 栅极电阻 (AO3400A)
     ],
@@ -288,7 +288,7 @@ def _valve(p):
 
     metrics = [
         _metric("稳态阀电流", peak, "A",
-                "✓ 阀额定 0.35A" if peak < 0.45 else "⚠ 超 0.45A, 检查线圈/占空比"),
+                "✓ 拉入≈0.5A@5V (registry 额定 0.45A@4.5V, 保持90%=额定)" if peak <= 0.52 else "⚠ >0.52A, 检查线圈/占空比"),
         _metric("电流时间常数", tau * 1e3, "ms",
                 "✓ <10ms, 不拖阀机械响应后腿" if tau < 10e-3 else "⚠ ≥10ms"),
         _metric("MOS导通损耗", P_mos * 1e3, "mW", "✓ SOT-23 无需散热"),
