@@ -1,0 +1,1920 @@
+{
+ "meta": {
+  "coord": "shell: 壳系 Z-up, 下壳外角原点 (与 meshes/*.stl 同源, 无翻转)",
+  "source": "hardware/flowio-p1/enclosure/connections.json (真值, 只读) + devices.json geom3d 端点 + case_geom 放置常量 + pos.csv 焊盘中心",
+  "generated_by": "flowio/twin/connections_render.build_render_payload()",
+  "placement_note": {
+   "valves": "D 阀 origin z=TOWER_Z0 (底面坐盖顶, devices.json install 1a); VV origin z=MAN_Z0-28=16.0 (N1 ⌀4.6 充满 ⌀4.8 承口带 44..50)",
+   "pump": "make_pump_module 装配位 (轴沿 X @z18.4, 头端面 x=140.2)",
+   "sensor": "pos.csv U6 焊盘中心 board_to_case(44,-22) 航向 -90°",
+   "lead_arc_z": 43.5,
+   "bend_note": "tube.bend=2 为采购下料名义值; 渲染折线按最小几何弯折 (2~4 点, 壁孔过越/障碍让位) —— 折线段长和 ≤ 下料长 len_mm, 差值即布管余量"
+  }
+ },
+ "devices": {
+  "V1": {
+   "name": "通道阀 V1 (F0520D)"
+  },
+  "V2": {
+   "name": "通道阀 V2 (F0520D)"
+  },
+  "V3": {
+   "name": "通道阀 V3 (F0520D)"
+  },
+  "V4": {
+   "name": "通道阀 V4 (F0520D)"
+  },
+  "V5": {
+   "name": "通道阀 V5 (F0520D)"
+  },
+  "V6": {
+   "name": "通道阀 V6 (F0520D)"
+  },
+  "V7": {
+   "name": "通道阀 V7 (F0520D)"
+  },
+  "V8": {
+   "name": "通道阀 V8 (F0520D)"
+  },
+  "VS": {
+   "name": "充气主阀 VS (F0520D)"
+  },
+  "VV": {
+   "name": "真空主阀 VV (F0520B)"
+  },
+  "VF": {
+   "name": "排气主阀 VF (F0520D)"
+  },
+  "P1": {
+   "name": "微型真空泵 ZR370-03PM"
+  },
+  "S1": {
+   "name": "微差压传感 XGZP6897D (U6)"
+  },
+  "Main": {
+   "name": "主模块"
+  },
+  "PMod": {
+   "name": "泵模块"
+  },
+  "ATM": {
+   "name": "大气"
+  }
+ },
+ "edges": [
+  {
+   "i": 0,
+   "cls": "pneumatic",
+   "kind": "socket",
+   "from": "V1.N1",
+   "to": "Main.M",
+   "render": "none",
+   "path": null,
+   "anchors": null,
+   "radius": null,
+   "follow": [
+    "V1",
+    "Main"
+   ],
+   "fit_pending": false,
+   "desc": "V1 嘴 ⌀3.0 上插承口 ⌀3.2 @ (20,70) 插入~5.5mm (位号1)"
+  },
+  {
+   "i": 1,
+   "cls": "pneumatic",
+   "kind": "socket",
+   "from": "V2.N1",
+   "to": "Main.M",
+   "render": "none",
+   "path": null,
+   "anchors": null,
+   "radius": null,
+   "follow": [
+    "V2",
+    "Main"
+   ],
+   "fit_pending": false,
+   "desc": "V2 嘴上插承口 @ (39,70) (位号2)"
+  },
+  {
+   "i": 2,
+   "cls": "pneumatic",
+   "kind": "socket",
+   "from": "V3.N1",
+   "to": "Main.M",
+   "render": "none",
+   "path": null,
+   "anchors": null,
+   "radius": null,
+   "follow": [
+    "V3",
+    "Main"
+   ],
+   "fit_pending": false,
+   "desc": "V3 嘴上插承口 @ (58,70) (位号3)"
+  },
+  {
+   "i": 3,
+   "cls": "pneumatic",
+   "kind": "socket",
+   "from": "V4.N1",
+   "to": "Main.M",
+   "render": "none",
+   "path": null,
+   "anchors": null,
+   "radius": null,
+   "follow": [
+    "V4",
+    "Main"
+   ],
+   "fit_pending": false,
+   "desc": "V4 嘴上插承口 @ (77,70) (位号4)"
+  },
+  {
+   "i": 4,
+   "cls": "pneumatic",
+   "kind": "socket",
+   "from": "V5.N1",
+   "to": "Main.M",
+   "render": "none",
+   "path": null,
+   "anchors": null,
+   "radius": null,
+   "follow": [
+    "V5",
+    "Main"
+   ],
+   "fit_pending": false,
+   "desc": "V5 嘴上插承口 @ (20,45) (位号5)"
+  },
+  {
+   "i": 5,
+   "cls": "pneumatic",
+   "kind": "socket",
+   "from": "V6.N1",
+   "to": "Main.M",
+   "render": "none",
+   "path": null,
+   "anchors": null,
+   "radius": null,
+   "follow": [
+    "V6",
+    "Main"
+   ],
+   "fit_pending": false,
+   "desc": "V6 嘴上插承口 @ (39,45) (位号6)"
+  },
+  {
+   "i": 6,
+   "cls": "pneumatic",
+   "kind": "socket",
+   "from": "V7.N1",
+   "to": "Main.M",
+   "render": "none",
+   "path": null,
+   "anchors": null,
+   "radius": null,
+   "follow": [
+    "V7",
+    "Main"
+   ],
+   "fit_pending": false,
+   "desc": "V7 嘴上插承口 @ (58,45) (位号7)"
+  },
+  {
+   "i": 7,
+   "cls": "pneumatic",
+   "kind": "socket",
+   "from": "V8.N1",
+   "to": "Main.M",
+   "render": "none",
+   "path": null,
+   "anchors": null,
+   "radius": null,
+   "follow": [
+    "V8",
+    "Main"
+   ],
+   "fit_pending": false,
+   "desc": "V8 嘴上插承口 @ (77,45) (位号8)"
+  },
+  {
+   "i": 8,
+   "cls": "pneumatic",
+   "kind": "socket",
+   "from": "VS.N1",
+   "to": "Main.M",
+   "render": "none",
+   "path": null,
+   "anchors": null,
+   "radius": null,
+   "follow": [
+    "VS",
+    "Main"
+   ],
+   "fit_pending": false,
+   "desc": "VS 充气主阀 N1 (歧管侧) 上插承口 @ (96,20.4) (位号9)"
+  },
+  {
+   "i": 9,
+   "cls": "pneumatic",
+   "kind": "socket",
+   "from": "VV.N1",
+   "to": "Main.M",
+   "render": "none",
+   "path": null,
+   "anchors": null,
+   "radius": null,
+   "follow": [
+    "VV",
+    "Main"
+   ],
+   "fit_pending": false,
+   "desc": "VV 真空主阀嘴 ⌀4.6 上插承口 ⌀4.8 深 6.0 + 变径腔 z50 锥收 ⌀3.2 (5→3 收口内化) @ (96,31.4) (位号10)"
+  },
+  {
+   "i": 10,
+   "cls": "pneumatic",
+   "kind": "socket",
+   "from": "VF.N1",
+   "to": "Main.M",
+   "render": "none",
+   "path": null,
+   "anchors": null,
+   "radius": null,
+   "follow": [
+    "VF",
+    "Main"
+   ],
+   "fit_pending": false,
+   "desc": "VF 排气主阀 N1 (歧管侧) 上插承口 @ (96,42.4) (位号11)"
+  },
+  {
+   "i": 11,
+   "cls": "pneumatic",
+   "kind": "tube",
+   "from": "Main.S_wall",
+   "to": "VS.N2",
+   "render": "tube",
+   "path": [
+    [
+     105.8,
+     20.4,
+     5.0
+    ],
+    [
+     96.0,
+     20.4,
+     5.0
+    ],
+    [
+     96.0,
+     20.4,
+     18.5
+    ]
+   ],
+   "anchors": [
+    "case_bottom",
+    "case_bottom",
+    "valves"
+   ],
+   "radius": 3.5,
+   "follow": [
+    "case_bottom",
+    "valves"
+   ],
+   "fit_pending": false,
+   "desc": "壳内充管: R 壁 S 孔 (ID5)→VS 正压侧 N2 (ID3), Kamoer 倒钩变径直通 3↔4.5 档在线 (到货按嘴径实配)"
+  },
+  {
+   "i": 12,
+   "cls": "pneumatic",
+   "kind": "tube",
+   "from": "Main.V_wall",
+   "to": "VV.N2",
+   "render": "tube",
+   "path": [
+    [
+     105.8,
+     31.4,
+     5.0
+    ],
+    [
+     96.0,
+     31.4,
+     5.0
+    ],
+    [
+     96.0,
+     31.4,
+     13.0
+    ]
+   ],
+   "anchors": [
+    "case_bottom",
+    "case_bottom",
+    "valves"
+   ],
+   "radius": 3.5,
+   "follow": [
+    "case_bottom",
+    "valves"
+   ],
+   "fit_pending": false,
+   "desc": "壳内吸管: R 壁 V 孔 (ID5)→VV 泵侧 N2 (ID3); VV 路歧管侧变径已内化 (位号10), N2 口为 D1 inferred 占位 ⌀3.0 (BRINGUP 实测校正)"
+  },
+  {
+   "i": 13,
+   "cls": "pneumatic",
+   "kind": "tube",
+   "from": "VF.N2",
+   "to": "Main.F_wall",
+   "render": "tube",
+   "path": [
+    [
+     96.0,
+     42.4,
+     18.5
+    ],
+    [
+     96.0,
+     42.4,
+     5.0
+    ],
+    [
+     105.8,
+     42.4,
+     5.0
+    ]
+   ],
+   "anchors": [
+    "valves",
+    "valves",
+    "case_bottom"
+   ],
+   "radius": 3.5,
+   "follow": [
+    "valves",
+    "case_bottom"
+   ],
+   "fit_pending": false,
+   "desc": "VF 通道侧 N2→R 壁 F 孔 (ID3×OD7; 壁孔 ⌀4.8 无密封要求)"
+  },
+  {
+   "i": 14,
+   "cls": "pneumatic",
+   "kind": "ambient",
+   "from": "Main.F_wall",
+   "to": "ATM.open",
+   "render": "none",
+   "path": null,
+   "anchors": null,
+   "radius": null,
+   "follow": [
+    "Main",
+    "ATM"
+   ],
+   "fit_pending": false,
+   "desc": "F 孔排大气 (被动泄压终端, 可塞消音棉)"
+  },
+  {
+   "i": 15,
+   "cls": "pneumatic",
+   "kind": "tube",
+   "from": "V1.N2",
+   "to": "Main.CH1",
+   "render": "tube",
+   "path": [
+    [
+     20.0,
+     70.0,
+     18.5
+    ],
+    [
+     20.0,
+     70.0,
+     17.25
+    ],
+    [
+     20.0,
+     85.8,
+     17.25
+    ]
+   ],
+   "anchors": [
+    "valves",
+    "valves",
+    "case_bottom"
+   ],
+   "radius": 3.5,
+   "follow": [
+    "valves",
+    "case_bottom"
+   ],
+   "fit_pending": false,
+   "desc": "V1 正压侧 N2→B 壁 CH1→外接 cuff (0.15~0.2m 取中值)"
+  },
+  {
+   "i": 16,
+   "cls": "pneumatic",
+   "kind": "tube",
+   "from": "V2.N2",
+   "to": "Main.CH2",
+   "render": "tube",
+   "path": [
+    [
+     39.0,
+     70.0,
+     18.5
+    ],
+    [
+     39.0,
+     70.0,
+     17.25
+    ],
+    [
+     29.5,
+     70.0,
+     17.25
+    ],
+    [
+     29.5,
+     85.8,
+     17.25
+    ]
+   ],
+   "anchors": [
+    "valves",
+    "valves",
+    "case_bottom",
+    "case_bottom"
+   ],
+   "radius": 3.5,
+   "follow": [
+    "valves",
+    "case_bottom"
+   ],
+   "fit_pending": false,
+   "desc": "V2 N2→CH2→cuff"
+  },
+  {
+   "i": 17,
+   "cls": "pneumatic",
+   "kind": "tube",
+   "from": "V3.N2",
+   "to": "Main.CH3",
+   "render": "tube",
+   "path": [
+    [
+     58.0,
+     70.0,
+     18.5
+    ],
+    [
+     58.0,
+     70.0,
+     17.25
+    ],
+    [
+     39.0,
+     70.0,
+     17.25
+    ],
+    [
+     39.0,
+     85.8,
+     17.25
+    ]
+   ],
+   "anchors": [
+    "valves",
+    "valves",
+    "case_bottom",
+    "case_bottom"
+   ],
+   "radius": 3.5,
+   "follow": [
+    "valves",
+    "case_bottom"
+   ],
+   "fit_pending": false,
+   "desc": "V3 N2→CH3→cuff"
+  },
+  {
+   "i": 18,
+   "cls": "pneumatic",
+   "kind": "tube",
+   "from": "V4.N2",
+   "to": "Main.CH4",
+   "render": "tube",
+   "path": [
+    [
+     77.0,
+     70.0,
+     18.5
+    ],
+    [
+     77.0,
+     70.0,
+     17.25
+    ],
+    [
+     48.5,
+     70.0,
+     17.25
+    ],
+    [
+     48.5,
+     85.8,
+     17.25
+    ]
+   ],
+   "anchors": [
+    "valves",
+    "valves",
+    "case_bottom",
+    "case_bottom"
+   ],
+   "radius": 3.5,
+   "follow": [
+    "valves",
+    "case_bottom"
+   ],
+   "fit_pending": false,
+   "desc": "V4 N2→CH4→cuff"
+  },
+  {
+   "i": 19,
+   "cls": "pneumatic",
+   "kind": "tube",
+   "from": "V5.N2",
+   "to": "Main.CH5",
+   "render": "tube",
+   "path": [
+    [
+     20.0,
+     45.0,
+     18.5
+    ],
+    [
+     20.0,
+     45.0,
+     17.25
+    ],
+    [
+     58.0,
+     45.0,
+     17.25
+    ],
+    [
+     58.0,
+     85.8,
+     17.25
+    ]
+   ],
+   "anchors": [
+    "valves",
+    "valves",
+    "case_bottom",
+    "case_bottom"
+   ],
+   "radius": 3.5,
+   "follow": [
+    "valves",
+    "case_bottom"
+   ],
+   "fit_pending": false,
+   "desc": "V5 N2→CH5→cuff"
+  },
+  {
+   "i": 20,
+   "cls": "pneumatic",
+   "kind": "tube",
+   "from": "V6.N2",
+   "to": "Main.CH6",
+   "render": "tube",
+   "path": [
+    [
+     39.0,
+     45.0,
+     18.5
+    ],
+    [
+     39.0,
+     45.0,
+     17.25
+    ],
+    [
+     67.5,
+     45.0,
+     17.25
+    ],
+    [
+     67.5,
+     85.8,
+     17.25
+    ]
+   ],
+   "anchors": [
+    "valves",
+    "valves",
+    "case_bottom",
+    "case_bottom"
+   ],
+   "radius": 3.5,
+   "follow": [
+    "valves",
+    "case_bottom"
+   ],
+   "fit_pending": false,
+   "desc": "V6 N2→CH6→cuff"
+  },
+  {
+   "i": 21,
+   "cls": "pneumatic",
+   "kind": "tube",
+   "from": "V7.N2",
+   "to": "Main.CH7",
+   "render": "tube",
+   "path": [
+    [
+     58.0,
+     45.0,
+     18.5
+    ],
+    [
+     58.0,
+     45.0,
+     17.25
+    ],
+    [
+     77.0,
+     45.0,
+     17.25
+    ],
+    [
+     77.0,
+     85.8,
+     17.25
+    ]
+   ],
+   "anchors": [
+    "valves",
+    "valves",
+    "case_bottom",
+    "case_bottom"
+   ],
+   "radius": 3.5,
+   "follow": [
+    "valves",
+    "case_bottom"
+   ],
+   "fit_pending": false,
+   "desc": "V7 N2→CH7→cuff"
+  },
+  {
+   "i": 22,
+   "cls": "pneumatic",
+   "kind": "tube",
+   "from": "V8.N2",
+   "to": "Main.CH8",
+   "render": "tube",
+   "path": [
+    [
+     77.0,
+     45.0,
+     18.5
+    ],
+    [
+     77.0,
+     45.0,
+     17.25
+    ],
+    [
+     86.5,
+     45.0,
+     17.25
+    ],
+    [
+     86.5,
+     85.8,
+     17.25
+    ]
+   ],
+   "anchors": [
+    "valves",
+    "valves",
+    "case_bottom",
+    "case_bottom"
+   ],
+   "radius": 3.5,
+   "follow": [
+    "valves",
+    "case_bottom"
+   ],
+   "fit_pending": false,
+   "desc": "V8 N2→CH8→cuff"
+  },
+  {
+   "i": 23,
+   "cls": "pneumatic",
+   "kind": "tube",
+   "from": "P1.CHG",
+   "to": "PMod.S_panel",
+   "render": "tube",
+   "path": [
+    [
+     155.2,
+     42.9,
+     37.9
+    ],
+    [
+     167.2,
+     42.9,
+     33.9
+    ],
+    [
+     202.70000000000002,
+     34.9,
+     18.4
+    ]
+   ],
+   "anchors": [
+    "pump",
+    "pump",
+    "pump_case"
+   ],
+   "radius": 3.5,
+   "follow": [
+    "pump",
+    "pump_case"
+   ],
+   "fit_pending": true,
+   "desc": "跳管(充): 泵出口顶嘴 ⌀4.2×7.5 (图纸'出气口')→面板 S 快插, 模块内走管避免折弯<R15"
+  },
+  {
+   "i": 24,
+   "cls": "pneumatic",
+   "kind": "tube",
+   "from": "P1.SUCK",
+   "to": "PMod.V_panel",
+   "render": "tube",
+   "path": [
+    [
+     165.2,
+     42.9,
+     37.9
+    ],
+    [
+     177.2,
+     42.9,
+     33.9
+    ],
+    [
+     202.70000000000002,
+     50.9,
+     18.4
+    ]
+   ],
+   "anchors": [
+    "pump",
+    "pump",
+    "pump_case"
+   ],
+   "radius": 3.5,
+   "follow": [
+    "pump",
+    "pump_case"
+   ],
+   "fit_pending": true,
+   "desc": "跳管(吸): 泵入口顶嘴 (图纸'进气口', 充/吸固定不可反接)→面板 V 快插"
+  },
+  {
+   "i": 25,
+   "cls": "pneumatic",
+   "kind": "tube",
+   "from": "PMod.S_panel",
+   "to": "Main.S_wall",
+   "render": "tube",
+   "path": [
+    [
+     202.70000000000002,
+     34.9,
+     18.4
+    ],
+    [
+     149.8,
+     20.4,
+     8.0
+    ],
+    [
+     105.8,
+     20.4,
+     5.0
+    ]
+   ],
+   "anchors": [
+    "pump_case",
+    "pump_case",
+    "case_bottom"
+   ],
+   "radius": 3.5,
+   "follow": [
+    "pump_case",
+    "case_bottom"
+   ],
+   "fit_pending": false,
+   "desc": "模块间干管(充): 泵模块面板 S 快插→主壳 R 壁 S 孔 (0.3~0.4m 取中值, 跨 30mm 间隙+弯曲余量)"
+  },
+  {
+   "i": 26,
+   "cls": "pneumatic",
+   "kind": "tube",
+   "from": "PMod.V_panel",
+   "to": "Main.V_wall",
+   "render": "tube",
+   "path": [
+    [
+     202.70000000000002,
+     50.9,
+     18.4
+    ],
+    [
+     149.8,
+     31.4,
+     8.0
+    ],
+    [
+     105.8,
+     31.4,
+     5.0
+    ]
+   ],
+   "anchors": [
+    "pump_case",
+    "pump_case",
+    "case_bottom"
+   ],
+   "radius": 3.5,
+   "follow": [
+    "pump_case",
+    "case_bottom"
+   ],
+   "fit_pending": false,
+   "desc": "模块间干管(吸): 面板 V 快插→R 壁 V 孔 (S=充/V=吸 不可对调)"
+  },
+  {
+   "i": 27,
+   "cls": "pneumatic",
+   "kind": "tube",
+   "from": "Main.M",
+   "to": "S1.P1",
+   "render": "tube",
+   "path": [
+    [
+     110.0,
+     53.4,
+     50.0
+    ],
+    [
+     110.0,
+     53.4,
+     60.0
+    ],
+    [
+     48.5,
+     27.0,
+     60.0
+    ],
+    [
+     48.5,
+     27.0,
+     17.1
+    ],
+    [
+     47.4,
+     27.5,
+     14.9
+    ]
+   ],
+   "anchors": [
+    "manifold",
+    "manifold",
+    "manifold",
+    "pcb",
+    "pcb"
+   ],
+   "radius": 3.5,
+   "follow": [
+    "manifold",
+    "pcb"
+   ],
+   "fit_pending": false,
+   "desc": "测压支路: 歧管测压口 (右面外嘴 ⌀4.4×伸出 5, 内孔 ⌀3.2 贯通 @x105,y53.4,z50)→天花过孔 ⌀3.4 @(48.5,27) 垂直下行→XGZP P1 高压倒钩 ⌀3.22 过盈 (死端引压, ~0.5m)"
+  },
+  {
+   "i": 28,
+   "cls": "pneumatic",
+   "kind": "ambient",
+   "from": "S1.P2",
+   "to": "ATM.open",
+   "render": "none",
+   "path": null,
+   "anchors": null,
+   "radius": null,
+   "follow": [
+    "S1",
+    "ATM"
+   ],
+   "fit_pending": false,
+   "desc": "XGZP P2 低压端大气开放 (表压基准; ★禁堵/禁管 —— 堵=读数漂移+迟滞)"
+  },
+  {
+   "i": 29,
+   "cls": "electrical",
+   "kind": "lead_2p",
+   "from": "V1.CONN_2P",
+   "to": "Main.J10",
+   "render": "wire",
+   "path": [
+    [
+     20.0,
+     51.3,
+     26.7
+    ],
+    [
+     20.0,
+     51.3,
+     43.5
+    ],
+    [
+     8.3,
+     88.8,
+     43.5
+    ],
+    [
+     8.3,
+     88.8,
+     15.2
+    ],
+    [
+     8.3,
+     76.9,
+     15.2
+    ]
+   ],
+   "anchors": [
+    "valves",
+    "valves",
+    "valves",
+    "pcb",
+    "pcb"
+   ],
+   "radius": 0.55,
+   "follow": [
+    "valves",
+    "pcb"
+   ],
+   "fit_pending": false,
+   "desc": "V1 引线 2P 白壳→XH 座 (gate1)"
+  },
+  {
+   "i": 30,
+   "cls": "electrical",
+   "kind": "lead_2p",
+   "from": "V2.CONN_2P",
+   "to": "Main.J11",
+   "render": "wire",
+   "path": [
+    [
+     39.0,
+     51.3,
+     26.7
+    ],
+    [
+     39.0,
+     51.3,
+     43.5
+    ],
+    [
+     19.299999999999997,
+     88.8,
+     43.5
+    ],
+    [
+     19.299999999999997,
+     88.8,
+     15.2
+    ],
+    [
+     19.299999999999997,
+     76.9,
+     15.2
+    ]
+   ],
+   "anchors": [
+    "valves",
+    "valves",
+    "valves",
+    "pcb",
+    "pcb"
+   ],
+   "radius": 0.55,
+   "follow": [
+    "valves",
+    "pcb"
+   ],
+   "fit_pending": false,
+   "desc": "V2 引线 (gate2)"
+  },
+  {
+   "i": 31,
+   "cls": "electrical",
+   "kind": "lead_2p",
+   "from": "V3.CONN_2P",
+   "to": "Main.J12",
+   "render": "wire",
+   "path": [
+    [
+     58.0,
+     51.3,
+     26.7
+    ],
+    [
+     58.0,
+     51.3,
+     43.5
+    ],
+    [
+     30.299999999999997,
+     88.8,
+     43.5
+    ],
+    [
+     30.299999999999997,
+     88.8,
+     15.2
+    ],
+    [
+     30.299999999999997,
+     76.9,
+     15.2
+    ]
+   ],
+   "anchors": [
+    "valves",
+    "valves",
+    "valves",
+    "pcb",
+    "pcb"
+   ],
+   "radius": 0.55,
+   "follow": [
+    "valves",
+    "pcb"
+   ],
+   "fit_pending": false,
+   "desc": "V3 引线 (gate3)"
+  },
+  {
+   "i": 32,
+   "cls": "electrical",
+   "kind": "lead_2p",
+   "from": "V4.CONN_2P",
+   "to": "Main.J13",
+   "render": "wire",
+   "path": [
+    [
+     77.0,
+     51.3,
+     26.7
+    ],
+    [
+     77.0,
+     51.3,
+     43.5
+    ],
+    [
+     41.3,
+     88.8,
+     43.5
+    ],
+    [
+     41.3,
+     88.8,
+     15.2
+    ],
+    [
+     41.3,
+     76.9,
+     15.2
+    ]
+   ],
+   "anchors": [
+    "valves",
+    "valves",
+    "valves",
+    "pcb",
+    "pcb"
+   ],
+   "radius": 0.55,
+   "follow": [
+    "valves",
+    "pcb"
+   ],
+   "fit_pending": false,
+   "desc": "V4 引线 (gate4)"
+  },
+  {
+   "i": 33,
+   "cls": "electrical",
+   "kind": "lead_2p",
+   "from": "V5.CONN_2P",
+   "to": "Main.J14",
+   "render": "wire",
+   "path": [
+    [
+     20.0,
+     26.299999999999997,
+     26.7
+    ],
+    [
+     20.0,
+     26.299999999999997,
+     43.5
+    ],
+    [
+     52.3,
+     88.8,
+     43.5
+    ],
+    [
+     52.3,
+     88.8,
+     15.2
+    ],
+    [
+     52.3,
+     76.9,
+     15.2
+    ]
+   ],
+   "anchors": [
+    "valves",
+    "valves",
+    "valves",
+    "pcb",
+    "pcb"
+   ],
+   "radius": 0.55,
+   "follow": [
+    "valves",
+    "pcb"
+   ],
+   "fit_pending": false,
+   "desc": "V5 引线 (gate5)"
+  },
+  {
+   "i": 34,
+   "cls": "electrical",
+   "kind": "lead_2p",
+   "from": "V6.CONN_2P",
+   "to": "Main.J15",
+   "render": "wire",
+   "path": [
+    [
+     39.0,
+     26.299999999999997,
+     26.7
+    ],
+    [
+     39.0,
+     26.299999999999997,
+     43.5
+    ],
+    [
+     63.3,
+     88.8,
+     43.5
+    ],
+    [
+     63.3,
+     88.8,
+     15.2
+    ],
+    [
+     63.3,
+     76.9,
+     15.2
+    ]
+   ],
+   "anchors": [
+    "valves",
+    "valves",
+    "valves",
+    "pcb",
+    "pcb"
+   ],
+   "radius": 0.55,
+   "follow": [
+    "valves",
+    "pcb"
+   ],
+   "fit_pending": false,
+   "desc": "V6 引线 (gate6)"
+  },
+  {
+   "i": 35,
+   "cls": "electrical",
+   "kind": "lead_2p",
+   "from": "V7.CONN_2P",
+   "to": "Main.J16",
+   "render": "wire",
+   "path": [
+    [
+     58.0,
+     26.299999999999997,
+     26.7
+    ],
+    [
+     58.0,
+     26.299999999999997,
+     43.5
+    ],
+    [
+     74.30000000000001,
+     88.8,
+     43.5
+    ],
+    [
+     74.30000000000001,
+     88.8,
+     15.2
+    ],
+    [
+     74.30000000000001,
+     76.9,
+     15.2
+    ]
+   ],
+   "anchors": [
+    "valves",
+    "valves",
+    "valves",
+    "pcb",
+    "pcb"
+   ],
+   "radius": 0.55,
+   "follow": [
+    "valves",
+    "pcb"
+   ],
+   "fit_pending": false,
+   "desc": "V7 引线 (gate7)"
+  },
+  {
+   "i": 36,
+   "cls": "electrical",
+   "kind": "lead_2p",
+   "from": "V8.CONN_2P",
+   "to": "Main.J17",
+   "render": "wire",
+   "path": [
+    [
+     77.0,
+     26.299999999999997,
+     26.7
+    ],
+    [
+     77.0,
+     26.299999999999997,
+     43.5
+    ],
+    [
+     85.30000000000001,
+     88.8,
+     43.5
+    ],
+    [
+     85.30000000000001,
+     88.8,
+     15.2
+    ],
+    [
+     85.30000000000001,
+     76.9,
+     15.2
+    ]
+   ],
+   "anchors": [
+    "valves",
+    "valves",
+    "valves",
+    "pcb",
+    "pcb"
+   ],
+   "radius": 0.55,
+   "follow": [
+    "valves",
+    "pcb"
+   ],
+   "fit_pending": false,
+   "desc": "V8 引线 (gate8)"
+  },
+  {
+   "i": 37,
+   "cls": "electrical",
+   "kind": "lead_2p",
+   "from": "VS.CONN_2P",
+   "to": "Main.J20",
+   "render": "wire",
+   "path": [
+    [
+     96.0,
+     1.6999999999999993,
+     26.7
+    ],
+    [
+     96.0,
+     1.6999999999999993,
+     43.5
+    ],
+    [
+     108.8,
+     20.4,
+     43.5
+    ],
+    [
+     108.8,
+     20.4,
+     15.2
+    ],
+    [
+     96.9,
+     20.4,
+     15.2
+    ]
+   ],
+   "anchors": [
+    "valves",
+    "valves",
+    "valves",
+    "pcb",
+    "pcb"
+   ],
+   "radius": 0.55,
+   "follow": [
+    "valves",
+    "pcb"
+   ],
+   "fit_pending": false,
+   "desc": "VS 引线 (gateS, 主阀列引线垂直下落直插 R 壁 J20 带)"
+  },
+  {
+   "i": 38,
+   "cls": "electrical",
+   "kind": "lead_2p",
+   "from": "VV.CONN_2P",
+   "to": "Main.J21",
+   "render": "wire",
+   "path": [
+    [
+     96.0,
+     12.7,
+     33.0
+    ],
+    [
+     96.0,
+     12.7,
+     43.5
+    ],
+    [
+     108.8,
+     31.4,
+     43.5
+    ],
+    [
+     108.8,
+     31.4,
+     15.2
+    ],
+    [
+     96.9,
+     31.4,
+     15.2
+    ]
+   ],
+   "anchors": [
+    "valves",
+    "valves",
+    "valves",
+    "pcb",
+    "pcb"
+   ],
+   "radius": 0.55,
+   "follow": [
+    "valves",
+    "pcb"
+   ],
+   "fit_pending": false,
+   "desc": "VV 引线 (gateV)"
+  },
+  {
+   "i": 39,
+   "cls": "electrical",
+   "kind": "lead_2p",
+   "from": "VF.CONN_2P",
+   "to": "Main.J22",
+   "render": "wire",
+   "path": [
+    [
+     96.0,
+     23.699999999999996,
+     26.7
+    ],
+    [
+     96.0,
+     23.699999999999996,
+     43.5
+    ],
+    [
+     108.8,
+     42.4,
+     43.5
+    ],
+    [
+     108.8,
+     42.4,
+     15.2
+    ],
+    [
+     96.9,
+     42.4,
+     15.2
+    ]
+   ],
+   "anchors": [
+    "valves",
+    "valves",
+    "valves",
+    "pcb",
+    "pcb"
+   ],
+   "radius": 0.55,
+   "follow": [
+    "valves",
+    "pcb"
+   ],
+   "fit_pending": false,
+   "desc": "VF 引线 (gateF)"
+  },
+  {
+   "i": 40,
+   "cls": "electrical",
+   "kind": "cable_2p",
+   "from": "Main.J23",
+   "to": "PMod.cable_2p",
+   "render": "wire",
+   "path": [
+    [
+     96.9,
+     53.4,
+     15.2
+    ],
+    [
+     113.8,
+     53.4,
+     10.6
+    ],
+    [
+     202.70000000000002,
+     42.9,
+     6.0
+    ]
+   ],
+   "anchors": [
+    "pcb",
+    "pcb",
+    "pump_case"
+   ],
+   "radius": 0.9,
+   "follow": [
+    "pcb",
+    "pump_case"
+   ],
+   "fit_pending": false,
+   "desc": "模块间电机电缆: 主模块 J23 (Q16) 穿壁→泵模块面板 2P 插头 (spec §4 模块间 3 边之一; 缺=泵不转)"
+  },
+  {
+   "i": 41,
+   "cls": "electrical",
+   "kind": "wire",
+   "from": "PMod.cable_2p",
+   "to": "P1.MOTOR_POS",
+   "render": "wire",
+   "path": [
+    [
+     202.70000000000002,
+     42.9,
+     6.0
+    ],
+    [
+     201.5,
+     44.4,
+     12.2
+    ],
+    [
+     198.29999999999998,
+     45.9,
+     18.4
+    ]
+   ],
+   "anchors": [
+    "pump_case",
+    "pump_case",
+    "pump"
+   ],
+   "radius": 0.75,
+   "follow": [
+    "pump_case",
+    "pump"
+   ],
+   "fit_pending": false,
+   "desc": "模块内电机引线 正极 (端面焊片图纸标注'正极'; 长度待 D4 装配态/实测 —— D2-A 视觉桩深度)"
+  },
+  {
+   "i": 42,
+   "cls": "electrical",
+   "kind": "wire",
+   "from": "PMod.cable_2p",
+   "to": "P1.MOTOR_NEG",
+   "render": "wire",
+   "path": [
+    [
+     202.70000000000002,
+     42.9,
+     6.0
+    ],
+    [
+     201.5,
+     41.4,
+     12.2
+    ],
+    [
+     198.29999999999998,
+     39.9,
+     18.4
+    ]
+   ],
+   "anchors": [
+    "pump_case",
+    "pump_case",
+    "pump"
+   ],
+   "radius": 0.75,
+   "follow": [
+    "pump_case",
+    "pump"
+   ],
+   "fit_pending": false,
+   "desc": "模块内电机引线 负极 (图纸标注'负极')"
+  },
+  {
+   "i": 43,
+   "cls": "mechanical",
+   "kind": "silicone_clamp",
+   "from": "P1.bracket_ring#0",
+   "to": "PMod.base",
+   "render": "none",
+   "path": null,
+   "anchors": null,
+   "radius": null,
+   "follow": [
+    "P1",
+    "PMod"
+   ],
+   "fit_pending": false,
+   "desc": "硅胶支架环#1 (x=6.05, 环轴=泵轴, 环抱 ⌀24 泵头段) 过盈夹持于底座"
+  },
+  {
+   "i": 44,
+   "cls": "mechanical",
+   "kind": "silicone_clamp",
+   "from": "P1.bracket_ring#1",
+   "to": "PMod.base",
+   "render": "none",
+   "path": null,
+   "anchors": null,
+   "radius": null,
+   "follow": [
+    "P1",
+    "PMod"
+   ],
+   "fit_pending": false,
+   "desc": "硅胶支架环#2 (x=52.05, 电机段 ⌀27 硅胶过盈张套) — 脚距 46mm M3 ×2 前后夹持"
+  },
+  {
+   "i": 45,
+   "cls": "mechanical",
+   "kind": "flange_clamp",
+   "from": "V1.C_flange_top",
+   "to": "Main.valve_bracket",
+   "render": "none",
+   "path": null,
+   "anchors": null,
+   "radius": null,
+   "follow": [
+    "V1",
+    "Main"
+   ],
+   "fit_pending": false,
+   "desc": "C 形硅钢架顶 0.7mm 翻边固定印刷支架 (竖装 1a)"
+  },
+  {
+   "i": 46,
+   "cls": "mechanical",
+   "kind": "flange_clamp",
+   "from": "V2.C_flange_top",
+   "to": "Main.valve_bracket",
+   "render": "none",
+   "path": null,
+   "anchors": null,
+   "radius": null,
+   "follow": [
+    "V2",
+    "Main"
+   ],
+   "fit_pending": false,
+   "desc": "V2 翻边固定"
+  },
+  {
+   "i": 47,
+   "cls": "mechanical",
+   "kind": "flange_clamp",
+   "from": "V3.C_flange_top",
+   "to": "Main.valve_bracket",
+   "render": "none",
+   "path": null,
+   "anchors": null,
+   "radius": null,
+   "follow": [
+    "V3",
+    "Main"
+   ],
+   "fit_pending": false,
+   "desc": "V3 翻边固定"
+  },
+  {
+   "i": 48,
+   "cls": "mechanical",
+   "kind": "flange_clamp",
+   "from": "V4.C_flange_top",
+   "to": "Main.valve_bracket",
+   "render": "none",
+   "path": null,
+   "anchors": null,
+   "radius": null,
+   "follow": [
+    "V4",
+    "Main"
+   ],
+   "fit_pending": false,
+   "desc": "V4 翻边固定"
+  },
+  {
+   "i": 49,
+   "cls": "mechanical",
+   "kind": "flange_clamp",
+   "from": "V5.C_flange_top",
+   "to": "Main.valve_bracket",
+   "render": "none",
+   "path": null,
+   "anchors": null,
+   "radius": null,
+   "follow": [
+    "V5",
+    "Main"
+   ],
+   "fit_pending": false,
+   "desc": "V5 翻边固定"
+  },
+  {
+   "i": 50,
+   "cls": "mechanical",
+   "kind": "flange_clamp",
+   "from": "V6.C_flange_top",
+   "to": "Main.valve_bracket",
+   "render": "none",
+   "path": null,
+   "anchors": null,
+   "radius": null,
+   "follow": [
+    "V6",
+    "Main"
+   ],
+   "fit_pending": false,
+   "desc": "V6 翻边固定 (V6-V8 同 V1)"
+  },
+  {
+   "i": 51,
+   "cls": "mechanical",
+   "kind": "flange_clamp",
+   "from": "V7.C_flange_top",
+   "to": "Main.valve_bracket",
+   "render": "none",
+   "path": null,
+   "anchors": null,
+   "radius": null,
+   "follow": [
+    "V7",
+    "Main"
+   ],
+   "fit_pending": false,
+   "desc": "V7 翻边固定"
+  },
+  {
+   "i": 52,
+   "cls": "mechanical",
+   "kind": "flange_clamp",
+   "from": "V8.C_flange_top",
+   "to": "Main.valve_bracket",
+   "render": "none",
+   "path": null,
+   "anchors": null,
+   "radius": null,
+   "follow": [
+    "V8",
+    "Main"
+   ],
+   "fit_pending": false,
+   "desc": "V8 翻边固定"
+  },
+  {
+   "i": 53,
+   "cls": "mechanical",
+   "kind": "flange_clamp",
+   "from": "VS.C_flange_top",
+   "to": "Main.valve_bracket",
+   "render": "none",
+   "path": null,
+   "anchors": null,
+   "radius": null,
+   "follow": [
+    "VS",
+    "Main"
+   ],
+   "fit_pending": false,
+   "desc": "VS 主阀翻边固定 (主阀列 x=96)"
+  },
+  {
+   "i": 54,
+   "cls": "mechanical",
+   "kind": "flange_clamp",
+   "from": "VF.C_flange_top",
+   "to": "Main.valve_bracket",
+   "render": "none",
+   "path": null,
+   "anchors": null,
+   "radius": null,
+   "follow": [
+    "VF",
+    "Main"
+   ],
+   "fit_pending": false,
+   "desc": "VF 主阀翻边固定"
+  },
+  {
+   "i": 55,
+   "cls": "mechanical",
+   "kind": "screw_m2",
+   "from": "VV.mount_hole",
+   "to": "Main.valve_bracket",
+   "render": "none",
+   "path": null,
+   "anchors": null,
+   "radius": null,
+   "follow": [
+    "VV",
+    "Main"
+   ],
+   "fit_pending": false,
+   "desc": "B 阀有孔变体 ⌀2.0 孔×2 螺固 (孔距=占位值, 待商家答复 procurement 问询 1/3)"
+  },
+  {
+   "i": 56,
+   "cls": "mechanical",
+   "kind": "reflow_solder",
+   "from": "S1.pcb_pad_row",
+   "to": "Main.pcb",
+   "render": "none",
+   "path": null,
+   "anchors": null,
+   "radius": null,
+   "follow": [
+    "S1",
+    "Main"
+   ],
+   "fit_pending": false,
+   "desc": "XGZP SOIC8 板载回流焊固定 (无紧固件; footprint 10.40×8.42)"
+  },
+  {
+   "i": 57,
+   "cls": "mechanical",
+   "kind": "screw_m3",
+   "from": "Main.manifold_seat",
+   "to": "Main.case_cover",
+   "render": "none",
+   "path": null,
+   "anchors": null,
+   "radius": null,
+   "follow": [
+    "Main",
+    "Main"
+   ],
+   "fit_pending": false,
+   "desc": "歧管 4 支腿 8×8 M3 立于壳盖沿实体带 (避通风栅/螺丝头/阀足印)"
+  }
+ ],
+ "counts": {
+  "V1": {
+   "pneumatic": 2,
+   "electrical": 1,
+   "mechanical": 1
+  },
+  "V2": {
+   "pneumatic": 2,
+   "electrical": 1,
+   "mechanical": 1
+  },
+  "V3": {
+   "pneumatic": 2,
+   "electrical": 1,
+   "mechanical": 1
+  },
+  "V4": {
+   "pneumatic": 2,
+   "electrical": 1,
+   "mechanical": 1
+  },
+  "V5": {
+   "pneumatic": 2,
+   "electrical": 1,
+   "mechanical": 1
+  },
+  "V6": {
+   "pneumatic": 2,
+   "electrical": 1,
+   "mechanical": 1
+  },
+  "V7": {
+   "pneumatic": 2,
+   "electrical": 1,
+   "mechanical": 1
+  },
+  "V8": {
+   "pneumatic": 2,
+   "electrical": 1,
+   "mechanical": 1
+  },
+  "VS": {
+   "pneumatic": 2,
+   "electrical": 1,
+   "mechanical": 1
+  },
+  "VV": {
+   "pneumatic": 2,
+   "electrical": 1,
+   "mechanical": 1
+  },
+  "VF": {
+   "pneumatic": 2,
+   "electrical": 1,
+   "mechanical": 1
+  },
+  "P1": {
+   "pneumatic": 2,
+   "electrical": 2,
+   "mechanical": 2
+  },
+  "S1": {
+   "pneumatic": 2,
+   "electrical": 0,
+   "mechanical": 1
+  },
+  "Main": {
+   "pneumatic": 26,
+   "electrical": 12,
+   "mechanical": 13
+  },
+  "PMod": {
+   "pneumatic": 4,
+   "electrical": 3,
+   "mechanical": 2
+  },
+  "ATM": {
+   "pneumatic": 2,
+   "electrical": 0,
+   "mechanical": 0
+  }
+ }
+}
