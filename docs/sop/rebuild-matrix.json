@@ -131,6 +131,85 @@
         "测试黄金值",
         "README-fab 钻孔谱/线宽谱黄金值 + check_fab 黄金计数"
       ]
+    },
+    "fw_constant": {
+      "trigger": "固件参数常量（占空比/时限/拓扑）",
+      "rerun": [
+        "改 devices.json 真值（禁手编 types.h）",
+        "python -m flowio fwgen",
+        "tools/check_codegen.py --ci（33/33 门）",
+        "build_twin.sh+selftest 锚点比对",
+        "flash 烧录"
+      ],
+      "sync": [
+        "firmware-driver-spec.md（若语义变）"
+      ]
+    },
+    "twin_model": {
+      "trigger": "孪生模型（BaseModel 子类/执行器子类）",
+      "rerun": [
+        "flowio/tests/test_twin.py",
+        "test_electrical_sim.py 6fn",
+        "tools/compare_baseline.py（12 场景锚点）",
+        "run_tests.sh"
+      ],
+      "sync": [
+        "baseline.json 若锚点有意变更（需评审）"
+      ]
+    },
+    "webapp_change": {
+      "trigger": "webapp 组件/样式",
+      "rerun": [
+        "ES ./ 检查（grep import）",
+        "test_webapp.js 55 条（NODE_PATH 主仓）",
+        "视觉回归截图对照",
+        "tools/build_site.py",
+        "site 冒烟"
+      ],
+      "sync": [
+        "组件契约测若新组件"
+      ]
+    },
+    "sensor_swap": {
+      "trigger": "传感器换型（XGZP 同位换）",
+      "rerun": [
+        "devices.json pneumatic.sensor 段",
+        "truth check+L5 pneumatic 断言",
+        "fwgen 重生成（若参数入链）",
+        "firmware-driver-spec 寄存器流程更新",
+        "T6 结构引压口核对"
+      ],
+      "sync": [
+        "registry",
+        "采购单"
+      ]
+    },
+    "actuator_add": {
+      "trigger": "新执行器类型（比例阀/无刷泵…）",
+      "rerun": [
+        "devices.json 真值条目（schema 合规）",
+        "IActuator 子类+（可选）工厂登记",
+        "flowio/tests/test_blind_extension.py 范式验证（零改仿真器）",
+        "T6 结构/T2 原理图通道"
+      ],
+      "sync": [
+        "registry",
+        "场景矩阵若新增场景"
+      ]
+    },
+    "params_trilingual": {
+      "trigger": "参数真值变更（devices.json）",
+      "rerun": [
+        "python -m flowio truth check",
+        "python -m flowio fwgen（C/JS 同步）",
+        "check_codegen --ci",
+        "compare_baseline（场景对拍）",
+        "run_tests.sh"
+      ],
+      "sync": [
+        "registry",
+        "component-param-audit"
+      ]
     }
   },
   "incidents": [
