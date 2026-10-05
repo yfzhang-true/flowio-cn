@@ -19,4 +19,4 @@ dependencies = []          # stdlib-only (与 firmware/twin 运行纪律一致)
 [tool.setuptools]
 packages = ["flowio", "flowio.core", "flowio.truth",
             "flowio.hw", "flowio.hw.route", "flowio.geom", "flowio.flows",
-            "flowio.twin"]
+            "flowio.twin", "flowio.fwgen"]
