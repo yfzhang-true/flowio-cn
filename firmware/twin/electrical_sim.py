@@ -4,12 +4,16 @@
 参数单源 (铁律): 全部电气参数与 drive_policy 从
   hardware/flowio-p1/enclosure/devices.json `pneumatic_devices` 段读取,
   禁手抄第二份; 加载/解析失败直接抛异常 = FAIL (不允许静默兜底值)。
+  M0 起 (spec v2.1 §5): 加载改经 flowio 内核 —— TruthSource (真值封装+校验)
+  + flowio.truth 视图 (ValveSpec/PumpSpec/DrivePolicy), 解析推导逻辑收拢单源;
+  本模块对外 API 与返回结构不变 (test_electrical_sim.py 零改动全绿为验收)。
 
 模型 (board_model 风格, stdlib-only):
   * 三态阀驱动 (drive_policy): 吸入 pull-in 100%≤100ms / 全开保持 90%(等效4.5V=额定)
     / 节能保持 55%(有意欠压 2.75V, 35kPa 背压下限 BRINGUP 实测);
   * 有效电压 V_eff = duty × rail_v (5V 轨 PWM 调制);
-  * 线圈电流 I = V_eff / R_coil, R_coil = rated_v / rated_i (registry electrical 段推导):
+  * 线圈电流 I = V_eff / R_coil, R_coil = rated_v / rated_i (registry electrical 段推导,
+    推导唯一出处 = flowio.truth.views.ValveSpec.r_coil):
     F0520D 4.5V/0.45A=10Ω, F0520B 4.5V/0.30A=15Ω —— 90% 保持时 V_eff=4.5V=额定电压,
     I=450mA 恰为额定 (registry voltage_adequacy 表 "正好额定" 语义; 最坏 9 阀+泵≈4.53A
     与 power_budget 4.55A 同源。任务书速算 9×0.45×0.9+0.475≈4.12A 是按占空比直折的
@@ -21,12 +25,20 @@
 
 运行: cd firmware/twin && python electrical_sim.py   (打印场景矩阵表)
 测试: python test_electrical_sim.py  (TDD 红→绿, 5 断言+冒烟)
+对拍: python tools/compare_baseline.py  (12 场景 vs docs/mod-baseline/baseline.json)
 """
-import json
 import re
+import sys
 from pathlib import Path
 
-# ---- 真值文件 (唯一来源) ------------------------------------------------------
+# ---- flowio 内核包 (M0: 参数单源改经 TruthSource; 未 pip -e 亦可跑) -----------
+_PKG_ROOT = Path(__file__).resolve().parents[2]          # 仓库根 (flowio 包所在)
+if str(_PKG_ROOT) not in sys.path:
+    sys.path.insert(0, str(_PKG_ROOT))
+from flowio.core import TruthSource                     # noqa: E402
+from flowio.truth import drive_policy, pump_spec, valve_specs  # noqa: E402
+
+# ---- 真值文件 (唯一来源; 兼容保留 —— FLOWIO_TRUTH 覆盖时以 TruthSource 为准) --
 REGISTRY = Path(__file__).resolve().parents[2] / "hardware" / "flowio-p1" / "enclosure" / "devices.json"
 
 # ---- 固件策略常量 (非器件参数, 来源 spec §2.6 / docs/component-registry.md §5) --
@@ -42,63 +54,48 @@ ALARM_NAMES = {ALARM_OVERLOAD: "OVERLOAD", ALARM_OVERPRESSURE: "OVERPRESSURE",
 # 阀状态机 (drive_policy 三态 + 关断)
 VALVE_STATES = ("off", "pull_in", "full_open", "economy")
 
-_PCT = re.compile(r"(\d+(?:\.\d+)?)\s*%")
-_MS = re.compile(r"<=?\s*(\d+)\s*ms")
 _CH_REF = re.compile(r"^V\d$")          # V1-V8 = 通道阀; VS/VF/VV = 主阀
-
-
-def _pct(s, where):
-    m = _PCT.search(str(s))
-    if not m:
-        raise ValueError(f"drive_policy {where} 无法解析百分比: {s!r}")
-    return float(m.group(1)) / 100.0
 
 
 def load_params(path=None):
     """从 devices.json pneumatic_devices 段加载全部电气参数与驱动策略 (每次全量读盘, 禁缓存——
-    断言⑤ '改库即改仿真' 依赖本函数的无缓存语义)。"""
-    src = Path(path) if path else REGISTRY
-    with src.open(encoding="utf-8") as f:
-        doc = json.load(f)
-    pd = doc["pneumatic_devices"]                      # KeyError/JSON 错 = FAIL
-    dp = pd["_meta"]["drive_policy"]
+    断言⑤ '改库即改仿真' 依赖本函数的无缓存语义)。
 
-    m = _MS.search(dp["valve"]["pull_in"])
-    if not m:
-        raise ValueError(f"drive_policy pull_in 时长无法解析: {dp['valve']['pull_in']!r}")
+    M0: 加载路径 = TruthSource(真值封装+两段校验) + flowio.truth 视图
+    (DrivePolicy/ValveSpec/PumpSpec, 解析推导收拢单源); 默认路径支持环境变量
+    FLOWIO_TRUTH 覆盖 (TruthSource 语义), 其余对外行为不变。
+    """
+    src = TruthSource(path)                              # 每次新建实例 = 每次全量读盘
+    pd = src.pneumatic_devices                           # TruthError = FAIL (fail-loud)
+    dp = drive_policy(pd)
+
     params = {
-        "rail_v": float(dp["rail_v"]),
-        "duties": {
-            "pull_in": _pct(dp["valve"]["pull_in"], "valve.pull_in"),
-            "full_open": _pct(dp["valve"]["full_open_hold"], "valve.full_open_hold"),
-            "economy": _pct(dp["valve"]["economy_hold"], "valve.economy_hold"),
-        },
-        "pull_in_ms": float(m.group(1)),
-        "pump_max_duty": _pct(dp["pump"]["max_duty"], "pump.max_duty"),
-        "pump_soft_start": "互锁" in str(dp["pump"]["soft_start"]),
+        "rail_v": dp.rail_v,
+        "duties": dict(dp.duties),
+        "pull_in_ms": dp.pull_in_ms,
+        "pump_max_duty": dp.pump_max_duty,
+        "pump_soft_start": dp.pump_soft_start,
         "valves": {},                                   # ref → 电气参数
         "channels": [],                                 # 通道阀 refs (软启动互锁判据)
     }
-    for group, kind in (("valves", None), ("valve_vacuum_master", None)):
-        for entry in pd.get(group, []):
-            el = entry["electrical"]
-            for ref in entry["refs"]:
-                params["valves"][ref] = {
-                    "model": entry.get("model", ""),
-                    "i_rated": float(el["rated_current_a"]),
-                    "v_rated": float(el["rated_v"]),
-                    "v_range": [float(x) for x in el["v_range"]],
-                    "r_coil": float(el["rated_v"]) / float(el["rated_current_a"]),
-                }
-                if _CH_REF.match(ref):
-                    params["channels"].append(ref)
+    for spec in valve_specs(pd):
+        for ref in spec.refs:
+            params["valves"][ref] = {
+                "model": spec.model,
+                "i_rated": spec.rated_current_a,
+                "v_rated": spec.rated_v,
+                "v_range": list(spec.v_range),
+                "r_coil": spec.r_coil,
+            }
+            if _CH_REF.match(ref):
+                params["channels"].append(ref)
     params["channels"].sort()
-    pump_el = pd["pump"][0]["electrical"]
+    pump = pump_spec(pd)
     params["pump"] = {
-        "model": pd["pump"][0].get("model", ""),
-        "i_load": float(pump_el["load_current_a"]),
-        "v_rated": float(pump_el["rated_v"]),
-        "v_range": [float(x) for x in pump_el["v_range"]],
+        "model": pump.model,
+        "i_load": pump.load_current_a,
+        "v_rated": pump.rated_v,
+        "v_range": list(pump.v_range),
     }
     if not params["valves"] or not params["channels"]:
         raise ValueError("pneumatic_devices 阀条目缺失 (单源加载失败)")
