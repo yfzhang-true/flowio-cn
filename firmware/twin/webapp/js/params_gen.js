@@ -18,7 +18,7 @@ export const FLOWIO_PARAMS = Object.freeze({
   }),
   pump: Object.freeze({
     max_duty: 0.95,  // [registry] pneumatic_devices._meta.drive_policy.pump.max_duty
-    p_min_kpa: -60.0, p_max_kpa: 120.0,  // [registry] pump[0].pressure_kpa (死头能力; 孪生仿真死点另见 types.h 注)
+    p_min_kpa: -60.0, p_max_kpa: 120.0,  // [registry] pump[0].pressure_kpa (死头能力; 孪生仿真死点另见 twin_api.c 注与本文件 banner)
     rated_v: 4.5, load_current_a: 0.5, flow_lpm: 2.8,  // [registry] pump[0] ZR370-03PM-DC4.5V
   }),
   sensor: Object.freeze({

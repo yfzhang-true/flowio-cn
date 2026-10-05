@@ -67,7 +67,7 @@ def gen_params_js(truth: TruthSource) -> str:
         "  }),",
         "  pump: Object.freeze({",
         "    max_duty: %s,  // [registry] %s" % (_num(dp.pump_max_duty), T.KEY_PUMP_MAX_DUTY),
-        "    p_min_kpa: %s, p_max_kpa: %s,  // [registry] pump[0].pressure_kpa (死头能力; 孪生仿真死点另见 types.h 注)"
+        "    p_min_kpa: %s, p_max_kpa: %s,  // [registry] pump[0].pressure_kpa (死头能力; 孪生仿真死点另见 twin_api.c 注与本文件 banner)"
         % (_num(pump.pressure_kpa[0]), _num(pump.pressure_kpa[1])),
         "    rated_v: %s, load_current_a: %s, flow_lpm: %s,  // [registry] pump[0] %s"
         % (_num(pump.rated_v), _num(pump.load_current_a), _num(pump.flow_lpm), pump.model),
