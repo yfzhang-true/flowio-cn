@@ -12,11 +12,14 @@
 [spec 偏差] §2.1 行文 "电机 ⌀24×31" vs 图纸端面 ⌀27.0±0.5 / 58.1-27.3=30.8 —— 默认按图纸。
 """
 import sys
+from pathlib import Path
 
 import FreeCAD as App
 import Part
 
-sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parents[3]))
+_ROOT = str(Path(__file__).resolve().parents[3])
+if _ROOT not in sys.path:                                    # FreeCAD python 免安装导入 (防重 guard)
+    sys.path.insert(0, _ROOT)
 from flowio.twin.devices3d import device_geom3d               # noqa: E402  单一真相源
 
 _PIN_DIA, _PIN_LEN = 0.6, 3.0    # 电机端面焊片视觉径/长 (端面图焊片, 非尺寸标注件)

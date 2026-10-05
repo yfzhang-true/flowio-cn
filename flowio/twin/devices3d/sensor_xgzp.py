@@ -12,11 +12,14 @@ devices.json sensor[0].geom3d 单源):
 器件自身原点 = 贴板面(坐板面)中心; +X = 本体长(引脚排沿 X); +Y = 排距方向。
 """
 import sys
+from pathlib import Path
 
 import FreeCAD as App
 import Part
 
-sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parents[3]))
+_ROOT = str(Path(__file__).resolve().parents[3])
+if _ROOT not in sys.path:                                    # FreeCAD python 免安装导入 (防重 guard)
+    sys.path.insert(0, _ROOT)
 from flowio.twin.devices3d import device_geom3d               # noqa: E402  单一真相源
 
 _PAD_L, _PAD_W, _PAD_T = 2.0, 0.9, 0.2     # 鸥翼脚焊盘 (焊盘图 0.9×2, 脚厚 0.2/0.4)

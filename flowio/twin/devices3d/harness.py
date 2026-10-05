@@ -13,15 +13,16 @@
 接口 = 桩两端点 (D2 电气边端点: 插头/插座/端子)。
 """
 import sys
+from pathlib import Path
 
 import FreeCAD as App
 import Part
-
-sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parents[3]))
 import json as _json
 
-_ROOT = str(__import__("pathlib").Path(__file__).resolve().parents[3])
-DEVICES_JSON = _ROOT + "/hardware/flowio-p1/enclosure/devices.json"
+_ROOT = str(Path(__file__).resolve().parents[3])
+if _ROOT not in sys.path:                                    # FreeCAD python 免安装导入 (防重 guard)
+    sys.path.insert(0, _ROOT)
+from flowio.twin.devices3d import DEVICES_JSON               # noqa: E402  常量单源 (消本地重复定义)
 
 _LEAD_DIA, _LEAD_GAP = 1.0, 1.2       # 阀引线视觉径/并排间距 (F0520D.pdf p2 引线, 实物照)
 _CABLE_DIA, _CABLE_GAP = 1.5, 1.8     # 泵电缆芯径/间距 (视觉值)

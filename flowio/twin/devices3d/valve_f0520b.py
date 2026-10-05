@@ -10,11 +10,14 @@
 器件自身原点 = N2 端面面心 (+Z 长轴)。
 """
 import sys
+from pathlib import Path
 
 import FreeCAD as App
 import Part
 
-sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parents[3]))
+_ROOT = str(Path(__file__).resolve().parents[3])
+if _ROOT not in sys.path:                                    # FreeCAD python 免安装导入 (防重 guard)
+    sys.path.insert(0, _ROOT)
 from flowio.twin.devices3d import device_geom3d               # noqa: E402  单一真相源
 
 _LEAD_DIA = 1.0
