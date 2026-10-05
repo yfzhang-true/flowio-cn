@@ -1,7 +1,7 @@
 {
   "_meta": {
     "source": "docs/sop/SKILL.md §2",
-    "usage": "flowio rebuild --after <key> → 有序重跑链 + 同步更新面（期 B cli 消费；人读见 SKILL.md）",
+    "usage": "python -m flowio rebuild --after <key> → 有序重跑链（M5 已实现，直接执行）",
     "updated": "2026-10-05"
   },
   "changes": {

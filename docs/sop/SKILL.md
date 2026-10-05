@@ -22,6 +22,7 @@ devices.json（单一真值：devices 贴装段 + pneumatic_devices 气动段）
 ```
 第一原则：**真值到介质的映射必须生成，不许手抄**（三语 codegen + CI diff 门）。
 统一入口：`python -m flowio <域> <子命令>`（`--help` 看全树；hw 危险命令需显式确认旗标）。
+变更重走链可直接执行：`python -m flowio rebuild --after <change-key>`（矩阵 15 键机读消费，M5 已实现）。
 
 ## 0. 三环境路径表（命令即复制即跑）
 
@@ -128,14 +129,21 @@ refs 四组内唯一且不与 devices 段冲突；负测试=deepcopy 坏数据�
 
 ## 6. 固件开发流程（fw 域）
 1. **规格源唯一**：docs/firmware-driver-spec.md（寄存器流程/三态占空比表/过压互锁）——改规格先改它；
-2. 参数常量：一律 `pn_core/types.h`（**生成文件禁手编**）——改 devices.json 后 `python -m flowio fwgen` 重生成（CI 门 `tools/check_codegen.py --ci` 抓手编）；
+2. 参数常量：一律 `pn_core/types.h`（**生成文件禁手编**）——真值位置
+   `devices.json → pneumatic_devices._meta.drive_policy.valve`（如 full_open_hold "90%"）；
+   改后 `python -m flowio fwgen` 重生成（CI 门 `tools/check_codegen.py --ci` 抓手编）。
+   **行重叠裁定**：凡进三语链的参数变更走 `params_trilingual` 行（超集，含 fw_constant 全步骤+
+   compare_baseline+run_tests）；fw_constant 行仅用于"不进 codegen 的拓扑/协议常量"（模板段，
+   分类表 flowio/fwgen/templates.py）。**锚点联动**：selftest/场景锚点若因参数变更需更新，
+   走 twin_model 行的 baseline.json 评审规则（有意变更+评审，禁静默改）。
 3. 组件实现：firmware/components/pn_core（逻辑拓扑常量如 PN_PORT_COUNT 属模板段，分类表在 flowio/fwgen/templates.py）；
 4. 验证：build_twin.sh 重建（exe 用 /tmp 副本法）→ twin_selftest 锚点比对 → 烧录 flash_com3.ps1；
 5. 固件常量变更重走链：见矩阵 `fw_constant`。
 
 ## 7. 孪生开发流程（twin 域）
 1. **模型模板**：新建模型 = 继承 `BaseModel`（params/step/reset 三方法）+ 参数从 TruthSource 视图注入（零器件常量手抄，board_model 拆分三模型是范式样本）；
-2. **执行器扩展三步**（盲测 test_blind_extension.py 固化）：①devices.json 加真值条目（schema 谓词合规）②定义 IActuator 子类（不入工厂即测试内可注入）③注入 ElectricalModel 求解——**零改仿真器**；型号串知识只许在工厂登记点；
+2. **执行器扩展三步**（IActuator 契约：`ref` 属性 + `current(state)->A` + `effective_v(duty)->V`
+   + `duty(state)->0~1`（报告钩子）；state ∈ pull_in/hold/economy/off）——盲测 test_blind_extension.py 固化：①devices.json 加真值条目（schema 谓词合规）②定义 IActuator 子类（不入工厂即测试内可注入）③注入 ElectricalModel 求解——**零改仿真器**；型号串知识只许在工厂登记点；
 3. 场景矩阵：flowio/twin/scenarios.py（验收语料与模型生命周期分离）；跑 `python -m flowio twin electrical [--json]`；
 4. 锚点钉值：测试锚点绑真值冻结值（r_coil 10Ω/worst 4.525A）；对拍 `tools/compare_baseline.py`；
 5. C 侧孪生常量（twin_api.c 标定段如 PUMP_P_MAX 61）：属孪生标定非真值映射——分类裁定见 fwgen 分类表，勿盲目"对齐"。
