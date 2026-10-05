@@ -1,6 +1,6 @@
 # FLOWIO 项目交接文档（新会话必读）
 
-> **更新**: 2026-10-05（二）· **状态**: 数字孪生全流程模块化 v2（M0-M5+A2，34 commits）合入 main — 四重对拍全绿（基线 26/26 + codegen 33/33 + webapp 55/55 + 双轨 EXIT 0）/ 生产站组件版在线 / 产品线等下单打样
+> **更新**: 2026-10-06（二）· **状态**: device-modeling（器件精确建模+连接图谱，25 commits）合入 main — 终审双 MERGE-READY（spec §7 五验收全过/16 门禁独立复跑绿）/ 用户三类错误诉求（E1 泵口侧置/E2 阀引线缺失/E3 模块接口未定义）全解决 / 生产站待重部署
 > **新会话第一动作**: 通读本文档 → 按需读 §2 的 spec/plan → 等用户指令
 
 ---
@@ -12,6 +12,7 @@
 **求职线**：4 公司尽调完成（乐鑫第一优先 9/10）、双简历就绪（GitHub + Live Demo 双链接）；**唯一待办：用户投递**。
 **已关闭**：tnkr.ai 线（2026-10-03 放弃，档案在 `docs/archive/tnkr-2026-10/`，项目页已删，App 授权待用户手动卸载——见 §5）。
 **模块化 v2（2026-10-05 合入）**：数字孪生全流程模块化 34 commits 合入 main——`flowio` 包全域（core 抽象/truth/hw/geom/flows/twin OOD/fwgen）+ 16 弃用 shim + SOP skill v2 十二节 + cli 全域 + 三语 codegen CI 门 + 基线冻结对拍（spec v2.1 三决策全 B，详见 §0b）；验收=四重对拍 26/26+33/33+55/55+双轨 EXIT 0，产物零改动（11 基线锚点 sha 全等）。
+**device-modeling（2026-10-06 合入）**：器件精确建模+连接图谱 25 commits 合入 main（spec/plan: `docs/superpowers/specs/2026-10-05-device-modeling-connections-design.md`，D1-D4 裁定全 A）——四器件 geom3d 三接口面+六参数化 builder（`flowio/twin/devices3d/`，datasheet 直推+58 几何断言）、connections.json 58 边（29 气/14 电/15 机）+四规则机器校验（`python -m flowio connections --check`）、模块接口规约（`docs/module-interface-spec.md`+6 漂移守卫）、孪生渲染层 devices3d 替换盒近似+连接驱动管路线束+点击高亮+爆炸跟随（5 张视觉回归截图 `docs/device-modeling/`）、BRINGUP §I 管路下料机器生成（`tools/gen_bringup_piping.py`）。用户三类错误诉求全解决；OPEN 遗留 4 项全 WARN 化有关闭通道（F0520B N2 实测/VF 静止密封问询单 §8/泵跳管 fit_pending/enclosure 盖开孔归 1a）。
 
 ## 0b. 五位一体架构（模块化 v2 落地形态，2026-10-05）
 
@@ -28,6 +29,8 @@ flowio/
   flows/      气路流拓扑: make_flows/device_graph
   twin/       孪生域 OOD: actuators(继承树) + electrical/thermal/pneumatic(三模型)
               + board.py(BoardModel 组合根) + scenarios(12 场景矩阵)
+              + connections(四规则校验器)/connections_render(渲染 payload)
+              + devices3d/(六参数化 builder+geom3d 单源+导出, FreeCAD 惰性导入)
   fwgen/      三语参数生成器: c_gen + ts_gen + templates(溯源注释模板段)
   tests/      test_core/test_twin/test_fwgen/test_cli/test_blind_extension(盲测守门)
   cli.py      统一入口 python -m flowio（pyproject console_script: flowio）
@@ -41,6 +44,7 @@ hw     gen-sch|gen-pcb|route  ⚠ 默认拒绝（产物零改动守门；确需�
 geom   <生成器>               FreeCAD 子进程重入（FLOWIO_FREECAD_PY）
 flows  make|graph             流向图/器件关系图
 twin   run|scenarios          电气/热/气动模型入口
+connections --check           连接图谱四规则校验（端点/口径/六动作/悬空; WARN=inferred+fit_pending）
 test   l5|quick               分层测试（quick=schema15+core+twin11+fwgen11+盲测3）
 rebuild --after <key>         消费 docs/sop/rebuild-matrix.json（15 键）→ 有序重跑链
 fwgen  (别名 codegen)         三语参数重生成（types.h + params_gen.js）

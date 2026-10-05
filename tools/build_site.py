@@ -56,7 +56,8 @@ def main() -> int:
     # M4: js/components/ 子目录 (组件文件互相 ./ ../ 相对引用, 拷贝后无需改写)
     for sub in ("css", "js", "js/components", "vendor", "meshes", "data"):
         (SITE / sub).mkdir(parents=True, exist_ok=True)
-    for name in ("flows.json", "hotspots.json"):
+    # D4 (2026-10-05): connections 渲染数据 (折线 payload + 真值原文副本) 随站同步
+    for name in ("flows.json", "hotspots.json", "connections_scene.json", "connections.json"):
         shutil.copyfile(WEB / name, SITE / name)
     for f in (WEB / "css").glob("*"):
         if f.is_file():

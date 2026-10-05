@@ -127,7 +127,9 @@ const cmd = (p, line) => p.evaluate((l) => window.__t2.panels.sendCmd(l), line);
   console.log('─ 气流+电流联动: I 1 255 (充气) ─');
   await cmd(p, 'I 1 255');
   await sleep(1400);                                     // 200ms 交替轮询 + 增益平滑
-  const on = await p.evaluate(() => {
+  /* 首条遥测断言宽限重试: 冷启动后首轮 200ms 遥测偶发未及回流 (增益平滑未爬坡,
+     质量审实证过一次 1 红) —— 阈值不放宽, 仅重读 ≤2 次 × 400ms 等遥测管道。 */
+  const readFlow = () => {
     const fl = window.__t2.flows;
     const g1 = fl.lines.gate1, a1 = fl.airs[0];
     return {
@@ -140,7 +142,12 @@ const cmd = (p, line) => p.evaluate((l) => window.__t2.panels.sendCmd(l), line);
       dir: a1.dir,
       otherOp: fl.airs[1].op,
     };
-  });
+  };
+  let on = await p.evaluate(readFlow);
+  for (let i = 0; i < 2 && !(on.live01 > 0.5); i++) {
+    await sleep(400);
+    on = await p.evaluate(readFlow);
+  }
   T('gate1 live01=阀电流归一 (>0.5)', on.live01 > 0.5);
   T('gate1 uGain>0.5 (电流辉光)', on.uGain > 0.5);
   T('gate1 uSpeed>1.5 (行进虚线加速)', on.uSpeed > 1.5);

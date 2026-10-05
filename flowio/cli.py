@@ -7,6 +7,7 @@
     geom   case|manifold|pump-module|meshes|assembly   FreeCAD 结构生成器
     flows  make|graph      流拓扑生成 (pos.csv→flows.json) / 器件关系图
     twin   electrical      场景矩阵 (12 场景母线电气解, --json 机器可读)
+    connections [--check]  连接图谱 (D2: 三类边四条校验 / 摘要; enclosure 真值)
     test   schema|core|twin|fwgen|blind|l5|quick      分层测试入口
     rebuild [--after KEY]  SOP 重建矩阵消费 (docs/sop/rebuild-matrix.json)
     fwgen  [--check]       三语参数 codegen (codegen = 本命令别名)
@@ -236,6 +237,41 @@ def _cmd_twin_electrical(args) -> int:
     return 0
 
 
+# ═══════════════════ connections (D2 连接图谱) ═══════════════════
+def _cmd_connections(args) -> int:
+    """connections --check: 三类边图谱四条校验 (rc 0/1/2 对齐全域 rc 约定);
+    无 --check: 摘要模式 (三类边计数 + 六动作路通表, 不作门)。"""
+    from flowio.twin.connections import load_connections, validate
+
+    try:
+        rep = validate(conn_path=args.conn, devices_path=args.truth)
+    except OSError as e:
+        print("FATAL: 连接图谱不可读: %s" % e)
+        return 2
+    except ValueError as e:
+        print("FATAL: %s" % e)
+        return 2
+    s = rep["stats"]
+    for p_ in rep["fail"]:
+        print("[FAIL] %s" % p_)
+    for w in rep["warn"]:
+        print("[WARN] %s" % w)
+    print("connections: pneumatic %d + electrical %d + mechanical %d 边, "
+          "模块 %d, 端点 %d, %d FAIL / %d WARN"
+          % (s["pneumatic_edges"], s["electrical_edges"], s["mechanical_edges"],
+             s["modules"], s["endpoints_resolved"], len(rep["fail"]), len(rep["warn"])))
+    for act, a in rep["actions"].items():
+        print("  [%s] %s" % ("OK  " if a["ok"] else "FAIL", a["desc"]))
+    if not args.check:
+        print("(摘要模式, 不作门; 校验加 --check)")
+        return 0
+    if rep["fail"]:
+        print("connections check: %d 违例 → rc=1" % len(rep["fail"]))
+        return 1
+    print("[OK] connections check: 四条校验全过 (端点/口径/六动作/悬空)")
+    return 0
+
+
 # ═══════════════════ test 分层入口 ═══════════════════
 _TEST_GEOM = ROOT / "hardware" / "flowio-p1" / "enclosure" / "test_device_geom.py"
 _TESTDIR = ROOT / "flowio" / "tests"
@@ -402,6 +438,17 @@ def _build_parser() -> argparse.ArgumentParser:
     te.add_argument("--json", action="store_true",
                     help="机器可读输出 (rows JSON; CI/对拍复用)")
 
+    # ---- connections (D2 连接图谱) ----
+    con = sub.add_parser("connections", help="连接图谱域: connections.json 三类边 "
+                                             "机器校验 (D2: 端点/口径/六动作/悬空)")
+    con.add_argument("--check", action="store_true",
+                     help="校验门: FAIL 清单 rc=1, 文件缺失/坏 JSON rc=2 "
+                          "(缺省=摘要模式, 计数+六动作路通表, 恒 rc=0)")
+    con.add_argument("--conn", default=None, metavar="PATH",
+                     help="connections.json 路径 (默认 enclosure/ 真值)")
+    con.add_argument("--truth", default=None, metavar="PATH",
+                     help="devices.json 路径 (端点接口面单源, FLOWIO_TRUTH 语义同 truth 域)")
+
     # ---- test 分层 ----
     test = sub.add_parser("test", help="分层测试入口 (python 侧; CAD 装配 L1-L4 段 "
                                        "委托 firmware/twin/run_tests.sh)")
@@ -445,6 +492,8 @@ def main(argv=None) -> int:
         return _cmd_flows(args)
     if args.cmd == "twin":
         return _cmd_twin_electrical(args)
+    if args.cmd == "connections":
+        return _cmd_connections(args)
     if args.cmd == "test":
         return _cmd_test(args)
     if args.cmd == "rebuild":

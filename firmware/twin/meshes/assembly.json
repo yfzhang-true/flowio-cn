@@ -8,19 +8,19 @@
       "explode": [
         0,
         0,
-        68
+        70
       ],
       "opacity": 1.0
     },
     {
       "id": "valves",
-      "name": "阀阵 11 只 (1a 竖装)",
+      "name": "阀阵 11 只 (devices3d 精确)",
       "stl": "/meshes/valves.stl",
       "color": "#4a6da7",
       "explode": [
         0,
         0,
-        36.5
+        39
       ],
       "opacity": 1.0
     },
@@ -32,7 +32,7 @@
       "explode": [
         0,
         0,
-        32
+        30
       ],
       "opacity": 1.0
     },
@@ -86,7 +86,7 @@
     },
     {
       "id": "pump",
-      "name": "泵 ZR370-03PM",
+      "name": "泵 ZR370-03PM (精确)",
       "stl": "/meshes/pump.stl",
       "color": "#555b63",
       "explode": [
@@ -110,7 +110,7 @@
     },
     {
       "id": "tubes",
-      "name": "供压/真空管 (视觉)",
+      "name": "管路/线束 (connections)",
       "stl": "/meshes/tubes.stl",
       "color": "#7ec8e3",
       "explode": [
@@ -118,7 +118,8 @@
         0,
         0
       ],
-      "opacity": 1.0
+      "opacity": 1.0,
+      "kind": "connections"
     }
   ],
   "bodies": {
@@ -142,5 +143,5 @@
     85.8,
     57.0
   ],
-  "assembly_note": "T6 双体装配: 主模块 (板+11 阀+歧管 M, 壳盖上气动塔) + 泵模块 (ZR370+硅胶支架, 分装式); 气管连 S/V 壁孔"
+  "assembly_note": "T6 双体装配: 主模块 (板+11 阀+歧管 M, 壳盖上气动塔) + 泵模块 (ZR370+硅胶支架, 分装式); 气管连 S/V 壁孔; D4: 阀/泵/传感=devices3d 精确模型, 管路线束=connections.json 驱动"
 }

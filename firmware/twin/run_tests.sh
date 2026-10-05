@@ -57,6 +57,7 @@ echo; echo "═══ 2b/5 CAD 干涉测试 L4 (FreeCAD, 探测到才跑) ══
 FC_PY="E:/FreeCAD/bin/python.exe"
 if [ -x "$FC_PY" ]; then
   "$FC_PY" "$ENC/test_assembly_freecad.py" || rc=1
+  "$FC_PY" "$ENC/test_devices3d_geom.py" || rc=1
 else
   echo "（SKIP: 未找到 $FC_PY）"
 fi
