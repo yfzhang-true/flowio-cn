@@ -38,7 +38,9 @@ def rewrite_js(text: str) -> str:
     """js 模块专用: ES import 裸说明符修正 ("js/x.js" 不走相对解析, 必须改 ./x.js).
     注意: import 修正必须先于通用 rewrite, 否则 "/webapp/" 先被剥掉导致匹配不到.
     覆盖三种形态: 静态 from "..." / 副作用 import "..." / 动态 import("...")——
-    动态 import 常为惰性加载 (scene.js/flows.js), 静态扫描看不见, 生产才炸 (2026-10-03 事故)."""
+    动态 import 常为惰性加载 (scene.js/flows.js), 静态扫描看不见, 生产才炸 (2026-10-03 事故).
+    M4 组件化后 js/components/*.js 互相全用 ./ ../ 相对路径 + "three" 裸说明符
+    (importmap 解析) —— 相对路径无需改写即可在 site/ 同构工作, 本函数保持幂等."""
     text = text.replace('from "/webapp/js/', 'from "./')
     text = text.replace('import "/webapp/js/', 'import "./')
     text = text.replace('import("/webapp/js/', 'import("./')
@@ -51,7 +53,8 @@ def rewrite_js(text: str) -> str:
 
 def main() -> int:
     # ---------- 1/2. 目录与拷贝
-    for sub in ("css", "js", "vendor", "meshes", "data"):
+    # M4: js/components/ 子目录 (组件文件互相 ./ ../ 相对引用, 拷贝后无需改写)
+    for sub in ("css", "js", "js/components", "vendor", "meshes", "data"):
         (SITE / sub).mkdir(parents=True, exist_ok=True)
     for name in ("flows.json", "hotspots.json"):
         shutil.copyfile(WEB / name, SITE / name)
@@ -60,11 +63,19 @@ def main() -> int:
             (SITE / "css" / f.name).write_bytes(rewrite(f.read_text(encoding="utf-8")).encode("utf-8"))
     for f in (WEB / "js").glob("*.js"):
         (SITE / "js" / f.name).write_bytes(rewrite_js(f.read_text(encoding="utf-8")).encode("utf-8"))
+    for f in (WEB / "js" / "components").glob("*.js"):
+        (SITE / "js" / "components" / f.name).write_bytes(
+            rewrite_js(f.read_text(encoding="utf-8")).encode("utf-8"))
     if (SITE / "js" / "demo_api.js").exists() is False:
         print("!! 缺少 site/js/demo_api.js (应先由仓库提供, 不从 webapp 同步覆盖)")
     # vendor 含子目录 (addons/), 必须整树拷贝 —— 顶层 glob 会漏 addons 导致
     # scene.js 的 ../vendor/addons/*.js 全 404, 动态 import 整图失败 (2026-10-03 事故第二层)
     shutil.copytree(WEB / "vendor", SITE / "vendor", dirs_exist_ok=True)
+    # 旧版已拆解文件 (panels/simlab 迁入组件) 残影清除, 防 site 留尸
+    for stale in ("panels.js", "simlab.js"):
+        stale_path = SITE / "js" / stale
+        if stale_path.exists():
+            stale_path.unlink()
     n_stl = 0
     for f in (SRC / "meshes").glob("*.stl"):
         shutil.copyfile(f, SITE / "meshes" / f.name)
@@ -119,8 +130,8 @@ def main() -> int:
             print("  -", b)
         return 1
 
-    n_js = len(list((SITE / "js").glob("*.js")))
-    print(f"SITE OK: index.html + js×{n_js} + stl×{n_stl} + assembly + sim_test_data, "
+    n_js = len(list((SITE / "js").glob("*.js"))) + len(list((SITE / "js" / "components").glob("*.js")))
+    print(f"SITE OK: index.html + js×{n_js} (含 components/) + stl×{n_stl} + assembly + sim_test_data, "
           f"共 {sum(1 for _ in SITE.rglob('*') if _.is_file())} 文件")
     return 0
 
