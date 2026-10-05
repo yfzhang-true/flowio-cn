@@ -173,7 +173,9 @@ def drive_policy(pn):
             },
             pull_in_ms=float(m.group(1)),
             pump_max_duty=_pct(dp["pump"]["max_duty"], "pump.max_duty"),
-            pump_soft_start="互锁" in str(dp["pump"].get("soft_start", "")),
+            # 硬取 (缺键=KeyError→TruthError): 软启动互锁判据禁静默默认 False;
+            # 键存在性已由 predicates.pneu_drive_policy_bad 在校验层前置同向。
+            pump_soft_start="互锁" in str(dp["pump"]["soft_start"]),
         )
     except TruthError:
         raise

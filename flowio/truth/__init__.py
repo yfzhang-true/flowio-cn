@@ -12,9 +12,9 @@ from flowio.truth.predicates import (  # noqa: F401
     DEVICE_REQUIRED_FIELDS, PLACEMENT_LEGAL, PNEU_ACTUATORS, PNEU_GROUPS,
     PNEU_RAIL_V, PNEU_RATED_V, bad_dims_entries, bad_placement_entries,
     connectors_missing_port, document_problems, incomplete_entries,
-    missing_bom_refs, pneu_completeness_bad, pneu_domain_ok, pneu_entries,
-    pneu_envelope_bad, pneu_groups_empty, pneu_rail_variant_ok, pneu_refs_dup,
-    pneu_tag, pneu_voltage_bad)
+    missing_bom_refs, pneu_completeness_bad, pneu_domain_ok, pneu_drive_policy_bad,
+    pneu_entries, pneu_envelope_bad, pneu_groups_empty, pneu_rail_variant_ok,
+    pneu_refs_dup, pneu_tag, pneu_voltage_bad)
 from flowio.truth.views import (  # noqa: F401
     DrivePolicy, PumpSpec, SensorSpec, ValveSpec, drive_policy, pump_spec,
     sensor_spec, valve_specs)
@@ -27,7 +27,8 @@ __all__ = [
     "bad_dims_entries", "connectors_missing_port", "bad_placement_entries",
     "pneu_entries", "pneu_tag", "pneu_groups_empty", "pneu_completeness_bad",
     "pneu_domain_ok", "pneu_voltage_bad", "pneu_rail_variant_ok",
-    "pneu_refs_dup", "pneu_envelope_bad", "document_problems",
+    "pneu_refs_dup", "pneu_envelope_bad", "pneu_drive_policy_bad",
+    "document_problems",
     # views
     "ValveSpec", "PumpSpec", "SensorSpec", "DrivePolicy",
     "valve_specs", "pump_spec", "sensor_spec", "drive_policy",

@@ -169,6 +169,17 @@ def pneu_rail_variant_ok(pn):
     return rail == PNEU_RAIL_V and "DC4.5V" in variant
 
 
+def pneu_drive_policy_bad(pn):
+    """drive_policy 结构完备性: pump 段必须含 soft_start 键 —— 泵软启动互锁判据
+    (views.DrivePolicy.pump_soft_start) 的唯一取值出处, 缺键=违例 (禁静默默认 False)。
+    注: 非 T1 冻结集成员 —— M0 质量修复补入 (恢复旧 electrical_sim 硬取的
+    fail-loud 语义, 校验层前置同向); 仅校验键存在, 取值语义仍由视图硬取判定。"""
+    pump = ((pn.get("_meta") or {}).get("drive_policy") or {}).get("pump")
+    if isinstance(pump, dict) and "soft_start" in pump:
+        return []
+    return ["drive_policy.pump(缺soft_start)"]
+
+
 def pneu_refs_dup(pn, pcb_refs):
     """四组合计 refs 不得重复, 且不得与 devices 段 (PCB 贴装) refs 冲突。"""
     seen, dups = set(), set()
@@ -230,6 +241,8 @@ def document_problems(doc):
     problems += ["pneumatic 电压档违例: %s" % x for x in pneu_voltage_bad(pn)]
     if not pneu_rail_variant_ok(pn):
         problems.append("pneumatic rail_v/variant 违例 (期望 rail=5.0 + DC4.5V)")
+    problems += ["pneumatic drive_policy 违例: %s" % x
+                 for x in pneu_drive_policy_bad(pn)]
     pcb_refs = set()
     for e in devices:
         pcb_refs |= set(e.get("refs") or [])

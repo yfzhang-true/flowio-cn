@@ -226,6 +226,14 @@ def test_truthsource_fail_loud():
         bad3.write_text(json.dumps(doc2), encoding="utf-8")
         with _must_raise(TruthError, "缺 pneumatic_devices 段"):
             TruthSource(bad3).devices
+        # e) 删 drive_policy.pump.soft_start 键 → 校验层即拦截 (缺键=违例,
+        #    禁静默默认 pump_soft_start=False —— M0 质量修复回归锚)
+        doc3 = json.loads(TRUTH_JSON.read_text(encoding="utf-8"))
+        del doc3["pneumatic_devices"]["_meta"]["drive_policy"]["pump"]["soft_start"]
+        bad4 = Path(td) / "nosoftstart.json"
+        bad4.write_text(json.dumps(doc3, ensure_ascii=False), encoding="utf-8")
+        with _must_raise(TruthError, "缺 soft_start 键须校验失败"):
+            TruthSource(bad4).devices
 
 
 # ══════════ 4. views: pneumatic 条目视图 (锚点值 = devices.json 冻结基线) ══════════
@@ -269,7 +277,7 @@ def test_views_drive_policy():
 
 
 def test_views_fail_loud():
-    """视图解析失败 → TruthError (无百分比/缺泵段)。"""
+    """视图解析失败 → TruthError (无百分比/缺泵段/缺 soft_start 键)。"""
     pn = TruthSource().pneumatic_devices
     bad = copy.deepcopy(pn)
     bad["_meta"]["drive_policy"]["valve"]["pull_in"] = "满开"   # 无百分比
@@ -279,6 +287,12 @@ def test_views_fail_loud():
     del bad2["pump"]
     with _must_raise(TruthError, "泵条目缺失须 TruthError"):
         pump_spec(bad2)
+    # 缺 soft_start 键 → 硬取 KeyError → TruthError (M0 质量修复回归锚:
+    # 恢复旧 electrical_sim 的 fail-loud, 禁 .get 静默默认 False)
+    bad3 = copy.deepcopy(pn)
+    del bad3["_meta"]["drive_policy"]["pump"]["soft_start"]
+    with _must_raise(TruthError, "缺 soft_start 键视图硬取须 TruthError"):
+        drive_policy(bad3)
 
 
 if __name__ == "__main__":
