@@ -30,7 +30,7 @@ import json
 import os
 import sys
 import tempfile
-from contextlib import redirect_stdout
+from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -130,13 +130,18 @@ def test_subcommand_help_complete():
 
 
 def test_unknown_command_rejected():
-    """未知命令 → argparse SystemExit(2) (fail-loud, 非静默)。"""
-    buf = io.StringIO()
+    """未知命令 → argparse SystemExit(2) (fail-loud, 非静默)。
+
+    stderr 一并捕获: usage 错误走 stderr (argparse 契约), 不捕获则
+    污染测试输出 (argparse noise); 顺带断言错误文本含拒收命令名。
+    """
+    out, err = io.StringIO(), io.StringIO()
     try:
-        with redirect_stdout(buf):
+        with redirect_stdout(out), redirect_stderr(err):
             cli.main(["bogus-cmd"])
     except SystemExit as e:
         assert e.code == 2
+        assert "bogus-cmd" in err.getvalue(), "stderr 应含 invalid choice 报告"
         return
     raise AssertionError("未知命令应 SystemExit(2)")
 

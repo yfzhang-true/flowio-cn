@@ -28,6 +28,13 @@ flowio/geom/<生成器>.py (脚本形态保持 M1 迁移语义, import 即执行
 产物零改动纪律 (M5): hw 三生成器默认拒绝执行 —— pcb/route 重写含 T4 布线
 的 flowio-p1.kicad_pcb, sch 重写嵌入符号 (uuid4 全换 = 产物漂移); 须显式
 携带确认旗标方派发。geom/flows-make 可确定性重生成 (SOP 重跑链成员)。
+
+rc 约定 (全域统一, 调用方 CI/脚本按此分级处置): 0=绿 / 1=数据问题
+(truth check 违例, fwgen --check 漂移, test 子套件失败) / 2=环境或拒绝
+(专用解释器缺失, hw 产物守门拒绝, 未知命令/变更键; argparse 误用同 SystemExit 2)。
+
+webgen 裁定注记 (M5): spec §2 的 webgen 域并入 fwgen —— params_gen.js 由
+fwgen.ts_gen 单 codegen 内核生成 (三语一份模板源); 第三介质出现前不拆独立域/子命令。
 """
 from __future__ import annotations
 

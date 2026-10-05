@@ -12,7 +12,7 @@
 #   L1-L4（装配/干涉测试仍是脚本形态，M6+ 迁 flowio.testkit 后再路由）。
 #
 # 双跑对拍（M5 验收动作）：
-#   bash run_tests.sh      → EXIT_A, 计数: L5 "15 PASS / 0 FAIL",
+#   bash run_tests.sh      → EXIT_A, 计数: L5 "13 PASS / 0 FAIL",
 #   bash run_tests_cli.sh  → EXIT_B, 计数: L5 同上 + electrical "6 testfns"
 #                            + quick 五套件；要求 EXIT_A == EXIT_B == 0 且
 #                            共同段关键计数一致（见 M5 报告对拍表）。
@@ -20,6 +20,9 @@
 # M6 起连续双绿后本脚本转正为默认（run_tests.sh 降级为回退备份）—— 避免一次
 # 性换轨风险。python -m flowio 需要 flowio 可导入：本脚本导出 PYTHONPATH=仓库根
 # （pip install -e . 后可去掉）。
+# 转正前知悉（双轨语义差异点）：venv-cad 缺失时经典轨 2c/5 SKIP → EXIT 0，
+#   cli 轨 test l5 → rc=2 fail-loud → EXIT 1 —— 转正后以 fail-loud 为准
+#   （缺依赖静默绿是经典轨遗留宽松性，非 cli 轨缺陷）。
 # 用法：bash run_tests_cli.sh   （cd firmware/twin）
 #   TWIN_PYTHON  指定 python 解释器（默认 conda paper20-cu128，回退 PATH python）
 set -u
