@@ -36,8 +36,7 @@ from flowio.twin import (ElectricalModel, LOGIC_A, PumpZR370,              # noq
                          ValveF0520B, ValveF0520D, BoardModel,
                          build_actuators, load_params, run_matrix,
                          run_scenario, simulate)
-from flowio.truth import DrivePolicy, PumpSpec, ValveSpec, drive_policy, \
-    pump_spec, valve_specs                                             # noqa: E402
+from flowio.truth import ValveSpec, drive_policy, pump_spec, valve_specs  # noqa: E402
 
 TWIN_DIR = ROOT / "firmware" / "twin"
 ALL_VALVE_REFS = {"V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8", "VS", "VF", "VV"}
