@@ -1,6 +1,6 @@
 # FLOWIO 项目交接文档（新会话必读）
 
-> **更新**: 2026-10-05 · **状态**: P1.1 平台化改版全绿合入 main — 产品线等下单打样 / 展示线在线 / 求职线待投递
+> **更新**: 2026-10-05（二）· **状态**: 数字孪生全流程模块化 v2（M0-M5+A2，34 commits）合入 main — 四重对拍全绿（基线 26/26 + codegen 33/33 + webapp 55/55 + 双轨 EXIT 0）/ 生产站组件版在线 / 产品线等下单打样
 > **新会话第一动作**: 通读本文档 → 按需读 §2 的 spec/plan → 等用户指令
 
 ---
@@ -11,6 +11,53 @@
 **展示线**：GitHub Pages 演示站上线 **https://yfzhang-true.github.io/flowio-cn/**（3D 爆炸 + 气流/电流 + 浏览器内四电路仿真，JS 移植与 Python 对拍零误差）；README 有 Live Demo 徽章。**2026-10-03 深夜 CAD 装配大修**：用户报障爆炸视图装配错误 → 根因四层（四源 z 基准矛盾/上壳是带底方盒/装配矩阵平移放错列/壳高装不下真实端子 17.5mm）→ 统一装配栈（板坐铜柱 7.4，总高 19→29.5）+ **CAD 测试体系 L1-L4 上线**（34 断言，干涉全 0.000mm³，入 run_tests.sh 第 2 层），spec 见 `docs/superpowers/specs/2026-10-03-cad-assembly-truth.md`。
 **求职线**：4 公司尽调完成（乐鑫第一优先 9/10）、双简历就绪（GitHub + Live Demo 双链接）；**唯一待办：用户投递**。
 **已关闭**：tnkr.ai 线（2026-10-03 放弃，档案在 `docs/archive/tnkr-2026-10/`，项目页已删，App 授权待用户手动卸载——见 §5）。
+**模块化 v2（2026-10-05 合入）**：数字孪生全流程模块化 34 commits 合入 main——`flowio` 包全域（core 抽象/truth/hw/geom/flows/twin OOD/fwgen）+ 16 弃用 shim + SOP skill v2 十二节 + cli 全域 + 三语 codegen CI 门 + 基线冻结对拍（spec v2.1 三决策全 B，详见 §0b）；验收=四重对拍 26/26+33/33+55/55+双轨 EXIT 0，产物零改动（11 基线锚点 sha 全等）。
+
+## 0b. 五位一体架构（模块化 v2 落地形态，2026-10-05）
+
+**原则**：产品五位一体（硬件/结构/固件/孪生/呈现）共享同一份真值 `enclosure/devices.json`——真值到介质的映射必须是**生成的**，不是手抄的。
+
+### flowio 包结构（pip -e 可装，全产品共享内核）
+```
+flowio/
+  core/       抽象层（零域知识）: interfaces.py(IActuator/ISensor/BaseModel ABC)
+              + truth.py(TruthSource 只读视图) + errors.py(域异常层次)
+  truth/      schema 谓词 + 两段解析 + TruthView 视图
+  hw/         硬件域: sch_gen/pcb_gen/route/(route_pcb)/netlist/drill
+  geom/       结构域: case_geom/device_geom/pneu_geom + make_{case,manifold,pump_module,meshes,assembly}
+  flows/      气路流拓扑: make_flows/device_graph
+  twin/       孪生域 OOD: actuators(继承树) + electrical/thermal/pneumatic(三模型)
+              + board.py(BoardModel 组合根) + scenarios(12 场景矩阵)
+  fwgen/      三语参数生成器: c_gen + ts_gen + templates(溯源注释模板段)
+  tests/      test_core/test_twin/test_fwgen/test_cli/test_blind_extension(盲测守门)
+  cli.py      统一入口 python -m flowio（pyproject console_script: flowio）
+```
+旧路径 16 弃用 shim（enclosure 11 + fab 2 + tools 3）sys.modules 顶替转发 + 孪生域 2 薄壳（board_model/electrical_sim）——旧脚本不改可继续跑，M6 起可清理。
+
+### cli 命令树（`python -m flowio`）
+```
+truth  check|summary          真值校验/摘要
+hw     gen-sch|gen-pcb|route  ⚠ 默认拒绝（产物零改动守门；确需重建加 --i-know-this-rewrites-products）
+geom   <生成器>               FreeCAD 子进程重入（FLOWIO_FREECAD_PY）
+flows  make|graph             流向图/器件关系图
+twin   run|scenarios          电气/热/气动模型入口
+test   l5|quick               分层测试（quick=schema15+core+twin11+fwgen11+盲测3）
+rebuild --after <key>         消费 docs/sop/rebuild-matrix.json（15 键）→ 有序重跑链
+fwgen  (别名 codegen)         三语参数重生成（types.h + params_gen.js）
+```
+
+### 三语参数 codegen 流（M3，-58→-60 手抄事故的机器级根治）
+```
+enclosure/devices.json（唯一真值）
+  └─ python -m flowio fwgen
+       ├─ firmware/components/pn_core/include/pn_core/types.h   （C，全文件生成 D1=B，DO NOT EDIT）
+       ├─ firmware/twin/webapp/js/params_gen.js                 （JS/ES module，DO NOT EDIT）
+       └─ twin 侧直接 import truth（省一份生成物）
+CI 门: tools/check_codegen.py --ci —— 重生成逐字节对拍 33 断言，手编生成物立即红
+```
+
+### 双轨测试（M5 对拍，转正条件见 §3 run_tests_cli.sh 行）
+`run_tests.sh`（经典轨，默认）∥ `run_tests_cli.sh`（cli 轨，2c/5 与 2e/5 走 `python -m flowio test`）——共同段计数须逐项一致（L1-L3 30 / L4 5 / L5 13 / 电气 6 testfns / api 50 / gui 28 / e2e 43）；连续双绿后 cli 轨转正为默认。
 
 ## 1. 已完成 / 待完成
 
@@ -28,6 +75,7 @@
 | 公司尽调 ×4 | `简历/公司尽调报告_上海嵌入式_2026-10.md` | 本地不入 git |
 | 双简历 | `简历/*.md` | 中英各一，双链接 |
 | Tnkr 档案 | `docs/archive/tnkr-2026-10/` | 已弃用留档 |
+| **模块化 v2**（2026-10-05 合入 main，34 commits） | `flowio/` + `docs/mod-baseline/` + spec `2026-10-05-digital-twin-fullstack-modularization-design.md` | M0-M5+A2 全落地：core 抽象/五域挂载/孪生 OOD/三语 codegen/webapp 组件化/cli+盲测；四重对拍 26+33+55+双轨 0 全绿（见 §0b） |
 
 ### ⏳ 待完成（优先级序）
 1. **【用户动作】投递乐鑫**（原型验证/ESP-IDF SDK/AI 方案三岗，弹药=FLOWIO-CN 全栈）
@@ -41,6 +89,7 @@
 | 文件 | 作用 |
 |---|---|
 | `docs/superpowers/specs/2026-10-04-p1.1-spin-b-design.md` | **P1.1 改版总 spec/plan**（T1-T9 任务分解与决策记录） |
+| `docs/superpowers/specs/2026-10-05-digital-twin-fullstack-modularization-design.md` | **模块化 v2 总 spec**（五位一体/OOD 设计/三决策 D1-D3 全 B/迁移分期 M0-M5） |
 | `docs/firmware-driver-spec.md` | **固件驱动规格（冻结）**——传感采集/阀泵 PWM/安全互锁唯一规格源；器件参数单源在 devices.json |
 | `docs/sop/SKILL.md` | 工程 SOP 流程真相源（变更重走矩阵 §2 先读）；`tools/deploy_sop_skill.py --check` 校验双源一致 |
 | `docs/superpowers/specs/2026-10-03-github-pages-demo-design.md` | Pages 站架构（含"为何静态即正解"FAQ） |
@@ -66,6 +115,10 @@
 | Pages 构建部署 | `python tools/build_site.py` → `git subtree split --prefix=site -b gh-pages-deploy` → push（SOP §8） |
 | 装配体再生成 | 两条命令（kicad-cli 导出 + make_assembly.py），见 `docs/archive/tnkr-2026-10/asset-manifest.md` 顶部注记 |
 | tyc-cli / mcp-jobs | 已配置（尽调已毕，额度 100/天 VIP） |
+| **flowio 包**（模块化 v2 内核） | `flowio/`（`pip -e .` 或 PYTHONPATH=仓库根）；`python -m flowio <域>` 统一入口（truth/hw/geom/flows/twin/test/rebuild/fwgen）；hw 生成器默认拒绝（旗标见铁律 17） |
+| **三语 codegen CI 门** | `tools/check_codegen.py --ci`（33 断言：模板段逐字节/define 名集全等/真值三方对拍/重生成逐字节）——改 devices.json 后必跑；手编 types.h/params_gen.js 立即红 |
+| **基线对拍器** | `tools/compare_baseline.py --products --params`（26 项：12 场景数值+11 产物 sha+3 参数锚点）；基线冻结在 `docs/mod-baseline/baseline.json`（@7885c62，附 types.h.handwritten.bak）——模块化后任何回归先跑它 |
+| **run_tests_cli.sh**（cli 双轨） | `firmware/twin/run_tests_cli.sh`（M5 对拍轨道）；**转正条件：连续双绿（与 run_tests.sh 退出码及共同段计数一致）后 M6 起转正为默认**，run_tests.sh 降级回退备份；差异点：venv-cad 缺失时经典轨 SKIP vs cli 轨 fail-loud |
 
 ## 4. 铁律（血泪换来的操作约束）
 
@@ -85,6 +138,7 @@
 14. **KiCad 层栈表铜层行必须先于 user 行**：`.kicad_prl`/板设置里层栈顺序若 user 层（Mask/Silk/Paste 等）排在铜层（F_Cu/In1/In2/B_Cu）之前，kicad-cli 导出 Gerber 会**静默失败**（部分层文件 0 字节或缺层，无报错）——T5b "Gerber 首次真达 ×11" 的根因。改层栈后必须逐层核对文件数与非空。
 15. **worktree 新编 exe 被 AV/策略拒执行**：worktree 内新生成的 .exe 直接跑报 `Permission denied`（Defender/策略对非信任路径新二进制拦截），**不是编译失败**。验证法：`cp xxx.exe /tmp/ && /tmp/xxx.exe`——/tmp 副本可执行即产物本身健康（build_twin.sh 的 selftest 即此惯例）。
 16. **子代理 5h 限额中断的续接范式**：长任务（全链产物重生成）跑一半被限额掐断时——①先查工作树半成品状态（`git status` 看哪些产物已落盘/已暂存）；②**重跑生成链**让下游产物追平（勿手工补单个文件）；③修"未跟上新真值"的断言（半途而废的旧断言会假红）。**勿盲目回滚**——半成品里的正确部分与新真值是有效工作，回滚会丢进度且重新生成耗时更长（T6-4/5 双体装配收尾即此范式实证）。
+17. **生成物禁手编 + hw 危险命令旗标**（M3/M5 模块化 v2 新增）：`firmware/components/pn_core/include/pn_core/types.h` 与 `firmware/twin/webapp/js/params_gen.js` 是**生成文件**（文件头 DO NOT EDIT）——改参数唯一正道=改 `enclosure/devices.json` → `python -m flowio fwgen` 重生成 → `tools/check_codegen.py --ci` 验绿（手编即红，-58→-60 三语手抄漂移的机器级根治；修生成物=改 `flowio/fwgen/templates.py` 模板源头再重生成）。同族：`python -m flowio hw gen-sch|gen-pcb|route` **默认拒绝执行**（重写 kicad 产物 → uuid churn 与库内提交版漂移，违反产物零改动纪律）——确需重建必须显式加 `--i-know-this-rewrites-products` 旗标（危险命令留痕可审计）。
 
 ## 5. MCP 状态（2026-10-03 复核）
 
@@ -99,6 +153,6 @@
 ```
 读 E:/FLOWIO/HANDOFF.md → 确认三待办（投递/下单/App 卸载）哪些已完成 → 按用户指令推进：
   (a) 板到货 → BRINGUP 验收流（P1.1 版 BRINGUP 增项见 plan T9）；
-  (b) 求职材料细化；(c) v2.1 特性立项 / 期B 程序模块化（docs/superpowers/specs/2026-10-05-sop-modularization-design.md）。
-硬改动前必读 docs/sop/SKILL.md §2 变更重走矩阵（改 X → 重跑什么）。
+  (b) 求职材料细化；(c) v2.1 特性立项 / M6+ 模块化续程（shim 清理、run_tests_cli.sh 转正、CAD 装配段迁 flowio.testkit）。
+硬改动前必读 docs/sop/SKILL.md §2 变更重走矩阵（改 X → 重跑什么；或 `python -m flowio rebuild --after <key>`）。
 ```
