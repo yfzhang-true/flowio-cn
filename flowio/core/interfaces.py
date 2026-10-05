@@ -12,6 +12,8 @@ OOD 落点:
 M0 契约 (实现者必读):
   * IActuator.current 的 state ∈ {"pull_in", "hold", "economy", "off"}
     (吸入瞬态 / 全开保持 / 节能保持 / 关断; 孪生域现行 "full_open" 即 "hold");
+  * IActuator.duty 为具体报告钩子 (非抽象, M2-R①): 覆写后与 current 同源,
+    未覆写调用即 fail-loud;
   * ISensor.read 返回 Sample (= dict, 键由具体传感协议定义), protocol 为
     协议对象注入位 (如 I2C 协议), M0 占位 None, M2 绑定;
   * BaseModel.params 返回参数单源视图 (dict), step 推进一个时间步, reset 归零。
@@ -34,6 +36,18 @@ class IActuator(ABC):
     @abstractmethod
     def effective_v(self, duty: float) -> float:
         """有效电压 = duty × 母线轨压 (PWM 调制)。"""
+
+    def duty(self, state: str) -> float:
+        """报告钩子 (M2-R①): 状态 → 该执行器实际驱动占空比。
+
+        仿真报告的 duty/eff_v 必须与 current(state) 同源 (执行器侧申报),
+        而非调用方的策略表 —— 注入异构执行器时两者才会分叉。具体执行器
+        覆写本钩子 (阀族 = 四态策略表, 泵 = off/95%/100%); 基类默认
+        fail-loud: 未申报驱动量的执行器一进报告层即暴露。
+        """
+        raise NotImplementedError(
+            "%s 未覆写 duty(state) —— 报告层需要与 current 同源的实际占空比"
+            % type(self).__name__)
 
 
 class ISensor(ABC):

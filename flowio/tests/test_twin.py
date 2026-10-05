@@ -9,7 +9,8 @@
      泵 hold 0.475A), 四态多态电流, 共享 effective_v, legacy full_open=hold 别名,
      型号防呆 (错 spec 注入必拒), 封装 (无常驻可变状态);
   2. 多态三落点①  — total = sum(a.current(s) for a in actuators) 零 if-else;
-     未来执行器 (比例阀 stub) 入列零改仿真器 (spec §3.4①/M5 盲测预演);
+     未来执行器 (比例阀 stub) 入列零改仿真器 (spec §3.4①/M5 盲测预演)
+     + 报告同源: duty/eff_v 经 IActuator.duty 钩子与 i_a 同源 (M2-R①);
   3. electrical  — ElectricalModel(BaseModel) 三方法契约 + 与 load_params/
      simulate 单源一致 (位级), 泵连续占空比 current_at 路径;
   4. scenarios   — 12 场景矩阵在库内 (SCENARIOS/run_scenario/run_matrix),
@@ -152,8 +153,11 @@ def test_future_actuator_zero_model_change():
         def ref(self):
             return self._ref
 
-        def current(self, state):                 # hold: 5V×20mA/V=0.1A
-            return 0.0 if state == "off" else 5.0 * self._k / 1000.0
+        def duty(self, state):                    # 报告钩子: on = 100% 控制量程
+            return 0.0 if state == "off" else 1.0
+
+        def current(self, state):                 # hold: 5V×20mA/V=0.1A (与 duty 同源)
+            return self._k * self.effective_v(self.duty(state)) / 1000.0
 
         def effective_v(self, duty):
             return duty * 5.0
@@ -167,6 +171,14 @@ def test_future_actuator_zero_model_change():
     r = model.solve({"VX": "full_open", "V1": "full_open"}, 0.0)
     assert abs(r["actuators"]["VX"]["i_a"] - 0.1) < 1e-9     # 仿真器零改即解
     assert abs(r["bus"]["i_valves_a"] - (0.45 + 0.1)) < 1e-9
+    # 报告与电流同源 (M2-R①): duty/eff_v 取执行器申报值, 不旁抄 p.duties 策略表
+    # (旧分叉: VX 报 duty=0.9/eff_v=4.5 但 i_a=0.1 → p_w=0.45 自相矛盾;
+    #  现 duty=1.0/eff_v=5.0 → p_w=0.5 与 5V×0.1A 物理自恰)
+    vx = r["actuators"]["VX"]
+    assert vx["duty"] == 1.0 and abs(vx["eff_v"] - 5.0) < 1e-9
+    assert abs(vx["p_w"] - 0.5) < 1e-9
+    assert r["actuators"]["V1"]["duty"] == 0.9    # 内置型号两源恒等 → 锚点不动
+    assert abs(r["actuators"]["V1"]["eff_v"] - 4.5) < 1e-9
 
 
 # ══════════ 3. electrical: ElectricalModel 三方法契约 ══════════

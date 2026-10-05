@@ -10,6 +10,8 @@
 多态核心 (spec §3.4 ①): 阀电流 = Σ a.current(state) —— 本模块只见 IActuator
 列表 (build_actuators 产), 不认识 D/B/泵具体型号; 新执行器类型入列零改本模块
 (见 flowio/tests/test_twin.py::test_future_actuator_zero_model_change)。
+报告同源 (M2-R①): 报告字段 duty/eff_v 经 IActuator.duty 报告钩子取自执行器
+侧 —— 与物理电流同一来源, 注入异构执行器时不再旁抄 params 策略表。
 
 位级对拍纪律: 求和顺序 = 真值条目序 (V1-V8/VS/VF → VV), 公式/舍入与旧
 electrical_sim 逐行同构 —— tools/compare_baseline.py 12 场景逐值相等的根基。
@@ -133,13 +135,15 @@ def _solve(p, valves, pump_duty, p_manifold_kpa, actuators):
 
     # ---- 执行器解 (多态核心 §3.4①): 仿真器只见 IActuator, 不认识具体阀型 ----
     # 阀 = 位号在阀表的执行器; 泵 = 其余 (位号路由, 型号无关; 无执行器注入时
-    # 退回参数直解, 与旧实现数值同式)。
+    # 退回参数直解, 与旧实现数值同式)。报告字段 duty/eff_v 与 i_a 同源取自
+    # 执行器 (a.duty 报告钩子) —— 注入异构执行器时不再旁抄 p["duties"] 策略表
+    # (M2-R①; 内置型号两源恒等, 对拍值不动)。
     valve_acts = [a for a in actuators if a.ref in states]
     pump_acts = [a for a in actuators if a.ref not in states]
     acts_out, i_valves = {}, 0.0
     for a in valve_acts:                                 # Σ a.current(state), 零 if 型号分支
         st = states[a.ref]
-        duty = 0.0 if st == "off" else p["duties"][st]
+        duty = a.duty(st)                                # 报告钩子 (与 i_a 同源)
         eff_v = a.effective_v(duty)                      # 共享实现 (中间基类)
         i_a = a.current(st)                              # 多态: D=10Ω / B=15Ω 各自解
         i_valves += i_a

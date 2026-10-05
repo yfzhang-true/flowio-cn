@@ -77,7 +77,11 @@ class _ValveActuator(_DutyActuator):
                          "economy": d["economy"], "off": 0.0}
 
     def duty(self, state: str) -> float:
-        """状态 → 占空比 (canonical hold ← drive_policy.full_open_hold)。"""
+        """状态 → 占空比 (canonical hold ← drive_policy.full_open_hold)。
+
+        双职责: 电流解的内部输入 (current 调用) + IActuator 报告钩子
+        (M2-R①: ElectricalModel 报告字段与 i_a 同源取自本表, 非策略旁抄)。
+        """
         return self._duty_of[_canon(state)]
 
     def current(self, state: str) -> float:
@@ -131,13 +135,17 @@ class PumpZR370(_DutyActuator):
         """连续占空比 → 电流 (线性负载模型)。"""
         return float(duty) * self._spec.load_current_a
 
-    def current(self, state: str) -> float:
+    def duty(self, state: str) -> float:
+        """状态 → 占空比 (IActuator 报告钩子): off=0 / hold=pump_max_duty(95%) /
+        pull_in=100%; economy 无定义 fail-loud。与 current 同一映射, 无第二份表。
+        """
         st = _canon(state)
-        if st == "off":
-            return 0.0
         if st == "economy":
             raise ValueError("泵 %s 无 economy 态 (∈ off/hold/pull_in)" % self.ref)
-        return self.current_at(1.0 if st == "pull_in" else self._duty_max)
+        return {"off": 0.0, "hold": self._duty_max, "pull_in": 1.0}[st]
+
+    def current(self, state: str) -> float:
+        return self.current_at(self.duty(state))   # 同源: 电流经 duty(state) 线性映射
 
 
 # ---- 工厂 --------------------------------------------------------------------

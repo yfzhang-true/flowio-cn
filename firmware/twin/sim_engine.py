@@ -17,7 +17,8 @@
 from math import exp
 
 import board_model  # noqa: E402  (M2: r_coil 默认值单源经组合根 BOARD_PARAMS [registry];
-                   #  board_model 为薄壳 → flowio.twin.board; 惰性导入避免环: board 不依赖本模块)
+                   #  board_model 为薄壳 → flowio.twin.board; 模块级导入: board 不反向
+                   #  依赖本模块, 无环)
 
 
 class ParamError(ValueError):
