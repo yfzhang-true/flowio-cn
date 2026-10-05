@@ -124,7 +124,8 @@ def check_mesh(name, m, min_shells=1, closed_required=True):
     """网格健全: 非空 + 壳数下限 + 逐连通壳闭合 (多件合体 STL 如 pump_module 底+盖 /
     valves 11 只按'逐壳闭合'校验 — 合体件 isSolid 必假是语义不是缺陷).
     closed_required=False: float32 STL 往返会把共面融合件的焊接点拆出 1-ULP 缝
-    (pump_module 实测 2 闭壳写盘重载变 3 壳 2 开) — 闭合真值以生成器写时断言
+    (pump_module 实测 2 闭壳写盘重载变 3 壳 2 开; parts_f 实测 3 开壳全落传感器域,
+    见 4/4b 取证断言) — 闭合真值以生成器写时断言
     (make_pump_module write_stl / OCC solid isValid) 为准, 此处退守壳数+面数."""
     facets = m.CountFacets
     comps = m.getSeparateComponents()
@@ -203,12 +204,39 @@ def main():
     pcb_shape = Part.makeBox(G.BW, G.BH, G.PCB_T, App.Vector(G.OX, G.OX, G.Z_BOARD))
 
     # 4. 顶面器件阵 (基面 Z_TOP) — D4: U6 (XGZP) 剔盒, 由精确传感器入阵
-    #    closed_required=False: float32 STL 往返把传感器倒钩 fuse/cut 共面点拆 1-ULP 缝
-    #    (make_pump_module 同款现象), 闭合真值以 OCC isValid 生成时断言为准
-    m_f = mesh_compound_write(Part.makeCompound(
-        [part_box(p) for p in tops if p["ref"] != SENSOR_REF] + [sensor_precise()]),
-        OUT / "parts_f.stl")
+    #    closed_required=False (D4 规格审遗留复核 2026-10-05 收口, 取证属实):
+    #    写前 OCC 157 体 isValid 且全闭合、逐体网格全闭合; float32 STL 往返把传感器
+    #    fuse/cut 共面点拆 1-ULP 缝, 稳定复现 3 开壳 = 本体(含引压孔 cut)+双倒钩
+    #    (stub.fuse(flare).cut(bore)), 全部落在传感器 bbox 域, 盒阵 148 体全闭合,
+    #    网格/OCC 体积相对差 2e-5 (float32 量化级) —— 缝隙为格式量化非几何破损,
+    #    不能收紧 closed_required=True (见 4b 重载定位断言)。写时断言双保险:
+    #    OCC isValid (此处) + 重载后开壳域检查 (4b)。
+    sensor_shape = sensor_precise()
+    pf_shape = Part.makeCompound(
+        [part_box(p) for p in tops if p["ref"] != SENSOR_REF] + [sensor_shape])
+    assert pf_shape.isValid() and all(s.isClosed() for s in pf_shape.Solids), \
+        "parts_f: 写前 OCC solid 无效/开壳 —— 几何构建破损, 非格式量化"
+    m_f = mesh_compound_write(pf_shape, OUT / "parts_f.stl")
     check_mesh("parts_f.stl", m_f, closed_required=False)
+
+    # 4b. parts_f 写盘重载复核 (float32 往返): 开壳仅允许出现在传感器 bbox 域内
+    #     (1-ULP 缝位置取证 2026-10-05); 盒阵/他处开壳 = 真破损, 必红。
+    pf_reload = Mesh.Mesh(str(OUT / "parts_f.stl"))
+    pf_comps = pf_reload.getSeparateComponents()
+    pf_opens = [c for c in pf_comps if not c.isSolid()]
+    sbb = sensor_shape.BoundBox
+    _pad = 0.5
+
+    def _in_sensor(c):
+        b = c.BoundBox
+        return (b.XMin >= sbb.XMin - _pad and b.XMax <= sbb.XMax + _pad and
+                b.YMin >= sbb.YMin - _pad and b.YMax <= sbb.YMax + _pad and
+                b.ZMin >= sbb.ZMin - _pad and b.ZMax <= sbb.ZMax + _pad)
+
+    print("[mesh] parts_f.stl  reload shells=%d open=%d all-in-sensor=%s"
+          % (len(pf_comps), len(pf_opens), all(_in_sensor(c) for c in pf_opens)))
+    assert all(_in_sensor(c) for c in pf_opens), \
+        "parts_f: 传感器域外开壳 —— 非 float32 ULP 缝, 需排查几何"
 
     # 4b. T6→D4 阀阵 11 只 (devices3d 精确模型: C 架+翻边+双端嘴+引线出体段)
     m_v = mesh_compound_write(Part.makeCompound([vs for *_m, vs in valve_solids_precise()]),
