@@ -92,8 +92,10 @@ def test_g4_intermodule_edges_pinned():
         assert (t["id"], t["od"], t["len_mm"]) == (5.0, 7.0, 350), pair
     cab = elec[("Main.J23", "PMod.cable_2p")]
     assert cab["len_mm"] == 150 and cab["kind"] == "cable_2p"
-    for tok in ("ID5", "OD7", "350", "150", "2P", "不可对调"):
+    for tok in ("ID5", "OD7", "350", "150", "2P", "不可对调", "C7429671"):
         assert tok in TEXT, "文档缺模块间规格字样 %r" % tok
+    # 料号真值随行钉扎: 文档出现处所在边须与 json connector 字段同值
+    assert cab.get("connector") in (None, "C7429671") or "C7429671" in str(cab), cab
 
 
 # ══════════ G5 对外面清单逐面对账 ══════════
