@@ -13,11 +13,14 @@
 所有接口 = 倒钩口两端 (D2 连接边端点: 口径/位置由 connections.json 消费)。
 """
 import sys
+from pathlib import Path
 
 import FreeCAD as App
 import Part
 
-sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parents[3]))
+_ROOT = str(Path(__file__).resolve().parents[3])
+if _ROOT not in sys.path:                                    # FreeCAD python 免安装导入 (防重 guard)
+    sys.path.insert(0, _ROOT)
 
 # 参数出处见模块 docstring; 结构: 组名 -> 尺寸 dict (mm)
 DEFAULTS = {
@@ -25,7 +28,9 @@ DEFAULTS = {
     "straight_barb": {"dia": 3.5, "neck": 2.0, "len": 25.0, "collar_d": 8.0, "collar_t": 2.0},
     "reducing_barb": {"dia_a": 4.9, "neck_a": 2.0, "dia_b": 5.0, "neck_b": 3.8,
                       "len": 30.7, "collar_d": 14.0, "collar_t": 2.0},
-    "tee": {"dia": 3.5, "neck": 2.0, "run_len": 25.0, "stem_len": 12.0, "collar_d": 8.0},
+    # 三通: 同店通用件无一手图纸 [inferred] —— inferred=true 供 D2 图谱程序化过滤待实测边
+    "tee": {"dia": 3.5, "neck": 2.0, "run_len": 25.0, "stem_len": 12.0, "collar_d": 8.0,
+            "inferred": True},
 }
 
 
