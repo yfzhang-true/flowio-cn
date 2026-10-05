@@ -1,12 +1,13 @@
-// firmware/twin/webapp/js/ble.js — Web Bluetooth 真机模式 (Task6, 自旧 gui.html 移植)
+// firmware/twin/webapp/js/ble.js — Web Bluetooth 真机模式 (Task6, 自旧 gui.html 移植; M4 组件接线)
 // 契约 = BLE.md: UUID 基址 f10a5c00-…-1b0fXXXX; 广播名 FLOWIO-P1-*;
 // cmd 写 0xA5 帧 [A5 cmd ports pwm crc8] (CRC-8 poly 0x07 init 0x00, 同 pn_core/proto.c),
 // 不可帧化的 CLI (H/F/L/G…) 走 ASCII 行 (pn_cmd_feed 双编码兼容);
 // state notify 20B LE → 与 /api/state 同构的 pnu 对象 → 同一 store/flows 管道 (p1_renderState 语义)。
 // 真机接管时停 HTTP 轮询 (telemetry.beat 检查 store.bleActive); 断连安静降级: 徽章灰、流光回底光。
-import { store, setState } from "/webapp/js/main.js";
+// M4: <top-bar> #t2_bleBtn 发 `ble-toggle` (document 层监听); 徽章/按钮经 dom.byId 深穿查询。
+import { store, setState } from "./store.js";
+import { byId } from "./dom.js";
 
-const $ = (id) => document.getElementById(id);
 const UUID = (suf) => "f10a5c00-0000-4b1e-9c2d-8e3a1b0f" + suf;
 
 let ble = { device: null, chCmd: null, chResp: null, chState: null, active: false };
@@ -147,7 +148,7 @@ async function sendLine(line) {
 
 function updateBadge() {
   const on = ble.active;
-  const badge = $("t2_modeBadge"), btn = $("t2_bleBtn");
+  const badge = byId("t2_modeBadge"), btn = byId("t2_bleBtn");
   if (!badge || !btn) return;
   badge.textContent = on ? "真机 BLE" : "孪生";
   badge.classList.toggle("live", on);
@@ -155,13 +156,16 @@ function updateBadge() {
 }
 
 export function initBLE() {
-  const btn = $("t2_bleBtn");
   if (!navigator.bluetooth) {
-    btn.disabled = true;
-    btn.title = "此环境不支持 Web Bluetooth（需 Chrome/Edge 蓝牙 + localhost/HTTPS）";
+    const btn = byId("t2_bleBtn");
+    if (btn) {
+      btn.disabled = true;
+      btn.title = "此环境不支持 Web Bluetooth（需 Chrome/Edge 蓝牙 + localhost/HTTPS）";
+    }
     return;
   }
-  btn.onclick = () => (ble.active ? disconnect() : connect());
+  // <top-bar> 的 #t2_bleBtn → `ble-toggle` composed 事件 (document 层路由)
+  document.addEventListener("ble-toggle", () => (ble.active ? disconnect() : connect()));
   window.__t2 = window.__t2 || {};
   window.__t2.ble = {                                 // T7 测试调试钩 + main.sendCmd 真机分支
     sendLine, connect, disconnect,

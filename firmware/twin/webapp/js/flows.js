@@ -1,7 +1,8 @@
 // firmware/twin/webapp/js/flows.js — 电流辉光 + 气流粒子 (数据驱动, 长在产品上)
 // 电流: Line+ShaderMaterial 行进虚线; 气流: Points 沿 QuadraticBezier (flows.json 3 控制点);
 // 爆炸跟随: 流组每帧复制 pcb 部件位移 (端点绑定), 呼吸由父 asm 组携带 → 连线不断。
-import * as THREE from "/webapp/vendor/three.module.js";
+// M4: three 解析改走 importmap 裸说明符 "three" (与 scene.js/vendor addons 同源)。
+import * as THREE from "three";
 
 const LINE_VS = `attribute float aT; varying float vT; void main(){ vT=aT;
   gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.); }`;

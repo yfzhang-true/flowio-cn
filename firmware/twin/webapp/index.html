@@ -5,16 +5,8 @@
 <link rel="stylesheet" href="/webapp/css/twin.css">
 <script type="importmap">{"imports":{"three":"/webapp/vendor/three.module.js"}}</script>
 </head><body>
-<header id="t2_topbar"><span class="t2_brand">FLOWIO-CN</span>
-  <span id="t2_modeBadge" class="t2_badge">孪生</span>
-  <button id="t2_bleBtn" class="t2_btn ghost">连接真机</button></header>
-<main id="t2_stage"><canvas id="t2_canvas"></canvas>
-  <aside id="t2_ctrlDrawer" class="t2_drawer left"></aside>
-  <div id="t2_transport" class="t2_pill"></div>
-  <aside id="t2_tlmDrawer" class="t2_drawer right"></aside>
-  <div id="t2_hotspotCard" class="t2_card"></div></main>
-<footer id="t2_statusbar"><span id="t2_staleBadge" class="t2_badge err" hidden>● 遥测冻结</span>
-  <span id="t2_calBadge" class="t2_badge warn">模型参数：理论值（未本机标定）</span>
-  <span id="t2_timeInfo"></span><button id="t2_simLabBtn" class="t2_btn ghost">仿真实验室</button></footer>
-<div id="t2_simOverlay" hidden></div>
+<!-- M4: 组件树根 (top-bar/scene-3d/control-drawer/telemetry-panel/transport-pill/
+     hotspot-card/status-bar/sim-lab 在其影子内组装; 旧 header/main/footer 骨架的
+     同名 id 全部保留在各宿主/影子节点上, 供 __t2.dom 深穿查询) -->
+<twin-app id="t2_app"></twin-app>
 <script type="module" src="/webapp/js/main.js"></script></body></html>
