@@ -1,50 +1,23 @@
 # -*- coding: utf-8 -*-
-"""drl.py — Excellon 钻孔文件解析 (plan T4).
+"""[弃用 shim · M1 2026-10] 本模块已迁至 flowio/hw/drill.py (drl.py 为旧名), 原位留转发。
 
-输入: fab/flowio-p1.drl (KiCad 导出, 公制小数, MixedPlating)
-输出 API:
-  holes()       -> [(x板, y板(=-Y 取负), dia)] 全部孔 (含 PTH)
-  npth_holes()  -> 仅 NPTH 段 (非金属化, M3 安装孔在此段)
+保留一个版本周期: 旧脚本 (tools/check_fab.py 等) 经 fab/ 路径 import 不改可
+继续跑 —— sys.modules 顶替法转发 (旧名与新名为同一模块对象);
+新代码一律 `from flowio.hw import drill`。M5 收单后删除本文件。
 """
-import re
+import sys
 from pathlib import Path
 
-HERE = Path(__file__).resolve().parent
-DRL = HERE / "flowio-p1.drl"
+_ROOT = str(Path(__file__).resolve().parents[3])   # fab -> flowio-p1 -> hardware -> 仓库根
+if _ROOT not in sys.path:
+    sys.path.insert(0, _ROOT)
 
+from flowio.hw import drill as _real  # noqa: E402
 
-def _parse():
-    text = DRL.read_text(encoding="utf-8", errors="replace")
-    tools = {}          # T号 -> (dia, is_npth)
-    cur_np = False
-    for m in re.finditer(r"; #@! TA\.AperFunction,(\w+)[^\n]*\nT(\d+)C([\d.]+)", text):
-        func, tn, dia = m.group(1), m.group(2), float(m.group(3))
-        tools[tn] = (dia, func == "NonPlated")
-    out = []
-    cur = None
-    for ln in text.splitlines():
-        s = ln.strip()
-        m = re.match(r"^T(\d+)$", s)
-        if m:
-            cur = m.group(1)
-            continue
-        m = re.match(r"^X(-?[\d.]+)Y(-?[\d.]+)$", s)
-        if m and cur in tools:
-            x, y = float(m.group(1)), float(m.group(2))
-            out.append((x, -y, tools[cur][0], tools[cur][1]))
-    return out
+sys.modules[__name__] = _real         # 旧名 drl = flowio.hw.drill 本体
 
-
-def holes():
-    return [(x, y, d) for x, y, d, _ in _parse()]
-
-
-def npth_holes():
-    return [(x, y, d) for x, y, d, np in _parse() if np]
-
-
-if __name__ == "__main__":
-    hs = _parse()
+if __name__ == "__main__":            # 旧用法: python fab/drl.py (统计打印)
+    hs = _real._parse()
     print("[drl] 总孔 %d, NPTH %d, 刀径 %s"
           % (len(hs), sum(1 for h in hs if h[3]),
              sorted({round(h[2], 2) for h in hs})))

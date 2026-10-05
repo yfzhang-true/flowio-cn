@@ -19,9 +19,11 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 FAB = os.path.join(HERE, "..", "fab")
 
 # ---------------------------------------------------------------- 受限 ast 解释器
-# (与 gen_pcb.py 头部同源: 只允许 P() 调用 + 字面量/名/下标/算术/f-string,
-#  覆盖 gen_sch.py 里 PARTS 的三种喂料方式: 顶层 += 列表 / for-append / for-+= )
-_src = open(os.path.join(HERE, "gen_sch.py"), encoding="utf-8").read()
+# (与 flowio/hw/pcb_gen.py 头部同源: 只允许 P() 调用 + 字面量/名/下标/算术/f-string,
+#  覆盖 sch_gen.py 里 PARTS 的三种喂料方式: 顶层 += 列表 / for-append / for-+= )
+# M1: gen_sch.py 已迁 flowio/hw/sch_gen.py, 读源路径随之改经包定位 (本文件留 tools/)。
+_src = open(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(HERE))),
+                         "flowio", "hw", "sch_gen.py"), encoding="utf-8").read()
 _tree = ast.parse(_src)
 
 CONSTS = {}
