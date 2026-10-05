@@ -11,8 +11,19 @@ KiCad pos.csv/STEP -> 壳系映射: x = PosX + OX, y = -PosY + OX
   (锚点验证: J10 (6.5,-68.5)->(9.4,71.4) 贴底边槽; J2 (86,-6)->(88.9,8.9) 贴右壁槽;
    J1 (5.5,-27)->(8.4,29.9) 贴左壁槽; "-PosY+75" 假设已被三锚点证伪)
 纯 Python (无 FreeCAD 依赖), FreeCADCmd 与测试均可 import。
+M1-R2 (E② 修复): 补 pathlib 导入 —— 此前 _load_device_dims/_load_pneu 引用未导入的
+Path, NameError 被宽 except 吞, 加载恒走内置兜底; 兜底对电子 3 键不等价 (L1/LED1/U3
+的封装 IND-SMD/5050/SOIC 在兜底表无关键词, 退化 DEFAULT_DIM), 气动 14 键等价。
+devices.json 落位裁定: **不拷贝** —— 加载路径经包定位指向 enclosure/ 原位单源
+(与 flowio.core.truth.TruthSource 默认路径同一文件); 拷贝至 flowio/geom/ 即制造
+第二份真值, 无 CI 守门必分叉。兜底表保留 (仓库外 FreeCAD 环境的降级鲁棒性, 原设计角色)。
 """
 import struct
+from pathlib import Path
+
+# devices.json 单源 (enclosure/ 原位; 经包定位: flowio/geom -> 仓库根)
+_DEVICES_JSON = (Path(__file__).resolve().parents[2] / "hardware" / "flowio-p1"
+                 / "enclosure" / "devices.json")
 
 # ---------- 基本参数 ----------
 WALL, CLR = 2.4, 0.5            # 壁厚 / 板-壁间隙
@@ -44,7 +55,7 @@ def _load_device_dims():
     失败回退内置兜底 (FreeCAD 无 devices.json 环境的鲁棒性)."""
     import json as _json
     try:
-        dev = _json.loads((Path(__file__).parent / "devices.json").read_text(encoding="utf-8"))["devices"]
+        dev = _json.loads(_DEVICES_JSON.read_text(encoding="utf-8"))["devices"]
         kw = []
         for e in dev:
             for k in e["pkg_keywords"]:
@@ -114,7 +125,7 @@ def _load_pneu():
     """pneumatic_devices -> 尺寸真值 dict (失败回退手抄真值, 与 devices.json 等价)."""
     import json as _json
     try:
-        pn = _json.loads((Path(__file__).parent / "devices.json").read_text(
+        pn = _json.loads(_DEVICES_JSON.read_text(
             encoding="utf-8"))["pneumatic_devices"]
         vd = pn["valves"][0]                       # F0520D 通道阀+充/排主阀
         vb = pn["valve_vacuum_master"][0]          # F0520B 真空主阀
