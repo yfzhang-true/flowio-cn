@@ -10,6 +10,19 @@
 BOM 无底面器件, 故不产出 parts_b.stl, assembly.json 亦不列该件 (旧版列了空件)。
 M1 迁移 (2026-10): enclosure/make_meshes.py -> flowio/geom/make_meshes.py (逻辑零改动,
 HERE/ROOT 语义经包定位重解析: HERE=enclosure 产物源目录, ROOT=仓库根; 落位不变)。
+
+D4 (2026-10-05, spec 2026-10-05 §5 device-modeling): 三件升级为 devices3d 精确模型
+(盒近似退役 —— 阀阵/泵/传感的 datasheet 几何直推, 单一真相 devices.json geom3d):
+  valves.stl   11 只 = 10×F0520D (底面坐盖顶, install 1a) + 1×F0520B/VV (⌀4.6 嘴充满
+               ⌀4.8 承口带 44..50 锚定, origin z=16.0) + C 架引线出体段在模;
+  pump.stl     ZR370 立式校正 (头⌀24 + 电机⌀27 + 顶置双嘴⌀4.2 ⊥轴), 装配位 =
+               make_pump_module 同式 (轴沿 X @z18.4, 头端面 x=140.2);
+  parts_f.stl  顶面盒阵剔除 U6 (XGZP) + 精确传感器 (焊盘中心贴板, 航向 -90°)。
+另产: webapp/connections_scene.json (connections.json → 渲染折线, D4-A/D2-A,
+      connections_render 单源) + webapp/connections.json (真值原文副本);
+      assembly.json tubes 件标记 kind=connections (scene-3d 运行时由图谱驱动,
+      tubes.stl 保留为加载失败回退件)。
+幂等: 网格化参数固定 (LinearDeflection 0.4/Angular 0.5), 重跑输出逐字节稳定。
 """
 import csv
 import json
@@ -30,11 +43,16 @@ import Part
 ROOT = Path(__file__).resolve().parents[2]        # flowio/geom -> 仓库根
 sys.path.insert(0, str(ROOT))                     # flowio 包 (FreeCAD python 免安装)
 from flowio.geom import case_geom as G            # noqa: E402
-from flowio.geom.pneu_geom import valve_solids, tube   # T6 共享构建器 (单一实现)
+from flowio.geom.pneu_geom import tube             # T6 共享构建器 (tubes.stl 回退件仍用)
+from flowio.twin import connections_render as CR  # noqa: E402  D4 渲染 payload (纯 stdlib)
+from flowio.twin.devices3d import (               # noqa: E402  D4 精确器件构建器
+    valve_f0520d, valve_f0520b, pump_zr370, sensor_xgzp)
 
 HERE = ROOT / "hardware" / "flowio-p1" / "enclosure"   # 产物源目录 (M1 前=脚本目录)
 POSCSV = ROOT / "hardware" / "flowio-p1" / "fab" / "flowio-p1-pos.csv"
 OUT = ROOT / "firmware" / "twin" / "meshes"
+WEB = ROOT / "firmware" / "twin" / "webapp"
+SENSOR_REF = "U6"                                 # XGZP6897D 位号 (pos.csv; connections=S1)
 
 
 def load_pos():
@@ -87,6 +105,21 @@ def mesh_and_write(shape, path):
     return m
 
 
+def mesh_compound_write(shape, path):
+    """D4: 逐 solid 细分 + addMesh 合并 (make_pump_module.write_stl 同模式) ——
+    meshFromShape 直接吃复合体会产生破壳 (FreeCAD 1.1.4 实测: 阀复合体 5952 facets
+    碎成 2258 开壳), 逐体细分各闭合。"""
+    out = None
+    for s in shape.Solids:
+        m = MeshPart.meshFromShape(Shape=s, LinearDeflection=0.4, AngularDeflection=0.5)
+        if out is None:
+            out = Mesh.Mesh(m)                   # addMesh 原位变更返回 None (pump_module 同坑)
+        else:
+            out.addMesh(m)
+    out.write(str(path))
+    return out
+
+
 def check_mesh(name, m, min_shells=1, closed_required=True):
     """网格健全: 非空 + 壳数下限 + 逐连通壳闭合 (多件合体 STL 如 pump_module 底+盖 /
     valves 11 只按'逐壳闭合'校验 — 合体件 isSolid 必假是语义不是缺陷).
@@ -104,6 +137,43 @@ def check_mesh(name, m, min_shells=1, closed_required=True):
     return facets
 
 
+def valve_solids_precise():
+    """D4: 11 阀 devices3d 精确模型, 壳系绝对坐标 (放锚同 connections_render 单源).
+
+    F0520D (10 只): 器件原点 (N2 端面面心) 坐壳盖顶 TOWER_Z0 —— install "13×15 底面
+      着板方向, 长轴 20.5 立起, 嘴朝上"; N1 嘴 (世界 42.0..45.0) 入歧管承口带 36.5..46。
+    F0520B (VV, 1 只): 器件原点 z = MAN_Z0 - 28.0 = 16.0 —— N1 ⌀4.6×6 嘴 (44..50)
+      充满 ⌀4.8 承口带 (装配态=歧管承插悬置, case_geom "阀吊装于歧管"; 体底 16.0
+      隐入腔内, 视觉于盖顶起浮 5.5mm 属真实悬置态)。
+    """
+    out = []
+    for v in CR.valve_places():
+        b = valve_f0520b.build() if v["kind"] == "B" else valve_f0520d.build()
+        b.translate(App.Vector(v["x"], v["y"], v["oz"]))
+        out.append((v["x"], v["y"], v["kind"], b))
+    return out
+
+
+def pump_precise():
+    """D4: ZR370 精确泵 (立式校正: 顶置双嘴 ⊥ 轴), 装配位 = make_pump_module 同式
+    (器件本地轴高 12 → 壳系 PUMP_AXIS_Z; 头端面贴内腔 x0 = T+CLR)。"""
+    sh = pump_zr370.build()
+    px, py, pz = CR.pump_place()
+    sh.translate(App.Vector(px, py, pz))
+    return sh
+
+
+def sensor_precise():
+    """D4: XGZP6897D 精确传感器 (双倒钩 + SOIC8 鸥翼), 焊盘中心贴板面 + 航向 -90°
+    (封装跨距 7.96 沿壳系 X / 体长轴沿 Y —— 与 parts_f 旧盒 7.96×10.6 同朝向;
+    P1 高压倒钩落天花过孔 (48.5,27) 邻位, 与测压支路对接)。"""
+    sh = sensor_xgzp.build()
+    sh.rotate(App.Vector(0, 0, 0), App.Vector(0, 0, 1), -90.0)
+    cx, cy, cz = CR.sensor_place(CR.load_pos())
+    sh.translate(App.Vector(cx, cy, cz))
+    return sh
+
+
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
 
@@ -112,9 +182,13 @@ def main():
     shutil.copyfile(HERE / "case-top.stl", OUT / "case_top.stl")
 
     # 1b. T6 气动结构件 STL 复制 (make_manifold / make_pump_module 产物, 壳系绝对坐标)
+    #     D4: pump.stl 不再取 enclosure 哑泵 —— devices3d 精确泵重建 (见 1c)
     for src, dst in (("manifold.stl", "manifold.stl"), ("pump-module.stl", "pump_module.stl"),
-                     ("pump.stl", "pump.stl"), ("brackets.stl", "brackets.stl")):
+                     ("brackets.stl", "brackets.stl")):
         shutil.copyfile(HERE / src, OUT / dst)
+
+    # 1c. D4 精确泵 (立式校正: 头⌀24×27.3 + 电机⌀27×30.8 + 顶置双嘴 ⌀4.2×7.5 ⊥轴)
+    check_mesh("pump.stl", mesh_compound_write(pump_precise(), OUT / "pump.stl"), min_shells=6)
 
     # 2. 坐标映射锚点校验
     parts = load_pos()
@@ -128,13 +202,18 @@ def main():
     # 3. PCB (板底 = 铜柱顶 Z_BOARD, 旧版误用 Z_FLOOR=2.4)
     pcb_shape = Part.makeBox(G.BW, G.BH, G.PCB_T, App.Vector(G.OX, G.OX, G.Z_BOARD))
 
-    # 4. 顶面器件阵 (基面 Z_TOP)
-    m_f = mesh_and_write(Part.makeCompound([part_box(p) for p in tops]), OUT / "parts_f.stl")
-    check_mesh("parts_f.stl", m_f)
+    # 4. 顶面器件阵 (基面 Z_TOP) — D4: U6 (XGZP) 剔盒, 由精确传感器入阵
+    #    closed_required=False: float32 STL 往返把传感器倒钩 fuse/cut 共面点拆 1-ULP 缝
+    #    (make_pump_module 同款现象), 闭合真值以 OCC isValid 生成时断言为准
+    m_f = mesh_compound_write(Part.makeCompound(
+        [part_box(p) for p in tops if p["ref"] != SENSOR_REF] + [sensor_precise()]),
+        OUT / "parts_f.stl")
+    check_mesh("parts_f.stl", m_f, closed_required=False)
 
-    # 4b. T6 阀阵 11 只 (体+嘴, pneu_geom 单一实现 — 与歧管自检同源)
-    m_v = mesh_and_write(Part.makeCompound([vs for *_m, vs in valve_solids()]), OUT / "valves.stl")
-    check_mesh("valves.stl", m_v, min_shells=22)      # 11 阀 × (体+嘴) 双壳
+    # 4b. T6→D4 阀阵 11 只 (devices3d 精确模型: C 架+翻边+双端嘴+引线出体段)
+    m_v = mesh_compound_write(Part.makeCompound([vs for *_m, vs in valve_solids_precise()]),
+                              OUT / "valves.stl")
+    check_mesh("valves.stl", m_v, min_shells=66)      # 11 阀 × 6 分件 (D: frame/flange/N1/N2/线×2; B: frame/端段/N1/N2/线×2)
 
     # 4c. T6 视觉气管 ×2 (泵模块面板 ↔ 主壳 S/V 壁孔, ⌀5 管视觉件)
     pmx = G.PMOD_OFF[0] + G.PMOD_L - 1.2      # 管端收 1.2: 斜轴圆柱端面圆盘外缘 x=b.x+r√(1-nx²),
@@ -158,8 +237,8 @@ def main():
     check_mesh("manifold.stl", Mesh.Mesh(str(OUT / "manifold.stl")))
     check_mesh("pump_module.stl", Mesh.Mesh(str(OUT / "pump_module.stl")), min_shells=2,
                closed_required=False)                                              # 底盒+裙盖
-    check_mesh("pump.stl", Mesh.Mesh(str(OUT / "pump.stl")), min_shells=3,
-               closed_required=False)                                              # 体+双嘴
+    check_mesh("pump.stl", Mesh.Mesh(str(OUT / "pump.stl")), min_shells=6,
+               closed_required=False)                                              # 头+电机+双嘴+双焊片
     check_mesh("brackets.stl", Mesh.Mesh(str(OUT / "brackets.stl")), min_shells=2,
                closed_required=False)                                              # 支架×2
 
@@ -171,23 +250,25 @@ def main():
 
     # 7. assembly.json — spec §3.4 契约 + T6 双体 (explode/bbox 全部来自 case_geom)
     #    主模块 6 件 (板+器件+底+盖+阀阵+歧管) + 泵模块 4 件 (壳+泵+支架+气管)
+    #    D4: tubes 件标记 kind=connections —— scene-3d 运行时由 connections 图谱驱动
+    #    折线渲染 (爆炸端跟随), tubes.stl 保留为数据加载失败的回退件。
     PARTS = [
-        ("manifold",    "歧管 M (1f-β 12 口)",   "/meshes/manifold.stl",     "#6b7fa3"),
-        ("valves",      "阀阵 11 只 (1a 竖装)",   "/meshes/valves.stl",       "#4a6da7"),
-        ("case_top",    "上壳(通风栅+气口阵列)",  "/meshes/case_top.stl",     "#9e9e9e"),
-        ("parts_F",     "器件阵-顶面",            "/meshes/parts_f.stl",      "#c62828"),
-        ("pcb",         "P1 主板",                "/meshes/pcb.stl",          "#0d6b3f"),
-        ("case_bottom", "下壳(铜柱+泵对接孔)",    "/meshes/case_bottom.stl",  "#757575"),
-        ("pump_case",   "泵模块壳 (1h 分装)",     "/meshes/pump_module.stl",  "#8f8f93"),
-        ("pump",        "泵 ZR370-03PM",          "/meshes/pump.stl",         "#555b63"),
-        ("brackets",    "硅胶支架 ×2",            "/meshes/brackets.stl",     "#c9a06a"),
-        ("tubes",       "供压/真空管 (视觉)",     "/meshes/tubes.stl",        "#7ec8e3"),
+        ("manifold",    "歧管 M (1f-β 12 口)",   "/meshes/manifold.stl",     "#6b7fa3", None),
+        ("valves",      "阀阵 11 只 (devices3d 精确)", "/meshes/valves.stl",   "#4a6da7", None),
+        ("case_top",    "上壳(通风栅+气口阵列)",  "/meshes/case_top.stl",     "#9e9e9e", None),
+        ("parts_F",     "器件阵-顶面",            "/meshes/parts_f.stl",      "#c62828", None),
+        ("pcb",         "P1 主板",                "/meshes/pcb.stl",          "#0d6b3f", None),
+        ("case_bottom", "下壳(铜柱+泵对接孔)",    "/meshes/case_bottom.stl",  "#757575", None),
+        ("pump_case",   "泵模块壳 (1h 分装)",     "/meshes/pump_module.stl",  "#8f8f93", None),
+        ("pump",        "泵 ZR370-03PM (精确)",   "/meshes/pump.stl",         "#555b63", None),
+        ("brackets",    "硅胶支架 ×2",            "/meshes/brackets.stl",     "#c9a06a", None),
+        ("tubes",       "管路/线束 (connections)", "/meshes/tubes.stl",       "#7ec8e3", "connections"),
     ]
     assembly = {
         "parts": [
             {"id": pid, "name": nm, "stl": stl, "color": col,
-             "explode": G.EXPLODE[pid], "opacity": 1.0}
-            for pid, nm, stl, col in PARTS
+             "explode": G.EXPLODE[pid], "opacity": 1.0, **({"kind": kd} if kd else {})}
+            for pid, nm, stl, col, kd in PARTS
         ],
         "bodies": {
             "main": ["manifold", "valves", "case_top", "parts_F", "pcb", "case_bottom"],
@@ -195,12 +276,24 @@ def main():
         },
         "bbox_mm": G.BBOX_MM,
         "assembly_note": "T6 双体装配: 主模块 (板+11 阀+歧管 M, 壳盖上气动塔) + "
-                         "泵模块 (ZR370+硅胶支架, 分装式); 气管连 S/V 壁孔",
+                         "泵模块 (ZR370+硅胶支架, 分装式); 气管连 S/V 壁孔; "
+                         "D4: 阀/泵/传感=devices3d 精确模型, 管路线束=connections.json 驱动",
     }
     (OUT / "assembly.json").write_bytes(json.dumps(assembly, ensure_ascii=False, indent=2).encode("utf-8"))
     print("[out] assembly.json written -> %s (bbox %s, 2 bodies x %d+%d parts)"
           % (OUT / "assembly.json", G.BBOX_MM, 6, 4))
+
+    # 8. D4 数据管线: connections 图谱 → webapp (渲染折线 payload + 真值原文副本)
+    WEB.mkdir(parents=True, exist_ok=True)
+    payload = CR.build_render_payload()
+    (WEB / "connections_scene.json").write_bytes(
+        json.dumps(payload, ensure_ascii=False, indent=1).encode("utf-8"))
+    shutil.copyfile(CR.CONNECTIONS_JSON, WEB / "connections.json")
+    n_render = sum(1 for e in payload["edges"] if e["render"] != "none")
+    print("[out] connections_scene.json (%d edges, %d rendered) + connections.json (真值副本) -> %s"
+          % (len(payload["edges"]), n_render, WEB))
     print("MESHES OK: 11 files in", OUT)
 
 
-main()
+if __name__ == "__main__":
+    main()
