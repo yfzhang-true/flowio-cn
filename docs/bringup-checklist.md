@@ -104,6 +104,58 @@
 | H4 | 有孔变体孔位 | D 阀 C 架翻边孔位/VV ⌀2.0×2 孔距待商家 | 答复入支架图纸（采购单 §5 问询项 1/3） |
 | H5 | 2P 白壳连接器型号 | 问询单 D-6 待答 | 与 BOM C7429671 卧贴座对拍；不同款则换同款插座入 BOM |
 
+<!-- BEGIN GENERATED:bringup-piping (tools/gen_bringup_piping.py; 禁手改, 重跑再生) -->
+## I. 模块间连接与管路下料（机器生成 · connections.json 真值）
+
+> **生成**：`python tools/gen_bringup_piping.py` @ 2026-10-05 · 生成于 device-modeling DX 收官 ·
+> 真值源 `hardware/flowio-p1/enclosure/connections.json`（29 气 + 14 电 + 15 机 = 58 边，只读）·
+> 折线几何 = `flowio/twin/connections_render.py` 渲染单源（与 `webapp/connections_scene.json` 同源）·
+> WARN 清单 = `flowio.twin.connections.validate()` 现值（`python -m flowio connections --check`：0 FAIL / 4 WARN）。
+> **下料口径**（scene meta bend_note）：tube.bend=2 为采购下料名义值；渲染折线按最小几何弯折
+> （2~4 点，壁孔过越/障碍让位）—— **折线段长和 ≤ 下料长 len_mm，差值即布管余量；采购/下料以
+> len_mm（真值列）为准**，折线段长和仅为装配态最小路径参考。承插 11 边 + 大气 2 边无下料
+> （器件嘴直插歧管承口 / 开放大气）。本节与 A~H 章无数字口径冲突（生成脚本已断言 §C J 座映射
+> 一致性）；bend 列为下料名义弯数（真值），非渲染折线点数。模块间恰 3 边的缺失后果矩阵与装配
+> 顺序见 [`docs/module-interface-spec.md`](module-interface-spec.md) §4/§5，待实测项关闭通道见其 §6。
+
+### I.1 管路下料表（16 条 tube 边 = 气路全量有几何边，序 = connections.json 真值序）
+
+| # | 域 | 管边 from→to | 规格 | 下料真值 len_mm | 折线段长和 | 余量 | 弯 | 状态 |
+|---|----|--------------|------|----------------|-----------|------|----|------|
+| 1 | 主阀干管 | `Main.S_wall` → `VS.N2` | ID5→3×OD7 变径 | 200 | 23.3 | 176.7 | 2 | — |
+| 2 | 主阀干管 | `Main.V_wall` → `VV.N2` | ID5→3×OD7 变径 | 200 | 17.8 | 182.2 | 2 | **inferred：待实测** |
+| 3 | 主阀干管 | `VF.N2` → `Main.F_wall` | ID3×OD7 | 200 | 23.3 | 176.7 | 2 | — |
+| 4 | 通道管 | `V1.N2` → `Main.CH1` | ID3×OD7 | 175 | 17.0 | 157.9 | 2 | — |
+| 5 | 通道管 | `V2.N2` → `Main.CH2` | ID3×OD7 | 175 | 26.5 | 148.4 | 2 | — |
+| 6 | 通道管 | `V3.N2` → `Main.CH3` | ID3×OD7 | 175 | 36.0 | 138.9 | 2 | — |
+| 7 | 通道管 | `V4.N2` → `Main.CH4` | ID3×OD7 | 175 | 45.5 | 129.4 | 2 | — |
+| 8 | 通道管 | `V5.N2` → `Main.CH5` | ID3×OD7 | 175 | 80.0 | 95.0 | 2 | — |
+| 9 | 通道管 | `V6.N2` → `Main.CH6` | ID3×OD7 | 175 | 70.5 | 104.5 | 2 | — |
+| 10 | 通道管 | `V7.N2` → `Main.CH7` | ID3×OD7 | 175 | 61.0 | 114.0 | 2 | — |
+| 11 | 通道管 | `V8.N2` → `Main.CH8` | ID3×OD7 | 175 | 51.5 | 123.5 | 2 | — |
+| 12 | 泵模块跳管 | `P1.CHG` → `PMod.S_panel` | ID5×OD7 | 150 | 52.2 | 97.8 | 2 | **fit_pending：到货试装 4/5 取一，ID4 备料** |
+| 13 | 泵模块跳管 | `P1.SUCK` → `PMod.V_panel` | ID5×OD7 | 150 | 43.5 | 106.5 | 2 | **fit_pending：到货试装 4/5 取一，ID4 备料** |
+| 14 | 模块间干管 | `PMod.S_panel` → `Main.S_wall` | ID5×OD7 | 350 | 99.9 | 250.1 | 2 | — |
+| 15 | 模块间干管 | `PMod.V_panel` → `Main.V_wall` | ID5×OD7 | 350 | 101.4 | 248.6 | 2 | — |
+| 16 | 测压支路 | `Main.M` → `S1.P1` | ID3×OD7 | 500 | 122.3 | 377.7 | 2 | — |
+
+### I.2 WARN 边清单（恰 4 条 = 2 fit_pending + 2 inferred，与 spec §6 待实测清单对齐；内容列 = validate() 原文）
+
+| WARN 类 | 边 | validate() 原文 | BRINGUP 关闭动作 |
+|---------|----|----------------|------------------|
+| inferred | `Main.V_wall`→`VV.N2` | WARN[inferred] 端点 VV.N2 (device VV.pneumatic_ports, VV.N2) — 边 Main.V_wall→VV.N2; D1 占位, BRINGUP 实测校正 | 卡尺实测校正（devices.json geom3d VV.N2 note；spec §6 行 1） |
+| inferred | `VV.mount_hole`→`Main.valve_bracket` | WARN[inferred] 端点 VV.mount_hole (device VV.mech_mounts, VV.mount_hole) — 边 VV.mount_hole→Main.valve_bracket; D1 占位, BRINGUP 实测校正 | 商家答复（procurement H4 / 问询 1/3）→ 支架图纸（spec §6 行 2） |
+| fit_pending | `P1.CHG`→`PMod.S_panel` | WARN[fit_pending] 气边 P1.CHG→PMod.S_panel: tube.id 5 > 端点 P1.CHG 嘴径 4.2 (registry §6 'ID5×OD7 定案+到货试装 4/5 取一' (泵嘴 ⌀4.2, id>嘴径 到货定档)) — registry §6 到货试装定档 | **到货试装 4/5 取一，ID4 备料**；勿强行扩口，定档回填 registry §6 / connections.json |
+| fit_pending | `P1.SUCK`→`PMod.V_panel` | WARN[fit_pending] 气边 P1.SUCK→PMod.V_panel: tube.id 5 > 端点 P1.SUCK 嘴径 4.2 (registry §6 同上 (泵嘴 ⌀4.2)) — registry §6 到货试装定档 | **到货试装 4/5 取一，ID4 备料**；勿强行扩口，定档回填 registry §6 / connections.json |
+
+### I.3 电气线束（connections.json electrical_edges 14 边，桩深口径机器提取）
+
+- 阀引线 lead_2p ×11：各 **60mm** 2P 白壳→XH 座（§C 通道表 J 座映射一致性已由生成脚本断言：
+  V1-V8→J10-J17 / VS→J20 / VV→J21 / VF→J22）；
+- 泵电机电缆 cable_2p ×1：**150mm**（Main.J23 ↔ PMod.cable_2p，XH2.54-2P，spec §4 模块间 3 边之一）；
+- 模块内电机引线 wire ×2：len_mm=null **待实测**（D2-A 视觉桩深度，泵端焊片正/负极以图纸标注为准）。
+<!-- END GENERATED:bringup-piping -->
+
 **收尾**：全部勾完后——D3/F3/H1/H2 结论回填 `docs/component-registry.md` + `devices.json`
 （先改表再改库，commit 关联），`firmware-driver-spec.md` §2/§3 数值随 registry 联动更新并重跑
 `firmware/twin/run_tests.sh` 全链。
