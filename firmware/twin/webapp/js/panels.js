@@ -5,14 +5,16 @@
 // 另: 运输条扩展 (速度/录制/回放) —— 与 main.js 的 sendCmd/postJSON 单向依赖 (无顶层求值, 循环安全)。
 import { store, onState, setState, sendCmd, postJSON, rec } from "/webapp/js/main.js";
 import { series, seriesFull } from "/webapp/js/telemetry.js";
+import { FLOWIO_PARAMS } from "/webapp/js/params_gen.js";   // M3: 参数真值 (devices.json 生成物)
 
 const $ = (id) => document.getElementById(id);
+const RAIL_LABEL = FLOWIO_PARAMS.rail_v.toFixed(0) + "V";   // 5V 轨名取真值 (rail_v=5.0)
 
 /* ══════════ ① 遥测抽屉 (右) ══════════ */
 const TLM_CARDS = [
-  { id: "v5", name: "5V 轨", unit: "V", dec: 3, color: "#e8b64c", get: (t) => t.rail_5v.v },
+  { id: "v5", name: RAIL_LABEL + " 轨", unit: "V", dec: 3, color: "#e8b64c", get: (t) => t.rail_5v.v },
   { id: "v33", name: "3.3V 轨", unit: "V", dec: 3, color: "#7ee2b8", get: (t) => t.rail_3v3.v },
-  { id: "load", name: "5V 负载", unit: "A", dec: 2, color: "#6aa9ff", get: (t) => t.rail_5v.load_a },
+  { id: "load", name: RAIL_LABEL + " 负载", unit: "A", dec: 2, color: "#6aa9ff", get: (t) => t.rail_5v.load_a },
   { id: "temp", name: "结温峰值", unit: "℃", dec: 1, color: "#ffb454", get: (t) => {
       const x = t.temp_est_c || {}; return Math.max(x.cpu || 0, x.buck || 0, x.mos || 0); } },
   { id: "eff", name: "Buck 效率", unit: "%", dec: 1, color: "#6ad4ff", get: (t) => t.rail_3v3.buck_eff * 100 },
@@ -221,7 +223,7 @@ function refreshCtrl() {                                 // 阀位点灯: pnu du
 // live 字段 → 归一满量程 (迷你横条宽度)
 const FIELD_MAX = [
   [/^valves\[\d+\]\.i_A$/, 0.36], [/^valves\[\d+\]\.p_w$/, 1.6],
-  [/^rail_5v\.v$/, 5.5], [/^rail_5v\.load_a$/, 3.0], [/^rail_5v\.p_w$/, 16],
+  [/^rail_5v\.v$/, FLOWIO_PARAMS.rail_v * 1.1], [/^rail_5v\.load_a$/, 3.0], [/^rail_5v\.p_w$/, 16],
   [/^rail_3v3\.v$/, 3.6], [/^rail_3v3\.load_a$/, 0.5], [/^rail_3v3\.buck_eff$/, 1.0],
   [/^temp_est_c\./, 85], [/^uptime_s$/, 3600],
 ];
