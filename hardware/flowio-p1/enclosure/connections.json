@@ -12,7 +12,7 @@
   },
   "conventions": {
    "vi_ch_pairing": "Vi→CH{i} 恒等配对 = 图谱拓扑约定 (物理上 CH 孔按阀列影成对: case_geom CH_PORT_X 每列 2 孔对应该列前/后行阀, 孔-阀前后行配对未钉真值); 八通道拓扑对称, 四条校验不受配对影响; BRINGUP §C 接管时对号",
-   "n1_n2_semantics": "F0520D 双端口按 datasheet '正压接N2 负压接N1': 主阀正压侧=N2 (VS 接泵充管 / VF 接大气 F 孔), 歧管承插侧=N1; 通道阀 N1→歧管承口 / N2→通道管→cuff (devices.json geom3d semantics 同源)",
+   "n1_n2_semantics": "F0520D 装配朝向由 D1 共用安装架几何强制, 图谱如实记录 (非气流设计声明): 主阀 N1→歧管承插侧 / N2→外侧 (VS.N2→泵充管 / VF.N2→大气 F 壁孔); 通道阀 N1→歧管承口 / N2→通道管→cuff (devices.json geom3d semantics 同源)。datasheet F0520D p2 '正压接N2 负压接N1' 是气流设计向, 不构成本朝向的密封背书: VF 排气释放时 +30kPa 来自 M 侧 (N1), 大气口 (N2) 恒 0 表压 —— 满压歧管下 VF 静止密封方向未验证, 理论存在 M→VF 泄漏路径; BRINGUP 整机保压可覆盖, 已显式列入 diagram §6 C7 / checklist §D D7 '保压下 V:F 口侧压降', 并向商家问询满压静止密封方向/允许朝向 (问询单 0520D §8)",
    "fit_pending": "泵顶嘴 ⌀4.2 × ID5 管: id>嘴径 按 R2 本应 FAIL —— registry §6 'ID5×OD7 定案 + 到货试装 4/5 取一' 在案 → 挂 fit_pending 降级 WARN (真值不发明, 不确定性可见)",
    "atm_node": "ATM=大气环境节点 (非实体模块): 排气终端 (F 壁孔) 与传感表压基准 (S1.P2) 显式接地, 供 R3 排/保判据的可达目标",
    "elec_scope": "电气边范围=器件级线束/电缆 (spec §2.1 harness 域, D2-A 视觉桩深度); PCB 板内网络 (I2C/栅极/电源) 由 flowio/flows/device_graph.py 网表域管辖不入图谱 (spec §4.1 对内电气板载); 阀 COIL_RED/BLACK 引线端子被 CONN_2P 视觉桩组件包含, 不单列",
