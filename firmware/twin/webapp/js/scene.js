@@ -85,6 +85,15 @@ export async function createScene(canvas, onPartClick = () => {}) {
   const loader = new STLLoader();
   const parts = [];
   const meshes = await Promise.all(man.parts.map(async (part) => {   // 并行加载缩短首帧
+    // D4: kind=connections 件 (tubes) 无 STL —— 几何由 connections.json 图谱运行时
+    // 驱动 (connections.js), 保留 part 注册表身份 (爆炸/高亮/计数契约 10 件不变)。
+    if (part.kind === "connections") {
+      const g = new THREE.Group();
+      g.userData = { partId: part.id, name: part.name || part.id };
+      asm.add(g);
+      return { id: part.id, name: part.name || part.id, mesh: g,
+               explode: new THREE.Vector3(...(part.explode || [0, 0, 0])) };
+    }
     const buf = await (await fetch(part.stl)).arrayBuffer();
     const geo = loader.parse(buf);
     geo.computeVertexNormals();                 // 非索引几何 → 平面法线 (CAD 质感)
@@ -138,6 +147,18 @@ export async function createScene(canvas, onPartClick = () => {}) {
   const ndc = new THREE.Vector2();
   const pulses = new Map();                       // partId → t0 (pulsePart)
   let highlightId = null;
+  let conn = null;                                // D4: connections 渲染/高亮句柄
+
+  // D4 点击高亮: 器件/部件 → 三类连接分色 (气动青/电气琥珀), 其余压暗;
+  // "t2-conn" 携 {name, counts} 给 <scene-3d> 提示 chip; 空白点击复位。
+  function applyConnHighlight(h) {
+    if (!conn) return;
+    const q = h ? (h.type === "hotspot" ? h.ref : h.partId) : null;
+    const res = conn.highlight(q);
+    window.dispatchEvent(new CustomEvent("t2-conn", {
+      detail: res ? { ...res, query: q } : { name: q, counts: null, query: q },
+    }));
+  }
 
   function pick(ev) {
     const r = canvas.getBoundingClientRect();
@@ -153,7 +174,11 @@ export async function createScene(canvas, onPartClick = () => {}) {
     const pt = hits.find((x) => x.object.userData.partId);
     return pt ? { type: "part", partId: pt.object.userData.partId, name: pt.object.userData.name } : null;
   }
-  canvas.addEventListener("pointerdown", (ev) => onPartClick(pick(ev)));
+  canvas.addEventListener("pointerdown", (ev) => {
+    const h = pick(ev);
+    applyConnHighlight(h);
+    onPartClick(h);
+  });
   canvas.addEventListener("pointermove", (ev) => {
     const h = pick(ev);
     canvas.style.cursor = h ? "pointer" : "";
@@ -180,8 +205,10 @@ export async function createScene(canvas, onPartClick = () => {}) {
   }
   function setHighlight(partId) {
     highlightId = partId || null;
-    for (const p of parts)                              // 立即生效 (渲染帧同步重算)
-      p.mesh.material.emissiveIntensity = p.id === highlightId ? 0.35 : 0;
+    for (const p of parts) {                            // 立即生效 (渲染帧同步重算)
+      if (p.mesh.material)                              // D4: connections 件 Group 无材质
+        p.mesh.material.emissiveIntensity = p.id === highlightId ? 0.35 : 0;
+    }
     return highlightId;
   }
   function pulsePart(partId) {
@@ -212,6 +239,7 @@ export async function createScene(canvas, onPartClick = () => {}) {
 
     // 高亮 / 脉冲 emissive (spec §3.3: hover 发光脉冲 0.15→0.4)
     for (const p of parts) {
+      if (!p.mesh.material) continue;             // D4: connections 件为 Group (无材质)
       let e = p.id === highlightId ? 0.35 : 0;
       const t0 = pulses.get(p.id);
       if (t0 !== undefined) {
@@ -224,7 +252,8 @@ export async function createScene(canvas, onPartClick = () => {}) {
 
     controls.update();
     if (flowsTick) flowsTick(t, dt, kCur);
-    renderer.render(scene, camera);
+    if (conn) conn.rebuild(m);                    // D4: 管路/线束爆炸端跟随 (随装配乘数 m,
+    renderer.render(scene, camera);               //  kTarget=0 时 intro 期 kCur 恒 0, 须用 m)
   }
 
   // 自驱动 rAF 循环 (render 同时暴露给测试/外部步进)
@@ -257,6 +286,15 @@ export async function createScene(canvas, onPartClick = () => {}) {
     flowsTick = handle.flows.tick;                // 渲染回调: render(t) 每帧驱动
   } catch (e) {
     console.warn("flows 加载失败 (流光/粒子不可用):", e);
+  }
+
+  // ── D4: connections.json 驱动管路/线束 (挂 'tubes' 件 Group, 爆炸端跟随+点击高亮) ──
+  try {
+    const { createConnections } = await import("./connections.js");
+    conn = await createConnections(asm, parts);
+    handle.connections = conn;                    // 测试/截图调试钩
+  } catch (e) {
+    console.warn("connections 加载失败 (管路/线束不可用):", e);
   }
 
   window.__t2 = window.__t2 || {};
