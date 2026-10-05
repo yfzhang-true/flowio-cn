@@ -28,7 +28,6 @@ M5 纪律: 产物零改动 (pcb 含 T4 布线, sch 重跑 uuid churn)。
 import io
 import json
 import os
-import subprocess
 import sys
 import tempfile
 from contextlib import redirect_stdout
