@@ -11,9 +11,12 @@
   R2 口径匹配  — 管边 tube.id (及异径段 id_to) ≤ 端点嘴径 (引用 geom3d 的 dia;
                 tube.id > 嘴径 = FAIL); 承插边 socket_dia ≥ 器件嘴径 (插入配合);
                 fit_pending 边 (registry §6 到货试装条款) 倒挂降级 WARN;
-  R3 六动作语义路通 — 充/吸/排/测 按场景阀态 (flowio.twin.scenarios SCENARIOS 同源:
-                充=VS+Vi / 吸=VV+Vi / 排=VF+Vi / 测=Vi) 在气动图上 BFS 可达, 8 通道逐一;
-                保 = 阀关断割集: 全部 NC 阀关断后, 通道口与 大气/泵双口/传感 隔离;
+  R3 六动作语义路通 — 充/吸/排/测 阀态在气动图上 BFS 可达, 8 通道逐一; 开阀集显式钉在
+                _R3_OPENS (充=VS+Vi / 吸=VV+Vi / 排=VF+Vi / 测=Vi 分时), 充/吸/排 主阀集
+                与 twin.scenarios single_* 同源 (test_connections 守卫比对, 任一侧漂移必红);
+                保 = 阀关断割集 (真源: docs/pneumatic-diagram.md §4 保行 "全关";
+                SCENARIOS single_hold 是 V1 economy 电气策略, 非同源):
+                全部 NC 阀关断后, 通道口与 大气/泵双口/传感 隔离;
                 (搬气=S+V 同开+泵内换向, 泵内气路不建边, 不在判据 —— spec §3 括号
                 同只列五类);
   R4 悬空端点  — 器件气动口 + {2P 白壳, 电机焊片} 端子 + 全部模块面 必须有边连接
@@ -169,31 +172,19 @@ def reach(adj, start, blocked=frozenset()):
 
 
 def check_actions(edges, nc):
-    """六动作语义路通 (R3): 阀态与 flowio.twin.scenarios SCENARIOS 同源。
-
-    充 single_inflate: VS+Vi 开, P1.CHG → Main.CH{i};
-    吸 single_vacuum: VV+Vi 开, Main.CH{i} → P1.SUCK;
-    排 single_release: VF+Vi 开, Main.CH{i} → ATM.open;
-    测 (3=1× 分时): Vi 开, Main.CH{i} → S1.P1;
-    保 single_hold: 全 NC 阀关断 (割集), Main.CH{i} 与大气/泵/传感 隔离。
-    """
+    """六动作语义路通 (R3): 开阀集真源见 _R3_PATHS/_R3_OPENS 注记。"""
     adj = build_pneu_adj(edges, nc)
     valve_nodes = {"V:%s" % r for r in nc}
-    channels = ["Main.CH%d" % i for i in range(1, 9)]
     rep = {}
 
     def path_ok(start, goal, openset):
         return goal in reach(adj, start, valve_nodes - set(openset))
 
-    ch_res = {}
-    for i, ch in enumerate(channels, 1):
-        vi = "V:V%d" % i
-        ch_res[i] = {
-            "inflate": path_ok("P1.CHG", ch, ("V:VS", vi)),
-            "vacuum": path_ok(ch, "P1.SUCK", ("V:VV", vi)),
-            "release": path_ok(ch, "ATM.open", ("V:VF", vi)),
-            "measure": path_ok(ch, "S1.P1", (vi,)),
-        }
+    ch_res = {i: {} for i in range(1, 9)}
+    for act, (start_s, goal_s) in _R3_PATHS.items():
+        for i in range(1, 9):
+            opens = tuple(s.format(i=i) for s in _R3_OPENS[act])
+            ch_res[i][act] = path_ok(start_s.format(i=i), goal_s.format(i=i), opens)
     for act in ("inflate", "vacuum", "release", "measure"):
         rep[act] = {"ok": all(ch_res[i][act] for i in ch_res),
                     "desc": _ACT_DESC[act], "ch": {i: ch_res[i][act] for i in ch_res}}
@@ -209,12 +200,33 @@ def check_actions(edges, nc):
     return rep
 
 
+# R3 四动作路径与开阀集 (阀态真值: docs/pneumatic-diagram.md §4 六动作阀态表)。
+# 充/吸/排 主阀集与 flowio.twin.scenarios single_{inflate,vacuum,release} 同源
+# (test_connections::test_r3_opensets_parity_with_scenarios 程序化比对, 两处手改漂移必红);
+# 测 = 决策 3=1× 分时只开 Vi, 无 SCENARIOS 对应场景; 保 = §4 保行 "全关" 割集
+# (SCENARIOS single_hold 是 V1 economy 电气策略, 非同源, 不比对)。
+_R3_PATHS = {
+    "inflate": ("P1.CHG", "Main.CH{i}"),
+    "vacuum": ("Main.CH{i}", "P1.SUCK"),
+    "release": ("Main.CH{i}", "ATM.open"),
+    "measure": ("Main.CH{i}", "S1.P1"),
+}
+_R3_OPENS = {
+    "inflate": ("V:VS", "V:V{i}"),
+    "vacuum": ("V:VV", "V:V{i}"),
+    "release": ("V:VF", "V:V{i}"),
+    "measure": ("V:V{i}",),
+}
+
+channels = ["Main.CH%d" % i for i in range(1, 9)]
+
 _ACT_DESC = {
     "inflate": "充: 泵→S→M→Vi→通道 (阀态 VS+Vi; scenarios single_inflate 同源)",
     "vacuum": "吸: 通道→Vi→M→VV→泵吸口 (阀态 VV+Vi; single_vacuum 同源)",
     "release": "排: 通道→Vi→M→VF→大气 (阀态 VF+Vi; single_release 同源)",
     "measure": "测: 通道→Vi→M→测压支路→S1.P1 (分时 Vi; 决策 3=1×)",
-    "hold": "保: 全 NC 阀关断割集 —— 通道口与 大气/泵/传感 隔离 (single_hold 同源)",
+    "hold": "保: 全 NC 阀关断割集 —— 通道口与 大气/泵/传感 隔离 (真源: pneumatic-diagram.md "
+            "§4 保行 '全关'; SCENARIOS single_hold 是 V1 economy 电气策略, 非同源)",
 }
 
 

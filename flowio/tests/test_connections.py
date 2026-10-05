@@ -13,8 +13,10 @@ import 即败), 实现后全绿。
   R2 口径匹配  — 管边 tube.id(及异径 id_to) ≤ 端点嘴径; 承插边 socket_dia ≥ 嘴径;
                 红例: 通道管 ID3.5 / 承口 3.2 收 B 阀嘴 4.6 / 异径端倒挂;
                 WARN 例: fit_pending (registry §6 到货试装条款) 倒挂降级 WARN 不 FAIL;
-  R3 六动作路通 — 充/吸/排/测 按场景阀态 (twin.scenarios 同源) BFS 可达 (8 通道逐一);
-                保 = 阀关断割集 (全阀断后通道口与 大气/泵/传感 隔离);
+  R3 六动作路通 — 充/吸/排/测 阀态 BFS 可达 (8 通道逐一); 开阀集↔SCENARIOS 漂移守卫
+                (充/吸/排 逐通道程序化比对 single_* 阀集, 两处手改漂移必红); 保 = 阀关断
+                割集 (真源: pneumatic-diagram §4 保行 "全关"; SCENARIOS single_hold 是
+                V1 economy 电气策略非同源, 显式留证);
                 红例: S/V 干管对调 (充+吸翻红 —— diagram §3 "不可对调"的机器化) /
                 删 F→大气边 (排红) / 删测压管 (测红) / 阀旁通直连 (保红);
   R4 悬空端点  — 器件气动口 + {2P 壳, 焊片}端子 + 模块面 全部有边连接或显式 reserved;
@@ -108,6 +110,7 @@ def test_real_warn_inventory():
     assert len(fp) == 2, "泵跳管 fit_pending 恰 2 条 (CHG/SUCK): %r" % fp
 
 
+
 # ══════════ R1 端点存在 ══════════
 def test_r1_endpoint_missing_red():
     """红例: 幽灵位号 / 幽灵模块面 / 边类-端点类错配 / 自环 各必翻红。"""
@@ -140,6 +143,7 @@ def test_r1_bad_json_red():
             assert bad in str(e), "异常须带路径: %s" % e
     finally:
         os.remove(bad)
+
 
 
 # ══════════ R2 口径匹配 ══════════
@@ -216,6 +220,31 @@ def test_r3_hold_cut_red():
     rep = _must_fail(_mut(bypass), "R3")
     assert not rep["actions"]["hold"]["ok"]
     assert rep["actions"]["inflate"]["ok"], "旁通不破坏充路可达性 (保是割集判据)"
+
+
+def test_r3_opensets_parity_with_scenarios():
+    """守卫: R3 opensets (connections._R3_OPENS) ↔ twin.scenarios SCENARIOS 阀集
+    程序化比对 —— 充/吸/排 逐通道一致, 任一侧手改漂移必红 (两审共同 Minor)。
+    测 = 决策 3=1× 分时 (无 SCENARIOS 对应场景, 单独钉形状); 保 = diagram §4 保行
+    "全关" 割集, 与 single_hold (V1 economy 电气策略) 非同源, 显式留证不比对。"""
+    from flowio.twin.scenarios import SCENARIOS
+    pair = {"inflate": "single_inflate", "vacuum": "single_vacuum",
+            "release": "single_release"}
+    for act, scen in pair.items():
+        sc_open = {r for r, st in SCENARIOS[scen]["valves"].items()
+                   if st in ("full_open", "pull_in")}
+        chans = {r for r in sc_open if r[1:].isdigit()}       # 通道阀 V1..V8
+        mains = {"V:" + r for r in sc_open - chans}           # 主阀 (VS/VV/VF)
+        assert chans == {"V1"}, \
+            "%s 须恰含通道阀 V1 + 主阀 (单通道语义): %r" % (scen, sc_open)
+        for i in range(1, 9):
+            opens = {s.format(i=i) for s in C._R3_OPENS[act]}
+            assert opens == mains | {"V:V%d" % i}, \
+                "R3 %s openset 与 %s 阀集漂移 (i=%d): %r vs %r" % (act, scen, i, opens, mains)
+    for i in range(1, 9):                                         # 测: 恰一个通道阀, 无主阀
+        assert {s.format(i=i) for s in C._R3_OPENS["measure"]} == {"V:V%d" % i}
+    assert SCENARIOS["single_hold"]["valves"] == {"V1": "economy"}, \
+        "single_hold 语义漂移: R3 保判据真源是 diagram §4 '全关', 不随 single_hold 变"
 
 
 # ══════════ R4 悬空端点 ══════════
@@ -301,9 +330,10 @@ if __name__ == "__main__":
     test_r3_release_path_red()
     test_r3_measure_path_red()
     test_r3_hold_cut_red()
+    test_r3_opensets_parity_with_scenarios()
     test_r4_dangling_red()
     test_r4_reserved_mechanism()
     test_cli_connections_check()
     test_cli_connections_summary_mode()
-    print("flowio.twin.connections tests OK (15 testfns: 数据合法×3 + R1×2 + R2×2 "
-          "+ R3×4 + R4×2 + CLI×2)")
+    print("flowio.twin.connections tests OK (16 testfns: 数据合法×3 + R1×2 + R2×2 "
+          "+ R3×5 + R4×2 + CLI×2)")
