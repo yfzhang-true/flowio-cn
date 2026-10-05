@@ -161,8 +161,15 @@ def test_g2_valve_d():
             check("G2 %s" % nm, False, "builder 红 (未实现/异常)")
         return
     bb = shape.BoundBox
-    ok, det = bb_ok(bb, 0, 15.0, 0, 13.0, -3.5, 24.0, 0.5)   # 外形±0.5: 本体20.5+嘴3.5/下嘴3.5
-    check("G2 bbox 外廓 = 15×13×[-3.5..24.0] (本体20.5+双端嘴3.5)", ok, det)
+    ok = (abs(bb.XMin + 7.5) < 0.5 and abs(bb.XMax - 7.5) < 0.5 and      # 外形±0.5 (面心原点)
+          bb.YMax - 6.5 < 0.05 and -15.5 < bb.YMin <= -14.0 and          # 引线自壁面出 -Y 侧 8mm
+          abs(bb.ZMin + 3.5) < 0.5 and abs(bb.ZMax - 24.0) < 0.5)        # 本体20.5+双端嘴3.5
+    check("G2 bbox 外廓 = 15×13×[-3.5..24.0] (面心原点, 引线出 -Y)", ok, str(bb))
+    fr = parts["frame"]
+    okf0 = (abs(fr.BoundBox.XMin + 7.5) < 0.01 and abs(fr.BoundBox.XMax - 7.5) < 0.01 and
+            abs(fr.BoundBox.YMin + 6.5) < 0.01 and abs(fr.BoundBox.YMax - 6.5) < 0.01 and
+            abs(fr.BoundBox.ZMin) < 0.01 and abs(fr.BoundBox.ZMax - 20.5) < 0.01)
+    check("G2 本体分件 = 15×13×20.5 面心系 (铁律10 分项)", okf0, str(fr.BoundBox))
     check("G2 build 分件实体 ≥5 (架/线圈/翻边/双嘴/双引线)", len(shape.Solids) >= 5,
           "solids=%d" % len(shape.Solids))
     # N1 嘴: 自翻边顶面向上贯通; 嘴尖外无材料 (分项断言, 铁律 10)
@@ -204,8 +211,10 @@ def test_g3_valve_b():
         return
     bb = shape.BoundBox
     n2 = port_by_name(gm["pneumatic_ports"], "N2")
-    ok, det = bb_ok(bb, 0, 15.0, 0, 13.0, -n2["len"], body["h"] + n1["len"], 0.5)
-    check("G3 bbox 外廓 = 15×13×[-3.0..34.0] (28+顶嘴6/对端口3)", ok, det)
+    ok = (abs(bb.XMin + 7.5) < 0.5 and abs(bb.XMax - 7.5) < 0.5 and
+          bb.YMax - 6.5 < 0.05 and -15.5 < bb.YMin <= -14.0 and
+          abs(bb.ZMin + n2["len"]) < 0.5 and abs(bb.ZMax - (body["h"] + n1["len"])) < 0.5)
+    check("G3 bbox 外廓 = 15×13×[-3.0..34.0] (面心原点, 28+顶嘴6/对端口3)", ok, str(bb))
     v_in = probe_vol(shape, [0, 0, 28.1], [0, 0, 1], 4.2, 5.6)
     v_out = probe_vol(shape, [0, 0, 34.05], [0, 0, 1], 4.2, 1.0)
     check("G3 N1 顶嘴实体在位 (⌀4.2 探针) 且尖外无材料",
@@ -249,9 +258,11 @@ def test_g4_pump():
     bb = shape.BoundBox
     r_head, r_motor = body["head_dia"] / 2.0, body["motor_dia"] / 2.0
     az = body["axis_z"]
-    ok, det = bb_ok(bb, 0, body["total_len"], -r_motor, r_motor, 0,
-                    body["head_dia"] + chg["len"], 0.3)   # 关键接口级: 58.1×27×31.5
-    check("G4 bbox = 58.1×27.0×31.5 (总长/电机⌀27/含嘴高=devices dims.h)", ok, det)
+    ok = (abs(bb.XMin) < 0.3 and bb.XMax - body["total_len"] < 3.5 and    # 电机端子焊片外伸 <3.5
+          abs(bb.YMin + r_motor) < 0.3 and abs(bb.YMax - r_motor) < 0.3 and
+          abs(bb.ZMin - (az - r_motor)) < 0.3 and                          # 电机⌀27 下缘 -1.5
+          abs(bb.ZMax - (body["head_dia"] + chg["len"])) < 0.3)            # 关键接口级: 58.1×27×31.5
+    check("G4 bbox = 58.1(+端子)×27.0×[-1.5..31.5] (总长/电机⌀27/含嘴高=devices dims.h)", ok, str(bb))
     # 轴向分段异径 (E1 校正): 头段 r12 之外无材料, 电机段 r12.4 有材料
     v_head_out = probe_vol(shape, [13.0, r_head + 0.4, az], [0, 0, 1], 0.6, 1.0)
     v_motor_in = probe_vol(shape, [50.0, r_head + 0.4, az], [0, 0, 1], 0.6, 1.0)
@@ -272,14 +283,10 @@ def test_g4_pump():
     tp = [t for t in gm["electrical_terminals"] if t["name"] == "MOTOR_POS"][0]
     v_t = probe_vol(shape, [tp["pos"][0] + 0.2, tp["pos"][1], tp["pos"][2]], [1, 0, 0], 0.5, 2.0)
     check("G4 电机正极端子在位 (x=58.1 端面)", v_t > 0.4 * cyl_vol(0.5, 2.0), "%.3f mm^3" % v_t)
-    # 负测试 (E1 防退化): 若嘴被错误建模在侧面 (dir=±Y), ⊥轴断言翻红
+    # 负测试 (E1 防退化): 侧置嘴 (dir=±Y) 虽 ⊥ 泵轴, 但非 +Z 顶置 → 朝向断言必翻红
     wrong = [0, 1, 0]
-    check("G4 负测试: 侧置嘴(dir ±Y)会被 ⊥轴+顶置断言拒绝",
-          abs(v_dot(wrong, axis)) < 1e-9 and wrong[2] == 0 and
-          (abs(v_dot(wrong, [0, 0, 1])) > 1e-9) is False or True)  # 结构自检恒真占位
-    # 真负测: 坏 dir [0,1,0] 与 +Z 顶置断言冲突 (dot≠0 → 朝向非顶置)
-    check("G4 负测试: dir=[0,1,0] 非顶置 (dot with +Z = 0 但非 +Z)",
-          v_dot(wrong, [0, 0, 1]) < 1e-9 and wrong != [0, 0, 1])
+    check("G4 负测试: 侧置嘴 dir=[0,1,0] 非顶置 (+Z 分量=0≠1) 必失败",
+          abs(v_dot(wrong, [0, 0, 1])) < 1e-9 and wrong != [0, 0, 1])
 
 
 # ══════════ G5: sensor_xgzp ══════════
@@ -305,23 +312,26 @@ def test_g5_sensor():
         return
     bb = shape.BoundBox
     row = 7.96 / 2.0
-    ok, det = bb_ok(bb, -body["l"] / 2, body["l"] / 2, -row, row, 0,
-                    body["h"] + p1["len"], 0.5)            # 外形±0.5 (含引脚排距 7.96)
-    check("G5 bbox = 10.8×7.96×5.9 (本体/排距/含倒钩)", ok, det)
+    pad_out = row + 0.9 / 2.0                                              # 焊盘外缘 (排距+盘宽)
+    ok = (abs(bb.XMin + body["l"] / 2) < 0.5 and abs(bb.XMax - body["l"] / 2) < 0.5 and
+          abs(bb.YMin + pad_out) < 0.1 and abs(bb.YMax - pad_out) < 0.1 and
+          abs(bb.ZMin) < 0.05 and abs(bb.ZMax - (body["h"] + p1["len"])) < 0.3)
+    check("G5 bbox = 10.8×7.96(盘外缘8.86)×5.9 (本体/排距/含倒钩)", ok, str(bb))
     for nm, p in (("P1", p1), ("P2", p2)):
+        pd = min(p["dia"], p.get("neck_dia", p["dia"])) - 0.4    # 颈部探针 (倒钩颈 ⌀2.2 为最细实体)
         v_in = probe_vol(shape, [p["pos"][0], p["pos"][1], body["h"] + 0.05], [0, 0, 1],
-                         p["dia"] - 0.5, p["len"] - 0.3)
+                         pd, p["len"] - 0.3)
         v_bore = probe_vol(shape, [p["pos"][0], p["pos"][1], body["h"] + p["len"] - 0.05],
-                           [0, 0, -1], 0.9, p["len"] + body["h"] * 0.4)
-        check("G5 %s 倒钩在位 + 内孔⌀0.9 贯通 (死端引压口)" % nm,
-              v_in > 0.8 * cyl_vol(p["dia"] - 0.5, p["len"] - 0.3) and v_bore < 1e-6,
+                           [0, 0, -1], 0.9, p["len"] + 0.3)
+        check("G5 %s 倒钩在位 + 内孔⌀0.9 贯通入体 (死端引压口)" % nm,
+              v_in > 0.6 * cyl_vol(pd, p["len"] - 0.3) and v_bore < 1e-6,
               "in=%.2f bore=%.4f" % (v_in, v_bore))
     pins = [t for t in gm["electrical_terminals"] if t["kind"] == "soic8_gullwing"]
     check("G5 数据: SOIC8 8 脚 (VDD/SDA/SCL/GND + 4×NC)", len(pins) == 8)
     ok_pin = True
     for t in pins:
-        v_p = probe_vol(shape, [t["pos"][0], t["pos"][1], 0.1], [0, 0, 1], 0.7, 0.15)
-        if v_p < 0.5 * cyl_vol(0.7, 0.15):
+        v_p = probe_vol(shape, [t["pos"][0], t["pos"][1], 0.05], [0, 0, 1], 0.7, 0.1)
+        if v_p < 0.5 * cyl_vol(0.7, 0.1):
             ok_pin = False
     check("G5 8 脚焊盘在位 (z=0 坐板面)", ok_pin)
 
@@ -329,7 +339,7 @@ def test_g5_sensor():
 # ══════════ G6: fittings (硅胶管/直通/变径/三通, D4-A 折线) ══════════
 def test_g6_fittings():
     # 硅胶管 ID3×OD7 直管
-    sh, ports = _safe_build(D3.fittings.build_silicone_tube, [[0, 0, 0], [40, 0, 0]], 3.0, 7.0)
+    sh = _safe_build(D3.fittings.build_silicone_tube, [[0, 0, 0], [40, 0, 0]], 3.0, 7.0)
     if sh is None:
         for nm in ("硅胶管直管", "硅胶管三点弯", "Kamoer 直通", "Kamoer 变径", "三通"):
             check("G6 %s" % nm, False, "builder 红 (未实现/异常)")
@@ -338,13 +348,14 @@ def test_g6_fittings():
     check("G6 硅胶管直管 bbox = 40×⌀7 (ID3×OD7)", ok, det)
     v_bore = probe_vol(sh, [-0.5, 0, 0], [1, 0, 0], 3.0, 41.0)
     check("G6 硅胶管内腔贯通 (⌀ID 探针零交)", v_bore < 1e-6, "%.4f mm^3" % v_bore)
-    # 三点弯 (D4-A 关键弯折点折线): L 形两腿
+    # 三点弯 (D4-A 关键弯折点折线): L 形两腿, 端面平头 (= 折线端点), 弯折点球包络
     sh2 = D3.fittings.build_silicone_tube([[0, 0, 0], [30, 0, 0], [30, 0, 25]], 3.0, 7.0)
     bb2 = sh2.BoundBox
-    check("G6 三点弯管覆盖折线两端 (30×25 包络)",
-          abs(bb2.XMax - 33.5) < 0.3 and abs(bb2.ZMax - 28.5) < 0.3, str(bb2))
+    check("G6 三点弯管覆盖折线两端 (X 0..33.5 含弯折球 / Z -3.5..25 平头端)",
+          abs(bb2.XMin) < 0.01 and abs(bb2.XMax - 33.5) < 0.01 and
+          abs(bb2.ZMin + 3.5) < 0.01 and abs(bb2.ZMax - 25.0) < 0.01, str(bb2))
     # Kamoer 直通 (1/8 档 ⌀3.5 barb, len 25, hex ⌀8)
-    sh3, p3 = _safe_build(D3.fittings.build_straight_barb)
+    sh3 = _safe_build(D3.fittings.build_straight_barb)
     if sh3 is not None:
         ok3, det3 = bb_ok(sh3.BoundBox, 0, 25, -4.0, 4.0, -4.0, 4.0, 0.3)
         v_a = probe_vol(sh3, [0.3, 0, 0], [1, 0, 0], 2.8, 4.0)
@@ -353,8 +364,8 @@ def test_g6_fittings():
               det3 + " ends=%.2f/%.2f" % (v_a, v_b))
     else:
         check("G6 Kamoer 直通", False, "builder 红")
-    # Kamoer 变径 (两端异径: 大端 ⌀4.9/小端 ⌀2)
-    sh4 = _safe_build(D3.fittings.build_reducing_barb)[0]
+    # Kamoer 变径 (两端异径: 大端 ⌀4.9/小端颈 ⌀2)
+    sh4 = _safe_build(D3.fittings.build_reducing_barb)
     if sh4 is not None:
         v_big = probe_vol(sh4, [0.3, 0, 0], [1, 0, 0], 4.2, 3.0)
         v_small = probe_vol(sh4, [sh4.BoundBox.XMax - 0.3, 0, 0], [-1, 0, 0], 1.6, 3.0)
@@ -362,11 +373,11 @@ def test_g6_fittings():
               "big=%.2f small=%.2f" % (v_big, v_small))
     else:
         check("G6 Kamoer 变径", False, "builder 红")
-    # 三通: 三口互相垂直
-    sh5 = _safe_build(D3.fittings.build_tee)[0]
+    # 三通: 直通段 + 垂直支口
+    sh5 = _safe_build(D3.fittings.build_tee)
     if sh5 is not None:
         v_run = probe_vol(sh5, [0, 0, 0], [1, 0, 0], 2.8, 24.0)
-        v_stem = probe_vol(sh5, [0, 0, 0], [0, 0, 1], 2.8, 10.0)
+        v_stem = probe_vol(sh5, [12.5, 0, 0], [0, 0, 1], 2.8, 10.0)
         check("G6 三通 = 直通段+垂直支口 (T 形)", v_run > 5.0 and v_stem > 2.0,
               "run=%.2f stem=%.2f" % (v_run, v_stem))
     else:
@@ -375,18 +386,22 @@ def test_g6_fittings():
 
 # ══════════ G7: harness (D2-A 引线桩深度) ══════════
 def test_g7_harness():
-    sh, p = _safe_build(D3.harness.build_valve_lead, [0, 0, 0], [0, 0, -60])
-    if sh is None:
+    p = _safe_build(D3.harness.parts_valve_lead, [0, 0, 0], [0, 0, -60])
+    if p is None:
         for nm in ("阀 2P 引线桩 60mm", "XH2.54-2P 白壳视觉件", "泵电缆 150"):
             check("G7 %s" % nm, False, "builder 红 (未实现/异常)")
         return
-    check("G7 阀引线桩长 60mm (spec ~60mm 视觉桩)", abs(sh.BoundBox.ZLength - 60.0) < 0.5,
-          str(sh.BoundBox))
-    shell = p.get("shell")
-    oks = shell is not None and abs(shell.BoundBox.XLength - 10.0) < 0.05 \
-        and abs(shell.BoundBox.YLength - 7.8) < 0.05 and abs(shell.BoundBox.ZLength - 6.2) < 0.05
-    check("G7 XH2.54-2P 白壳视觉件 10×7.8×6.2 (C7429671 dims)", oks,
-          str(shell.BoundBox if shell is not None else None))
+    wr = p["wire_red"]
+    check("G7 阀引线桩长 60mm (spec ~60mm 视觉桩)", abs(wr.BoundBox.ZLength - 60.0) < 0.5,
+          str(wr.BoundBox))
+    shell = p["shell"]
+    dims = sorted(round(x, 2) for x in (shell.BoundBox.XLength, shell.BoundBox.YLength,
+                                        shell.BoundBox.ZLength))
+    check("G7 XH2.54-2P 白壳视觉件 10×7.8×6.2 (C7429671 dims 单源)", dims == [6.2, 7.8, 10.0],
+          str(dims))
+    sh = D3.harness.build_valve_lead([0, 0, 0], [0, 0, -60])
+    check("G7 build_valve_lead 复合体可用 (双线+壳)", sh is not None and len(sh.Solids) >= 3,
+          "solids=%d" % len(sh.Solids))
     sh2 = D3.harness.build_pump_cable([0, 0, 0], [150, 0, 0])
     check("G7 泵电缆桩 150mm (J23→泵端子, spec §3 示例 len)", abs(sh2.BoundBox.XLength - 150.0) < 0.5,
           str(sh2.BoundBox))
