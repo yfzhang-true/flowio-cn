@@ -92,8 +92,11 @@ FreeCAD 内嵌 OCCT 同核，`Part` 工作台即可表达（make_manifold/make_p
 ## 6. baseline 研究结论（已检索 + 计划深挖）
 - **OSS CAD**：build123d/CadQuery（OCCT 系 Python 参数化建模，STEP/BREP）为标准——
   **FreeCAD 内嵌 OCCT 同核，零新依赖采纳其表达范式**（builder-pattern）；
-- **学术**：气路集总参数建模（Xavier et al., 已在库 literature/）；aminer MCP 未在当前
-  工具环境——学术 baseline 深挖列为 Phase R 可选项（不阻塞）；
+- **学术**（aminer MCP 已恢复，2026-10-05 检索落地 → docs/research/device-modeling-baseline.md）：
+  🎯 Ruzarovsky 2025《Behaviour-Based Digital Twin for Electro-Pneumatic Actuator》
+  （三级保真度孪生对比，与本项目 L3/L5/§2.7.1 分层同构——几何+连接之外，气动动态是
+  可信度分水岭）；混合物理+数据建模（Cell Rep. Phys. Sci. 2022）；电磁阀 RUL/状态监测簇
+  （P2 医疗安全叙事学术支点）。
 - **官方参照**：资源/官方参考/official-3mf（FlowIO 原版模块几何）+ 官方照片（管路走线/
   腕带形态）——集成目视的对照基准；
 - **GitHub MCP**：未在当前工具环境；开源库检索已用 WebSearch 完成（结论同上），
