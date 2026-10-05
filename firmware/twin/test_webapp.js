@@ -10,7 +10,7 @@
  *     选择器去掉跨影前缀（如 '#t2_ctrlDrawer .t2_seg' → '.t2_seg', 唯一性不变）;
  *   · 原 id 全部保留在各组件影子/宿主上（t2_pwmVac/t2_explodeRange/t2_hv_*…）。
  * 新增「组件契约」节 7 条: 定义齐全 / open shadowRoot / 组装树 / 属性反映 /
- * pwm-change / 标签联动 / valve-cmd→cmd-line 组装。合计 47+7=54。
+ * pwm-change / 标签联动 / valve-cmd→cmd-line 组装。合计 47+8=55（迁移 47 零弱化 + 组件契约 8）。
  *
  * 对象: / (webapp 零构建 ES Modules) 的 3D 场景 / 流光粒子 / 抽屉 / 热点卡 / 仿真浮层。
  * 方法: 经 window.__t2={scene,flows,panels,simlab,dom,ble} 调试钩读渲染态（uniforms/粒子
