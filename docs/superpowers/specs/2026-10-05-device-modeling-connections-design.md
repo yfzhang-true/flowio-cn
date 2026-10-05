@@ -94,8 +94,16 @@ FreeCAD 内嵌 OCCT 同核，`Part` 工作台即可表达（make_manifold/make_p
   **FreeCAD 内嵌 OCCT 同核，零新依赖采纳其表达范式**（builder-pattern）；
 - **学术**（aminer MCP 已恢复，2026-10-05 检索落地 → docs/research/device-modeling-baseline.md）：
   🎯 Ruzarovsky 2025《Behaviour-Based Digital Twin for Electro-Pneumatic Actuator》
-  （三级保真度孪生对比，与本项目 L3/L5/§2.7.1 分层同构——几何+连接之外，气动动态是
-  可信度分水岭）；混合物理+数据建模（Cell Rep. Phys. Sci. 2022）；电磁阀 RUL/状态监测簇
+  **已下载全文并精读**（literature/ruzarovsky2025-*.pdf/.txt，res.mdpi.com CDN 绕 Akamai）。
+  精读增量结论（详见研究笔记"精读落地"节）：
+  ① 三级保真度实证：**"模拟量但无物理"与离散级输出完全相同**——可信度分水岭只在
+  气动动态级，支持"默认 L1+L3、气动动态整档 P2、不做半吊子模拟级"；
+  ② 式(6) Qn=C·Ath·√Δp（等温标称流量）为 P2 阀/管路建模优先口径（对齐 datasheet 标定）；
+  式(4) 腔压 ODE 移植时 Aẋ→dV/dt 腔壁变形项；
+  ③ P2 验收集加 **rise-time 误差 + 跟踪误差** 两断言（对齐 BRINGUP 实测）；
+  ④ latent phase（指令→压力/运动响应延迟）为独立观测量；⑤ 该文为刚性缸+PLC 域，
+  器件级几何不迁移，软体连续体仍归 RA-L 2022 杆理论（次级）。
+  另：混合物理+数据建模（Cell Rep. Phys. Sci. 2022）；电磁阀 RUL/状态监测簇
   （P2 医疗安全叙事学术支点）。
 - **官方参照**：资源/官方参考/official-3mf（FlowIO 原版模块几何）+ 官方照片（管路走线/
   腕带形态）——集成目视的对照基准；
