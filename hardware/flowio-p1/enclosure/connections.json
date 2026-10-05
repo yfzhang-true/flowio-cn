@@ -3,6 +3,7 @@
   "added": "2026-10-05 D2 (spec 2026-10-05 §3 连接图谱+§4 模块接口规约; plan D2)",
   "provenance": "拓扑真值: docs/pneumatic-diagram.md §1-§5 (12 口位号/管径管长对照/六动作阀态/装配接管) + flowio/twin/scenarios.py SCENARIOS (动作阀态同源) + flowio/flows/make_flows.py ELEC (阀座/泵座 J10-J23 映射) + flowio/geom/case_geom.py (壁孔/承口/面板快插/出线孔径) + docs/component-registry.md §6 (硅胶管/变径/支架)。端点接口面单源: devices.json pneumatic_devices.*.geom3d (D1)",
   "endpoint_syntax": "<位号>.<接口面name[#序号]> (devices geom3d: pneumatic_ports.name / electrical_terminals.name / mech_mounts.kind, #序号消同名) | <模块名>.<face名> (本文件 modules 块)",
+  "copies": "生成副本声明: firmware/twin/webapp/connections.json (make_meshes D4 段拷贝) 与 site/connections.json (build_site.py 拷贝) 为本文件的生成副本, 真值以 hardware/flowio-p1/enclosure/connections.json 为准, 禁止手改副本 —— 字节等同守卫: flowio/tests/test_connections_render.py",
   "schema": {
    "pneumatic_edges": "{from,to,kind:'tube'|'socket'|'ambient', tube:{id,id_to?,od,len_mm,bend}|null, socket_dia?, fit_pending?, inferred?, desc, src}",
    "electrical_edges": "{from,to,kind:'cable_2p'|'lead_2p'|'wire', len_mm, desc, src}",
