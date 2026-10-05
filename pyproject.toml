@@ -3,7 +3,8 @@
 # flowio/ 位于仓库根, 本文件与之同级; `pip install -e .` 即可开发态安装。
 # M0: core/truth 两子包 (stdlib-only); M1 追加 hw/geom/flows 三域 (同为
 # stdlib-only; FreeCAD/pcbnew/networkx 依赖的生成器为脚本形态, 不入包依赖);
-# M2-M5 迁入其余子包时继续在 [tool.setuptools].packages 追加。
+# M2 追加 twin (孪生域 OOD: actuators/electrical/scenarios/thermal/pneumatic/board);
+# M3-M5 迁入其余子包时继续在 [tool.setuptools].packages 追加。
 [build-system]
 requires = ["setuptools>=64"]
 build-backend = "setuptools.build_meta"
@@ -17,4 +18,5 @@ dependencies = []          # stdlib-only (与 firmware/twin 运行纪律一致)
 
 [tool.setuptools]
 packages = ["flowio", "flowio.core", "flowio.truth",
-            "flowio.hw", "flowio.hw.route", "flowio.geom", "flowio.flows"]
+            "flowio.hw", "flowio.hw.route", "flowio.geom", "flowio.flows",
+            "flowio.twin"]
