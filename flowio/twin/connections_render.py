@@ -112,15 +112,15 @@ def _port_tip(device, port, places, pplace, splace):
     """气动口**口端**世界坐标 (geom3d pos 沿 dir 外推 len)."""
     gm = _geom3d_of(device)
     q = next(p for p in gm["pneumatic_ports"] if p["name"] == port)
-    if device.startswith(("V", )) and device != "VF" or device in ("VS", "VV", "VF"):
+    if device.startswith("V"):                               # 11 阀 (V1-V8/VS/VV/VF) 共用阀阵放置
         pl = next(v for v in places if v["ref"] == device)
         base = (pl["x"], pl["y"], pl["oz"])
     elif device == "P1":
         base = pplace
     elif device == "S1":
         base = splace
-        # 体长轴航向 -90°: 本地 (x,y,z) → 壳系 (cx + y, cy + x, cz + z)?? —— 本地 X(长轴)
-        # 旋至 -Y: case = R(-90°)·local, R: (lx,ly)→(ly,-lx)
+        # 体长轴航向 -90°: case = base + R(-90°)·local, R: (lx,ly)→(ly,-lx) —— 本地
+        # X(长轴) 旋至 -Y, 即 case = (cx + ly, cy - lx, cz + lz)
         lx, ly, lz = q["pos"]
         tip = (base[0] + ly + q["dir"][1] * q["len"],
                base[1] - lx - q["dir"][0] * q["len"],
@@ -213,7 +213,10 @@ def _tube_path(key, pa, pb, places, pplace, splace):
         v = next(v for v in places if v["ref"] in (f_dev, t_dev))
         wall = pa if t_dev in ("VS", "VV", "VF") else pb
         tip = pb if t_dev in ("VS", "VV", "VF") else pa
-        return _dedupe([tip, [tip[0], tip[1], wall[2]], wall])
+        pth = _dedupe([tip, [tip[0], tip[1], wall[2]], wall])
+        # 端点顺序 = from→to (docstring 契约; 修 D4 审缺: from=壁孔侧的 S/V 干管边
+        # 原样发 [嘴端..壁孔] 反序, 爆炸跟随 anchors 逐点归属随之错位)
+        return pth if f_dev in ("VS", "VV", "VF") else pth[::-1]
     # 2) 通道阀 N2 ↔ B 壁 CH 孔: 落到过孔 z → 对齐孔 x → 穿墙
     if "Main.CH" in key[0] or "Main.CH" in key[1]:
         ch = pa if key[0].startswith("Main.CH") else pb
@@ -365,7 +368,7 @@ def build_render_payload(path=None):
                 "sensor": "pos.csv U6 焊盘中心 board_to_case(44,-22) 航向 -90°",
                 "lead_arc_z": LEAD_ARC_Z,
                 "bend_note": "tube.bend=2 为采购下料名义值; 渲染折线按最小几何弯折 (2~4 点, "
-                             "壁孔过越/障碍让位) —— 段长和仍可核算下料",
+                             "壁孔过越/障碍让位) —— 折线段长和 ≤ 下料长 len_mm, 差值即布管余量",
             },
         },
         "devices": {k: {"name": v} for k, v in _DEVICE_NAMES.items()},

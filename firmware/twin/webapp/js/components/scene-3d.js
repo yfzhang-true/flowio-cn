@@ -11,7 +11,10 @@ import { adopt } from "./styles.js";
 class Scene3D extends HTMLElement {
   constructor() { super(); this.onPartClick = () => {}; }
   connectedCallback() {
-    if (this._booted) return;
+    if (this._booted) {                // 重连 (DOM 移动): 影子已建, 仅幂等重绑监听
+      if (this._onConn) window.addEventListener("t2-conn", this._onConn);
+      return;
+    }
     this._booted = true;
     const root = this.attachShadow({ mode: "open" });
     adopt(root, `
@@ -34,7 +37,9 @@ class Scene3D extends HTMLElement {
     `);
     root.innerHTML = `<div id="t2_sceneView"><canvas id="t2_canvas"></canvas></div>
       <div id="t2_connChip" hidden></div>`;
-    window.addEventListener("t2-conn", (ev) => {
+    // t2-conn 监听 = window 级, 处理器存实例: disconnectedCallback 移除 (组件重建不
+    // 泄漏/不双绑); 重连时 addEventListener 同一函数引用幂等 (DOM 规范去重)。
+    this._onConn = (ev) => {
       const chip = root.getElementById("t2_connChip");
       const d = ev.detail || {};
       if (!d.counts) {                            // 空白/板内器件: 复位隐藏
@@ -49,7 +54,8 @@ class Scene3D extends HTMLElement {
         + (d.hit ? `<span style="opacity:.65">(渲染 ${d.hit} 条)</span>` : "");
       chip.hidden = false;
       requestAnimationFrame(() => chip.classList.add("on"));
-    });
+    };
+    window.addEventListener("t2-conn", this._onConn);
     import("../scene.js")
       .then(({ createScene }) =>
         createScene(root.getElementById("t2_canvas"), (h) => this.onPartClick(h)))
@@ -59,6 +65,9 @@ class Scene3D extends HTMLElement {
         d.textContent = "3D 场景不可用：" + e.message;
         root.appendChild(d);
       });
+  }
+  disconnectedCallback() {                       // 重建防护: 移除 window 级监听 (防泄漏)
+    if (this._onConn) window.removeEventListener("t2-conn", this._onConn);
   }
 }
 customElements.define("scene-3d", Scene3D);

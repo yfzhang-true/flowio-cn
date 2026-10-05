@@ -8,6 +8,10 @@
 //       —— "连接边随爆炸端点跟随, 管/线拉伸可视" 的分装式教学价值。
 // 点击高亮: 器件 → 其三类连接分色增强 (气动青/电气琥珀), 其余压暗;
 //       highlight() 返回 {name, counts} 供 <scene-3d> 提示 chip (mech 边计入计数)。
+// 线路口径 (防误读为 bug): spec/plan 线束估算 "12 引线+2 电缆" 与图谱电气边 14 条
+//       (11 lead_2p 阀引线 + 1 cable_2p 泵电缆 + 2 wire 模块内电机引线) 总数一致,
+//       差异只在泵侧分类: 估算把泵电缆记 2 根/电机端子线并入引线, 实装为
+//       1 根 2P 电缆 + 正/负 2 根端子线 (connections.json electrical_edges 同源)。
 // 回退: connections_scene.json 加载失败 → 退回 /meshes/tubes.stl 旧单件 (优雅降级)。
 import * as THREE from "three";
 import { STLLoader } from "../vendor/addons/STLLoader.js";
