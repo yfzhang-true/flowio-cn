@@ -2,7 +2,7 @@
 """flowio.twin.devices3d — 孪生器件参数化 3D 构建器 (D1, spec 2026-10-05 §2.1)。
 
 器件 = 三接口面实体 (气动/电气/机械) + 参数化几何 (datasheet 图纸直推):
-    valve_f0520d.py   F0520D C 架阀 (本体 20.5×15×13 + 顶翻边 0.7 + N1/N2 双端嘴 ⌀3.0×3.5)
+    valve_f0520d.py   F0520D C 架阀 (本体 20.5×15×13 + 顶翻边 0.7 + N1/N2 双端嘴 ⌀3.0×3.0)
     valve_f0520b.py   F0520B 真空主阀 (总长 28 = 本体 20 + 端段 8, N1 顶嘴 ⌀4.6×6.0)
     pump_zr370.py     ZR370-03PM 立式校正 (头 ⌀24×27.3 + 电机 ⌀27×30.8 + 顶置双嘴 ⌀4.2×7.5 ⊥轴)
     sensor_xgzp.py    XGZP6897D (本体 10.8×7×3.5 + 双倒钩 ⌀3.22×2.4 顶置 + SOIC8 鸥翼)
@@ -53,9 +53,17 @@ __all__ = [
 
 def load_geom3d(path=None):
     """devices.json -> {组名: 该组首条目的 geom3d 块} (纯 stdlib; 失败抛异常, 真值缺失即红)。"""
-    with open(path or DEVICES_JSON, encoding="utf-8") as f:
+    p = path or DEVICES_JSON
+    with open(p, encoding="utf-8") as f:
         pn = json.load(f)["pneumatic_devices"]
-    return {g: pn[g][0]["geom3d"] for g in _GROUPS}
+    out = {}
+    for g in _GROUPS:
+        try:
+            out[g] = pn[g][0]["geom3d"]
+        except (KeyError, IndexError, TypeError):
+            raise KeyError("load_geom3d: pneumatic_devices 缺组 %r 或其条目缺 geom3d 块 (文件: %s)"
+                           % (g, p))
+    return out
 
 
 def device_geom3d(group, path=None):
