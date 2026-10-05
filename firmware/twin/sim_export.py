@@ -121,12 +121,18 @@ def _mmap(res):
 
 
 # ---------------------------------------------------------------- 导出主体
-_TITLES = {                       # 电路 → 报告小节标题 (与旧版对应)
+_TITLES = {                       # 电路 → 报告小节标题 (与旧版对应; valve 段从默认参数动态生成, 见 _vtitle)
     "buck":  "TPS54331 Buck 5V→3.27V (L=6.8µH, Cout=113µF, fsw=570kHz)",
     "dior":  "双 SS34 二极管-或输入 (DC-005 ‖ USB-C VBUS)",
-    "valve": "AO3400A 低边阀驱动 (PWM 10Hz/50%, 线圈 14Ω/25mH)",
     "i2c":   "I2C 总线 (TCA9548A + 5×传感器, 4.7k 上拉, Cbus≈115pF)",
 }
+
+
+def _vtitle(p):
+    """valve 小节标题 —— 从引擎默认参数动态生成 (参数单源: 改 SPEC 默认值即改文案,
+    不再写死 14Ω 时代数值, 与 T7 registry 单源同步同一教训)."""
+    return ("AO3400A 低边阀驱动 (PWM %.0fHz/%.0f%%, 线圈 %.0fΩ/%.0fmH)"
+            % (p["pwm_hz"], p["duty"] * 100, p["r_coil"], p["l_mh"]))
 _SVGS = {                         # 电路 → 本节引用的 SVG 文件名
     "buck":  ["buck_startup.svg", "buck_ripple.svg"],
     "dior":  ["dior_share.svg"],
@@ -186,11 +192,13 @@ def export_all(out_dir=None):
     mv = _mmap(rv)
     tva, ival = _wv(rv, "阀电流")
     _tg, vg = _wv(rv, "Vgs")
+    vp = rv["params"]                                        # τ=L/R 等从参数动态算 (单源)
     plot_svg([("i 阀电流 (A)", tva, ival, C1), ("Vgs (V)", tva, vg, C2)],
              out / "valve_pwm.svg",
-             "AO3400A 驱动阀线圈 PWM 10Hz/50% (τ=L/R=1.8ms)",
+             "AO3400A 驱动阀线圈 PWM %.0fHz/%.0f%% (τ=L/R=%.1fms)"
+             % (vp["pwm_hz"], vp["duty"] * 100, vp["l_mh"] / vp["r_coil"]),
              "t (ms)", "A / V", xscale=1e3,
-             notes=["稳态峰值电流 %.3fA (阀额定 0.35A)" % mv["稳态阀电流"]["value"],
+             notes=["稳态峰值电流 %.3fA (registry 额定 0.45A@4.5V)" % mv["稳态阀电流"]["value"],
                     "关断续流由 SS14 钳位至 -0.35V, 无高压尖峰"])
     files.append(out / "valve_pwm.svg")
 
@@ -220,9 +228,10 @@ def export_all(out_dir=None):
           "(buck 分压比即板上实阻); 手册/假设档参数及回板校准动线见 spec §10 校准矩阵.",
           ""]
     verdicts = []
+    titles = dict(_TITLES, valve=_vtitle(results["valve"]["params"]))
     for i, c in enumerate(("buck", "dior", "valve", "i2c"), 1):
         r = results[c]
-        md.append("### %d. %s" % (i, _TITLES[c]))
+        md.append("### %d. %s" % (i, titles[c]))
         md.append("")
         md.append("| 参数 | 默认值 | 允许范围 |")
         md.append("|---|---|---|")

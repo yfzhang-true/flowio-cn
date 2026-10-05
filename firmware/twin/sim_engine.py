@@ -11,7 +11,7 @@
           闭环 KP=0.3 KI=2500 D0=VOUT_T/vin, dt=TSW/140, ss=0.5ms,
           sim 2.5ms 取 T>2.2ms 稳态段; 效率含 Rsw/DCR/二极管/开关(20ns)/ESR 五项
   dior  : SS34 指数模型 Is=1e-7 n=1.2, 不动点迭代 (vo += 0.05*(ΣI - vo/RL))
-  valve : 解析栅极 exp(±dt/τg) + RL 一阶欧拉 dt=2e-5, 3 周期取末周期峰值 ≈0.356A
+  valve : 解析栅极 exp(±dt/τg) + RL 一阶欧拉 dt=2e-5, 3 周期取末周期峰值 ≈0.498A (r_coil=10Ω registry)
   i2c   : 一阶 RC, tr = 2.2·τ, 波形取 8τ
 """
 from math import exp
