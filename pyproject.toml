@@ -1,0 +1,26 @@
+# pyproject.toml — flowio 内核包安装描述 (spec v2.1 §2: "可安装包 (pip -e)")。
+#
+# flowio/ 位于仓库根, 本文件与之同级; `pip install -e .` 即可开发态安装。
+# M0: core/truth 两子包 (stdlib-only); M1 追加 hw/geom/flows 三域 (同为
+# stdlib-only; FreeCAD/pcbnew/networkx 依赖的生成器为脚本形态, 不入包依赖);
+# M2 追加 twin (孪生域 OOD: actuators/electrical/scenarios/thermal/pneumatic/board);
+# M3 追加 fwgen (三语参数 codegen); M5 追加 tests (分层测试资产) + cli 全域
+# 子命令 + console script `flowio` (= python -m flowio 等价入口)。
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "flowio"
+version = "0.1.0"
+description = "FLOWIO-CN 数字孪生全栈内核 — devices.json 单一真值到五域介质的共享抽象"
+requires-python = ">=3.9"
+dependencies = []          # stdlib-only (与 firmware/twin 运行纪律一致)
+
+[project.scripts]
+flowio = "flowio.cli:main"   # console script: flowio truth|hw|geom|... (≡ python -m flowio)
+
+[tool.setuptools]
+packages = ["flowio", "flowio.core", "flowio.truth",
+            "flowio.hw", "flowio.hw.route", "flowio.geom", "flowio.flows",
+            "flowio.twin", "flowio.fwgen", "flowio.tests"]

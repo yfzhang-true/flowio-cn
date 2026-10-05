@@ -1,0 +1,148 @@
+# -*- coding: utf-8 -*-
+"""FLOWIO-P1 合并装配体 — T6 双体: 主模块 (PCB+壳+11 阀+歧管) + 泵模块 (壳+泵+支架).
+运行: E:/FreeCAD/bin/python.exe flowio/geom/make_assembly.py
+输出: hardware/flowio-p1/enclosure/ 下 flowio-p1-assembly.step / .stl (gitignore, 按需再生)
+
+坐标系: 壳系 (case_geom 单一真相).
+  KiCad STEP 帧: 板 XY 平面, Y∈[-75,0] (y 已取负), Z 厚度向上。
+  变换: (x_k, y_k, z_k) -> (x_k+OX, -y_k+OX, z_k+Z_BOARD), 即 Y 翻转 + 平移,
+        与 case_geom.board_to_case 同映射 (J10/J2/J1 三锚点已在 make_meshes 验证)。
+  板底面落位: Z_BOARD = WALL + PH = 7.4 (铜柱顶; 2026-10-03 装配栈统一)。
+  泵模块 (make_pump_module 产物) 已是壳系绝对坐标 (PMOD_OFF), 直接并入;
+  阀阵/歧管同样为壳系绝对坐标 (pneu_geom / make_manifold 单一实现)。
+M1 迁移 (2026-10): enclosure/make_assembly.py -> flowio/geom/make_assembly.py
+(逻辑零改动, HERE/REPO 语义经包定位重解析为 enclosure 产物目录 / flowio-p1 目录)。
+"""
+import os
+import sys
+from pathlib import Path
+
+import FreeCAD as App
+import Part, Mesh
+
+_ROOT = str(Path(__file__).resolve().parents[2])            # flowio/geom -> 仓库根
+sys.path.insert(0, _ROOT)                                   # flowio 包 (FreeCAD python 免安装)
+from flowio.geom import case_geom as G                      # noqa: E402
+from flowio.geom.pneu_geom import valve_solids
+
+HERE = os.path.join(_ROOT, "hardware", "flowio-p1", "enclosure")   # 产物目录 (M1 前=脚本目录)
+REPO = os.path.join(_ROOT, "hardware", "flowio-p1")                # .../hardware/flowio-p1
+PCB_STEP = os.path.join(REPO, "fab", "flowio-p1.step")
+
+
+def load_step(path):
+    sh = Part.Shape()
+    sh.read(path)
+    return sh
+
+
+# ---------- 1. PCB: 离群过滤 (坏原点 JLC 模型) ----------
+pcb = load_step(PCB_STEP)
+keep, dropped = [], 0
+for s in pcb.Solids:
+    b = s.BoundBox
+    cx, cy = (b.XMin + b.XMax) / 2, (b.YMin + b.YMax) / 2
+    if -25 <= cx <= 115 and -100 <= cy <= 25:          # 板区 X∈[0,90] Y∈[-75,0] ±25 容差
+        keep.append(s)
+    else:
+        dropped += 1
+print("ASSEMBLY PCB solids: keep %d / drop %d (outlier)" % (len(keep), dropped))
+pcb_kept = Part.makeCompound(keep)
+
+# ---------- 2. 变换到壳坐标系 (锚点已验证的定稿映射, 无分支) ----------
+# 注意: FreeCAD Matrix 的平移在第 4 列 (列向量约定, 已用最小实验验证):
+# 旧版把 (OX,OX,Z_BOARD) 放在第 4 行 -> 平移从未生效, PCB 一直贴错墙穿底板,
+# 而旧断言 (总包围盒 ±2.0) 看不见此错误 — 本次以 pcb 自身包围盒断言拦截。
+m = App.Matrix(1, 0, 0, G.OX,
+               0, -1, 0, G.OX,
+               0, 0, 1, G.Z_BOARD,
+               0, 0, 0, 1)
+pcb_placed = pcb_kept.transformGeometry(m)
+
+# ---------- 3. 合并 (T6 双体) ----------
+bottom = load_step(os.path.join(HERE, "case-bottom.step"))
+top = load_step(os.path.join(HERE, "case-top.step"))
+manifold = load_step(os.path.join(HERE, "manifold.step"))
+valves_c = Part.makeCompound([vs for *_m, vs in valve_solids()])
+main_body = Part.makeCompound([bottom, top, pcb_placed, valves_c, manifold])
+
+# 泵模块: 壳与泵/支架均取 STEP (make_pump_module 同源产物, 壳系绝对坐标); 干涉以
+# 生成器内 OCC 布尔 + L5 FCL (venv-cad) 双守门, 此处只做位姿/包围盒契约。
+# 注: 旧路径 Mesh STL→Part.Shape 在 FreeCAD 1.1.4 (20260928 build) 原生崩溃
+# (rc=127 无 Python 异常, T6-4/5 的装配产物因此停留在 10-04 旧版), 改 STEP 直载。
+pump_case = load_step(os.path.join(HERE, "pump-module.step"))
+pump_body = Part.makeCompound([pump_case,
+                               load_step(os.path.join(HERE, "pump.step")),
+                               load_step(os.path.join(HERE, "brackets.step"))])
+
+asm = Part.makeCompound([main_body, pump_body])
+
+# ---------- 4. 断言 (收紧: 旧 ±2.0/±2.5 -> 分项核对) ----------
+# 已知模型噪声: WJ500V 封装 offset(-0.3,0.5,3.5) + 模型内部原点 -> 实测端子体
+# 相对焊盘中心 +3.15mm (J17 体尖探入右壁 ~1.5mm), z 抬升 3.5 (真件高度或在 ~14)。
+# 设计真相 = pos.csv 居中 (case_geom 槽位/孪生盒体自洽); 板到货后实测再定槽位微调。
+pb = pcb_placed.BoundBox
+print("ASSEMBLY pcb placed: x[%.2f..%.2f] y[%.2f..%.2f] z[%.2f..%.2f]"
+      % (pb.XMin, pb.XMax, pb.YMin, pb.YMax, pb.ZMin, pb.ZMax))
+assert abs(pb.XMin - G.OX) < 0.3 and abs(pb.YMin - G.OX) < 0.3, "PCB 原点落位超差 (平移未生效?)"
+assert pb.XMax <= G.OX + G.BW + 3.6, "PCB X 右探超限 (>3.6 = 新增模型偏移)"
+assert pb.YMax <= G.OX + G.BH + 0.3, "PCB Y 落位超差 (映射翻转?)"
+assert abs(pb.ZMin - G.Z_BOARD) < 0.3, "PCB 板底必须落在铜柱顶 Z_BOARD"
+assert pb.ZMax <= G.OUTER_H + 0.6, "元件超出外壳总高 (含模型噪声预算 0.6)"
+# 注: 真实 KiCad 端子模型含 +3.5z 封装偏移, 顶达 ~26.5 (JLC 真值 14.07);
+# 盒真相 (L4/孪生/壳设计) 以 JLC 为准, 此 STEP 为评审件放宽模型噪声; 板到货实测终裁.
+
+bb = asm.BoundBox
+dx = abs(bb.XLength - G.BBOX_MM[0]); dy = abs(bb.YLength - G.BBOX_MM[1]); dz = abs(bb.ZLength - G.BBOX_MM[2])
+print("ASSEMBLY bbox: %s  (dx=%.2f dy=%.2f dz=%.2f)" % (bb, dx, dy, dz))
+assert dx <= 0.6 and dy <= 0.6 and dz <= 0.6, "双体装配体包围盒超差 (case_geom.BBOX_MM 契约)"
+assert len(asm.Solids) >= 500, "solid 数不足 (PCB 元件缺失?)"
+
+# ---------- 4b. T6 双体分项契约 (铁律 10: 分项 bbox, 禁总盒宽松) ----------
+bbv = valves_c.BoundBox
+assert (abs(bbv.ZMin - G.TOWER_Z0) < 0.01 and
+        abs(bbv.ZMax - (G.TOWER_Z0 + G._PNEU["vb_h"])) < 0.01 and
+        abs(bbv.XMin - (G.V_COLS[0] - G._PNEU["vd_w"] / 2)) < 0.01 and
+        abs(bbv.XMax - (G.M_X + G._PNEU["vd_w"] / 2)) < 0.01), \
+    "阀阵 bbox: %s" % bbv
+bbm = manifold.BoundBox
+assert (abs(bbm.ZMin - G.TOWER_Z0) < 0.01 and abs(bbm.ZMax - G.MAN_Z1) < 0.01), \
+    "歧管 bbox: %s" % bbm
+bbp = pump_case.BoundBox
+ox0, oy0, oz0 = G.PMOD_OFF
+assert (abs(bbp.XMin - ox0) < 0.01 and abs(bbp.XMax - ox0 - G.PMOD_L) < 0.01 and
+        abs(bbp.YMin - oy0) < 0.01 and abs(bbp.YMax - oy0 - G.PMOD_W) < 0.01 and
+        abs(bbp.ZMin - oz0) < 0.01 and abs(bbp.ZMax - oz0 - G.PMOD_H) < 0.01), \
+    "泵模块壳 bbox: %s" % bbp
+print("ASSEMBLY T6 分项: 阀阵 z[%.1f..%.1f] 歧管 z[%.1f..%.1f] 泵壳 x[%.1f..%.1f]"
+      % (bbv.ZMin, bbv.ZMax, bbm.ZMin, bbm.ZMax, bbp.XMin, bbp.XMax))
+
+# 双体物理分置: 主模块 x ≤ OW, 泵模块 x ≥ PMOD_OFF[0] (30mm 空隙)
+assert main_body.BoundBox.XMax <= G.OW + 4.5 + 0.01, "主模块 x 越界 (歧管测压嘴 110 > 壳)"
+assert pump_body.BoundBox.XMin >= G.PMOD_OFF[0] - 0.01, "泵模块未落位 PMOD_OFF"
+gap = pump_body.BoundBox.XMin - G.OW
+print("ASSEMBLY 双体间隙 = %.1f mm (主模块 xMax %.1f -> 泵模块 xMin %.1f)"
+      % (gap, G.OW, pump_body.BoundBox.XMin))
+assert gap >= 24.0, "双体间隙不足 24mm"
+
+# 塔内干涉复核 (OCC): 歧管∩阀阵 = 0 (生成器已自检, 装配态再守一道)
+v_im = manifold.common(valves_c).Volume
+print("ASSEMBLY 歧管∩阀阵 = %.4f mm^3" % v_im)
+assert v_im < 1e-3, "歧管∩阀阵 干涉"
+
+# 侧壁干涉: JLC 模型自带偏移噪声 (J17 +3.15 探壁 ~260mm^3), 阈值据此放宽;
+# 严格的零干涉校验在 test_assembly_freecad.py 用 pos.csv 盒子模型 (设计真相) 执行。
+inter_b = bottom.common(pcb_placed)
+print("ASSEMBLY 下壳∩PCB 体积 = %.3f mm^3 (含模型偏移噪声, 阈值 400)" % inter_b.Volume)
+assert inter_b.Volume < 400.0, "PCB 与下壳干涉超限"
+
+# ---------- 5. 输出 ----------
+out_step = os.path.join(HERE, "flowio-p1-assembly.step")
+out_stl = os.path.join(HERE, "flowio-p1-assembly.stl")
+asm.exportStep(out_step)
+doc = App.newDocument("asm")
+o = doc.addObject("Part::Feature", "Assembly")
+o.Shape = asm
+Mesh.export([o], out_stl)
+print("ASSEMBLY OK: solids=%d -> %s (%.1f MB) + %s"
+      % (len(asm.Solids), out_step, os.path.getsize(out_step) / 1e6, out_stl))

@@ -3,6 +3,12 @@
  *
  * 对标 FlowIO 架构的自主实现（见 study-notes/02、09）。
  * 本组件为纯逻辑层：不包含任何 ESP-IDF / 平台头文件，可在主机上做单元测试。
+ *
+ * ⚠ 生成文件（DO NOT EDIT）——M3 D1=B 全文件生成（spec v2.1 §3.5）：
+ *   模板段（类型/枚举/拓扑常量/溯源注释）= flowio/fwgen/templates.py；
+ *   参数段（行内 [registry] 标注者）= hardware/flowio-p1/enclosure/devices.json 映射。
+ *   再生成：python -m flowio fwgen；CI 门：tools/check_codegen.py --ci（手改即红）。
+ *   改参数 = 改真值后重生成——-58→-60 类三语手抄漂移的机器级根治。
  */
 #pragma once
 
@@ -27,8 +33,9 @@ extern "C" {
  *   firmware/twin/electrical_sim.py 场景矩阵与 test_electrical_sim.py 断言②）。
  * 节能保持 55%（有意欠压 2.75V，受限/错峰模式用）经 BLE Config 服务 pwm_params 下发，
  * 不作固件默认值。原 170/~500ms 为 FlowIO 借值，与冻结 drive_policy 不符，已对齐。 */
-#define PN_HOLD_DEFAULT_DUTY      230    /* 255 的 ~90%（230/255=90.2% → 4.51V≈额定4.5V） */
-#define PN_HOLD_DEFAULT_DELAY_MS  100    /* 吸入窗 ≤100ms（drive_policy valve.pull_in） */
+#define PN_HOLD_DEFAULT_DUTY      230    /* 255 的 ~90%（230/255=90.2% → 4.51V≈额定4.5V）
+                                         * [registry] pneumatic_devices._meta.drive_policy.valve.full_open_hold */
+#define PN_HOLD_DEFAULT_DELAY_MS  100    /* 吸入窗 ≤100ms [registry] pneumatic_devices._meta.drive_policy.valve.pull_in */
 
 /* ---- 32 位状态字（对外广播用，协议层可直接回传） ---- */
 #define PN_SW_PORT1     (1u << 0)        /* 端口阀 1 开 */

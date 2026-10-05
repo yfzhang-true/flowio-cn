@@ -18,10 +18,10 @@ import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-sys.path.insert(0, str(HERE))
-import case_geom as G
-
 ROOT = HERE.parents[2]
+sys.path.insert(0, str(ROOT))          # M1: 几何单一真相源经 flowio.geom (旧 case_geom shim 留外部旧脚本)
+from flowio.geom import case_geom as G  # noqa: E402
+
 MESH = ROOT / "firmware" / "twin" / "meshes"
 WEB = ROOT / "firmware" / "twin" / "webapp"
 POSCSV = ROOT / "hardware" / "flowio-p1" / "fab" / "flowio-p1-pos.csv"

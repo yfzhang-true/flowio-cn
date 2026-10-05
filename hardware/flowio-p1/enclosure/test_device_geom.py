@@ -5,6 +5,9 @@
   T1 test_schema          — devices.json 覆盖 BOM 全行/字段完整/21 连接器有 port
      test_schema_pneumatic — pneumatic_devices 段: 4组完整/字段完整/负压阀域(spec 1f-β)/
                              DC4.5V 电压档/refs 唯一/泵压力包络 (+常驻坏副本负测试)
+     M0 (spec v2.1 §2): T1 十五断言的谓词部分收拢于 flowio 内核包
+     (flowio.truth.predicates, TruthSource 校验同源复用) —— 断言测试仍留本文件
+     原地, 经 flowio.truth 调用; check 计数与语义冻结不变 (@7885c62 15/0)。
   T2 test_orientation     — 端口射线朝外 + 贴边 (periphery bias / I-O keepout 断言)
   T3 test_matching        — 21 连接器 <-> 21 槽 完美匹配 (networkx; P1.1 +J20-23/+J5B槽)
   T4 test_drill_keepout   — 器件 OBB 避让 M3 孔 + 铜柱投影
@@ -21,10 +24,12 @@ import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-sys.path.insert(0, str(HERE))
-import case_geom as G
-
 ROOT = HERE.parents[2]
+sys.path.insert(0, str(ROOT))          # M0: flowio 内核包 (真值谓词单源)
+                                      # M1: geom/flows/hw 域一律经 flowio 包 (旧位 shim 只兜外部旧脚本)
+from flowio.geom import case_geom as G  # noqa: E402
+from flowio.truth import predicates as TP  # noqa: E402
+
 BOM = ROOT / "hardware" / "flowio-p1" / "fab" / "flowio-p1-bom-jlc.csv"
 POS = ROOT / "hardware" / "flowio-p1" / "fab" / "flowio-p1-pos.csv"
 DEVICES = HERE / "devices.json"
@@ -58,24 +63,20 @@ def load_pos():
     return out
 
 
-# ══════════ T1: 器件数据层 schema ══════════
+# ══════════ T1: 器件数据层 schema (谓词单源 = flowio.truth.predicates) ══════════
 def test_schema():
     dev = load_devices()
     entries = dev["devices"]
     bom_rows = list(csv.DictReader(open(BOM, encoding="utf-8-sig")))
 
-    # 1) BOM 38 行全覆盖 (按 refs 展开)
-    covered = set()
-    for e in entries:
-        for r in e["refs"]:
-            covered.add(r)
+    # 1) BOM 全行全覆盖 (按 refs 展开); BOM csv 属断言侧输入
     bom_refs = set()
     for r in bom_rows:
         for ref in (r["Designator"] or "").split(","):
             ref = ref.strip()
             if ref:
                 bom_refs.add(ref)
-    missing = sorted(bom_refs - covered)
+    missing = TP.missing_bom_refs(entries, bom_refs)
     check("T1 schema: BOM %d 位号全覆盖" % len(bom_refs), not missing, "缺: %s" % missing[:8])
 
     # 2) 唯一 C 号数 = 34, 每条含必需字段
@@ -83,145 +84,28 @@ def test_schema():
     #   + XH-2P/C7429671 + U6 淘宝件 (lcsc="" 特例段, ingest CURATED_NOPART) = 34
     cn = {e["lcsc"] for e in entries}
     check("T1 schema: 34 唯一 C 号 (33+U6 淘宝段)", len(cn) == 34, "实际 %d" % len(cn))
-    need = {"lcsc", "name", "refs", "pkg_keywords", "dims", "placement", "datasheet"}
-    bad = [e["lcsc"] for e in entries if not need <= set(e)]
+    bad = TP.incomplete_entries(entries)
     check("T1 schema: 字段完整 (7 必需)", not bad, "缺字段: %s" % bad[:4])
 
     # 3) dims 三元组数值合理
-    badd = [e["lcsc"] for e in entries
-            if not (0.2 <= e["dims"]["w"] <= 40 and 0.2 <= e["dims"]["d"] <= 40
-                    and 0.2 <= e["dims"]["h"] <= 20)]
+    badd = TP.bad_dims_entries(entries)
     check("T1 schema: dims 数值域 (0.2..40 / h<=20)", not badd, "异常: %s" % badd[:4])
 
     # 4) 21 连接器必须有 port (dir_local 单位向量 + exit_z 带宽)
     # P1.1: +J20-J23 主阀/泵座 (12 阀座全 XH-2P SMD)
     CONN = {"J1", "J2", "J5", "J6", "J7", "J8", "J9", "J10", "J11", "J12", "J13",
             "J14", "J15", "J16", "J17", "J18", "J19", "J20", "J21", "J22", "J23"}
-    noport = []
-    for e in entries:
-        if CONN & set(e["refs"]):
-            p = e.get("port")
-            if not p or "dir_local" not in p or "exit_z" not in p:
-                noport.append(e["lcsc"])
-            else:
-                dx, dy = p["dir_local"][:2]
-                if abs(math.hypot(dx, dy) - 1.0) > 1e-6:
-                    noport.append(e["lcsc"] + "(非单位向量)")
+    noport = TP.connectors_missing_port(entries, CONN)
     check("T1 schema: 21 连接器均有 port.dir_local/exit_z", not noport, "缺: %s" % noport)
 
     # 5) placement 枚举合法
-    LEGAL = {"EDGE_OUT", "SURFACE", "INTERNAL"}
-    badp = [e["lcsc"] for e in entries if e["placement"] not in LEGAL]
+    badp = TP.bad_placement_entries(entries)
     check("T1 schema: placement 枚举合法", not badp, str(badp[:4]))
 
 
 # ══════════ T1: 气动器件段 schema (pneumatic_devices, spec 1f-β) ══════════
-PNEU_GROUPS = ("valves", "valve_vacuum_master", "pump", "sensor")
-PNEU_ACTUATORS = ("valves", "valve_vacuum_master", "pump")   # DC4.5V 执行器; sensor 为 5V 轨直供 I2C 件
-PNEU_RATED_V = 4.5                                            # P1.1 定案: 全系 DC4.5V 变体
-PNEU_RAIL_V = 5.0                                             # _meta.drive_policy.rail_v
-
-
-def _pneu_tag(g, e):
-    return "%s:%s" % (g, "/".join(e.get("refs") or ["?"]))
-
-
-def _pneu_entries(pn):
-    """展平 (group, entry) 对; 组缺失按空处理."""
-    out = []
-    for g in PNEU_GROUPS:
-        for e in (pn.get(g) or []):
-            out.append((g, e))
-    return out
-
-
-def _pneu_completeness_bad(pn):
-    """每条气动 entry 必需字段: refs/model/manufacturer/datasheet/electrical/dims
-    + 阀/传感器单口 port + 泵双口 ports."""
-    bad = []
-    for g, e in _pneu_entries(pn):
-        tag = _pneu_tag(g, e)
-        if not (isinstance(e.get("refs"), list) and e["refs"]):
-            bad.append(tag + "(refs)")
-        for f in ("model", "manufacturer", "datasheet"):
-            if not (isinstance(e.get(f), str) and e[f].strip()):
-                bad.append(tag + "(%s)" % f)
-        if not isinstance(e.get("electrical"), dict):
-            bad.append(tag + "(electrical)")
-        dm = e.get("dims")
-        if not (isinstance(dm, dict) and all(isinstance(dm.get(k), (int, float)) and dm[k] > 0
-                                             for k in ("w", "d", "h"))):
-            bad.append(tag + "(dims)")
-        if g != "pump" and not e.get("port"):
-            bad.append(tag + "(port)")
-        if g == "pump" and not e.get("ports"):
-            bad.append(tag + "(ports)")
-    return bad
-
-
-def _pneu_domain_ok(pn):
-    """spec 1f-β 负压专用阀域: pressure_kpa 上限<=0 的阀 (F0520B) 只允许出现在
-    valve_vacuum_master 组; valves 组 (V1-V8/VS/VF 正压通用阀位) 不允许混入;
-    反向: valve_vacuum_master 组内必须全为负压域条目."""
-    for e in (pn.get("valves") or []):
-        pk = e.get("pressure_kpa")
-        if not pk or pk[1] <= 0:
-            return False
-    for e in (pn.get("valve_vacuum_master") or []):
-        pk = e.get("pressure_kpa")
-        if not pk or pk[1] > 0:
-            return False
-    return True
-
-
-def _pneu_voltage_bad(pn):
-    """电压档一致性 (P1.1 定案全系 DC4.5V): 执行器 (阀/泵) electrical.rated_v 必须为 4.5;
-    无 rated_v 的直供件 (sensor) 其 v_range 必须覆盖 5V 轨."""
-    rail = ((pn.get("_meta") or {}).get("drive_policy") or {}).get("rail_v")
-    bad = []
-    for g, e in _pneu_entries(pn):
-        el = e.get("electrical") or {}
-        tag = _pneu_tag(g, e)
-        if g in PNEU_ACTUATORS:
-            if "rated_v" not in el:
-                bad.append(tag + "(缺rated_v)")
-            elif el["rated_v"] != PNEU_RATED_V:
-                bad.append(tag + "(rated_v=%s≠%s)" % (el["rated_v"], PNEU_RATED_V))
-        else:
-            vr = el.get("v_range")
-            if not (vr and rail is not None and vr[0] <= rail <= vr[1]):
-                bad.append(tag + "(v_range=%s 不含rail=%s)" % (vr, rail))
-    return bad
-
-
-def _pneu_refs_dup(pn, pcb_refs):
-    """四组合计 refs 不得重复, 且不得与 devices 段 (PCB 贴装) refs 冲突."""
-    seen, dups = set(), set()
-    for g, e in _pneu_entries(pn):
-        for r in (e.get("refs") or []):
-            if r in seen or r in pcb_refs:
-                dups.add(r)
-            seen.add(r)
-    return sorted(dups)
-
-
-def _pneu_envelope_bad(pn):
-    """泵压力窗必须严格包络两类阀压力窗 (valve ⊂ pump, 余量>0).
-    返回 (违例列表, 全局最小余量 kPa; 无有效阀-泵对时为 None)."""
-    pumps = [e for e in (pn.get("pump") or []) if e.get("pressure_kpa")]
-    bad, margins = [], []
-    for g in ("valves", "valve_vacuum_master"):
-        for e in (pn.get(g) or []):
-            pk = e.get("pressure_kpa")
-            if not pk:
-                bad.append(_pneu_tag(g, e) + "(缺pressure_kpa)")
-                continue
-            m = [min(pk[0] - p["pressure_kpa"][0], p["pressure_kpa"][1] - pk[1])
-                 for p in pumps]
-            margins += m
-            if not m or max(m) <= 0:
-                bad.append("%s %s" % (_pneu_tag(g, e), pk))
-    return bad, (min(margins) if margins else None)
+# 谓词已收拢 flowio.truth.predicates (常量 PNEU_GROUPS/PNEU_RATED_V/... 同源);
+# 断言与常驻负测试仍留原地 —— check 计数与语义冻结不变。
 
 
 def test_schema_pneumatic():
@@ -229,7 +113,7 @@ def test_schema_pneumatic():
     pn = dev.get("pneumatic_devices")
 
     # 1) 段完整性: pneumatic_devices 存在且 4 列表组均非空
-    empty = [g for g in PNEU_GROUPS if not (isinstance((pn or {}).get(g), list) and pn[g])]
+    empty = TP.pneu_groups_empty(pn or {})
     check("T1 pneumatic: 段完整 (pneumatic_devices 4 列表组非空)", bool(pn) and not empty,
           "缺/空: %s" % empty)
     if not pn or empty:
@@ -237,34 +121,34 @@ def test_schema_pneumatic():
                         # 负测试也无法构造 — 只留 check1 干净 FAIL 即为正确行为
 
     # 2) 字段完整: 每条气动 entry 必需字段无缺失
-    bad = _pneu_completeness_bad(pn or {})
+    bad = TP.pneu_completeness_bad(pn or {})
     check("T1 pneumatic: 字段完整 (refs/model/manufacturer/datasheet/electrical/dims/port(s))",
           not bad, str(bad[:6]))
 
     # 3) 负压专用阀域 (spec 1f-β, 核心): 上限<=0 的阀只允许在 valve_vacuum_master
     check("T1 pneumatic: 负压阀域 (pressure_kpa 上限≤0 仅 valve_vacuum_master)",
-          _pneu_domain_ok(pn or {}))
+          TP.pneu_domain_ok(pn or {}))
 
     # 4) 电压档一致性 (P1.1 定案全系 DC4.5V): 执行器 rated_v=4.5; sensor v_range 覆盖 5V 轨
-    vbad = _pneu_voltage_bad(pn or {})
+    vbad = TP.pneu_voltage_bad(pn or {})
     check("T1 pneumatic: 电压档一致 (执行器 rated_v=4.5, sensor v_range 覆盖 5V 轨)",
           not vbad, str(vbad[:4]))
     meta = (pn or {}).get("_meta") or {}
     rail = (meta.get("drive_policy") or {}).get("rail_v")
     variant = meta.get("voltage_variant") or ""
     check("T1 pneumatic: drive_policy.rail_v=5.0 且 voltage_variant 含 DC4.5V",
-          rail == PNEU_RAIL_V and "DC4.5V" in variant,
+          TP.pneu_rail_variant_ok(pn or {}),
           "rail=%s variant=%s" % (rail, variant[:36]))
 
     # 5) refs 唯一性: 四组合计不重复, 且不与 devices 段冲突
     pcb_refs = set()
     for e in dev["devices"]:
         pcb_refs |= set(e["refs"])
-    dups = _pneu_refs_dup(pn or {}, pcb_refs)
+    dups = TP.pneu_refs_dup(pn or {}, pcb_refs)
     check("T1 pneumatic: refs 唯一 (气动四组内 + 不与 devices 段冲突)", not dups, str(dups[:6]))
 
     # 6) 压力包络 sanity: 两类阀压力窗 ⊂ 泵压力窗 (严格包含, 余量>0)
-    ebad, margin = _pneu_envelope_bad(pn)
+    ebad, margin = TP.pneu_envelope_bad(pn)
     check("T1 pneumatic: 泵压力窗严格包络两类阀 (余量>0)", not ebad,
           str(ebad[:4]) if ebad else ("最小余量 %.1f kPa" % margin))
 
@@ -273,12 +157,12 @@ def test_schema_pneumatic():
     leak = copy.deepcopy(b_dom["valve_vacuum_master"][0])
     leak["refs"] = ["VX"]                        # 改名隔离: 只打域断言, 不连坐 refs 唯一性
     b_dom["valves"].append(leak)                 # 把 F0520B 负压阀混入正压阀组
-    check("T1 pneumatic: 负测试-负压阀混入 valves 组必失败", not _pneu_domain_ok(b_dom),
-          "domain_ok(坏副本)=%s (须 False)" % _pneu_domain_ok(b_dom))
+    check("T1 pneumatic: 负测试-负压阀混入 valves 组必失败", not TP.pneu_domain_ok(b_dom),
+          "domain_ok(坏副本)=%s (须 False)" % TP.pneu_domain_ok(b_dom))
 
     b_vol = copy.deepcopy(pn)
     b_vol["valves"][0]["electrical"]["rated_v"] = 3.7     # 电压档改坏 (非 4.5)
-    vbad2 = _pneu_voltage_bad(b_vol)
+    vbad2 = TP.pneu_voltage_bad(b_vol)
     check("T1 pneumatic: 负测试-rated_v 改 3.7V 必失败", bool(vbad2), str(vbad2[:2]))
 
 
@@ -297,8 +181,8 @@ KNOWN_VIA_BOSS = set()
 
 
 def test_orientation():
-    import device_geom as DG
-    import case_geom as GG
+    from flowio.geom import device_geom as DG
+    from flowio.geom import case_geom as GG
     bad_dir, bad_edge = [], []
     for ref in CONN_REFS:
         ray = DG.port_ray(ref)
@@ -323,7 +207,7 @@ def test_orientation():
 
 
 def test_collision_fcl():
-    import device_geom as DG
+    from flowio.geom import device_geom as DG
 
     def active_hits(cm):
         res = cm.in_collision_internal(return_names=True)
@@ -347,14 +231,14 @@ def test_collision_fcl():
 
 # ══════════ T3: 关系图 — 匹配闭环 + flows 交叉校验 ══════════
 def test_matching():
-    import device_graph as DGr
+    from flowio.flows import device_graph as DGr
     ok, pairs, diag = DGr.slots_satisfied()
     check("T3 匹配: 21 连接器↔21 槽完美匹配", ok, diag)
     if pairs:
         d = dict(pairs)
         slots = DGr.slot_nodes()
         import math
-        import device_geom as DG
+        from flowio.geom import device_geom as DG
         worst, wref = 0.0, ""
         for ref, sid in d.items():
             w = math.dist(DG.port_ray(ref)["origin"], slots[sid]["center3"])
@@ -372,15 +256,15 @@ def test_matching():
 
 
 def test_flows_crosscheck():
-    import device_graph as DGr
+    from flowio.flows import device_graph as DGr
     bad = DGr.flows_crosscheck()
     check("T3 flows 电气拓扑 ↔ 网表权威源 0 违例", not bad, str(bad[:4]))
 
 
 # ══════════ T4: 钻孔/禁布 — M3 孔 + 铜柱避让 ══════════
 def test_drill_keepout():
-    import device_geom as DG
-    import drl
+    from flowio.geom import device_geom as DG
+    from flowio.hw import drill as drl  # M1: fab/drl.py -> flowio/hw/drill.py (旧 device_graph 注入 fab 的副作用取消)
     holes = drl.npth_holes()                    # [(x板, y板, dia)]
     m3 = [h for h in holes if 3.0 <= h[2] <= 3.4]
     check("T4 drl: NPTH Ø3.2 M3 孔 = 4", len(m3) == 4, str([(round(a,1),round(b,1)) for a,b,_ in m3]))

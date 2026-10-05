@@ -1,9 +1,9 @@
-// firmware/twin/webapp/js/telemetry.js — 双源轮询管道 (Task5)
+// firmware/twin/webapp/js/telemetry.js — 双源轮询管道 (Task5; M4: store 自 main.js 抽出, 仅改 import)
 // 200ms 交替: /api/board/state?since= (电气遥测+增量历史) ↔ /api/state (阀 duty/压力/状态字)
-// 结果 → setState (panels 消费) + flows.update (流光/粒子消费) 双管道。
+// 结果 → setState (组件消费) + flows.update (流光/粒子消费) 双管道。
 // 停轮询: document.hidden / 孪生时间暂停 (store.paused) / BLE 真机接管 (store.bleActive);
 // 连续失败 → setState({stale:true}) + 流光回底光 (spec §6 安静降级, 不弹窗)。
-import { store, setState } from "/webapp/js/main.js";
+import { store, setState } from "./store.js";
 
 const SPARK_N = 60;                 // sparkline 窗口 (≈24s @400ms/点)
 const LONG_N = 600;                 // 展开小图窗口 (≈4min, 与服务端 600s 历史同量级)

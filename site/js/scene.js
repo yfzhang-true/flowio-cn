@@ -1,7 +1,10 @@
 // firmware/twin/webapp/js/scene.js — 全屏产品场景: 装配叙事 / 爆炸 / Liquid Glass 材质 / 热点
 // 坐标系 = 壳系 Z-up (与 meshes/*.stl、flows.json 同源, 无任何翻转);
 // 爆炸语义同 S3: part.position = explode * k; 装配叙事初始 k=1 且额外位移 ×2.5 (即 ×3) 1.5s easeOutQuint 归零。
-import * as THREE from "../vendor/three.module.js";
+// M4: three 解析改走 importmap 裸说明符 "three" (index.html <script type=importmap> 映射
+//     /webapp/vendor/three.module.js; vendor addons 本就以 "three" 裸引用, importmap 自始
+//     承担解析 —— 现内核与 addons 同源一处管); addons 走 ../vendor 相对路径 (ES ./ 铁律)。
+import * as THREE from "three";
 import { OrbitControls } from "../vendor/addons/OrbitControls.js";
 import { STLLoader } from "../vendor/addons/STLLoader.js";
 import { RoomEnvironment } from "../vendor/addons/RoomEnvironment.js";

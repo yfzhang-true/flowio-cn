@@ -1,170 +1,30 @@
-"""S2 板级电气孪生纯模型 (stdlib-only: math + collections).
+"""board_model — S2 板级电气孪生纯模型 → M2 薄壳 (shim, spec v2.1 §3.2)。
 
-由 server.py 以 ~50ms (TICK=0.1s 对齐) 周期调用 step() 推进：
-  阀线圈 RL 电流(解析式) -> 5V 轨负载/压降 -> 3V3 轨 -> 一阶热惯性 -> 600s 环形历史。
+迁移史:
+  * S2: 初版 (8 阀 RL + 双轨 + 热一体式模型, BOARD_PARAMS 手写常量);
+  * T7: BOARD_PARAMS [registry] 条目与 devices.json 参数单源同步
+    (r_coil 10Ω / i_pump 0.5A / vbus 5.0V);
+  * M2 (本形态): 拆分迁至 flowio 包 ——
+      flowio/twin/pneumatic.py  PneumaticModel (8 阀 RL 电流 + 泵命令负载)
+      flowio/twin/thermal.py    ThermalModel   (cpu/buck/mos 一阶热惯性)
+      flowio/twin/board.py      BoardModel = 组合根 façade (has-a 三模型:
+                                 pneumatic/thermal/electrical; BOARD_PARAMS 与
+                                 [registry]/[手册]/[实测] 溯源注释随迁于彼, 值不动)
+    本模块仅 re-export —— 对外公共 API (BoardModel.step/telemetry + 模块常量)
+    逐签名兼容, 旧调用方 (server.py / test_board_model.py) 零改动。
 
-设计笔记 (与 test_board_model.py 锚点对齐; 参数来源见 BOARD_PARAMS 注释, [registry]=devices.json):
+设计笔记 (与 test_board_model.py 锚点对齐; 详见 flowio.twin 各模块 docstring):
   * 开通:  i = I_inf + (i0 - I_inf) * exp(-dt/tau_on),  tau_on = L/(r_coil+rds) ≈ 2.49ms
-           —— 100ms 吸入窗内电流完全建立 (dt/tau ~ 40)。
-  * 关断:  MOS 已断开, 线圈经 SS14 续流回路释放: vcoil = -vf_fw,
-           i = max(0, I_off + (i0 - I_off) * exp(-dt/tau_off)),
-           tau_off = L/r_coil ≈ 2.5ms,  I_off = -vf_fw/r_coil (负稳态,
-           电流过零即被二极管反向截止钳位) —— 与 sim_engine._valve 的
-           续流 ODE (VF_FW=0.35, 钳 i>=0) 同一物理量, 防双源漂移。
+  * 关断:  线圈经 SS14 续流回路释放, 电流过零即被二极管反向截止钳位
+          (与 sim_engine._valve 的续流 ODE 同一物理量, 防双源漂移)。
 无文件 IO、无 numpy; telemetry() 从当前 state 以与 step() 相同的式子重算轨值。
 """
+import sys
+from pathlib import Path
 
-import math
-import threading
-from collections import deque
+_PKG_ROOT = Path(__file__).resolve().parents[2]          # 仓库根 (flowio 包所在)
+if str(_PKG_ROOT) not in sys.path:
+    sys.path.insert(0, str(_PKG_ROOT))
 
-# ESP32 峰值 (~0.24A) + TCA9548A + CH340 等逻辑负载估算
-LOGIC_A = 0.43
-
-# 板级参数 (含来源成色注释: [手册]=datasheet, [仿真]=电路仿真, [实测]=上表测量, [假设]=工程假设,
-#           [registry]=devices.json pneumatic_devices 真值——T7 2026-10-03 参数单源同步)
-BOARD_PARAMS = {
-    "r_coil": 10.0,    # [registry] F0520D rated 4.5V/0.45A → 10Ω（原 14Ω 为行业典型假设已废弃；
-                       #           5V 全开拉入 ≈0.50A, 90% 保持=4.5V=额定 0.45A, 与 electrical_sim 同式）
-    "l_coil": 25e-3,   # [假设] 阀线圈电感 25mH
-    "rds": 0.040,      # [手册] AO3400 @ VGS=3.3V 导通电阻 ~40mΩ
-    "vbus": 5.0,       # [registry] drive_policy.rail_v 5.0V
-    "vf_ss34": 0.31,   # [手册] SS34 肖特基正向压降 (5V 轨串入)
-    "r_ss34": 0.05,    # [手册] SS34 导通电阻
-    "vf_fw": 0.35,     # [手册] SS14 续流二极管正向压降 (与 sim_engine VF_FW 同源)
-    "vout3v3": 3.269,  # [实测] buck 标称输出
-    "load_reg": 0.012, # [仿真] buck 负载调整率 (V/A)
-    "i_pump": 0.50,    # [registry] ZR370-03PM load_current_a 0.5A（原 0.35 假设已废弃）
-    "theta": {         # [手册] 热阻 ℃/W
-        "cpu": 35.0,
-        "buck": 130.0,
-        "mos": 350.0,
-    },
-}
-
-BUCK_EFF = 0.876          # [仿真] buck 效率
-N_VALVES = 8
-HIST_S = 600              # 历史窗口长度 (s)
-TICK = 0.1                # 名义步长 (s); 历史容量 = HIST_S/TICK = 6000 点
-TAU_THERMAL = 30.0        # 板级热时间常数 (s)
-
-# 温升一阶惯性目标功率里的固定 cpu 功率 = LOGIC_A * vout3v3
-_P_CPU = LOGIC_A * BOARD_PARAMS["vout3v3"]
-
-
-class BoardModel:
-    """8 阀 RL + 双轨 + 热状态的确定性板级模型。"""
-
-    def __init__(self):
-        self.i = [0.0] * N_VALVES          # 各阀线圈电流 (A)
-        self.pump = 0.0                    # 最近一次泵命令 (0/1), telemetry 重算负载用
-        self.t = 0.0                       # 累计仿真时间 (s)
-        self.stale = False                 # server 超时未收到命令时置 True
-        self.temp = {"cpu": 25.0, "buck": 25.0, "mos": 25.0}  # 估计结温 (℃)
-        self.hist = deque(maxlen=int(HIST_S / TICK))          # 环形历史
-        self._lock = threading.Lock()      # tick 线程 step() 与 HTTP 线程 telemetry() 互斥
-        self._acc = 0.0                    # 历史节流累加器 (满 TICK=0.1s 落一条)
-
-    # ------------------------------------------------------------------ step
-    def step(self, dt, valves, pump):
-        """推进 dt 秒。valves: 8 元命令列表(真值=开), pump: 泵命令(真值=开)。"""
-        with self._lock:                   # 全程持锁: 状态写入与 telemetry 快照互斥
-            self._step_locked(dt, valves, pump)
-
-    def _step_locked(self, dt, valves, pump):
-        p = BOARD_PARAMS
-        tau_on = p["l_coil"] / (p["r_coil"] + p["rds"])   # 激励回路: L/(r_coil+rds)
-        tau_off = p["l_coil"] / p["r_coil"]               # 续流回路: L/r_coil (SS14 钳位)
-        i_inf = p["vbus"] / (p["r_coil"] + p["rds"])      # 稳态电流 (开)
-        i_inf_off = -p["vf_fw"] / p["r_coil"]             # 续流负稳态 (过零截止)
-        for k in range(N_VALVES):
-            on = bool(valves[k]) if k < len(valves) else False
-            i0 = self.i[k]
-            if on:
-                self.i[k] = i_inf + (i0 - i_inf) * math.exp(-dt / tau_on)
-            else:
-                i = i_inf_off + (i0 - i_inf_off) * math.exp(-dt / tau_off)
-                self.i[k] = i if i > 0.0 else 0.0         # 二极管反向截止钳位
-
-        self.pump = 1.0 if pump else 0.0
-        load5 = sum(self.i) + p["i_pump"] * self.pump + LOGIC_A
-        v5 = p["vbus"] - (p["vf_ss34"] + p["r_ss34"] * load5)
-        v33 = p["vout3v3"] - p["load_reg"] * LOGIC_A
-
-        # 温升一阶惯性: T += (T_target - T) * min(1, dt/30),  T_target = 25 + P*theta
-        p_buck = v33 * LOGIC_A * (1.0 / BUCK_EFF - 1.0)
-        p_mos = max(x * x for x in self.i) * p["rds"]
-        for part, pw in (("cpu", _P_CPU), ("buck", p_buck), ("mos", p_mos)):
-            t_target = 25.0 + pw * p["theta"][part]
-            self.temp[part] += (t_target - self.temp[part]) * min(1.0, dt / TAU_THERMAL)
-
-        self.t += dt
-        self.stale = False  # 刚收到命令即视为新鲜
-        # 历史节流: step 周期 (50ms) < TICK=0.1s, 每步都 append 则 6000 条仅覆盖
-        # 300s; 累计满 TICK 才落一条 → 6000 条 = 600s 仿真时间。dt 可达 0.2s
-        # (speed=4), while 保证一步补齐 2 条; 时间戳取 0.1s 边界穿越时刻,
-        # uptime/tick 语义不变 (仍按真实累计时间)。
-        self._acc += dt
-        while self._acc >= TICK:
-            self._acc -= TICK
-            self.hist.append({"t": round(self.t - self._acc, 6), "v5": v5,
-                              "v33": v33, "load": load5, "vi": list(self.i)})
-
-    # ------------------------------------------------------------- telemetry
-    def telemetry(self):
-        """当前快照; 负载/轨压由当前 state 按与 step() 相同公式重算。
-        历史快照段持锁拷贝——tick 线程并发 append 会使裸迭代 deque 抛
-        'deque mutated during iteration'; dict 组装在锁外做纯计算。"""
-        with self._lock:
-            i = list(self.i)
-            pump = self.pump
-            t = self.t
-            stale = self.stale
-            temp = dict(self.temp)
-            hist = list(self.hist)          # 落库后的 rec 不再被改, 浅拷贝即可
-        p = BOARD_PARAMS
-        load5 = sum(i) + p["i_pump"] * pump + LOGIC_A
-        v5 = p["vbus"] - (p["vf_ss34"] + p["r_ss34"] * load5)
-        v33 = p["vout3v3"] - p["load_reg"] * LOGIC_A   # 与 step() history v33 同式
-        # buck 损耗随负载动态 (load5↑ → v5↓ → D↑), 公式与 sim_engine._buck 同源
-        # (CCM 损耗分解: Rsw=0.12Ω, DCR=18mΩ, VF=0.42V, vin=5V, FSW=570kHz):
-        #   P_sw=I²·0.12·D, P_dcr=I²·0.018, P_diode=0.42·I·(1-D),
-        #   P_switching=0.5·5.0·I·20ns·570kHz, D=vout3v3/v5 ≈ 3.269/4.67。
-        d = p["vout3v3"] / v5
-        i33 = LOGIC_A                                  # 3V3 轨负载 = 逻辑电流
-        p_sw = i33 ** 2 * 0.12 * d
-        p_dcr = i33 ** 2 * 0.018
-        p_diode = 0.42 * i33 * (1.0 - d)
-        p_swp = 0.5 * 5.0 * i33 * 20e-9 * 570e3
-        p_out = p["vout3v3"] * i33
-        buck_eff = p_out / (p_out + p_sw + p_dcr + p_diode + p_swp)
-        r_loop = p["r_coil"] + p["rds"]
-        valves = [{"on": x > 0.01,
-                   "i_A": round(x, 3),
-                   "p_w": round(x * x * r_loop, 2)} for x in i]
-        history = {"t": [], "v5": [], "v33": [], "load": [], "vi": []}
-        for rec in hist:
-            for key in history:
-                history[key].append(rec[key])
-        return {
-            "tick": int(t / TICK),
-            "uptime_s": round(t, 3),
-            "stale": stale,
-            "valves": valves,
-            "rail_5v": {"v": round(v5, 4), "load_a": round(load5, 4),
-                        "p_w": round(v5 * load5, 3)},
-            # v 与 step()/history 的 v33 同式同值 (vout3v3 - load_reg*LOGIC_A),
-            # 消除 telemetry 3.269 vs history 3.2638 的双源漂移; v_nom 保留标称。
-            "rail_3v3": {"v": round(v33, 4), "v_nom": p["vout3v3"],
-                         "load_a": LOGIC_A,
-                         "ripple_mv": 1.0,  # 与 sim_engine buck 默认工况实测一致（@3A）
-                         # 损耗/效率随负载动态（@LOGIC_A 工况, 非旧 @3A 常量快照
-                         # {706,162,436,85}），公式与 sim_engine._buck 同源。
-                         "buck_eff": round(buck_eff, 4),
-                         "loss_mw": {"sw": round(p_sw * 1e3), "dcr": round(p_dcr * 1e3),
-                                     "diode": round(p_diode * 1e3),
-                                     "switching": round(p_swp * 1e3)}},
-            "board_p_w": round(v5 * load5, 3),
-            "temp_est_c": {k: round(v, 2) for k, v in temp.items()},
-            "history": history,
-        }
+from flowio.twin.board import (BOARD_PARAMS, BUCK_EFF, HIST_S, LOGIC_A,        # noqa: E402,F401
+                               N_VALVES, TICK, TAU_THERMAL, BoardModel)

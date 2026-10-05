@@ -16,6 +16,10 @@
 """
 from math import exp
 
+import board_model  # noqa: E402  (M2: r_coil 默认值单源经组合根 BOARD_PARAMS [registry];
+                   #  board_model 为薄壳 → flowio.twin.board; 模块级导入: board 不反向
+                   #  依赖本模块, 无环)
+
 
 class ParamError(ValueError):
     """电路名未知 / 参数名未知 / 类型错误 / 超出允许范围."""
@@ -23,6 +27,8 @@ class ParamError(ValueError):
 
 # ---------------------------------------------------------------- 参数域表
 # (参数名, 下限, 上限, 默认值) —— 默认值与 BOM/原仿真一致 (buck Cout=100+10+3µF)
+# r_coil 默认 = BOARD_PARAMS["r_coil"] (registry F0520D 4.5V/0.45A=10Ω, M2 起
+# 经组合根 BoardModel 单源 —— 值不变 10.0, test_sim_engine 锚点 0.498A 不动)
 SPEC = {
     "buck": [
         ("vin", 3.8, 5.5, 5.0),        # 输入电压 (DC/USB 双源轨)
@@ -40,7 +46,7 @@ SPEC = {
     "valve": [
         ("pwm_hz", 1, 50, 10.0),       # PWM 频率 (气动阀 10Hz)
         ("duty", 0.05, 0.95, 0.5),     # 占空比
-        ("r_coil", 8, 30, 10.0),       # 阀线圈电阻 [registry] F0520D 4.5V/0.45A=10Ω (原 14Ω 假设废弃, T7 单源同步)
+        ("r_coil", 8, 30, board_model.BOARD_PARAMS["r_coil"]),  # [registry] F0520D 4.5V/0.45A=10Ω (原 14Ω 假设废弃, T7 单源同步; M2 经 BOARD_PARAMS 单源)
         ("l_mh", 5, 60, 25.0),         # 阀线圈电感
         ("rg", 47, 330, 100.0),        # 栅极电阻 (AO3400A)
     ],

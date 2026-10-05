@@ -25,11 +25,11 @@ except Exception:
     pass
 
 HERE = Path(__file__).resolve().parent
-sys.path.insert(0, str(HERE))
-import case_geom as G                     # OX / Z_TOP 单一真相源
-import make_flows as MF                   # load_pos + _outward_dir (出线方向真值)
-
 ROOT = HERE.parents[2]
+sys.path.insert(0, str(ROOT))             # M1: 常量/拓扑真值经 flowio.geom / flowio.flows
+from flowio.geom import case_geom as G    # OX / Z_TOP 单一真相源  # noqa: E402
+from flowio.flows import make_flows as MF  # load_pos + _outward_dir (出线方向真值)  # noqa: E402
+
 FLOWS = ROOT / "firmware" / "twin" / "webapp" / "flows.json"
 HOTSPOTS = ROOT / "firmware" / "twin" / "webapp" / "hotspots.json"
 

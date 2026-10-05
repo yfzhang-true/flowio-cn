@@ -9,6 +9,21 @@ description: FLOWIO-CN 硬件工程全流程 SOP——真值链铁律、五层�
 > `tools/deploy_sop_skill.py` 单向同步到用户级 skill 目录）。
 > 每节=触发条件→步骤→命令→验收。**先读 §2 变更矩阵，再动手。**
 
+## 0a. 产品五位一体（全流程总纲）
+
+数字孪生产品 = 物理实体与其数字镜像共享同一份真值：
+```
+devices.json（单一真值：devices 贴装段 + pneumatic_devices 气动段）
+  ├─ 硬件域  sch→pcb→fab        (flowio.hw)
+  ├─ 结构域  case/manifold/pump  (flowio.geom)
+  ├─ 固件域  pn_core+driver      (flowio.fwgen→types.h 生成)
+  ├─ 孪生域  仿真模型            (flowio.twin: IActuator/BaseModel 体系)
+  └─ 呈现域  webapp/site         (params_gen.js 生成 + 组件)
+```
+第一原则：**真值到介质的映射必须生成，不许手抄**（三语 codegen + CI diff 门）。
+统一入口：`python -m flowio <域> <子命令>`（`--help` 看全树；hw 危险命令需显式确认旗标）。
+变更重走链可直接执行：`python -m flowio rebuild --after <change-key>`（矩阵 15 键机读消费，M5 已实现）。
+
 ## 0. 三环境路径表（命令即复制即跑）
 
 | 环境 | 解释器/路径 | 用途 |
@@ -95,6 +110,8 @@ refs 四组内唯一且不与 devices 段冲突；负测试=deepcopy 坏数据�
 6. **GitHub**：>50MB 警告>100MB 拒收；大工件 gitignore+脚本再生；PAT 只在简历/（gitignored）。
 7. **LCSC datasheet 下载**：wmsc 直链模式
    `https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/<YYYYMMDDHHMMSS>_<MFR>_<MPN>_<C号>.pdf`。
+8. **生成物禁手编**：types.h/params_gen.js 由 fwgen 生成——改 devices.json → `python -m flowio fwgen` 重生成；
+   CI 门 `tools/check_codegen.py --ci` 手编即红（修生成物=改模板源头再重生成）。
 
 ## 5. 布线收敛 SOP（route_pcb 6 阶段 + freerouting）
 
@@ -110,21 +127,49 @@ refs 四组内唯一且不与 devices 段冲突；负测试=deepcopy 坏数据�
 拥挤区（如 BOOT 走廊）先挪无关走线开廊再补线；退化残段（<0.1mm）先删；
 验收=0 未连 + DRC 0 + L5 T4 钻孔避让断言绿。布线只动铜，**禁动 PLACE**；standoffs 真值=`hardware/flowio-p1/standoffs.txt`（HD 孔位变更时重出）；**PLACE 若改了孔位/板边（如 HD 移位），连带触发 `devices_json_pcb` 整行**（make_case→meshes→flows→L1-L3）。
 
-## 6. 双阶段评审（subagent 开发流程）
+## 6. 固件开发流程（fw 域）
+1. **规格源唯一**：docs/firmware-driver-spec.md（寄存器流程/三态占空比表/过压互锁）——改规格先改它；
+2. 参数常量：一律 `pn_core/types.h`（**生成文件禁手编**）——真值位置
+   `devices.json → pneumatic_devices._meta.drive_policy.valve`（如 full_open_hold "90%"）；
+   改后 `python -m flowio fwgen` 重生成（CI 门 `tools/check_codegen.py --ci` 抓手编）。
+   **行重叠裁定**：凡进三语链的参数变更走 `params_trilingual` 行（超集，含 fw_constant 全步骤+
+   compare_baseline+run_tests）；fw_constant 行仅用于"不进 codegen 的拓扑/协议常量"（模板段，
+   分类表 flowio/fwgen/templates.py）。**锚点联动**：selftest/场景锚点若因参数变更需更新，
+   走 twin_model 行的 baseline.json 评审规则（有意变更+评审，禁静默改）。
+3. 组件实现：firmware/components/pn_core（逻辑拓扑常量如 PN_PORT_COUNT 属模板段，分类表在 flowio/fwgen/templates.py）；
+4. 验证：build_twin.sh 重建（exe 用 /tmp 副本法）→ twin_selftest 锚点比对 → 烧录 flash_com3.ps1；
+5. 固件常量变更重走链：见矩阵 `fw_constant`。
+
+## 7. 孪生开发流程（twin 域）
+1. **模型模板**：新建模型 = 继承 `BaseModel`（params/step/reset 三方法）+ 参数从 TruthSource 视图注入（零器件常量手抄，board_model 拆分三模型是范式样本）；
+2. **执行器扩展三步**（IActuator 契约：`ref` 属性 + `current(state)->A` + `effective_v(duty)->V`
+   + `duty(state)->0~1`（报告钩子）；state ∈ pull_in/hold/economy/off）——盲测 test_blind_extension.py 固化：①devices.json 加真值条目（schema 谓词合规）②定义 IActuator 子类（不入工厂即测试内可注入）③注入 ElectricalModel 求解——**零改仿真器**；型号串知识只许在工厂登记点；
+3. 场景矩阵：flowio/twin/scenarios.py（验收语料与模型生命周期分离）；跑 `python -m flowio twin electrical [--json]`；
+4. 锚点钉值：测试锚点绑真值冻结值（r_coil 10Ω/worst 4.525A）；对拍 `tools/compare_baseline.py`；
+5. C 侧孪生常量（twin_api.c 标定段如 PUMP_P_MAX 61）：属孪生标定非真值映射——分类裁定见 fwgen 分类表，勿盲目"对齐"。
+
+## 8. 呈现域流程（web 域）
+1. 组件架构：webapp/js/components/ 11 组件（Custom Elements+shadow DOM）；通信=CustomEvent（composed）+store；新增面板=新组件文件+组件契约测；
+2. **ES 铁律**：import 一律 `./`/`../` 相对（唯 importmap 豁免的 `three` 裸说明符）；
+3. 参数消费：`params_gen.js`（生成物禁手编）import FLOWIO_PARAMS；
+4. 测试：test_webapp.js（55=47 行为+8 契约；playwright+NODE_PATH 主仓 node_modules）；视觉回归截图对照（像素差 <1% 噪声带）；
+5. 站点：tools/build_site.py → site/；部署 gh-pages subtree（§12）；生产终验（首屏+assembly.json 关键数字+资源 200）。
+
+## 9. 双阶段评审（subagent 开发流程）
 
 每任务：实现者（TDD 红→绿+自审+commit）→ **规格合规审**（对照任务书逐条+独立验证，
 防"声称绿实际红"）→ 修复 → **质量审**（Must/Should 分级，Should 也要修）→ 复审 → 完结。
 实现者状态协议：DONE / DONE_WITH_CONCERNS / NEEDS_CONTEXT / BLOCKED（BLOCKED 必附证据，
 换代理时携带前代理的关键情报清单）。
 
-## 7. 器件选型 SOP
+## 10. 器件选型 SOP
 
 四类参数审计（电气/几何/协议/工艺）逐项标证据级（🅰一手 datasheet/🅱 多源交叉/🅲 推定待实测）；
 **参数两说裁决**：多源交叉→按最坏情况兜底设计→BRINGUP 实测一锤定音（判据表先行）；
 否决件留档（DFR0866/BMP180/惠州阀……）写明否决理由；硬约束=气动件全国产淘宝/1688 可购；
 registry（docs/component-registry.md）六元组闭环：型号↔店铺↔一手档↔参数↔状态↔决策。
 
-## 8. 部署 SOP
+## 11. 部署 SOP
 
 gh-pages = site 目录 subtree：`git subtree split -P site -b gh-pages-deploy &&
 git push -f origin gh-pages-deploy:gh-pages`；部署后生产终验（双态截图目视+关键数字核对）。

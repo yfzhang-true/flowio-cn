@@ -1,0 +1,117 @@
+{
+ "frozen_at_commit": "7885c62",
+ "products": {
+  "hardware/flowio-p1/flowio-p1.kicad_sch": [
+   448482,
+   "f9d15ecde811"
+  ],
+  "hardware/flowio-p1/flowio-p1.kicad_pcb": [
+   3026692,
+   "be35ebc7cff8"
+  ],
+  "hardware/flowio-p1/fab/flowio-p1-jlc.zip": [
+   542817,
+   "7bd6420a76a1"
+  ],
+  "hardware/flowio-p1/enclosure/manifold.stl": [
+   839584,
+   "c485460be3d7"
+  ],
+  "hardware/flowio-p1/enclosure/pump-module.stl": [
+   19884,
+   "1e23604a63d7"
+  ],
+  "hardware/flowio-p1/enclosure/case-top.stl": [
+   397584,
+   "d5344d928e86"
+  ],
+  "hardware/flowio-p1/enclosure/case-bottom.stl": [
+   528484,
+   "1a51551d3f44"
+  ],
+  "firmware/twin/meshes/assembly.json": [
+   2654,
+   "0630def517d1"
+  ],
+  "firmware/twin/webapp/flows.json": [
+   12152,
+   "9f9b175a0076"
+  ],
+  "firmware/twin/meshes/valves.stl": [
+   61684,
+   "1d30029a599e"
+  ],
+  "firmware/twin/meshes/tubes.stl": [
+   50484,
+   "91fd51db5306"
+  ]
+ },
+ "scenarios": {
+  "single_inflate": [
+   1.375,
+   [],
+   false
+  ],
+  "single_vacuum": [
+   1.225,
+   [],
+   false
+  ],
+  "single_release": [
+   0.9,
+   [],
+   false
+  ],
+  "single_hold": [
+   0.275,
+   [],
+   false
+  ],
+  "inflate_pull_in_transient": [
+   1.475,
+   [],
+   false
+  ],
+  "inflate_3ch": [
+   2.275,
+   [],
+   false
+  ],
+  "worst_9v_hold_pump": [
+   4.525,
+   [
+    1
+   ],
+   true
+  ],
+  "worst_9v_economy_pump": [
+   2.95,
+   [],
+   false
+  ],
+  "transfer_gas": [
+   1.675,
+   [],
+   false
+  ],
+  "pump_only_interlock": [
+   0.0,
+   [],
+   false
+  ],
+  "overpressure": [
+   0.9,
+   [
+    2
+   ],
+   false
+  ],
+  "vacuum_clamp": [
+   0.75,
+   [
+    4
+   ],
+   false
+  ]
+ }
+}
