@@ -1,7 +1,10 @@
-# Plan: 数字孪生全流程 SOP 与模块化（M0-M5 + A2 · spec 批准后执行）
+# Plan: 数字孪生全流程 SOP 与模块化（M0-M5 + A2 · v2.1 一次性全量 · 用户裁定全 B）
 
-> spec: docs/superpowers/specs/2026-10-05-digital-twin-fullstack-modularization-design.md
-> worktree: modularization · 每期独立交付可中断 · 基线冻结+字节对拍 · 双阶段评审每期必走
+> spec: docs/superpowers/specs/2026-10-05-digital-twin-fullstack-modularization-design.md（v2.1）
+> worktree: modularization · **一次性全量**（D3=B）：M0-M5 顺序执行一个 worktree 一次交付，
+> 每步 commit+测试绿（内部检查点不省略），末端统一双阶段评审+对拍+合并 main
+> 备份：tag `v1.1-pre-modularization` + `archive/pre-modularization`（90213e6，回滚线）
+> D1=B types.h 全文件生成 / D2=B webapp Custom Elements 组件化
 
 ## M0 核心抽象层（先行，~半天）
 1. `flowio/core/interfaces.py`：IActuator/ISensor/BaseModel(+TubeNet 预留)+errors 层次（纯 ABC 零依赖）；
@@ -57,5 +60,7 @@
 - M3 迁 types.h 逐常量须逐个溯源注释搬运（禁丢事故出处）；
 - 与 P2 板到货 BRINGUP 争窗口——各期独立可暂停，BRINGUP 优先。
 
-## 依赖与顺序
-M0→M1→M2→M3→M4→M5 主线；A2 随 M0 并行启动；D1/D2/D3 裁定后开工。
+## 依赖与顺序（v2.1 全量）
+M0→M1→M2→M3→M4→M5 顺序执行（依赖序不可乱）；A2 随 M0 启动同 worktree 完成；
+**末端统一验收**：全量对拍（M1 产物字节/M2 场景数值/M3 三语对拍+types.h 语义等价门/M4 site+47 测）
+→ 双阶段评审（规格+质量）→ 合并 main → 生产重部署终验。回滚线如失效验收不过：reset 备份 tag。

@@ -1,6 +1,10 @@
 # Spec: 数字孪生产品全流程 SOP 与代码模块化（v2——全栈覆盖 + OOD 设计）
 
-> 日期: 2026-10-05 · worktree: modularization（自 main 90213e6）· 状态: **待用户审查**
+> 日期: 2026-10-05 · worktree: modularization（自 main 90213e6）· 状态: **批准执行（v2.1 三决策全 B + 备份前置）**
+> 用户裁定（2026-10-05）：**先备份已跑通版本** → D1=B（types.h 全文件生成替换）/ D2=B（webapp 组件化重写）/
+> D3=B（一次性全量重构，不分期）。
+> 备份落位：tag `v1.1-pre-modularization` + 分支 `archive/pre-modularization`（均锚 90213e6，
+> 含生产在线版本与全套守门绿状态——回滚即 `git reset --hard v1.1-pre-modularization`）。
 > 来源: 用户指正——"SOP 的 skill 和代码模块化应覆盖数字孪生**产品研发的全流程**，而不只是布线；
 > 代码模块化的目的是提高可维护性，因此引入自顶向下、自底向上、高内聚、低耦合、
 > 抽象、继承、封装、多态等技巧。"
@@ -130,7 +134,18 @@ CI 守门：重生成后 `git diff --exit-code`——**手编生成物立即红*
 - webapp 不引入框架（原生 ES module+importmap 即可）；
 - 不重写已绿的测试语义（只搬不改断言）。
 
-## 7. 决策点（待裁定）
-- **D1 C 侧 codegen 形态**：A=生成片段被 types.h include（推荐，渐进）/ B=全文件替换 types.h
-- **D2 M4 webapp 深度**：A=仅归位+importmap（推荐）/ B=组件化重写（shadow DOM 等）
-- **D3 执行时机**：A=M0+M1 先行，M2-M5 随 P2 节奏分批（推荐）/ B=一次性全量
+## 7. 决策记录（2026-10-05 用户裁定：全 B）
+- **D1=B 全文件替换**：`pn_core/types.h` 整体成为生成文件——`flowio fwgen` 产出
+  （模板段：类型/枚举定义 + 参数段：devices.json 映射 #define），文件头 DO NOT EDIT；
+  原手写常量的溯源注释逐条迁入生成器模板（事故出处不丢）。风险与对策：生成器自身
+  bug 会波及类型定义 → M3 验收加"生成 types.h 与备份版 diff 逐行为等价语义（类型段
+  字节一致+参数段仅值域受控变化）"对拍门。
+- **D2=B 组件化重写**：webapp 以 Custom Elements + shadow DOM 重写（每面板一组件：
+  DualPumpPWM/ChannelRow/FlowCanvas/TwinScene/TelemetryPanel…），importmap 管依赖；
+  ES ./ 铁律保持。行为基线：test_webapp 47 条语义迁移（选择器适配组件 DOM），
+  最终 47/47 等价覆盖+新增组件契约单测。
+- **D3=B 一次性全量**：M0→M5 工程依赖顺序不变（抽象→挂载→孪生→codegen→web→cli），
+  但**交付节奏合一**——一个 worktree 一次走完，末端一次双阶段评审+对拍+合并。
+  内部检查点不省略：每步 commit+相关测试绿（守门是纪律不是阶段）；中断恢复靠
+  worktree 内 commit 序列（铁律 16 范式）。
+- **回滚线**：备份 tag/archive 如上；重构若最终验收不过且无法修复，主树 reset 备份即恢复生产。
